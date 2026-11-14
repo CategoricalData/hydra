@@ -21,13 +21,13 @@ import hydra.core.substitution
 ## Encode a float value to JSON. Finite values become JSON numbers (shortest round-trip); IEEE specials (NaN/Inf/-0.0) become JSON strings. Float32 and Float64 are symmetric; the schema disambiguates precision on decode.
 term encodeFloat =
   λfv.cases(FloatValue){
-      `float32`=λf.
+      `float32` = λf.
           let s := printFloat32 f
           in ifElse
             (requiresJsonStringSentinel s)
             right(Value{`string` = s})
             right(Value{number = float32ToDecimal f}),
-      `float64`=λf.
+      `float64` = λf.
           let s := printFloat64 f
           in ifElse
             (requiresJsonStringSentinel s)
@@ -38,26 +38,26 @@ term encodeFloat =
 ## Encode an integer value to JSON. Small ints use native numbers; large ints use strings.
 term encodeInteger =
   λiv.cases(IntegerValue){
-      `bigint`=λbi.right(Value{`string` = printBigint bi}),
-      `int64`=λi.right(Value{`string` = printInt64 i}),
-      `uint64`=λi.right(Value{`string` = printUint64 i}),
-      `int8`=λi.right(Value{number = bigintToDecimal (int8ToBigint i)}),
-      `int16`=λi.right(Value{number = bigintToDecimal (int16ToBigint i)}),
-      `int32`=λi.right(Value{number = bigintToDecimal (int32ToBigint i)}),
-      `uint8`=λi.right(Value{number = bigintToDecimal (uint8ToBigint i)}),
-      `uint16`=λi.right(Value{number = bigintToDecimal (uint16ToBigint i)}),
-      `uint32`=λi.right(Value{number = bigintToDecimal (uint32ToBigint i)})}
+      `bigint` = λbi.right(Value{`string` = printBigint bi}),
+      `int64` = λi.right(Value{`string` = printInt64 i}),
+      `uint64` = λi.right(Value{`string` = printUint64 i}),
+      `int8` = λi.right(Value{number = bigintToDecimal (int8ToBigint i)}),
+      `int16` = λi.right(Value{number = bigintToDecimal (int16ToBigint i)}),
+      `int32` = λi.right(Value{number = bigintToDecimal (int32ToBigint i)}),
+      `uint8` = λi.right(Value{number = bigintToDecimal (uint8ToBigint i)}),
+      `uint16` = λi.right(Value{number = bigintToDecimal (uint16ToBigint i)}),
+      `uint32` = λi.right(Value{number = bigintToDecimal (uint32ToBigint i)})}
       iv
 
 ## Encode a Hydra literal to a JSON value
 term encodeLiteral =
   λlit.cases(Literal){
-      `binary`=λb.right(Value{`string` = binaryToBase64 b}),
-      `boolean`=λb.right(Value{`boolean` = b}),
-      `decimal`=λd.right(Value{number = d}),
-      float=λf.encodeFloat f,
-      integer=λi.encodeInteger i,
-      `string`=λs.right(Value{`string` = s})}
+      `binary` = λb.right(Value{`string` = binaryToBase64 b}),
+      `boolean` = λb.right(Value{`boolean` = b}),
+      `decimal` = λd.right(Value{number = d}),
+      float = λf.encodeFloat f,
+      integer = λi.encodeInteger i,
+      `string` = λs.right(Value{`string` = s})}
       lit
 
 ## True for IEEE sentinel strings that JSON must escape as a string to preserve.
@@ -66,34 +66,35 @@ term requiresJsonStringSentinel =
 
 ## Encode a Hydra term to a JSON value given a type and type name. Returns Left for unsupported constructs. The compactMaps flag enables the #624 compact object form for string-resolving map keys; it must be False for any caller that reads/writes the checked-in dist/json module-bootstrapping representation (moduleToJson, decodeModuleFromJson, verify-json-kernel), since that wire format is consumed by the published (pre-#624) host and must stay byte-stable. New callers encoding/decoding arbitrary values against a schema (e.g. hydra.build.format digests) may pass True.
 term toJson =
-  λtypes,compactMaps,tname,typ,`term`.
+  λtypes, compactMaps, tname, typ, `term`.
     let stripped := deannotateType typ in
     let strippedTerm := deannotateTerm `term` in
-    let isVariableTerm := cases(Term){variable=λ`_`.true, `_`=false} strippedTerm in
+    let isVariableTerm := cases(Term){variable = λ`_`.true, `_` = false}
+        strippedTerm in
     ifElse
       isVariableTerm
       (cases(Term){
-        variable=λn.right(Value{
+        variable = λn.right(Value{
               object = [("@var", Value{`string` = Name[] n})]}),
-        `_`=left("expected variable term")}
+        `_` = left("expected variable term")}
         strippedTerm)
       (let reduceApp := λapp.
           let fn := deannotateType (ApplicationType[function] app) in
           let arg := ApplicationType[argument] app in
           cases(Type){
-            application=λinnerApp.eithers.either
+            application = λinnerApp.eithers.either
                   (λerr.left(err))
                   (λreducedFn.reduceApp
                       ApplicationType{
                         function = reducedFn,
                         argument = arg})
                   (reduceApp innerApp),
-            `forall`=λft.right(substInType
+            `forall` = λft.right(substInType
                   (singletonTypeSubst
                     (ForallType[parameter] ft)
                     arg)
                   (ForallType[body] ft)),
-            variable=λname.
+            variable = λname.
                 let lookedUp := maps.lookup name types
                 in match
                   lookedUp
@@ -103,11 +104,11 @@ term toJson =
                       ApplicationType{
                         function = resolvedFn,
                         argument = arg}),
-            `_`=left(strings.concat
+            `_` = left(strings.concat
                 ["cannot apply a non-parametric type: ", model.type fn])}
             fn
       in cases(Type){
-        application=λat.eithers.either
+        application = λat.eithers.either
               (λerr.left(err))
               (λreducedType.toJson
                   types
@@ -116,18 +117,18 @@ term toJson =
                   reducedType
                   `term`)
               (reduceApp at),
-        `forall`=λft.toJson
+        `forall` = λft.toJson
               types
               compactMaps
               tname
               (ForallType[body] ft)
               `term`,
-        literal=λ`_`.cases(Term){
-              literal=λlit.encodeLiteral lit,
-              `_`=left("expected literal term")}
+        literal = λ`_`.cases(Term){
+              literal = λlit.encodeLiteral lit,
+              `_` = left("expected literal term")}
               strippedTerm,
-        `list`=λelemType.cases(Term){
-              `list`=λterms.
+        `list` = λelemType.cases(Term){
+              `list` = λterms.
                   let results := eithers.mapList
                       (λt.toJson
                           types
@@ -137,12 +138,13 @@ term toJson =
                           t)
                       terms
                   in eithers.map
-                    (λvs.Value{array = vs})
+                    (λvs.Value{
+                        array = vs})
                     results,
-              `_`=left("expected list term")}
+              `_` = left("expected list term")}
               strippedTerm,
-        `set`=λelemType.cases(Term){
-              `set`=λvals.
+        `set` = λelemType.cases(Term){
+              `set` = λvals.
                   let terms := sets.toList vals in
                   let results := eithers.mapList
                       (λt.toJson
@@ -153,20 +155,22 @@ term toJson =
                           t)
                       terms in
                   eithers.map
-                    (λvs.Value{array = vs})
+                    (λvs.Value{
+                        array = vs})
                     results,
-              `_`=left("expected set term")}
+              `_` = left("expected set term")}
               strippedTerm,
-        `optional`=λinnerType.
+        `optional` = λinnerType.
             let innerStripped := deannotateType innerType in
             let isNestedMaybe := cases(Type){
-                `optional`=λ`_`.true,
-                `_`=false}
+                `optional` = λ`_`.true,
+                `_` = false}
                 innerStripped in
             cases(Term){
-              `optional`=λopt.match
+              `optional` = λopt.match
                     opt
-                    right(Value{null})
+                    right(Value{
+                      null})
                     (λv.
                       let encoded := toJson
                           types
@@ -181,31 +185,31 @@ term toJson =
                               array = [ev]})
                           encoded)
                         encoded),
-              `_`=left("expected maybe term")}
+              `_` = left("expected maybe term")}
               strippedTerm,
-        `record`=λrt.cases(Term){
-              `record`=λr.
+        `record` = λrt.cases(Term){
+              `record` = λr.
                   let isSimpleMaybe := λftype.cases(Type){
-                        `optional`=λinnerT.cases(Type){
-                              `optional`=λ`_`.false,
-                              `_`=true}
+                        `optional` = λinnerT.cases(Type){
+                              `optional` = λ`_`.false,
+                              `_` = true}
                               (deannotateType innerT),
-                        `_`=false}
+                        `_` = false}
                         (deannotateType ftype) in
-                  let encodeFieldWithType := λft,f.
+                  let encodeFieldWithType := λft, f.
                       let fname := Name[] (Field[name] f) in
                       let fterm := Field[`term`] f in
                       let ftype := FieldType[`type`] ft in
                       ifElse
                         (isSimpleMaybe ftype)
                         (cases(Term){
-                          `optional`=λopt.match
+                          `optional` = λopt.match
                                 opt
                                 right(none)
                                 (λv.
                                   let innerType := cases(Type){
-                                      `optional`=λit.it,
-                                      `_`=ftype}
+                                      `optional` = λit.it,
+                                      `_` = ftype}
                                       (deannotateType ftype) in
                                   let encoded := toJson
                                       types
@@ -216,7 +220,7 @@ term toJson =
                                   eithers.map
                                     (λev.given((fname, ev)))
                                     encoded),
-                          `_`=left("expected maybe term for optional field")}
+                          `_` = left("expected maybe term for optional field")}
                           (deannotateTerm fterm))
                         (let encoded := toJson
                             types
@@ -238,10 +242,10 @@ term toJson =
                     (λpairs.Value{
                         object = givens pairs})
                     encodedPairs,
-              `_`=left("expected record term")}
+              `_` = left("expected record term")}
               strippedTerm,
-        `union`=λrt.cases(Term){
-              `inject`=λinj.
+        `union` = λrt.cases(Term){
+              `inject` = λinj.
                   let field := Injection[field] inj in
                   let fname := Name[] (Field[name] field) in
                   let fterm := Field[`term`] field in
@@ -259,8 +263,8 @@ term toJson =
                     (λftype.
                       let ftypeStripped := deannotateType ftype in
                       let isUnit := cases(Type){
-                          `unit`=λ`_`.true,
-                          `_`=false}
+                          `unit` = λ`_`.true,
+                          `_` = false}
                           ftypeStripped in
                       ifElse
                         isUnit
@@ -277,31 +281,31 @@ term toJson =
                               object = [(fname, v)]})
                           encodedUnion))
                     ftypeResult,
-              `_`=left("expected union term")}
+              `_` = left("expected union term")}
               strippedTerm,
-        `unit`=λ`_`.right(Value{object = []}),
-        `wrap`=λwn.cases(Term){
-              `wrap`=λwt.toJson
+        `unit` = λ`_`.right(Value{object = []}),
+        `wrap` = λwn.cases(Term){
+              `wrap` = λwt.toJson
                     types
                     compactMaps
                     tname
                     wn
                     (WrappedTerm[body] wt),
-              `_`=left("expected wrapped term")}
+              `_` = left("expected wrapped term")}
               strippedTerm,
-        `map`=λmt.
+        `map` = λmt.
             let keyType := MapType[keys] mt in
             let valType := MapType[values] mt in
             let typeAllowsCompact := and
                 compactMaps
                 (mapKeyResolvesToString types keyType) in
             cases(Term){
-              `map`=λm.
+              `map` = λm.
                   let hasVariableKey := match
                       (find
                         (λk.cases(Term){
-                            variable=λ`_`.true,
-                            `_`=false}
+                            variable = λ`_`.true,
+                            `_` = false}
                             (deannotateTerm k))
                         (maps.keys m))
                       false
@@ -320,8 +324,8 @@ term toJson =
                           (λerr.left(err))
                           (λek.
                             let keyStrResult := cases(Value){
-                                `string`=λs.right(s),
-                                `_`=left("internal error: string-resolving map key did not encode to a JSON string")}
+                                `string` = λs.right(s),
+                                `_` = left("internal error: string-resolving map key did not encode to a JSON string")}
                                 ek
                             in eithers.either
                               (λerr.left(err))
@@ -352,13 +356,13 @@ term toJson =
                     eithers.map
                       (λes.Value{array = es})
                       entries),
-              `_`=left("expected map term")}
+              `_` = left("expected map term")}
               strippedTerm,
-        pair=λpt.
+        pair = λpt.
             let firstType := PairType[first] pt in
             let secondType := PairType[second] pt in
             cases(Term){
-              pair=λp.
+              pair = λp.
                   let first := pairs.first p in
                   let second := pairs.second p in
                   let encodedFirst := toJson
@@ -380,13 +384,13 @@ term toJson =
                             object = [("first", ef), ("second", es)]})
                         encodedSecond)
                     encodedFirst,
-              `_`=left("expected pair term")}
+              `_` = left("expected pair term")}
               strippedTerm,
-        `either`=λet.
+        `either` = λet.
             let leftType := EitherType[`left`] et in
             let rightType := EitherType[`right`] et in
             cases(Term){
-              `either`=λe.eithers.either
+              `either` = λe.eithers.either
                     (λl.
                       let encodedL := toJson
                           types
@@ -410,9 +414,9 @@ term toJson =
                             object = [("right", v)]})
                         encodedR)
                     e,
-              `_`=left("expected either term")}
+              `_` = left("expected either term")}
               strippedTerm,
-        variable=λname.
+        variable = λname.
             let lookedUp := maps.lookup name types
             in match
               lookedUp
@@ -423,7 +427,7 @@ term toJson =
                   name
                   resolvedType
                   `term`),
-        `_`=left(strings.concat
+        `_` = left(strings.concat
             ["unsupported type for JSON encoding: ", model.type typ])}
         stripped)
 
@@ -432,22 +436,22 @@ term toJsonUntyped =
   λ`term`.
     let stripped := deannotateTerm `term`
     in cases(Term){
-      variable=λn.right(Value{object = [("@var", Value{`string` = Name[] n})]}),
-      literal=λlit.encodeLiteral lit,
-      `list`=λterms.
+      variable = λn.right(Value{object = [("@var", Value{`string` = Name[] n})]}),
+      literal = λlit.encodeLiteral lit,
+      `list` = λterms.
           let results := eithers.mapList (λt.toJsonUntyped t) terms
           in eithers.map (λvs.Value{array = vs}) results,
-      `set`=λvals.
+      `set` = λvals.
           let terms := sets.toList vals in
           let results := eithers.mapList (λt.toJsonUntyped t) terms in
           eithers.map (λvs.Value{array = vs}) results,
-      `optional`=λopt.match
+      `optional` = λopt.match
             opt
             right(Value{null})
             (λv.
               let encodedMaybe := toJsonUntyped v
               in eithers.map (λencoded.Value{array = [encoded]}) encodedMaybe),
-      `record`=λr.
+      `record` = λr.
           let encodeField := λf.
               let fname := Name[] (Field[name] f) in
               let fterm := Field[`term`] f in
@@ -456,20 +460,20 @@ term toJsonUntyped =
           let fields := Record[fields] r in
           let encodedFields := eithers.mapList encodeField fields in
           eithers.map (λfs.Value{object = fs}) encodedFields,
-      `inject`=λinj.
+      `inject` = λinj.
           let field := Injection[field] inj in
           let fname := Name[] (Field[name] field) in
           let fterm := Field[`term`] field in
           let ftermStripped := deannotateTerm fterm in
-          let isUnit := cases(Term){`unit`=λ`_`.true, `_`=false} ftermStripped in
+          let isUnit := cases(Term){`unit` = λ`_`.true, `_` = false} ftermStripped in
           ifElse
             isUnit
             right(Value{`string` = fname})
             (let encodedUnion := toJsonUntyped fterm
             in eithers.map (λv.Value{object = [(fname, v)]}) encodedUnion),
-      `unit`=λ`_`.right(Value{object = []}),
-      `wrap`=λwt.toJsonUntyped (WrappedTerm[body] wt),
-      `map`=λm.
+      `unit` = λ`_`.right(Value{object = []}),
+      `wrap` = λwt.toJsonUntyped (WrappedTerm[body] wt),
+      `map` = λm.
           let encodeEntry := λkv.
               let k := pairs.first kv in
               let v := pairs.second kv in
@@ -483,7 +487,7 @@ term toJsonUntyped =
                 encodedK in
           let entries := eithers.mapList encodeEntry (maps.toList m) in
           eithers.map (λes.Value{array = es}) entries,
-      pair=λp.
+      pair = λp.
           let first := pairs.first p in
           let second := pairs.second p in
           let encodedFirst := toJsonUntyped first in
@@ -492,7 +496,7 @@ term toJsonUntyped =
             (λerr.left(err))
             (λef.eithers.map (λes.Value{object = [("first", ef), ("second", es)]}) encodedSecond)
             encodedFirst,
-      `either`=λe.eithers.either
+      `either` = λe.eithers.either
             (λl.
               let encodedL := toJsonUntyped l
               in eithers.map (λv.Value{object = [("left", v)]}) encodedL)
@@ -500,5 +504,5 @@ term toJsonUntyped =
               let encodedR := toJsonUntyped r
               in eithers.map (λv.Value{object = [("right", v)]}) encodedR)
             e,
-      `_`=left(strings.concat ["unsupported term variant for JSON encoding: ", model.term `term`])}
+      `_` = left(strings.concat ["unsupported term variant for JSON encoding: ", model.term `term`])}
       stripped

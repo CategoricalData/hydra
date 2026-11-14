@@ -37,8 +37,8 @@ import hydra.core.variables
 
 ## Adapt a graph and its schema to the given language constraints. The doExpand flag controls eta expansion of partial applications. Adaptation is type-preserving: binding-level TypeSchemes are adapted (not stripped). Note: case statement hoisting is done separately, prior to adaptation. The els0 parameter provides the original ordered bindings. Returns both the adapted graph and the ordered adapted bindings.
 term adaptDataGraph =
-  λconstraints,doExpand,els0,cx,graph0.
-    let transformTerm := λg,`term`.
+  λconstraints, doExpand, els0, cx, graph0.
+    let transformTerm := λg, `term`.
         let tx := g in
         let t1 := unshadowVariables
             (pushTypeAppsInward `term`) in
@@ -48,7 +48,7 @@ term adaptDataGraph =
               (pushTypeAppsInward (etaExpandTerm tx t1))
               t1) in
         liftLambdaAboveLet t2 in
-    let transformBinding := λg,el.Binding{
+    let transformBinding := λg, el.Binding{
           name = Binding[name] el,
           `term` = transformTerm g (Binding[`term`] el),
           typeScheme = Binding[typeScheme] el} in
@@ -113,7 +113,10 @@ term adaptDataGraph =
               (λels1.eithers.bind
                   (eithers.mapList
                     (λkv.eithers.bind
-                        (adaptPrimitive constraints litmap (second kv))
+                        (adaptPrimitive
+                          constraints
+                          litmap
+                          (second kv))
                         (λprim1.right((first kv, prim1))))
                     (maps.toList prims0))
                   (λprimPairs.
@@ -132,18 +135,18 @@ term adaptDataGraph =
 
 ## Attempt to adapt a floating-point type using the given language constraints
 term adaptFloatType =
-  λconstraints,ft.
+  λconstraints, ft.
     let supported := sets.member ft (LanguageConstraints[floatTypes] constraints) in
     let alt := adaptFloatType constraints in
     let forUnsupported := λft.cases(FloatType){
-          `float32`=λ`_`.alt FloatType{`float64`},
-          `float64`=λ`_`.alt FloatType{`float32`}}
+          `float32` = λ`_`.alt FloatType{`float64`},
+          `float64` = λ`_`.alt FloatType{`float32`}}
           ft in
     ifElse supported given(ft) (forUnsupported ft)
 
 ## Adapt a schema graph to the given language constraints
 term adaptGraphSchema =
-  λconstraints,litmap,types0.
+  λconstraints, litmap, types0.
     let mapPair := λpair.
         let name := first pair in
         let typ := second pair in
@@ -156,28 +159,28 @@ term adaptGraphSchema =
 
 ## Attempt to adapt an integer type using the given language constraints
 term adaptIntegerType =
-  λconstraints,it.
+  λconstraints, it.
     let supported := sets.member it (LanguageConstraints[integerTypes] constraints) in
     let alt := adaptIntegerType constraints in
     let forUnsupported := λit.cases(IntegerType){
-          `bigint`=λ`_`.none,
-          `int8`=λ`_`.alt IntegerType{`uint16`},
-          `int16`=λ`_`.alt IntegerType{`uint32`},
-          `int32`=λ`_`.alt IntegerType{`uint64`},
-          `int64`=λ`_`.alt IntegerType{`bigint`},
-          `uint8`=λ`_`.alt IntegerType{`int16`},
-          `uint16`=λ`_`.alt IntegerType{`int32`},
-          `uint32`=λ`_`.alt IntegerType{`int64`},
-          `uint64`=λ`_`.alt IntegerType{`bigint`}}
+          `bigint` = λ`_`.none,
+          `int8` = λ`_`.alt IntegerType{`uint16`},
+          `int16` = λ`_`.alt IntegerType{`uint32`},
+          `int32` = λ`_`.alt IntegerType{`uint64`},
+          `int64` = λ`_`.alt IntegerType{`bigint`},
+          `uint8` = λ`_`.alt IntegerType{`int16`},
+          `uint16` = λ`_`.alt IntegerType{`int32`},
+          `uint32` = λ`_`.alt IntegerType{`int64`},
+          `uint64` = λ`_`.alt IntegerType{`bigint`}}
           it in
     ifElse supported given(it) (forUnsupported it)
 
 ## Rewrite callback for adapting lambda domain types in a term
 term adaptLambdaDomains =
-  λconstraints,litmap,recurse,`term`.eithers.bind
+  λconstraints, litmap, recurse, `term`.eithers.bind
       (recurse `term`)
       (λrewritten.cases(Term){
-          lambda=λl.eithers.bind
+          lambda = λl.eithers.bind
                 (optionals.match
                   (Lambda[domain] l)
                   right(none)
@@ -189,42 +192,42 @@ term adaptLambdaDomains =
                       parameter = Lambda[parameter] l,
                       domain = adaptedDomain,
                       body = Lambda[body] l}})),
-          `_`=right(rewritten)}
+          `_` = right(rewritten)}
           rewritten)
 
 ## Convert a literal to a different type
 term adaptLiteral =
-  λlt,l.cases(Literal){
-      `binary`=λb.cases(LiteralType){`string`=λ`_`.Literal{`string` = binaryToBase64 b}} lt,
-      `boolean`=λb.cases(LiteralType){
-            integer=λit.Literal{
+  λlt, l.cases(Literal){
+      `binary` = λb.cases(LiteralType){`string` = λ`_`.Literal{`string` = binaryToBase64 b}} lt,
+      `boolean` = λb.cases(LiteralType){
+            integer = λit.Literal{
                   integer = bigintToIntegerValue
                       it
                       (ifElse b 1:bigint 0:bigint)}}
             lt,
-      `decimal`=λd.cases(LiteralType){
-            float=λ`_`.Literal{
+      `decimal` = λd.cases(LiteralType){
+            float = λ`_`.Literal{
                   float = FloatValue{
                     `float64` = decimalToFloat64 d}},
-            `string`=λ`_`.Literal{`string` = printDecimal d}}
+            `string` = λ`_`.Literal{`string` = printDecimal d}}
             lt,
-      float=λf.cases(LiteralType){
-            float=λft.Literal{
+      float = λf.cases(LiteralType){
+            float = λft.Literal{
                   float = cases(FloatType){
-                      `float32`=λ`_`.FloatValue{
+                      `float32` = λ`_`.FloatValue{
                             `float32` = cases(FloatValue){
-                                `float32`=λf32.f32,
-                                `float64`=λf64.float64ToFloat32 f64}
+                                `float32` = λf32.f32,
+                                `float64` = λf64.float64ToFloat32 f64}
                                 f},
-                      `float64`=λ`_`.FloatValue{
+                      `float64` = λ`_`.FloatValue{
                             `float64` = cases(FloatValue){
-                                `float32`=λf32.float32ToFloat64 f32,
-                                `float64`=λf64.f64}
+                                `float32` = λf32.float32ToFloat64 f32,
+                                `float64` = λf64.f64}
                                 f}}
                       ft}}
             lt,
-      integer=λi.cases(LiteralType){
-            integer=λit.Literal{
+      integer = λi.cases(LiteralType){
+            integer = λit.Literal{
                   integer = bigintToIntegerValue
                       it
                       (integerValueToBigint i)}}
@@ -233,24 +236,24 @@ term adaptLiteral =
 
 ## Attempt to adapt a literal type using the given language constraints
 term adaptLiteralType =
-  λconstraints,lt.
+  λconstraints, lt.
     let forUnsupported := λlt.cases(LiteralType){
-          `binary`=λ`_`.given(LiteralType{`string`}),
-          `boolean`=λ`_`.optionals.map
+          `binary` = λ`_`.given(LiteralType{`string`}),
+          `boolean` = λ`_`.optionals.map
                 (λx.LiteralType{integer = x})
                 (adaptIntegerType
                   constraints
                   IntegerType{`int8`}),
-          `decimal`=λ`_`.given(LiteralType{
+          `decimal` = λ`_`.given(LiteralType{
                 float = FloatType{
                   `float64`}}),
-          float=λft.optionals.map
+          float = λft.optionals.map
                 (λx.LiteralType{float = x})
                 (adaptFloatType constraints ft),
-          integer=λit.optionals.map
+          integer = λit.optionals.map
                 (λx.LiteralType{integer = x})
                 (adaptIntegerType constraints it),
-          `_`=none}
+          `_` = none}
           lt
     in ifElse (literalTypeSupported constraints lt) none (forUnsupported lt)
 
@@ -262,14 +265,14 @@ term adaptLiteralTypesMap =
 
 ## Adapt a literal value using the given language constraints
 term adaptLiteralValue =
-  λlitmap,lt,l.optionals.match (maps.lookup lt litmap) Literal{`string` = model.literal l} (λlt2.adaptLiteral lt2 l)
+  λlitmap, lt, l.optionals.match (maps.lookup lt litmap) Literal{`string` = model.literal l} (λlt2.adaptLiteral lt2 l)
 
 ## Rewrite callback for adapting nested let binding TypeSchemes in a term
 term adaptNestedTypes =
-  λconstraints,litmap,recurse,`term`.eithers.bind
+  λconstraints, litmap, recurse, `term`.eithers.bind
       (recurse `term`)
       (λrewritten.cases(Term){
-          `let`=λlt.
+          `let` = λlt.
               let adaptB := λb.eithers.bind
                     (optionals.match
                       (Binding[typeScheme] b)
@@ -287,12 +290,12 @@ term adaptNestedTypes =
                     `let` = Let{
                       bindings = adaptedBindings,
                       body = Let[body] lt}})),
-          `_`=right(rewritten)}
+          `_` = right(rewritten)}
           rewritten)
 
 ## Adapt a primitive to the given language constraints, prior to inference
 term adaptPrimitive =
-  λconstraints,litmap,prim0.
+  λconstraints, litmap, prim0.
     let def0 := Primitive[definition] prim0
     in eithers.bind
       (adaptTermSignature constraints litmap (PrimitiveDefinition[signature] def0))
@@ -305,21 +308,23 @@ term adaptPrimitive =
           isTotal = PrimitiveDefinition[isTotal] def0,
           defaultImplementation = PrimitiveDefinition[defaultImplementation]
               def0}
-        in right(Primitive{definition = def1, implementation = Primitive[implementation] prim0}))
+        in right(Primitive{
+          definition = def1,
+          implementation = Primitive[implementation] prim0}))
 
 ## Adapt a term using the given language constraints
 term adaptTerm =
-  λconstraints,litmap,cx,graph,term0.
-    let rewrite := λrecurse,term0.
+  λconstraints, litmap, cx, graph, term0.
+    let rewrite := λrecurse, term0.
         let forSupported := λ`term`.cases(Term){
-              literal=λl.
+              literal = λl.
                   let lt := reflect.literalType l
                   in right(given(ifElse
                     (literalTypeSupported constraints lt)
                     `term`
                     Term{
                       literal = adaptLiteralValue litmap lt l})),
-              `_`=right(given(`term`))}
+              `_` = right(given(`term`))}
               `term`, forUnsupported := λ`term`.
             let tryAlts := λalts.optionals.match
                   (lists.uncons alts)
@@ -344,8 +349,8 @@ term adaptTerm =
         in eithers.bind
           (recurse term0)
           (λterm1.cases(Term){
-              annotated=λ`_`.right(term1),
-              typeApplication=λta.eithers.bind
+              annotated = λ`_`.right(term1),
+              typeApplication = λta.eithers.bind
                     (adaptType
                       constraints
                       litmap
@@ -354,8 +359,8 @@ term adaptTerm =
                         typeApplication = TypeApplicationTerm{
                           body = TypeApplicationTerm[body] ta,
                           `type` = atyp}})),
-              typeLambda=λ`_`.right(term1),
-              `_`=eithers.bind
+              typeLambda = λ`_`.right(term1),
+              `_` = eithers.bind
                   (tryTerm term1)
                   (λmterm.optionals.match
                       mterm
@@ -369,14 +374,14 @@ term adaptTerm =
 
 ## Adapt a term using the constraints of a given language
 term adaptTermForLanguage =
-  λlang,cx,g,`term`.
+  λlang, cx, g, `term`.
     let constraints := Language[constraints] lang in
     let litmap := adaptLiteralTypesMap constraints in
     adaptTerm constraints litmap cx g `term`
 
 ## Adapt the types within a term signature to the given language constraints, in place. Parameter names, descriptions, and per-parameter isLazy flags, as well as type parameters, are preserved; only the parameter and result types are adapted. Unlike routing through TypeScheme (the type-only view), this retains the full TermSignature metadata, including primitive laziness flags.
 term adaptTermSignature =
-  λconstraints,litmap,sig0.
+  λconstraints, litmap, sig0.
     let result0 := TermSignature[result] sig0
     in eithers.bind
       (adaptType constraints litmap (Result[`type`] result0))
@@ -399,16 +404,18 @@ term adaptTermSignature =
 
 ## Adapt a type using the given language constraints
 term adaptType =
-  λconstraints,litmap,type0.
+  λconstraints, litmap, type0.
     let forSupported := λtyp.cases(Type){
-          literal=λlt.ifElse
+          literal = λlt.ifElse
                 (literalTypeSupported constraints lt)
                 given(typ)
                 (optionals.match
                   (maps.lookup lt litmap)
-                  given(Type{literal = LiteralType{`string`}})
+                  given(Type{
+                    literal = LiteralType{
+                      `string`}})
                   (λlt2.given(Type{literal = lt2}))),
-          `_`=given(typ)}
+          `_` = given(typ)}
           typ, forUnsupported := λtyp.
         let tryAlts := λalts.optionals.bind
               (lists.uncons alts)
@@ -422,7 +429,7 @@ term adaptType =
             (reflect.typeVariant typ)
             (LanguageConstraints[typeVariants] constraints)
         in ifElse supportedVariant (forSupported typ) (forUnsupported typ) in
-    let rewrite := λrecurse,typ.eithers.bind
+    let rewrite := λrecurse, typ.eithers.bind
           (recurse typ)
           (λtype1.optionals.match
               (tryType type1)
@@ -435,14 +442,14 @@ term adaptType =
 
 ## Adapt a type using the constraints of a given language
 term adaptTypeForLanguage =
-  λlang,typ.
+  λlang, typ.
     let constraints := Language[constraints] lang in
     let litmap := adaptLiteralTypesMap constraints in
     adaptType constraints litmap typ
 
 ## Adapt a type scheme to the given language constraints, prior to inference
 term adaptTypeScheme =
-  λconstraints,litmap,ts0.
+  λconstraints, litmap, ts0.
     let vars0 := TypeScheme[variables] ts0 in
     let t0 := TypeScheme[body] ts0 in
     eithers.bind
@@ -454,13 +461,13 @@ term adaptTypeScheme =
 
 ## Compose two coders into a single coder
 term composeCoders =
-  λc1,c2.Coder{
+  λc1, c2.Coder{
       encode = λa.eithers.bind (Coder[encode] c1 a) (λb1.Coder[encode] c2 b1),
       decode = λc.eithers.bind (Coder[decode] c2 c) (λb2.Coder[decode] c1 b2)}
 
 ## Given a data graph along with language constraints, original ordered bindings, and a designated list of namespaces, adapt the graph to the language constraints, then return the processed graph along with term definitions grouped by namespace (in the order of the input namespaces). Inference is performed before adaptation if bindings lack type annotations. Hoisting must preserve type schemes; if any binding loses its type scheme after hoisting, the pipeline fails. Adaptation preserves type application/lambda wrappers and adapts embedded types. Post-adaptation inference is performed to ensure binding TypeSchemes are fully consistent. The doExpand flag controls eta expansion. The doHoistCaseStatements flag controls case statement hoisting (needed for Python). The doHoistPolymorphicLetBindings flag controls polymorphic let binding hoisting (needed for Java). The originalBindings parameter provides the original ordered bindings (from module elements).
 term dataGraphToDefinitions =
-  λconstraints,doInfer,doExpand,doHoistCaseStatements,doHoistPolymorphicLetBindings,originalBindings,graph0,namespaces,cx.
+  λconstraints, doInfer, doExpand, doHoistCaseStatements, doHoistPolymorphicLetBindings, originalBindings, graph0, namespaces, cx.
     let namespacesSet := sets.fromList namespaces in
     let isParentBinding := λb.optionals.match
           (moduleNameOf (Binding[name] b))
@@ -502,7 +509,7 @@ term dataGraphToDefinitions =
           (strings.concat2 "(no module) " nm)
           (λns.strings.concat
               [ModuleName[] ns, " :: ", nm]) in
-    let checkBindingsTyped := λdebugLabel,bindings.
+    let checkBindingsTyped := λdebugLabel, bindings.
         let untypedBindings := lists.map
             qualifyUntyped
             (lists.filter
@@ -585,13 +592,13 @@ term dataGraphToDefinitions =
                   (λbins4.
                     let bins5Raw := normalizeBindings bins4 in
                     let peelOne := λt.cases(Term){
-                          typeLambda=λtl.TypeLambda[body] tl,
-                          typeApplication=λta.TypeApplicationTerm[body] ta,
-                          `_`=t}
+                          typeLambda = λtl.TypeLambda[body] tl,
+                          typeApplication = λta.TypeApplicationTerm[body] ta,
+                          `_` = t}
                           t in
                     let extractAnn := λt.cases(Term){
-                          annotated=λat.given(AnnotatedTerm[annotation] at),
-                          `_`=none}
+                          annotated = λat.given(AnnotatedTerm[annotation] at),
+                          `_` = none}
                           t in
                     let findAnn := λt.
                         let t1 := peelOne t in
@@ -623,7 +630,7 @@ term dataGraphToDefinitions =
                           (λann.Binding{
                               name = Binding[name] b,
                               `term` = cases(Term){
-                                  annotated=λat.Term{
+                                  annotated = λat.Term{
                                         annotated = AnnotatedTerm{
                                           body = AnnotatedTerm[body] at,
                                           annotation = wrapAnnotationMap
@@ -631,7 +638,7 @@ term dataGraphToDefinitions =
                                                 (getAnnotationMap
                                                   (AnnotatedTerm[annotation] at))
                                                 (getAnnotationMap ann))}},
-                                  `_`=Term{
+                                  `_` = Term{
                                     annotated = AnnotatedTerm{
                                       body = Binding[`term`] b,
                                       annotation = ann}}}
@@ -652,7 +659,7 @@ term dataGraphToDefinitions =
                             (λns.sets.member ns namespacesSet))
                         bins5 in
                     let elementsByNamespace := lists.foldl
-                        (λacc,el.optionals.match
+                        (λacc, el.optionals.match
                             (moduleNameOf (Binding[name] el))
                             acc
                             (λns.
@@ -693,15 +700,15 @@ term dataGraphToDefinitions =
 
 ## Check if a literal type is supported by the given language constraints
 term literalTypeSupported =
-  λconstraints,lt.
+  λconstraints, lt.
     let forType := λlt.cases(LiteralType){
-          float=λft.sets.member
+          float = λft.sets.member
                 ft
                 (LanguageConstraints[floatTypes] constraints),
-          integer=λit.sets.member
+          integer = λit.sets.member
                 it
                 (LanguageConstraints[integerTypes] constraints),
-          `_`=true}
+          `_` = true}
           lt
     in ifElse
       (sets.member (reflect.literalTypeVariant lt) (LanguageConstraints[literalVariants] constraints))
@@ -711,56 +718,60 @@ term literalTypeSupported =
 ## Prepare a float type, substituting unsupported types
 term prepareFloatType =
   λft.cases(FloatType){
-      `float32`=λ`_`.(FloatType{`float32`}, (λv.cases(FloatValue){`float32`=λf.FloatValue{`float32` = f}, `_`=v} v, sets.empty)),
-      `float64`=λ`_`.(FloatType{`float64`}, (λv.cases(FloatValue){`float64`=λf.FloatValue{`float64` = f}, `_`=v} v, sets.empty))}
+      `float32` = λ`_`.(
+            FloatType{`float32`},
+            (λv.cases(FloatValue){`float32` = λf.FloatValue{`float32` = f}, `_` = v} v, sets.empty)),
+      `float64` = λ`_`.(
+            FloatType{`float64`},
+            (λv.cases(FloatValue){`float64` = λf.FloatValue{`float64` = f}, `_` = v} v, sets.empty))}
       ft
 
 ## Prepare an integer type, substituting unsupported types
 term prepareIntegerType =
   λit.cases(IntegerType){
-      `bigint`=λ`_`.(
+      `bigint` = λ`_`.(
             IntegerType{`int64`},
             (
-              λv.cases(IntegerValue){`bigint`=λi.IntegerValue{`int64` = bigintToInt64 i}, `_`=v} v,
+              λv.cases(IntegerValue){`bigint` = λi.IntegerValue{`int64` = bigintToInt64 i}, `_` = v} v,
               sets.fromList ["replace arbitrary-precision integers with 64-bit integers"])),
-      `uint8`=λ`_`.(
+      `uint8` = λ`_`.(
             IntegerType{`int8`},
             (
-              λv.cases(IntegerValue){`uint8`=λi.IntegerValue{`int8` = bigintToInt8 (uint8ToBigint i)}, `_`=v} v,
+              λv.cases(IntegerValue){`uint8` = λi.IntegerValue{`int8` = bigintToInt8 (uint8ToBigint i)}, `_` = v} v,
               sets.fromList ["replace unsigned 8-bit integers with signed 8-bit integers"])),
-      `uint32`=λ`_`.(
+      `uint32` = λ`_`.(
             IntegerType{`int32`},
             (
-              λv.cases(IntegerValue){`uint32`=λi.IntegerValue{`int32` = bigintToInt32 (uint32ToBigint i)}, `_`=v} v,
+              λv.cases(IntegerValue){`uint32` = λi.IntegerValue{`int32` = bigintToInt32 (uint32ToBigint i)}, `_` = v} v,
               sets.fromList ["replace unsigned 32-bit integers with signed 32-bit integers"])),
-      `uint64`=λ`_`.(
+      `uint64` = λ`_`.(
             IntegerType{`int64`},
             (
-              λv.cases(IntegerValue){`uint64`=λi.IntegerValue{`int64` = bigintToInt64 (uint64ToBigint i)}, `_`=v} v,
+              λv.cases(IntegerValue){`uint64` = λi.IntegerValue{`int64` = bigintToInt64 (uint64ToBigint i)}, `_` = v} v,
               sets.fromList ["replace unsigned 64-bit integers with signed 64-bit integers"])),
-      `_`=prepareSame it}
+      `_` = prepareSame it}
       it
 
 ## Prepare a literal type, substituting unsupported types
 term prepareLiteralType =
   λat.cases(LiteralType){
-      `binary`=λ`_`.(
+      `binary` = λ`_`.(
             LiteralType{`string`},
             (
-              λv.cases(Literal){`binary`=λb.Literal{`string` = binaryToBase64 b}, `_`=v} v,
+              λv.cases(Literal){`binary` = λb.Literal{`string` = binaryToBase64 b}, `_` = v} v,
               sets.fromList ["replace binary strings with character strings"])),
-      `decimal`=λ`_`.(
+      `decimal` = λ`_`.(
             LiteralType{float = FloatType{`float64`}},
             (
-              λv.cases(Literal){`decimal`=λd.Literal{float = FloatValue{`float64` = decimalToFloat64 d}}, `_`=v} v,
+              λv.cases(Literal){`decimal` = λd.Literal{float = FloatValue{`float64` = decimalToFloat64 d}}, `_` = v} v,
               sets.fromList ["replace arbitrary-precision decimal numbers with 64-bit floating-point numbers (doubles)"])),
-      float=λft.
+      float = λft.
           let result := prepareFloatType ft, rtyp := first result, rep := first (second result), msgs := second (second result)
-          in (LiteralType{float = rtyp}, (λv.cases(Literal){float=λfv.Literal{float = rep fv}, `_`=v} v, msgs)),
-      integer=λit.
+          in (LiteralType{float = rtyp}, (λv.cases(Literal){float = λfv.Literal{float = rep fv}, `_` = v} v, msgs)),
+      integer = λit.
           let result := prepareIntegerType it, rtyp := first result, rep := first (second result), msgs := second (second result)
-          in (LiteralType{integer = rtyp}, (λv.cases(Literal){integer=λiv.Literal{integer = rep iv}, `_`=v} v, msgs)),
-      `_`=prepareSame at}
+          in (LiteralType{integer = rtyp}, (λv.cases(Literal){integer = λiv.Literal{integer = rep iv}, `_` = v} v, msgs)),
+      `_` = prepareSame at}
       at
 
 ## Return a value unchanged with identity transform and no messages
@@ -768,22 +779,22 @@ term prepareSame = λx.(x, (λy.y, sets.empty))
 
 ## Prepare a type, substituting unsupported literal types
 term prepareType =
-  λcx,typ.cases(Type){
-      literal=λat.
+  λcx, typ.cases(Type){
+      literal = λat.
           let result := prepareLiteralType at, rtyp := first result, rep := first (second result), msgs := second (second result)
-          in (Type{literal = rtyp}, (λv.cases(Term){literal=λav.Term{literal = rep av}, `_`=v} v, msgs)),
-      `_`=prepareSame typ}
+          in (Type{literal = rtyp}, (λv.cases(Term){literal = λav.Term{literal = rep av}, `_` = v} v, msgs)),
+      `_` = prepareSame typ}
       (deannotateType typ)
 
 ## Normalize a term by pushing TermTypeApplication inward past TermApplication and TermLambda. This corrects structures produced by poly-let hoisting and eta expansion, where type applications from inference end up wrapping term applications or lambda abstractions instead of being directly on the polymorphic variable.
 term pushTypeAppsInward =
   λ`term`.
-    let push := λbody,typ.cases(Term){
-          annotated=λat.Term{
+    let push := λbody, typ.cases(Term){
+          annotated = λat.Term{
                 annotated = AnnotatedTerm{
                   body = push (AnnotatedTerm[body] at) typ,
                   annotation = AnnotatedTerm[annotation] at}},
-          application=λa.go
+          application = λa.go
                 Term{
                   application = Application{
                     function = Term{
@@ -791,7 +802,7 @@ term pushTypeAppsInward =
                         body = Application[function] a,
                         `type` = typ}},
                     argument = Application[argument] a}},
-          lambda=λl.go
+          lambda = λl.go
                 Term{
                   lambda = Lambda{
                     parameter = Lambda[parameter] l,
@@ -800,7 +811,7 @@ term pushTypeAppsInward =
                       typeApplication = TypeApplicationTerm{
                         body = Lambda[body] l,
                         `type` = typ}}}},
-          `let`=λlt.go
+          `let` = λlt.go
                 Term{
                   `let` = Let{
                     bindings = Let[bindings] lt,
@@ -808,7 +819,7 @@ term pushTypeAppsInward =
                       typeApplication = TypeApplicationTerm{
                         body = Let[body] lt,
                         `type` = typ}}}},
-          `_`=Term{
+          `_` = Term{
             typeApplication = TypeApplicationTerm{
               body = body,
               `type` = typ}}}
@@ -829,15 +840,15 @@ term pushTypeAppsInward =
             let forPair := λp.(go (first p), go (second p))
             in maps.fromList (lists.map forPair (maps.toList m)) in
         cases(Term){
-          annotated=λat.Term{
+          annotated = λat.Term{
                 annotated = AnnotatedTerm{
                   body = go (AnnotatedTerm[body] at),
                   annotation = AnnotatedTerm[annotation] at}},
-          application=λa.Term{
+          application = λa.Term{
                 application = Application{
                   function = go (Application[function] a),
                   argument = go (Application[argument] a)}},
-          `cases`=λcs.Term{
+          `cases` = λcs.Term{
                 `cases` = CaseStatement{
                   typeName = CaseStatement[typeName] cs,
                   default = optionals.map
@@ -846,39 +857,39 @@ term pushTypeAppsInward =
                   `cases` = lists.map
                       forCaseAlternative
                       (CaseStatement[`cases`] cs)}},
-          `either`=λe.Term{`either` = eithers.either (λl.left(go l)) (λr.right(go r)) e},
-          lambda=λl.Term{
+          `either` = λe.Term{`either` = eithers.either (λl.left(go l)) (λr.right(go r)) e},
+          lambda = λl.Term{
                 lambda = Lambda{
                   parameter = Lambda[parameter] l,
                   domain = Lambda[domain] l,
                   body = go (Lambda[body] l)}},
-          `let`=λlt.Term{`let` = forLet lt},
-          `list`=λels.Term{`list` = lists.map go els},
-          literal=λv.Term{literal = v},
-          `map`=λm.Term{`map` = forMap m},
-          `optional`=λm.Term{`optional` = optionals.map go m},
-          pair=λp.Term{pair = (go (first p), go (second p))},
-          `project`=λp.Term{`project` = p},
-          `record`=λr.Term{
+          `let` = λlt.Term{`let` = forLet lt},
+          `list` = λels.Term{`list` = lists.map go els},
+          literal = λv.Term{literal = v},
+          `map` = λm.Term{`map` = forMap m},
+          `optional` = λm.Term{`optional` = optionals.map go m},
+          pair = λp.Term{pair = (go (first p), go (second p))},
+          `project` = λp.Term{`project` = p},
+          `record` = λr.Term{
                 `record` = Record{
                   typeName = Record[typeName] r,
                   fields = lists.map forField (Record[fields] r)}},
-          `set`=λs.Term{`set` = sets.fromList (lists.map go (sets.toList s))},
-          typeApplication=λtt.
+          `set` = λs.Term{`set` = sets.fromList (lists.map go (sets.toList s))},
+          typeApplication = λtt.
               let body1 := go (TypeApplicationTerm[body] tt)
               in push body1 (TypeApplicationTerm[`type`] tt),
-          typeLambda=λta.Term{
+          typeLambda = λta.Term{
                 typeLambda = TypeLambda{
                   parameter = TypeLambda[parameter] ta,
                   body = go (TypeLambda[body] ta)}},
-          `inject`=λi.Term{
+          `inject` = λi.Term{
                 `inject` = Injection{
                   typeName = Injection[typeName] i,
                   field = forField (Injection[field] i)}},
-          `unit`=λ`_`.Term{`unit`},
-          `unwrap`=λn.Term{`unwrap` = n},
-          variable=λv.Term{variable = v},
-          `wrap`=λwt.Term{
+          `unit` = λ`_`.Term{`unit`},
+          `unwrap` = λn.Term{`unwrap` = n},
+          variable = λv.Term{variable = v},
+          `wrap` = λwt.Term{
                 `wrap` = WrappedTerm{
                   typeName = WrappedTerm[typeName] wt,
                   body = go (WrappedTerm[body] wt)}}}
@@ -887,7 +898,7 @@ term pushTypeAppsInward =
 
 ## Given a schema graph along with language constraints and a designated list of element names, adapt the graph to the language constraints, then return a corresponding type definition for each element name.
 term schemaGraphToDefinitions =
-  λconstraints,graph,nameLists,cx.
+  λconstraints, graph, nameLists, cx.
     let litmap := adaptLiteralTypesMap constraints
     in eithers.bind
       (eithers.bimap
@@ -912,7 +923,7 @@ term schemaGraphToDefinitions =
 
 ## Given a target language and a source type, produce an adapter which rewrites the type and its terms according to the language's constraints. The encode direction adapts terms; the decode direction is identity.
 term simpleLanguageAdapter =
-  λlang,cx,g,typ.
+  λlang, cx, g, typ.
     let constraints := Language[constraints] lang in
     let litmap := adaptLiteralTypesMap constraints in
     eithers.bind
@@ -927,12 +938,12 @@ term simpleLanguageAdapter =
 
 ## Find a list of alternatives for a given term, if any
 term termAlternatives =
-  λcx,graph,`term`.cases(Term){
-      annotated=λat.let term2 := AnnotatedTerm[body] at in right([term2]),
-      `optional`=λot.right([Term{`list` = optionals.match ot [] (λterm2.[term2])}]),
-      typeLambda=λabs.let term2 := TypeLambda[body] abs in right([term2]),
-      typeApplication=λta.let term2 := TypeApplicationTerm[body] ta in right([term2]),
-      `inject`=λinj.
+  λcx, graph, `term`.cases(Term){
+      annotated = λat.let term2 := AnnotatedTerm[body] at in right([term2]),
+      `optional` = λot.right([Term{`list` = optionals.match ot [] (λterm2.[term2])}]),
+      typeLambda = λabs.let term2 := TypeLambda[body] abs in right([term2]),
+      typeApplication = λta.let term2 := TypeApplicationTerm[body] ta in right([term2]),
+      `inject` = λinj.
           let tname := Injection[typeName] inj in
           let field := Injection[field] inj in
           let fname := Field[name] field in
@@ -949,24 +960,24 @@ term termAlternatives =
           eithers.bind
             (requireUnionType cx graph tname)
             (λrt.right([Term{`record` = Record{typeName = tname, fields = lists.map forFieldType rt}}])),
-      `unit`=λ`_`.right([Term{literal = Literal{`boolean` = true}}]),
-      `wrap`=λwt.let term2 := WrappedTerm[body] wt in right([term2]),
-      `_`=right([])}
+      `unit` = λ`_`.right([Term{literal = Literal{`boolean` = true}}]),
+      `wrap` = λwt.let term2 := WrappedTerm[body] wt in right([term2]),
+      `_` = right([])}
       `term`
 
 ## Find a list of alternatives for a given type, if any
 term typeAlternatives =
   λ`type`.cases(Type){
-      annotated=λat.let type2 := AnnotatedType[body] at in [type2],
-      `effect`=λet.[et],
-      `optional`=λot.[Type{`list` = ot}],
-      `union`=λrt.
+      annotated = λat.let type2 := AnnotatedType[body] at in [type2],
+      `effect` = λet.[et],
+      `optional` = λot.[Type{`list` = ot}],
+      `union` = λrt.
           let toOptField := λf.FieldType{
                 name = FieldType[name] f,
                 `type` = Type{`optional` = FieldType[`type`] f}} in
           let optFields := lists.map toOptField rt in
           [Type{`record` = optFields}],
-      `unit`=λ`_`.[Type{literal = LiteralType{`boolean`}}],
-      `void`=λ`_`.[Type{`unit`}],
-      `_`=[]}
+      `unit` = λ`_`.[Type{literal = LiteralType{`boolean`}}],
+      `void` = λ`_`.[Type{`unit`}],
+      `_` = []}
       `type`

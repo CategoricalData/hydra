@@ -70,6 +70,7 @@ module_ = Module {
    definitions = [
      toDefinition annotateApplicationSpan,
      toDefinition annotateSpan,
+     toDefinition formatParseFailure,
      toDefinition keySourceSpan,
      toDefinition offsetToPosition,
      toDefinition peelSpans,
@@ -134,6 +135,27 @@ offsetToPosition = define "offsetToPosition" $
       (pair (var "line") (Math.add (var "col") (var "width")))) $
   "end" <~ Lists.foldl (var "step") (pair (int32 0) (int32 0)) (Lists.zip (var "cps") (var "nexts")) $
   Parsing.sourcePosition (Pairs.first $ var "end") (Pairs.second $ var "end")
+
+-- | Format a parse failure as '<line>:<col>: <message>', for human-facing error reporting (hand-
+-- edited '.hydra' files; #711). Takes the full original input and the codepoint offset at which
+-- the failure occurred (the error's remaining input's own offset, or the trailing-input check's
+-- current offset), converts the offset to a position via 'offsetToPosition', and renders the
+-- line/column as 1-based (the universal convention for compiler/editor error messages), unlike
+-- 'SourcePosition' itself, which stays 0-based (the LSP convention, used by its other consumers).
+formatParseFailure :: TypedTermDefinition (String -> Int -> String -> String)
+formatParseFailure = define "formatParseFailure" $
+  doc ("Format a parse failure as 'line:col: message' (1-based line/column), given the full input"
+    <> " text, the codepoint offset of the failure, and the raw error message") $
+  "text" ~> "offset" ~> "message" ~>
+  "pos" <~ offsetToPosition @@ var "text" @@ var "offset" $
+  "line1" <~ Math.add (Parsing.sourcePositionLine $ var "pos") (int32 1) $
+  "col1" <~ Math.add (Parsing.sourcePositionColumn $ var "pos") (int32 1) $
+  Strings.concat $ list [
+    Literals.printInt32 (var "line1"),
+    string ":",
+    Literals.printInt32 (var "col1"),
+    string ": ",
+    var "message"]
 
 -- | Remove all span-only annotation layers from the top of a term
 peelSpans :: TypedTermDefinition (Term -> Term)

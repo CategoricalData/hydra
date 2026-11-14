@@ -25,7 +25,7 @@ term binding = bindingAliased maps.empty
 
 ## Show a binding as a string, shortening nominal references via the given import-alias map (#803)
 term bindingAliased =
-  λaliases,el.
+  λaliases, el.
     let name := printName (Binding[name] el) in
     let t := Binding[`term`] el in
     let typeStr := match
@@ -36,7 +36,7 @@ term bindingAliased =
 
 ## Show a binding as a line-layout expression, shortening nominal references via the given import-alias map (#803)
 term bindingExprAliased =
-  λbudget,aliases,el.
+  λbudget, aliases, el.
     let name := printName (Binding[name] el) in
     let t := Binding[`term`] el in
     let typeStr := match
@@ -58,7 +58,7 @@ term bindingExprAliased =
 
 ## Show a case statement as a string, shortening nominal references via the given import-alias map (#803)
 term caseStatement =
-  λaliases,cs.
+  λaliases, cs.
     let tname := printNameAliased aliases (CaseStatement[typeName] cs) in
     let mdef := CaseStatement[default] cs in
     let csCases := CaseStatement[`cases`] cs in
@@ -71,7 +71,7 @@ term caseStatement =
 
 ## Show a case statement as a line-layout expression, shortening nominal references via the given import-alias map (#803)
 term caseStatementExprAliased =
-  λbudget,aliases,cs.
+  λbudget, aliases, cs.
     let tname := printNameAliased aliases (CaseStatement[typeName] cs) in
     let mdef := CaseStatement[default] cs in
     let csCases := CaseStatement[`cases`] cs in
@@ -100,7 +100,7 @@ term caseStatementExprAliased =
 
 ## Show an Either value using given functions for left and right
 term either =
-  λshowA,showB,e.eithers.either
+  λshowA, showB, e.eithers.either
       (λa.strings.concat2 "left(" (strings.concat2 (showA a) ")"))
       (λb.strings.concat2 "right(" (strings.concat2 (showB b) ")"))
       e
@@ -161,21 +161,21 @@ term escapeStringChar =
 
 ## Show a field as a string, shortening nominal references in its term via the given alias map (#803)
 term field =
-  λaliases,field.
+  λaliases, field.
     let fname := printName (Field[name] field) in
     let fterm := Field[`term`] field in
-    strings.concat [fname, "=", termAliased aliases fterm]
+    strings.concat [fname, " = ", termAliased aliases fterm]
 
 ## Show a field as a line-layout expression, shortening nominal references in its term via the given alias map (#803)
 term fieldExprAliased =
-  λbudget,aliases,field.
+  λbudget, aliases, field.
     let fname := printName (Field[name] field) in
     let fterm := Field[`term`] field in
-    let valueBudget := sub budget (add (strings.length fname) 1:int32) in
+    let valueBudget := sub budget (add (strings.length fname) 3:int32) in
     let valueExpr := termExprAtPrecBudget valueBudget aliases 0:int32 fterm in
     let eqOp := Op{
       symbol = sym "=",
-      padding = Padding{`left` = Ws{`none`}, `right` = Ws{`none`}},
+      padding = Padding{`left` = Ws{space}, `right` = Ws{space}},
       precedence = Precedence{0:int32},
       associativity = Associativity{`none`}} in
     ifElse
@@ -184,11 +184,11 @@ term fieldExprAliased =
       (indentSubsequentLines doubleSpace (ifx eqOp (cst fname) valueExpr))
 
 ## True iff a term is the unit term (for bareword unit-field sugar, #809)
-term fieldTermIsUnit = λt.cases(Term){`unit`=λ`_`.true, `_`=false} t
+term fieldTermIsUnit = λt.cases(Term){`unit` = λ`_`.true, `_` = false} t
 
 ## Show a field type as a string, shortening nominal references in its type via the given alias map (#803)
 term fieldType =
-  λaliases,ft.
+  λaliases, ft.
     let fname := printName (FieldType[name] ft) in
     let ftyp := FieldType[`type`] ft in
     let peeled := peelDescriptionAnnotation ftyp in
@@ -196,7 +196,7 @@ term fieldType =
 
 ## Show a field type as a block-layout expression, with its description (if any) as a preceding '##' comment line
 term fieldTypeExpr =
-  λaliases,ft.
+  λaliases, ft.
     let ftyp := FieldType[`type`] ft in
     let peeled := peelDescriptionAnnotation ftyp in
     let mdesc := first peeled in
@@ -206,49 +206,49 @@ term fieldTypeExpr =
 
 ## Show a list of fields as a string, shortening nominal references via the given alias map (#803)
 term fields =
-  λaliases,flds.
+  λaliases, flds.
     let fieldStrs := lists.map (field aliases) flds
     in strings.concat ["{", strings.join ", " fieldStrs, "}"]
 
 ## Show a float value as a string
 term float =
   λfv.cases(FloatValue){
-      `float32`=λv.strings.concat2 (printFloat32 v) ":float32",
-      `float64`=λv.strings.concat2 (printFloat64 v) ":float64"}
+      `float32` = λv.strings.concat2 (printFloat32 v) ":float32",
+      `float64` = λv.strings.concat2 (printFloat64 v) ":float64"}
       fv
 
 ## Show a float type as a string
-term floatType = λft.cases(FloatType){`float32`=λ`_`."float32", `float64`=λ`_`."float64"} ft
+term floatType = λft.cases(FloatType){`float32` = λ`_`."float32", `float64` = λ`_`."float64"} ft
 
 ## Gather a chain of directly-nested Term.lambda binders, returning (binders, innermost body)
 term gatherLambdaBinders =
-  λprev,t.cases(Term){
-      lambda=λl.
+  λprev, t.cases(Term){
+      lambda = λl.
           let v := Lambda[parameter] l in
           let mt := Lambda[domain] l in
           let body := Lambda[body] l in
           gatherLambdaBinders (lists.cons (v, mt) prev) body,
-      `_`=(lists.reverse prev, t)}
+      `_` = (lists.reverse prev, t)}
       t
 
 ## Gather a chain of directly-nested Term.let_ links, returning (binding-groups, innermost body)
 term gatherLetChain =
-  λprev,t.cases(Term){
-      `let`=λl.
+  λprev, t.cases(Term){
+      `let` = λl.
           let bindings := Let[bindings] l in
           let body := Let[body] l in
           gatherLetChain (lists.cons bindings prev) body,
-      `_`=(lists.reverse prev, t)}
+      `_` = (lists.reverse prev, t)}
       t
 
 ## Gather a chain of directly-nested Term.typeLambda binders, returning (binders, innermost body)
 term gatherTypeLambdaBinders =
-  λprev,t.cases(Term){
-      typeLambda=λta.
+  λprev, t.cases(Term){
+      typeLambda = λta.
           let v := TypeLambda[parameter] ta in
           let body := TypeLambda[body] ta in
           gatherTypeLambdaBinders (lists.cons v prev) body,
-      `_`=(lists.reverse prev, t)}
+      `_` = (lists.reverse prev, t)}
       t
 
 ## Look up a hex digit (0-15) as a lowercase hex character.
@@ -257,14 +257,14 @@ term hexDigit =
 
 ## Show an injection as a string, shortening the type name via the given import-alias map (#803)
 term injection =
-  λaliases,inj.
+  λaliases, inj.
     let tname := Injection[typeName] inj in
     let f := Injection[field] inj in
     strings.concat [printNameAliased aliases tname, sugarFields aliases [f]]
 
 ## Show an injection as a line-layout expression, shortening the type name via the given import-alias map (#803)
 term injectionExprAliased =
-  λbudget,aliases,inj.
+  λbudget, aliases, inj.
     let tname := Injection[typeName] inj in
     let f := Injection[field] inj in
     let tnameStr := printNameAliased aliases tname in
@@ -280,54 +280,54 @@ term injectionExprAliased =
 ## Show an integer value as a string
 term integer =
   λiv.cases(IntegerValue){
-      `bigint`=λv.strings.concat2 (printBigint v) ":bigint",
-      `int8`=λv.strings.concat2 (printInt8 v) ":int8",
-      `int16`=λv.strings.concat2 (printInt16 v) ":int16",
-      `int32`=λv.strings.concat2 (printInt32 v) ":int32",
-      `int64`=λv.strings.concat2 (printInt64 v) ":int64",
-      `uint8`=λv.strings.concat2 (printUint8 v) ":uint8",
-      `uint16`=λv.strings.concat2 (printUint16 v) ":uint16",
-      `uint32`=λv.strings.concat2 (printUint32 v) ":uint32",
-      `uint64`=λv.strings.concat2 (printUint64 v) ":uint64"}
+      `bigint` = λv.strings.concat2 (printBigint v) ":bigint",
+      `int8` = λv.strings.concat2 (printInt8 v) ":int8",
+      `int16` = λv.strings.concat2 (printInt16 v) ":int16",
+      `int32` = λv.strings.concat2 (printInt32 v) ":int32",
+      `int64` = λv.strings.concat2 (printInt64 v) ":int64",
+      `uint8` = λv.strings.concat2 (printUint8 v) ":uint8",
+      `uint16` = λv.strings.concat2 (printUint16 v) ":uint16",
+      `uint32` = λv.strings.concat2 (printUint32 v) ":uint32",
+      `uint64` = λv.strings.concat2 (printUint64 v) ":uint64"}
       iv
 
 ## Show an integer type as a string
 term integerType =
   λit.cases(IntegerType){
-      `bigint`=λ`_`."bigint",
-      `int8`=λ`_`."int8",
-      `int16`=λ`_`."int16",
-      `int32`=λ`_`."int32",
-      `int64`=λ`_`."int64",
-      `uint8`=λ`_`."uint8",
-      `uint16`=λ`_`."uint16",
-      `uint32`=λ`_`."uint32",
-      `uint64`=λ`_`."uint64"}
+      `bigint` = λ`_`."bigint",
+      `int8` = λ`_`."int8",
+      `int16` = λ`_`."int16",
+      `int32` = λ`_`."int32",
+      `int64` = λ`_`."int64",
+      `uint8` = λ`_`."uint8",
+      `uint16` = λ`_`."uint16",
+      `uint32` = λ`_`."uint32",
+      `uint64` = λ`_`."uint64"}
       it
 
 ## True iff a name is a nonempty sequence of dot-separated segments of alphanumeric characters.
 term isBareName =
   λs.
     let segs := strings.splitOn "." s
-    in and (not (lists.isEmpty segs)) (lists.foldl (λacc,seg.and acc (isBareSegment seg)) true segs)
+    in and (not (lists.isEmpty segs)) (lists.foldl (λacc, seg.and acc (isBareSegment seg)) true segs)
 
 ## True iff a name segment is a nonempty sequence of alphanumeric characters (the bare alphabet).
 term isBareSegment =
-  λseg.and (not (strings.isEmpty seg)) (lists.foldl (λacc,c.and acc (isAlphaNum c)) true (strings.toList seg))
+  λseg.and (not (strings.isEmpty seg)) (lists.foldl (λacc, c.and acc (isAlphaNum c)) true (strings.toList seg))
 
 ## True iff a term is a let or lambda (a binder-introducing construct, for #711 chained-binder line breaking)
-term isBinderChainTerm = λt.cases(Term){`let`=λ`_`.true, lambda=λ`_`.true, `_`=false} t
+term isBinderChainTerm = λt.cases(Term){`let` = λ`_`.true, lambda = λ`_`.true, `_` = false} t
 
 ## True iff a term prints as a self-indenting bracketed construct (record/list/set/map), for #711 double-indent avoidance
 term isBracketedTerm =
   λt.cases(Term){
-      `record`=λ`_`.true,
-      `list`=λ`_`.true,
-      `set`=λ`_`.true,
-      `map`=λ`_`.true,
-      `inject`=λ`_`.true,
-      `wrap`=λ`_`.true,
-      `_`=false}
+      `record` = λ`_`.true,
+      `list` = λ`_`.true,
+      `set` = λ`_`.true,
+      `map` = λ`_`.true,
+      `inject` = λ`_`.true,
+      `wrap` = λ`_`.true,
+      `_` = false}
       t
 
 ## True iff the given string is a reserved word which must be backtick-escaped when used as a name.
@@ -390,11 +390,11 @@ term isReservedWord =
           "Infinity"])
 
 ## True iff a term is a bare variable reference (for wrap-sugar disambiguation, #809)
-term isVariableTerm = λt.cases(Term){variable=λ`_`.true, `_`=false} t
+term isVariableTerm = λt.cases(Term){variable = λ`_`.true, `_` = false} t
 
 ## Show a lambda as a string, shortening nominal references in its domain/body via the given alias map (#803)
 term lambda =
-  λaliases,l.
+  λaliases, l.
     let gathered := gatherLambdaBinders [] Term{lambda = l} in
     let binders := first gathered in
     let body := second gathered in
@@ -402,11 +402,11 @@ term lambda =
         let v := printBinderName (first b) in
         let mt := second b in
         match mt v (λt.strings.concat [v, ":", typeAliased aliases t]) in
-    strings.concat ["λ", strings.join "," (lists.map binderStr binders), ".", termAliased aliases body]
+    strings.concat ["λ", strings.join ", " (lists.map binderStr binders), ".", termAliased aliases body]
 
 ## Show a lambda as a line-layout expression, shortening nominal references in its domain/body via the given alias map (#803)
 term lambdaExprAliased =
-  λbudget,aliases,l.
+  λbudget, aliases, l.
     let gathered := gatherLambdaBinders [] Term{lambda = l} in
     let binders := first gathered in
     let body := second gathered in
@@ -414,7 +414,7 @@ term lambdaExprAliased =
         let v := printBinderName (first b) in
         let mt := second b in
         match mt v (λt.strings.concat [v, ":", typeAliased aliases t]) in
-    let headStr := strings.concat ["λ", strings.join "," (lists.map binderStr binders), "."] in
+    let headStr := strings.concat ["λ", strings.join ", " (lists.map binderStr binders), "."] in
     let bodyBudget := sub budget (strings.length headStr) in
     let bodyExpr := termExprAtPrecBudget bodyBudget aliases 0:int32 body in
     let forceBreak := and
@@ -446,7 +446,7 @@ term let = letAliased maps.empty
 
 ## Show a let expression as a string, shortening nominal references via the given import-alias map (#803)
 term letAliased =
-  λaliases,l.
+  λaliases, l.
     let bindings := Let[bindings] l in
     let env := Let[body] l in
     let bindingStrs := lists.map (bindingAliased aliases) bindings in
@@ -454,7 +454,7 @@ term letAliased =
 
 ## Show a let expression as a line-layout expression, shortening nominal references via the given import-alias map (#803)
 term letExprAliased =
-  λbudget,aliases,l.
+  λbudget, aliases, l.
     let gathered := gatherLetChain [] Term{`let` = l} in
     let bindingGroups := first gathered in
     let finalBody := second gathered in
@@ -474,7 +474,7 @@ term letExprAliased =
       precedence = Precedence{0:int32},
       associativity = Associativity{`none`}} in
     let inlineForm := lists.foldr
-        (λge,acc.ifx inletOp (ifx letPrefixOp (cst "") ge) acc)
+        (λge, acc.ifx inletOp (ifx letPrefixOp (cst "") ge) acc)
         bodyExpr
         groupInlineStrs in
     let letLineOp := Op{
@@ -503,52 +503,52 @@ term letExprAliased =
     chooseLayout budget inlineForm blockForm
 
 ## Show a list using a given function to show each element
-term list = λf,xs.let elementStrs := lists.map f xs in strings.concat ["[", strings.join ", " elementStrs, "]"]
+term list = λf, xs.let elementStrs := lists.map f xs in strings.concat ["[", strings.join ", " elementStrs, "]"]
 
 ## Show a literal as a string
 term literal =
   λl.cases(Literal){
-      `binary`=λb.strings.concat [printString (binaryToBase64 b), ":binary"],
-      `boolean`=λb.ifElse b "true" "false",
-      `decimal`=λd.printDecimal d,
-      float=λfv.float fv,
-      integer=λiv.integer iv,
-      `string`=λs.printStringLit s}
+      `binary` = λb.strings.concat [printString (binaryToBase64 b), ":binary"],
+      `boolean` = λb.ifElse b "true" "false",
+      `decimal` = λd.printDecimal d,
+      float = λfv.float fv,
+      integer = λiv.integer iv,
+      `string` = λs.printStringLit s}
       l
 
 ## Show a literal type as a string
 term literalType =
   λlt.cases(LiteralType){
-      `binary`=λ`_`."binary",
-      `boolean`=λ`_`."boolean",
-      `decimal`=λ`_`."decimal",
-      float=λft.floatType ft,
-      integer=λit.integerType it,
-      `string`=λ`_`."string"}
+      `binary` = λ`_`."binary",
+      `boolean` = λ`_`."boolean",
+      `decimal` = λ`_`."decimal",
+      float = λft.floatType ft,
+      integer = λit.integerType it,
+      `string` = λ`_`."string"}
       lt
 
 ## Show a map using given functions to show keys and values, in canonical (ascending key) order
 term map =
-  λshowK,showV,m.
+  λshowK, showV, m.
     let pairStrs := lists.map
         (λp.strings.concat [showK (first p), "=", showV (second p)])
         (lists.sortBy first (maps.toList m))
     in strings.concat ["{", strings.join ", " pairStrs, "}"]
 
 ## Show an optional value using a given function to show the element
-term optional = λf,mx.match mx "none" (λx.strings.concat2 "given(" (strings.concat2 (f x) ")"))
+term optional = λf, mx.match mx "none" (λx.strings.concat2 "given(" (strings.concat2 (f x) ")"))
 
 ## Show a pair using given functions to show each element
-term pair = λshowA,showB,p.strings.concat ["(", showA (first p), ", ", showB (second p), ")"]
+term pair = λshowA, showB, p.strings.concat ["(", showA (first p), ", ", showB (second p), ")"]
 
 ## Peel a single '@{description = ...}' annotation off a type, returning (description, body) if found
 term peelDescriptionAnnotation =
   λtyp.cases(Type){
-      annotated=λat.
+      annotated = λat.
           let body := AnnotatedType[body] at in
           let ann := AnnotatedType[annotation] at in
           cases(Term){
-            `map`=λm.
+            `map` = λm.
                 let entries := maps.toList m
                 in ifElse
                   (equal (lists.length entries) 1:int32)
@@ -558,43 +558,43 @@ term peelDescriptionAnnotation =
                   let k := first entry in
                   let v := second entry in
                   cases(Term){
-                    variable=λn.ifElse
+                    variable = λn.ifElse
                           (equal (Name[] n) "description")
                           (cases(Term){
-                            literal=λl.cases(Literal){
-                                  `string`=λs.(given(s), body),
-                                  `_`=(none, typ)}
+                            literal = λl.cases(Literal){
+                                  `string` = λs.(given(s), body),
+                                  `_` = (none, typ)}
                                   l,
-                            `_`=(none, typ)}
+                            `_` = (none, typ)}
                             v)
                           (none, typ),
-                    `_`=(none, typ)}
+                    `_` = (none, typ)}
                     k)
                   (none, typ),
-            `_`=(none, typ)}
+            `_` = (none, typ)}
             ann,
-      `_`=(none, typ)}
+      `_` = (none, typ)}
       typ
 
 ## Peel a 'description' entry off a term's outermost '@{...}' annotation map, if present
 term peelTermDescriptionAnnotation =
   λt.cases(Term){
-      annotated=λat.
+      annotated = λat.
           let body := AnnotatedTerm[body] at in
           let ann := AnnotatedTerm[annotation] at in
           cases(Term){
-            `map`=λm.
+            `map` = λm.
                 let descKey := Term{variable = Name{"description"}} in
                 let mdescVal := maps.lookup descKey m in
                 let descStr := match
                     mdescVal
                     none
                     (λv.cases(Term){
-                        literal=λl.cases(Literal){
-                              `string`=λs.given(s),
-                              `_`=none}
+                        literal = λl.cases(Literal){
+                              `string` = λs.given(s),
+                              `_` = none}
                               l,
-                        `_`=none}
+                        `_` = none}
                         v) in
                 match
                   descStr
@@ -610,9 +610,9 @@ term peelTermDescriptionAnnotation =
                             annotation = Term{
                               `map` = rest}}} in
                     (given(s), remainingTerm)),
-            `_`=(none, t)}
+            `_` = (none, t)}
             ann,
-      `_`=(none, t)}
+      `_` = (none, t)}
       t
 
 ## Render a name in backticked form, escaping its content per #2.4.
@@ -629,7 +629,7 @@ term printName =
 
 ## Show a nominal name, shortened via the given import-alias map when its module is aliased (#803).
 term printNameAliased =
-  λaliases,n.
+  λaliases, n.
     let s := Name[] n in
     let segs := strings.splitOn "." s in
     let segCount := lists.length segs in
@@ -653,27 +653,27 @@ term printStringLit = λs.strings.concat ["\"", strings.concat (lists.map escape
 
 ## Show a projection as a string, shortening the type name via the given import-alias map (#803)
 term projection =
-  λaliases,proj.
+  λaliases, proj.
     let tname := printNameAliased aliases (Projection[typeName] proj) in
     let fname := printNameAliased aliases (Projection[fieldName] proj) in
     strings.concat [tname, "[", fname, "]"]
 
 ## Show a set using a given function to show each element, in canonical (ascending) order
 term set =
-  λf,xs.
+  λf, xs.
     let elementStrs := lists.map f (lists.sort (sets.toList xs))
     in strings.concat ["{", strings.join ", " elementStrs, "}"]
 
 ## Show a single field in sugar form: bareword 'name' for a unit value, else 'name = term' (#809)
 term sugarField =
-  λaliases,field.
+  λaliases, field.
     let fname := printName (Field[name] field) in
     let fterm := Field[`term`] field in
     ifElse (fieldTermIsUnit fterm) fname (strings.concat [fname, " = ", termAliased aliases fterm])
 
 ## Show a single field as a line-layout sugar expression: bareword 'name' for a unit value, else 'name = term' (#809)
 term sugarFieldExprAliased =
-  λbudget,aliases,field.
+  λbudget, aliases, field.
     let fname := printName (Field[name] field) in
     let fterm := Field[`term`] field in
     ifElse
@@ -693,13 +693,13 @@ term sugarFieldExprAliased =
 
 ## Show fields as nominal-construction sugar, abbreviating unit-valued fields bareword (#809)
 term sugarFields =
-  λaliases,flds.
+  λaliases, flds.
     let fieldStrs := lists.map (sugarField aliases) flds
     in strings.concat ["{", strings.join ", " fieldStrs, "}"]
 
 ## Show fields as a line-layout nominal-construction-sugar expression, abbreviating unit-valued fields bareword (#809)
 term sugarFieldsExprAliased =
-  λbudget,aliases,flds.
+  λbudget, aliases, flds.
     let fieldExprs := lists.map (sugarFieldExprAliased (sub budget 2:int32) aliases) flds
     in chooseLayout
       budget
@@ -710,29 +710,29 @@ term sugarFieldsExprAliased =
 term term = termAliased maps.empty
 
 ## Show a term as a string, shortening nominal references via the given import-alias map (#803)
-term termAliased = λaliases,t.printExpr (termExprAliased aliases t)
+term termAliased = λaliases, t.printExpr (termExprAliased aliases t)
 
 ## Show a term as a string at a given minimum context precedence, adding minimal parentheses
-term termAtPrec = λaliases,ctx,t.printExpr (termExprAtPrec aliases ctx t)
+term termAtPrec = λaliases, ctx, t.printExpr (termExprAtPrec aliases ctx t)
 
 ## Show a term as a line-layout expression at the top-level context, shortening nominal references via the given import-alias map (#803)
-term termExprAliased = λaliases,t.termExprAtPrecBudget maxLineWidth aliases 0:int32 t
+term termExprAliased = λaliases, t.termExprAtPrecBudget maxLineWidth aliases 0:int32 t
 
 ## Show a term as a line-layout expression at a given minimum context precedence, with a full line-width budget
-term termExprAtPrec = λaliases,ctx,t.termExprAtPrecBudget maxLineWidth aliases ctx t
+term termExprAtPrec = λaliases, ctx, t.termExprAtPrecBudget maxLineWidth aliases ctx t
 
 ## Show a term as a line-layout expression at a given minimum context precedence and available-width budget, adding minimal parentheses
 term termExprAtPrecBudget =
-  λbudget,aliases,ctx,t.
-    let gatherTerms := λprev,app.
+  λbudget, aliases, ctx, t.
+    let gatherTerms := λprev, app.
         let lhs := Application[function] app in
         let rhs := Application[argument] app in
         cases(Term){
-          application=λapp2.gatherTerms (lists.cons rhs prev) app2,
-          `_`=lists.cons lhs (lists.cons rhs prev)}
+          application = λapp2.gatherTerms (lists.cons rhs prev) app2,
+          `_` = lists.cons lhs (lists.cons rhs prev)}
           lhs
     in cases(Term){
-      annotated=λat.
+      annotated = λat.
           let bodyExpr := termExprAtPrecBudget
               budget
               aliases
@@ -762,10 +762,14 @@ term termExprAtPrecBudget =
                 associativity = Associativity{`none`}}
               bodyExpr
               annExpr),
-      application=λapp.
+      application = λapp.
           let terms := gatherTerms [] app in
           let termExprs := lists.map
-              (λe.termExprAtPrecBudget budget aliases 3:int32 e)
+              (λe.termExprAtPrecBudget
+                  budget
+                  aliases
+                  3:int32
+                  e)
               terms in
           ifElse
             (ordering.lt 2:int32 ctx)
@@ -784,7 +788,8 @@ term termExprAtPrecBudget =
                       symbol = sym "",
                       padding = Padding{
                         `left` = Ws{`none`},
-                        `right` = Ws{breakAndIndent = doubleSpace}},
+                        `right` = Ws{
+                          breakAndIndent = doubleSpace}},
                       precedence = Precedence{0:int32},
                       associativity = Associativity{`none`}}
                     headExpr
@@ -803,13 +808,14 @@ term termExprAtPrecBudget =
                     symbol = sym "",
                     padding = Padding{
                       `left` = Ws{`none`},
-                      `right` = Ws{breakAndIndent = doubleSpace}},
+                      `right` = Ws{
+                        breakAndIndent = doubleSpace}},
                     precedence = Precedence{0:int32},
                     associativity = Associativity{`none`}}
                   headExpr
                   (newlineSep argExprs)))),
-      `cases`=λcs.caseStatementExprAliased budget aliases cs,
-      `either`=λe.eithers.either
+      `cases` = λcs.caseStatementExprAliased budget aliases cs,
+      `either` = λe.eithers.either
             (λl.suffix
                 ")"
                 (prefix
@@ -821,33 +827,35 @@ term termExprAtPrecBudget =
                   "right("
                   (termExprAtPrecBudget (sub budget 6:int32) aliases 0:int32 r)))
             e,
-      lambda=λl.ifElse
+      lambda = λl.ifElse
             (ordering.lt 0:int32 ctx)
             (parens (lambdaExprAliased budget aliases l))
             (lambdaExprAliased budget aliases l),
-      `let`=λl.ifElse
+      `let` = λl.ifElse
             (ordering.lt 0:int32 ctx)
             (parens (letExprAliased budget aliases l))
             (letExprAliased budget aliases l),
-      `list`=λels.bracketListAdaptive (lists.map (termExprAliased aliases) els),
-      literal=λlit.cst (literal lit),
-      `map`=λm.
+      `list` = λels.bracketListAdaptive (lists.map (termExprAliased aliases) els),
+      literal = λlit.cst (literal lit),
+      `map` = λm.
           let entryExpr := λp.ifx
                 Op{
                   symbol = sym "=",
                   padding = Padding{
-                    `left` = Ws{`none`},
-                    `right` = Ws{`none`}},
+                    `left` = Ws{space},
+                    `right` = Ws{space}},
                   precedence = Precedence{0:int32},
                   associativity = Associativity{`none`}}
                 (termExprAliased aliases (first p))
                 (termExprAliased aliases (second p)) in
-          let entryExprs := lists.map entryExpr (lists.sortBy first (maps.toList m)) in
+          let entryExprs := lists.map
+              entryExpr
+              (lists.sortBy first (maps.toList m)) in
           chooseLayout
             budget
             (curlyBracesList none inlineStyle entryExprs)
             (curlyBracesList none halfBlockStyle entryExprs),
-      `optional`=λmt.match
+      `optional` = λmt.match
             mt
             (cst "none")
             (λt.suffix
@@ -855,10 +863,10 @@ term termExprAtPrecBudget =
                 (prefix
                   "given("
                   (termExprAtPrecBudget (sub budget 6:int32) aliases 0:int32 t))),
-      pair=λp.parenListAdaptive
+      pair = λp.parenListAdaptive
             [termExprAliased aliases (first p), termExprAliased aliases (second p)],
-      `project`=λproj.cst (projection aliases proj),
-      `record`=λrec.
+      `project` = λproj.cst (projection aliases proj),
+      `record` = λrec.
           let tname := printNameAliased aliases (Record[typeName] rec) in
           let flds := Record[fields] rec in
           ifx
@@ -868,8 +876,11 @@ term termExprAtPrecBudget =
               precedence = Precedence{0:int32},
               associativity = Associativity{`none`}}
             (cst tname)
-            (sugarFieldsExprAliased (sub budget (strings.length tname)) aliases flds),
-      `set`=λs.
+            (sugarFieldsExprAliased
+              (sub budget (strings.length tname))
+              aliases
+              flds),
+      `set` = λs.
           let elExprs := lists.map
               (termExprAliased aliases)
               (lists.sort (sets.toList s))
@@ -877,12 +888,15 @@ term termExprAtPrecBudget =
             budget
             (curlyBracesList none inlineStyle elExprs)
             (curlyBracesList none halfBlockStyle elExprs),
-      typeLambda=λta.
-          let gathered := gatherTypeLambdaBinders [] Term{typeLambda = ta} in
+      typeLambda = λta.
+          let gathered := gatherTypeLambdaBinders
+              []
+              Term{typeLambda = ta} in
           let vs := first gathered in
           let body := second gathered in
           let vNames := lists.map printBinderName vs in
-          let headStr := strings.concat ["Λ", strings.join "," vNames, "."] in
+          let headStr := strings.concat
+              ["Λ", strings.join ", " vNames, "."] in
           let bodyExpr := termExprAtPrecBudget
               (sub budget (strings.length headStr))
               aliases
@@ -911,10 +925,14 @@ term termExprAtPrecBudget =
                   associativity = Associativity{`none`}}
                 (cst headStr)
                 bodyExpr)),
-      typeApplication=λtt.
+      typeApplication = λtt.
           let t2 := TypeApplicationTerm[body] tt in
           let typ := TypeApplicationTerm[`type`] tt in
-          let bodyExpr := termExprAtPrecBudget budget aliases 3:int32 t2 in
+          let bodyExpr := termExprAtPrecBudget
+              budget
+              aliases
+              3:int32
+              t2 in
           ifElse
             (ordering.lt 3:int32 ctx)
             (parens
@@ -923,7 +941,9 @@ term termExprAtPrecBudget =
                 (ifx
                   Op{
                     symbol = sym "⟨",
-                    padding = Padding{`left` = Ws{`none`}, `right` = Ws{`none`}},
+                    padding = Padding{
+                      `left` = Ws{`none`},
+                      `right` = Ws{`none`}},
                     precedence = Precedence{0:int32},
                     associativity = Associativity{`none`}}
                   bodyExpr
@@ -933,16 +953,18 @@ term termExprAtPrecBudget =
               (ifx
                 Op{
                   symbol = sym "⟨",
-                  padding = Padding{`left` = Ws{`none`}, `right` = Ws{`none`}},
+                  padding = Padding{
+                    `left` = Ws{`none`},
+                    `right` = Ws{`none`}},
                   precedence = Precedence{0:int32},
                   associativity = Associativity{`none`}}
                 bodyExpr
                 (cst (typeAliased aliases typ)))),
-      `inject`=λinj.injectionExprAliased budget aliases inj,
-      `unit`=λ`_`.cst "unit",
-      `unwrap`=λtname.cst (strings.concat [printNameAliased aliases tname, "[]"]),
-      variable=λname.cst (printNameAliased aliases name),
-      `wrap`=λwt.
+      `inject` = λinj.injectionExprAliased budget aliases inj,
+      `unit` = λ`_`.cst "unit",
+      `unwrap` = λtname.cst (strings.concat [printNameAliased aliases tname, "[]"]),
+      variable = λname.cst (printNameAliased aliases name),
+      `wrap` = λwt.
           let tname := printNameAliased aliases (WrappedTerm[typeName] wt) in
           let term1 := WrappedTerm[body] wt in
           ifElse
@@ -978,12 +1000,12 @@ term termSignature = termSignatureAliased maps.empty
 
 ## Show a term signature as a string (preserving lazy markings), shortening nominal references via the given alias map (#803)
 term termSignatureAliased =
-  λaliases,sig.
+  λaliases, sig.
     let typeParams := TermSignature[typeParameters] sig in
     let params := TermSignature[parameters] sig in
     let result := TermSignature[result] sig in
     let varNames := lists.map (λtp.printBinderName (TypeParameter[name] tp)) typeParams in
-    let constraintClassName := λc.cases(TypeClassConstraint){simple=λn.Name[] n} c in
+    let constraintClassName := λc.cases(TypeClassConstraint){simple = λn.Name[] n} c in
     let toConstraintPairsForParam := λtp.
         let v := TypeParameter[name] tp
         in lists.map
@@ -1002,7 +1024,7 @@ term termSignatureAliased =
       (strings.concat
         [
           "∀",
-          strings.join "," varNames,
+          strings.join ", " varNames,
           ".",
           ifElse (lists.isEmpty tc) "" (strings.concat ["(", strings.join ", " tc, ") ⇒ "]),
           bodyStr])
@@ -1018,61 +1040,68 @@ term toHex2 =
 term type = typeAliased maps.empty
 
 ## Show a type as a string, shortening nominal references via the given import-alias map (#803)
-term typeAliased = λaliases,typ.typeAtPrec aliases 0:int32 typ
+term typeAliased = λaliases, typ.typeAtPrec aliases 0:int32 typ
 
 ## Show a type as a string at a given minimum context precedence, adding minimal parentheses
 term typeAtPrec =
-  λaliases,ctx,typ.
+  λaliases, ctx, typ.
+    let fieldHasDescription := λft.match
+          (first (peelDescriptionAnnotation (FieldType[`type`] ft)))
+          false
+          (λ`_`.true) in
     let showRowType := λflds.
         let fieldExprs := lists.map (fieldTypeExpr aliases) flds
-        in printExpr (curlyBracesList none halfBlockStyle fieldExprs) in
-    let gatherTypes := λprev,app.
+        in ifElse
+          (not (lists.isEmpty (lists.filter fieldHasDescription flds)))
+          (printExpr (curlyBracesListWithBlankLines halfBlockStyle fieldExprs))
+          (printExpr (curlyBracesList none halfBlockStyle fieldExprs)) in
+    let gatherTypes := λprev, app.
         let lhs := ApplicationType[function] app in
         let rhs := ApplicationType[argument] app in
         cases(Type){
-          application=λapp2.gatherTypes (lists.cons rhs prev) app2,
-          `_`=lists.cons lhs (lists.cons rhs prev)}
+          application = λapp2.gatherTypes (lists.cons rhs prev) app2,
+          `_` = lists.cons lhs (lists.cons rhs prev)}
           lhs in
-    let gatherFunctionTypes := λprev,t.cases(Type){
-          function=λft.
+    let gatherFunctionTypes := λprev, t.cases(Type){
+          function = λft.
               let dom := FunctionType[domain] ft in
               let cod := FunctionType[codomain] ft in
               gatherFunctionTypes
                 (lists.cons dom prev)
                 cod,
-          `_`=lists.reverse (lists.cons t prev)}
+          `_` = lists.reverse (lists.cons t prev)}
           t in
-    let gatherForallBinders := λprev,t.cases(Type){
-          `forall`=λft.
+    let gatherForallBinders := λprev, t.cases(Type){
+          `forall` = λft.
               let v := ForallType[parameter] ft in
               let body := ForallType[body] ft in
               gatherForallBinders
                 (lists.cons v prev)
                 body,
-          `_`=(lists.reverse prev, t)}
+          `_` = (lists.reverse prev, t)}
           t in
     cases(Type){
-      annotated=λat.
+      annotated = λat.
           let bodyStr := typeAtPrec aliases 3:int32 (AnnotatedType[body] at) in
           let annStr := termAtPrec aliases 3:int32 (AnnotatedType[annotation] at) in
           ifElse
             (ordering.lt 3:int32 ctx)
             (strings.concat ["(", strings.concat [bodyStr, "@", annStr], ")"])
             (strings.concat [bodyStr, "@", annStr]),
-      application=λapp.
+      application = λapp.
           let types := gatherTypes [] app in
           let typeStrs := lists.map (λe.typeAtPrec aliases 3:int32 e) types in
           ifElse
             (ordering.lt 2:int32 ctx)
             (strings.concat ["(", strings.join " " typeStrs, ")"])
             (strings.join " " typeStrs),
-      `effect`=λetyp.strings.concat ["effect<", typeAliased aliases etyp, ">"],
-      `either`=λet.
+      `effect` = λetyp.strings.concat ["effect<", typeAliased aliases etyp, ">"],
+      `either` = λet.
           let leftTyp := EitherType[`left`] et in
           let rightTyp := EitherType[`right`] et in
           strings.concat
             ["either<", typeAliased aliases leftTyp, ", ", typeAliased aliases rightTyp, ">"],
-      `forall`=λft.
+      `forall` = λft.
           let binderVars := gatherForallBinders [] typ in
           let vs := first binderVars in
           let body := second binderVars in
@@ -1083,33 +1112,33 @@ term typeAtPrec =
               ["(", strings.concat ["forall ", strings.join ", " vNames, ". ", typeAliased aliases body], ")"])
             (strings.concat
               ["forall ", strings.join ", " vNames, ". ", typeAliased aliases body]),
-      function=λft.
+      function = λft.
           let types := gatherFunctionTypes [] typ in
           let typeStrs := lists.map (λe.typeAtPrec aliases 2:int32 e) types in
           ifElse
             (ordering.lt 1:int32 ctx)
             (strings.concat ["(", strings.join " → " typeStrs, ")"])
             (strings.join " → " typeStrs),
-      `list`=λetyp.strings.concat ["list<", typeAliased aliases etyp, ">"],
-      literal=λlt.literalType lt,
-      `map`=λmt.
+      `list` = λetyp.strings.concat ["list<", typeAliased aliases etyp, ">"],
+      literal = λlt.literalType lt,
+      `map` = λmt.
           let keyTyp := MapType[keys] mt in
           let valTyp := MapType[values] mt in
           strings.concat
             ["map<", typeAliased aliases keyTyp, ", ", typeAliased aliases valTyp, ">"],
-      `optional`=λetyp.strings.concat ["optional<", typeAliased aliases etyp, ">"],
-      pair=λpt.
+      `optional` = λetyp.strings.concat ["optional<", typeAliased aliases etyp, ">"],
+      pair = λpt.
           let firstTyp := PairType[first] pt in
           let secondTyp := PairType[second] pt in
           strings.concat
             ["(", typeAliased aliases firstTyp, ", ", typeAliased aliases secondTyp, ")"],
-      `record`=λrt.strings.concat2 "record" (showRowType rt),
-      `set`=λetyp.strings.concat ["set<", typeAliased aliases etyp, ">"],
-      `union`=λrt.strings.concat2 "union" (showRowType rt),
-      `unit`=λ`_`."unit",
-      variable=λname.printNameAliased aliases name,
-      `void`=λ`_`."void",
-      `wrap`=λwt.strings.concat ["wrap(", typeAliased aliases wt, ")"]}
+      `record` = λrt.strings.concat2 "record" (showRowType rt),
+      `set` = λetyp.strings.concat ["set<", typeAliased aliases etyp, ">"],
+      `union` = λrt.strings.concat2 "union" (showRowType rt),
+      `unit` = λ`_`."unit",
+      variable = λname.printNameAliased aliases name,
+      `void` = λ`_`."void",
+      `wrap` = λwt.strings.concat ["wrap(", typeAliased aliases wt, ")"]}
       typ
 
 ## Show a type scheme as a string
@@ -1117,12 +1146,12 @@ term typeScheme = typeSchemeAliased maps.empty
 
 ## Show a type scheme as a string, shortening nominal references in its body via the given alias map (#803)
 term typeSchemeAliased =
-  λaliases,ts.
+  λaliases, ts.
     let vars := TypeScheme[variables] ts in
     let body := TypeScheme[body] ts in
     let varNames := lists.map printBinderName vars in
-    let constraintClassName := λc.cases(TypeClassConstraint){simple=λn.Name[] n} c in
-    let toConstraintPair := λv,c.strings.concat [constraintClassName c, " ", Name[] v] in
+    let constraintClassName := λc.cases(TypeClassConstraint){simple = λn.Name[] n} c in
+    let toConstraintPair := λv, c.strings.concat [constraintClassName c, " ", Name[] v] in
     let toConstraintPairs := λp.lists.map
           (toConstraintPair (first p))
           (lists.sortBy
@@ -1137,7 +1166,7 @@ term typeSchemeAliased =
       (strings.concat
         [
           "∀",
-          strings.join "," varNames,
+          strings.join ", " varNames,
           ".",
           ifElse (lists.isEmpty tc) "" (strings.concat ["(", strings.join ", " tc, ") ⇒ "]),
           bodyStr])

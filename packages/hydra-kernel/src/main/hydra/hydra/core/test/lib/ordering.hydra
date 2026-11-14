@@ -993,12 +993,12 @@ term allTests =
                                       variable = Name{"hydra.core.lib.ordering.compare"}},
                                     argument = Term{
                                       `map` = {
-                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
-                                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}},
                                 argument = Term{
                                   `map` = {
-                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
-                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
                     expected = λ`_`.`term`
                           Term{
                             `inject` = Injection{
@@ -1029,12 +1029,12 @@ term allTests =
                                       variable = Name{"hydra.core.lib.ordering.compare"}},
                                     argument = Term{
                                       `map` = {
-                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
-                                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}},
                                 argument = Term{
                                   `map` = {
-                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
-                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
                     expected = λ`_`.`term`
                           Term{
                             `inject` = Injection{
@@ -1065,10 +1065,10 @@ term allTests =
                                       variable = Name{"hydra.core.lib.ordering.compare"}},
                                     argument = Term{
                                       `map` = {
-                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}}}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}}}}},
                                 argument = Term{
                                   `map` = {
-                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}}}}}),
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}}}}}),
                     expected = λ`_`.`term`
                           Term{
                             `inject` = Injection{
@@ -1099,10 +1099,10 @@ term allTests =
                                       variable = Name{"hydra.core.lib.ordering.compare"}},
                                     argument = Term{
                                       `map` = {
-                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}}}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}}}}},
                                 argument = Term{
                                   `map` = {
-                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
                     expected = λ`_`.`term`
                           Term{
                             `inject` = Injection{

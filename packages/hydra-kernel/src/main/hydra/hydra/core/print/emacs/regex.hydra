@@ -21,12 +21,12 @@ term anyClass = "[^z-a]"
 ## Render a single atom; . -> [^z-a], and groups use Emacs's \( \) escaping.
 term atom =
   λa.cases(Atom){
-      literal=λc.escapeLiteral c,
-      any=λ`_`.anyClass,
-      anchorStart=λ`_`."\\`",
-      anchorEnd=λ`_`."\\'",
-      group=λg.strings.concat ["\\(", alternation g, "\\)"],
-      class=λcc.characterClass cc}
+      literal = λc.escapeLiteral c,
+      any = λ`_`.anyClass,
+      anchorStart = λ`_`."\\`",
+      anchorEnd = λ`_`."\\'",
+      group = λg.strings.concat ["\\(", alternation g, "\\)"],
+      class = λcc.characterClass cc}
       a
 
 ## Render a character class, including the leading ^ for a negated class. Reorders items positionally for Emacs (which has no bracket-expression escaping): a literal ] is moved to the front (immediately after the optional negating ^), a literal - is moved to the back, and (only when there is no literal ] item to occupy the first slot) a literal ^ is moved after the first non-^ item -- Emacs treats a leading ^ as the negation marker regardless of Hydra's negated flag. The one residual gap: a class whose only member is a literal ^ has no safe position on Emacs; this is an extreme corner case (single-item classes are otherwise unremarkable) and is left unhandled here.
@@ -41,19 +41,19 @@ term characterClass =
 ## Render one character-class member (a single character or an inclusive range). Emacs bracket expressions do NOT support backslash escaping (probe-verified: \- and \] inside [...] are two literal characters, not an escape); the metacharacters ] ^ - are instead disambiguated positionally by characterClass (] first, - last, ^ never first), so a plain character or range here never needs an escape.
 term classItem =
   λitem.cases(ClassItem){
-      character=λc.printCodePoint c,
-      range=λr.strings.concat
+      character = λc.printCodePoint c,
+      range = λr.strings.concat
             [printCodePoint (CharacterRange[`from`] r), "-", printCodePoint (CharacterRange[to] r)]}
       item
 
 ## True if a ClassItem is the single literal character code point c (not a range).
-term classItemIsLiteral = λc,item.cases(ClassItem){character=λic.equal ic c, `_`=false} item
+term classItemIsLiteral = λc, item.cases(ClassItem){character = λic.equal ic c, `_` = false} item
 
 ## Render a literal code point in top-level context under Emacs regexp, escaping only the characters that are special bare in Emacs: . * + ? [ ] ^ $ \. Note | ( ) { } are literal in Emacs and are NOT escaped here.
 term escapeLiteral =
   λc.
     let isMeta := lists.foldl
-        (λacc,m.or acc (equal c m))
+        (λacc, m.or acc (equal c m))
         false
         [46:int32, 42:int32, 43:int32, 63:int32, 91:int32, 93:int32, 94:int32, 36:int32, 92:int32]
     in ifElse isMeta (strings.concat2 "\\" (printCodePoint c)) (printCodePoint c)
@@ -70,13 +70,13 @@ term quantified = λqa.strings.concat2 (atom (Quantified[atom] qa)) (quantifier 
 ## Render a quantifier suffix; bounded {..} forms use Emacs's escaped braces \{..\}.
 term quantifier =
   λq.cases(Quantifier){
-      one=λ`_`."",
-      zeroOrOne=λ`_`."?",
-      zeroOrMore=λ`_`."*",
-      oneOrMore=λ`_`."+",
-      exactly=λn.strings.concat ["\\{", printInt32 n, "\\}"],
-      atLeast=λn.strings.concat ["\\{", printInt32 n, ",\\}"],
-      range=λr.strings.concat
+      one = λ`_`."",
+      zeroOrOne = λ`_`."?",
+      zeroOrMore = λ`_`."*",
+      oneOrMore = λ`_`."+",
+      exactly = λn.strings.concat ["\\{", printInt32 n, "\\}"],
+      atLeast = λn.strings.concat ["\\{", printInt32 n, ",\\}"],
+      range = λr.strings.concat
             ["\\{", printInt32 (QuantifierRange[min] r), ",", printInt32 (QuantifierRange[max] r), "\\}"]}
       q
 

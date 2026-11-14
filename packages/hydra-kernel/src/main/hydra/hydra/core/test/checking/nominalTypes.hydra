@@ -551,7 +551,7 @@ term multiParameterPolymorphicRecordsTests =
                                           name = Name{"other"},
                                           `term` = Term{
                                             `map` = {
-                                              Term{variable = Name{"k"}}=Term{variable = Name{"v"}}}}}}}},
+                                              Term{variable = Name{"k"}} = Term{variable = Name{"v"}}}}}}}},
                                   Field{name = Name{"third"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 999:int32}}}}]}}}}}}),
             expected = λ`_`.`type`
                   Type{
@@ -2709,7 +2709,7 @@ term multiParameterPolymorphicInjectionsTests =
                                 domain = none,
                                 body = Term{
                                   `map` = {
-                                    Term{literal = Literal{`string` = "key"}}=Term{
+                                    Term{literal = Literal{`string` = "key"}} = Term{
                                       `record` = Record{
                                         typeName = testTypeTripleName,
                                         fields = [
@@ -5209,7 +5209,7 @@ term nestedWrappedTermsTests =
                           `list` = [
                             Term{
                               `map` = {
-                                Term{literal = Literal{`string` = "key"}}=Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}}}]}}}),
+                                Term{literal = Literal{`string` = "key"}} = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}}}]}}}),
             expected = λ`_`.`type`
                   Type{
                     application = ApplicationType{

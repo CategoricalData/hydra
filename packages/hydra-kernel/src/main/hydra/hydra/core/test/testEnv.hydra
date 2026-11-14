@@ -5,4 +5,4 @@ import hydra.core.lexical
 
 term testContext = emptyInferenceContext
 
-term testGraph = λtys,tms.emptyGraph
+term testGraph = λtys, tms.emptyGraph

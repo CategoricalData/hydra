@@ -4419,7 +4419,8 @@
                                                                                                     "type": {"variable": "hydra.core.model.Term"}}}]}}}}}}}]}}}}}}]}}}}}}}}}},
                                             {
                                               "name": "expected",
-                                              "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "forall a. (forall b. b)@{tag=\"x\"}"}}}}}]}}}}}},
+                                              "term": {
+                                                "lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "forall a. (forall b. b)@{tag = \"x\"}"}}}}}]}}}}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                               {
@@ -4660,7 +4661,7 @@
                           "record": {
                             "typeName": "hydra.core.testing.TestCaseWithMetadata",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "three directly-nested λ's collapse into one 'λa,b,c.'"}}},
+                              {"name": "name", "term": {"literal": {"string": "three directly-nested λ's collapse into one 'λa, b, c.'"}}},
                               {
                                 "name": "case",
                                 "term": {
@@ -4732,7 +4733,7 @@
                                                                                                     "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "a"}}}}}}}}]}}}}}}]}}}}}}]}}}}}}}}}},
                                             {
                                               "name": "expected",
-                                              "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "λa,b,c.a"}}}}}]}}}}}},
+                                              "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "λa, b, c.a"}}}}}]}}}}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                               {
@@ -4975,7 +4976,7 @@
                                                                                       "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "a"}}}}}}}}]}}}}}}]}}}}}}}}}},
                                             {
                                               "name": "expected",
-                                              "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "λa:int32,b:string.a"}}}}}]}}}}}},
+                                              "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "λa:int32, b:string.a"}}}}}]}}}}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                               {
@@ -5255,7 +5256,7 @@
                                                                                                     "type": {"variable": "hydra.core.model.Term"}}}]}}}}}}}]}}}}}}]}}}}}}}}}},
                                             {
                                               "name": "expected",
-                                              "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "λa.(λb.b)@{description=\"inner\"}"}}}}}]}}}}}},
+                                              "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "λa.(λb.b)@{description = \"inner\"}"}}}}}]}}}}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                               {
@@ -5490,7 +5491,7 @@
                           "record": {
                             "typeName": "hydra.core.testing.TestCaseWithMetadata",
                             "fields": [
-                              {"name": "name", "term": {"literal": {"string": "three directly-nested Λ's collapse into one 'Λa,b,c.'"}}},
+                              {"name": "name", "term": {"literal": {"string": "three directly-nested Λ's collapse into one 'Λa, b, c.'"}}},
                               {
                                 "name": "case",
                                 "term": {
@@ -5553,7 +5554,7 @@
                                                                                                     "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "a"}}}}}}}}]}}}}}}]}}}}}}]}}}}}}}}}},
                                             {
                                               "name": "expected",
-                                              "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "Λa,b,c.a"}}}}}]}}}}}},
+                                              "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "Λa, b, c.a"}}}}}]}}}}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                               {
@@ -5704,7 +5705,7 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "Print/parse/round-trip cases for multi-binder 'λa,b.'/'Λa,b.' syntax (#711)"}}}]}}}}},
+                  "value": {"literal": {"string": "Print/parse/round-trip cases for multi-binder 'λa, b.'/'Λa, b.' syntax (#711)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.core.test.syntax.lazyParameterRoundtripGroup",
@@ -6181,7 +6182,7 @@
                                                                           "field": {"name": "variable", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "v"}}}}}}}}]}}}]}}}}}}},
                                             {
                                               "name": "expected",
-                                              "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "∀k,v.lazy v → k → Map k v → v"}}}}}]}}}}}},
+                                              "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "∀k, v.lazy v → k → Map k v → v"}}}}}]}}}}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                               {
@@ -6606,7 +6607,7 @@
                                             {
                                               "name": "expected",
                                               "term": {
-                                                "lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "∀x,y.optional<x> → lazy y → (x → y) → y"}}}}}]}}}}}},
+                                                "lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "∀x, y.optional<x> → lazy y → (x → y) → y"}}}}}]}}}}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                               {
@@ -15916,7 +15917,7 @@
                                                 "lambda": {
                                                   "parameter": "_",
                                                   "domain": "unit",
-                                                  "body": {"literal": {"string": "## Get a character by index\nterm charAt = impl@{availableSince=\"0.17.6\"}"}}}}}]}}}}}},
+                                                  "body": {"literal": {"string": "## Get a character by index\nterm charAt = impl@{availableSince = \"0.17.6\"}"}}}}}]}}}}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                               {
@@ -16039,7 +16040,10 @@
                                             {
                                               "name": "expected",
                                               "term": {
-                                                "lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "term wrapped = f x@{description=\"inner desc\"}"}}}}}]}}}}}},
+                                                "lambda": {
+                                                  "parameter": "_",
+                                                  "domain": "unit",
+                                                  "body": {"literal": {"string": "term wrapped = f x@{description = \"inner desc\"}"}}}}}]}}}}}},
                               {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
                               {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
                               {

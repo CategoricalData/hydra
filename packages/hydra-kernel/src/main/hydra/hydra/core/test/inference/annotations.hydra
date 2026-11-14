@@ -170,7 +170,7 @@ term transparencyTests =
                                   `int32` = 42:int32}}},
                             annotation = Term{
                               `map` = {
-                                Term{literal = Literal{`string` = "description"}}=Term{literal = Literal{`string` = "the answer"}}}}}}),
+                                Term{literal = Literal{`string` = "description"}} = Term{literal = Literal{`string` = "the answer"}}}}}}),
                 expected = λ`_`.typeScheme
                       TypeScheme{
                         variables = [],

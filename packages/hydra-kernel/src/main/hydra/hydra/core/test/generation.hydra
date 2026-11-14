@@ -237,8 +237,8 @@ term allTests =
                             (λm.strings.concat
                                 (lists.map
                                   (λd.cases(Definition){
-                                      `type`=λtd."",
-                                      `term`=λtd.strings.concat
+                                      `type` = λtd."",
+                                      `term` = λtd.strings.concat
                                             [
                                               Name[] (TermDefinition[name] td),
                                               " :: ",
@@ -249,7 +249,7 @@ term allTests =
                                               " = ",
                                               `term` (TermDefinition[body] td),
                                               "\n"],
-                                      `primitive`=λpd.strings.concat
+                                      `primitive` = λpd.strings.concat
                                             [Name[] (PrimitiveDefinition[name] pd), " :: <primitive>\n"]}
                                       d)
                                   (Module[definitions] m)))
@@ -326,8 +326,8 @@ term allTests =
                             (λm.strings.concat
                                 (lists.map
                                   (λd.cases(Definition){
-                                      `type`=λtd."",
-                                      `term`=λtd.strings.concat
+                                      `type` = λtd."",
+                                      `term` = λtd.strings.concat
                                             [
                                               Name[] (TermDefinition[name] td),
                                               " :: ",
@@ -338,7 +338,7 @@ term allTests =
                                               " = ",
                                               `term` (TermDefinition[body] td),
                                               "\n"],
-                                      `primitive`=λpd.strings.concat
+                                      `primitive` = λpd.strings.concat
                                             [Name[] (PrimitiveDefinition[name] pd), " :: <primitive>\n"]}
                                       d)
                                   (Module[definitions] m)))
@@ -422,8 +422,8 @@ term allTests =
                             (λm.strings.concat
                                 (lists.map
                                   (λd.cases(Definition){
-                                      `type`=λtd."",
-                                      `term`=λtd.strings.concat
+                                      `type` = λtd."",
+                                      `term` = λtd.strings.concat
                                             [
                                               Name[] (TermDefinition[name] td),
                                               " :: ",
@@ -434,7 +434,7 @@ term allTests =
                                               " = ",
                                               `term` (TermDefinition[body] td),
                                               "\n"],
-                                      `primitive`=λpd.strings.concat
+                                      `primitive` = λpd.strings.concat
                                             [Name[] (PrimitiveDefinition[name] pd), " :: <primitive>\n"]}
                                       d)
                                   (Module[definitions] m)))
@@ -535,8 +535,8 @@ term allTests =
                             (λm.strings.concat
                                 (lists.map
                                   (λd.cases(Definition){
-                                      `type`=λtd."",
-                                      `term`=λtd.strings.concat
+                                      `type` = λtd."",
+                                      `term` = λtd.strings.concat
                                             [
                                               Name[] (TermDefinition[name] td),
                                               " :: ",
@@ -547,7 +547,7 @@ term allTests =
                                               " = ",
                                               `term` (TermDefinition[body] td),
                                               "\n"],
-                                      `primitive`=λpd.strings.concat
+                                      `primitive` = λpd.strings.concat
                                             [Name[] (PrimitiveDefinition[name] pd), " :: <primitive>\n"]}
                                       d)
                                   (Module[definitions] m)))
@@ -655,8 +655,8 @@ term allTests =
                             (λm.strings.concat
                                 (lists.map
                                   (λd.cases(Definition){
-                                      `type`=λtd."",
-                                      `term`=λtd.strings.concat
+                                      `type` = λtd."",
+                                      `term` = λtd.strings.concat
                                             [
                                               Name[] (TermDefinition[name] td),
                                               " :: ",
@@ -667,7 +667,7 @@ term allTests =
                                               " = ",
                                               `term` (TermDefinition[body] td),
                                               "\n"],
-                                      `primitive`=λpd.strings.concat
+                                      `primitive` = λpd.strings.concat
                                             [Name[] (PrimitiveDefinition[name] pd), " :: <primitive>\n"]}
                                       d)
                                   (Module[definitions] m)))
@@ -791,8 +791,8 @@ term allTests =
                             (λm.strings.concat
                                 (lists.map
                                   (λd.cases(Definition){
-                                      `type`=λtd."",
-                                      `term`=λtd.strings.concat
+                                      `type` = λtd."",
+                                      `term` = λtd.strings.concat
                                             [
                                               Name[] (TermDefinition[name] td),
                                               " :: ",
@@ -803,7 +803,7 @@ term allTests =
                                               " = ",
                                               `term` (TermDefinition[body] td),
                                               "\n"],
-                                      `primitive`=λpd.strings.concat
+                                      `primitive` = λpd.strings.concat
                                             [Name[] (PrimitiveDefinition[name] pd), " :: <primitive>\n"]}
                                       d)
                                   (Module[definitions] m)))
@@ -862,8 +862,8 @@ term allTests =
                             (λm.strings.concat
                                 (lists.map
                                   (λd.cases(Definition){
-                                      `type`=λtd."",
-                                      `term`=λtd.strings.concat
+                                      `type` = λtd."",
+                                      `term` = λtd.strings.concat
                                             [
                                               Name[] (TermDefinition[name] td),
                                               " :: ",
@@ -874,7 +874,7 @@ term allTests =
                                               " = ",
                                               `term` (TermDefinition[body] td),
                                               "\n"],
-                                      `primitive`=λpd.strings.concat
+                                      `primitive` = λpd.strings.concat
                                             [Name[] (PrimitiveDefinition[name] pd), " :: <primitive>\n"]}
                                       d)
                                   (Module[definitions] m)))
@@ -982,8 +982,8 @@ term allTests =
                             (λm.strings.concat
                                 (lists.map
                                   (λd.cases(Definition){
-                                      `type`=λtd."",
-                                      `term`=λtd.strings.concat
+                                      `type` = λtd."",
+                                      `term` = λtd.strings.concat
                                             [
                                               Name[] (TermDefinition[name] td),
                                               " :: ",
@@ -994,7 +994,7 @@ term allTests =
                                               " = ",
                                               `term` (TermDefinition[body] td),
                                               "\n"],
-                                      `primitive`=λpd.strings.concat
+                                      `primitive` = λpd.strings.concat
                                             [Name[] (PrimitiveDefinition[name] pd), " :: <primitive>\n"]}
                                       d)
                                   (Module[definitions] m)))
@@ -1053,8 +1053,8 @@ term allTests =
                             (λm.strings.concat
                                 (lists.map
                                   (λd.cases(Definition){
-                                      `type`=λtd."",
-                                      `term`=λtd.strings.concat
+                                      `type` = λtd."",
+                                      `term` = λtd.strings.concat
                                             [
                                               Name[] (TermDefinition[name] td),
                                               " :: ",
@@ -1065,7 +1065,7 @@ term allTests =
                                               " = ",
                                               `term` (TermDefinition[body] td),
                                               "\n"],
-                                      `primitive`=λpd.strings.concat
+                                      `primitive` = λpd.strings.concat
                                             [Name[] (PrimitiveDefinition[name] pd), " :: <primitive>\n"]}
                                       d)
                                   (Module[definitions] m)))

@@ -300,7 +300,7 @@ field = define "field" $
   "aliases" ~> "field" ~>
   "fname" <~ printName @@ (Core.fieldName $ var "field") $
   "fterm" <~ Core.fieldTerm (var "field") $
-  Strings.concat $ list [var "fname", string "=", termAliased @@ var "aliases" @@ var "fterm"]
+  Strings.concat $ list [var "fname", string " = ", termAliased @@ var "aliases" @@ var "fterm"]
 
 -- | Like 'field', but builds an 'Expr' (#711 line-layout pass) so a long term value can break
 -- onto following lines, indented. 'budget' is the number of columns already consumed on the
@@ -328,11 +328,11 @@ fieldExprAliased = define "fieldExprAliased" $
   "budget" ~> "aliases" ~> "field" ~>
   "fname" <~ printName @@ (Core.fieldName $ var "field") $
   "fterm" <~ Core.fieldTerm (var "field") $
-  "valueBudget" <~ Math.sub (var "budget") (Math.add (Strings.length $ var "fname") (int32 1)) $
+  "valueBudget" <~ Math.sub (var "budget") (Math.add (Strings.length $ var "fname") (int32 3)) $
   "valueExpr" <~ termExprAtPrecBudget @@ var "valueBudget" @@ var "aliases" @@ int32 precMin @@ var "fterm" $
   "eqOp" <~ Ast.op
     (Serialization.sym @@ string "=")
-    (Ast.padding Ast.wsNone Ast.wsNone)
+    (Ast.padding Ast.wsSpace Ast.wsSpace)
     (Ast.precedence $ int32 0)
     Ast.associativityNone $
   Logic.ifElse (isBracketedTerm @@ var "fterm")
@@ -836,7 +836,7 @@ lambda = define "lambda" $
       ("t" ~> Strings.concat $ list [var "v", string ":", typeAliased @@ var "aliases" @@ var "t"])) $
   Strings.concat $ list [
     string "λ",
-    Strings.join (string ",") (Lists.map (var "binderStr") (var "binders")),
+    Strings.join (string ", ") (Lists.map (var "binderStr") (var "binders")),
     string ".",
     termAliased @@ var "aliases" @@ var "body"]
 
@@ -874,7 +874,7 @@ lambdaExprAliased = define "lambdaExprAliased" $
       ("t" ~> Strings.concat $ list [var "v", string ":", typeAliased @@ var "aliases" @@ var "t"])) $
   "headStr" <~ Strings.concat (list [
     string "λ",
-    Strings.join (string ",") (Lists.map (var "binderStr") (var "binders")),
+    Strings.join (string ", ") (Lists.map (var "binderStr") (var "binders")),
     string "."]) $
   "bodyBudget" <~ Math.sub (var "budget") (Strings.length $ var "headStr") $
   "bodyExpr" <~ termExprAtPrecBudget @@ var "bodyBudget" @@ var "aliases" @@ int32 precMin @@ var "body" $
@@ -1216,7 +1216,7 @@ termExprAtPrecBudget = define "termExprAtPrecBudget" $
     _Term_map>>: "m" ~>
       "entryExpr" <~ ("p" ~> Serialization.ifx @@ (Ast.op
           (Serialization.sym @@ string "=")
-          (Ast.padding Ast.wsNone Ast.wsNone)
+          (Ast.padding Ast.wsSpace Ast.wsSpace)
           (Ast.precedence $ int32 0)
           Ast.associativityNone) @@
           (termExprAliased @@ var "aliases" @@ (Pairs.first $ var "p")) @@
@@ -1257,7 +1257,7 @@ termExprAtPrecBudget = define "termExprAtPrecBudget" $
       "vNames" <~ Lists.map (asTerm printBinderName) (var "vs") $
       "headStr" <~ Strings.concat (list [
         string "Λ",
-        Strings.join (string ",") (var "vNames"),
+        Strings.join (string ", ") (var "vNames"),
         string "."]) $
       "bodyExpr" <~ termExprAtPrecBudget @@ (Math.sub (var "budget") (Strings.length $ var "headStr")) @@ var "aliases" @@ int32 precMin @@ var "body" $
       parenthesizeIfNeededExpr precMin (var "ctx") $
@@ -1336,9 +1336,18 @@ typeAtPrec = define "typeAtPrec" $
   -- other Hydra coder already uses for this exact "braced, comma-separated, one-per-line" shape,
   -- rather than hand-rolling indentation here. 'curlyBracesList' itself renders the empty-fields
   -- case as a bare '{}', so no separate check is needed.
+  -- When at least one field carries a '##' doc comment, separate every field (including the
+  -- first) with a blank line, so each comment visually groups with its own field rather than
+  -- reading as a tight, undifferentiated block (#711, Josh's readability request 2026-11-13).
+  -- A row type with no commented fields keeps the original compact one-per-line layout.
+  "fieldHasDescription" <~ ("ft" ~>
+    Optionals.match (Pairs.first (peelDescriptionAnnotation @@ (Core.fieldTypeType $ var "ft")))
+      false (constant true)) $
   "showRowType" <~ ("flds" ~>
     "fieldExprs" <~ Lists.map (fieldTypeExpr @@ var "aliases") (var "flds") $
-    Serialization.printExpr @@ (Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@ var "fieldExprs")) $
+    Logic.ifElse (Logic.not $ Lists.isEmpty $ Lists.filter (var "fieldHasDescription") (var "flds"))
+      (Serialization.printExpr @@ (Serialization.curlyBracesListWithBlankLines @@ Serialization.halfBlockStyle @@ var "fieldExprs"))
+      (Serialization.printExpr @@ (Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@ var "fieldExprs"))) $
   "gatherTypes" <~ ("prev" ~> "app" ~>
     "lhs" <~ Core.applicationTypeFunction (var "app") $
     "rhs" <~ Core.applicationTypeArgument (var "app") $
@@ -1477,7 +1486,7 @@ typeSchemeAliased = define "typeSchemeAliased" $
     (var "bodyStr")
     (Strings.concat $ list [
       string "∀",
-      Strings.join (string ",") (var "varNames"),
+      Strings.join (string ", ") (var "varNames"),
       string ".",
       Logic.ifElse (Lists.isEmpty $ var "tc")
         (string "")
@@ -1531,7 +1540,7 @@ termSignatureAliased = define "termSignatureAliased" $
     (var "bodyStr")
     (Strings.concat $ list [
       string "∀",
-      Strings.join (string ",") (var "varNames"),
+      Strings.join (string ", ") (var "varNames"),
       string ".",
       Logic.ifElse (Lists.isEmpty $ var "tc")
         (string "")

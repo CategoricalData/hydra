@@ -21,45 +21,48 @@ term applicationSpine =
     let fn := Application[function] app in
     let arg := Application[argument] app in
     cases(Term){
-      application=λinnerApp.
+      application = λinnerApp.
           let inner := applicationSpine innerApp
           in (first inner, lists.concat2 (second inner) [arg]),
-      `_`=(fn, [arg])}
+      `_` = (fn, [arg])}
       fn
 
 ## Find the free variables of a term that are referenced eagerly, i.e. outside of any nested lambda body; used to break false dependency cycles caused by DSL-level thunks such as hydra.core.parsers.lazy
 term eagerFreeVariablesInTerm =
   λ`term`.
-    let dfltVars := λ`_`.lists.foldl (λs,t.sets.union s (eagerFreeVariablesInTerm t)) sets.empty (subterms `term`)
+    let dfltVars := λ`_`.lists.foldl
+          (λs, t.sets.union s (eagerFreeVariablesInTerm t))
+          sets.empty
+          (subterms `term`)
     in cases(Term){
-      lambda=λ`_l`.sets.empty,
-      application=λapp.(λapp.
+      lambda = λ`_l`.sets.empty,
+      application = λapp.(λapp.
             let spined := applicationSpine app in
             let headTerm := first spined in
             let args := second spined in
             let argsVars := (λargList.lists.foldl
-                  (λs,a.sets.union s (eagerFreeVariablesInTerm a))
+                  (λs, a.sets.union s (eagerFreeVariablesInTerm a))
                   sets.empty
                   argList)
                 args in
             cases(Term){
-              lambda=λ`_`.sets.union
+              lambda = λ`_`.sets.union
                     (eagerVarsOfRedexBody sets.empty headTerm args)
                     argsVars,
-              `_`=sets.union (eagerFreeVariablesInTerm headTerm) argsVars}
+              `_` = sets.union (eagerFreeVariablesInTerm headTerm) argsVars}
               headTerm)
             app,
-      `let`=λl.sets.difference
+      `let` = λl.sets.difference
             (dfltVars unit)
             (sets.fromList (lists.map Binding[name] (Let[bindings] l))),
-      variable=λv.sets.singleton v,
-      `_`=dfltVars unit}
+      variable = λv.sets.singleton v,
+      `_` = dfltVars unit}
       `term`
 
 ## Find the eager free variables of a curried beta-redex's body, descending through each immediately-applied lambda layer
 term eagerVarsOfRedexBody =
-  λboundSoFar,body,remainingArgs.cases(Term){
-      lambda=λlam.ifElse
+  λboundSoFar, body, remainingArgs.cases(Term){
+      lambda = λlam.ifElse
             (lists.isEmpty remainingArgs)
             sets.empty
             (let param := Lambda[parameter] lam
@@ -67,25 +70,25 @@ term eagerVarsOfRedexBody =
               (sets.insert param boundSoFar)
               (Lambda[body] lam)
               (lists.drop 1:int32 remainingArgs)),
-      `_`=sets.difference (eagerFreeVariablesInTerm body) boundSoFar}
+      `_` = sets.difference (eagerFreeVariablesInTerm body) boundSoFar}
       body
 
 ## Get the set of free type variables in a term (including schema names, where they appear in type annotations). In this context, only the type schemes of let bindings can bind type variables; type lambdas do not.
 term freeTypeVariablesInTerm =
   λterm0.
     let allOf := λsets.lists.foldl sets.union sets.empty sets in
-    let tryType := λtvars,typ.sets.difference (freeVariablesInType typ) tvars in
-    let getAll := λvars,`term`.
+    let tryType := λtvars, typ.sets.difference (freeVariablesInType typ) tvars in
+    let getAll := λvars, `term`.
         let recurse := getAll vars in
         let dflt := allOf (lists.map recurse (subterms `term`)) in
         cases(Term){
-          lambda=λl.
+          lambda = λl.
               let domt := optionals.match
                   (Lambda[domain] l)
                   sets.empty
                   (tryType vars)
               in sets.union domt (recurse (Lambda[body] l)),
-          `let`=λl.
+          `let` = λl.
               let forBinding := λb.
                   let newVars := optionals.match
                       (Binding[typeScheme] b)
@@ -102,48 +105,50 @@ term freeTypeVariablesInTerm =
               in sets.union
                 (allOf (lists.map forBinding (Let[bindings] l)))
                 (recurse (Let[body] l)),
-          typeApplication=λtt.sets.union
+          typeApplication = λtt.sets.union
                 (tryType vars (TypeApplicationTerm[`type`] tt))
                 (recurse (TypeApplicationTerm[body] tt)),
-          typeLambda=λtl.sets.union
-                (tryType vars Type{variable = TypeLambda[parameter] tl})
+          typeLambda = λtl.sets.union
+                (tryType
+                  vars
+                  Type{variable = TypeLambda[parameter] tl})
                 (recurse (TypeLambda[body] tl)),
-          `_`=dflt}
+          `_` = dflt}
           `term` in
     getAll sets.empty term0
 
 ## Find the free variables (i.e. variables not bound by a lambda or let) in a term
 term freeVariablesInTerm =
   λ`term`.
-    let dfltVars := λ`_`.lists.foldl (λs,t.sets.union s (freeVariablesInTerm t)) sets.empty (subterms `term`)
+    let dfltVars := λ`_`.lists.foldl (λs, t.sets.union s (freeVariablesInTerm t)) sets.empty (subterms `term`)
     in cases(Term){
-      lambda=λl.sets.delete (Lambda[parameter] l) (freeVariablesInTerm (Lambda[body] l)),
-      `let`=λl.sets.difference
+      lambda = λl.sets.delete (Lambda[parameter] l) (freeVariablesInTerm (Lambda[body] l)),
+      `let` = λl.sets.difference
             (dfltVars unit)
             (sets.fromList (lists.map Binding[name] (Let[bindings] l))),
-      variable=λv.sets.singleton v,
-      `_`=dfltVars unit}
+      variable = λv.sets.singleton v,
+      `_` = dfltVars unit}
       `term`
 
 ## Find the free variables (i.e. variables not bound by a lambda or let) in a type
 term freeVariablesInType =
   λtyp.
-    let dfltVars := lists.foldl (λs,t.sets.union s (freeVariablesInType t)) sets.empty (subtypes typ)
+    let dfltVars := lists.foldl (λs, t.sets.union s (freeVariablesInType t)) sets.empty (subtypes typ)
     in cases(Type){
-      `forall`=λlt.sets.delete (ForallType[parameter] lt) (freeVariablesInType (ForallType[body] lt)),
-      variable=λv.sets.singleton v,
-      `_`=dfltVars}
+      `forall` = λlt.sets.delete (ForallType[parameter] lt) (freeVariablesInType (ForallType[body] lt)),
+      variable = λv.sets.singleton v,
+      `_` = dfltVars}
       typ
 
 ## Find the free variables in a type in deterministic left-to-right order
 term freeVariablesInTypeOrdered =
   λtyp.
-    let collectVars := λboundVars,t.cases(Type){
-          variable=λv.ifElse (sets.member v boundVars) [] [v],
-          `forall`=λft.collectVars
+    let collectVars := λboundVars, t.cases(Type){
+          variable = λv.ifElse (sets.member v boundVars) [] [v],
+          `forall` = λft.collectVars
                 (sets.insert (ForallType[parameter] ft) boundVars)
                 (ForallType[body] ft),
-          `_`=lists.concat (lists.map (collectVars boundVars) (subtypes t))}
+          `_` = lists.concat (lists.map (collectVars boundVars) (subtypes t))}
           t
     in lists.distinct (collectVars sets.empty typ)
 
@@ -164,38 +169,38 @@ term freeVariablesInTypeSchemeSimple =
 ## Same as freeVariablesInType, but ignores the binding action of lambda types
 term freeVariablesInTypeSimple =
   λtyp.
-    let helper := λtypes,typ.cases(Type){variable=λv.sets.insert v types, `_`=types} typ
+    let helper := λtypes, typ.cases(Type){variable = λv.sets.insert v types, `_` = types} typ
     in foldOverType TraversalOrder{pre} helper sets.empty typ
 
 ## Find a fresh name based on the given base name, not in the given avoid-set, trying base2, base3, etc.
 term freshNameAvoiding =
-  λbase,avoid.
+  λbase, avoid.
     let go := λi.
         let candidate := Name{strings.concat2 (Name[] base) (printInt32 i)}
         in ifElse (sets.member candidate avoid) (go (add i 1:int32)) candidate
     in go 2:int32
 
 ## Check whether a variable is free (not bound) in a term
-term isFreeVariableInTerm = λv,`term`.not (sets.member v (freeVariablesInTerm `term`))
+term isFreeVariableInTerm = λv, `term`.not (sets.member v (freeVariablesInTerm `term`))
 
 ## Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ...
 term normalizeTypeVariablesInTerm =
   λ`term`.
-    let replaceName := λsubst,v.optionals.withDefault v (maps.lookup v subst) in
-    let substType := λsubst,typ.
-        let rewrite := λrecurse,typ.cases(Type){
-              variable=λv.Type{
+    let replaceName := λsubst, v.optionals.withDefault v (maps.lookup v subst) in
+    let substType := λsubst, typ.
+        let rewrite := λrecurse, typ.cases(Type){
+              variable = λv.Type{
                     variable = replaceName subst v},
-              `_`=recurse typ}
+              `_` = recurse typ}
               typ
         in rewriteType rewrite typ in
-    let rewriteWithSubst := λstate,term0.
+    let rewriteWithSubst := λstate, term0.
         let sb := first state in
         let next := second state in
         let subst := first sb in
         let boundVars := second sb in
-        let rewrite := λrecurse,`term`.cases(Term){
-              lambda=λl.
+        let rewrite := λrecurse, `term`.cases(Term){
+              lambda = λl.
                   let domain := Lambda[domain] l
                   in Term{
                     lambda = Lambda{
@@ -204,10 +209,10 @@ term normalizeTypeVariablesInTerm =
                       body = rewriteWithSubst
                           ((subst, boundVars), next)
                           (Lambda[body] l)}},
-              `let`=λlt.
+              `let` = λlt.
                   let bindings0 := Let[bindings] lt in
                   let body0 := Let[body] lt in
-                  let step := λacc,bs.optionals.match
+                  let step := λacc, bs.optionals.match
                         (lists.uncons bs)
                         (lists.reverse acc)
                         (λuc.
@@ -225,7 +230,7 @@ term normalizeTypeVariablesInTerm =
                               let vars := TypeScheme[variables] ts in
                               let typ := TypeScheme[body] ts in
                               let k := lists.length vars in
-                              let gen := λi,rem,acc2.
+                              let gen := λi, rem, acc2.
                                   let ti := Name{strings.concat2
                                     "t"
                                     (printInt32 (add next i))}
@@ -277,7 +282,7 @@ term normalizeTypeVariablesInTerm =
                       body = rewriteWithSubst
                           ((subst, boundVars), next)
                           body0}},
-              typeApplication=λtt.Term{
+              typeApplication = λtt.Term{
                     typeApplication = TypeApplicationTerm{
                       body = rewriteWithSubst
                           ((subst, boundVars), next)
@@ -285,7 +290,7 @@ term normalizeTypeVariablesInTerm =
                       `type` = substType
                           subst
                           (TypeApplicationTerm[`type`] tt)}},
-              typeLambda=λta.Term{
+              typeLambda = λta.Term{
                     typeLambda = TypeLambda{
                       parameter = replaceName
                           subst
@@ -293,86 +298,89 @@ term normalizeTypeVariablesInTerm =
                       body = rewriteWithSubst
                           ((subst, boundVars), next)
                           (TypeLambda[body] ta)}},
-              `_`=recurse `term`}
+              `_` = recurse `term`}
               `term` in
         rewriteTerm rewrite term0 in
     rewriteWithSubst ((maps.empty, sets.empty), 0:int32) `term`
 
 ## Replace a free variable in a term
 term replaceFreeTermVariable =
-  λvold,tnew,`term`.
-    let rewrite := λrecurse,t.cases(Term){
-          lambda=λl.
+  λvold, tnew, `term`.
+    let rewrite := λrecurse, t.cases(Term){
+          lambda = λl.
               let v := Lambda[parameter] l
               in ifElse (equal v vold) t (recurse t),
-          variable=λv.ifElse (equal v vold) tnew Term{variable = v},
-          `_`=recurse t}
+          variable = λv.ifElse
+                (equal v vold)
+                tnew
+                Term{variable = v},
+          `_` = recurse t}
           t
     in rewriteTerm rewrite `term`
 
 ## Replace free occurrences of a name in a type
 term replaceFreeTypeVariable =
-  λv,rep,typ.
-    let mapExpr := λrecurse,t.cases(Type){
-          `forall`=λft.ifElse
+  λv, rep, typ.
+    let mapExpr := λrecurse, t.cases(Type){
+          `forall` = λft.ifElse
                 (equal v (ForallType[parameter] ft))
                 t
                 Type{
                   `forall` = ForallType{
                     parameter = ForallType[parameter] ft,
                     body = recurse (ForallType[body] ft)}},
-          variable=λ`v'`.ifElse (equal v `v'`) rep t,
-          `_`=recurse t}
+          variable = λ`v'`.ifElse (equal v `v'`) rep t,
+          `_` = recurse t}
           t
     in rewriteType mapExpr typ
 
 ## Substitute type variables in a type
 term substituteTypeVariables =
-  λsubst,typ.
-    let replace := λrecurse,typ.cases(Type){
-          variable=λn.Type{
+  λsubst, typ.
+    let replace := λrecurse, typ.cases(Type){
+          variable = λn.Type{
                 variable = optionals.withDefault
                     n
                     (maps.lookup n subst)},
-          `_`=recurse typ}
+          `_` = recurse typ}
           typ
     in rewriteType replace typ
 
 ## Substitute one variable for another in a term
 term substituteVariable =
-  λ`from`,to,`term`.
-    let replace := λrecurse,`term`.cases(Term){
-          variable=λx.Term{
+  λ`from`, to, `term`.
+    let replace := λrecurse, `term`.cases(Term){
+          variable = λx.Term{
                 variable = ifElse (equal x `from`) to x},
-          lambda=λl.ifElse
+          lambda = λl.ifElse
                 (equal (Lambda[parameter] l) `from`)
                 `term`
                 (recurse `term`),
-          `_`=recurse `term`}
+          `_` = recurse `term`}
           `term`
     in rewriteTerm replace `term`
 
 ## Substitute multiple variables in a term
 term substituteVariables =
-  λsubst,`term`.
-    let replace := λrecurse,`term`.cases(Term){
-          variable=λn.Term{
+  λsubst, `term`.
+    let replace := λrecurse, `term`.cases(Term){
+          variable = λn.Term{
                 variable = optionals.withDefault
                     n
                     (maps.lookup n subst)},
-          lambda=λl.optionals.match
+          lambda = λl.optionals.match
                 (maps.lookup (Lambda[parameter] l) subst)
                 (recurse `term`)
                 (λ`_`.`term`),
-          `_`=recurse `term`}
+          `_` = recurse `term`}
           `term`
     in rewriteTerm replace `term`
 
 ## Rename all shadowed variables (both lambda parameters and let-bound variables that shadow lambda parameters) in a term.
 term unshadowVariables =
   λterm0.
-    let f := λrecurse,m,`term`.cases(Term){
-          lambda=λl.
+    let f := λrecurse, m, `term`.cases(Term){
+          lambda = λl.
               let v := Lambda[parameter] l in
               let domain := Lambda[domain] l in
               let body := Lambda[body] l in
@@ -390,8 +398,8 @@ term unshadowVariables =
                     parameter = v,
                     domain = domain,
                     body = f recurse (maps.insert v v m) body}},
-          `let`=λlt.
-              let resolveBinding := λacc,b.
+          `let` = λlt.
+              let resolveBinding := λacc, b.
                   let bname := Binding[name] b in
                   let resolved := first acc in
                   let mapSoFar := second acc in
@@ -422,16 +430,18 @@ term unshadowVariables =
                     typeScheme = Binding[typeScheme] b} in
               let newBindings := lists.map
                   renameBinding
-                  (lists.zip (Let[bindings] lt) resolvedNames) in
+                  (lists.zip
+                    (Let[bindings] lt)
+                    resolvedNames) in
               Term{
                 `let` = Let{
                   bindings = newBindings,
                   body = f recurse m2 (Let[body] lt)}},
-          variable=λv.Term{
+          variable = λv.Term{
                 variable = optionals.match
                     (maps.lookup v m)
                     v
                     (λrenamed.renamed)},
-          `_`=recurse m `term`}
+          `_` = recurse m `term`}
           `term`
     in rewriteTermWithContext f maps.empty term0

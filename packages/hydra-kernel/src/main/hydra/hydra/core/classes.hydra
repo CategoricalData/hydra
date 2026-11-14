@@ -9,15 +9,16 @@ import hydra.core.typing
 
 ## Check whether a type is an instance of a constraint class, by the class's short name.
 term classIsSatisfiedByType =
-  λclassName,typ.
+  λclassName, typ.
     let isIntegerLiteral := cases(Type){
-        literal=λlt.cases(LiteralType){integer=λ`_`.true, `_`=false}
+        literal = λlt.cases(LiteralType){integer = λ`_`.true, `_` = false}
               lt,
-        `_`=false}
+        `_` = false}
         (deannotateType typ) in
     let isFloatLiteral := cases(Type){
-        literal=λlt.cases(LiteralType){float=λ`_`.true, `_`=false} lt,
-        `_`=false}
+        literal = λlt.cases(LiteralType){float = λ`_`.true, `_` = false}
+              lt,
+        `_` = false}
         (deannotateType typ) in
     ifElse
       (equal className Name{"equality"})

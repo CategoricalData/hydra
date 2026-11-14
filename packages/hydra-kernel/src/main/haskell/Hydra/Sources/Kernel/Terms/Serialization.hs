@@ -5,6 +5,7 @@ module Hydra.Sources.Kernel.Terms.Serialization where
 import Hydra.Kernel hiding (
   angleBraces, angleBracesList, braces, bracesList, brackets, bracketsList, bracesListAdaptive,
   bracketList, bracketListAdaptive, cat, chooseLayout, commaSep, commaSepAdaptive, cst, curlyBlock, curlyBraces, curlyBracesList,
+  curlyBracesListWithBlankLines,
   customIndent, customIndentBlock, dotSep, doubleNewlineSep, doubleQuoted, doubleSpace,
   expressionLength, fullBlockStyle, fullName, halfBlockStyle, halfIndent, ifx, indent, indentBlock,
   indentLines, indentSubsequentLines, infixWs, infixWsList, inlineStyle, maxLineWidth, newline, newlineSep, noSep,
@@ -89,6 +90,7 @@ module_ = Module {
      toDefinition curlyBlock,
      toDefinition curlyBraces,
      toDefinition curlyBracesList,
+     toDefinition curlyBracesListWithBlankLines,
      toDefinition customIndent,
      toDefinition customIndentBlock,
      toDefinition dotSep,
@@ -232,6 +234,34 @@ curlyBracesList = define "curlyBracesList" $
       (cst @@ string "{}")
       (brackets @@ curlyBraces @@ var "style" @@
         (symbolSep @@ (Optionals.withDefault (string ",") (var "msymb")) @@ var "style" @@ var "els"))
+
+-- | Like 'curlyBracesList', but always separates entries with a comma followed by a BLANK line,
+-- and ALSO opens with a blank line right after '{' (before the first entry) -- for record/union
+-- field lists where at least one field carries a '##' doc comment (#711, Josh's readability
+-- request 2026-11-13): grouping each comment visually with its field reads better than a tight
+-- one-per-line block. The closing brace stays on the last entry's own line (no blank line before
+-- it) -- only entries, including the first, get a blank line BEFORE them. Built directly (not via
+-- 'brackets'/'Ast.BlockStyle', whose leading/trailing break is a plain single-or-none choice, not
+-- a double-break) since no existing block style expresses "double break before the first entry,
+-- none before the close". Renders as `{}` when empty, same as 'curlyBracesList'.
+curlyBracesListWithBlankLines :: TypedTermDefinition (BlockStyle -> [Expr] -> Expr)
+curlyBracesListWithBlankLines = define "curlyBracesListWithBlankLines" $
+  doc ("Separate the elements inside curly braces with a comma and a blank line between them"
+    <> " (including before the first entry), for commented record/union fields (#711)") $
+  "style" ~> "els" ~>
+    Logic.ifElse (Lists.isEmpty $ var "els")
+      (cst @@ string "{}")
+      ("commaBlankOp" <~ (Ast.op
+        (sym @@ string ",")
+        (Ast.padding Ast.wsNone Ast.wsDoubleBreak)
+        (Ast.precedence $ int32 0)
+        Ast.associativityNone) $
+      "entriesExpr" <~ Optionals.match (Lists.head $ var "els") (cst @@ string "")
+        ("h" ~> Lists.foldl ("acc" ~> "el" ~> ifx @@ var "commaBlankOp" @@ var "acc" @@ var "el") (var "h") (Lists.drop (int32 1) (var "els"))) $
+      "entriesStr" <~ printExpr @@ var "entriesExpr" $
+      "doIndent" <~ Ast.blockStyleIndent (var "style") $
+      "indentedStr" <~ Optionals.match (var "doIndent") (var "entriesStr") ("pre" ~> customIndent @@ var "pre" @@ var "entriesStr") $
+      cst @@ (Strings.concat $ list [string "{\n\n", var "indentedStr", string "}"]))
 
 customIndent :: TypedTermDefinition (String -> String -> String)
 customIndent = define "customIndent" $

@@ -7,24 +7,33 @@ module hydra.core.yaml.model
 
 ## A YAML node (value)
 type Node = union{
+
   ## A mapping from nodes to nodes
   mapping: map<Node, Node>,
+
   ## A scalar value
   scalar: Scalar,
+
   ## A sequence of nodes
   sequence: list<Node>}
 
 ## A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here
 type Scalar = union{
+
   ## Represents a true/false value
   bool: boolean,
+
   ## An arbitrary-precision decimal number (lexically a valid JSON number)
   `decimal`: decimal,
+
   ## Represents an approximation to real numbers
   float: float64,
+
   ## Represents arbitrary sized finite mathematical integers
   int: bigint,
+
   ## Represents the lack of a value
   null: unit,
+
   ## A string value
   str: string}

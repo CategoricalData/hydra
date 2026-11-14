@@ -202,10 +202,10 @@ term allTests =
                                   variable = Name{"hydra.core.lib.equality.equal"}},
                                 argument = Term{
                                   `map` = {
-                                    Term{literal = Literal{`string` = "k1"}}=Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}}}}},
+                                    Term{literal = Literal{`string` = "k1"}} = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}}}}},
                             argument = Term{
                               `map` = {
-                                Term{literal = Literal{`string` = "k1"}}=Term{literal = Literal{integer = IntegerValue{`int32` = 99:int32}}}}}}}),
+                                Term{literal = Literal{`string` = "k1"}} = Term{literal = Literal{integer = IntegerValue{`int32` = 99:int32}}}}}}}),
                 expected = λ`_`.`term`
                       Term{
                         literal = Literal{
@@ -232,10 +232,10 @@ term allTests =
                                   variable = Name{"hydra.core.lib.equality.equal"}},
                                 argument = Term{
                                   `map` = {
-                                    Term{literal = Literal{`string` = "k1"}}=Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}}}}},
+                                    Term{literal = Literal{`string` = "k1"}} = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}}}}},
                             argument = Term{
                               `map` = {
-                                Term{literal = Literal{`string` = "k1"}}=Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}}}}}),
+                                Term{literal = Literal{`string` = "k1"}} = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}}}}}),
                 expected = λ`_`.`term`
                       Term{
                         literal = Literal{
@@ -262,10 +262,10 @@ term allTests =
                                   variable = Name{"hydra.core.lib.equality.equal"}},
                                 argument = Term{
                                   `map` = {
-                                    Term{literal = Literal{`string` = "k"}}=Term{literal = Literal{`decimal` = 1.1}}}}}},
+                                    Term{literal = Literal{`string` = "k"}} = Term{literal = Literal{`decimal` = 1.1}}}}}},
                             argument = Term{
                               `map` = {
-                                Term{literal = Literal{`string` = "k"}}=Term{literal = Literal{`decimal` = 1.10}}}}}}),
+                                Term{literal = Literal{`string` = "k"}} = Term{literal = Literal{`decimal` = 1.10}}}}}}),
                 expected = λ`_`.`term`
                       Term{
                         literal = Literal{
@@ -292,10 +292,10 @@ term allTests =
                                   variable = Name{"hydra.core.lib.equality.equal"}},
                                 argument = Term{
                                   `map` = {
-                                    Term{literal = Literal{`string` = "k"}}=Term{literal = Literal{`decimal` = 1.1}}}}}},
+                                    Term{literal = Literal{`string` = "k"}} = Term{literal = Literal{`decimal` = 1.1}}}}}},
                             argument = Term{
                               `map` = {
-                                Term{literal = Literal{`string` = "k"}}=Term{literal = Literal{`decimal` = 1.1}}}}}}),
+                                Term{literal = Literal{`string` = "k"}} = Term{literal = Literal{`decimal` = 1.1}}}}}}),
                 expected = λ`_`.`term`
                       Term{
                         literal = Literal{
@@ -848,12 +848,12 @@ term allTests =
                                   variable = Name{"hydra.core.lib.equality.equal"}},
                                 argument = Term{
                                   `map` = {
-                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
-                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}},
                             argument = Term{
                               `map` = {
-                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
-                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
                 expected = λ`_`.`term`
                       Term{
                         literal = Literal{
@@ -880,12 +880,12 @@ term allTests =
                                   variable = Name{"hydra.core.lib.equality.equal"}},
                                 argument = Term{
                                   `map` = {
-                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
-                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}},
                             argument = Term{
                               `map` = {
-                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
-                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
                 expected = λ`_`.`term`
                       Term{
                         literal = Literal{
@@ -912,11 +912,11 @@ term allTests =
                                   variable = Name{"hydra.core.lib.equality.equal"}},
                                 argument = Term{
                                   `map` = {
-                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}}}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}}}}},
                             argument = Term{
                               `map` = {
-                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
-                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
                 expected = λ`_`.`term`
                       Term{
                         literal = Literal{
@@ -943,12 +943,12 @@ term allTests =
                                   variable = Name{"hydra.core.lib.equality.equal"}},
                                 argument = Term{
                                   `map` = {
-                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
-                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}},
                             argument = Term{
                               `map` = {
-                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
-                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 21:int32}}}}}}}),
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 21:int32}}}}}}}),
                 expected = λ`_`.`term`
                       Term{
                         literal = Literal{
@@ -975,14 +975,14 @@ term allTests =
                                   variable = Name{"hydra.core.lib.equality.equal"}},
                                 argument = Term{
                                   `map` = {
-                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{
                                       `map` = {
-                                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}}},
                             argument = Term{
                               `map` = {
-                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{
                                   `map` = {
-                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}}}),
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}}}),
                 expected = λ`_`.`term`
                       Term{
                         literal = Literal{
@@ -1009,14 +1009,14 @@ term allTests =
                                   variable = Name{"hydra.core.lib.equality.equal"}},
                                 argument = Term{
                                   `map` = {
-                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{
                                       `map` = {
-                                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}}},
+                                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}}},
                             argument = Term{
                               `map` = {
-                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{
                                   `map` = {
-                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 21:int32}}}}}}}}}),
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 21:int32}}}}}}}}}),
                 expected = λ`_`.`term`
                       Term{
                         literal = Literal{
@@ -1377,12 +1377,12 @@ term allTests =
                                   variable = Name{"hydra.core.lib.equality.notEqual"}},
                                 argument = Term{
                                   `map` = {
-                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
-                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}},
                             argument = Term{
                               `map` = {
-                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
-                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
                 expected = λ`_`.`term`
                       Term{
                         literal = Literal{
@@ -1409,11 +1409,11 @@ term allTests =
                                   variable = Name{"hydra.core.lib.equality.notEqual"}},
                                 argument = Term{
                                   `map` = {
-                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}}}}},
+                                    Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}}}}},
                             argument = Term{
                               `map` = {
-                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
-                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}}}}),
                 expected = λ`_`.`term`
                       Term{
                         literal = Literal{

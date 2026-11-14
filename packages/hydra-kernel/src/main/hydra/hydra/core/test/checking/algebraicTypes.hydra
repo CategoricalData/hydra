@@ -1709,7 +1709,7 @@ term optionalsWithComplexTypesTests =
                     Term{
                       `optional` = given(Term{
                           `map` = {
-                            Term{literal = Literal{`string` = "key"}}=Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}}})}),
+                            Term{literal = Literal{`string` = "key"}} = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}}})}),
             expected = λ`_`.`type`
                   Type{
                     `optional` = Type{

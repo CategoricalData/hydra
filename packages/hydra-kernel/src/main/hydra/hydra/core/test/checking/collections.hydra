@@ -517,8 +517,8 @@ term monomorphicMapsTests =
                     testGraph
                     Term{
                       `map` = {
-                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{`string` = "one"}},
-                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{literal = Literal{`string` = "two"}}}}),
+                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{`string` = "one"}},
+                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{literal = Literal{`string` = "two"}}}}),
             expected = λ`_`.`type`
                   Type{
                     `map` = MapType{
@@ -546,8 +546,8 @@ term monomorphicMapsTests =
                     testGraph
                     Term{
                       `map` = {
-                        Term{literal = Literal{`string` = "a"}}=Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
-                        Term{literal = Literal{`string` = "b"}}=Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}}}),
+                        Term{literal = Literal{`string` = "a"}} = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                        Term{literal = Literal{`string` = "b"}} = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}}}),
             expected = λ`_`.`type`
                   Type{
                     `map` = MapType{
@@ -575,7 +575,7 @@ term monomorphicMapsTests =
                     testGraph
                     Term{
                       `map` = {
-                        Term{literal = Literal{integer = IntegerValue{`bigint` = 42:bigint}}}=Term{literal = Literal{`boolean` = true}}}}),
+                        Term{literal = Literal{integer = IntegerValue{`bigint` = 42:bigint}}} = Term{literal = Literal{`boolean` = true}}}}),
             expected = λ`_`.`type`
                   Type{
                     `map` = MapType{
@@ -614,7 +614,7 @@ term polymorphicMapsTests =
                         domain = none,
                         body = Term{
                           `map` = {
-                            Term{variable = Name{"k"}}=Term{literal = Literal{`string` = "value"}}}}}}),
+                            Term{variable = Name{"k"}} = Term{literal = Literal{`string` = "value"}}}}}}),
             expected = λ`_`.`type`
                   Type{
                     `forall` = ForallType{
@@ -651,7 +651,7 @@ term polymorphicMapsTests =
                         domain = none,
                         body = Term{
                           `map` = {
-                            Term{literal = Literal{`string` = "key"}}=Term{variable = Name{"v"}}}}}}),
+                            Term{literal = Literal{`string` = "key"}} = Term{variable = Name{"v"}}}}}}),
             expected = λ`_`.`type`
                   Type{
                     `forall` = ForallType{
@@ -692,7 +692,7 @@ term polymorphicMapsTests =
                             domain = none,
                             body = Term{
                               `map` = {
-                                Term{variable = Name{"k"}}=Term{variable = Name{"v"}}}}}}}}),
+                                Term{variable = Name{"k"}} = Term{variable = Name{"v"}}}}}}}}),
             expected = λ`_`.`type`
                   Type{
                     `forall` = ForallType{
@@ -735,7 +735,7 @@ term polymorphicMapsTests =
                         domain = none,
                         body = Term{
                           `map` = {
-                            Term{variable = Name{"x"}}=Term{variable = Name{"x"}}}}}}),
+                            Term{variable = Name{"x"}} = Term{variable = Name{"x"}}}}}}),
             expected = λ`_`.`type`
                   Type{
                     `forall` = ForallType{
@@ -776,7 +776,7 @@ term mapsInComplexContextsTests =
                       pair = (
                           Term{
                             `map` = {
-                              Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{`string` = "one"}}}},
+                              Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{`string` = "one"}}}},
                           Term{literal = Literal{`string` = "context"}})}),
             expected = λ`_`.`type`
                   Type{
@@ -810,9 +810,9 @@ term mapsInComplexContextsTests =
                     testGraph
                     Term{
                       `map` = {
-                        Term{literal = Literal{`string` = "outer"}}=Term{
+                        Term{literal = Literal{`string` = "outer"}} = Term{
                           `map` = {
-                            Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{literal = Literal{`boolean` = true}}}}}}),
+                            Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{literal = Literal{`boolean` = true}}}}}}),
             expected = λ`_`.`type`
                   Type{
                     `map` = MapType{
@@ -850,8 +850,8 @@ term mapsInComplexContextsTests =
                             name = Name{"lookup"},
                             `term` = Term{
                               `map` = {
-                                Term{literal = Literal{`string` = "key1"}}=Term{literal = Literal{integer = IntegerValue{`int32` = 100:int32}}},
-                                Term{literal = Literal{`string` = "key2"}}=Term{literal = Literal{integer = IntegerValue{`int32` = 200:int32}}}}},
+                                Term{literal = Literal{`string` = "key1"}} = Term{literal = Literal{integer = IntegerValue{`int32` = 100:int32}}},
+                                Term{literal = Literal{`string` = "key2"}} = Term{literal = Literal{integer = IntegerValue{`int32` = 200:int32}}}}},
                             typeScheme = none}],
                         body = Term{
                           variable = Name{"lookup"}}}}),
@@ -889,7 +889,7 @@ term mapsWithComplexTypesTests =
                     testGraph
                     Term{
                       `map` = {
-                        Term{literal = Literal{`string` = "person1"}}=Term{
+                        Term{literal = Literal{`string` = "person1"}} = Term{
                           `record` = Record{
                             typeName = testTypePersonName,
                             fields = [
@@ -921,8 +921,8 @@ term mapsWithComplexTypesTests =
                     testGraph
                     Term{
                       `map` = {
-                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}=Term{`list` = [Term{literal = Literal{`string` = "a"}}, Term{literal = Literal{`string` = "b"}}]},
-                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}=Term{`list` = [Term{literal = Literal{`string` = "c"}}, Term{literal = Literal{`string` = "d"}}]}}}),
+                        Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}} = Term{`list` = [Term{literal = Literal{`string` = "a"}}, Term{literal = Literal{`string` = "b"}}]},
+                        Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}} = Term{`list` = [Term{literal = Literal{`string` = "c"}}, Term{literal = Literal{`string` = "d"}}]}}}),
             expected = λ`_`.`type`
                   Type{
                     `map` = MapType{
@@ -951,7 +951,7 @@ term mapsWithComplexTypesTests =
                     testGraph
                     Term{
                       `map` = {
-                        Term{literal = Literal{`string` = "coords"}}=Term{
+                        Term{literal = Literal{`string` = "coords"}} = Term{
                           pair = (
                               Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}},
                               Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}})}}}),
@@ -1444,7 +1444,7 @@ term setsWithComplexTypesTests =
                       `set` = {
                         Term{
                           `map` = {
-                            Term{literal = Literal{`string` = "key"}}=Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}}}}}),
+                            Term{literal = Literal{`string` = "key"}} = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}}}}}),
             expected = λ`_`.`type`
                   Type{
                     `set` = Type{

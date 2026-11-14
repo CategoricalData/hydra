@@ -26,7 +26,7 @@ import hydra.core.variables
 
 ## Dereference a type name to get the actual type (Either version)
 term dereferenceType =
-  λcx,graph,name.
+  λcx, graph, name.
     let mel := lookupBinding graph name
     in optionals.match
       mel
@@ -44,7 +44,8 @@ term dereferenceType =
 
 ## Test whether a given System F type is polymorphic (i.e., a forall type)
 term fTypeIsPolymorphic =
-  λtyp.cases(Type){annotated=λat.fTypeIsPolymorphic (AnnotatedType[body] at), `forall`=λft.true, `_`=false} typ
+  λtyp.cases(Type){annotated = λat.fTypeIsPolymorphic (AnnotatedType[body] at), `forall` = λft.true, `_` = false}
+      typ
 
 ## Build a map from field name to field term, given a list of fields
 term fieldMap =
@@ -56,13 +57,13 @@ term fieldTypeMap =
 
 ## Get field types from a record or union type (Either version)
 term fieldTypes =
-  λcx,graph,t.
+  λcx, graph, t.
     let toMap := λfields.maps.fromList (lists.map (λft.(FieldType[name] ft, FieldType[`type`] ft)) fields)
     in cases(Type){
-      `forall`=λft.fieldTypes cx graph (ForallType[body] ft),
-      `record`=λrt.right(toMap rt),
-      `union`=λrt.right(toMap rt),
-      variable=λname.optionals.match
+      `forall` = λft.fieldTypes cx graph (ForallType[body] ft),
+      `record` = λrt.right(toMap rt),
+      `union` = λrt.right(toMap rt),
+      variable = λname.optionals.match
             (maps.lookup name (Graph[schemaTypes] graph))
             (eithers.bind
               (requireBinding graph name)
@@ -77,7 +78,7 @@ term fieldTypes =
                     (model.type graph (Binding[`term`] el)))
                   (λdecodedType.fieldTypes cx graph decodedType)))
             (λts.fieldTypes cx graph (TypeScheme[body] ts)),
-      `_`=left(Error{
+      `_` = left(Error{
           resolution = ResolutionError{
             unexpectedShape = UnexpectedShapeError{
               expected = "record or union type",
@@ -86,7 +87,7 @@ term fieldTypes =
 
 ## Find a field type by name in a list of field types
 term findFieldType =
-  λcx,fname,fields.
+  λcx, fname, fields.
     let matchingFields := lists.filter (λft.equal (Name[] (FieldType[name] ft)) (Name[] fname)) fields in
     let noMatch := left(Error{
         resolution = ResolutionError{
@@ -103,15 +104,15 @@ term findFieldType =
 ## Fully strip a type of forall quantifiers, normalizing bound variable names for alpha-equivalence comparison
 term fullyStripAndNormalizeType =
   λtyp.
-    let go := λdepth,subst,t.cases(Type){
-          `forall`=λft.
+    let go := λdepth, subst, t.cases(Type){
+          `forall` = λft.
               let oldVar := ForallType[parameter] ft in
               let newVar := Name{strings.concat2 "_" (printInt32 depth)} in
               go
                 (add depth 1:int32)
                 (maps.insert oldVar newVar subst)
                 (ForallType[body] ft),
-          `_`=(subst, t)}
+          `_` = (subst, t)}
           (deannotateType t) in
     let result := go 0:int32 maps.empty typ in
     let subst := first result in
@@ -120,17 +121,17 @@ term fullyStripAndNormalizeType =
 
 ## Fully strip a type of forall quantifiers
 term fullyStripType =
-  λtyp.cases(Type){`forall`=λft.fullyStripType (ForallType[body] ft), `_`=typ} (deannotateType typ)
+  λtyp.cases(Type){`forall` = λft.fullyStripType (ForallType[body] ft), `_` = typ} (deannotateType typ)
 
 ## Instantiate a type by replacing all forall-bound type variables with fresh variables, threading InferenceContext
 term instantiateType =
-  λcx,typ.
+  λcx, typ.
     let result := instantiateTypeScheme cx (typeToTypeScheme typ)
     in (typeSchemeToFType (first result), second result)
 
 ## Instantiate a type scheme with fresh variables, threading InferenceContext
 term instantiateTypeScheme =
-  λcx,scheme.
+  λcx, scheme.
     let oldVars := TypeScheme[variables] scheme in
     let result := freshNames (lists.length oldVars) cx in
     let newVars := first result in
@@ -150,29 +151,29 @@ term instantiateTypeScheme =
 
 ## Test whether a map's key type resolves to string, following aliases and wrappers. Used to decide whether a map may use the compact JSON object encoding.
 term mapKeyResolvesToString =
-  λtypes,keyType.cases(Type){literal=λlt.cases(LiteralType){`string`=λ`_`.true, `_`=false} lt, `_`=false}
+  λtypes, keyType.cases(Type){literal = λlt.cases(LiteralType){`string` = λ`_`.true, `_` = false} lt, `_` = false}
       (resolveBaseType types keyType)
 
 ## Apply type arguments to a nominal type
 term nominalApplication =
-  λtname,args.lists.foldl
-      (λt,a.Type{application = ApplicationType{function = t, argument = a}})
+  λtname, args.lists.foldl
+      (λt, a.Type{application = ApplicationType{function = t, argument = a}})
       Type{variable = tname}
       args
 
 ## Require a name to resolve to a record type
 term requireRecordType =
-  λcx,graph,name.
-    let toRecord := λt.cases(Type){`record`=λrt.given(rt), `_`=none} t
+  λcx, graph, name.
+    let toRecord := λt.cases(Type){`record` = λrt.given(rt), `_` = none} t
     in requireRowType cx "record type" toRecord graph name
 
 ## Require a name to resolve to a row type
 term requireRowType =
-  λcx,label,getter,graph,name.
+  λcx, label, getter, graph, name.
     let rawType := λt.cases(Type){
-          annotated=λat.rawType (AnnotatedType[body] at),
-          `forall`=λft.rawType (ForallType[body] ft),
-          `_`=t}
+          annotated = λat.rawType (AnnotatedType[body] at),
+          `forall` = λft.rawType (ForallType[body] ft),
+          `_` = t}
           t
     in eithers.bind
       (requireType cx graph name)
@@ -189,14 +190,14 @@ term requireRowType =
 
 ## Look up a schema type and instantiate it, threading InferenceContext
 term requireSchemaType =
-  λcx,types,tname.optionals.match
+  λcx, types, tname.optionals.match
       (maps.lookup tname types)
       left(Error{resolution = ResolutionError{noSuchBinding = NoSuchBindingError{name = tname}}})
       (λts.right(instantiateTypeScheme cx (deannotateTypeSchemeRecursive ts)))
 
 ## Require a type by name
 term requireType =
-  λcx,graph,name.optionals.match
+  λcx, graph, name.optionals.match
       (maps.lookup name (Graph[schemaTypes] graph))
       (optionals.match
         (maps.lookup name (Graph[boundTypes] graph))
@@ -206,7 +207,7 @@ term requireType =
 
 ## Require a field type from a union type
 term requireUnionField =
-  λcx,graph,tname,fname.
+  λcx, graph, tname, fname.
     let withRowType := λrt.
         let noMatchErr := left(Error{
             resolution = ResolutionError{
@@ -220,43 +221,43 @@ term requireUnionField =
 
 ## Require a name to resolve to a union type
 term requireUnionType =
-  λcx,graph,name.
-    let toUnion := λt.cases(Type){`union`=λrt.given(rt), `_`=none} t
+  λcx, graph, name.
+    let toUnion := λt.cases(Type){`union` = λrt.given(rt), `_` = none} t
     in requireRowType cx "union" toUnion graph name
 
 ## Resolve a type to its base, following annotations, type aliases (Type.variable dereferenced against the given type map), and Type.wrap bodies, transitively. An unresolvable variable name (not found in the map) is returned as-is, since the caller is in the best position to decide whether that is an error. As with hydra.sources.kernel.terms.lexical.dereferenceSchemaType, this assumes type aliases form an acyclic reference graph, as guaranteed by schema construction; a genuinely self-referential alias is not a supported input and would not terminate.
 term resolveBaseType =
-  λtypes,typ.
+  λtypes, typ.
     let stripped := deannotateType typ
     in cases(Type){
-      variable=λname.optionals.match
+      variable = λname.optionals.match
             (maps.lookup name types)
             stripped
             (λresolved.resolveBaseType types resolved),
-      `wrap`=λinner.resolveBaseType types inner,
-      `_`=stripped}
+      `wrap` = λinner.resolveBaseType types inner,
+      `_` = stripped}
       stripped
 
 ## Resolve a type, dereferencing type variables
 term resolveType =
-  λgraph,typ.cases(Type){
-      variable=λname.optionals.match
+  λgraph, typ.cases(Type){
+      variable = λname.optionals.match
             (maps.lookup name (Graph[schemaTypes] graph))
             (optionals.map
               (λts.typeSchemeToFType ts)
               (maps.lookup name (Graph[boundTypes] graph)))
             (λts.given(typeSchemeToFType ts)),
-      `_`=given(typ)}
+      `_` = given(typ)}
       (deannotateType typ)
 
 ## Convert a (System F -style) type to a type scheme
 term typeToTypeScheme =
   λt0.
-    let helper := λvars,t.cases(Type){
-          `forall`=λft.helper
+    let helper := λvars, t.cases(Type){
+          `forall` = λft.helper
                 (lists.cons (ForallType[parameter] ft) vars)
                 (ForallType[body] ft),
-          `_`=TypeScheme{
+          `_` = TypeScheme{
             variables = lists.reverse vars,
             body = t,
             constraints = maps.empty}}

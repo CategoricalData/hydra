@@ -8,40 +8,40 @@ import hydra.core.variants
 
 ## Find the precision of a given floating-point type
 term floatTypePrecision =
-  cases(FloatType){`float32`=λ`_`.Precision{bits = 32:int32}, `float64`=λ`_`.Precision{bits = 64:int32}}
+  cases(FloatType){`float32` = λ`_`.Precision{bits = 32:int32}, `float64` = λ`_`.Precision{bits = 64:int32}}
 
 ## All floating-point types in a canonical order
 term floatTypes = [FloatType{`float32`}, FloatType{`float64`}]
 
 ## Find the float type for a given floating-point value
 term floatValueType =
-  cases(FloatValue){`float32`=λ`_`.FloatType{`float32`}, `float64`=λ`_`.FloatType{`float64`}}
+  cases(FloatValue){`float32` = λ`_`.FloatType{`float32`}, `float64` = λ`_`.FloatType{`float64`}}
 
 ## Find whether a given integer type is signed (true) or unsigned (false)
 term integerTypeIsSigned =
   cases(IntegerType){
-    `bigint`=λ`_`.true,
-    `int8`=λ`_`.true,
-    `int16`=λ`_`.true,
-    `int32`=λ`_`.true,
-    `int64`=λ`_`.true,
-    `uint8`=λ`_`.false,
-    `uint16`=λ`_`.false,
-    `uint32`=λ`_`.false,
-    `uint64`=λ`_`.false}
+    `bigint` = λ`_`.true,
+    `int8` = λ`_`.true,
+    `int16` = λ`_`.true,
+    `int32` = λ`_`.true,
+    `int64` = λ`_`.true,
+    `uint8` = λ`_`.false,
+    `uint16` = λ`_`.false,
+    `uint32` = λ`_`.false,
+    `uint64` = λ`_`.false}
 
 ## Find the precision of a given integer type
 term integerTypePrecision =
   cases(IntegerType){
-    `bigint`=λ`_`.Precision{arbitrary},
-    `int8`=λ`_`.Precision{bits = 8:int32},
-    `int16`=λ`_`.Precision{bits = 16:int32},
-    `int32`=λ`_`.Precision{bits = 32:int32},
-    `int64`=λ`_`.Precision{bits = 64:int32},
-    `uint8`=λ`_`.Precision{bits = 8:int32},
-    `uint16`=λ`_`.Precision{bits = 16:int32},
-    `uint32`=λ`_`.Precision{bits = 32:int32},
-    `uint64`=λ`_`.Precision{bits = 64:int32}}
+    `bigint` = λ`_`.Precision{arbitrary},
+    `int8` = λ`_`.Precision{bits = 8:int32},
+    `int16` = λ`_`.Precision{bits = 16:int32},
+    `int32` = λ`_`.Precision{bits = 32:int32},
+    `int64` = λ`_`.Precision{bits = 64:int32},
+    `uint8` = λ`_`.Precision{bits = 8:int32},
+    `uint16` = λ`_`.Precision{bits = 16:int32},
+    `uint32` = λ`_`.Precision{bits = 32:int32},
+    `uint64` = λ`_`.Precision{bits = 64:int32}}
 
 ## All integer types, in a canonical order
 term integerTypes =
@@ -59,35 +59,35 @@ term integerTypes =
 ## Find the integer type for a given integer value
 term integerValueType =
   cases(IntegerValue){
-    `bigint`=λ`_`.IntegerType{`bigint`},
-    `int8`=λ`_`.IntegerType{`int8`},
-    `int16`=λ`_`.IntegerType{`int16`},
-    `int32`=λ`_`.IntegerType{`int32`},
-    `int64`=λ`_`.IntegerType{`int64`},
-    `uint8`=λ`_`.IntegerType{`uint8`},
-    `uint16`=λ`_`.IntegerType{`uint16`},
-    `uint32`=λ`_`.IntegerType{`uint32`},
-    `uint64`=λ`_`.IntegerType{`uint64`}}
+    `bigint` = λ`_`.IntegerType{`bigint`},
+    `int8` = λ`_`.IntegerType{`int8`},
+    `int16` = λ`_`.IntegerType{`int16`},
+    `int32` = λ`_`.IntegerType{`int32`},
+    `int64` = λ`_`.IntegerType{`int64`},
+    `uint8` = λ`_`.IntegerType{`uint8`},
+    `uint16` = λ`_`.IntegerType{`uint16`},
+    `uint32` = λ`_`.IntegerType{`uint32`},
+    `uint64` = λ`_`.IntegerType{`uint64`}}
 
 ## Find the literal type for a given literal value
 term literalType =
   cases(Literal){
-    `binary`=λ`_`.LiteralType{`binary`},
-    `boolean`=λ`_`.LiteralType{`boolean`},
-    `decimal`=λ`_`.LiteralType{`decimal`},
-    float=λ`arg_`.(λ`injected_`.LiteralType{float = `injected_`}) (floatValueType `arg_`),
-    integer=λ`arg_`.(λ`injected_`.LiteralType{integer = `injected_`}) (integerValueType `arg_`),
-    `string`=λ`_`.LiteralType{`string`}}
+    `binary` = λ`_`.LiteralType{`binary`},
+    `boolean` = λ`_`.LiteralType{`boolean`},
+    `decimal` = λ`_`.LiteralType{`decimal`},
+    float = λ`arg_`.(λ`injected_`.LiteralType{float = `injected_`}) (floatValueType `arg_`),
+    integer = λ`arg_`.(λ`injected_`.LiteralType{integer = `injected_`}) (integerValueType `arg_`),
+    `string` = λ`_`.LiteralType{`string`}}
 
 ## Find the literal type inject (constructor) for a given literal value
 term literalTypeVariant =
   cases(LiteralType){
-    `binary`=λ`_`.LiteralVariant{`binary`},
-    `boolean`=λ`_`.LiteralVariant{`boolean`},
-    `decimal`=λ`_`.LiteralVariant{`decimal`},
-    float=λ`_`.LiteralVariant{float},
-    integer=λ`_`.LiteralVariant{integer},
-    `string`=λ`_`.LiteralVariant{`string`}}
+    `binary` = λ`_`.LiteralVariant{`binary`},
+    `boolean` = λ`_`.LiteralVariant{`boolean`},
+    `decimal` = λ`_`.LiteralVariant{`decimal`},
+    float = λ`_`.LiteralVariant{float},
+    integer = λ`_`.LiteralVariant{integer},
+    `string` = λ`_`.LiteralVariant{`string`}}
 
 ## All literal types, in a canonical order
 term literalTypes =
@@ -114,27 +114,27 @@ term literalVariants =
 ## Find the term inject (constructor) for a given term
 term termVariant =
   cases(Term){
-    annotated=λ`_`.TermVariant{annotated},
-    application=λ`_`.TermVariant{application},
-    `cases`=λ`_`.TermVariant{`cases`},
-    `either`=λ`_`.TermVariant{`either`},
-    lambda=λ`_`.TermVariant{lambda},
-    `let`=λ`_`.TermVariant{`let`},
-    `list`=λ`_`.TermVariant{`list`},
-    literal=λ`_`.TermVariant{literal},
-    `map`=λ`_`.TermVariant{`map`},
-    `optional`=λ`_`.TermVariant{`optional`},
-    pair=λ`_`.TermVariant{pair},
-    `project`=λ`_`.TermVariant{`project`},
-    `record`=λ`_`.TermVariant{`record`},
-    `set`=λ`_`.TermVariant{`set`},
-    typeApplication=λ`_`.TermVariant{typeApplication},
-    typeLambda=λ`_`.TermVariant{typeLambda},
-    `inject`=λ`_`.TermVariant{`inject`},
-    `unit`=λ`_`.TermVariant{`unit`},
-    `unwrap`=λ`_`.TermVariant{`unwrap`},
-    variable=λ`_`.TermVariant{variable},
-    `wrap`=λ`_`.TermVariant{`wrap`}}
+    annotated = λ`_`.TermVariant{annotated},
+    application = λ`_`.TermVariant{application},
+    `cases` = λ`_`.TermVariant{`cases`},
+    `either` = λ`_`.TermVariant{`either`},
+    lambda = λ`_`.TermVariant{lambda},
+    `let` = λ`_`.TermVariant{`let`},
+    `list` = λ`_`.TermVariant{`list`},
+    literal = λ`_`.TermVariant{literal},
+    `map` = λ`_`.TermVariant{`map`},
+    `optional` = λ`_`.TermVariant{`optional`},
+    pair = λ`_`.TermVariant{pair},
+    `project` = λ`_`.TermVariant{`project`},
+    `record` = λ`_`.TermVariant{`record`},
+    `set` = λ`_`.TermVariant{`set`},
+    typeApplication = λ`_`.TermVariant{typeApplication},
+    typeLambda = λ`_`.TermVariant{typeLambda},
+    `inject` = λ`_`.TermVariant{`inject`},
+    `unit` = λ`_`.TermVariant{`unit`},
+    `unwrap` = λ`_`.TermVariant{`unwrap`},
+    variable = λ`_`.TermVariant{variable},
+    `wrap` = λ`_`.TermVariant{`wrap`}}
 
 ## All term (expression) variants, in a canonical order
 term termVariants =
@@ -164,24 +164,24 @@ term termVariants =
 ## Find the type inject (constructor) for a given type
 term typeVariant =
   cases(Type){
-    annotated=λ`_`.TypeVariant{annotated},
-    application=λ`_`.TypeVariant{application},
-    `effect`=λ`_`.TypeVariant{`effect`},
-    `either`=λ`_`.TypeVariant{`either`},
-    `forall`=λ`_`.TypeVariant{`forall`},
-    function=λ`_`.TypeVariant{function},
-    `list`=λ`_`.TypeVariant{`list`},
-    literal=λ`_`.TypeVariant{literal},
-    `map`=λ`_`.TypeVariant{`map`},
-    `optional`=λ`_`.TypeVariant{`optional`},
-    pair=λ`_`.TypeVariant{pair},
-    `record`=λ`_`.TypeVariant{`record`},
-    `set`=λ`_`.TypeVariant{`set`},
-    `union`=λ`_`.TypeVariant{`union`},
-    `unit`=λ`_`.TypeVariant{`unit`},
-    variable=λ`_`.TypeVariant{variable},
-    `void`=λ`_`.TypeVariant{`void`},
-    `wrap`=λ`_`.TypeVariant{`wrap`}}
+    annotated = λ`_`.TypeVariant{annotated},
+    application = λ`_`.TypeVariant{application},
+    `effect` = λ`_`.TypeVariant{`effect`},
+    `either` = λ`_`.TypeVariant{`either`},
+    `forall` = λ`_`.TypeVariant{`forall`},
+    function = λ`_`.TypeVariant{function},
+    `list` = λ`_`.TypeVariant{`list`},
+    literal = λ`_`.TypeVariant{literal},
+    `map` = λ`_`.TypeVariant{`map`},
+    `optional` = λ`_`.TypeVariant{`optional`},
+    pair = λ`_`.TypeVariant{pair},
+    `record` = λ`_`.TypeVariant{`record`},
+    `set` = λ`_`.TypeVariant{`set`},
+    `union` = λ`_`.TypeVariant{`union`},
+    `unit` = λ`_`.TypeVariant{`unit`},
+    variable = λ`_`.TypeVariant{variable},
+    `void` = λ`_`.TypeVariant{`void`},
+    `wrap` = λ`_`.TypeVariant{`wrap`}}
 
 ## All type variants, in a canonical order
 term typeVariants =

@@ -379,7 +379,7 @@ term testGroupForPrimitiveReferences =
                                 values = Type{
                                   variable = Name{"t1"}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -414,7 +414,7 @@ term testGroupForPrimitiveReferences =
                                   `optional` = Type{
                                     variable = Name{"t1"}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -456,7 +456,7 @@ term testGroupForPrimitiveReferences =
                                         values = Type{
                                           variable = Name{"t1"}}}}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -498,7 +498,7 @@ term testGroupForPrimitiveReferences =
                                     values = Type{
                                       variable = Name{"t1"}}}}}}}},
                         constraints = {
-                          Name{"t2"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t2"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -524,7 +524,7 @@ term testGroupForPrimitiveReferences =
                             values = Type{
                               variable = Name{"t1"}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -557,7 +557,7 @@ term testGroupForPrimitiveReferences =
                               `set` = Type{
                                 variable = Name{"t0"}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -589,7 +589,7 @@ term testGroupForPrimitiveReferences =
                                   literal = LiteralType{
                                     `boolean`}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -621,7 +621,7 @@ term testGroupForPrimitiveReferences =
                                   `set` = Type{
                                     variable = Name{"t0"}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -657,8 +657,8 @@ term testGroupForPrimitiveReferences =
                                   `set` = Type{
                                     variable = Name{"t1"}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}},
-                          Name{"t1"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}},
+                          Name{"t1"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -694,7 +694,7 @@ term testGroupForPrimitiveReferences =
                                   literal = LiteralType{
                                     `boolean`}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"equality"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"equality"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -724,7 +724,7 @@ term testGroupForPrimitiveReferences =
                                 codomain = Type{
                                   variable = Name{"hydra.core.util.Comparison"}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -759,7 +759,7 @@ term testGroupForPrimitiveReferences =
                                 codomain = Type{
                                   variable = Name{"t0"}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -789,7 +789,7 @@ term testGroupForPrimitiveReferences =
                                 codomain = Type{
                                   variable = Name{"t0"}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -819,7 +819,7 @@ term testGroupForPrimitiveReferences =
                                 codomain = Type{
                                   variable = Name{"t0"}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -845,7 +845,7 @@ term testGroupForPrimitiveReferences =
                             codomain = Type{
                               variable = Name{"t0"}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -878,7 +878,7 @@ term testGroupForPrimitiveReferences =
                               `list` = Type{
                                 variable = Name{"t0"}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -906,7 +906,7 @@ term testGroupForPrimitiveReferences =
                               `list` = Type{
                                 variable = Name{"t0"}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"equality"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"equality"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -938,7 +938,7 @@ term testGroupForPrimitiveReferences =
                                   literal = LiteralType{
                                     `boolean`}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"equality"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"equality"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]}],
@@ -993,7 +993,7 @@ term testGroupForPartialApplication =
                                   `optional` = Type{
                                     variable = Name{"t1"}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -1043,7 +1043,7 @@ term testGroupForPartialApplication =
                                     values = Type{
                                       variable = Name{"t1"}}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -1088,7 +1088,7 @@ term testGroupForPartialApplication =
                                   literal = LiteralType{
                                     `boolean`}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -1140,7 +1140,7 @@ term testGroupForPartialApplication =
                                   literal = LiteralType{
                                     `boolean`}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"equality"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"equality"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -1259,7 +1259,7 @@ term testGroupForLetBindings =
                                   `optional` = Type{
                                     variable = Name{"t1"}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -1315,7 +1315,7 @@ term testGroupForLetBindings =
                                   literal = LiteralType{
                                     `boolean`}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -1353,7 +1353,7 @@ term testGroupForLetBindings =
                                 values = Type{
                                   variable = Name{"t1"}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -1411,8 +1411,8 @@ term testGroupForLetBindings =
                                 values = Type{
                                   variable = Name{"t1"}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}},
-                          Name{"t1"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}},
+                          Name{"t1"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -1455,7 +1455,7 @@ term testGroupForLetBindings =
                               `set` = Type{
                                 variable = Name{"t0"}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -1576,7 +1576,7 @@ term testGroupForComposition =
                                 values = Type{
                                   variable = Name{"t0"}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -1632,7 +1632,7 @@ term testGroupForComposition =
                                   `set` = Type{
                                     variable = Name{"t1"}}}}}}},
                         constraints = {
-                          Name{"t1"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t1"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -1685,8 +1685,8 @@ term testGroupForComposition =
                                   `list` = Type{
                                     variable = Name{"t1"}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}},
-                          Name{"t1"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}},
+                          Name{"t1"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -1765,8 +1765,8 @@ term testGroupForComposition =
                                         values = Type{
                                           variable = Name{"t3"}}}}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}},
-                          Name{"t1"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}},
+                          Name{"t1"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]}],
@@ -1826,8 +1826,8 @@ term testGroupForNestedContainers =
                                   `set` = Type{
                                     variable = Name{"t1"}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}},
-                          Name{"t1"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}},
+                          Name{"t1"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -1874,7 +1874,7 @@ term testGroupForNestedContainers =
                                 `set` = Type{
                                   variable = Name{"t0"}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -1936,7 +1936,7 @@ term testGroupForNestedContainers =
                                   `set` = Type{
                                     variable = Name{"t0"}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]}],
@@ -1980,7 +1980,7 @@ term testGroupForCollectionTerms =
                               `set` = Type{
                                 variable = Name{"t0"}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -2021,7 +2021,7 @@ term testGroupForCollectionTerms =
                                   `set` = Type{
                                     variable = Name{"t0"}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -2076,7 +2076,7 @@ term testGroupForCollectionTerms =
                                 domain = none,
                                 body = Term{
                                   `map` = {
-                                    Term{variable = Name{"k"}}=Term{variable = Name{"v"}}}}}}}}),
+                                    Term{variable = Name{"k"}} = Term{variable = Name{"v"}}}}}}}}),
                 expected = λ`_`.typeScheme
                       TypeScheme{
                         variables = [Name{"t0"}, Name{"t1"}],
@@ -2095,7 +2095,7 @@ term testGroupForCollectionTerms =
                                     values = Type{
                                       variable = Name{"t1"}}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -2111,7 +2111,7 @@ term testGroupForCollectionTerms =
                         testGraph
                         Term{
                           `map` = {
-                            Term{literal = Literal{`string` = "a"}}=Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}}}),
+                            Term{literal = Literal{`string` = "a"}} = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}}}),
                 expected = λ`_`.typeScheme
                       TypeScheme{
                         variables = [],
@@ -2165,7 +2165,7 @@ term testGroupForCollectionTerms =
                               `set` = Type{
                                 variable = Name{"t0"}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{
+                          Name{"t0"} = TypeVariableConstraints{
                             classes = {
                               TypeClassConstraint{simple = Name{"numeric"}},
                               TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
@@ -2188,7 +2188,7 @@ term testGroupForCollectionTerms =
                             domain = none,
                             body = Term{
                               `map` = {
-                                Term{variable = Name{"k"}}=Term{
+                                Term{variable = Name{"k"}} = Term{
                                   application = Application{
                                     function = Term{variable = Name{"hydra.core.lib.lists.sort"}},
                                     argument = Term{`list` = [Term{variable = Name{"k"}}]}}}}}}}),
@@ -2207,7 +2207,7 @@ term testGroupForCollectionTerms =
                                   `list` = Type{
                                     variable = Name{"t0"}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -2235,7 +2235,7 @@ term testGroupForCollectionTerms =
                                 Term{
                                   application = Application{
                                     function = Term{variable = Name{"hydra.core.lib.lists.length"}},
-                                    argument = Term{variable = Name{"xs"}}}}=Term{
+                                    argument = Term{variable = Name{"xs"}}}} = Term{
                                   application = Application{
                                     function = Term{variable = Name{"hydra.core.lib.sets.fromList"}},
                                     argument = Term{variable = Name{"xs"}}}}}}}}),
@@ -2257,7 +2257,7 @@ term testGroupForCollectionTerms =
                                   `set` = Type{
                                     variable = Name{"t0"}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -2286,7 +2286,7 @@ term testGroupForCollectionTerms =
                                 `list` = Type{
                                   variable = Name{"t0"}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -2322,7 +2322,7 @@ term testGroupForCollectionTerms =
                                 integer = IntegerType{
                                   `int32`}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -2359,7 +2359,7 @@ term testGroupForCollectionTerms =
                                 `set` = Type{
                                   variable = Name{"t0"}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]}],

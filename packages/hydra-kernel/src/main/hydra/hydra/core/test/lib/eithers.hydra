@@ -228,7 +228,7 @@ term allTests =
                         (λn.printInt32 n)
                         e)
                       (eithers.foldList
-                        (λacc,el.ifElse
+                        (λacc, el.ifElse
                             (equal el 0:int32)
                             left("zero")
                             right(add acc el))
@@ -251,7 +251,7 @@ term allTests =
                         (λn.printInt32 n)
                         e)
                       (eithers.foldList
-                        (λacc,el.ifElse
+                        (λacc, el.ifElse
                             (equal el 0:int32)
                             left("zero")
                             right(add acc el))
@@ -274,7 +274,7 @@ term allTests =
                         (λn.printInt32 n)
                         e)
                       (eithers.foldList
-                        (λacc,el.ifElse
+                        (λacc, el.ifElse
                             (equal el 0:int32)
                             left("zero")
                             right(add acc el))

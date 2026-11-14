@@ -40,7 +40,10 @@ term compactCommaOp =
 
 ## Comma-separate the elements inside the given bracket pair with no insignificant whitespace at all.
 term compactList =
-  λbr,els.ifElse (lists.isEmpty els) (brackets br inlineStyle (cst "")) (brackets br inlineStyle (sep compactCommaOp els))
+  λbr, els.ifElse
+      (lists.isEmpty els)
+      (brackets br inlineStyle (cst ""))
+      (brackets br inlineStyle (sep compactCommaOp els))
 
 ## The default layout options, reproducing the historical, non-configurable behavior of printJson byte-for-byte: pretty-printed, two-space indent, 120-column adaptive width, no indent-depth limit.
 term defaultJsonWriterOptions =
@@ -94,7 +97,7 @@ term jsonString =
 
 ## Convert a key-value pair to an AST expression, honoring the given writer options and nesting depth.
 term keyValueToExprWith =
-  λoptions,depth,pair.
+  λoptions, depth, pair.
     let key := first pair in
     let value := second pair in
     let colon := ifElse (JsonWriterOptions[compact] options) compactColonOp colonOp in
@@ -104,11 +107,11 @@ term keyValueToExprWith =
 term printJson = λvalue.printJsonWith defaultJsonWriterOptions value
 
 ## Serialize a JSON value to a string using the given layout options.
-term printJsonWith = λoptions,value.printExpr (valueToExprWith options 0:int32 value)
+term printJsonWith = λoptions, value.printExpr (valueToExprWith options 0:int32 value)
 
 ## Choose between an inline and a block rendering of the same logical collection, given the (non-compact) writer options and the current nesting depth. Depths at or beyond maxIndentDepth always render inline; otherwise the width-adaptive choice from chooseLayout applies, using the options' own line width in place of the fixed maxLineWidth constant.
 term styleForDepth =
-  λoptions,depth,inlineExpr,blockExpr.
+  λoptions, depth, inlineExpr, blockExpr.
     let atMaxDepth := optionals.match
         (JsonWriterOptions[maxIndentDepth] options)
         false
@@ -123,12 +126,12 @@ term valueToExpr = λvalue.valueToExprWith defaultJsonWriterOptions 0:int32 valu
 
 ## Convert a JSON value to an AST expression for serialization, honoring the given writer options and nesting depth.
 term valueToExprWith =
-  λoptions,depth,value.
+  λoptions, depth, value.
     let childDepth := add depth 1:int32 in
     let compact := JsonWriterOptions[compact] options in
     let style := ifElse compact inlineStyle (halfBlockStyleWith options) in
     cases(Value){
-      array=λarr.
+      array = λarr.
           let els := lists.map (valueToExprWith options childDepth) arr
           in ifElse
             compact
@@ -138,9 +141,9 @@ term valueToExprWith =
               depth
               (bracketList inlineStyle els)
               (bracketList style els)),
-      `boolean`=λb.cst (ifElse b "true" "false"),
-      null=λ`_`.cst "null",
-      number=λn.
+      `boolean` = λb.cst (ifElse b "true" "false"),
+      null = λ`_`.cst "null",
+      number = λn.
           let rounded := decimalToBigint n in
           let shown := printDecimal n in
           let notExponential := lte
@@ -152,14 +155,15 @@ term valueToExprWith =
               notExponential
               (or
                 (lte (lists.length fracParts) 1:int32)
-                (strings.isEmpty (strings.concat (strings.splitOn "0" frac)))) in
+                (strings.isEmpty
+                  (strings.concat (strings.splitOn "0" frac)))) in
           let plain := printBigint rounded in
           cst
             (ifElse
               (and isWhole (lte (strings.length plain) (strings.length shown)))
               plain
               shown),
-      object=λobj.
+      object = λobj.
           let els := lists.map (keyValueToExprWith options childDepth) obj
           in ifElse
             compact
@@ -169,5 +173,5 @@ term valueToExprWith =
               depth
               (curlyBracesList none inlineStyle els)
               (curlyBracesList none style els)),
-      `string`=λs.cst (jsonString s)}
+      `string` = λs.cst (jsonString s)}
       value

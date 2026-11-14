@@ -111,7 +111,7 @@ term allTests =
             case = TestCase{
               effectful = EffectfulTestCase{
                 actual = λ`_`.effects.foldList
-                      (λacc,x.effects.pure (concat2 acc x))
+                      (λacc, x.effects.pure (concat2 acc x))
                       ""
                       ["a", "b", "c"],
                 expected = λ`_`."abc"}},
@@ -133,7 +133,7 @@ term allTests =
                         "":binary)
                       (λ`_w`.effects.bind
                           (effects.foldList
-                            (λacc,x.effects.bind
+                            (λacc, x.effects.bind
                                 (appendFile
                                   FilePath{"/tmp/hydra-testing/fold-order.txt"}
                                   x)

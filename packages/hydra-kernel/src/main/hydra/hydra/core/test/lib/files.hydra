@@ -499,13 +499,13 @@ term allTests =
                               (λr.`either`
                                   (λ`_e`."ERR")
                                   (λs.cases(FileType){
-                                      block=λ`_x`."block",
-                                      character=λ`_x`."character",
-                                      directory=λ`_x`."directory",
-                                      fifo=λ`_x`."fifo",
-                                      regular=λ`_x`."regular",
-                                      link=λ`_x`."link",
-                                      socket=λ`_x`."socket"}
+                                      block = λ`_x`."block",
+                                      character = λ`_x`."character",
+                                      directory = λ`_x`."directory",
+                                      fifo = λ`_x`."fifo",
+                                      regular = λ`_x`."regular",
+                                      link = λ`_x`."link",
+                                      socket = λ`_x`."socket"}
                                       (FileStatus[fileType] s))
                                   r)
                               (status
@@ -562,13 +562,13 @@ term allTests =
                                   (λr.`either`
                                       (λ`_e`."ERR")
                                       (λs.cases(FileType){
-                                          block=λ`_x`."block",
-                                          character=λ`_x`."character",
-                                          directory=λ`_x`."directory",
-                                          fifo=λ`_x`."fifo",
-                                          regular=λ`_x`."regular",
-                                          link=λ`_x`."link",
-                                          socket=λ`_x`."socket"}
+                                          block = λ`_x`."block",
+                                          character = λ`_x`."character",
+                                          directory = λ`_x`."directory",
+                                          fifo = λ`_x`."fifo",
+                                          regular = λ`_x`."regular",
+                                          link = λ`_x`."link",
+                                          socket = λ`_x`."socket"}
                                           (FileStatus[fileType] s))
                                       r)
                                   (status
@@ -599,13 +599,13 @@ term allTests =
                                   (λr.`either`
                                       (λ`_e`."ERR")
                                       (λs.cases(FileType){
-                                          block=λ`_x`."block",
-                                          character=λ`_x`."character",
-                                          directory=λ`_x`."directory",
-                                          fifo=λ`_x`."fifo",
-                                          regular=λ`_x`."regular",
-                                          link=λ`_x`."link",
-                                          socket=λ`_x`."socket"}
+                                          block = λ`_x`."block",
+                                          character = λ`_x`."character",
+                                          directory = λ`_x`."directory",
+                                          fifo = λ`_x`."fifo",
+                                          regular = λ`_x`."regular",
+                                          link = λ`_x`."link",
+                                          socket = λ`_x`."socket"}
                                           (FileStatus[fileType] s))
                                       r)
                                   (status
@@ -631,13 +631,13 @@ term allTests =
                                   (λr.`either`
                                       (λ`_e`."ERR")
                                       (λs.cases(FileType){
-                                          block=λ`_x`."block",
-                                          character=λ`_x`."character",
-                                          directory=λ`_x`."directory",
-                                          fifo=λ`_x`."fifo",
-                                          regular=λ`_x`."regular",
-                                          link=λ`_x`."link",
-                                          socket=λ`_x`."socket"}
+                                          block = λ`_x`."block",
+                                          character = λ`_x`."character",
+                                          directory = λ`_x`."directory",
+                                          fifo = λ`_x`."fifo",
+                                          regular = λ`_x`."regular",
+                                          link = λ`_x`."link",
+                                          socket = λ`_x`."socket"}
                                           (FileStatus[fileType] s))
                                       r)
                                   (status
@@ -664,13 +664,13 @@ term allTests =
                               (λr.`either`
                                   (λ`_e`."ERR")
                                   (λs.cases(FileType){
-                                      block=λ`_x`."block",
-                                      character=λ`_x`."character",
-                                      directory=λ`_x`."directory",
-                                      fifo=λ`_x`."fifo",
-                                      regular=λ`_x`."regular",
-                                      link=λ`_x`."link",
-                                      socket=λ`_x`."socket"}
+                                      block = λ`_x`."block",
+                                      character = λ`_x`."character",
+                                      directory = λ`_x`."directory",
+                                      fifo = λ`_x`."fifo",
+                                      regular = λ`_x`."regular",
+                                      link = λ`_x`."link",
+                                      socket = λ`_x`."socket"}
                                       (FileStatus[fileType] s))
                                   r)
                               (status

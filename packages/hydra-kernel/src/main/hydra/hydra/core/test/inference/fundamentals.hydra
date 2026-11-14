@@ -143,7 +143,7 @@ term testGroupForLambdas =
                                 codomain = Type{
                                   variable = Name{"t0"}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -191,7 +191,7 @@ term testGroupForLambdas =
                                   codomain = Type{
                                     variable = Name{"t0"}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -899,7 +899,7 @@ term testGroupForLet =
                                       literal = LiteralType{
                                         `boolean`}}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -1391,7 +1391,7 @@ term testGroupForLet =
                         body = Type{
                           variable = Name{"t0"}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -3632,7 +3632,7 @@ term testGroupForPolymorphism =
                                 codomain = Type{
                                   variable = Name{"t0"}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -3670,7 +3670,7 @@ term testGroupForPolymorphism =
                                 codomain = Type{
                                   variable = Name{"t0"}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -3708,7 +3708,7 @@ term testGroupForPolymorphism =
                             codomain = Type{
                               variable = Name{"t0"}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]},

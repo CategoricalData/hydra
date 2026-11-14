@@ -29,7 +29,7 @@ import hydra.core.variants
 
 ## Check if a binding needs to be treated as a function
 term isComplexBinding =
-  λtc,b.
+  λtc, b.
     let `term` := Binding[`term`] b in
     let mts := Binding[typeScheme] b in
     match
@@ -43,17 +43,17 @@ term isComplexBinding =
 
 ## Check if a term needs to be treated as a function rather than a simple value
 term isComplexTerm =
-  λtc,t.cases(Term){
-      `let`=λ`_`.true,
-      typeApplication=λ`_`.true,
-      typeLambda=λ`_`.true,
-      variable=λname.isComplexVariable tc name,
-      `_`=lists.foldl (λb,sub.or b (isComplexTerm tc sub)) false (subterms t)}
+  λtc, t.cases(Term){
+      `let` = λ`_`.true,
+      typeApplication = λ`_`.true,
+      typeLambda = λ`_`.true,
+      variable = λname.isComplexVariable tc name,
+      `_` = lists.foldl (λb, sub.or b (isComplexTerm tc sub)) false (subterms t)}
       t
 
 ## Check if a variable is bound to a complex term
 term isComplexVariable =
-  λtc,name.
+  λtc, name.
     let metaLookup := maps.lookup name (Graph[metadata] tc)
     in ifElse
       (isGiven metaLookup)
@@ -69,48 +69,49 @@ term isComplexVariable =
             primLookup
             true
             (λprim.gt
-                (typeSchemeArity (termSignatureToTypeScheme (PrimitiveDefinition[signature] (Primitive[definition] prim))))
+                (typeSchemeArity
+                  (termSignatureToTypeScheme (PrimitiveDefinition[signature] (Primitive[definition] prim))))
                 0:int32))
           (λts.gt (typeSchemeArity ts) 0:int32)))
 
 ## Determines whether a given term is an encoded term (meta-level term)
 term isEncodedTerm =
   λt.cases(Term){
-      application=λa.isEncodedTerm (Application[function] a),
-      `inject`=λi.equal "hydra.core.model.Term" (Name[] (Injection[typeName] i)),
-      `_`=false}
+      application = λa.isEncodedTerm (Application[function] a),
+      `inject` = λi.equal "hydra.core.model.Term" (Name[] (Injection[typeName] i)),
+      `_` = false}
       (deannotateTerm t)
 
 ## Determines whether a given term is an encoded type
 term isEncodedType =
   λt.cases(Term){
-      application=λa.isEncodedType (Application[function] a),
-      `inject`=λi.equal "hydra.core.model.Type" (Name[] (Injection[typeName] i)),
-      `_`=false}
+      application = λa.isEncodedType (Application[function] a),
+      `inject` = λi.equal "hydra.core.model.Type" (Name[] (Injection[typeName] i)),
+      `_` = false}
       (deannotateTerm t)
 
 ## Check if a row type represents an enum (all fields are unit-typed)
 term isEnumRowType = λrt.lists.foldl and true (lists.map (λf.isUnitType (deannotateType (FieldType[`type`] f))) rt)
 
 ## Check if a type is an enum type
-term isEnumType = λtyp.cases(Type){`union`=λrt.isEnumRowType rt, `_`=false} (deannotateType typ)
+term isEnumType = λtyp.cases(Type){`union` = λrt.isEnumRowType rt, `_` = false} (deannotateType typ)
 
 ## Check whether a type is a nominal type definition (record, union, wrap, or forall wrapping one). Type aliases (applications, functions, literal types, etc.) return false.
 term isNominalType =
   λtyp.cases(Type){
-      `record`=λrt.true,
-      `union`=λrt.true,
-      `wrap`=λwt.true,
-      `forall`=λfa.isNominalType (ForallType[body] fa),
-      `_`=false}
+      `record` = λrt.true,
+      `union` = λrt.true,
+      `wrap` = λwt.true,
+      `forall` = λfa.isNominalType (ForallType[body] fa),
+      `_` = false}
       (deannotateType typ)
 
 ## Check if an element is serializable (no function, effect, or void types in dependencies) (Either version)
 term isSerializable =
-  λcx,graph,el.
+  λcx, graph, el.
     let variants := λtyp.lists.map
           typeVariant
-          (foldOverType TraversalOrder{pre} (λm,t.lists.cons t m) [] typ)
+          (foldOverType TraversalOrder{pre} (λm, t.lists.cons t m) [] typ)
     in eithers.map
       (λdeps.
         let allVariants := sets.fromList (lists.concat (lists.map variants (maps.elems deps)))
@@ -122,10 +123,10 @@ term isSerializable =
 
 ## Check if a type (by name) is serializable, resolving all type dependencies (no function, effect, or void types) (Either version)
 term isSerializableByName =
-  λcx,graph,name.
+  λcx, graph, name.
     let variants := λtyp.lists.map
           typeVariant
-          (foldOverType TraversalOrder{pre} (λm,t.lists.cons t m) [] typ)
+          (foldOverType TraversalOrder{pre} (λm, t.lists.cons t m) [] typ)
     in eithers.map
       (λdeps.
         let allVariants := sets.fromList (lists.concat (lists.map variants (maps.elems deps)))
@@ -139,7 +140,7 @@ term isSerializableByName =
 term isSerializableType =
   λtyp.
     let allVariants := sets.fromList
-        (lists.map typeVariant (foldOverType TraversalOrder{pre} (λm,t.lists.cons t m) [] typ))
+        (lists.map typeVariant (foldOverType TraversalOrder{pre} (λm, t.lists.cons t m) [] typ))
     in not
       (or
         (sets.member TypeVariant{`effect`} allVariants)
@@ -148,47 +149,47 @@ term isSerializableType =
 ## Check if a term is trivially cheap (no thunking needed)
 term isTrivialTerm =
   λt.cases(Term){
-      literal=λ`_`.true,
-      variable=λnm.equal (lists.length (splitOn "." (Name[] nm))) 1:int32,
-      `unit`=λ`_`.true,
-      application=λapp.
+      literal = λ`_`.true,
+      variable = λnm.equal (lists.length (splitOn "." (Name[] nm))) 1:int32,
+      `unit` = λ`_`.true,
+      application = λapp.
           let fun := Application[function] app in
           let arg := Application[argument] app in
           cases(Term){
-            `project`=λ`_`.isTrivialTerm arg,
-            `unwrap`=λ`_`.isTrivialTerm arg,
-            `_`=false}
+            `project` = λ`_`.isTrivialTerm arg,
+            `unwrap` = λ`_`.isTrivialTerm arg,
+            `_` = false}
             fun,
-      `optional`=λopt.match opt true (λinner.isTrivialTerm inner),
-      `record`=λrec.lists.foldl
-            (λacc,fld.and acc (isTrivialTerm (Field[`term`] fld)))
+      `optional` = λopt.match opt true (λinner.isTrivialTerm inner),
+      `record` = λrec.lists.foldl
+            (λacc, fld.and acc (isTrivialTerm (Field[`term`] fld)))
             true
             (Record[fields] rec),
-      `wrap`=λwt.isTrivialTerm (WrappedTerm[body] wt),
-      typeApplication=λta.isTrivialTerm (TypeApplicationTerm[body] ta),
-      typeLambda=λtl.isTrivialTerm (TypeLambda[body] tl),
-      `_`=false}
+      `wrap` = λwt.isTrivialTerm (WrappedTerm[body] wt),
+      typeApplication = λta.isTrivialTerm (TypeApplicationTerm[body] ta),
+      typeLambda = λtl.isTrivialTerm (TypeLambda[body] tl),
+      `_` = false}
       (deannotateTerm t)
 
 ## Check whether a type is a type (always true for non-encoded types)
 term isType =
   λt.cases(Type){
-      application=λa.isType (ApplicationType[function] a),
-      `forall`=λl.isType (ForallType[body] l),
-      `union`=λrt.false,
-      variable=λv.equal v Name{"hydra.core.model.Type"},
-      `_`=false}
+      application = λa.isType (ApplicationType[function] a),
+      `forall` = λl.isType (ForallType[body] l),
+      `union` = λrt.false,
+      variable = λv.equal v Name{"hydra.core.model.Type"},
+      `_` = false}
       (deannotateType t)
 
 ## Check whether a term is the unit term
-term isUnitTerm = cases(Term){`unit`=λ`_`.true, `_`=false}
+term isUnitTerm = cases(Term){`unit` = λ`_`.true, `_` = false}
 
 ## Check whether a type is the unit type
-term isUnitType = cases(Type){`unit`=λ`_`.true, `_`=false}
+term isUnitType = cases(Type){`unit` = λ`_`.true, `_` = false}
 
 ## Get all type dependencies for a given type name (Either version)
 term typeDependencies =
-  λcx,graph,withSchema,transform,name.
+  λcx, graph, withSchema, transform, name.
     let requireType := λname.
         let cx1 := cx
         in eithers.bind
@@ -197,8 +198,10 @@ term typeDependencies =
               (λ`_e`.Error{decoding = `_e`})
               (λ`_a`.`_a`)
               (model.type graph (Binding[`term`] el))) in
-    let toPair := λname.eithers.map (λtyp.(name, transform typ)) (requireType name) in
-    let deps := λseeds,names.ifElse
+    let toPair := λname.eithers.map
+          (λtyp.(name, transform typ))
+          (requireType name) in
+    let deps := λseeds, names.ifElse
           (sets.isEmpty seeds)
           right(names)
           (eithers.bind

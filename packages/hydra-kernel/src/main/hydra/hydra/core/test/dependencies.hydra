@@ -1475,7 +1475,7 @@ term allTests =
                                   annotation = Term{
                                     `map` = maps.mapKeys
                                         (λn.Term{variable = n})
-                                        {keyType=Term{literal = Literal{`string` = "someType"}}}}}}),
+                                        {keyType = Term{literal = Literal{`string` = "someType"}}}}}}),
                             (Name{"b"}, Term{literal = Literal{`string` = "bar"}})])),
                 expected = λ`_`.`list`
                       (λgroup.`list`
@@ -1492,7 +1492,7 @@ term allTests =
                                 annotation = Term{
                                   `map` = maps.mapKeys
                                       (λn.Term{variable = n})
-                                      {keyType=Term{literal = Literal{`string` = "someType"}}}}}})],
+                                      {keyType = Term{literal = Literal{`string` = "someType"}}}}}})],
                         [(Name{"b"}, Term{literal = Literal{`string` = "bar"}})]]}},
             description = none,
             tags = [],

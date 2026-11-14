@@ -572,7 +572,7 @@ term allTests =
                           ", "
                           (lists.map
                             (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
-                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"}=Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
+                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"} = Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
                         "}"]}},
             description = none,
             tags = [],
@@ -609,7 +609,7 @@ term allTests =
                           ", "
                           (lists.map
                             (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
-                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"}=Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
+                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"} = Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
                         "}"]}},
             description = none,
             tags = [],
@@ -643,7 +643,7 @@ term allTests =
                           ", "
                           (lists.map
                             (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
-                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"}=Type{variable = Name{"b"}}}}))),
+                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"} = Type{variable = Name{"b"}}}}))),
                         "}"]}},
             description = none,
             tags = [],
@@ -683,7 +683,7 @@ term allTests =
                           ", "
                           (lists.map
                             (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
-                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"}=Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
+                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"} = Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
                         "}"]}},
             description = none,
             tags = [],
@@ -771,8 +771,8 @@ term allTests =
                             (maps.toList
                               (TypeSubst[]
                                 TypeSubst{{
-                                  Name{"a"}=Type{literal = LiteralType{integer = IntegerType{`int32`}}},
-                                  Name{"b"}=Type{literal = LiteralType{`string`}}}}))),
+                                  Name{"a"} = Type{literal = LiteralType{integer = IntegerType{`int32`}}},
+                                  Name{"b"} = Type{literal = LiteralType{`string`}}}}))),
                         "}"]}},
             description = none,
             tags = [],
@@ -860,7 +860,7 @@ term allTests =
                           ", "
                           (lists.map
                             (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
-                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"}=Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
+                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"} = Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
                         "}"]}},
             description = none,
             tags = [],
@@ -910,8 +910,8 @@ term allTests =
                             (maps.toList
                               (TypeSubst[]
                                 TypeSubst{{
-                                  Name{"a"}=Type{literal = LiteralType{integer = IntegerType{`int32`}}},
-                                  Name{"b"}=Type{literal = LiteralType{`string`}}}}))),
+                                  Name{"a"} = Type{literal = LiteralType{integer = IntegerType{`int32`}}},
+                                  Name{"b"} = Type{literal = LiteralType{`string`}}}}))),
                         "}"]}},
             description = none,
             tags = [],
@@ -961,8 +961,8 @@ term allTests =
                             (maps.toList
                               (TypeSubst[]
                                 TypeSubst{{
-                                  Name{"a"}=Type{literal = LiteralType{integer = IntegerType{`int32`}}},
-                                  Name{"b"}=Type{literal = LiteralType{`string`}}}}))),
+                                  Name{"a"} = Type{literal = LiteralType{integer = IntegerType{`int32`}}},
+                                  Name{"b"} = Type{literal = LiteralType{`string`}}}}))),
                         "}"]}},
             description = none,
             tags = [],
@@ -1012,8 +1012,8 @@ term allTests =
                             (maps.toList
                               (TypeSubst[]
                                 TypeSubst{{
-                                  Name{"k"}=Type{literal = LiteralType{`string`}},
-                                  Name{"v"}=Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
+                                  Name{"k"} = Type{literal = LiteralType{`string`}},
+                                  Name{"v"} = Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
                         "}"]}},
             description = none,
             tags = [],
@@ -1053,7 +1053,7 @@ term allTests =
                           ", "
                           (lists.map
                             (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
-                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"}=Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
+                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"} = Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
                         "}"]}},
             description = none,
             tags = [],
@@ -1249,7 +1249,7 @@ term allTests =
                           ", "
                           (lists.map
                             (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
-                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"}=Type{variable = Name{"Foo"}}}}))),
+                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"} = Type{variable = Name{"Foo"}}}}))),
                         "}"]}},
             description = none,
             tags = [],
@@ -1283,7 +1283,7 @@ term allTests =
                           ", "
                           (lists.map
                             (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
-                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"}=Type{variable = Name{"Foo"}}}}))),
+                            (maps.toList (TypeSubst[] TypeSubst{{Name{"a"} = Type{variable = Name{"Foo"}}}}))),
                         "}"]}},
             description = none,
             tags = [],
@@ -1378,7 +1378,7 @@ term allTests =
                           ", "
                           (lists.map
                             (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
-                            (maps.toList (TypeSubst[] TypeSubst{{Name{"Foo"}=Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
+                            (maps.toList (TypeSubst[] TypeSubst{{Name{"Foo"} = Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
                         "}"]}},
             description = none,
             tags = [],

@@ -25,7 +25,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -36,12 +36,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "null"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -52,7 +52,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -71,7 +71,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -82,12 +82,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "true"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -98,7 +98,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -117,7 +117,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -128,12 +128,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "false"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -144,7 +144,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -163,7 +163,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -174,12 +174,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "0"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -190,7 +190,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -209,7 +209,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -220,12 +220,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "42"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -236,7 +236,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -255,7 +255,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -266,12 +266,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "-17"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -282,7 +282,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -301,7 +301,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -312,12 +312,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "1000000"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -328,7 +328,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -347,7 +347,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -358,12 +358,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "3.14"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -374,7 +374,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -393,7 +393,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -404,12 +404,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "-2.5"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -420,7 +420,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -439,7 +439,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -450,12 +450,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "1e3"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -466,7 +466,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -485,7 +485,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -496,12 +496,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "1.5e2"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -512,7 +512,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -531,7 +531,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -542,12 +542,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "1e-2"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -558,7 +558,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -582,7 +582,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -593,12 +593,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "1e-20"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -609,7 +609,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -628,7 +628,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -639,12 +639,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "1e20"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -655,7 +655,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -679,7 +679,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -690,12 +690,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "\"\""),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -706,7 +706,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -725,7 +725,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -736,12 +736,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "\"hello\""),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -752,7 +752,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -771,7 +771,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -782,12 +782,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "\"hello world\""),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -798,7 +798,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -817,7 +817,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -828,12 +828,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "\"say \\\"hi\\\"\""),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -844,7 +844,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -863,7 +863,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -874,14 +874,14 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser
                         jsonValue
                         "\"path\\\\to\\\\file\""),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -892,7 +892,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -911,7 +911,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -922,12 +922,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "\"line1\\nline2\""),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -938,7 +938,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -957,7 +957,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -968,12 +968,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "\"line1\\rline2\""),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -984,7 +984,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -1003,7 +1003,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1014,12 +1014,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "\"col1\\tcol2\""),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1030,7 +1030,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -1049,7 +1049,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1060,12 +1060,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "\"a\\/b\""),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1076,7 +1076,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -1095,7 +1095,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1106,12 +1106,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "\"\\u0041A\""),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1122,7 +1122,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -1141,7 +1141,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1152,12 +1152,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "\"\\u00e9\""),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1168,7 +1168,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -1187,7 +1187,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1198,12 +1198,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "\"\\u00E9\""),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1214,7 +1214,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -1233,7 +1233,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1244,12 +1244,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "\"\\u0000\""),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1260,7 +1260,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -1279,7 +1279,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1290,12 +1290,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "\"\\ud83c\\udf89\""),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1306,7 +1306,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -1325,7 +1325,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1336,7 +1336,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "\"\\ud83c\""),
@@ -1349,7 +1349,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1360,7 +1360,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "\"\\udf89\""),
@@ -1373,7 +1373,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1384,7 +1384,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "\"\\u12\""),
@@ -1402,7 +1402,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1413,12 +1413,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "[]"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1429,7 +1429,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -1448,7 +1448,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1459,12 +1459,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "[1]"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1475,7 +1475,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -1494,7 +1494,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1505,12 +1505,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "[1, 2, 3]"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1521,7 +1521,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -1540,7 +1540,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1551,12 +1551,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "[\"a\", \"b\"]"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1567,7 +1567,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -1586,7 +1586,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1597,14 +1597,14 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser
                         jsonValue
                         "[1, \"two\", true, null]"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1615,7 +1615,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -1639,7 +1639,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1650,12 +1650,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "{}"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1666,7 +1666,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -1685,7 +1685,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1696,14 +1696,14 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser
                         jsonValue
                         "{\"name\": \"Alice\"}"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1714,7 +1714,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -1733,7 +1733,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1744,14 +1744,14 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser
                         jsonValue
                         "{\"a\": 1, \"b\": 2}"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1762,7 +1762,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -1781,7 +1781,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1792,14 +1792,14 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser
                         jsonValue
                         "{\"active\": true, \"count\": 42, \"name\": \"test\"}"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1810,7 +1810,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -1834,7 +1834,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1845,12 +1845,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "[[1, 2], [3, 4]]"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1861,7 +1861,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -1880,7 +1880,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1891,14 +1891,14 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser
                         jsonValue
                         "{\"items\": [1, 2]}"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1909,7 +1909,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -1928,7 +1928,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1939,14 +1939,14 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser
                         jsonValue
                         "[{\"id\": 1}, {\"id\": 2}]"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1957,7 +1957,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -1976,7 +1976,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -1987,14 +1987,14 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser
                         jsonValue
                         "{\"user\": {\"name\": \"Bob\"}}"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -2005,7 +2005,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -2029,7 +2029,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -2040,12 +2040,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "null  "),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -2056,7 +2056,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -2075,7 +2075,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -2086,12 +2086,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "[ 1 , 2 , 3 ]"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -2102,7 +2102,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -2121,7 +2121,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -2132,12 +2132,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "{ \"a\" : 1 }"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -2148,7 +2148,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -2167,7 +2167,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -2178,12 +2178,12 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser jsonValue "[\n  1,\n  2\n]"),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -2194,7 +2194,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{
@@ -2218,7 +2218,7 @@ term allTests =
             case = TestCase{
               universal = UniversalTestCase{
                 actual = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -2229,7 +2229,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       (runParser
@@ -2238,7 +2238,7 @@ term allTests =
                           Value{
                             `string` = "\u0000\u0001\u0002\u0003\u0004\u0005\u0006\u0007\b\t\n\u000b\f\r\u000e\u000f\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001a\u001b\u001c\u001d\u001e\u001f"})),
                 expected = λ`_`.cases(ParseResult){
-                      success=λps.concat2
+                      success = λps.concat2
                             "success("
                             (concat2
                               (printJson (ParseSuccess[value] ps))
@@ -2249,7 +2249,7 @@ term allTests =
                                     (ParseInput[codepoints]
                                       (ParseSuccess[remainder] ps)))
                                   ")"))),
-                      failure=λpe.concat2
+                      failure = λpe.concat2
                             "failure("
                             (concat2 "parse error" ")")}
                       ParseResult{

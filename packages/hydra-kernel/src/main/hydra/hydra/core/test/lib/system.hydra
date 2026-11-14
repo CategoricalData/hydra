@@ -244,7 +244,7 @@ term allTests =
                               arguments = [],
                               workingDirectory = none,
                               environment = given({
-                                  EnvironmentVariable{"HYDRA_X"}="hydra-value"})}),
+                                  EnvironmentVariable{"HYDRA_X"} = "hydra-value"})}),
                     expected = λ`_`."HYDRA_X=hydra-value\n"}},
                 description = none,
                 tags = [],
@@ -261,11 +261,11 @@ term allTests =
                     actual = λ`_`.effects.map
                           (λr.`either`
                               (λe.cases(SystemError){
-                                  commandNotFound=λ`_p`."commandNotFound",
-                                  permissionDenied=λ`_p`."permissionDenied",
-                                  invalidWorkingDirectory=λ`_p`."invalidWorkingDirectory",
-                                  interrupted=λ`_u`."interrupted",
-                                  other=λ`_m`."other"}
+                                  commandNotFound = λ`_p`."commandNotFound",
+                                  permissionDenied = λ`_p`."permissionDenied",
+                                  invalidWorkingDirectory = λ`_p`."invalidWorkingDirectory",
+                                  interrupted = λ`_u`."interrupted",
+                                  other = λ`_m`."other"}
                                   e)
                               (λ`_r`."<ran>")
                               r)

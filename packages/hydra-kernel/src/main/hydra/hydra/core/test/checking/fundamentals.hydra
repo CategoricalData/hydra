@@ -4346,7 +4346,7 @@ term variablesInComplexContextsTests =
                             domain = none,
                             body = Term{
                               `map` = {
-                                Term{variable = Name{"key"}}=Term{variable = Name{"value"}}}}}}}}),
+                                Term{variable = Name{"key"}} = Term{variable = Name{"value"}}}}}}}}),
             expected = λ`_`.`type`
                   Type{
                     `forall` = ForallType{

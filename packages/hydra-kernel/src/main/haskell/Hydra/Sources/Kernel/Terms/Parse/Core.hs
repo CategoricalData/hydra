@@ -1136,10 +1136,11 @@ parseTermWithSpans = define "parseTermWithSpans" $
   "input" ~>
   match _ParseResult (P.runParser @@ (P.bind @@ whitespace @@ (constant $ asTerm term)) @@ var "input") Nothing [
     _ParseResult_success>>: "s" ~>
-      Logic.ifElse (Lists.isEmpty (Parsing.parseInputCodepoints $ Parsing.parseSuccessRemainder $ var "s"))
+      "remainder" <~ Parsing.parseSuccessRemainder (var "s") $
+      Logic.ifElse (Lists.isEmpty (Parsing.parseInputCodepoints $ var "remainder"))
         (right (Parsing.parseSuccessValue (var "s")))
-        (left (string "trailing input after term")),
-    _ParseResult_failure>>: "e" ~> left (Parsing.parseErrorMessage (var "e"))]
+        (left (Positions.formatParseFailure @@ var "input" @@ (Parsing.parseInputOffset $ var "remainder") @@ string "trailing input after term")),
+    _ParseResult_failure>>: "e" ~> left (Positions.formatParseFailure @@ var "input" @@ (Parsing.parseInputOffset $ Parsing.parseErrorRemainder $ var "e") @@ (Parsing.parseErrorMessage $ var "e"))]
 
 -- | Run the term parser on a full input string, requiring all input to be consumed (after
 -- trailing whitespace/comments). Returns the parse error message on failure or trailing input.
@@ -1149,10 +1150,11 @@ parseTerm = define "parseTerm" $
   "input" ~>
   match _ParseResult (P.runParser @@ (P.bind @@ whitespace @@ (constant $ asTerm term)) @@ var "input") Nothing [
     _ParseResult_success>>: "s" ~>
-      Logic.ifElse (Lists.isEmpty (Parsing.parseInputCodepoints $ Parsing.parseSuccessRemainder $ var "s"))
+      "remainder" <~ Parsing.parseSuccessRemainder (var "s") $
+      Logic.ifElse (Lists.isEmpty (Parsing.parseInputCodepoints $ var "remainder"))
         (right (Positions.stripSpans @@ (Parsing.parseSuccessValue $ var "s")))
-        (left (string "trailing input after term")),
-    _ParseResult_failure>>: "e" ~> left (Parsing.parseErrorMessage (var "e"))]
+        (left (Positions.formatParseFailure @@ var "input" @@ (Parsing.parseInputOffset $ var "remainder") @@ string "trailing input after term")),
+    _ParseResult_failure>>: "e" ~> left (Positions.formatParseFailure @@ var "input" @@ (Parsing.parseInputOffset $ Parsing.parseErrorRemainder $ var "e") @@ (Parsing.parseErrorMessage $ var "e"))]
 
 ----------------------------------------------------------------------------------------------
 -- Types
@@ -1382,10 +1384,11 @@ parseType = define "parseType" $
   "input" ~>
   match _ParseResult (P.runParser @@ (P.bind @@ whitespace @@ (constant $ asTerm type_)) @@ var "input") Nothing [
     _ParseResult_success>>: "s" ~>
-      Logic.ifElse (Lists.isEmpty (Parsing.parseInputCodepoints $ Parsing.parseSuccessRemainder $ var "s"))
+      "remainder" <~ Parsing.parseSuccessRemainder (var "s") $
+      Logic.ifElse (Lists.isEmpty (Parsing.parseInputCodepoints $ var "remainder"))
         (right (stripSpansInType @@ (Parsing.parseSuccessValue (var "s"))))
-        (left (string "trailing input after type")),
-    _ParseResult_failure>>: "e" ~> left (Parsing.parseErrorMessage (var "e"))]
+        (left (Positions.formatParseFailure @@ var "input" @@ (Parsing.parseInputOffset $ var "remainder") @@ string "trailing input after type")),
+    _ParseResult_failure>>: "e" ~> left (Positions.formatParseFailure @@ var "input" @@ (Parsing.parseInputOffset $ Parsing.parseErrorRemainder $ var "e") @@ (Parsing.parseErrorMessage $ var "e"))]
 
 ----------------------------------------------------------------------------------------------
 -- Type schemes
@@ -1546,10 +1549,11 @@ parseTermSignature = define "parseTermSignature" $
   "input" ~>
   match _ParseResult (P.runParser @@ (P.bind @@ whitespace @@ (constant $ asTerm termSignature)) @@ var "input") Nothing [
     _ParseResult_success>>: "s" ~>
-      Logic.ifElse (Lists.isEmpty (Parsing.parseInputCodepoints $ Parsing.parseSuccessRemainder $ var "s"))
+      "remainder" <~ Parsing.parseSuccessRemainder (var "s") $
+      Logic.ifElse (Lists.isEmpty (Parsing.parseInputCodepoints $ var "remainder"))
         (right (Parsing.parseSuccessValue (var "s")))
-        (left (string "trailing input after term signature")),
-    _ParseResult_failure>>: "e" ~> left (Parsing.parseErrorMessage (var "e"))]
+        (left (Positions.formatParseFailure @@ var "input" @@ (Parsing.parseInputOffset $ var "remainder") @@ string "trailing input after term signature")),
+    _ParseResult_failure>>: "e" ~> left (Positions.formatParseFailure @@ var "input" @@ (Parsing.parseInputOffset $ Parsing.parseErrorRemainder $ var "e") @@ (Parsing.parseErrorMessage $ var "e"))]
 
 -- | Run the type-scheme parser on a full input string, requiring all input to be consumed.
 parseTypeScheme :: TypedTermDefinition (String -> Either String TypeScheme)
@@ -1558,7 +1562,8 @@ parseTypeScheme = define "parseTypeScheme" $
   "input" ~>
   match _ParseResult (P.runParser @@ (P.bind @@ whitespace @@ (constant $ asTerm typeScheme)) @@ var "input") Nothing [
     _ParseResult_success>>: "s" ~>
-      Logic.ifElse (Lists.isEmpty (Parsing.parseInputCodepoints $ Parsing.parseSuccessRemainder $ var "s"))
+      "remainder" <~ Parsing.parseSuccessRemainder (var "s") $
+      Logic.ifElse (Lists.isEmpty (Parsing.parseInputCodepoints $ var "remainder"))
         (right (Parsing.parseSuccessValue (var "s")))
-        (left (string "trailing input after type scheme")),
-    _ParseResult_failure>>: "e" ~> left (Parsing.parseErrorMessage (var "e"))]
+        (left (Positions.formatParseFailure @@ var "input" @@ (Parsing.parseInputOffset $ var "remainder") @@ string "trailing input after type scheme")),
+    _ParseResult_failure>>: "e" ~> left (Positions.formatParseFailure @@ var "input" @@ (Parsing.parseInputOffset $ Parsing.parseErrorRemainder $ var "e") @@ (Parsing.parseErrorMessage $ var "e"))]

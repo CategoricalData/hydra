@@ -1,6 +1,10 @@
 ## Primitives in the hydra.core.lib.logic module.
 module hydra.core.lib.logic
 
+import hydra.core.model
+import hydra.core.packaging
+import hydra.core.typing
+
 ## Compute the logical AND of two boolean values.
 ##
 ## and(p, q) returns true iff both p and q are true.
@@ -9,7 +13,7 @@ module hydra.core.lib.logic
 ##
 ## @availableSince 0.15
 ## @requirement trueOnlyWhenBothTrue: and(p, q) returns true exactly when both p and q are true; any false operand makes the result false.
-primitive and : boolean → lazy boolean → boolean = λa,b.ifElse a b false
+primitive and : boolean → lazy boolean → boolean = λa, b.ifElse a b false
 
 ## Compute a conditional expression.
 ##
@@ -38,4 +42,4 @@ primitive not : boolean → boolean = λa.ifElse a false true
 ##
 ## @availableSince 0.15
 ## @requirement trueWhenEitherTrue: or(p, q) returns true when at least one of p and q is true; it returns false only when both are false.
-primitive or : boolean → lazy boolean → boolean = λa,b.ifElse a true b
+primitive or : boolean → lazy boolean → boolean = λa, b.ifElse a true b

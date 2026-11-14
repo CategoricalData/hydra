@@ -10,6 +10,7 @@
     {"module": "hydra.core.lib.eithers"},
     {"module": "hydra.core.lib.equality"},
     {"module": "hydra.core.lib.lists"},
+    {"module": "hydra.core.lib.literals"},
     {"module": "hydra.core.lib.logic"},
     {"module": "hydra.core.lib.maps"},
     {"module": "hydra.core.lib.math"},
@@ -161,6 +162,89 @@
                   "value": {
                     "literal": {
                       "string": "Wrap a term in a layer whose only annotation is the reserved span key. This is surface trivia, like comments: it is exempt from the round-trip contract and is removed by stripSpans."}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.positions.formatParseFailure",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"literal": "string"}, "isLazy": false},
+            {"name": "arg1", "type": {"literal": {"integer": "int32"}}, "isLazy": false},
+            {"name": "arg2", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"literal": "string"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "text",
+                "domain": {"literal": "string"},
+                "body": {
+                  "lambda": {
+                    "parameter": "offset",
+                    "domain": {"literal": {"integer": "int32"}},
+                    "body": {
+                      "lambda": {
+                        "parameter": "message",
+                        "domain": {"literal": "string"},
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "pos",
+                                "term": {
+                                  "application": {
+                                    "function": {"application": {"function": {"variable": "hydra.core.positions.offsetToPosition"}, "argument": {"variable": "text"}}},
+                                    "argument": {"variable": "offset"}}},
+                                "typeScheme": {"variables": [], "body": {"variable": "hydra.core.parsing.SourcePosition"}, "constraints": []}}],
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "line1",
+                                    "term": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                            "argument": {
+                                              "application": {
+                                                "function": {"project": {"typeName": "hydra.core.parsing.SourcePosition", "fieldName": "line"}},
+                                                "argument": {"variable": "pos"}}}}},
+                                        "argument": {"literal": {"integer": {"int32": 1}}}}},
+                                    "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}}],
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "col1",
+                                        "term": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.math.add"}, "type": {"literal": {"integer": "int32"}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {"project": {"typeName": "hydra.core.parsing.SourcePosition", "fieldName": "column"}},
+                                                    "argument": {"variable": "pos"}}}}},
+                                            "argument": {"literal": {"integer": {"int32": 1}}}}},
+                                        "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}}],
+                                    "body": {
+                                      "application": {
+                                        "function": {"variable": "hydra.core.lib.strings.concat"},
+                                        "argument": {
+                                          "list": [
+                                            {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "line1"}}},
+                                            {"literal": {"string": ":"}},
+                                            {"application": {"function": {"variable": "hydra.core.lib.literals.printInt32"}, "argument": {"variable": "col1"}}},
+                                            {"literal": {"string": ": "}},
+                                            {"variable": "message"}]}}}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Format a parse failure as 'line:col: message' (1-based line/column), given the full input text, the codepoint offset of the failure, and the raw error message"}}}]}}}}},
     {
       "term": {
         "name": "hydra.core.positions.keySourceSpan",

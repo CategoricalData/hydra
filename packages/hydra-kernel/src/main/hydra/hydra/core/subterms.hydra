@@ -21,55 +21,57 @@ import hydra.core.substitution
 
 ## The expected type to thread into an immediate child, given this node's (synthesized) type, its term, and the step reaching the child. This is the term->type position map underlying the TermGraph:TypeGraph erasure: element positions get the container element type, mapEntry gets pair<K,V>, lambdaBody the codomain, and so on. `none` where the child's type is not fixed top-down (e.g. a function-position subterm), which is fine for non-empty children.
 term expectedForStep =
-  λschema,typ,`term`,step.
-    let elementOfList := λt.cases(Type){`list`=λe.given(e), `_`=none} t in
-    let elementOfSet := λt.cases(Type){`set`=λe.given(e), `_`=none} t in
-    let elementOfOptional := λt.cases(Type){`optional`=λe.given(e), `_`=none} t in
-    let codomainOf := λt.cases(Type){function=λft.given(FunctionType[codomain] ft), `_`=none}
+  λschema, typ, `term`, step.
+    let elementOfList := λt.cases(Type){`list` = λe.given(e), `_` = none} t in
+    let elementOfSet := λt.cases(Type){`set` = λe.given(e), `_` = none} t in
+    let elementOfOptional := λt.cases(Type){`optional` = λe.given(e), `_` = none} t in
+    let codomainOf := λt.cases(Type){function = λft.given(FunctionType[codomain] ft), `_` = none}
           t in
     let mapPairType := λt.cases(Type){
-          `map`=λmt.given(Type{
+          `map` = λmt.given(Type{
                 pair = PairType{
                   first = MapType[keys] mt,
                   second = MapType[values] mt}}),
-          `_`=none}
+          `_` = none}
           t in
     cases(SubtermStep){
-      listElement=λ`_`.elementOfList typ,
-      setElement=λ`_`.elementOfSet typ,
-      optionalGiven=λ`_`.elementOfOptional typ,
-      lambdaBody=λ`_`.codomainOf typ,
-      mapEntry=λ`_`.mapPairType typ,
-      pairFirst=λ`_`.cases(Type){pair=λpt.given(PairType[first] pt), `_`=none}
+      listElement = λ`_`.elementOfList typ,
+      setElement = λ`_`.elementOfSet typ,
+      optionalGiven = λ`_`.elementOfOptional typ,
+      lambdaBody = λ`_`.codomainOf typ,
+      mapEntry = λ`_`.mapPairType typ,
+      pairFirst = λ`_`.cases(Type){pair = λpt.given(PairType[first] pt), `_` = none}
             typ,
-      pairSecond=λ`_`.cases(Type){pair=λpt.given(PairType[second] pt), `_`=none}
+      pairSecond = λ`_`.cases(Type){
+            pair = λpt.given(PairType[second] pt),
+            `_` = none}
             typ,
-      recordField=λfname.fieldTypeFromSchema schema `term` fname,
-      injectField=λfname.fieldTypeFromSchema schema `term` fname,
-      `_`=none}
+      recordField = λfname.fieldTypeFromSchema schema `term` fname,
+      injectField = λfname.fieldTypeFromSchema schema `term` fname,
+      `_` = none}
       step
 
 ## The expected type of a record field / injected union field, from the named type in the schema
 term fieldTypeFromSchema =
-  λschema,`term`,fname.cases(Term){
-      `record`=λr.optionals.bind
+  λschema, `term`, fname.cases(Term){
+      `record` = λr.optionals.bind
             (maps.lookup (Record[typeName] r) schema)
             (λsty.eithers.either
                 (λ`_`.none)
                 (λfields.findFieldTypeIn fname fields)
                 (recordType (Record[typeName] r) sty)),
-      `inject`=λinj.optionals.bind
+      `inject` = λinj.optionals.bind
             (maps.lookup (Injection[typeName] inj) schema)
             (λsty.eithers.either
                 (λ`_`.none)
                 (λfields.findFieldTypeIn fname fields)
                 (unionType (Injection[typeName] inj) sty)),
-      `_`=none}
+      `_` = none}
       `term`
 
 ## The type of the named field within a list of field types, if present
 term findFieldTypeIn =
-  λfname,fields.optionals.map FieldType[`type`] (lists.head (lists.filter (λf.equal (FieldType[name] f) fname) fields))
+  λfname, fields.optionals.map FieldType[`type`] (lists.head (lists.filter (λf.equal (FieldType[name] f) fname) fields))
 
 ## The term-graph view of a typed graph: one root node per binding. Sharing is explicit; children are inline (a tree); variable occurrences become symbolic references carrying their binding node's id. Input must be a POST-INFERENCE (elaborated) graph: binding schemes present, lambda domains present, typeLambda/typeApplication explicit. Node types are synthesized in one O(n) bidirectional pass; a missing annotation (or an untyped empty leaf) is a precondition failure.
 term graphToTermGraph =
@@ -89,7 +91,7 @@ term graphToTermGraph =
         (maps.toList boundTerms))
 
 ## The expected type for a root binding node: its declared type in the schema, if present
-term rootExpectedType = λschema,name.maps.lookup name schema
+term rootExpectedType = λschema, name.maps.lookup name schema
 
 ## The type-graph view of a schema: one root node per named type. A Type.variable referencing a schema-bound name is a nominal reference; a forall-bound variable in scope is a variable reference to its binding node; leaf types and non-type constituents are carried as links.
 term schemaToTypeGraph =
@@ -108,8 +110,8 @@ term schemaToTypeGraph =
 
 ## Synthesize the type of an elaborated subterm, syntax-directed and without unification, threading `expected` top-down. Reads annotations (lambda domain, typeApplication type) and combines child types bottom-up; synthesis-incomplete leaves (empty list/set/map, optional none, either's absent branch) CONSUME `expected`. `expected = none` at such a leaf is a precondition failure with path.
 term synthesizeType =
-  λgraph,schema,env,root,expected,path,`term`.
-    let recurseInto := λmexp,child.synthesizeType
+  λgraph, schema, env, root, expected, path, `term`.
+    let recurseInto := λmexp, child.synthesizeType
           graph
           schema
           env
@@ -130,25 +132,27 @@ term synthesizeType =
     let elementOfExpected := optionals.bind
         expected
         (λt.cases(Type){
-            `list`=λe.given(e),
-            `set`=λe.given(e),
-            `optional`=λe.given(e),
-            `_`=none}
+            `list` = λe.given(e),
+            `set` = λe.given(e),
+            `optional` = λe.given(e),
+            `_` = none}
             t) in
     let codomainOfExpected := optionals.bind
         expected
         (λt.cases(Type){
-            function=λft.given(FunctionType[codomain] ft),
-            `_`=none}
+            function = λft.given(FunctionType[codomain] ft),
+            `_` = none}
             t) in
     cases(Term){
-      application=λapp.eithers.bind
-            (recurseInto none (Application[function] app))
+      application = λapp.eithers.bind
+            (recurseInto
+              none
+              (Application[function] app))
             (λftype.cases(Type){
-                function=λft.right(FunctionType[codomain] ft),
-                `_`=fail "application of a non-function"}
+                function = λft.right(FunctionType[codomain] ft),
+                `_` = fail "application of a non-function"}
                 ftype),
-      lambda=λl.optionals.match
+      lambda = λl.optionals.match
             (Lambda[domain] l)
             (fail "lambda without a domain annotation")
             (λdom.eithers.map
@@ -156,26 +160,28 @@ term synthesizeType =
                     function = FunctionType{
                       domain = dom,
                       codomain = bt}})
-                (recurseInto codomainOfExpected (Lambda[body] l))),
-      typeLambda=λtl.eithers.map
+                (recurseInto
+                  codomainOfExpected
+                  (Lambda[body] l))),
+      typeLambda = λtl.eithers.map
             (λbt.Type{
                 `forall` = ForallType{
                   parameter = TypeLambda[parameter] tl,
                   body = bt}})
             (recurseInto none (TypeLambda[body] tl)),
-      typeApplication=λta.eithers.bind
+      typeApplication = λta.eithers.bind
             (recurseInto
               none
               (TypeApplicationTerm[body] ta))
             (λbt.cases(Type){
-                `forall`=λft.right(substInType
+                `forall` = λft.right(substInType
                       (singletonTypeSubst
                         (ForallType[parameter] ft)
                         (TypeApplicationTerm[`type`] ta))
                       (ForallType[body] ft)),
-                `_`=fail "type application of a non-forall"}
+                `_` = fail "type application of a non-forall"}
                 bt),
-      variable=λname.optionals.match
+      variable = λname.optionals.match
             (maps.lookup name env)
             (optionals.match
               (maps.lookup name schema)
@@ -185,27 +191,27 @@ term synthesizeType =
                   (Name[] name)))
               (λt.right(t)))
             (λt.right(t)),
-      `unit`=λ`_`.right(Type{`unit`}),
-      literal=λlit.right(Type{literal = literalType lit}),
-      `optional`=λmt.optionals.match
+      `unit` = λ`_`.right(Type{`unit`}),
+      literal = λlit.right(Type{literal = literalType lit}),
+      `optional` = λmt.optionals.match
             mt
             (consumeExpected "optional none")
             (λt.eithers.map
                 (λx.Type{`optional` = x})
                 (recurseInto elementOfExpected t)),
-      `list`=λels.optionals.match
+      `list` = λels.optionals.match
             (lists.head els)
             (consumeExpected "empty list")
             (λt0.eithers.map
                 (λx.Type{`list` = x})
                 (recurseInto elementOfExpected t0)),
-      `set`=λs.optionals.match
+      `set` = λs.optionals.match
             (lists.head (sets.toList s))
             (consumeExpected "empty set")
             (λt0.eithers.map
                 (λx.Type{`set` = x})
                 (recurseInto elementOfExpected t0)),
-      `map`=λm.optionals.match
+      `map` = λm.optionals.match
             (lists.head (maps.toList m))
             (consumeExpected "empty map")
             (λkv.eithers.bind
@@ -216,7 +222,7 @@ term synthesizeType =
                           keys = kt,
                           values = vt}})
                     (recurseInto none (second kv)))),
-      pair=λp.eithers.bind
+      pair = λp.eithers.bind
             (recurseInto none (first p))
             (λft.eithers.map
                 (λst.Type{
@@ -224,31 +230,35 @@ term synthesizeType =
                       first = ft,
                       second = st}})
                 (recurseInto none (second p))),
-      `either`=λe.consumeExpected "either value",
-      `record`=λr.optionals.match
+      `either` = λe.consumeExpected "either value",
+      `record` = λr.optionals.match
             (maps.lookup (Record[typeName] r) schema)
             (fail
               (strings.concat2
                 "record type not in schema: "
                 (Name[] (Record[typeName] r))))
             (λt.right(t)),
-      `inject`=λinj.optionals.match
-            (maps.lookup (Injection[typeName] inj) schema)
+      `inject` = λinj.optionals.match
+            (maps.lookup
+              (Injection[typeName] inj)
+              schema)
             (fail
               (strings.concat2
                 "union type not in schema: "
                 (Name[] (Injection[typeName] inj))))
             (λt.right(t)),
-      `wrap`=λw.optionals.match
+      `wrap` = λw.optionals.match
             (maps.lookup (WrappedTerm[typeName] w) schema)
             (fail
               (strings.concat2
                 "wrapper type not in schema: "
                 (Name[] (WrappedTerm[typeName] w))))
             (λt.right(t)),
-      annotated=λat.recurseInto expected (AnnotatedTerm[body] at),
-      `let`=λlt.recurseInto expected (Let[body] lt),
-      `project`=λp.
+      annotated = λat.recurseInto
+            expected
+            (AnnotatedTerm[body] at),
+      `let` = λlt.recurseInto expected (Let[body] lt),
+      `project` = λp.
           let tname := Projection[typeName] p in
           let fname := Projection[fieldName] p in
           optionals.match
@@ -270,7 +280,7 @@ term synthesizeType =
                           domain = Type{
                             variable = tname},
                           codomain = ftyp}})))),
-      `unwrap`=λtname.optionals.match
+      `unwrap` = λtname.optionals.match
             (maps.lookup tname schema)
             (fail
               (strings.concat2
@@ -283,7 +293,7 @@ term synthesizeType =
                         variable = tname},
                       codomain = inner}})
                 (wrappedType tname sty)),
-      `cases`=λcs.
+      `cases` = λcs.
           let tname := CaseStatement[typeName] cs in
           let rep := optionals.match
               (CaseStatement[default] cs)
@@ -303,42 +313,45 @@ term synthesizeType =
                             variable = tname},
                           codomain = FunctionType[codomain] ft}})
                     (functionType htype))),
-      `_`=fail "unsupported term constructor"}
+      `_` = fail "unsupported term constructor"}
       `term`
 
 ## The content attribute links contributed by a term constructor (a non-term constituent, with its value)
 term termAttributesOf =
   λ`term`.cases(Term){
-      `cases`=λcs.[TermAttributeLink{casesTypeName = CaseStatement[typeName] cs}],
-      `inject`=λinj.[TermAttributeLink{injectTypeName = Injection[typeName] inj}],
-      lambda=λl.lists.concat2
+      `cases` = λcs.[TermAttributeLink{casesTypeName = CaseStatement[typeName] cs}],
+      `inject` = λinj.[TermAttributeLink{injectTypeName = Injection[typeName] inj}],
+      lambda = λl.lists.concat2
             [TermAttributeLink{lambdaParameter = Lambda[parameter] l}]
-            (optionals.match (Lambda[domain] l) [] (λd.[TermAttributeLink{lambdaDomainGiven = d}])),
-      literal=λlit.[TermAttributeLink{literal = lit}],
-      `project`=λp.[
+            (optionals.match
+              (Lambda[domain] l)
+              []
+              (λd.[TermAttributeLink{lambdaDomainGiven = d}])),
+      literal = λlit.[TermAttributeLink{literal = lit}],
+      `project` = λp.[
             TermAttributeLink{projectTypeName = Projection[typeName] p},
             TermAttributeLink{projectFieldName = Projection[fieldName] p}],
-      `record`=λr.[TermAttributeLink{recordTypeName = Record[typeName] r}],
-      typeApplication=λta.[TermAttributeLink{typeApplicationType = TypeApplicationTerm[`type`] ta}],
-      typeLambda=λtl.[TermAttributeLink{typeLambdaParameter = TypeLambda[parameter] tl}],
-      `unwrap`=λu.[TermAttributeLink{unwrapTypeName = u}],
-      `wrap`=λw.[TermAttributeLink{wrapTypeName = WrappedTerm[typeName] w}],
-      `_`=[]}
+      `record` = λr.[TermAttributeLink{recordTypeName = Record[typeName] r}],
+      typeApplication = λta.[TermAttributeLink{typeApplicationType = TypeApplicationTerm[`type`] ta}],
+      typeLambda = λtl.[TermAttributeLink{typeLambdaParameter = TypeLambda[parameter] tl}],
+      `unwrap` = λu.[TermAttributeLink{unwrapTypeName = u}],
+      `wrap` = λw.[TermAttributeLink{wrapTypeName = WrappedTerm[typeName] w}],
+      `_` = []}
       `term`
 
 ## Build a term-graph node (inline) for the subterm at the given path within a root binding. `env` maps each in-scope local variable to its (binder node id, type); `lambdaScope` marks the lambda-bound subset. `expected` is the type flowing top-down, consumed by synthesis-incomplete leaves. A variable child is not a node: the parent emits a reference link for it.
 term termGraphNode =
-  λgraph,schema,root,env,lambdaScope,expected,path,`term`.
+  λgraph, schema, root, env, lambdaScope, expected, path, `term`.
     let steps := SubtermPath[] path in
     let thisId := TermNodeId{root = root, path = path} in
     let envTypes := maps.map (λp.second p) env in
     let childEnv := cases(Term){
-        lambda=λl.maps.insert
+        lambda = λl.maps.insert
               (Lambda[parameter] l)
               (thisId, optionals.withDefault Type{variable = Name{"?"}} (Lambda[domain] l))
               env,
-        `let`=λlt.lists.foldl
-              (λacc,b.
+        `let` = λlt.lists.foldl
+              (λacc, b.
                 let bname := Binding[name] b in
                 let bid := TermNodeId{
                   root = root,
@@ -354,16 +367,23 @@ term termGraphNode =
                 maps.insert bname (bid, btype) acc)
               env
               (Let[bindings] lt),
-        `_`=env}
+        `_` = env}
         `term` in
     let childLambdaScope := cases(Term){
-        lambda=λl.sets.insert
+        lambda = λl.sets.insert
               (Lambda[parameter] l)
               lambdaScope,
-        `_`=lambdaScope}
+        `_` = lambdaScope}
         `term` in
     eithers.bind
-      (synthesizeType graph schema envTypes root expected path `term`)
+      (synthesizeType
+        graph
+        schema
+        envTypes
+        root
+        expected
+        path
+        `term`)
       (λtyp.
         let attrLinks := lists.map
             (λx.TermLink{attribute = x})
@@ -376,7 +396,7 @@ term termGraphNode =
               let childPath := SubtermPath{lists.concat2 steps [step]} in
               let childExpected := expectedForStep schema typ `term` step in
               cases(Term){
-                variable=λname.eithers.map
+                variable = λname.eithers.map
                       (λref.TermLink{
                           reference = TermReferenceLink{
                             step = step,
@@ -386,7 +406,7 @@ term termGraphNode =
                         childEnv
                         childLambdaScope
                         name),
-                `_`=eithers.map
+                `_` = eithers.map
                     (λcnode.TermLink{
                         subterm = SubtermLink{
                           step = step,
@@ -409,7 +429,7 @@ term termGraphNode =
 
 ## Classify a variable occurrence, carrying its binder's node id: lambda-bound (node = the binding lambda), let-bound — locally or as a graph binding — (node = the bound term), or a primitive; a free variable is a precondition failure. `lambdaScope` marks which local names are lambda-bound.
 term termReferenceFor =
-  λgraph,env,lambdaScope,name.optionals.match
+  λgraph, env, lambdaScope, name.optionals.match
       (maps.lookup name env)
       (ifElse
         (maps.member name (Graph[boundTerms] graph))
@@ -431,9 +451,12 @@ term termReferenceFor =
           right(TermReference{
             `primitive` = PrimitiveReference{
               name = name,
-              `type` = Type{variable = Name{"?"}}}})
+              `type` = Type{
+                variable = Name{"?"}}}})
           left(Error{
-            other = OtherError{strings.concat2 "free variable in term graph: " (Name[] name)}})))
+            other = OtherError{strings.concat2
+              "free variable in term graph: "
+              (Name[] name)}})))
       (λidType.
         let binderId := first idType in
         let occType := second idType in
@@ -453,32 +476,32 @@ term termReferenceFor =
 ## The content attribute links contributed by a type constructor: annotation, forall parameter, or literal type
 term typeAttributesOf =
   λtyp.cases(Type){
-      annotated=λat.[TypeAttributeLink{annotatedAnnotation = AnnotatedType[annotation] at}],
-      `forall`=λft.[TypeAttributeLink{forallParameter = ForallType[parameter] ft}],
-      literal=λlt.[TypeAttributeLink{literal = lt}],
-      `_`=[]}
+      annotated = λat.[TypeAttributeLink{annotatedAnnotation = AnnotatedType[annotation] at}],
+      `forall` = λft.[TypeAttributeLink{forallParameter = ForallType[parameter] ft}],
+      literal = λlt.[TypeAttributeLink{literal = lt}],
+      `_` = []}
       typ
 
 ## Build a type-graph node (inline) for the subtype at the given path within a named root type
 term typeGraphNode =
-  λschemaNames,root,forallScope,path,typ.eithers.map
+  λschemaNames, root, forallScope, path, typ.eithers.map
       (λlinks.TypeNode{`type` = typ, links = links})
       (typeLinks schemaNames root forallScope path typ)
 
 ## The outgoing links of a type node: its content attributes, and one link per immediate subtype — a variable occurrence becomes a reference link on the parent (occurrences are not nodes), any other subtype an inline subtype link. `forallScope` maps each in-scope forall variable to its binding node id.
 term typeLinks =
-  λschemaNames,root,forallScope,path,typ.
+  λschemaNames, root, forallScope, path, typ.
     let steps := SubtypePath[] path in
     let thisId := TypeNodeId{root = root, path = path} in
     let attrLinks := lists.map
         (λx.TypeLink{attribute = x})
         (typeAttributesOf typ) in
     let childScope := cases(Type){
-        `forall`=λft.maps.insert
+        `forall` = λft.maps.insert
               (ForallType[parameter] ft)
               thisId
               forallScope,
-        `_`=forallScope}
+        `_` = forallScope}
         typ in
     eithers.bind
       (eithers.mapList
@@ -487,25 +510,33 @@ term typeLinks =
           let child := second st in
           let childPath := SubtypePath{lists.concat2 steps [step]} in
           cases(Type){
-            variable=λname.eithers.map
+            variable = λname.eithers.map
                   (λref.TypeLink{
                       reference = TypeReferenceLink{
                         step = step,
                         target = ref}})
-                  (typeReferenceFor schemaNames childScope name),
-            `_`=eithers.map
+                  (typeReferenceFor
+                    schemaNames
+                    childScope
+                    name),
+            `_` = eithers.map
                 (λcnode.TypeLink{
                     subtype = SubtypeLink{
                       step = step,
                       child = cnode}})
-                (typeGraphNode schemaNames root childScope childPath child)}
+                (typeGraphNode
+                  schemaNames
+                  root
+                  childScope
+                  childPath
+                  child)}
             child)
         (subtypesWithSteps typ))
       (λchildLinks.right(lists.concat2 attrLinks childLinks))
 
 ## Classify a type variable occurrence: a schema-bound name is a nominal reference; a forall-bound variable in scope is a variable reference carrying its binding forall's node id; anything else is a free-variable precondition failure.
 term typeReferenceFor =
-  λschemaNames,forallScope,name.ifElse
+  λschemaNames, forallScope, name.ifElse
       (sets.member name schemaNames)
       right(TypeReference{nominal = NominalTypeReference{name = name}})
       (optionals.match

@@ -154,13 +154,13 @@ lazyParameterRoundtripGroup = define "lazyParameterRoundtripGroup" $
 
     signaturePrintTest "findWithDefault: lazy default value prints with 'lazy' keyword"
       findWithDefaultSignature
-      "\8704k,v.lazy v \8594 k \8594 Map k v \8594 v",
+      "\8704k, v.lazy v \8594 k \8594 Map k v \8594 v",
 
     signatureRoundtripTest "findWithDefault: lazy default value round-trips" findWithDefaultSignature,
 
     signaturePrintTest "optionals.match: lazy default value prints with 'lazy' keyword"
       optionalsMatchSignature
-      "\8704x,y.optional<x> \8594 lazy y \8594 (x \8594 y) \8594 y",
+      "\8704x, y.optional<x> \8594 lazy y \8594 (x \8594 y) \8594 y",
 
     signatureRoundtripTest "optionals.match: lazy default value round-trips" optionalsMatchSignature,
 
@@ -218,7 +218,7 @@ forallMultiBinderGroup = define "forallMultiBinderGroup" $
 
     typePrintTest "forall nested under an annotation does NOT collapse across the annotation"
       forallNestedUnderAnnotationType
-      "forall a. (forall b. b)@{tag=\"x\"}",
+      "forall a. (forall b. b)@{tag = \"x\"}",
 
     typeRoundtripTest "forall nested under an annotation round-trips" forallNestedUnderAnnotationType])
 
@@ -268,11 +268,11 @@ termDocCommentGroup = define "termDocCommentGroup" $
 
     termDefinitionPrintTest "description plus another key: description hoists, other key stays trailing"
       (termDefOf "charAt" (withDescriptionAndOtherAnn "Get a character by index" "0.17.6" (varT "impl")))
-      "## Get a character by index\nterm charAt = impl@{availableSince=\"0.17.6\"}",
+      "## Get a character by index\nterm charAt = impl@{availableSince = \"0.17.6\"}",
 
     termDefinitionPrintTest "inner (non-outermost) description is NOT hoisted"
       (termDefOf "wrapped" (Core.termApplication $ Core.application (varT "f") (withDescriptionAnn "inner desc" (varT "x"))))
-      "term wrapped = f x@{description=\"inner desc\"}"])
+      "term wrapped = f x@{description = \"inner desc\"}"])
 
 -- | Build a bare (no pre-existing metadata) TypeDefinition for the given type scheme body, for
 -- exercising 'PrintPackaging.typeDefinition's description-hoisting directly (#711).
@@ -410,29 +410,29 @@ typeLambdaTripleNestedTerm = Core.termTypeLambda $ Core.typeLambda (nm "a")
 -- type-lambda chain prints as one comma-separated binder list, consistent with forall/∀.
 lambdaMultiBinderGroup :: TypedTermDefinition TestGroup
 lambdaMultiBinderGroup = define "lambdaMultiBinderGroup" $
-  doc "Print/parse/round-trip cases for multi-binder 'λa,b.'/'Λa,b.' syntax (#711)" $
+  doc "Print/parse/round-trip cases for multi-binder 'λa, b.'/'Λa, b.' syntax (#711)" $
   Testing.testGroup (string "lambda/type-lambda multi-binder syntax") nothing (list ([] :: [TypedTerm TestGroup])) (list [
-    termPrintTest "three directly-nested λ's collapse into one 'λa,b,c.'"
+    termPrintTest "three directly-nested λ's collapse into one 'λa, b, c.'"
       lambdaTripleNestedTerm
-      "λa,b,c.a",
+      "λa, b, c.a",
 
     termRoundtripTest "three directly-nested λ's round-trip" lambdaTripleNestedTerm,
 
     termPrintTest "typed binders collapse with each binder keeping its own domain type"
       lambdaTypedNestedTerm
-      "λa:int32,b:string.a",
+      "λa:int32, b:string.a",
 
     termRoundtripTest "typed binders round-trip" lambdaTypedNestedTerm,
 
     termPrintTest "λ nested under an annotation does NOT collapse across the annotation"
       lambdaNestedUnderAnnotationTerm
-      "λa.(λb.b)@{description=\"inner\"}",
+      "λa.(λb.b)@{description = \"inner\"}",
 
     termRoundtripTest "λ nested under an annotation round-trips" lambdaNestedUnderAnnotationTerm,
 
-    termPrintTest "three directly-nested Λ's collapse into one 'Λa,b,c.'"
+    termPrintTest "three directly-nested Λ's collapse into one 'Λa, b, c.'"
       typeLambdaTripleNestedTerm
-      "Λa,b,c.a",
+      "Λa, b, c.a",
 
     termRoundtripTest "three directly-nested Λ's round-trip" typeLambdaTripleNestedTerm])
 

@@ -70,8 +70,8 @@ term testGroupForCollectionPrimitives =
                                 values = Type{
                                   variable = Name{"t1"}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}},
-                          Name{"t1"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}},
+                          Name{"t1"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -114,7 +114,7 @@ term testGroupForCollectionPrimitives =
                                   `list` = Type{
                                     variable = Name{"t1"}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -154,8 +154,8 @@ term testGroupForCollectionPrimitives =
                                   `set` = Type{
                                     variable = Name{"t1"}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}},
-                          Name{"t1"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}},
+                          Name{"t1"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -192,7 +192,7 @@ term testGroupForCollectionPrimitives =
                               `set` = Type{
                                 variable = Name{"t0"}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{
+                          Name{"t0"} = TypeVariableConstraints{
                             classes = {
                               TypeClassConstraint{simple = Name{"numeric"}},
                               TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
@@ -230,7 +230,7 @@ term testGroupForCollectionPrimitives =
                                   integer = IntegerType{
                                     `int32`}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -281,8 +281,8 @@ term testGroupForCollectionPrimitives =
                                   `set` = Type{
                                     variable = Name{"t1"}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}},
-                          Name{"t1"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}},
+                          Name{"t1"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -313,7 +313,7 @@ term testGroupForCollectionPrimitives =
                                     function = Term{variable = Name{"f"}},
                                     argument = Term{
                                       `map` = {
-                                        Term{literal = Literal{`string` = "a"}}=Term{
+                                        Term{literal = Literal{`string` = "a"}} = Term{
                                           `list` = [
                                             Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
                                             Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]}}}}},
@@ -387,7 +387,7 @@ term testGroupForCollectionPrimitives =
                                     integer = IntegerType{
                                       `int32`}}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -445,7 +445,7 @@ term testGroupForCollectionPrimitives =
                                     values = Type{
                                       variable = Name{"t1"}}}}}}}},
                         constraints = {
-                          Name{"t2"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                          Name{"t2"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -1044,7 +1044,7 @@ term testGroupForFolds =
                                 codomain = Type{
                                   variable = Name{"t0"}}}}}},
                         constraints = {
-                          Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
+                          Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -1598,8 +1598,8 @@ term testGroupForMaps =
                     testGraph
                     Term{
                       `map` = {
-                        Term{literal = Literal{`string` = "firstName"}}=Term{literal = Literal{`string` = "Arthur"}},
-                        Term{literal = Literal{`string` = "lastName"}}=Term{literal = Literal{`string` = "Dent"}}}}),
+                        Term{literal = Literal{`string` = "firstName"}} = Term{literal = Literal{`string` = "Arthur"}},
+                        Term{literal = Literal{`string` = "lastName"}} = Term{literal = Literal{`string` = "Dent"}}}}),
             expected = λ`_`.typeScheme
                   TypeScheme{
                     variables = [],
@@ -1636,7 +1636,7 @@ term testGroupForMaps =
                         values = Type{
                           variable = Name{"t1"}}}},
                     constraints = {
-                      Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                      Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
         description = none,
         tags = [],
         provisions = []},
@@ -1660,8 +1660,8 @@ term testGroupForMaps =
                             domain = none,
                             body = Term{
                               `map` = {
-                                Term{variable = Name{"x"}}=Term{literal = Literal{float = FloatValue{`float64` = 0.1:float64}}},
-                                Term{variable = Name{"y"}}=Term{literal = Literal{float = FloatValue{`float64` = 0.2:float64}}}}}}}}}),
+                                Term{variable = Name{"x"}} = Term{literal = Literal{float = FloatValue{`float64` = 0.1:float64}}},
+                                Term{variable = Name{"y"}} = Term{literal = Literal{float = FloatValue{`float64` = 0.2:float64}}}}}}}}}),
             expected = λ`_`.typeScheme
                   TypeScheme{
                     variables = [Name{"t0"}],
@@ -1682,7 +1682,7 @@ term testGroupForMaps =
                                     float = FloatType{
                                       `float64`}}}}}}}}},
                     constraints = {
-                      Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                      Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
         description = none,
         tags = [],
         provisions = []}]}
@@ -2230,7 +2230,7 @@ term testGroupForSets =
                         `set` = Type{
                           variable = Name{"t0"}}}},
                     constraints = {
-                      Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
+                      Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"ordering"}}}}}}}},
         description = none,
         tags = [],
         provisions = []}]}

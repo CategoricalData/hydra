@@ -916,7 +916,7 @@ term forallMultiBinderGroup =
                           annotation = Term{
                             `map` = maps.fromList
                                 [(Term{variable = Name{"tag"}}, Term{literal = Literal{`string` = "x"}})]}}}}},
-            expected = λ`_`."forall a. (forall b. b)@{tag=\"x\"}"}},
+            expected = λ`_`."forall a. (forall b. b)@{tag = \"x\"}"}},
         description = none,
         tags = [],
         provisions = []},
@@ -960,7 +960,7 @@ term forallMultiBinderGroup =
         tags = [],
         provisions = []}]}
 
-## Print/parse/round-trip cases for multi-binder 'λa,b.'/'Λa,b.' syntax (#711)
+## Print/parse/round-trip cases for multi-binder 'λa, b.'/'Λa, b.' syntax (#711)
 term lambdaMultiBinderGroup =
   TestGroup{
     name = "lambda/type-lambda multi-binder syntax",
@@ -968,7 +968,7 @@ term lambdaMultiBinderGroup =
     subgroups = [],
     `cases` = [
       TestCaseWithMetadata{
-        name = "three directly-nested λ's collapse into one 'λa,b,c.'",
+        name = "three directly-nested λ's collapse into one 'λa, b, c.'",
         case = TestCase{
           universal = UniversalTestCase{
             actual = λ`_`.model.term
@@ -986,7 +986,7 @@ term lambdaMultiBinderGroup =
                               domain = none,
                               body = Term{
                                 variable = Name{"a"}}}}}}}},
-            expected = λ`_`."λa,b,c.a"}},
+            expected = λ`_`."λa, b, c.a"}},
         description = none,
         tags = [],
         provisions = []},
@@ -1051,7 +1051,7 @@ term lambdaMultiBinderGroup =
                                 `string`}}),
                           body = Term{
                             variable = Name{"a"}}}}}},
-            expected = λ`_`."λa:int32,b:string.a"}},
+            expected = λ`_`."λa:int32, b:string.a"}},
         description = none,
         tags = [],
         provisions = []},
@@ -1118,7 +1118,7 @@ term lambdaMultiBinderGroup =
                           annotation = Term{
                             `map` = maps.fromList
                                 [(Term{variable = Name{"description"}}, Term{literal = Literal{`string` = "inner"}})]}}}}},
-            expected = λ`_`."λa.(λb.b)@{description=\"inner\"}"}},
+            expected = λ`_`."λa.(λb.b)@{description = \"inner\"}"}},
         description = none,
         tags = [],
         provisions = []},
@@ -1166,7 +1166,7 @@ term lambdaMultiBinderGroup =
         tags = [],
         provisions = []},
       TestCaseWithMetadata{
-        name = "three directly-nested Λ's collapse into one 'Λa,b,c.'",
+        name = "three directly-nested Λ's collapse into one 'Λa, b, c.'",
         case = TestCase{
           universal = UniversalTestCase{
             actual = λ`_`.model.term
@@ -1181,7 +1181,7 @@ term lambdaMultiBinderGroup =
                               parameter = Name{"c"},
                               body = Term{
                                 variable = Name{"a"}}}}}}}},
-            expected = λ`_`."Λa,b,c.a"}},
+            expected = λ`_`."Λa, b, c.a"}},
         description = none,
         tags = [],
         provisions = []},
@@ -1641,11 +1641,11 @@ term moduleAliasGroup =
                           "\n"
                           (lists.map
                             (λd.cases(Definition){
-                                `type`=λtd.strings.concat
+                                `type` = λtd.strings.concat
                                       [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
-                                `term`=λtd.strings.concat
+                                `term` = λtd.strings.concat
                                       [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
-                                `primitive`=λpd.Name[] (PrimitiveDefinition[name] pd)}
+                                `primitive` = λpd.Name[] (PrimitiveDefinition[name] pd)}
                                 d)
                             (Module[definitions] mod2))])
                   (parseModule
@@ -1699,11 +1699,11 @@ term moduleAliasGroup =
                       "\n"
                       (lists.map
                         (λd.cases(Definition){
-                            `type`=λtd.strings.concat
+                            `type` = λtd.strings.concat
                                   [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
-                            `term`=λtd.strings.concat
+                            `term` = λtd.strings.concat
                                   [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
-                            `primitive`=λpd.Name[] (PrimitiveDefinition[name] pd)}
+                            `primitive` = λpd.Name[] (PrimitiveDefinition[name] pd)}
                             d)
                         (Module[definitions]
                           Module{
@@ -1743,11 +1743,11 @@ term moduleAliasGroup =
                           "\n"
                           (lists.map
                             (λd.cases(Definition){
-                                `type`=λtd.strings.concat
+                                `type` = λtd.strings.concat
                                       [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
-                                `term`=λtd.strings.concat
+                                `term` = λtd.strings.concat
                                       [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
-                                `primitive`=λpd.Name[] (PrimitiveDefinition[name] pd)}
+                                `primitive` = λpd.Name[] (PrimitiveDefinition[name] pd)}
                                 d)
                             (Module[definitions] mod2))])
                   (parseModule
@@ -1817,11 +1817,11 @@ term moduleAliasGroup =
                       "\n"
                       (lists.map
                         (λd.cases(Definition){
-                            `type`=λtd.strings.concat
+                            `type` = λtd.strings.concat
                                   [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
-                            `term`=λtd.strings.concat
+                            `term` = λtd.strings.concat
                                   [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
-                            `primitive`=λpd.Name[] (PrimitiveDefinition[name] pd)}
+                            `primitive` = λpd.Name[] (PrimitiveDefinition[name] pd)}
                             d)
                         (Module[definitions]
                           Module{
@@ -3293,7 +3293,7 @@ term termDocCommentGroup =
                               [
                                 (Term{variable = Name{"description"}}, Term{literal = Literal{`string` = "Get a character by index"}}),
                                 (Term{variable = Name{"availableSince"}}, Term{literal = Literal{`string` = "0.17.6"}})]}}}},
-            expected = λ`_`."## Get a character by index\nterm charAt = impl@{availableSince=\"0.17.6\"}"}},
+            expected = λ`_`."## Get a character by index\nterm charAt = impl@{availableSince = \"0.17.6\"}"}},
         description = none,
         tags = [],
         provisions = []},
@@ -3318,7 +3318,7 @@ term termDocCommentGroup =
                             annotation = Term{
                               `map` = maps.fromList
                                   [(Term{variable = Name{"description"}}, Term{literal = Literal{`string` = "inner desc"}})]}}}}}},
-            expected = λ`_`."term wrapped = f x@{description=\"inner desc\"}"}},
+            expected = λ`_`."term wrapped = f x@{description = \"inner desc\"}"}},
         description = none,
         tags = [],
         provisions = []}]}
@@ -3372,11 +3372,11 @@ term unqualifiedNamesGroup =
                           "\n"
                           (lists.map
                             (λd.cases(Definition){
-                                `type`=λtd.strings.concat
+                                `type` = λtd.strings.concat
                                       [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
-                                `term`=λtd.strings.concat
+                                `term` = λtd.strings.concat
                                       [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
-                                `primitive`=λpd.Name[] (PrimitiveDefinition[name] pd)}
+                                `primitive` = λpd.Name[] (PrimitiveDefinition[name] pd)}
                                 d)
                             (Module[definitions] mod2))])
                   (parseModuleWith
@@ -3429,11 +3429,11 @@ term unqualifiedNamesGroup =
                       "\n"
                       (lists.map
                         (λd.cases(Definition){
-                            `type`=λtd.strings.concat
+                            `type` = λtd.strings.concat
                                   [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
-                            `term`=λtd.strings.concat
+                            `term` = λtd.strings.concat
                                   [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
-                            `primitive`=λpd.Name[] (PrimitiveDefinition[name] pd)}
+                            `primitive` = λpd.Name[] (PrimitiveDefinition[name] pd)}
                             d)
                         (Module[definitions]
                           Module{
@@ -3464,12 +3464,12 @@ term unqualifiedNamesGroup =
                       (lists.head (Module[definitions] mod2))
                       "no-definitions"
                       (λd.cases(Definition){
-                          `term`=λtd.cases(Term){
-                                `record`=λ`_`."record",
-                                `inject`=λ`_`."inject",
-                                `_`="not-record-or-inject"}
+                          `term` = λtd.cases(Term){
+                                `record` = λ`_`."record",
+                                `inject` = λ`_`."inject",
+                                `_` = "not-record-or-inject"}
                                 (TermDefinition[body] td),
-                          `_`="not-a-term"}
+                          `_` = "not-a-term"}
                           d))
                   (parseModuleWith
                     (maps.fromList
@@ -3612,11 +3612,11 @@ term unqualifiedNamesGroup =
                           "\n"
                           (lists.map
                             (λd.cases(Definition){
-                                `type`=λtd.strings.concat
+                                `type` = λtd.strings.concat
                                       [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
-                                `term`=λtd.strings.concat
+                                `term` = λtd.strings.concat
                                       [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
-                                `primitive`=λpd.Name[] (PrimitiveDefinition[name] pd)}
+                                `primitive` = λpd.Name[] (PrimitiveDefinition[name] pd)}
                                 d)
                             (Module[definitions] mod2))])
                   (parseModuleWith
@@ -3677,11 +3677,11 @@ term unqualifiedNamesGroup =
                       "\n"
                       (lists.map
                         (λd.cases(Definition){
-                            `type`=λtd.strings.concat
+                            `type` = λtd.strings.concat
                                   [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
-                            `term`=λtd.strings.concat
+                            `term` = λtd.strings.concat
                                   [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
-                            `primitive`=λpd.Name[] (PrimitiveDefinition[name] pd)}
+                            `primitive` = λpd.Name[] (PrimitiveDefinition[name] pd)}
                             d)
                         (Module[definitions]
                           Module{
@@ -3748,11 +3748,11 @@ term unqualifiedNamesGroup =
                           "\n"
                           (lists.map
                             (λd.cases(Definition){
-                                `type`=λtd.strings.concat
+                                `type` = λtd.strings.concat
                                       [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
-                                `term`=λtd.strings.concat
+                                `term` = λtd.strings.concat
                                       [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
-                                `primitive`=λpd.Name[] (PrimitiveDefinition[name] pd)}
+                                `primitive` = λpd.Name[] (PrimitiveDefinition[name] pd)}
                                 d)
                             (Module[definitions] mod2))])
                   (parseModuleWith
@@ -3801,11 +3801,11 @@ term unqualifiedNamesGroup =
                       "\n"
                       (lists.map
                         (λd.cases(Definition){
-                            `type`=λtd.strings.concat
+                            `type` = λtd.strings.concat
                                   [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
-                            `term`=λtd.strings.concat
+                            `term` = λtd.strings.concat
                                   [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
-                            `primitive`=λpd.Name[] (PrimitiveDefinition[name] pd)}
+                            `primitive` = λpd.Name[] (PrimitiveDefinition[name] pd)}
                             d)
                         (Module[definitions]
                           Module{

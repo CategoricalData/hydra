@@ -518,6 +518,183 @@
                       "string": "Separate the elements inside curly braces using the given symbol (default `,`) in the given block style; renders as `{}` when empty"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.core.serialization.curlyBracesListWithBlankLines",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {"name": "arg0", "type": {"variable": "hydra.core.ast.BlockStyle"}, "isLazy": false},
+            {"name": "arg1", "type": {"list": {"variable": "hydra.core.ast.Expr"}}, "isLazy": false}],
+          "result": {"type": {"variable": "hydra.core.ast.Expr"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "style",
+                "domain": {"variable": "hydra.core.ast.BlockStyle"},
+                "body": {
+                  "lambda": {
+                    "parameter": "els",
+                    "domain": {"list": {"variable": "hydra.core.ast.Expr"}},
+                    "body": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "application": {
+                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"variable": "hydra.core.ast.Expr"}}},
+                                "argument": {
+                                  "application": {
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.isEmpty"}, "type": {"variable": "hydra.core.ast.Expr"}}},
+                                    "argument": {"variable": "els"}}}}},
+                            "argument": {"application": {"function": {"variable": "hydra.core.serialization.cst"}, "argument": {"literal": {"string": "{}"}}}}}},
+                        "argument": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "commaBlankOp",
+                                "term": {
+                                  "record": {
+                                    "typeName": "hydra.core.ast.Op",
+                                    "fields": [
+                                      {
+                                        "name": "symbol",
+                                        "term": {"application": {"function": {"variable": "hydra.core.serialization.sym"}, "argument": {"literal": {"string": ","}}}}},
+                                      {
+                                        "name": "padding",
+                                        "term": {
+                                          "record": {
+                                            "typeName": "hydra.core.ast.Padding",
+                                            "fields": [
+                                              {"name": "left", "term": {"inject": {"typeName": "hydra.core.ast.Ws", "field": {"name": "none", "term": "unit"}}}},
+                                              {
+                                                "name": "right",
+                                                "term": {"inject": {"typeName": "hydra.core.ast.Ws", "field": {"name": "doubleBreak", "term": "unit"}}}}]}}},
+                                      {
+                                        "name": "precedence",
+                                        "term": {"wrap": {"typeName": "hydra.core.ast.Precedence", "body": {"literal": {"integer": {"int32": 0}}}}}},
+                                      {
+                                        "name": "associativity",
+                                        "term": {"inject": {"typeName": "hydra.core.ast.Associativity", "field": {"name": "none", "term": "unit"}}}}]}},
+                                "typeScheme": {"variables": [], "body": {"variable": "hydra.core.ast.Op"}, "constraints": []}}],
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "entriesExpr",
+                                    "term": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.match"}, "type": {"variable": "hydra.core.ast.Expr"}}},
+                                                    "type": {"variable": "hydra.core.ast.Expr"}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.head"}, "type": {"variable": "hydra.core.ast.Expr"}}},
+                                                    "argument": {"variable": "els"}}}}},
+                                            "argument": {"application": {"function": {"variable": "hydra.core.serialization.cst"}, "argument": {"literal": {"string": ""}}}}}},
+                                        "argument": {
+                                          "lambda": {
+                                            "parameter": "h",
+                                            "domain": {"variable": "hydra.core.ast.Expr"},
+                                            "body": {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.foldl"}, "type": {"variable": "hydra.core.ast.Expr"}}},
+                                                            "type": {"variable": "hydra.core.ast.Expr"}}},
+                                                        "argument": {
+                                                          "lambda": {
+                                                            "parameter": "acc",
+                                                            "domain": {"variable": "hydra.core.ast.Expr"},
+                                                            "body": {
+                                                              "lambda": {
+                                                                "parameter": "el",
+                                                                "domain": {"variable": "hydra.core.ast.Expr"},
+                                                                "body": {
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {"application": {"function": {"variable": "hydra.core.serialization.ifx"}, "argument": {"variable": "commaBlankOp"}}},
+                                                                        "argument": {"variable": "acc"}}},
+                                                                    "argument": {"variable": "el"}}}}}}}}},
+                                                    "argument": {"variable": "h"}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.lists.drop"}, "type": {"variable": "hydra.core.ast.Expr"}}},
+                                                        "argument": {"literal": {"integer": {"int32": 1}}}}},
+                                                    "argument": {"variable": "els"}}}}}}}}},
+                                    "typeScheme": {"variables": [], "body": {"variable": "hydra.core.ast.Expr"}, "constraints": []}}],
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "entriesStr",
+                                        "term": {
+                                          "application": {"function": {"variable": "hydra.core.serialization.printExpr"}, "argument": {"variable": "entriesExpr"}}},
+                                        "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "doIndent",
+                                            "term": {
+                                              "application": {
+                                                "function": {"project": {"typeName": "hydra.core.ast.BlockStyle", "fieldName": "indent"}},
+                                                "argument": {"variable": "style"}}},
+                                            "typeScheme": {"variables": [], "body": {"optional": {"literal": "string"}}, "constraints": []}}],
+                                        "body": {
+                                          "let": {
+                                            "bindings": [
+                                              {
+                                                "name": "indentedStr",
+                                                "term": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.optionals.match"}, "type": {"literal": "string"}}},
+                                                                "type": {"literal": "string"}}},
+                                                            "argument": {"variable": "doIndent"}}},
+                                                        "argument": {"variable": "entriesStr"}}},
+                                                    "argument": {
+                                                      "lambda": {
+                                                        "parameter": "pre",
+                                                        "domain": {"literal": "string"},
+                                                        "body": {
+                                                          "application": {
+                                                            "function": {"application": {"function": {"variable": "hydra.core.serialization.customIndent"}, "argument": {"variable": "pre"}}},
+                                                            "argument": {"variable": "entriesStr"}}}}}}},
+                                                "typeScheme": {"variables": [], "body": {"literal": "string"}, "constraints": []}}],
+                                            "body": {
+                                              "application": {
+                                                "function": {"variable": "hydra.core.serialization.cst"},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {"variable": "hydra.core.lib.strings.concat"},
+                                                    "argument": {"list": [{"literal": {"string": "{\n\n"}}, {"variable": "indentedStr"}, {"literal": {"string": "}"}}]}}}}}}}}}}}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Separate the elements inside curly braces with a comma and a blank line between them (including before the first entry), for commented record/union fields (#711)"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.core.serialization.customIndent",
         "signature": {
           "typeParameters": [],

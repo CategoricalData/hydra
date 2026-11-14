@@ -21,48 +21,50 @@ import hydra.core.scoping
 
 ## Left-apply type-variable params to a base type in binder order (fixes param reversal)
 term applyForallParamsInOrder =
-  λbase,params.lists.foldl
-      (λacc,p.Type{application = ApplicationType{function = acc, argument = Type{variable = p}}})
+  λbase, params.lists.foldl
+      (λacc, p.Type{application = ApplicationType{function = acc, argument = Type{variable = p}}})
       base
       params
 
 ## Collect forall type variable names from a type
 term collectForallVariables =
   λtyp.cases(Type){
-      annotated=λat.collectForallVariables (AnnotatedType[body] at),
-      `forall`=λft.lists.cons (ForallType[parameter] ft) (collectForallVariables (ForallType[body] ft)),
-      `_`=[]}
+      annotated = λat.collectForallVariables (AnnotatedType[body] at),
+      `forall` = λft.lists.cons (ForallType[parameter] ft) (collectForallVariables (ForallType[body] ft)),
+      `_` = []}
       typ
 
 ## Collect type variables needing Ord constraints (from Map key and Set element types)
 term collectOrdConstrainedVariables =
   λtyp.cases(Type){
-      annotated=λat.collectOrdConstrainedVariables (AnnotatedType[body] at),
-      application=λappType.lists.concat2
+      annotated = λat.collectOrdConstrainedVariables (AnnotatedType[body] at),
+      application = λappType.lists.concat2
             (collectOrdConstrainedVariables (ApplicationType[function] appType))
             (collectOrdConstrainedVariables (ApplicationType[argument] appType)),
-      `effect`=λelemType.collectOrdConstrainedVariables elemType,
-      `either`=λet.lists.concat2
+      `effect` = λelemType.collectOrdConstrainedVariables elemType,
+      `either` = λet.lists.concat2
             (collectOrdConstrainedVariables (EitherType[`left`] et))
             (collectOrdConstrainedVariables (EitherType[`right`] et)),
-      `forall`=λft.collectOrdConstrainedVariables (ForallType[body] ft),
-      `list`=λelemType.collectOrdConstrainedVariables elemType,
-      `map`=λmt.lists.concat
+      `forall` = λft.collectOrdConstrainedVariables (ForallType[body] ft),
+      `list` = λelemType.collectOrdConstrainedVariables elemType,
+      `map` = λmt.lists.concat
             [
               collectTypeVariablesFromType (MapType[keys] mt),
               collectOrdConstrainedVariables (MapType[keys] mt),
               collectOrdConstrainedVariables (MapType[values] mt)],
-      `optional`=λelemType.collectOrdConstrainedVariables elemType,
-      pair=λpt.lists.concat2
+      `optional` = λelemType.collectOrdConstrainedVariables elemType,
+      pair = λpt.lists.concat2
             (collectOrdConstrainedVariables (PairType[first] pt))
             (collectOrdConstrainedVariables (PairType[second] pt)),
-      `record`=λrt.lists.concat (lists.map (λft.collectOrdConstrainedVariables (FieldType[`type`] ft)) rt),
-      `set`=λelemType.lists.concat2
+      `record` = λrt.lists.concat
+            (lists.map (λft.collectOrdConstrainedVariables (FieldType[`type`] ft)) rt),
+      `set` = λelemType.lists.concat2
             (collectTypeVariablesFromType elemType)
             (collectOrdConstrainedVariables elemType),
-      `union`=λrt.lists.concat (lists.map (λft.collectOrdConstrainedVariables (FieldType[`type`] ft)) rt),
-      `wrap`=λwt.collectOrdConstrainedVariables wt,
-      `_`=[]}
+      `union` = λrt.lists.concat
+            (lists.map (λft.collectOrdConstrainedVariables (FieldType[`type`] ft)) rt),
+      `wrap` = λwt.collectOrdConstrainedVariables wt,
+      `_` = []}
       typ
 
 ## Collect type variable names from a type (forall parameters only)
@@ -71,34 +73,34 @@ term collectTypeVariables = λtyp.collectForallVariables typ
 ## Collect all type variable names from a type expression
 term collectTypeVariablesFromType =
   λtyp.cases(Type){
-      annotated=λat.collectTypeVariablesFromType (AnnotatedType[body] at),
-      application=λappType.lists.concat2
+      annotated = λat.collectTypeVariablesFromType (AnnotatedType[body] at),
+      application = λappType.lists.concat2
             (collectTypeVariablesFromType (ApplicationType[function] appType))
             (collectTypeVariablesFromType (ApplicationType[argument] appType)),
-      `effect`=λelemType.collectTypeVariablesFromType elemType,
-      `either`=λet.lists.concat2
+      `effect` = λelemType.collectTypeVariablesFromType elemType,
+      `either` = λet.lists.concat2
             (collectTypeVariablesFromType (EitherType[`left`] et))
             (collectTypeVariablesFromType (EitherType[`right`] et)),
-      `forall`=λft.collectTypeVariablesFromType (ForallType[body] ft),
-      `list`=λelemType.collectTypeVariablesFromType elemType,
-      `map`=λmt.lists.concat2
+      `forall` = λft.collectTypeVariablesFromType (ForallType[body] ft),
+      `list` = λelemType.collectTypeVariablesFromType elemType,
+      `map` = λmt.lists.concat2
             (collectTypeVariablesFromType (MapType[keys] mt))
             (collectTypeVariablesFromType (MapType[values] mt)),
-      `optional`=λelemType.collectTypeVariablesFromType elemType,
-      pair=λpt.lists.concat2
+      `optional` = λelemType.collectTypeVariablesFromType elemType,
+      pair = λpt.lists.concat2
             (collectTypeVariablesFromType (PairType[first] pt))
             (collectTypeVariablesFromType (PairType[second] pt)),
-      `record`=λrt.lists.concat (lists.map (λft.collectTypeVariablesFromType (FieldType[`type`] ft)) rt),
-      `set`=λelemType.collectTypeVariablesFromType elemType,
-      `union`=λrt.lists.concat (lists.map (λft.collectTypeVariablesFromType (FieldType[`type`] ft)) rt),
-      variable=λname.[name],
-      `wrap`=λwt.collectTypeVariablesFromType wt,
-      `_`=[]}
+      `record` = λrt.lists.concat (lists.map (λft.collectTypeVariablesFromType (FieldType[`type`] ft)) rt),
+      `set` = λelemType.collectTypeVariablesFromType elemType,
+      `union` = λrt.lists.concat (lists.map (λft.collectTypeVariablesFromType (FieldType[`type`] ft)) rt),
+      variable = λname.[name],
+      `wrap` = λwt.collectTypeVariablesFromType wt,
+      `_` = []}
       typ
 
 ## Transform a type binding into a decoder binding
 term decodeBinding =
-  λcx,graph,b.eithers.bind
+  λcx, graph, b.eithers.bind
       (decode.model.type graph (Binding[`term`] b))
       (λtyp.
         let rtype := decoderFullResultTypeNamed (Binding[name] b) typ in
@@ -171,7 +173,7 @@ term decodeListType =
 ## Generate a decoder for a literal type
 term decodeLiteralType =
   λlt.cases(LiteralType){
-      `binary`=λ`_`.Term{
+      `binary` = λ`_`.Term{
             lambda = Lambda{
               parameter = Name{"cx"},
               domain = given(Type{
@@ -310,7 +312,7 @@ term decodeLiteralType =
                                 variable = Name{"cx"}}}},
                           argument = Term{
                             variable = Name{"raw"}}}}}}}}}},
-      `boolean`=λ`_`.Term{
+      `boolean` = λ`_`.Term{
             lambda = Lambda{
               parameter = Name{"cx"},
               domain = given(Type{
@@ -449,7 +451,7 @@ term decodeLiteralType =
                                 variable = Name{"cx"}}}},
                           argument = Term{
                             variable = Name{"raw"}}}}}}}}}},
-      `decimal`=λ`_`.Term{
+      `decimal` = λ`_`.Term{
             lambda = Lambda{
               parameter = Name{"cx"},
               domain = given(Type{
@@ -588,8 +590,8 @@ term decodeLiteralType =
                                 variable = Name{"cx"}}}},
                           argument = Term{
                             variable = Name{"raw"}}}}}}}}}},
-      float=λft.cases(FloatType){
-            `float32`=λ`_`.Term{
+      float = λft.cases(FloatType){
+            `float32` = λ`_`.Term{
                   lambda = Lambda{
                     parameter = Name{"cx"},
                     domain = given(Type{
@@ -752,7 +754,7 @@ term decodeLiteralType =
                                       variable = Name{"cx"}}}},
                                 argument = Term{
                                   variable = Name{"raw"}}}}}}}}}},
-            `float64`=λ`_`.Term{
+            `float64` = λ`_`.Term{
                   lambda = Lambda{
                     parameter = Name{"cx"},
                     domain = given(Type{
@@ -916,8 +918,8 @@ term decodeLiteralType =
                                 argument = Term{
                                   variable = Name{"raw"}}}}}}}}}}}
             ft,
-      integer=λit.cases(IntegerType){
-            `bigint`=λ`_`.Term{
+      integer = λit.cases(IntegerType){
+            `bigint` = λ`_`.Term{
                   lambda = Lambda{
                     parameter = Name{"cx"},
                     domain = given(Type{
@@ -1080,7 +1082,7 @@ term decodeLiteralType =
                                       variable = Name{"cx"}}}},
                                 argument = Term{
                                   variable = Name{"raw"}}}}}}}}}},
-            `int8`=λ`_`.Term{
+            `int8` = λ`_`.Term{
                   lambda = Lambda{
                     parameter = Name{"cx"},
                     domain = given(Type{
@@ -1243,7 +1245,7 @@ term decodeLiteralType =
                                       variable = Name{"cx"}}}},
                                 argument = Term{
                                   variable = Name{"raw"}}}}}}}}}},
-            `int16`=λ`_`.Term{
+            `int16` = λ`_`.Term{
                   lambda = Lambda{
                     parameter = Name{"cx"},
                     domain = given(Type{
@@ -1406,7 +1408,7 @@ term decodeLiteralType =
                                       variable = Name{"cx"}}}},
                                 argument = Term{
                                   variable = Name{"raw"}}}}}}}}}},
-            `int32`=λ`_`.Term{
+            `int32` = λ`_`.Term{
                   lambda = Lambda{
                     parameter = Name{"cx"},
                     domain = given(Type{
@@ -1569,7 +1571,7 @@ term decodeLiteralType =
                                       variable = Name{"cx"}}}},
                                 argument = Term{
                                   variable = Name{"raw"}}}}}}}}}},
-            `int64`=λ`_`.Term{
+            `int64` = λ`_`.Term{
                   lambda = Lambda{
                     parameter = Name{"cx"},
                     domain = given(Type{
@@ -1732,7 +1734,7 @@ term decodeLiteralType =
                                       variable = Name{"cx"}}}},
                                 argument = Term{
                                   variable = Name{"raw"}}}}}}}}}},
-            `uint8`=λ`_`.Term{
+            `uint8` = λ`_`.Term{
                   lambda = Lambda{
                     parameter = Name{"cx"},
                     domain = given(Type{
@@ -1895,7 +1897,7 @@ term decodeLiteralType =
                                       variable = Name{"cx"}}}},
                                 argument = Term{
                                   variable = Name{"raw"}}}}}}}}}},
-            `uint16`=λ`_`.Term{
+            `uint16` = λ`_`.Term{
                   lambda = Lambda{
                     parameter = Name{"cx"},
                     domain = given(Type{
@@ -2058,7 +2060,7 @@ term decodeLiteralType =
                                       variable = Name{"cx"}}}},
                                 argument = Term{
                                   variable = Name{"raw"}}}}}}}}}},
-            `uint32`=λ`_`.Term{
+            `uint32` = λ`_`.Term{
                   lambda = Lambda{
                     parameter = Name{"cx"},
                     domain = given(Type{
@@ -2221,7 +2223,7 @@ term decodeLiteralType =
                                       variable = Name{"cx"}}}},
                                 argument = Term{
                                   variable = Name{"raw"}}}}}}}}}},
-            `uint64`=λ`_`.Term{
+            `uint64` = λ`_`.Term{
                   lambda = Lambda{
                     parameter = Name{"cx"},
                     domain = given(Type{
@@ -2385,7 +2387,7 @@ term decodeLiteralType =
                                 argument = Term{
                                   variable = Name{"raw"}}}}}}}}}}}
             it,
-      `string`=λ`_`.Term{
+      `string` = λ`_`.Term{
             lambda = Lambda{
               parameter = Name{"cx"},
               domain = given(Type{
@@ -2562,14 +2564,14 @@ term decodeMaybeType =
 
 ## Transform a type module into a decoder module
 term decodeModule =
-  λcx,graph,mod.eithers.bind
+  λcx, graph, mod.eithers.bind
       (filterTypeBindings
         cx
         graph
         (optionals.givens
           (lists.map
             (λd.cases(Definition){
-                `type`=λtd.given((λname,typ.
+                `type` = λtd.given((λname, typ.
                       let schemaTerm := Term{
                         variable = Name{"hydra.core.model.Type"}} in
                       let dataTerm := normalizeTermAnnotations
@@ -2588,7 +2590,7 @@ term decodeModule =
                             constraints = maps.empty})})
                       (TypeDefinition[name] td)
                       (TypeScheme[body] (TypeDefinition[body] td))),
-                `_`=none}
+                `_` = none}
                 d)
             (Module[definitions] mod))))
       (λtypeBindings.ifElse
@@ -2667,7 +2669,7 @@ term decodeRecordType = λrt.decodeRecordTypeImpl Name{"unknown"} rt Type{variab
 
 ## Generate a decoder for a record type with a type name. rtype is the fully-applied result type (e.g. Table<v>) used for the record's body annotations. (#476)
 term decodeRecordTypeImpl =
-  λtname,rt,rtype.
+  λtname, rt, rtype.
     let recType := rtype in
     let graphType := Type{variable = Name{"hydra.core.graph.Graph"}} in
     let termType := Type{variable = Name{"hydra.core.model.Term"}} in
@@ -2699,14 +2701,14 @@ term decodeRecordTypeImpl =
                   variable = Name{"fieldMap"}}}},
             argument = Term{variable = Name{"cx"}}}} in
     let localVarName := λft.Name{strings.concat ["field_", Name[] (FieldType[name] ft)]} in
-    let toFieldLambda := λft,body.Term{
+    let toFieldLambda := λft, body.Term{
           lambda = Lambda{
             parameter = localVarName ft,
             domain = given(decoderFullResultType
                 (FieldType[`type`] ft)),
             body = body}} in
     let decodeBody := lists.foldl
-        (λacc,ft.Term{
+        (λacc, ft.Term{
             application = Application{
               function = Term{
                 application = Application{
@@ -2856,7 +2858,7 @@ term decodeRecordTypeImpl =
                       variable = Name{"raw"}}}}}}}}}}
 
 ## Generate a decoder for a record type with element name
-term decodeRecordTypeNamed = λename,rt,rtype.decodeRecordTypeImpl ename rt rtype
+term decodeRecordTypeNamed = λename, rt, rtype.decodeRecordTypeImpl ename rt rtype
 
 ## Generate a decoder for a set type
 term decodeSetType =
@@ -2874,8 +2876,8 @@ term decodeSetType =
 ## Generate a decoder term for a Type
 term decodeType =
   λtyp.cases(Type){
-      annotated=λat.decodeType (AnnotatedType[body] at),
-      application=λappType.Term{
+      annotated = λat.decodeType (AnnotatedType[body] at),
+      application = λappType.Term{
             application = Application{
               function = Term{
                 typeApplication = TypeApplicationTerm{
@@ -2885,21 +2887,21 @@ term decodeType =
                       (ApplicationType[argument] appType)}},
               argument = decodeType
                   (ApplicationType[argument] appType)}},
-      `either`=λet.decodeEitherType et,
-      `forall`=λft.decodeForallType ft,
-      `list`=λelemType.decodeListType elemType,
-      literal=λlt.decodeLiteralType lt,
-      `map`=λmt.decodeMapType mt,
-      `optional`=λelemType.decodeMaybeType elemType,
-      pair=λpt.decodePairType pt,
-      `record`=λrt.decodeRecordType rt,
-      `set`=λelemType.decodeSetType elemType,
-      `union`=λrt.decodeUnionType rt,
-      `unit`=λ`_`.decodeUnitType,
-      `void`=λ`_`.decodeUnitType,
-      `wrap`=λwt.decodeWrappedType wt,
-      variable=λtypeName.Term{variable = decodeBindingName typeName},
-      `_`=Term{
+      `either` = λet.decodeEitherType et,
+      `forall` = λft.decodeForallType ft,
+      `list` = λelemType.decodeListType elemType,
+      literal = λlt.decodeLiteralType lt,
+      `map` = λmt.decodeMapType mt,
+      `optional` = λelemType.decodeMaybeType elemType,
+      pair = λpt.decodePairType pt,
+      `record` = λrt.decodeRecordType rt,
+      `set` = λelemType.decodeSetType elemType,
+      `union` = λrt.decodeUnionType rt,
+      `unit` = λ`_`.decodeUnitType,
+      `void` = λ`_`.decodeUnitType,
+      `wrap` = λwt.decodeWrappedType wt,
+      variable = λtypeName.Term{variable = decodeBindingName typeName},
+      `_` = Term{
         lambda = Lambda{
           parameter = Name{"cx"},
           domain = given(Type{variable = Name{"hydra.core.graph.Graph"}}),
@@ -2927,9 +2929,9 @@ term decodeType =
 
 ## Generate a decoder term for a Type, with element name for nominal types. rtype is the FULLY-APPLIED result type for nominal bodies (e.g. DataRow<v> for forall v. wrap...), so the body's intermediate type annotations carry the type parameters rather than a bare nominal name — otherwise Java/Scala coders emit raw types that fail to compile against the parameterized signature. (#476)
 term decodeTypeNamed =
-  λename,typ,rtype.cases(Type){
-      annotated=λat.decodeTypeNamed ename (AnnotatedType[body] at) rtype,
-      application=λappType.Term{
+  λename, typ, rtype.cases(Type){
+      annotated = λat.decodeTypeNamed ename (AnnotatedType[body] at) rtype,
+      application = λappType.Term{
             application = Application{
               function = Term{
                 typeApplication = TypeApplicationTerm{
@@ -2939,8 +2941,8 @@ term decodeTypeNamed =
                       (ApplicationType[argument] appType)}},
               argument = decodeType
                   (ApplicationType[argument] appType)}},
-      `either`=λet.decodeEitherType et,
-      `forall`=λft.Term{
+      `either` = λet.decodeEitherType et,
+      `forall` = λft.Term{
             lambda = Lambda{
               parameter = decodeBindingName
                   (ForallType[parameter] ft),
@@ -2962,22 +2964,23 @@ term decodeTypeNamed =
                   ename
                   (ForallType[body] ft)
                   rtype}},
-      `list`=λelemType.decodeListType elemType,
-      literal=λlt.decodeLiteralType lt,
-      `map`=λmt.decodeMapType mt,
-      `optional`=λelemType.decodeMaybeType elemType,
-      pair=λpt.decodePairType pt,
-      `record`=λrt.decodeRecordTypeNamed ename rt rtype,
-      `set`=λelemType.decodeSetType elemType,
-      `union`=λrt.decodeUnionTypeNamed ename rt rtype,
-      `unit`=λ`_`.decodeUnitType,
-      `void`=λ`_`.decodeUnitType,
-      `wrap`=λwt.decodeWrappedTypeNamed ename wt rtype,
-      variable=λtypeName.Term{variable = decodeBindingName typeName},
-      `_`=Term{
+      `list` = λelemType.decodeListType elemType,
+      literal = λlt.decodeLiteralType lt,
+      `map` = λmt.decodeMapType mt,
+      `optional` = λelemType.decodeMaybeType elemType,
+      pair = λpt.decodePairType pt,
+      `record` = λrt.decodeRecordTypeNamed ename rt rtype,
+      `set` = λelemType.decodeSetType elemType,
+      `union` = λrt.decodeUnionTypeNamed ename rt rtype,
+      `unit` = λ`_`.decodeUnitType,
+      `void` = λ`_`.decodeUnitType,
+      `wrap` = λwt.decodeWrappedTypeNamed ename wt rtype,
+      variable = λtypeName.Term{variable = decodeBindingName typeName},
+      `_` = Term{
         lambda = Lambda{
           parameter = Name{"cx"},
-          domain = given(Type{variable = Name{"hydra.core.graph.Graph"}}),
+          domain = given(Type{
+              variable = Name{"hydra.core.graph.Graph"}}),
           body = Term{
             lambda = Lambda{
               parameter = Name{"t"},
@@ -3005,7 +3008,7 @@ term decodeUnionType = λrt.decodeUnionTypeNamed Name{"unknown"} rt Type{variabl
 
 ## Generate a decoder for a union type with the given element name. rtype is the fully-applied result type (e.g. Foo<v>) used for body annotations. (#476)
 term decodeUnionTypeNamed =
-  λename,rt,rtype.
+  λename, rt, rtype.
     let unionType := rtype in
     let decErrType := Type{variable = Name{"hydra.core.errors.DecodingError"}} in
     let nameType := Type{variable = Name{"hydra.core.model.Name"}} in
@@ -3313,7 +3316,7 @@ term decodeWrappedType = λwt.decodeWrappedTypeNamed Name{"unknown"} wt Type{var
 
 ## Generate a decoder for a wrapped type with the given element name. rtype is the fully-applied result type (e.g. DataRow<v>) used for body annotations. (#476)
 term decodeWrappedTypeNamed =
-  λename,wt,rtype.
+  λename, wt, rtype.
     let bodyDecoder := decodeType wt in
     let bodyType := decoderFullResultType wt in
     Term{
@@ -3450,91 +3453,92 @@ term decodeWrappedTypeNamed =
 ## Get full result type for decoder
 term decoderFullResultType =
   λtyp.cases(Type){
-      annotated=λat.decoderFullResultType (AnnotatedType[body] at),
-      application=λappType.Type{
+      annotated = λat.decoderFullResultType (AnnotatedType[body] at),
+      application = λappType.Type{
             application = ApplicationType{
               function = decoderFullResultType
                   (ApplicationType[function] appType),
               argument = ApplicationType[argument] appType}},
-      `effect`=λelemType.Type{`effect` = decoderFullResultType elemType},
-      `either`=λet.Type{
+      `effect` = λelemType.Type{`effect` = decoderFullResultType elemType},
+      `either` = λet.Type{
             `either` = EitherType{
               `left` = decoderFullResultType (EitherType[`left`] et),
               `right` = decoderFullResultType (EitherType[`right`] et)}},
-      `forall`=λft.applyForallParamsInOrder
+      `forall` = λft.applyForallParamsInOrder
             (decoderFullResultType (stripForalls (ForallType[body] ft)))
             (collectForallVariables typ),
-      `list`=λelemType.Type{`list` = decoderFullResultType elemType},
-      literal=λlt.Type{literal = lt},
-      `map`=λmt.Type{
+      `list` = λelemType.Type{`list` = decoderFullResultType elemType},
+      literal = λlt.Type{literal = lt},
+      `map` = λmt.Type{
             `map` = MapType{
               keys = decoderFullResultType (MapType[keys] mt),
               values = decoderFullResultType (MapType[values] mt)}},
-      `optional`=λelemType.Type{`optional` = decoderFullResultType elemType},
-      pair=λpt.Type{
+      `optional` = λelemType.Type{`optional` = decoderFullResultType elemType},
+      pair = λpt.Type{
             pair = PairType{
               first = decoderFullResultType (PairType[first] pt),
               second = decoderFullResultType (PairType[second] pt)}},
-      `record`=λ`_`.Type{variable = Name{"hydra.core.model.Term"}},
-      `set`=λelemType.Type{`set` = decoderFullResultType elemType},
-      `union`=λ`_`.Type{variable = Name{"hydra.core.model.Term"}},
-      `unit`=λ`_`.Type{`unit`},
-      variable=λname.Type{variable = name},
-      `void`=λ`_`.Type{`void`},
-      `wrap`=λwt.decoderFullResultType wt,
-      `_`=Type{variable = Name{"hydra.core.model.Term"}}}
+      `record` = λ`_`.Type{variable = Name{"hydra.core.model.Term"}},
+      `set` = λelemType.Type{`set` = decoderFullResultType elemType},
+      `union` = λ`_`.Type{variable = Name{"hydra.core.model.Term"}},
+      `unit` = λ`_`.Type{`unit`},
+      variable = λname.Type{variable = name},
+      `void` = λ`_`.Type{`void`},
+      `wrap` = λwt.decoderFullResultType wt,
+      `_` = Type{variable = Name{"hydra.core.model.Term"}}}
       typ
 
 ## Get full result type for decoder with element name
 term decoderFullResultTypeNamed =
-  λename,typ.cases(Type){
-      annotated=λat.decoderFullResultTypeNamed ename (AnnotatedType[body] at),
-      `forall`=λft.applyForallParamsInOrder
+  λename, typ.cases(Type){
+      annotated = λat.decoderFullResultTypeNamed ename (AnnotatedType[body] at),
+      `forall` = λft.applyForallParamsInOrder
             (decoderFullResultTypeNamed ename (stripForalls (ForallType[body] ft)))
             (collectForallVariables typ),
-      `record`=λ`_`.Type{variable = ename},
-      `union`=λ`_`.Type{variable = ename},
-      `wrap`=λ`_`.Type{variable = ename},
-      application=λappType.Type{
+      `record` = λ`_`.Type{variable = ename},
+      `union` = λ`_`.Type{variable = ename},
+      `wrap` = λ`_`.Type{variable = ename},
+      application = λappType.Type{
             application = ApplicationType{
               function = decoderFullResultType
                   (ApplicationType[function] appType),
               argument = ApplicationType[argument] appType}},
-      `effect`=λelemType.Type{`effect` = decoderFullResultType elemType},
-      `either`=λet.Type{
+      `effect` = λelemType.Type{`effect` = decoderFullResultType elemType},
+      `either` = λet.Type{
             `either` = EitherType{
-              `left` = decoderFullResultType (EitherType[`left`] et),
+              `left` = decoderFullResultType
+                  (EitherType[`left`] et),
               `right` = decoderFullResultType
                   (EitherType[`right`] et)}},
-      `list`=λelemType.Type{`list` = decoderFullResultType elemType},
-      literal=λlt.Type{literal = lt},
-      `map`=λmt.Type{
+      `list` = λelemType.Type{`list` = decoderFullResultType elemType},
+      literal = λlt.Type{literal = lt},
+      `map` = λmt.Type{
             `map` = MapType{
               keys = decoderFullResultType (MapType[keys] mt),
               values = decoderFullResultType (MapType[values] mt)}},
-      `optional`=λelemType.Type{`optional` = decoderFullResultType elemType},
-      pair=λpt.Type{
+      `optional` = λelemType.Type{`optional` = decoderFullResultType elemType},
+      pair = λpt.Type{
             pair = PairType{
               first = decoderFullResultType (PairType[first] pt),
               second = decoderFullResultType (PairType[second] pt)}},
-      `set`=λelemType.Type{`set` = decoderFullResultType elemType},
-      `unit`=λ`_`.Type{`unit`},
-      variable=λname.Type{variable = name},
-      `void`=λ`_`.Type{`void`},
-      `_`=Type{variable = Name{"hydra.core.model.Term"}}}
+      `set` = λelemType.Type{`set` = decoderFullResultType elemType},
+      `unit` = λ`_`.Type{`unit`},
+      variable = λname.Type{variable = name},
+      `void` = λ`_`.Type{`void`},
+      `_` = Type{variable = Name{"hydra.core.model.Term"}}}
       typ
 
 ## Compute the result type name for a decoder
 term decoderResultType =
   λtyp.cases(Type){
-      annotated=λat.decoderResultType (AnnotatedType[body] at),
-      application=λappType.decoderResultType (ApplicationType[function] appType),
-      `forall`=λft.decoderResultType (ForallType[body] ft),
-      literal=λ`_`.Name{"hydra.core.model.Literal"},
-      `record`=λ`_`.Name{"hydra.core.model.Term"},
-      `union`=λ`_`.Name{"hydra.core.model.Term"},
-      `wrap`=λ`_`.Name{"hydra.core.model.Term"},
-      `_`=Name{"hydra.core.model.Term"}}
+      annotated = λat.decoderResultType (AnnotatedType[body] at),
+      application = λappType.decoderResultType (ApplicationType[function] appType),
+      `forall` = λft.decoderResultType (ForallType[body] ft),
+      literal = λ`_`.Name{"hydra.core.model.Literal"},
+      `record` = λ`_`.Name{"hydra.core.model.Term"},
+      `union` = λ`_`.Name{"hydra.core.model.Term"},
+      `wrap` = λ`_`.Name{"hydra.core.model.Term"},
+      `_` = Name{"hydra.core.model.Term"}}
       typ
 
 ## Build decoder function type
@@ -3557,7 +3561,7 @@ term decoderType =
 
 ## Build decoder function type with element name
 term decoderTypeNamed =
-  λename,typ.
+  λename, typ.
     let resultType := decoderFullResultTypeNamed ename typ in
     let baseType := Type{
       function = FunctionType{
@@ -3587,7 +3591,7 @@ term decoderTypeScheme =
 
 ## Build type scheme for a decoder function with element name
 term decoderTypeSchemeNamed =
-  λename,typ.
+  λename, typ.
     let typeVars := collectTypeVariables typ in
     let allOrdVars := collectOrdConstrainedVariables typ in
     let ordVars := lists.filter (λv.lists.member v typeVars) allOrdVars in
@@ -3599,21 +3603,21 @@ term decoderTypeSchemeNamed =
 
 ## Filter bindings to only decodable type definitions
 term filterTypeBindings =
-  λcx,graph,bindings.eithers.map
+  λcx, graph, bindings.eithers.map
       optionals.givens
       (eithers.mapList (isDecodableBinding cx graph) (lists.filter isNativeType bindings))
 
 ## Check if a binding is decodable (serializable type)
 term isDecodableBinding =
-  λcx,graph,b.eithers.bind
+  λcx, graph, b.eithers.bind
       (isSerializableByName cx graph (Binding[name] b))
       (λserializable.right(ifElse serializable given(b) none))
 
 ## Prepend decoder types for forall parameters to base type
 term prependForallDecoders =
-  λbaseType,typ.cases(Type){
-      annotated=λat.prependForallDecoders baseType (AnnotatedType[body] at),
-      `forall`=λft.Type{
+  λbaseType, typ.cases(Type){
+      annotated = λat.prependForallDecoders baseType (AnnotatedType[body] at),
+      `forall` = λft.Type{
             function = FunctionType{
               domain = Type{
                 function = FunctionType{
@@ -3632,13 +3636,13 @@ term prependForallDecoders =
               codomain = prependForallDecoders
                   baseType
                   (ForallType[body] ft)}},
-      `_`=baseType}
+      `_` = baseType}
       typ
 
 ## Remove all leading forall quantifiers, returning the quantified body
 term stripForalls =
   λtyp.cases(Type){
-      annotated=λat.stripForalls (AnnotatedType[body] at),
-      `forall`=λft.stripForalls (ForallType[body] ft),
-      `_`=typ}
+      annotated = λat.stripForalls (AnnotatedType[body] at),
+      `forall` = λft.stripForalls (ForallType[body] ft),
+      `_` = typ}
       typ

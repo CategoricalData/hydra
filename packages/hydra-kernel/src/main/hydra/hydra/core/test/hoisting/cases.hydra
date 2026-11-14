@@ -135,8 +135,8 @@ term allTests =
                 actual = λ`_`.`term`
                       (hoistSubterms
                         (λpt.cases(Term){
-                            `list`=λ`_`.true,
-                            `_`=false}
+                            `list` = λ`_`.true,
+                            `_` = false}
                             (second pt))
                         emptyGraph
                         Term{
@@ -190,8 +190,8 @@ term allTests =
                 actual = λ`_`.`term`
                       (hoistSubterms
                         (λpt.cases(Term){
-                            `list`=λ`_`.true,
-                            `_`=false}
+                            `list` = λ`_`.true,
+                            `_` = false}
                             (second pt))
                         emptyGraph
                         Term{
@@ -260,8 +260,8 @@ term allTests =
                 actual = λ`_`.`term`
                       (hoistSubterms
                         (λpt.cases(Term){
-                            `list`=λ`_`.true,
-                            `_`=false}
+                            `list` = λ`_`.true,
+                            `_` = false}
                             (second pt))
                         emptyGraph
                         Term{
@@ -313,8 +313,8 @@ term allTests =
                 actual = λ`_`.`term`
                       (hoistSubterms
                         (λpt.cases(Term){
-                            `list`=λ`_`.true,
-                            `_`=false}
+                            `list` = λ`_`.true,
+                            `_` = false}
                             (second pt))
                         emptyGraph
                         Term{
@@ -374,8 +374,8 @@ term allTests =
                 actual = λ`_`.`term`
                       (hoistSubterms
                         (λpt.cases(Term){
-                            application=λ`_`.true,
-                            `_`=false}
+                            application = λ`_`.true,
+                            `_` = false}
                             (second pt))
                         emptyGraph
                         Term{
@@ -419,8 +419,8 @@ term allTests =
                 actual = λ`_`.`term`
                       (hoistSubterms
                         (λpt.cases(Term){
-                            application=λ`_`.true,
-                            `_`=false}
+                            application = λ`_`.true,
+                            `_` = false}
                             (second pt))
                         emptyGraph
                         Term{
@@ -472,8 +472,8 @@ term allTests =
                 actual = λ`_`.`term`
                       (hoistSubterms
                         (λpt.cases(Term){
-                            application=λ`_`.true,
-                            `_`=false}
+                            application = λ`_`.true,
+                            `_` = false}
                             (second pt))
                         emptyGraph
                         Term{
@@ -529,8 +529,8 @@ term allTests =
                 actual = λ`_`.`term`
                       (hoistSubterms
                         (λpt.cases(Term){
-                            `cases`=λ`_`.true,
-                            `_`=false}
+                            `cases` = λ`_`.true,
+                            `_` = false}
                             (second pt))
                         emptyGraph
                         Term{
@@ -601,8 +601,8 @@ term allTests =
                 actual = λ`_`.`term`
                       (hoistSubterms
                         (λpt.cases(Term){
-                            `cases`=λ`_`.true,
-                            `_`=false}
+                            `cases` = λ`_`.true,
+                            `_` = false}
                             (second pt))
                         emptyGraph
                         Term{
@@ -654,8 +654,8 @@ term allTests =
                 actual = λ`_`.`term`
                       (hoistSubterms
                         (λpt.cases(Term){
-                            `list`=λ`_`.true,
-                            `_`=false}
+                            `list` = λ`_`.true,
+                            `_` = false}
                             (second pt))
                         emptyGraph
                         Term{
@@ -716,8 +716,8 @@ term allTests =
                 actual = λ`_`.`term`
                       (hoistSubterms
                         (λpt.cases(Term){
-                            `list`=λ`_`.true,
-                            `_`=false}
+                            `list` = λ`_`.true,
+                            `_` = false}
                             (second pt))
                         emptyGraph
                         Term{
@@ -749,8 +749,8 @@ term allTests =
                 actual = λ`_`.`term`
                       (hoistSubterms
                         (λpt.cases(Term){
-                            application=λ`_`.true,
-                            `_`=false}
+                            application = λ`_`.true,
+                            `_` = false}
                             (second pt))
                         emptyGraph
                         Term{
@@ -784,8 +784,8 @@ term allTests =
                 actual = λ`_`.`term`
                       (hoistSubterms
                         (λpt.cases(Term){
-                            `list`=λ`_`.true,
-                            `_`=false}
+                            `list` = λ`_`.true,
+                            `_` = false}
                             (second pt))
                         emptyGraph
                         Term{
@@ -833,8 +833,8 @@ term allTests =
                 actual = λ`_`.`term`
                       (hoistSubterms
                         (λpt.cases(Term){
-                            `list`=λ`_`.true,
-                            `_`=false}
+                            `list` = λ`_`.true,
+                            `_` = false}
                             (second pt))
                         emptyGraph
                         Term{
@@ -889,8 +889,8 @@ term allTests =
                 actual = λ`_`.`term`
                       (hoistSubterms
                         (λpt.cases(Term){
-                            `list`=λ`_`.true,
-                            `_`=false}
+                            `list` = λ`_`.true,
+                            `_` = false}
                             (second pt))
                         emptyGraph
                         Term{
@@ -946,8 +946,8 @@ term allTests =
                 actual = λ`_`.`term`
                       (hoistSubterms
                         (λpt.cases(Term){
-                            `list`=λ`_`.true,
-                            `_`=false}
+                            `list` = λ`_`.true,
+                            `_` = false}
                             (second pt))
                         emptyGraph
                         Term{
@@ -1010,8 +1010,8 @@ term allTests =
                 actual = λ`_`.`term`
                       (hoistSubterms
                         (λpt.cases(Term){
-                            `list`=λ`_`.true,
-                            `_`=false}
+                            `list` = λ`_`.true,
+                            `_` = false}
                             (second pt))
                         emptyGraph
                         Term{
@@ -1082,8 +1082,8 @@ term allTests =
                 actual = λ`_`.`term`
                       (hoistSubterms
                         (λpt.cases(Term){
-                            `list`=λ`_`.true,
-                            `_`=false}
+                            `list` = λ`_`.true,
+                            `_` = false}
                             (second pt))
                         emptyGraph
                         Term{
@@ -1155,8 +1155,8 @@ term allTests =
                 actual = λ`_`.`term`
                       (hoistSubterms
                         (λpt.cases(Term){
-                            `list`=λ`_`.true,
-                            `_`=false}
+                            `list` = λ`_`.true,
+                            `_` = false}
                             (second pt))
                         emptyGraph
                         Term{
@@ -1226,8 +1226,8 @@ term allTests =
                 actual = λ`_`.`term`
                       (hoistSubterms
                         (λpt.cases(Term){
-                            `list`=λ`_`.true,
-                            `_`=false}
+                            `list` = λ`_`.true,
+                            `_` = false}
                             (second pt))
                         emptyGraph
                         Term{

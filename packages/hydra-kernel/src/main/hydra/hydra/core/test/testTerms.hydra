@@ -6,7 +6,7 @@ import hydra.core.model
 import hydra.core.test.testTypes
 
 term latlonRecord =
-  λlat,lon.Term{
+  λlat, lon.Term{
       `record` = Record{
         typeName = testTypeLatLonName,
         fields = [

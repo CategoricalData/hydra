@@ -50,7 +50,7 @@ term atomicTerm =
                 (lexeme (parsers.char 46:int32))
                 (λ`_`.parsers.map
                     (λbody.lists.foldl
-                        (λt,v.Term{typeLambda = TypeLambda{parameter = v, body = t}})
+                        (λt, v.Term{typeLambda = TypeLambda{parameter = v, body = t}})
                         body
                         (lists.reverse vs))
                     (parsers.lazy (λ`_`.`term`))))),
@@ -320,7 +320,7 @@ term doTerm =
                     (termKeyword "}")
                     (λ`_`.parsers.pure
                         (let bindRef := Term{variable = wrap(Name){bindName}} in
-                        let step := λclause,acc.match
+                        let step := λclause, acc.match
                               acc
                               given(second clause)
                               (λk.given(Term{
@@ -530,7 +530,7 @@ term lambdaTerm =
             (lexeme (parsers.char 46:int32))
             (λ`_`.parsers.map
                 (λbody.lists.foldl
-                    (λt,b.Term{lambda = Lambda{parameter = first b, domain = second b, body = t}})
+                    (λt, b.Term{lambda = Lambda{parameter = first b, domain = second b, body = t}})
                     body
                     (lists.reverse binders))
                 (parsers.lazy (λ`_`.`term`)))))
@@ -641,51 +641,91 @@ term optionalTerm =
 ## Parse a complete term from a string, requiring the parse to consume all input
 term parseTerm =
   λinput.cases(ParseResult){
-      success=λs.ifElse
-            (lists.isEmpty (ParseInput[codepoints] (ParseSuccess[remainder] s)))
+      success = λs.
+          let remainder := ParseSuccess[remainder] s
+          in ifElse
+            (lists.isEmpty (ParseInput[codepoints] remainder))
             right(stripSpans (ParseSuccess[value] s))
-            left("trailing input after term"),
-      failure=λe.left(ParseError[message] e)}
+            left(formatParseFailure
+              input
+              (ParseInput[offset] remainder)
+              "trailing input after term"),
+      failure = λe.left(formatParseFailure
+            input
+            (ParseInput[offset] (ParseError[remainder] e))
+            (ParseError[message] e))}
       (parsers.runParser (parsers.bind whitespace (λ`_`.`term`)) input)
 
 ## Parse a complete term signature from a string, requiring the parse to consume all input
 term parseTermSignature =
   λinput.cases(ParseResult){
-      success=λs.ifElse
-            (lists.isEmpty (ParseInput[codepoints] (ParseSuccess[remainder] s)))
+      success = λs.
+          let remainder := ParseSuccess[remainder] s
+          in ifElse
+            (lists.isEmpty (ParseInput[codepoints] remainder))
             right(ParseSuccess[value] s)
-            left("trailing input after term signature"),
-      failure=λe.left(ParseError[message] e)}
+            left(formatParseFailure
+              input
+              (ParseInput[offset] remainder)
+              "trailing input after term signature"),
+      failure = λe.left(formatParseFailure
+            input
+            (ParseInput[offset] (ParseError[remainder] e))
+            (ParseError[message] e))}
       (parsers.runParser (parsers.bind whitespace (λ`_`.termSignature)) input)
 
 ## Parse a complete term from a string, keeping source spans as reserved annotations. Use hydra.core.positions.spanAtPath to resolve a SubtermPath to a span, and hydra.core.positions.stripSpans to recover the span-free term.
 term parseTermWithSpans =
   λinput.cases(ParseResult){
-      success=λs.ifElse
-            (lists.isEmpty (ParseInput[codepoints] (ParseSuccess[remainder] s)))
+      success = λs.
+          let remainder := ParseSuccess[remainder] s
+          in ifElse
+            (lists.isEmpty (ParseInput[codepoints] remainder))
             right(ParseSuccess[value] s)
-            left("trailing input after term"),
-      failure=λe.left(ParseError[message] e)}
+            left(formatParseFailure
+              input
+              (ParseInput[offset] remainder)
+              "trailing input after term"),
+      failure = λe.left(formatParseFailure
+            input
+            (ParseInput[offset] (ParseError[remainder] e))
+            (ParseError[message] e))}
       (parsers.runParser (parsers.bind whitespace (λ`_`.`term`)) input)
 
 ## Parse a complete type from a string, requiring the parse to consume all input
 term parseType =
   λinput.cases(ParseResult){
-      success=λs.ifElse
-            (lists.isEmpty (ParseInput[codepoints] (ParseSuccess[remainder] s)))
+      success = λs.
+          let remainder := ParseSuccess[remainder] s
+          in ifElse
+            (lists.isEmpty (ParseInput[codepoints] remainder))
             right(stripSpansInType (ParseSuccess[value] s))
-            left("trailing input after type"),
-      failure=λe.left(ParseError[message] e)}
+            left(formatParseFailure
+              input
+              (ParseInput[offset] remainder)
+              "trailing input after type"),
+      failure = λe.left(formatParseFailure
+            input
+            (ParseInput[offset] (ParseError[remainder] e))
+            (ParseError[message] e))}
       (parsers.runParser (parsers.bind whitespace (λ`_`.`type`)) input)
 
 ## Parse a complete type scheme from a string, requiring the parse to consume all input
 term parseTypeScheme =
   λinput.cases(ParseResult){
-      success=λs.ifElse
-            (lists.isEmpty (ParseInput[codepoints] (ParseSuccess[remainder] s)))
+      success = λs.
+          let remainder := ParseSuccess[remainder] s
+          in ifElse
+            (lists.isEmpty (ParseInput[codepoints] remainder))
             right(ParseSuccess[value] s)
-            left("trailing input after type scheme"),
-      failure=λe.left(ParseError[message] e)}
+            left(formatParseFailure
+              input
+              (ParseInput[offset] remainder)
+              "trailing input after type scheme"),
+      failure = λe.left(formatParseFailure
+            input
+            (ParseInput[offset] (ParseError[remainder] e))
+            (ParseError[message] e))}
       (parsers.runParser (parsers.bind whitespace (λ`_`.typeScheme)) input)
 
 ## Parse an atomic term followed by zero or more postfix '@annotation'/'⟨type⟩' suffixes, left-chaining
@@ -697,7 +737,7 @@ term postfixTerm =
         atomicTerm
         (λt0.parsers.map
             (λsufs.lists.foldl
-                (λt,suf.eithers.either
+                (λt, suf.eithers.either
                     (λann.Term{annotated = AnnotatedTerm{body = t, annotation = ann}})
                     (λtyp.Term{typeApplication = TypeApplicationTerm{body = t, `type` = typ}})
                     suf)
@@ -713,7 +753,7 @@ term postfixType =
   parsers.bind
     typeAtom
     (λt0.parsers.map
-        (λanns.lists.foldl (λt,ann.Type{annotated = AnnotatedType{body = t, annotation = ann}}) t0 anns)
+        (λanns.lists.foldl (λt, ann.Type{annotated = AnnotatedType{body = t, annotation = ann}}) t0 anns)
         (parsers.many annot))
 
 ## Parse a project term: 'project' '(' name ')' '{' name '}'
@@ -784,15 +824,15 @@ term stringLit =
 ## Remove every span annotation from a type's own annotation payloads
 term stripSpansInType =
   λtyp.
-    let remove := λrecurse,typ.
+    let remove := λrecurse, typ.
         let rewritten := recurse typ
         in cases(Type){
-          annotated=λat.Type{
+          annotated = λat.Type{
                 annotated = AnnotatedType{
                   body = AnnotatedType[body] at,
                   annotation = stripSpans
                       (AnnotatedType[annotation] at)}},
-          `_`=rewritten}
+          `_` = rewritten}
           rewritten
     in rewriteType remove typ
 
@@ -812,7 +852,7 @@ term term =
     postfixTerm
     (λt0.parsers.map
         (λrest.lists.foldl
-            (λf,a.annotateApplicationSpan f a Term{application = Application{function = f, argument = a}})
+            (λf, a.annotateApplicationSpan f a Term{application = Application{function = f, argument = a}})
             t0
             rest)
         (parsers.many postfixTerm))
@@ -866,7 +906,7 @@ term termSignature =
                             (λcs.parsers.bind
                                 (termKeyword ")")
                                 (λ`_`.parsers.bind (lexeme (parsers.char 8658:int32)) (λ`_`.parsers.pure cs)))))))
-                  (λmcs.(λvars,mcs.
+                  (λmcs.(λvars, mcs.
                       let typeParams := lists.map
                           (λv.TypeParameter{
                               name = v,
@@ -886,7 +926,7 @@ term termSignature =
                           let params := lists.reverse
                               (first
                                 (lists.foldl
-                                  (λacc,item.
+                                  (λacc, item.
                                     let pairAcc := first acc in
                                     let i := second acc in
                                     (
@@ -908,7 +948,7 @@ term termSignature =
                         termSignatureArrowChain)
                       vars
                       mcs)))))
-    ((λvars,mcs.
+    ((λvars, mcs.
       let typeParams := lists.map
           (λv.TypeParameter{
               name = v,
@@ -928,7 +968,7 @@ term termSignature =
           let params := lists.reverse
               (first
                 (lists.foldl
-                  (λacc,item.
+                  (λacc, item.
                     let pairAcc := first acc in
                     let i := second acc in
                     (
@@ -958,7 +998,7 @@ term termSignatureArrowChain =
           (parsers.bind
             postfixType
             (λt0.parsers.map
-                (λrest.lists.foldl (λf,a.Type{application = ApplicationType{function = f, argument = a}}) t0 rest)
+                (λrest.lists.foldl (λf, a.Type{application = ApplicationType{function = f, argument = a}}) t0 rest)
                 (parsers.many postfixType)))))
     (λdom.parsers.alt
         (parsers.bind
@@ -1018,7 +1058,7 @@ term typeAtom =
                 (typeKeyword ".")
                 (λ`_`.parsers.map
                     (λbody.lists.foldl
-                        (λt,v.Type{`forall` = ForallType{parameter = v, body = t}})
+                        (λt, v.Type{`forall` = ForallType{parameter = v, body = t}})
                         body
                         (lists.reverse vs))
                     (parsers.lazy (λ`_`.`type`))))),
@@ -1089,7 +1129,7 @@ term typeAtom =
                               (λ`_`.parsers.map
                                   (λt.FieldType{
                                       name = fname,
-                                      `type` = (λmdesc,t.match
+                                      `type` = (λmdesc, t.match
                                             mdesc
                                             t
                                             (λd.Type{
@@ -1162,7 +1202,7 @@ term typeAtom =
                               (λ`_`.parsers.map
                                   (λt.FieldType{
                                       name = fname,
-                                      `type` = (λmdesc,t.match
+                                      `type` = (λmdesc, t.match
                                             mdesc
                                             t
                                             (λd.Type{
@@ -1218,13 +1258,13 @@ term typeFunction =
     (parsers.bind
       postfixType
       (λt0.parsers.map
-          (λrest.lists.foldl (λf,a.Type{application = ApplicationType{function = f, argument = a}}) t0 rest)
+          (λrest.lists.foldl (λf, a.Type{application = ApplicationType{function = f, argument = a}}) t0 rest)
           (parsers.many postfixType)))
     (λdom.parsers.alt
         (parsers.bind
           (lexeme (parsers.char 8594:int32))
           (λ`_`.parsers.map
-              (λcod.(λd,c.Type{function = FunctionType{domain = d, codomain = c}}) dom cod)
+              (λcod.(λd, c.Type{function = FunctionType{domain = d, codomain = c}}) dom cod)
               (parsers.lazy (λ`_`.typeFunction))))
         (parsers.pure dom))
 

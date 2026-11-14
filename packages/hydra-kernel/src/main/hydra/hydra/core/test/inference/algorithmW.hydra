@@ -317,7 +317,7 @@ term testGroupForSystemF =
                     body = Type{
                       variable = Name{"t0"}},
                     constraints = {
-                      Name{"t0"}=TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
+                      Name{"t0"} = TypeVariableConstraints{classes = {TypeClassConstraint{simple = Name{"numeric"}}}}}}}},
         description = none,
         tags = [],
         provisions = []},

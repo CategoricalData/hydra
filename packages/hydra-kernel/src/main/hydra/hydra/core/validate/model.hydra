@@ -24,7 +24,7 @@ import hydra.core.variants
 
 ## Append a rule-tagged InvalidTermError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds.
 term appendFinding =
-  λp,acc,finding.optionals.match
+  λp, acc, finding.optionals.match
       finding
       acc
       (λrp.
@@ -48,7 +48,7 @@ term appendFinding =
 
 ## Append a rule-tagged InvalidTypeError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds.
 term appendFindingType =
-  λp,acc,finding.optionals.match
+  λp, acc, finding.optionals.match
       finding
       acc
       (λrp.
@@ -72,7 +72,7 @@ term appendFindingType =
 
 ## Check for duplicate binding names in a list of bindings
 term checkDuplicateBindings =
-  λpath,bindings.
+  λpath, bindings.
     let names := lists.map Binding[name] bindings in
     let dup := findDuplicate names in
     optionals.map
@@ -81,14 +81,14 @@ term checkDuplicateBindings =
 
 ## Check for duplicate field names in a list of field types
 term checkDuplicateFieldTypes =
-  λfields,mkError.
+  λfields, mkError.
     let names := lists.map FieldType[name] fields in
     let dup := findDuplicateFieldType names in
     optionals.match dup none (λname.mkError name)
 
 ## Check for duplicate field names in a list of fields
 term checkDuplicateFields =
-  λpath,names.
+  λpath, names.
     let dup := findDuplicate names
     in optionals.map
       (λname.InvalidTermError{duplicateField = DuplicateFieldError{location = path, name = name}})
@@ -96,7 +96,7 @@ term checkDuplicateFields =
 
 ## Check that a literal value's type matches an expected literal type
 term checkLiteral =
-  λexpected,value.
+  λexpected, value.
     let actual := literalType value
     in ifElse
       (equal expected actual)
@@ -108,9 +108,9 @@ term checkLiteral =
 
 ## Check if any name in a list shadows a variable already in scope
 term checkShadowing =
-  λpath,cx,names.
+  λpath, cx, names.
     let result := lists.foldl
-        (λacc,name.optionals.match
+        (λacc, name.optionals.match
             acc
             (ifElse
               (or
@@ -128,8 +128,8 @@ term checkShadowing =
 
 ## Check a single term node for validation errors. Rules disabled by the profile are not evaluated.
 term checkTerm =
-  λp,typed,path,cx,`term`.cases(Term){
-      annotated=λann.
+  λp, typed, path, cx, `term`.cases(Term){
+      annotated = λann.
           let body := AnnotatedTerm[body] ann in
           let annMap := getAnnotationMap (AnnotatedTerm[annotation] ann) in
           firstFinding
@@ -148,11 +148,13 @@ term checkTerm =
                 (optionals.map
                   (λf.(Name{"hydra.core.error.model.InvalidTermError.nestedTermAnnotation"}, f))
                   (cases(Term){
-                    annotated=λ`_`.given(InvalidTermError{nestedTermAnnotation = NestedTermAnnotationError{location = path}}),
-                    `_`=none}
+                    annotated = λ`_`.given(InvalidTermError{
+                          nestedTermAnnotation = NestedTermAnnotationError{
+                            location = path}}),
+                    `_` = none}
                     body))
                 none],
-      application=λapp.
+      application = λapp.
           let fun := Application[function] app in
           let arg := Application[argument] app in
           firstFinding
@@ -162,20 +164,20 @@ term checkTerm =
                 (optionals.map
                   (λf.(Name{"hydra.core.error.model.InvalidTermError.constantCondition"}, f))
                   (cases(Term){
-                    variable=λprimName.ifElse
+                    variable = λprimName.ifElse
                           (equal (Name[] primName) "hydra.core.lib.logic.ifElse")
                           (cases(Term){
-                            literal=λlit.cases(Literal){
-                                  `boolean`=λboolVal.given(InvalidTermError{
+                            literal = λlit.cases(Literal){
+                                  `boolean` = λboolVal.given(InvalidTermError{
                                         constantCondition = ConstantConditionError{
                                           location = path,
                                           value = boolVal}}),
-                                  `_`=none}
+                                  `_` = none}
                                   lit,
-                            `_`=none}
+                            `_` = none}
                             arg)
                           none,
-                    `_`=none}
+                    `_` = none}
                     fun))
                 none,
               ifElse
@@ -183,17 +185,17 @@ term checkTerm =
                 (optionals.map
                   (λf.(Name{"hydra.core.error.model.InvalidTermError.selfApplication"}, f))
                   (cases(Term){
-                    variable=λfunName.cases(Term){
-                          variable=λargName.ifElse
+                    variable = λfunName.cases(Term){
+                          variable = λargName.ifElse
                                 (equal funName argName)
                                 given(InvalidTermError{
                                   selfApplication = SelfApplicationError{
                                     location = path,
                                     name = funName}})
                                 none,
-                          `_`=none}
+                          `_` = none}
                           arg,
-                    `_`=none}
+                    `_` = none}
                     fun))
                 none,
               ifElse
@@ -201,19 +203,19 @@ term checkTerm =
                 (optionals.map
                   (λf.(Name{"hydra.core.error.model.InvalidTermError.unnecessaryIdentityApplication"}, f))
                   (cases(Term){
-                    lambda=λlam.
+                    lambda = λlam.
                         let param := Lambda[parameter] lam in
                         let body := Lambda[body] lam in
                         cases(Term){
-                          variable=λbodyVar.ifElse
+                          variable = λbodyVar.ifElse
                                 (equal param bodyVar)
                                 given(InvalidTermError{
                                   unnecessaryIdentityApplication = UnnecessaryIdentityApplicationError{
                                     location = path}})
                                 none,
-                          `_`=none}
+                          `_` = none}
                           body,
-                    `_`=none}
+                    `_` = none}
                     fun))
                 none,
               ifElse
@@ -221,8 +223,8 @@ term checkTerm =
                 (optionals.map
                   (λf.(Name{"hydra.core.error.model.InvalidTermError.redundantWrapUnwrap"}, f))
                   (cases(Term){
-                    `unwrap`=λunwrapName.cases(Term){
-                          `wrap`=λwt.
+                    `unwrap` = λunwrapName.cases(Term){
+                          `wrap` = λwt.
                               let wrapName := WrappedTerm[typeName] wt
                               in ifElse
                                 (equal unwrapName wrapName)
@@ -231,12 +233,12 @@ term checkTerm =
                                     location = path,
                                     typeName = unwrapName}})
                                 none,
-                          `_`=none}
+                          `_` = none}
                           arg,
-                    `_`=none}
+                    `_` = none}
                     fun))
                 none],
-      `record`=λrec.
+      `record` = λrec.
           let tname := Record[typeName] rec in
           let flds := Record[fields] rec in
           let suppliedNames := sets.fromList (lists.map Field[name] flds) in
@@ -275,8 +277,8 @@ term checkTerm =
                     resolved
                     none
                     (λtyp.cases(Type){
-                        `record`=λ`_`.none,
-                        `_`=given(InvalidTermError{
+                        `record` = λ`_`.none,
+                        `_` = given(InvalidTermError{
                             nominalTypeKindMismatch = NominalTypeKindMismatchError{
                               location = path,
                               typeName = tname,
@@ -323,7 +325,7 @@ term checkTerm =
                             typeName = tname,
                             fieldNames = sets.toList extra}}))))
                 none],
-      `let`=λlt.
+      `let` = λlt.
           let bindings := Let[bindings] lt in
           let names := lists.map Binding[name] bindings in
           firstFinding
@@ -378,7 +380,7 @@ term checkTerm =
                         bindings))
                     none))
                 none],
-      `inject`=λinj.
+      `inject` = λinj.
           let tname := Injection[typeName] inj in
           let variantName := Field[name] (Injection[field] inj) in
           let resolved := resolveNominalType cx tname in
@@ -410,8 +412,8 @@ term checkTerm =
                     resolved
                     none
                     (λtyp.cases(Type){
-                        `union`=λ`_`.none,
-                        `_`=given(InvalidTermError{
+                        `union` = λ`_`.none,
+                        `_` = given(InvalidTermError{
                             nominalTypeKindMismatch = NominalTypeKindMismatchError{
                               location = path,
                               typeName = tname,
@@ -438,7 +440,7 @@ term checkTerm =
                             typeName = tname,
                             variantName = variantName}}))))
                 none],
-      lambda=λlam.
+      lambda = λlam.
           let paramName := Lambda[parameter] lam
           in firstFinding
             [
@@ -482,7 +484,7 @@ term checkTerm =
                                 name = uvName}}))))
                     none))
                 none],
-      `project`=λproj.
+      `project` = λproj.
           let tname := Projection[typeName] proj in
           let fname := Projection[fieldName] proj in
           let resolved := resolveNominalType cx tname in
@@ -514,8 +516,8 @@ term checkTerm =
                     resolved
                     none
                     (λtyp.cases(Type){
-                        `record`=λ`_`.none,
-                        `_`=given(InvalidTermError{
+                        `record` = λ`_`.none,
+                        `_` = given(InvalidTermError{
                             nominalTypeKindMismatch = NominalTypeKindMismatchError{
                               location = path,
                               typeName = tname,
@@ -542,11 +544,12 @@ term checkTerm =
                             typeName = tname,
                             fieldName = fname}}))))
                 none],
-      `cases`=λcs.
+      `cases` = λcs.
           let tname := CaseStatement[typeName] cs in
           let csDefault := CaseStatement[default] cs in
           let csCases := CaseStatement[`cases`] cs in
-          let altNames := sets.fromList (lists.map CaseAlternative[name] csCases) in
+          let altNames := sets.fromList
+              (lists.map CaseAlternative[name] csCases) in
           let unionFields := resolveUnionFields cx tname in
           let resolved := resolveNominalType cx tname in
           firstFinding
@@ -577,8 +580,8 @@ term checkTerm =
                     resolved
                     none
                     (λtyp.cases(Type){
-                        `union`=λ`_`.none,
-                        `_`=given(InvalidTermError{
+                        `union` = λ`_`.none,
+                        `_` = given(InvalidTermError{
                             nominalTypeKindMismatch = NominalTypeKindMismatchError{
                               location = path,
                               typeName = tname,
@@ -643,7 +646,7 @@ term checkTerm =
                               typeName = tname,
                               name = firstUnknown}})))))
                 none],
-      typeApplication=λta.ifElse
+      typeApplication = λta.ifElse
             (enabled
               p
               Name{"hydra.core.error.model.InvalidTermError.undefinedTypeVariableInTypeApplication"})
@@ -661,7 +664,7 @@ term checkTerm =
                         name = uvName}})))
                 none))
             none,
-      typeLambda=λtl.
+      typeLambda = λtl.
           let tvName := TypeLambda[parameter] tl
           in firstFinding
             [
@@ -689,12 +692,16 @@ term checkTerm =
                         location = path,
                         name = tvName}})))
                 none],
-      variable=λvarName.
+      variable = λvarName.
           let looksQualified := optionals.isGiven (moduleNameOf varName) in
           let isBoundTerm := optionals.isGiven
-              (maps.lookup varName (Graph[boundTerms] cx)) in
+              (maps.lookup
+                varName
+                (Graph[boundTerms] cx)) in
           let isPrimitive := optionals.isGiven
-              (maps.lookup varName (Graph[primitives] cx)) in
+              (maps.lookup
+                varName
+                (Graph[primitives] cx)) in
           firstFinding
             [
               ifElse
@@ -728,7 +735,7 @@ term checkTerm =
                     given(InvalidTermError{untypedTermVariable = UntypedTermVariableError{location = path, name = varName}})
                     none))
                 none],
-      `wrap`=λwt.
+      `wrap` = λwt.
           let tname := WrappedTerm[typeName] wt in
           let resolved := resolveNominalType cx tname in
           firstFinding
@@ -759,8 +766,8 @@ term checkTerm =
                     resolved
                     none
                     (λtyp.cases(Type){
-                        `wrap`=λ`_`.none,
-                        `_`=given(InvalidTermError{
+                        `wrap` = λ`_`.none,
+                        `_` = given(InvalidTermError{
                             nominalTypeKindMismatch = NominalTypeKindMismatchError{
                               location = path,
                               typeName = tname,
@@ -769,7 +776,7 @@ term checkTerm =
                               actualVariant = typeVariant typ}})}
                         typ)))
                 none],
-      `unwrap`=λtname.
+      `unwrap` = λtname.
           let resolved := resolveNominalType cx tname
           in firstFinding
             [
@@ -790,8 +797,8 @@ term checkTerm =
                     resolved
                     none
                     (λtyp.cases(Type){
-                        `wrap`=λ`_`.none,
-                        `_`=given(InvalidTermError{
+                        `wrap` = λ`_`.none,
+                        `_` = given(InvalidTermError{
                             nominalTypeKindMismatch = NominalTypeKindMismatchError{
                               location = path,
                               typeName = tname,
@@ -800,12 +807,12 @@ term checkTerm =
                               actualVariant = typeVariant typ}})}
                         typ)))
                 none],
-      `_`=none}
+      `_` = none}
       `term`
 
 ## Check a type for type variables not bound in the current scope
 term checkUndefinedTypeVariablesInType =
-  λpath,cx,typ,mkError.
+  λpath, cx, typ, mkError.
     let freeVars := freeVariablesInType typ in
     let resolvedNames := sets.union
         (Graph[typeVariables] cx)
@@ -818,26 +825,29 @@ term checkUndefinedTypeVariablesInType =
 
 ## Check a type scheme for type variables not bound by the scheme or the current scope
 term checkUndefinedTypeVariablesInTypeScheme =
-  λpath,cx,ts,mkError.
+  λpath, cx, ts, mkError.
     let freeVars := freeVariablesInTypeScheme ts in
     let resolvedNames := sets.union
         (Graph[typeVariables] cx)
         (sets.fromList (maps.keys (Graph[schemaTypes] cx))) in
     let undefined := sets.difference freeVars resolvedNames in
-    optionals.match (lists.head (sets.toList undefined)) none (λfirstUndefined.mkError firstUndefined)
+    optionals.match
+      (lists.head (sets.toList undefined))
+      none
+      (λfirstUndefined.mkError firstUndefined)
 
 ## Return an error if the given type is TypeVoid
 term checkVoid =
   λtyp.cases(Type){
-      `void`=λ`_`.given(InvalidTypeError{
+      `void` = λ`_`.given(InvalidTypeError{
             voidInNonBottomPosition = VoidInNonBottomPositionError{
               location = SubtermPath{[]}}}),
-      `_`=none}
+      `_` = none}
       typ
 
 ## True iff the given rule name appears in the profile's errorRules or warningRules.
 term enabled =
-  λp,ruleName.or
+  λp, ruleName.or
       (sets.member ruleName (ValidationProfile[errorRules] p))
       (sets.member ruleName (ValidationProfile[warningRules] p))
 
@@ -845,7 +855,7 @@ term enabled =
 term findDuplicate =
   λnames.
     let result := lists.foldl
-        (λacc,name.
+        (λacc, name.
           let seen := first acc in
           let dup := second acc in
           optionals.match
@@ -860,7 +870,7 @@ term findDuplicate =
 term findDuplicateFieldType =
   λnames.
     let result := lists.foldl
-        (λacc,name.
+        (λacc, name.
           let seen := first acc in
           let dup := second acc in
           optionals.match
@@ -872,16 +882,16 @@ term findDuplicateFieldType =
     in second result
 
 ## Return the first error from a list of optional errors, or nothing if all are valid
-term firstError = λchecks.lists.foldl (λacc,check.optionals.match acc check (λ`_`.acc)) none checks
+term firstError = λchecks.lists.foldl (λacc, check.optionals.match acc check (λ`_`.acc)) none checks
 
 ## Return the first rule-tagged finding from a list, or nothing if all are valid
-term firstFinding = λchecks.lists.foldl (λacc,check.optionals.match acc check (λ`_`.acc)) none checks
+term firstFinding = λchecks.lists.foldl (λacc, check.optionals.match acc check (λ`_`.acc)) none checks
 
 ## Return the first rule-tagged type finding from a list, or nothing if all are valid
-term firstFindingType = λchecks.lists.foldl (λacc,check.optionals.match acc check (λ`_`.acc)) none checks
+term firstFindingType = λchecks.lists.foldl (λacc, check.optionals.match acc check (λ`_`.acc)) none checks
 
 ## Return the first type error from a list of optional errors, or nothing if all are valid
-term firstTypeError = λchecks.lists.foldl (λacc,check.optionals.match acc check (λ`_`.acc)) none checks
+term firstTypeError = λchecks.lists.foldl (λacc, check.optionals.match acc check (λ`_`.acc)) none checks
 
 ## Check whether a name is valid at an introduction site. Currently rejects empty strings.
 term isValidName = λname.not (equal (Name[] name) "")
@@ -942,7 +952,7 @@ term kernelDefaultCoreProfile =
 
 ## Resolve a type name to the annotation-stripped type it names in the current graph scope, or Nothing if it does not resolve.
 term resolveNominalType =
-  λcx,tname.
+  λcx, tname.
     let toType := λts.given(deannotateType (TypeScheme[body] ts))
     in optionals.match
       (maps.lookup tname (Graph[schemaTypes] cx))
@@ -951,17 +961,17 @@ term resolveNominalType =
 
 ## Resolve a type name to the field list of the record type it names, or Nothing if it does not resolve to a record type.
 term resolveRecordFields =
-  λcx,tname.optionals.match
+  λcx, tname.optionals.match
       (resolveNominalType cx tname)
       none
-      (λtyp.cases(Type){`record`=λfields.given(fields), `_`=none} typ)
+      (λtyp.cases(Type){`record` = λfields.given(fields), `_` = none} typ)
 
 ## Resolve a type name to the field list of the union type it names, or Nothing if it does not resolve to a union type.
 term resolveUnionFields =
-  λcx,tname.
+  λcx, tname.
     let toFields := λts.
         let stripped := deannotateType (TypeScheme[body] ts)
-        in cases(Type){`union`=λfields.given(fields), `_`=none} stripped
+        in cases(Type){`union` = λfields.given(fields), `_` = none} stripped
     in optionals.match
       (maps.lookup tname (Graph[schemaTypes] cx))
       (optionals.match (maps.lookup tname (Graph[boundTypes] cx)) none toFields)
@@ -969,13 +979,16 @@ term resolveUnionFields =
 
 ## Validate a term against the given ValidationProfile, returning a ValidationResult. Errors hard-stop traversal once maxErrors is reached; warnings are bounded by maxWarnings without causing termination.
 term term =
-  λp,typed,g,t.foldTermWithGraphAndPath
-      (λrecurse,path,cx,acc,trm.ifElse
+  λp, typed, g, t.foldTermWithGraphAndPath
+      (λrecurse, path, cx, acc, trm.ifElse
           (ordering.gte
             (lists.length (ValidationResult[errors] acc))
             (ValidationProfile[maxErrors] p))
           acc
-          (let acc1 := appendFinding p acc (checkTerm p typed wrap(SubtermPath){path} cx trm)
+          (let acc1 := appendFinding
+              p
+              acc
+              (checkTerm p typed wrap(SubtermPath){path} cx trm)
           in ifElse
             (ordering.gte
               (lists.length (ValidationResult[errors] acc1))
@@ -988,7 +1001,7 @@ term term =
 
 ## Validate a type against the given ValidationProfile, threading a ValidationResult accumulator through subtypes. Errors hard-stop traversal once maxErrors is reached.
 term type =
-  λp,acc,boundVars,typ.ifElse
+  λp, acc, boundVars, typ.ifElse
       (ordering.gte (lists.length (ValidationResult[errors] acc)) (ValidationProfile[maxErrors] p))
       acc
       (let acc1 := appendFindingType p acc (validateTypeNode p boundVars typ)
@@ -996,45 +1009,49 @@ term type =
         (ordering.gte (lists.length (ValidationResult[errors] acc1)) (ValidationProfile[maxErrors] p))
         acc1
         (cases(Type){
-          `forall`=λft.
+          `forall` = λft.
               let newBound := sets.insert (ForallType[parameter] ft) boundVars
               in `type` p acc1 newBound (ForallType[body] ft),
-          annotated=λann.`type` p acc1 boundVars (AnnotatedType[body] ann),
-          application=λat.
-              let acc2 := `type` p acc1 boundVars (ApplicationType[function] at)
+          annotated = λann.`type` p acc1 boundVars (AnnotatedType[body] ann),
+          application = λat.
+              let acc2 := `type`
+                  p
+                  acc1
+                  boundVars
+                  (ApplicationType[function] at)
               in `type` p acc2 boundVars (ApplicationType[argument] at),
-          `effect`=λet.`type` p acc1 boundVars et,
-          `either`=λet.
+          `effect` = λet.`type` p acc1 boundVars et,
+          `either` = λet.
               let acc2 := `type` p acc1 boundVars (EitherType[`left`] et)
               in `type` p acc2 boundVars (EitherType[`right`] et),
-          function=λft.
+          function = λft.
               let acc2 := `type` p acc1 boundVars (FunctionType[domain] ft)
               in `type` p acc2 boundVars (FunctionType[codomain] ft),
-          `list`=λlt.`type` p acc1 boundVars lt,
-          `map`=λmt.
+          `list` = λlt.`type` p acc1 boundVars lt,
+          `map` = λmt.
               let acc2 := `type` p acc1 boundVars (MapType[keys] mt)
               in `type` p acc2 boundVars (MapType[values] mt),
-          `optional`=λmt.`type` p acc1 boundVars mt,
-          pair=λpt.
+          `optional` = λmt.`type` p acc1 boundVars mt,
+          pair = λpt.
               let acc2 := `type` p acc1 boundVars (PairType[first] pt)
               in `type` p acc2 boundVars (PairType[second] pt),
-          `record`=λfields.lists.foldl
-                (λa,f.`type` p a boundVars (FieldType[`type`] f))
+          `record` = λfields.lists.foldl
+                (λa, f.`type` p a boundVars (FieldType[`type`] f))
                 acc1
                 fields,
-          `set`=λst.`type` p acc1 boundVars st,
-          `union`=λfields.lists.foldl
-                (λa,f.`type` p a boundVars (FieldType[`type`] f))
+          `set` = λst.`type` p acc1 boundVars st,
+          `union` = λfields.lists.foldl
+                (λa, f.`type` p a boundVars (FieldType[`type`] f))
                 acc1
                 fields,
-          `wrap`=λwt.`type` p acc1 boundVars wt,
-          `_`=acc1}
+          `wrap` = λwt.`type` p acc1 boundVars wt,
+          `_` = acc1}
           typ))
 
 ## Check a single type node for validation errors. Rules disabled by the profile are not evaluated.
 term validateTypeNode =
-  λp,boundVars,typ.cases(Type){
-      annotated=λann.
+  λp, boundVars, typ.cases(Type){
+      annotated = λann.
           let body := AnnotatedType[body] ann in
           let annMap := getAnnotationMap (AnnotatedType[annotation] ann) in
           firstFindingType
@@ -1053,13 +1070,13 @@ term validateTypeNode =
                 (optionals.map
                   (λf.(Name{"hydra.core.error.model.InvalidTypeError.nestedTypeAnnotation"}, f))
                   (cases(Type){
-                    annotated=λ`_`.given(InvalidTypeError{
+                    annotated = λ`_`.given(InvalidTypeError{
                           nestedTypeAnnotation = NestedTypeAnnotationError{
                             location = SubtermPath{[]}}}),
-                    `_`=none}
+                    `_` = none}
                     body))
                 none],
-      `either`=λet.firstFindingType
+      `either` = λet.firstFindingType
             [
               ifElse
                 (enabled p Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
@@ -1073,7 +1090,7 @@ term validateTypeNode =
                   (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
                   (checkVoid (EitherType[`right`] et)))
                 none],
-      `effect`=λet.ifElse
+      `effect` = λet.ifElse
             (enabled
               p
               Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
@@ -1081,7 +1098,7 @@ term validateTypeNode =
               (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
               (checkVoid et))
             none,
-      `forall`=λft.
+      `forall` = λft.
           let paramName := ForallType[parameter] ft
           in firstFindingType
             [
@@ -1109,7 +1126,7 @@ term validateTypeNode =
                         location = SubtermPath{[]},
                         name = paramName}})))
                 none],
-      function=λft.ifElse
+      function = λft.ifElse
             (enabled
               p
               Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
@@ -1117,7 +1134,7 @@ term validateTypeNode =
               (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
               (checkVoid (FunctionType[codomain] ft)))
             none,
-      `list`=λlt.ifElse
+      `list` = λlt.ifElse
             (enabled
               p
               Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
@@ -1125,7 +1142,7 @@ term validateTypeNode =
               (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
               (checkVoid lt))
             none,
-      `map`=λmt.
+      `map` = λmt.
           let keyType := MapType[keys] mt
           in firstFindingType
             [
@@ -1134,11 +1151,11 @@ term validateTypeNode =
                 (optionals.map
                   (λf.(Name{"hydra.core.error.model.InvalidTypeError.nonComparableMapKeyType"}, f))
                   (cases(Type){
-                    function=λ`_`.given(InvalidTypeError{
+                    function = λ`_`.given(InvalidTypeError{
                           nonComparableMapKeyType = NonComparableMapKeyTypeError{
                             location = SubtermPath{[]},
                             keyType = keyType}}),
-                    `_`=none}
+                    `_` = none}
                     keyType))
                 none,
               ifElse
@@ -1151,7 +1168,7 @@ term validateTypeNode =
                   (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
                   (checkVoid (MapType[values] mt)))
                 none],
-      pair=λpt.firstFindingType
+      pair = λpt.firstFindingType
             [
               ifElse
                 (enabled p Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
@@ -1165,7 +1182,7 @@ term validateTypeNode =
                   (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
                   (checkVoid (PairType[second] pt)))
                 none],
-      `record`=λfields.firstFindingType
+      `record` = λfields.firstFindingType
             [
               ifElse
                 (enabled p Name{"hydra.core.error.model.InvalidTypeError.emptyRecordType"})
@@ -1193,25 +1210,25 @@ term validateTypeNode =
                   (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
                   (firstTypeError (lists.map (λf.checkVoid (FieldType[`type`] f)) fields)))
                 none],
-      `set`=λelemType.firstFindingType
+      `set` = λelemType.firstFindingType
             [
               ifElse
                 (enabled p Name{"hydra.core.error.model.InvalidTypeError.nonComparableSetElementType"})
                 (optionals.map
                   (λf.(Name{"hydra.core.error.model.InvalidTypeError.nonComparableSetElementType"}, f))
                   (cases(Type){
-                    function=λ`_`.given(InvalidTypeError{
+                    function = λ`_`.given(InvalidTypeError{
                           nonComparableSetElementType = NonComparableSetElementTypeError{
                             location = SubtermPath{[]},
                             elementType = elemType}}),
-                    `_`=none}
+                    `_` = none}
                     elemType))
                 none,
               ifElse
                 (enabled p Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
                 (optionals.map (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f)) (checkVoid elemType))
                 none],
-      `union`=λfields.firstFindingType
+      `union` = λfields.firstFindingType
             [
               ifElse
                 (enabled p Name{"hydra.core.error.model.InvalidTypeError.emptyUnionType"})
@@ -1254,7 +1271,7 @@ term validateTypeNode =
                   (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
                   (firstTypeError (lists.map (λf.checkVoid (FieldType[`type`] f)) fields)))
                 none],
-      variable=λvarName.ifElse
+      variable = λvarName.ifElse
             (enabled
               p
               Name{"hydra.core.error.model.InvalidTypeError.undefinedTypeVariable"})
@@ -1268,5 +1285,5 @@ term validateTypeNode =
                     location = SubtermPath{[]},
                     name = varName}})))
             none,
-      `_`=none}
+      `_` = none}
       typ

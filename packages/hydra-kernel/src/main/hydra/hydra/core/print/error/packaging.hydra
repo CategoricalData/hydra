@@ -79,13 +79,13 @@ term invalidModuleError =
   λe.concat2
       "invalid module: "
       (cases(InvalidModuleError){
-        conflictingVariantName=conflictingVariantNameError,
-        definitionNotInModuleName=definitionNotInModuleNameError,
-        definitionsOutOfOrder=definitionsOutOfOrderError,
-        duplicateDefinitionName=duplicateDefinitionNameError,
-        invalidDefinitionName=invalidDefinitionNameError,
-        invalidModuleNameConvention=invalidModuleNameConventionError,
-        missingDocumentation=missingDocumentationError}
+        conflictingVariantName = conflictingVariantNameError,
+        definitionNotInModuleName = definitionNotInModuleNameError,
+        definitionsOutOfOrder = definitionsOutOfOrderError,
+        duplicateDefinitionName = duplicateDefinitionNameError,
+        invalidDefinitionName = invalidDefinitionNameError,
+        invalidModuleNameConvention = invalidModuleNameConventionError,
+        missingDocumentation = missingDocumentationError}
         e)
 
 ## Show an invalid namespace convention error as a string
@@ -101,13 +101,13 @@ term invalidPackageError =
   λe.concat2
       "invalid package: "
       (cases(InvalidPackageError){
-        conflictingModuleName=conflictingModuleNameError,
-        duplicateModuleName=duplicateModuleNameError,
-        invalidModule=invalidModuleError,
-        invalidPackageName=invalidPackageNameError,
-        moduleInMultiplePackages=moduleInMultiplePackagesError,
-        nestedModuleName=nestedModuleNameError,
-        undeclaredDependency=undeclaredDependencyError}
+        conflictingModuleName = conflictingModuleNameError,
+        duplicateModuleName = duplicateModuleNameError,
+        invalidModule = invalidModuleError,
+        invalidPackageName = invalidPackageNameError,
+        moduleInMultiplePackages = moduleInMultiplePackagesError,
+        nestedModuleName = nestedModuleNameError,
+        undeclaredDependency = undeclaredDependencyError}
         e)
 
 ## Show an invalid package name error as a string
