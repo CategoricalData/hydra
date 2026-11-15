@@ -41,11 +41,12 @@ import qualified Hydra.Core.Dsl.Util                  as Util
 import qualified Hydra.Core.Dsl.Validation            as Validation
 import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms         as Phantoms
 import           Hydra.Sources.Kernel.Types.All
+import qualified Hydra.Sources.Kernel.Terms.Annotations as KernelAnnotations
 import qualified Hydra.Sources.Kernel.Terms.Constants  as Constants
 import qualified Hydra.Sources.Kernel.Terms.Dependencies as Dependencies
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names      as Names
-import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
+import qualified Hydra.Sources.Kernel.Terms.Strip      as Strip
 import qualified Hydra.Sources.Kernel.Terms.Variables  as Variables
 import qualified Data.List                       as L
 import           Prelude hiding ((++))
@@ -61,7 +62,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Constants.ns, Dependencies.ns, Formatting.ns, Names.ns, Variables.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([KernelAnnotations.ns, Constants.ns, Dependencies.ns, Formatting.ns, Names.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just "Validation functions for modules and packages")}
   where
     definitions = [
@@ -80,6 +81,7 @@ module_ = Module {
       toDefinition checkNestedModuleNames,
       toDefinition checkPackageNameConvention,
       toDefinition checkUndeclaredDependencies,
+      toDefinition conflictingVariantNameExemptions,
       toDefinition definitionName,
       toDefinition enabledPackaging,
       toDefinition kernelDefaultPackagingProfile,
@@ -195,10 +197,53 @@ checkConflictingModuleNames = define "checkConflictingModuleNames" $
     (Packaging.packageModules $ var "pkg") $
   Pairs.second (var "result")
 
+-- | TEMPORARY exemption set for 'checkConflictingVariantNames', keyed by the
+-- MODULE-QUALIFIED generated constructor name ('<module>.<constructorName>',
+-- matching how every conflict is scoped -- within one module, per the check's
+-- own contract). A bare, unqualified constructor name would risk silently
+-- exempting an unrelated future clash of the same name in a different
+-- module; qualifying by module keeps each entry pinned to the exact
+-- conflict it was added for. Each entry is a latent, pre-existing conflict
+-- that only the '.hydra' parse path exposes -- the DSL path silently
+-- skipped every documented union until the annotation-stripping fix above
+-- (#837's full-dist scan found these four):
+--   * "hydra.core.regex.QuantifierRange": Quantifier's 'range' variant vs.
+--     the unrelated QuantifierRange type, same module.
+--   * "hydra.ext.azure.dtld.SchemaPrimitive": Schema's 'primitive' variant
+--     vs. the unrelated SchemaPrimitive type, same module.
+--   * "hydra.ext.azure.dtld.SchemaComplex": Schema's 'complex' variant vs.
+--     the unrelated SchemaComplex type, same module.
+--   * "hydra.rust.syntax.TypePath": Type's 'path' variant vs. the unrelated
+--     TypePath type, same module.
+-- The real fix for each is a naming decision -- rename the variant or the
+-- conflicting type -- which is Josh's call, tracked on the Decision Desk.
+-- Remove each entry once its rename lands.
+conflictingVariantNameExemptions :: TypedTermDefinition (S.Set String)
+conflictingVariantNameExemptions = define "conflictingVariantNameExemptions" $
+  doc "TEMPORARY: module-qualified constructor names exempted from checkConflictingVariantNames pending a Desk naming decision (#711/#837)" $
+  Sets.fromList $ list [
+    string "hydra.core.regex.QuantifierRange",
+    string "hydra.ext.azure.dtld.SchemaComplex",
+    string "hydra.ext.azure.dtld.SchemaPrimitive",
+    string "hydra.rust.syntax.TypePath"]
+
 -- | Check for union variant names that conflict with type definition names.
 -- For each union type, the capitalized type local name concatenated with
 -- the capitalized variant field name must not collide with any other type
--- definition's local name in the same module.
+-- definition's local name in the same module. Looks through the type's
+-- outermost annotation layer (via 'Strip.deannotateType') before matching
+-- '_Type_union' -- the same blind spot 'checkDefinitionDocumentation' had:
+-- a DSL-authored, documented union's body is 'TypeAnnotated' (the
+-- description lives on the body itself, not in EntityMetadata, until a
+-- print/parse round trip promotes it -- see 'checkDefinitionDocumentation'),
+-- so without stripping, every documented union in a module silently skips
+-- this check, masking real conflicts that only the '.hydra' parse path
+-- (where the description IS in EntityMetadata, leaving a bare union body)
+-- would otherwise expose (#711/#837). A small, explicitly temporary
+-- exemption set ('conflictingVariantNameExemptions') excludes known,
+-- pre-existing conflicts pending a naming decision, so fixing this blind
+-- spot does not turn the fleet red on a latent violation the rule itself
+-- cannot resolve.
 checkConflictingVariantNames :: TypedTermDefinition (Module -> Maybe InvalidModuleError)
 checkConflictingVariantNames = define "checkConflictingVariantNames" $
   doc "Check for union variant names that, when mapped to constructor names, conflict with other type definitions" $
@@ -219,7 +264,7 @@ checkConflictingVariantNames = define "checkConflictingVariantNames" $
           _Definition_type>>: "td" ~>
             "typeName" <~ Packaging.typeDefinitionName (var "td") $
             "localTypeName" <~ (Names.localNameOf @@ var "typeName") $
-            "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "td")) $
+            "typ" <~ (Strip.deannotateType @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "td"))) $
             match _Type (var "typ") (Just nothing) [
               _Type_union>>: "fields" ~>
                 -- Check each field of the union
@@ -231,7 +276,12 @@ checkConflictingVariantNames = define "checkConflictingVariantNames" $
                         "constructorName" <~ Strings.concat2
                           (Formatting.capitalize @@ var "localTypeName")
                           (Formatting.capitalize @@ var "localFieldName") $
-                        Logic.ifElse (Sets.member (var "constructorName") (var "defNames" :: TypedTerm (S.Set String)))
+                        "qualifiedConstructorName" <~ Strings.concat2
+                          (Strings.concat2 (Packaging.unModuleName $ var "ns") (string "."))
+                          (var "constructorName") $
+                        Logic.ifElse (Logic.and
+                            (Sets.member (var "constructorName") (var "defNames" :: TypedTerm (S.Set String)))
+                            (Logic.not $ Sets.member (var "qualifiedConstructorName") (asTerm conflictingVariantNameExemptions)))
                           (just $ ErrorPackaging.invalidModuleErrorConflictingVariantName $
                             ErrorPackaging.conflictingVariantNameError
                               (var "ns")
@@ -250,17 +300,24 @@ checkConflictingVariantNames = define "checkConflictingVariantNames" $
 -- description, in EITHER of the two conventions a definition's description can be
 -- found in: its own EntityMetadata (the #711 doc-comment convention: a definition's
 -- leading '##' description, as reconstructed by 'Parse.Packaging.parseModuleWith'
--- from '.hydra' text), or a body-level '@{description=...}' annotation at the term's
--- (or type scheme's) outermost layer (the raw DSL-authoring convention: 'doc'/
--- 'setTermDescription' attach the description directly to the body, and promotion to
--- EntityMetadata happens only during a print/parse round trip, not at DSL-definition
--- time -- so a module built straight from DSL source never has EntityMetadata
--- populated this way). Checking only one convention would wrongly fail whichever path
--- doesn't use it. A definition with neither is reported as missing documentation.
--- Fails on the first undocumented definition found.
+-- from '.hydra' text), or a 'description' key on the term's (or type's) own outermost
+-- annotation map (the raw DSL-authoring convention: 'doc'/'setTermDescription'/
+-- 'setTypeDescription' attach the description directly to the body, merged with any
+-- other annotation key already present via 'setTermAnnotation'/'setTypeAnnotation';
+-- promotion to EntityMetadata happens only during a print/parse round trip, not at
+-- DSL-definition time -- so a module built straight from DSL source never has
+-- EntityMetadata populated this way). The presence check uses
+-- 'getTermAnnotation'/'hasTypeDescription' (plain annotation-map lookups), NOT the
+-- printer's 'peelTermDescriptionAnnotation'/'peelDescriptionAnnotation' -- those peel
+-- helpers only recognize a SOLE description entry and return nothing when another
+-- annotation key (e.g. a bounded-collection's 'minLength') shares the same merged map,
+-- which would wrongly report a definition like a described 'nonemptyList' type as
+-- undocumented. Checking only one convention would wrongly fail whichever path doesn't
+-- use it. A definition with neither is reported as missing documentation. Fails on the
+-- first undocumented definition found.
 checkDefinitionDocumentation :: TypedTermDefinition (Module -> Maybe InvalidModuleError)
 checkDefinitionDocumentation = define "checkDefinitionDocumentation" $
-  doc "Check that every top-level definition has a description, via EntityMetadata or a body annotation" $
+  doc "Check that every top-level definition has a description, via EntityMetadata or an annotation" $
   "mod" ~>
   "ns" <~ Packaging.moduleName (var "mod") $
   "hasDescriptionMeta" <~ ("mem" ~> Optionals.match (var "mem") false ("em" ~> Logic.not (Equality.equal
@@ -274,11 +331,11 @@ checkDefinitionDocumentation = define "checkDefinitionDocumentation" $
             _Definition_term>>: "td" ~>
               Logic.or
                 (var "hasDescriptionMeta" @@ (Packaging.termDefinitionMetadata $ var "td"))
-                (Optionals.isGiven $ Pairs.first $ PrintCore.peelTermDescriptionAnnotation @@ (Packaging.termDefinitionBody $ var "td")),
+                (Optionals.isGiven $ KernelAnnotations.getTermAnnotation @@ Constants.keyDescription @@ (Packaging.termDefinitionBody $ var "td")),
             _Definition_type>>: "td" ~>
               Logic.or
                 (var "hasDescriptionMeta" @@ (Packaging.typeDefinitionMetadata $ var "td"))
-                (Optionals.isGiven $ Pairs.first $ PrintCore.peelDescriptionAnnotation @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td")),
+                (KernelAnnotations.hasTypeDescription @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td")),
             _Definition_primitive>>: "pd" ~>
               var "hasDescriptionMeta" @@ (Packaging.primitiveDefinitionMetadata $ var "pd")] $
           Logic.ifElse (var "documented")
