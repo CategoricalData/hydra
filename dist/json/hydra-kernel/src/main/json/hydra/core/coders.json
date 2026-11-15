@@ -587,6 +587,269 @@
           "constraints": []}}},
     {
       "type": {
+        "name": "hydra.core.coders.TcoBinding",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.model.Name"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the bound variable"}}}]}}}},
+                  {
+                    "name": "term",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.model.Term"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The term to which the variable is bound; recomputed on every loop iteration"}}}]}}}},
+                  {
+                    "name": "typeScheme",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.core.model.TypeScheme"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The optional type scheme of the binding, needed to declare its own type parameters"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A 'let' binding within a TCO-lowered loop body, mirroring Core.Binding"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.coders.TcoCaseAlternative",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.model.Name"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name of the union variant matched by this alternative"}}}]}}}},
+                  {
+                    "name": "parameter",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.model.Name"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name bound to the matched variant's payload (from the original handler lambda)"}}}]}}}},
+                  {
+                    "name": "handler",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.coders.TcoStep"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The lowered handler body for the matched variant's payload"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A single alternative of a TCO-lowered case statement, mirroring Core.CaseAlternative. The original handler is always a lambda binding the variant's payload; 'parameter' preserves that bound name so coders know what to bind when printing the branch."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.coders.TcoCaseStatement",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "typeName",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.model.Name"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The name of the union type"}}}]}}}},
+                  {
+                    "name": "scrutinee",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.model.Term"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The term being matched against; evaluated exactly once per dispatch"}}}]}}}},
+                  {
+                    "name": "default",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.core.coders.TcoStep"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "An optional default case, used if none of the explicit cases match"}}}]}}}},
+                  {
+                    "name": "cases",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.core.coders.TcoCaseAlternative"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A list of case alternatives, one per union variant being handled"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A TCO-lowered union elimination, mirroring Core.CaseStatement"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.coders.TcoLet",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "bindings",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.core.coders.TcoBinding"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The list of variable bindings; recomputed on every loop iteration"}}}]}}}},
+                  {
+                    "name": "body",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.coders.TcoStep"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The lowered body term in which the variables are bound"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A set of 'let' bindings together with a lowered body, mirroring Core.Let"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.coders.TcoLoopPlan",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "params",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.core.model.Name"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Parameter names, in order; these are the loop's mutable loop variables"}}}]}}}},
+                  {
+                    "name": "body",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.coders.TcoStep"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The loop body, with tail self-calls lowered to continuation steps"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A self-tail-recursive function body, restructured into an explicit loop. Produced by lowerSelfTailRecursion; consumed by per-language coders to emit a native iteration construct."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.coders.TcoStep",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "continue",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.core.model.Term"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {"string": "Reassign params to these new values, in the same order as TcoLoopPlan.params, and repeat the loop"}}}]}}}},
+                  {
+                    "name": "return",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.model.Term"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Exit the loop, yielding this value"}}}]}}}},
+                  {
+                    "name": "cases",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.coders.TcoCaseStatement"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Branch on a union elimination; mirrors Core.CaseStatement but handlers are TcoStep"}}}]}}}},
+                  {
+                    "name": "let_",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.coders.TcoLet"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Bindings that must be recomputed on every iteration, mirroring Core.Let"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "One node of a TCO-lowered function body: a loop continuation, a terminal value, or a branch"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
         "name": "hydra.core.coders.TraversalOrder",
         "body": {
           "variables": [],
