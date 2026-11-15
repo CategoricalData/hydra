@@ -2,7 +2,7 @@ package hydra.sources.scala
 
 import hydra.core.overlay.scala.dsl.{Helpers, Phantoms}
 import hydra.core.overlay.scala.dsl.meta.Defs
-import hydra.core.overlay.scala.dsl.Phantoms.{`var` => v, `match`, applyP, lambda, let, field, string, int32, bool, list, nothing, just, doc, constant, matchWithDefault, project, unwrap, wrap, inject, makeLocal, define, cat2}
+import hydra.core.overlay.scala.dsl.Phantoms.{`var` => v, `match`, applyP, lambda, let, field, string, int32, bool, list, nothing, just, doc, constant, matchWithDefault, project, projTerm, unwrap, wrap, inject, makeLocal, define, cat2}
 import hydra.core.packaging.{Definition, EntityMetadata, Module, ModuleName}
 import hydra.core.typed.TypedTerm
 import hydra.core.model.{Field, Injection, Literal, Term, WrappedTerm}
@@ -43,6 +43,16 @@ object Coder:
     inject("hydra.scala.syntax.Type", "ref",
       inject("hydra.scala.syntax.RefType", "name",
         ScalaSyntax.nameType(s)))
+
+  // @tailrec annotation Mod, for a local recursive def lowered from a TcoLoopPlan.
+  // NameType.value is a flat string (no qualified-select wrapper in this minimal AST),
+  // so the fully-qualified form is passed directly; the printer renders it verbatim,
+  // which is valid Scala for a qualified annotation reference without an explicit import.
+  private val tailrecMod: TypedTerm[Any] =
+    inject("hydra.scala.syntax.Mod", "annot",
+      ScalaSyntax.annotMod(
+        ScalaSyntax.init(stref(string("scala.annotation.tailrec")))(
+          inject("hydra.scala.syntax.Name", "value", string("")))(emptyList)))
 
   private def errorOther(msg: TypedTerm[String]): TypedTerm[Any] =
     applyP("hydra.core.dsl.errors.errorOther",
@@ -151,6 +161,25 @@ object Coder:
 
   lazy val extractLetBindingsDef: Definition =
     define(NS, "extractLetBindings").doc("Extract let bindings from a term").to(extractLetBindingsBody)
+
+  // extractTcoBody
+  // Like extractBody, but stops at the first `let` rather than unwrapping it, since
+  // lowerSelfTailRecursion/lowerTcoStep (hydra.core.analysis) already handle `let` via
+  // TcoStep.let_ — stripping it here would silently discard the bindings before the TCO
+  // pass ever sees them (#709).
+  private val extractTcoBodyBody = lambda("t",
+    matchWithDefault("hydra.core.model.Term",
+      applyP("hydra.core.strip.deannotateAndDetypeTerm", v("t")),
+      v("t"),
+      field("lambda", lambda("lam",
+        applyP(local("extractTcoBody"), CoreDsl.lambdaBody(v("lam"))))),
+      field("typeLambda", lambda("tl",
+        applyP(local("extractTcoBody"), CoreDsl.typeLambdaBody(v("tl"))))),
+      field("typeApplication", lambda("ta",
+        applyP(local("extractTcoBody"), CoreDsl.typeApplicationTermBody(v("ta")))))))
+
+  lazy val extractTcoBodyDef: Definition =
+    define(NS, "extractTcoBody").doc("Extract the innermost non-let body from a term, for TCO analysis").to(extractTcoBodyBody)
 
   // extractParams
   private val extractParamsBody = lambda("t",
@@ -918,7 +947,7 @@ object Coder:
     applyP("hydra.core.lib.logic.ifElse",
       v("isFunctionType"),
       applyP(local("encodeComplexTermDef"),
-        v("overlaySubs"), v("cx"), v("g"), v("lname"), v("term"), v("typ'")),
+        v("overlaySubs"), v("cx"), v("g"), v("name"), v("lname"), v("term"), v("typ'")),
       applyP("hydra.core.lib.logic.ifElse",
         applyP("hydra.core.lib.lists.isEmpty", v("freeTypeVarsInTyp")),
         encodeTermDefSimpleVal,
@@ -1302,11 +1331,291 @@ object Coder:
   lazy val encodeLocalDefDef: Definition =
     define(NS, "encodeLocalDef").doc("Encode a local def. outerTypeVars are type params already in scope (don't redeclare them).").to(encodeLocalDefBody)
 
+  // ===== encodeTcoStep — new for #709: lower a TcoStep into a Scala expression. =====
+  // Mirrors encodeFunctionCasesArm/encodeCase for the `cases` branch (same pattern
+  // construction via nameOfType/fieldTypes/fTypeIsPolymorphic/ExtractPat), but each
+  // TcoCaseAlternative already carries its own bound `parameter` name directly (no
+  // isUnit/lamParamSuffix detection needed), and the recursive descent targets
+  // encodeTcoStep instead of encodeTerm. `continue` becomes a call to the enclosing
+  // @tailrec local `def loop`; `return` is a plain encoded value; `let_` becomes a
+  // block of vals followed by the lowered body.
+  private val encodeTcoStepContinueArm = lambda("newArgs",
+    applyP("hydra.core.lib.eithers.bind",
+      applyP("hydra.core.lib.eithers.mapList",
+        lambda("a", applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("a"))),
+        v("newArgs")),
+      lambda("sargs",
+        Phantoms.right(
+          inject("hydra.scala.syntax.Data", "apply",
+            ScalaSyntax.applyData(
+              applyP(localUtils("sname"), v("loopName")))(
+              v("sargs")))))))
+
+  private val encodeTcoStepReturnArm = lambda("rv",
+    applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("rv")))
+
+  // Whether a TcoCaseAlternative's variant carries no payload (ftypes lookup misses, or the
+  // field's declared type is Unit) — mirrors encodeCaseIsUnitFromType's "record"/"unit" arms,
+  // simplified since a TcoCaseAlternative's own `parameter` is always bound (no lambda-wrapper
+  // detection needed the way encodeCaseIsUnitLambdaArm needs it for a raw CaseAlternative).
+  private val encodeTcoStepAltIsUnit = lambda("altName", lambda("ftypes",
+    applyP("hydra.core.lib.optionals.match",
+      applyP("hydra.core.lib.maps.lookup", v("altName"), v("ftypes")),
+      Phantoms.bool(false),
+      lambda("dom",
+        matchWithDefault("hydra.core.model.Type",
+          applyP("hydra.core.strip.deannotateType", v("dom")),
+          Phantoms.bool(false),
+          field("unit", constant(Phantoms.bool(true))))))))
+
+  private val encodeTcoStepCaseAltArm = lambda("sn", lambda("isPolymorphic", lambda("ftypes", lambda("loopName", lambda("alt",
+    Phantoms.let(Seq(
+      field("altName", projTerm("hydra.core.coders.TcoCaseAlternative", "name", v("alt"))),
+      field("param", projTerm("hydra.core.coders.TcoCaseAlternative", "parameter", v("alt"))),
+      field("handler", projTerm("hydra.core.coders.TcoCaseAlternative", "handler", v("alt"))),
+      // Not scalaEscapeName: this feeds svar (a pattern binding, via Pat.extract), and
+      // backtick-quoting a trailing-underscore name there makes Scala parse it as a stable-
+      // identifier pattern instead of a fresh binding ("Not found" at compile time). The
+      // handler body's own reference to this name is escaped independently and correctly by
+      // encodeTermVariableArm (an expression context, where backticks are safe).
+      field("payloadVar", CoreDsl.unName(v("param"))),
+      field("isUnit", Phantoms.apply(encodeTcoStepAltIsUnit, v("altName"), v("ftypes"))),
+      field("patArgs",
+        applyP("hydra.core.lib.logic.ifElse",
+          v("isUnit"),
+          applyP("hydra.core.lib.logic.ifElse",
+            v("isPolymorphic"),
+            list(inject("hydra.scala.syntax.Pat", "wildcard", Phantoms.unit)),
+            emptyList),
+          list(applyP(localUtils("svar"), CoreDsl.name(v("payloadVar")))))),
+      field("pat",
+        inject("hydra.scala.syntax.Pat", "extract",
+          ScalaSyntax.extractPat(
+            applyP(localUtils("sname"),
+              applyP(localUtils("qualifyUnionFieldName"),
+                string("MATCHED."), v("sn"), v("altName"))))(
+            v("patArgs"))(
+            applyP("hydra.core.lib.logic.or",
+              applyP("hydra.core.lib.logic.not", v("isUnit")),
+              v("isPolymorphic")))))),
+      applyP("hydra.core.lib.eithers.bind",
+        applyP(local("encodeTcoStep"), v("overlaySubs"), v("cx"), v("g"), v("loopName"), v("handler")),
+        lambda("sbody",
+          Phantoms.right(
+            ScalaSyntax.`case`(v("pat"))(nothing)(v("sbody")))))))))))
+
+  private val encodeTcoStepCasesArm = lambda("cs",
+    Phantoms.let(Seq(
+      field("tname", projTerm("hydra.core.coders.TcoCaseStatement", "typeName", v("cs"))),
+      field("dom", CoreDsl.typeVariable(v("tname"))),
+      field("sn", applyP(localUtils("nameOfType"), v("g"), v("dom"))),
+      field("alts", projTerm("hydra.core.coders.TcoCaseStatement", "cases", v("cs"))),
+      field("dflt", projTerm("hydra.core.coders.TcoCaseStatement", "default", v("cs"))),
+      field("scrutinee", projTerm("hydra.core.coders.TcoCaseStatement", "scrutinee", v("cs"))),
+      field("isPolymorphic",
+        applyP("hydra.core.lib.optionals.match",
+          applyP("hydra.core.resolution.resolveType", v("g"), v("dom")),
+          Phantoms.bool(false),
+          lambda("typ", applyP("hydra.core.resolution.fTypeIsPolymorphic", v("typ"))))),
+      field("ftypes",
+        applyP("hydra.core.lib.eithers.either",
+          constant(v("hydra.core.lib.maps.empty")),
+          lambda("x_", v("x_")),
+          applyP("hydra.core.resolution.fieldTypes", v("cx"), v("g"), v("dom"))))),
+      applyP("hydra.core.lib.eithers.bind",
+        applyP("hydra.core.lib.eithers.mapList",
+          Phantoms.apply(encodeTcoStepCaseAltArm, v("sn"), v("isPolymorphic"), v("ftypes"), v("loopName")),
+          v("alts")),
+        lambda("fieldCases",
+          applyP("hydra.core.lib.eithers.bind",
+            applyP("hydra.core.lib.optionals.match",
+              v("dflt"),
+              Phantoms.right(v("fieldCases")),
+              lambda("dfltStep",
+                applyP("hydra.core.lib.eithers.bind",
+                  applyP(local("encodeTcoStep"), v("overlaySubs"), v("cx"), v("g"), v("loopName"), v("dfltStep")),
+                  lambda("sdflt",
+                    Phantoms.right(
+                      applyP("hydra.core.lib.lists.concat2",
+                        v("fieldCases"),
+                        list(ScalaSyntax.`case`(
+                          inject("hydra.scala.syntax.Pat", "wildcard", Phantoms.unit))(
+                          nothing)(v("sdflt"))))))))),
+            lambda("scases",
+              applyP("hydra.core.lib.eithers.bind",
+                applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("g"), v("scrutinee")),
+                lambda("sscrutinee",
+                  Phantoms.right(
+                    inject("hydra.scala.syntax.Data", "match",
+                      ScalaSyntax.matchData(v("sscrutinee"))(v("scases"))))))))))))
+
+  // Bindings are rebuilt as Core.Binding (with their type scheme) and routed through encodeLetBinding
+  // over an extended graph, mirroring encodeTerm's let arm, so polymorphic bindings declare their own
+  // type parameters.
+  private val encodeTcoStepLetArm = lambda("lt",
+    Phantoms.let(Seq(
+      field("tbindings", projTerm("hydra.core.coders.TcoLet", "bindings", v("lt"))),
+      field("letBody", projTerm("hydra.core.coders.TcoLet", "body", v("lt")))),
+      Phantoms.let(Seq(
+        field("coreBindings",
+          applyP("hydra.core.lib.lists.map",
+            lambda("tb",
+              CoreDsl.binding(projTerm("hydra.core.coders.TcoBinding", "name", v("tb")))(
+                projTerm("hydra.core.coders.TcoBinding", "term", v("tb")))(
+                projTerm("hydra.core.coders.TcoBinding", "typeScheme", v("tb")))),
+            v("tbindings")))),
+        Phantoms.let(Seq(
+          field("gLet",
+            applyP("hydra.core.lib.logic.ifElse",
+              applyP("hydra.core.lib.lists.isEmpty", v("coreBindings")),
+              v("g"),
+              applyP("hydra.core.scoping.extendGraphForLet",
+                lambda("g2", lambda("b",
+                  applyP("hydra.core.lib.logic.ifElse",
+                    applyP("hydra.core.predicates.isComplexBinding", v("g2"), v("b")),
+                    just(Phantoms.metaBool(true)),
+                    nothing))),
+                v("g"),
+                CoreDsl.let(v("coreBindings"))(
+                  CoreDsl.termVariable(wrap("hydra.core.model.Name", string("dummy")))))))),
+          applyP("hydra.core.lib.eithers.bind",
+            applyP("hydra.core.lib.eithers.mapList",
+              applyP(local("encodeLetBinding"),
+                v("overlaySubs"), v("cx"), v("gLet"),
+                GraphDsl.graphTypeVariables(v("gLet"))),
+              v("coreBindings")),
+            lambda("sbindings",
+              applyP("hydra.core.lib.eithers.bind",
+                applyP(local("encodeTcoStep"), v("overlaySubs"), v("cx"), v("gLet"), v("loopName"), v("letBody")),
+                lambda("sbody",
+                  Phantoms.right(
+                    applyP("hydra.core.lib.logic.ifElse",
+                      applyP("hydra.core.lib.lists.isEmpty", v("sbindings")),
+                      v("sbody"),
+                      inject("hydra.scala.syntax.Data", "block",
+                        ScalaSyntax.blockData(
+                          applyP("hydra.core.lib.lists.concat2",
+                            v("sbindings"),
+                            list(inject("hydra.scala.syntax.Stat", "term", v("sbody"))))))))))))))))
+
+  private val encodeTcoStepBody = lambda("overlaySubs", lambda("cx", lambda("g", lambda("loopName", lambda("step",
+    matchWithDefault("hydra.core.coders.TcoStep",
+      v("step"),
+      errorLeft("unrecognized TcoStep variant"),
+      field("continue", encodeTcoStepContinueArm),
+      field("return", encodeTcoStepReturnArm),
+      field("cases", encodeTcoStepCasesArm),
+      field("let_", encodeTcoStepLetArm)))))))
+
+  lazy val encodeTcoStepDef: Definition =
+    define(NS, "encodeTcoStep").doc("Lower a TcoStep into a Scala expression: continue -> tail call to the local loop def, return -> plain value, cases -> match, let_ -> block then recurse").to(encodeTcoStepBody)
+
   // ===== encodeComplexTermDef — Coder.hs:232-286, full translation =====
   // Similar shape to encodeLocalDef but lacks outerTypeVars handling. Uses nested
   // 1-binding lets for unambiguous scoping.
 
-  private val encodeComplexTermDefBody = lambda("overlaySubs", lambda("cx", lambda("g", lambda("lname", lambda("term", lambda("typ",
+  // Non-TCO defBody assembly: unchanged logic from before the #709 lowering, extracted to its
+  // own top-level helper so encodeComplexTermDefBody's branch on mPlan stays flat and each side
+  // is independently paren-checkable.
+  private val encodeComplexTermDefPlainBody = lambda("overlaySubs", lambda("cx", lambda("g", lambda("gWithTypeVars", lambda("lname",
+    lambda("tparams", lambda("sparams", lambda("scod", lambda("letBindings", lambda("freeTypeVars", lambda("tcoBody",
+      applyP("hydra.core.lib.eithers.bind",
+        applyP(local("encodeTerm"), v("overlaySubs"), v("cx"), v("gWithTypeVars"), v("tcoBody")),
+        lambda("sbody",
+          Phantoms.let("gForLets",
+            applyP("hydra.core.lib.logic.ifElse",
+              applyP("hydra.core.lib.lists.isEmpty", v("letBindings")),
+              v("gWithTypeVars"),
+              applyP("hydra.core.scoping.extendGraphForLet",
+                lambda("g", lambda("b",
+                  applyP("hydra.core.lib.logic.ifElse",
+                    applyP("hydra.core.predicates.isComplexBinding", v("g"), v("b")),
+                    just(Phantoms.metaBool(true)),
+                    nothing))),
+                v("gWithTypeVars"),
+                CoreDsl.let(v("letBindings"))(
+                  CoreDsl.termVariable(wrap("hydra.core.model.Name", string("dummy")))))),
+            applyP("hydra.core.lib.eithers.bind",
+              applyP("hydra.core.lib.eithers.mapList",
+                applyP(local("encodeLetBinding"),
+                  v("overlaySubs"), v("cx"), v("gForLets"),
+                  applyP("hydra.core.lib.sets.fromList", v("freeTypeVars"))),
+                v("letBindings")),
+              lambda("sbindings",
+                Phantoms.let("defBody",
+                  applyP("hydra.core.lib.logic.ifElse",
+                    applyP("hydra.core.lib.lists.isEmpty", v("sbindings")),
+                    v("sbody"),
+                    inject("hydra.scala.syntax.Data", "block",
+                      ScalaSyntax.blockData(
+                        applyP("hydra.core.lib.lists.concat2",
+                          v("sbindings"),
+                          list(inject("hydra.scala.syntax.Stat", "term", v("sbody"))))))),
+                  Phantoms.right(
+                    inject("hydra.scala.syntax.Stat", "defn",
+                      inject("hydra.scala.syntax.Defn", "def",
+                        ScalaSyntax.defDefn(emptyList)(
+                          ScalaSyntax.nameData(ScalaSyntax.predefString(v("lname"))))(
+                          v("tparams"))(
+                          applyP("hydra.core.lib.lists.map",
+                            lambda("p", list(v("p"))),
+                            v("sparams")))(
+                          just(v("scod")))(
+                          v("defBody"))))))))))))))))))))))
+
+  // TCO defBody assembly: a local @tailrec def <lname>$loop(params...) whose body is
+  // encodeTcoStep's lowering of the plan, followed by the outer def's body calling
+  // loop(initial param values). The recursive calls inside loop are themselves tail calls on
+  // loop, which @tailrec verifies at compile time.
+  private val encodeComplexTermDefTcoBody = lambda("overlaySubs", lambda("cx", lambda("gWithTypeVars", lambda("lname",
+    lambda("tparams", lambda("sparams", lambda("scod", lambda("loopVarNames", lambda("plan",
+      Phantoms.let("loopName", applyP("hydra.core.lib.strings.concat2", v("lname"), string("$loop")),
+        Phantoms.let("loopParams", v("sparams"),
+          Phantoms.let("initialArgs",
+            applyP("hydra.core.lib.lists.map",
+              lambda("pr", applyP(localUtils("sname"), v("pr"))),
+              v("loopVarNames")),
+            Phantoms.let("planBody", projTerm("hydra.core.coders.TcoLoopPlan", "body", v("plan")),
+              applyP("hydra.core.lib.eithers.bind",
+                applyP(local("encodeTcoStep"), v("overlaySubs"), v("cx"), v("gWithTypeVars"), v("loopName"), v("planBody")),
+                lambda("loopBody",
+                  Phantoms.let("loopDefn",
+                    inject("hydra.scala.syntax.Stat", "defn",
+                      inject("hydra.scala.syntax.Defn", "def",
+                        ScalaSyntax.defDefn(list(tailrecMod))(
+                          ScalaSyntax.nameData(ScalaSyntax.predefString(v("loopName"))))(
+                          emptyList)(
+                          list(v("loopParams")))(
+                          just(v("scod")))(
+                          v("loopBody")))),
+                    Phantoms.let("initialCall",
+                      inject("hydra.scala.syntax.Stat", "term",
+                        inject("hydra.scala.syntax.Data", "apply",
+                          ScalaSyntax.applyData(
+                            applyP(localUtils("sname"), v("loopName")))(
+                            v("initialArgs")))),
+                      Phantoms.let("defBody",
+                        inject("hydra.scala.syntax.Data", "block",
+                          ScalaSyntax.blockData(list(v("loopDefn"), v("initialCall")))),
+                        Phantoms.right(
+                          inject("hydra.scala.syntax.Stat", "defn",
+                            inject("hydra.scala.syntax.Defn", "def",
+                              ScalaSyntax.defDefn(emptyList)(
+                                ScalaSyntax.nameData(ScalaSyntax.predefString(v("lname"))))(
+                                v("tparams"))(
+                                applyP("hydra.core.lib.lists.map",
+                                  lambda("p", list(v("p"))),
+                                  v("sparams")))(
+                                just(v("scod")))(
+                                v("defBody")))))))))))))))))))))))
+
+  lazy val encodeComplexTermDefPlainBodyDef: Definition =
+    define(NS, "encodeComplexTermDefPlainBody").doc("Non-TCO defBody assembly for a complex term definition").to(encodeComplexTermDefPlainBody)
+
+  lazy val encodeComplexTermDefTcoBodyDef: Definition =
+    define(NS, "encodeComplexTermDefTcoBody").doc("TCO defBody assembly (@tailrec local loop) for a self-tail-recursive complex term definition").to(encodeComplexTermDefTcoBody)
+
+  private val encodeComplexTermDefBody = lambda("overlaySubs", lambda("cx", lambda("g", lambda("fname", lambda("lname", lambda("term", lambda("typ",
     Phantoms.let(Seq(
       field("doms", applyP(local("extractDomains"), v("typ"))),
       field("paramNames", applyP(local("extractParams"), v("term"))),
@@ -1334,6 +1643,13 @@ object Coder:
           lambda("tv", applyP(localUtils("stparam"), v("tv"))),
           v("freeTypeVars"))),
       field("letBindings", applyP(local("extractLetBindings"), v("term"))),
+      field("tcoBody", applyP(local("extractBody"), v("term"))),
+      field("tcoAnalysisBody", applyP(local("extractTcoBody"), v("term"))),
+      field("mPlan",
+        applyP("hydra.core.analysis.lowerSelfTailRecursion",
+          v("fname"),
+          applyP("hydra.core.lib.lists.take", v("paramCount"), v("paramNames")),
+          v("tcoAnalysisBody"))),
       field("gWithTypeVars",
         GraphDsl.graph(GraphDsl.graphBoundTerms(v("g")))(
           GraphDsl.graphBoundTypes(v("g")))(
@@ -1344,7 +1660,13 @@ object Coder:
           GraphDsl.graphSchemaTypes(v("g")))(
           applyP("hydra.core.lib.sets.union",
             applyP("hydra.core.lib.sets.fromList", v("freeTypeVars")),
-            GraphDsl.graphTypeVariables(v("g")))))),
+            GraphDsl.graphTypeVariables(v("g"))))),
+      field("loopVarNames",
+        applyP("hydra.core.lib.lists.map",
+          lambda("p",
+            applyP(localUtils("scalaEscapeName"),
+              applyP("hydra.core.names.localNameOf", applyP("hydra.core.lib.pairs.first", v("p"))))),
+          v("zippedParams")))),
       applyP("hydra.core.lib.eithers.bind",
         applyP("hydra.core.lib.eithers.mapList",
           applyP(local("encodeTypedParam"),
@@ -1352,54 +1674,18 @@ object Coder:
           v("zippedParams")),
         lambda("sparams",
           applyP("hydra.core.lib.eithers.bind",
-            applyP(local("encodeTerm"),
-              v("overlaySubs"), v("cx"), v("gWithTypeVars"),
-              applyP(local("extractBody"), v("term"))),
-            lambda("sbody",
-              applyP("hydra.core.lib.eithers.bind",
-                applyP(local("encodeType"),
-                  v("cx"), v("g"), v("cod")),
-                lambda("scod",
-                  Phantoms.let("gForLets",
-                    applyP("hydra.core.lib.logic.ifElse",
-                      applyP("hydra.core.lib.lists.isEmpty", v("letBindings")),
-                      v("gWithTypeVars"),
-                      applyP("hydra.core.scoping.extendGraphForLet",
-                        lambda("g", lambda("b",
-                          applyP("hydra.core.lib.logic.ifElse",
-                            applyP("hydra.core.predicates.isComplexBinding", v("g"), v("b")),
-                            just(Phantoms.metaBool(true)),
-                            nothing))),
-                        v("gWithTypeVars"),
-                        CoreDsl.let(v("letBindings"))(
-                          CoreDsl.termVariable(wrap("hydra.core.model.Name", string("dummy")))))),
-                    applyP("hydra.core.lib.eithers.bind",
-                      applyP("hydra.core.lib.eithers.mapList",
-                        applyP(local("encodeLetBinding"),
-                          v("overlaySubs"), v("cx"), v("gForLets"),
-                          applyP("hydra.core.lib.sets.fromList", v("freeTypeVars"))),
-                        v("letBindings")),
-                      lambda("sbindings",
-                        Phantoms.let("defBody",
-                          applyP("hydra.core.lib.logic.ifElse",
-                            applyP("hydra.core.lib.lists.isEmpty", v("sbindings")),
-                            v("sbody"),
-                            inject("hydra.scala.syntax.Data", "block",
-                              ScalaSyntax.blockData(
-                                applyP("hydra.core.lib.lists.concat2",
-                                  v("sbindings"),
-                                  list(inject("hydra.scala.syntax.Stat", "term", v("sbody"))))))),
-                          Phantoms.right(
-                            inject("hydra.scala.syntax.Stat", "defn",
-                              inject("hydra.scala.syntax.Defn", "def",
-                                ScalaSyntax.defDefn(emptyList)(
-                                  ScalaSyntax.nameData(ScalaSyntax.predefString(v("lname"))))(
-                                  v("tparams"))(
-                                  applyP("hydra.core.lib.lists.map",
-                                    lambda("p", list(v("p"))),
-                                    v("sparams")))(
-                                  just(v("scod")))(
-                                  v("defBody"))))))))))))))))))))))
+            applyP(local("encodeType"),
+              v("cx"), v("g"), v("cod")),
+            lambda("scod",
+              applyP("hydra.core.lib.optionals.match",
+                v("mPlan"),
+                Phantoms.apply(encodeComplexTermDefPlainBody,
+                  v("overlaySubs"), v("cx"), v("g"), v("gWithTypeVars"), v("lname"),
+                  v("tparams"), v("sparams"), v("scod"), v("letBindings"), v("freeTypeVars"), v("tcoBody")),
+                lambda("plan",
+                  Phantoms.apply(encodeComplexTermDefTcoBody,
+                    v("overlaySubs"), v("cx"), v("gWithTypeVars"), v("lname"),
+                    v("tparams"), v("sparams"), v("scod"), v("loopVarNames"), v("plan"))))))))))))))))
 
   lazy val encodeComplexTermDefDef: Definition =
     define(NS, "encodeComplexTermDef").doc("Encode a complex term definition with proper parameter types from the type signature").to(encodeComplexTermDefBody)
@@ -2702,10 +2988,13 @@ object Coder:
     dropDomainsDef,
     encodeCaseDef,
     encodeComplexTermDefDef,
+    encodeComplexTermDefPlainBodyDef,
+    encodeComplexTermDefTcoBodyDef,
     encodeFunctionDef,
     encodeLetBindingDef,
     encodeLiteralDef,
     encodeLocalDefDef,
+    encodeTcoStepDef,
     encodeTermDef,
     encodeTermDefinitionDef,
     encodeTypeDef,
@@ -2720,6 +3009,7 @@ object Coder:
     extractInOutPairDef,
     extractLetBindingsDef,
     extractParamsDef,
+    extractTcoBodyDef,
     fieldToEnumCaseDef,
     fieldToParamDef,
     filterByFlagsDef,
