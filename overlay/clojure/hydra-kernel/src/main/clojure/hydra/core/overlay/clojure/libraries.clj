@@ -799,108 +799,6 @@
                                      [] bin (eff (p/tc-either sysErr unit)))}))
 
 ;; ============================================================
-;; ============================================================
-;; Annotations (term-level functions registered as primitives)
-;; ============================================================
-
-(defn- term-maybe-to-native
-  "Convert a term-level maybe (:optional val_or_nil) to native maybe (:given val) / (:none)"
-  [m]
-  (cond
-    (nil? m) (list :none)
-    (not (sequential? m)) (list :given m)
-    (= (first m) :none) (list :none)
-    (= (first m) :given) m
-    (= (first m) :optional)
-    (let [inner (second m)]
-      (cond
-        (or (nil? inner)
-            (and (sequential? inner) (= (first inner) :none)))
-        (list :none)
-        (and (sequential? inner) (= (first inner) :given))
-        inner  ;; (:given val) — already in native format
-        :else
-        (list :given inner)))
-    :else (list :given m)))
-
-(defn- native-maybe-to-term
-  "Convert a native maybe (:given val) / (:none) to term-level (:optional val_or_nil)"
-  [m]
-  (cond
-    (nil? m) (list :optional nil)
-    (not (sequential? m)) (list :optional m)
-    (= (first m) :given) (list :optional (second m))
-    (= (first m) :none) (list :optional nil)
-    :else (list :optional m)))
-
-(defn- passthrough-coder
-  "A Term passthrough coder declared at TYPE. The annotations primitives below take and return
-   raw Term values at runtime, but their DECLARED types must match the kernel definitions they
-   shadow (hydra.core.annotations.*): a Term-typed placeholder made the Java coder's type checking
-   reject e.g. setTermDescription's optional<string> first argument (#814)."
-  [type]
-  (assoc (p/tc-term) :type type))
-
-(defn register-annotations []
-  (let [t (p/tc-term)
-        term-t (list :variable "hydra.core.model.Term")
-        opt-string-t (list :optional (list :literal (list :string nil)))
-        name-c (passthrough-coder (list :variable "hydra.core.model.Name"))
-        opt-term-c (passthrough-coder (list :optional term-t))
-        opt-string-c (passthrough-coder opt-string-t)
-        cx-c (passthrough-coder (list :variable "t0"))
-        graph-c (passthrough-coder (list :variable "hydra.core.graph.Graph"))
-        either-desc-c (passthrough-coder
-                       (:type (p/tc-either (passthrough-coder (list :variable "hydra.core.errors.Error"))
-                                           opt-string-c)))]
-    {;; setTermAnnotation :: Name -> Maybe Term -> Term -> Term
-     "hydra.core.annotations.setTermAnnotation"
-     (p/prim3 "hydra.core.annotations.setTermAnnotation"
-              (fn [key val term]
-                (let [native-maybe (term-maybe-to-native val)]
-                  ((((deref (or (resolve 'hydra_core_annotations_set_term_annotation) (ns-resolve 'hydra.core.annotations 'hydra_core_annotations_set_term_annotation))) key) native-maybe) term)))
-              [] name-c opt-term-c t t)
-     ;; getTermAnnotation :: Name -> Term -> Maybe Term
-     "hydra.core.annotations.getTermAnnotation"
-     (p/prim2 "hydra.core.annotations.getTermAnnotation"
-              (fn [key term]
-                (native-maybe-to-term
-                 (((deref (or (resolve 'hydra_core_annotations_get_term_annotation) (ns-resolve 'hydra.core.annotations 'hydra_core_annotations_get_term_annotation))) key) term)))
-              [] name-c t opt-term-c)
-     ;; setTermDescription :: Maybe String -> Term -> Term
-     "hydra.core.annotations.setTermDescription"
-     (p/prim2 "hydra.core.annotations.setTermDescription"
-              (fn [d term]
-                (let [native-d (term-maybe-to-native d)
-                      ;; Extract string from (:literal (:string "...")) wrapper if present
-                      native-str-d (cond
-                                     (= (first native-d) :none) (list :none)
-                                     :else (let [inner (second native-d)]
-                                             (if (and (sequential? inner) (= (first inner) :literal)
-                                                      (sequential? (second inner)) (= (first (second inner)) :string))
-                                               (list :given (second (second inner)))
-                                               native-d)))]
-                  (((deref (or (resolve 'hydra_core_annotations_set_term_description) (ns-resolve 'hydra.core.annotations 'hydra_core_annotations_set_term_description))) native-str-d) term)))
-              [] opt-string-c t t)
-     ;; getTermDescription :: InferenceContext -> Graph -> Term -> Either (Maybe String)
-     "hydra.core.annotations.getTermDescription"
-     (p/prim3 "hydra.core.annotations.getTermDescription"
-              (fn [cx graph term]
-                (let [result ((((deref (or (resolve 'hydra_core_annotations_get_term_description) (ns-resolve 'hydra.core.annotations 'hydra_core_annotations_get_term_description))) cx) graph) term)]
-                  ;; Result is Either Error (Maybe String)
-                  ;; Convert to term-level: (:either (:right (:optional (:literal (:string "...")))))
-                  (if (= (first result) :left)
-                    (list :either result)
-                    (let [maybe-str (second result)
-                          term-maybe (cond
-                                       (nil? maybe-str) (list :optional nil)
-                                       (= (first maybe-str) :none) (list :optional nil)
-                                       (= (first maybe-str) :given)
-                                       (list :optional (list :literal (list :string (second maybe-str))))
-                                       :else (list :optional maybe-str))]
-                      (list :either (list :right term-maybe))))))
-              ["t0"] cx-c graph-c t either-desc-c)}))
-
 ;; Default-implementation fallbacks (#609 Stage 3): primitives with no native Clojure
 ;; implementation, but which declare a portable defaultImplementation term. Spike: only
 ;; lists.takeWhile is wired here, mirroring the Java/Python/Scala validation case. Under
@@ -1007,6 +905,5 @@
          (register-sets)
          (register-strings)
          (register-system)
-         (register-text)
-         (register-annotations))]
+         (register-text))]
     (merge native (register-default-fallbacks (set (keys native))))))

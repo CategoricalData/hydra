@@ -796,110 +796,6 @@
         (cons (prim-name hydra_core_lib_literals_print_string)  (prim1 (prim-name hydra_core_lib_literals_print_string)  hydra_overlay_common_lisp_lib_literals_print_string  nil s s))))))
 
 ;; ============================================================================
-;; Annotations (term-level functions registered as primitives)
-;; ============================================================================
-
-(defun term-maybe-to-native (m)
-  "Convert a term-level maybe (:optional val_or_nil) to native maybe (:given val) / (:none)."
-  (cond
-    ((null m) (list :none))
-    ((not (consp m)) (list :given m))
-    ((eq (first m) :none) (list :none))
-    ((eq (first m) :given) m)
-    ((eq (first m) :optional)
-     (let ((inner (second m)))
-       (if (or (null inner)
-               (and (consp inner) (eq (first inner) :none)))
-           (list :none)
-           (list :given inner))))
-    (t (list :given m))))
-
-(defun native-maybe-to-term (m)
-  "Convert a native maybe (:given val) / (:none) to term-level (:optional val_or_nil)."
-  (cond
-    ((null m) (list :optional nil))
-    ((not (consp m)) (list :optional m))
-    ((eq (first m) :given) (list :optional (second m)))
-    ((eq (first m) :none) (list :optional nil))
-    (t (list :optional m))))
-
-(defun passthrough-coder (type)
-  "A Term passthrough coder declared at TYPE. The annotations primitives below take and return
-   raw Term values at runtime, but their DECLARED types must match the kernel definitions they
-   shadow (hydra.core.annotations.*): a Term-typed placeholder made the Java coder's type checking
-   reject e.g. setTermDescription's optional<string> first argument (#814)."
-  (make-term_coder type
-    (lambda (cx) (declare (ignore cx)) (lambda (g) (declare (ignore g)) (lambda (t_) (list :right t_))))
-    (lambda (cx) (declare (ignore cx)) (lambda (t_) (list :right t_)))))
-
-(defun register-annotations ()
-  (let* ((t_ (tc-term))
-         (term-t (list :variable "hydra.core.model.Term"))
-         (opt-string-t (list :optional (list :literal (list :string nil))))
-         (name-c (passthrough-coder (list :variable "hydra.core.model.Name")))
-         (opt-term-c (passthrough-coder (list :optional term-t)))
-         (opt-string-c (passthrough-coder opt-string-t))
-         (cx-c (passthrough-coder (list :variable "t0")))
-         (graph-c (passthrough-coder (list :variable "hydra.core.graph.Graph")))
-         (either-desc-c (passthrough-coder
-                          (list :either (make-either_type (list :variable "hydra.core.errors.Error")
-                                                          opt-string-t)))))
-    (list
-      ;; setTermAnnotation :: Name -> Maybe Term -> Term -> Term
-      (cons "hydra.core.annotations.setTermAnnotation"
-            (prim3 "hydra.core.annotations.setTermAnnotation"
-                   (lambda (key)
-                     (lambda (val)
-                       (lambda (term)
-                         (let ((native-maybe (term-maybe-to-native val)))
-                           (funcall (funcall (funcall hydra_core_annotations_set_term_annotation key) native-maybe) term)))))
-                   nil name-c opt-term-c t_ t_))
-      ;; getTermAnnotation :: Name -> Term -> Maybe Term
-      (cons "hydra.core.annotations.getTermAnnotation"
-            (prim2 "hydra.core.annotations.getTermAnnotation"
-                   (lambda (key)
-                     (lambda (term)
-                       (native-maybe-to-term
-                         (funcall (funcall hydra_core_annotations_get_term_annotation key) term))))
-                   nil name-c t_ opt-term-c))
-      ;; setTermDescription :: Maybe String -> Term -> Term
-      (cons "hydra.core.annotations.setTermDescription"
-            (prim2 "hydra.core.annotations.setTermDescription"
-                   (lambda (d)
-                     (lambda (term)
-                       (let* ((native-d (term-maybe-to-native d))
-                              (native-str-d
-                                (cond
-                                  ((eq (first native-d) :none) (list :none))
-                                  (t (let ((inner (second native-d)))
-                                       (if (and (consp inner) (eq (first inner) :literal)
-                                                (consp (second inner)) (eq (first (second inner)) :string))
-                                           (list :given (second (second inner)))
-                                           native-d))))))
-                         (funcall (funcall hydra_core_annotations_set_term_description native-str-d) term))))
-                   nil opt-string-c t_ t_))
-      ;; getTermDescription :: InferenceContext -> Graph -> Term -> Either (Maybe String)
-      (cons "hydra.core.annotations.getTermDescription"
-            (prim3 "hydra.core.annotations.getTermDescription"
-                   (lambda (cx)
-                     (lambda (graph)
-                       (lambda (term)
-                         (let ((result (funcall (funcall (funcall hydra_core_annotations_get_term_description cx) graph) term)))
-                           ;; Result is Either Error (Maybe String)
-                           (if (eq (first result) :left)
-                               (list :either result)
-                               (let* ((maybe-str (second result))
-                                      (term-maybe
-                                        (cond
-                                          ((null maybe-str) (list :optional nil))
-                                          ((eq (first maybe-str) :none) (list :optional nil))
-                                          ((eq (first maybe-str) :given)
-                                           (list :optional (list :literal (list :string (second maybe-str)))))
-                                          (t (list :optional maybe-str)))))
-                                 (list :either (list :right term-maybe))))))))
-                   (list "t0") cx-c graph-c t_ either-desc-c)))))
-
-;; ============================================================================
 ;; Regex
 ;; ============================================================================
 
@@ -1046,6 +942,5 @@
             (register-sets)
             (register-strings)
             (register-system)
-            (register-text)
-            (register-annotations))))
+            (register-text))))
     (append native (register-default-fallbacks (mapcar #'car native)))))

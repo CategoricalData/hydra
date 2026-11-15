@@ -771,91 +771,6 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
         (cons (prim-name hydra_core_lib_literals_print_string)   (prim1 (prim-name hydra_core_lib_literals_print_string)   hydra_overlay_emacs_lisp_lib_literals_print_string   nil s s))))))
 
 ;; ============================================================================
-;; Annotations (term-level functions registered as primitives)
-;; ============================================================================
-
-(defun term-maybe-to-native (m)
-  "Convert a term-level maybe (:optional val_or_nil) to native maybe (:given val) / (:none)."
-  (cond
-    ((null m) (list :none))
-    ((not (consp m)) (list :given m))
-    ((eq (car m) :none) (list :none))
-    ((eq (car m) :given) m)
-    ((eq (car m) :optional)
-     (let ((inner (cadr m)))
-       (if (or (null inner)
-               (and (consp inner) (eq (car inner) :none)))
-           (list :none)
-           (list :given inner))))
-    (t (list :given m))))
-
-(defun native-maybe-to-term (m)
-  "Convert a native maybe (:given val) / (:none) to term-level (:optional val_or_nil)."
-  (cond
-    ((null m) (list :optional nil))
-    ((not (consp m)) (list :optional m))
-    ((eq (car m) :given) (list :optional (cadr m)))
-    ((eq (car m) :none) (list :optional nil))
-    (t (list :optional m))))
-
-(defun register-annotations ()
-  (let ((t_ (tc-term)))
-    (list
-      ;; setTermAnnotation :: Name -> Maybe Term -> Term -> Term
-      (cons "hydra.core.annotations.setTermAnnotation"
-            (prim3 "hydra.core.annotations.setTermAnnotation"
-                   (lambda (key)
-                     (lambda (val)
-                       (lambda (term)
-                         (let ((native-maybe (term-maybe-to-native val)))
-                           (funcall (funcall (funcall hydra_core_annotations_set_term_annotation key) native-maybe) term)))))
-                   nil t_ t_ t_ t_))
-      ;; getTermAnnotation :: Name -> Term -> Maybe Term
-      (cons "hydra.core.annotations.getTermAnnotation"
-            (prim2 "hydra.core.annotations.getTermAnnotation"
-                   (lambda (key)
-                     (lambda (term)
-                       (native-maybe-to-term
-                         (funcall (funcall hydra_core_annotations_get_term_annotation key) term))))
-                   nil t_ t_ t_))
-      ;; setTermDescription :: Maybe String -> Term -> Term
-      (cons "hydra.core.annotations.setTermDescription"
-            (prim2 "hydra.core.annotations.setTermDescription"
-                   (lambda (d)
-                     (lambda (term)
-                       (let* ((native-d (term-maybe-to-native d))
-                              (native-str-d
-                                (cond
-                                  ((eq (car native-d) :none) (list :none))
-                                  (t (let ((inner (cadr native-d)))
-                                       (if (and (consp inner) (eq (car inner) :literal)
-                                                (consp (cadr inner)) (eq (car (cadr inner)) :string))
-                                           (list :given (cadr (cadr inner)))
-                                           native-d))))))
-                         (funcall (funcall hydra_core_annotations_set_term_description native-str-d) term))))
-                   nil t_ t_ t_))
-      ;; getTermDescription :: InferenceContext -> Graph -> Term -> Either (Maybe String)
-      (cons "hydra.core.annotations.getTermDescription"
-            (prim3 "hydra.core.annotations.getTermDescription"
-                   (lambda (cx)
-                     (lambda (graph)
-                       (lambda (term)
-                         (let ((result (funcall (funcall (funcall hydra_core_annotations_get_term_description cx) graph) term)))
-                           ;; Result is Either Error (Maybe String)
-                           (if (eq (car result) :left)
-                               (list :either result)
-                               (let* ((maybe-str (cadr result))
-                                      (term-maybe
-                                        (cond
-                                          ((null maybe-str) (list :optional nil))
-                                          ((eq (car maybe-str) :none) (list :optional nil))
-                                          ((eq (car maybe-str) :given)
-                                           (list :optional (list :literal (list :string (cadr maybe-str)))))
-                                          (t (list :optional maybe-str)))))
-                                 (list :either (list :right term-maybe))))))))
-                   nil t_ t_ t_ t_)))))
-
-;; ============================================================================
 ;; Regex
 ;; ============================================================================
 
@@ -974,8 +889,7 @@ The def var is loaded globally by the dolist above; callers pass the bare def va
             (register-sets)
             (register-strings)
             (register-system)
-            (register-text)
-            (register-annotations))))
+            (register-text))))
     (append native (register-default-fallbacks (mapcar #'car native)))))
 
 (provide 'hydra.lib.libraries)
