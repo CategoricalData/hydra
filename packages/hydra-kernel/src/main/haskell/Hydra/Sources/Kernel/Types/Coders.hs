@@ -39,6 +39,12 @@ module_ = Module {
       languageFeature,
       languageName,
       symmetricAdapter,
+      tcoBinding,
+      tcoCaseAlternative,
+      tcoCaseStatement,
+      tcoLet,
+      tcoLoopPlan,
+      tcoStep,
       traversalOrder,
       typeAdapter]
 
@@ -205,6 +211,90 @@ symmetricAdapter :: TypeDefinition
 symmetricAdapter = define "SymmetricAdapter" $
   doc "A bidirectional encoder which maps between the same type and term languages on either side" $
   T.forAlls ["t", "v", "e"] $ adapter @@ "t" @@ "t" @@ "v" @@ "v" @@ "e"
+
+tcoBinding :: TypeDefinition
+tcoBinding = define "TcoBinding" $
+  doc "A 'let' binding within a TCO-lowered loop body, mirroring Core.Binding" $
+  T.record [
+    "name">:
+      doc "The name of the bound variable"
+      Core.name,
+    "term">:
+      doc "The term to which the variable is bound; recomputed on every loop iteration" $
+      Core.term,
+    "typeScheme">:
+      doc "The optional type scheme of the binding, needed to declare its own type parameters" $
+      T.optional Core.typeScheme]
+
+tcoCaseAlternative :: TypeDefinition
+tcoCaseAlternative = define "TcoCaseAlternative" $
+  doc "A single alternative of a TCO-lowered case statement, mirroring Core.CaseAlternative. The original handler is always a lambda binding the variant's payload; 'parameter' preserves that bound name so coders know what to bind when printing the branch." $
+  T.record [
+    "name">:
+      doc "The name of the union variant matched by this alternative"
+      Core.name,
+    "parameter">:
+      doc "The name bound to the matched variant's payload (from the original handler lambda)"
+      Core.name,
+    "handler">:
+      doc "The lowered handler body for the matched variant's payload" $
+      tcoStep]
+
+tcoCaseStatement :: TypeDefinition
+tcoCaseStatement = define "TcoCaseStatement" $
+  doc "A TCO-lowered union elimination, mirroring Core.CaseStatement" $
+  T.record [
+    "typeName">:
+      doc "The name of the union type"
+      Core.name,
+    "scrutinee">:
+      doc "The term being matched against; evaluated exactly once per dispatch" $
+      Core.term,
+    "default">:
+      doc "An optional default case, used if none of the explicit cases match" $
+      T.optional tcoStep,
+    "cases">:
+      doc "A list of case alternatives, one per union variant being handled" $
+      T.list tcoCaseAlternative]
+
+tcoLet :: TypeDefinition
+tcoLet = define "TcoLet" $
+  doc "A set of 'let' bindings together with a lowered body, mirroring Core.Let" $
+  T.record [
+    "bindings">:
+      doc "The list of variable bindings; recomputed on every loop iteration" $
+      T.list tcoBinding,
+    "body">:
+      doc "The lowered body term in which the variables are bound" $
+      tcoStep]
+
+tcoLoopPlan :: TypeDefinition
+tcoLoopPlan = define "TcoLoopPlan" $
+  doc "A self-tail-recursive function body, restructured into an explicit loop. Produced by lowerSelfTailRecursion; consumed by per-language coders to emit a native iteration construct." $
+  T.record [
+    "params">:
+      doc "Parameter names, in order; these are the loop's mutable loop variables" $
+      T.list Core.name,
+    "body">:
+      doc "The loop body, with tail self-calls lowered to continuation steps" $
+      tcoStep]
+
+tcoStep :: TypeDefinition
+tcoStep = define "TcoStep" $
+  doc "One node of a TCO-lowered function body: a loop continuation, a terminal value, or a branch" $
+  T.union [
+    "continue">:
+      doc "Reassign params to these new values, in the same order as TcoLoopPlan.params, and repeat the loop" $
+      T.list Core.term,
+    "return">:
+      doc "Exit the loop, yielding this value"
+      Core.term,
+    "cases">:
+      doc "Branch on a union elimination; mirrors Core.CaseStatement but handlers are TcoStep" $
+      tcoCaseStatement,
+    "let_">:
+      doc "Bindings that must be recomputed on every iteration, mirroring Core.Let" $
+      tcoLet]
 
 traversalOrder :: TypeDefinition
 traversalOrder = define "TraversalOrder" $

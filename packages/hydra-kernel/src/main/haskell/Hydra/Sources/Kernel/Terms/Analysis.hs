@@ -22,6 +22,8 @@ import Hydra.Kernel hiding (
   isSimpleAssignment,
   isSelfTailRecursive,
   isTailRecursiveInTailPosition,
+  lowerSelfTailRecursion,
+  lowerTcoStep,
   moduleContainsBinaryLiterals,
   moduleContainsDecimalLiterals,
   moduleDependencyModuleNames,
@@ -120,6 +122,8 @@ module_ = Module {
       toDefinition isSelfTailRecursive,
       toDefinition isSimpleAssignment,
       toDefinition isTailRecursiveInTailPosition,
+      toDefinition lowerSelfTailRecursion,
+      toDefinition lowerTcoStep,
       toDefinition moduleContainsBinaryLiterals,
       toDefinition moduleContainsDecimalLiterals,
       toDefinition moduleDependencyModuleNames,
@@ -498,6 +502,97 @@ gatherArgsWithTypeApps = define "gatherArgsWithTypeApps" $
       "body" <~ Core.typeApplicationTermBody (var "ta") $
       "typ" <~ Core.typeApplicationTermType (var "ta") $
       gatherArgsWithTypeApps @@ var "body" @@ var "args" @@ (Lists.cons (var "typ") (var "tyArgs"))]
+
+lowerSelfTailRecursion :: TypedTermDefinition (Name -> [Name] -> Term -> Maybe TcoLoopPlan)
+lowerSelfTailRecursion = define "lowerSelfTailRecursion" $
+  doc "Lower a self-tail-recursive function body into an explicit TcoLoopPlan, or Nothing if the body is not self-tail-recursive. Mirrors the traversal of isTailRecursiveInTailPosition, but builds a TcoStep tree instead of a boolean verdict." $
+  "funcName" ~> "paramNames" ~> "body" ~>
+  Logic.ifElse (isSelfTailRecursive @@ var "funcName" @@ var "body")
+    (just $ record _TcoLoopPlan [
+      _TcoLoopPlan_params>>: var "paramNames",
+      _TcoLoopPlan_body>>: (lowerTcoStep @@ var "funcName" @@ var "paramNames" @@ var "body")])
+    nothing
+
+-- | Lower a term known to be in tail position (per isTailRecursiveInTailPosition) into a TcoStep.
+--   Precondition: isTailRecursiveInTailPosition funcName term == True.
+lowerTcoStep :: TypedTermDefinition (Name -> [Name] -> Term -> TcoStep)
+lowerTcoStep = define "lowerTcoStep" $
+  doc "Lower a term in tail position into a TcoStep (continue/return/cases/let_)" $
+  "funcName" ~> "paramNames" ~> "term" ~>
+    "stripped" <~ (Strip.deannotateAndDetypeTerm @@ var "term") $
+    match _Term (var "stripped") (Just $
+      -- Default: not a recognized tail-recursive shape; this is a terminal value
+      inject _TcoStep _TcoStep_return (var "term")) [
+      _Term_application>>: "app" ~>
+        "gathered" <~ (gatherApplications @@ var "stripped") $
+        "gatherArgs" <~ (Pairs.first $ var "gathered") $
+        "gatherFun" <~ (Pairs.second $ var "gathered") $
+        "strippedFun" <~ (Strip.deannotateAndDetypeTerm @@ var "gatherFun") $
+        match _Term (var "strippedFun") (Just $
+          inject _TcoStep _TcoStep_return (var "term")) [
+          _Term_variable>>: "vname" ~>
+            Logic.ifElse (Equality.equal (var "vname") (var "funcName"))
+              -- Self-call in tail position: emit a continue step with the gathered
+              -- arguments, reordered to match paramNames (by position; the Logic.and
+              -- guard in isTailRecursiveInTailPosition already confirmed arity and
+              -- argument safety, so no re-validation is needed here)
+              (inject _TcoStep _TcoStep_continue (var "gatherArgs"))
+              -- Not a self-call: terminal value
+              (inject _TcoStep _TcoStep_return (var "term")),
+          _Term_cases>>: "cs" ~>
+            "tname" <~ (Core.caseStatementTypeName $ var "cs") $
+            "cases_" <~ (Core.caseStatementCases $ var "cs") $
+            "dflt" <~ (Core.caseStatementDefault $ var "cs") $
+            "loweredCases" <~ (Lists.map
+              ("field" ~>
+                "handler" <~ (Core.caseAlternativeHandler $ var "field") $
+                "strippedHandler" <~ (Strip.deannotateAndDetypeTerm @@ var "handler") $
+                match _Term (var "strippedHandler") (Just $
+                  -- Handlers are always lambdas by construction (CaseAlternative's own
+                  -- invariant); this default never fires in practice, but is required by
+                  -- the exhaustiveness check. Falls back to lowering the raw handler term
+                  -- with a synthetic, never-referenced parameter name.
+                  record _TcoCaseAlternative [
+                    _TcoCaseAlternative_name>>: Core.caseAlternativeName (var "field"),
+                    _TcoCaseAlternative_parameter>>: Core.name (string "_"),
+                    _TcoCaseAlternative_handler>>:
+                      (lowerTcoStep @@ var "funcName" @@ var "paramNames" @@ var "handler")]) [
+                  _Term_lambda>>: "lam" ~>
+                    "param" <~ (Core.lambdaParameter $ var "lam") $
+                    "lamBody" <~ (Core.lambdaBody $ var "lam") $
+                    record _TcoCaseAlternative [
+                      _TcoCaseAlternative_name>>: Core.caseAlternativeName (var "field"),
+                      _TcoCaseAlternative_parameter>>: var "param",
+                      _TcoCaseAlternative_handler>>:
+                        (lowerTcoStep @@ var "funcName" @@ var "paramNames" @@ var "lamBody")]])
+              (var "cases_")) $
+            "loweredDflt" <~ (Optionals.map
+              ("d" ~> lowerTcoStep @@ var "funcName" @@ var "paramNames" @@ var "d")
+              (var "dflt")) $
+            -- The cases dispatch is unary (application(cases(...), scrutinee)); the
+            -- DSL's `match` combinator always desugars to exactly this shape, so
+            -- gatherArgs has exactly one element here.
+            "scrutinee_" <~ (Optionals.withDefault (var "term") (Lists.head (var "gatherArgs"))) $
+            inject _TcoStep _TcoStep_cases (record _TcoCaseStatement [
+              _TcoCaseStatement_typeName>>: var "tname",
+              _TcoCaseStatement_scrutinee>>: var "scrutinee_",
+              _TcoCaseStatement_default>>: var "loweredDflt",
+              _TcoCaseStatement_cases>>: var "loweredCases"])],
+      -- Lambda: tail position is the body (transparent; the lambda itself is not re-emitted,
+      -- consistent with isTailRecursiveInTailPosition treating it as a pass-through)
+      _Term_lambda>>: "lam" ~>
+        lowerTcoStep @@ var "funcName" @@ var "paramNames" @@ (Core.lambdaBody $ var "lam"),
+      -- Let: tail position is the body; bindings are carried into the loop, recomputed each iteration
+      _Term_let>>: "lt" ~>
+        "loweredBindings" <~ (Lists.map
+          ("b" ~> record _TcoBinding [
+            _TcoBinding_name>>: Core.bindingName (var "b"),
+            _TcoBinding_term>>: Core.bindingTerm (var "b"),
+            _TcoBinding_typeScheme>>: Core.bindingTypeScheme (var "b")])
+          (Core.letBindings $ var "lt")) $
+        inject _TcoStep _TcoStep_let_ (record _TcoLet [
+          _TcoLet_bindings>>: var "loweredBindings",
+          _TcoLet_body>>: (lowerTcoStep @@ var "funcName" @@ var "paramNames" @@ (Core.letBody $ var "lt"))])]
 
 isSelfTailRecursive :: TypedTermDefinition (Name -> Term -> Bool)
 isSelfTailRecursive = define "isSelfTailRecursive" $
