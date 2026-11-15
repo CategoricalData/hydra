@@ -33,6 +33,7 @@ import qualified Hydra.Core.Dsl.Lib.Pairs                  as Pairs
 import qualified Hydra.Core.Dsl.Lib.Sets                   as Sets
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core                       as Core
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph                      as Graph
+import qualified Hydra.Core.Dsl.Coders                          as Coders
 import qualified Hydra.Core.Dsl.Errors                          as Error
 import qualified Hydra.Core.Dsl.Packaging                       as Packaging
 import qualified Hydra.Core.Dsl.Typing                          as Typing
@@ -93,6 +94,7 @@ module_ = Module {
       toDefinition encodeLiteral,
       toDefinition encodeLiteralType,
       toDefinition encodeParam,
+      toDefinition encodeTcoStep,
       toDefinition encodeTerm,
       toDefinition encodeTermDefinition,
       toDefinition encodeType,
@@ -128,6 +130,7 @@ module_ = Module {
       toDefinition tsAsAny,
       toDefinition tsCall,
       toDefinition tsCond,
+      toDefinition tsConstDeclStatement,
       toDefinition tsDocEntityRef,
       toDefinition tsEnvGetGraph,
       toDefinition tsEnvSetGraph,
@@ -277,7 +280,7 @@ encodeBindingAsStatement = def "encodeBindingAsStatement" $
         -- self-reference (recursive let). The inner function is itself built
         -- via the function-structure pipeline.
         "innerFunDecl" <~ (functionDeclarationFromTerm @@ var "cx" @@ var "g" @@ var "currentNs"
-          @@ var "lname" @@ var "bterm"
+          @@ var "bname" @@ var "lname" @@ var "bterm"
           @@ (Optionals.bind (Core.bindingTypeScheme (var "b"))
                 ("ts" ~> just (Core.typeSchemeBody (var "ts"))))) $
         inject TS._Statement TS._Statement_functionDeclaration (var "innerFunDecl")]
@@ -1067,7 +1070,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     -- `export const lname = <expr>;`.
     "dterm" <~ (Strip.deannotateTerm @@ var "rawTerm") $
     "funDecl" <~ (functionDeclarationFromTerm @@ var "cx" @@ var "g" @@ var "currentNs"
-      @@ var "lname" @@ var "rawTerm" @@ var "mScheme") $
+      @@ var "name" @@ var "lname" @@ var "rawTerm" @@ var "mScheme") $
     "asFunDecl" <~ (var "asExport" @@ (inject TS._Statement TS._Statement_functionDeclaration (var "funDecl"))) $
     "item" <~ match _Term (var "dterm")
       (Just $
@@ -1431,15 +1434,134 @@ flattenApplication = def "flattenApplication" $
              (Lists.concat2 (var "prevArgs")
                             (Lists.singleton (Core.applicationArgument (var "app"))))]
 
+-- | Lower a TcoStep into a list of TS statements, given the function's own
+-- loop-variable names (one per parameter, already-sanitized TS identifiers).
+-- Mirrors the existing `_Term_cases` switch-statement convention in
+-- `encodeTerm` (tag/value access via `(u as any).tag`/`.value`), but each
+-- `continue` step emits a batch of assignment statements (reassigning the
+-- loop variables, evaluated via the ordinary `encodeTerm` before any
+-- assignment happens, so later assignments don't see earlier ones'
+-- already-updated values) followed by a bare `continue;`, instead of a
+-- `return <call>;`.
+encodeTcoStep :: TypedTermDefinition (InferenceContext -> Graph -> ModuleName -> [String] -> TcoStep -> [TS.Statement])
+encodeTcoStep = def "encodeTcoStep" $
+  doc "Lower a TcoStep into TS statements: continue -> assignments + continue, return -> return, cases -> switch, let_ -> const bindings then recurse" $
+  "cx" ~> "g" ~> "currentNs" ~> "loopVars" ~> "step" ~>
+    match _TcoStep (var "step") Nothing [
+      _TcoStep_continue>>: lambda "newArgs" $
+        -- Evaluate every new argument expression BEFORE assigning any loop
+        -- variable, so an argument that refers to an earlier parameter
+        -- (e.g. `f(x, x+1)` rewritten in terms of the old `x`) sees the
+        -- pre-reassignment value, matching the Hydra term's own
+        -- simultaneous-binding tail-call semantics. Temp names are derived
+        -- from each loop variable's own (already-unique) name, so no
+        -- index-generation primitive is needed.
+        "newExprs" <~ (Lists.map
+          (lambda "a" $ encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "a")
+          (var "newArgs")) $
+        "tmpNames" <~ (Lists.map
+          (lambda "lv" $ Strings.concat2 (string "_tco_tmp_") (var "lv"))
+          (var "loopVars")) $
+        "tmpDecls" <~ (Lists.map
+          (lambda "pair" $
+            "tmpName" <~ Pairs.first (var "pair") $
+            "expr" <~ Pairs.second (var "pair") $
+            tsConstDeclStatement @@ var "tmpName" @@ var "expr")
+          (Lists.zip (var "tmpNames") (var "newExprs"))) $
+        "assignStmts" <~ (Lists.map
+          (lambda "pair" $
+            "loopVar" <~ Pairs.first (var "pair") $
+            "tmpName" <~ Pairs.second (var "pair") $
+            inject TS._Statement TS._Statement_expression
+              (inject TS._Expression TS._Expression_assignment
+                (record TS._AssignmentExpression [
+                  TS._AssignmentExpression_operator>>: inject TS._AssignmentOperator TS._AssignmentOperator_assign unit,
+                  TS._AssignmentExpression_left>>: inject TS._Pattern TS._Pattern_identifier (tsIdent @@ var "loopVar"),
+                  TS._AssignmentExpression_right>>: tsExprIdent @@ var "tmpName"])))
+          (Lists.zip (var "loopVars") (var "tmpNames"))) $
+        Lists.concat2 (var "tmpDecls") (Lists.concat2 (var "assignStmts") (list [inject TS._Statement TS._Statement_continue (Optionals.map (lambda "label" $ wrap TS._Identifier (var "label")) (nothing :: TypedTerm (Maybe String)))])),
+      _TcoStep_return>>: lambda "v" $
+        list [inject TS._Statement TS._Statement_return
+          (just (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "v"))],
+      _TcoStep_cases>>: lambda "cs" $
+        "tname_" <~ (Coders.tcoCaseStatementTypeName (var "cs")) $
+        "ignoreTname" <~ var "tname_" $
+        "scrutinee_" <~ (Coders.tcoCaseStatementScrutinee (var "cs")) $
+        "armFields" <~ (Coders.tcoCaseStatementCases (var "cs")) $
+        "defaultMaybe" <~ (Coders.tcoCaseStatementDefault (var "cs")) $
+        "uVar" <~ string "u" $
+        "uInitExpr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "scrutinee_") $
+        "uDecl" <~ (tsConstDeclStatement @@ var "uVar" @@ var "uInitExpr") $
+        "uExpr" <~ (tsAsAny @@ (tsExprIdent @@ var "uVar")) $
+        "uTag" <~ (tsMember @@ var "uExpr" @@ string "tag") $
+        "uValue" <~ (tsMember @@ var "uExpr" @@ string "value") $
+        "armCases" <~ (Lists.map
+          (lambda "f" $
+            "fname" <~ Core.unName (Coders.tcoCaseAlternativeName (var "f")) $
+            "payloadVar" <~ (sanitizeParamName @@ Coders.tcoCaseAlternativeParameter (var "f")) $
+            "payloadDecl" <~ (tsConstDeclStatement @@ var "payloadVar" @@ var "uValue") $
+            "armStmts" <~ (encodeTcoStep @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "loopVars"
+              @@ Coders.tcoCaseAlternativeHandler (var "f")) $
+            record TS._SwitchCase [
+              TS._SwitchCase_test>>: just (tsExprStr @@ var "fname"),
+              TS._SwitchCase_consequent>>: list [inject TS._Statement TS._Statement_block (Lists.concat2 (list [var "payloadDecl"]) (var "armStmts"))]])
+          (var "armFields")) $
+        "defaultCase" <~ (Optionals.match (var "defaultMaybe")
+          (record TS._SwitchCase [
+            TS._SwitchCase_test>>: (nothing :: TypedTerm (Maybe TS.Expression)),
+            TS._SwitchCase_consequent>>: list [
+              inject TS._Statement TS._Statement_return (just
+                (tsCall @@ (tsExprIdent @@ string "(() => { throw new Error('unmatched case'); })")
+                        @@ list ([] :: [TypedTerm TS.Expression])))]])
+          (lambda "dflt" $
+            "dStmts" <~ (encodeTcoStep @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "loopVars" @@ var "dflt") $
+            record TS._SwitchCase [
+              TS._SwitchCase_test>>: (nothing :: TypedTerm (Maybe TS.Expression)),
+              TS._SwitchCase_consequent>>: list [inject TS._Statement TS._Statement_block (var "dStmts")]])) $
+        "allCases" <~ (Lists.concat2 (var "armCases") (list [var "defaultCase"])) $
+        "switchStmt" <~ (inject TS._Statement TS._Statement_switch
+          (record TS._SwitchStatement [
+            TS._SwitchStatement_discriminant>>: var "uTag",
+            TS._SwitchStatement_cases>>: var "allCases"])) $
+        list [var "uDecl", var "switchStmt"],
+      _TcoStep_let_>>: lambda "lt" $
+        "bindings" <~ (Coders.tcoLetBindings (var "lt")) $
+        "bindingStmts" <~ (Lists.map
+          (lambda "b" $
+            "bname" <~ (sanitizeParamName @@ Coders.tcoBindingName (var "b")) $
+            "bexpr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Coders.tcoBindingTerm (var "b")) $
+            tsConstDeclStatement @@ var "bname" @@ var "bexpr")
+          (var "bindings")) $
+        "bodyStmts" <~ (encodeTcoStep @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "loopVars"
+          @@ Coders.tcoLetBody (var "lt")) $
+        Lists.concat2 (var "bindingStmts") (var "bodyStmts")]
+
+-- | A `const <name> = <expr>;` statement.
+tsConstDeclStatement :: TypedTermDefinition (String -> TS.Expression -> TS.Statement)
+tsConstDeclStatement = def "tsConstDeclStatement" $
+  doc "A const variable-declaration statement" $
+  "name" ~> "expr" ~>
+    "declarator" <~ (record TS._VariableDeclarator [
+      TS._VariableDeclarator_id>>: inject TS._Pattern TS._Pattern_identifier (tsIdent @@ var "name"),
+      TS._VariableDeclarator_init>>: just (var "expr")]) $
+    "varDecl" <~ (record TS._VariableDeclaration [
+      TS._VariableDeclaration_kind>>: inject TS._VariableKind TS._VariableKind_const unit,
+      TS._VariableDeclaration_declarations>>: list [var "declarator"]]) $
+    inject TS._Statement TS._Statement_variableDeclaration (var "varDecl")
+
 -- | Build a TS `FunctionDeclaration` from a Hydra term. Uses
 -- `Analysis.analyzeFunctionTerm` to peel lambdas (and any nested let bindings)
 -- into the FunctionStructure shape: explicit params + statements + body.
 -- The `mScheme :: Maybe Type` arg is the binding's known type scheme body
--- (for codomain inference); pass `Nothing` if not available.
-functionDeclarationFromTerm :: TypedTermDefinition (InferenceContext -> Graph -> ModuleName -> String -> Term -> Maybe Type -> TS.FunctionDeclaration)
+-- (for codomain inference); pass `Nothing` if not available. The `fname`
+-- arg is the term's own kernel-level binding `Name` (not the TS-sanitized
+-- `lname`) -- the identity that `Analysis.isSelfTailRecursive`/
+-- `lowerSelfTailRecursion` match self-calls against, mirroring the Java/Python
+-- coders which use the same original `Name` for this check.
+functionDeclarationFromTerm :: TypedTermDefinition (InferenceContext -> Graph -> ModuleName -> Name -> String -> Term -> Maybe Type -> TS.FunctionDeclaration)
 functionDeclarationFromTerm = def "functionDeclarationFromTerm" $
   doc "Build a TS function declaration from a Hydra term by peeling lambdas and let bindings into explicit parameters, statements, and a body" $
-  "cx" ~> "g" ~> "currentNs" ~> "lname" ~> "term" ~> "_mScheme" ~>
+  "cx" ~> "g" ~> "currentNs" ~> "fname" ~> "lname" ~> "term" ~> "_mScheme" ~>
     "fsE" <~ (analyzeTypeScriptFunction @@ var "cx" @@ var "g" @@ var "term") $
     "fs" <~ Eithers.either
       (lambda "_err" $ record _FunctionStructure [
@@ -1481,9 +1603,39 @@ functionDeclarationFromTerm = def "functionDeclarationFromTerm" $
     "bindingStmts" <~ (Lists.map
       (lambda "b" $ encodeBindingAsStatement @@ var "cx" @@ var "fsEnv" @@ var "currentNs" @@ var "b")
       (var "sortedBindings")) $
-    "bodyExpr" <~ (encodeTerm @@ var "cx" @@ var "fsEnv" @@ var "currentNs" @@ var "fsBody") $
-    "returnStmt" <~ (inject TS._Statement TS._Statement_return (just (var "bodyExpr"))) $
-    "block" <~ (Lists.concat2 (var "bindingStmts") (list [var "returnStmt"])) $
+    -- TCO: if the body is self-tail-recursive on `fname`, lower it to a
+    -- `while (true) { ... }` loop instead of a direct (stack-growing)
+    -- recursive call. `fsParams` doubles as the TCO loop-variable list --
+    -- each is reassigned in place by a `continue` step. Loop variables are
+    -- sanitized the same way ordinary params are (encodeParam's identifier
+    -- side), via `sanitizeParamName`, so reassignment targets match the
+    -- declared parameter identifiers exactly.
+    "loopVarNames" <~ (Lists.map
+      (lambda "p" $ sanitizeParamName @@ var "p")
+      (var "fsParams")) $
+    -- The lifted let bindings may depend on the loop parameters, so they must be
+    -- recomputed on each iteration: re-wrap them around the body before lowering
+    -- (the TcoStep let arm emits them inside the loop) instead of emitting them
+    -- once before the loop.
+    "tcoBody" <~ Logic.ifElse (Lists.isEmpty (var "fsBindings"))
+      (var "fsBody")
+      (Core.termLet (Core.let_ (var "sortedBindings") (var "fsBody"))) $
+    "mPlan" <~ (Analysis.lowerSelfTailRecursion @@ var "fname" @@ var "fsParams" @@ var "tcoBody") $
+    "block" <~ (Optionals.match (var "mPlan")
+      ("bodyExpr" <~ (encodeTerm @@ var "cx" @@ var "fsEnv" @@ var "currentNs" @@ var "fsBody") $
+        "returnStmt" <~ (inject TS._Statement TS._Statement_return (just (var "bodyExpr"))) $
+        Lists.concat2 (var "bindingStmts") (list [var "returnStmt"]))
+      (lambda "plan" $
+        "loopStmts" <~ (encodeTcoStep @@ var "cx" @@ var "fsEnv" @@ var "currentNs" @@ var "loopVarNames"
+          @@ Coders.tcoLoopPlanBody (var "plan")) $
+        "loopBody" <~ (inject TS._Statement TS._Statement_block (var "loopStmts")) $
+        "trueExpr" <~ (inject TS._Expression TS._Expression_literal
+          (inject TS._Literal TS._Literal_boolean (boolean True))) $
+        "whileStmt" <~ (inject TS._Statement TS._Statement_while
+          (record TS._WhileStatement [
+            TS._WhileStatement_test>>: var "trueExpr",
+            TS._WhileStatement_body>>: var "loopBody"])) $
+        list [var "whileStmt"])) $
     record TS._FunctionDeclaration [
       TS._FunctionDeclaration_id>>: tsIdent @@ var "lname",
       TS._FunctionDeclaration_params>>: var "paramPatterns",
