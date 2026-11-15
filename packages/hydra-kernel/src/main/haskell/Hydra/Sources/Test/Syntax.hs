@@ -272,7 +272,19 @@ termDocCommentGroup = define "termDocCommentGroup" $
 
     termDefinitionPrintTest "inner (non-outermost) description is NOT hoisted"
       (termDefOf "wrapped" (Core.termApplication $ Core.application (varT "f") (withDescriptionAnn "inner desc" (varT "x"))))
-      "term wrapped = f x@{description = \"inner desc\"}"])
+      "term wrapped = f x@{description = \"inner desc\"}",
+
+    -- #711/#837: a module-level print -> parse -> re-print round trip, not just a bare
+    -- TermDefinition print, so a parser-side regression in reattaching the description to the
+    -- body (as opposed to leaving it on EntityMetadata) is caught too -- 'moduleRoundtripTest'
+    -- compares full re-printed text against the original, and 'termDefinition' only ever peels a
+    -- description off the BODY (never off metadata), so a dropped reattachment shows up as a
+    -- missing leading '##' line in the re-print.
+    moduleRoundtripTest "self-recursive term description round-trips (whole module, #837)"
+      (moduleWithSelfRecursiveTermDescription "test.selfrec.term" "Loop until done."),
+
+    moduleRoundtripTest "term description plus another annotation key round-trips (whole module)"
+      (moduleWithTermDescriptionAndOtherAnn "test.descplusann.term" "Get a character by index" "0.17.6")])
 
 -- | Build a bare (no pre-existing metadata) TypeDefinition for the given type scheme body, for
 -- exercising 'PrintPackaging.typeDefinition's description-hoisting directly (#711).
@@ -326,6 +338,33 @@ moduleWithTypeDescription nsStr d = Packaging.module_
   (nsLit nsStr) Phantoms.nothing
   (Phantoms.list ([] :: [TypedTerm ModuleDependency]))
   (Phantoms.list [Packaging.definitionType (typeDefOf "Config" (withTypeDescriptionAnn d T.string))])
+
+-- | Build a minimal, no-module-metadata module whose sole term definition is SELF-RECURSIVE (its
+-- lambda body applies its own fully-qualified name) and carries the given description, for
+-- round-tripping the whole module (#711/#837): a prior validator bug was first surfaced by a
+-- real self-recursive definition ('hydra.core.json.yaml.encode.jsonToYaml'), on the hypothesis
+-- that self-recursion specifically interacted with doc-comment reattachment. That hypothesis was
+-- disproven by direct repro (both the self-recursive and a sibling non-recursive definition
+-- parsed to the identical correct shape; the real bug was a stale, short-circuiting validator --
+-- see 'Validate.Packaging.checkDefinitionDocumentation'), but this fixture pins the self-recursive
+-- shape as a standing regression case regardless.
+moduleWithSelfRecursiveTermDescription :: String -> String -> TypedTerm Module
+moduleWithSelfRecursiveTermDescription nsStr d = Packaging.module_
+  (nsLit nsStr) Phantoms.nothing
+  (Phantoms.list ([] :: [TypedTerm ModuleDependency]))
+  (Phantoms.list [Packaging.definitionTerm (termDefOf "loop"
+    (withDescriptionAnn d (lamT "x" (appT (refT (nsStr L.++ ".loop")) (varT "x")))))])
+
+-- | Build a minimal, no-module-metadata module whose sole term definition carries a description
+-- PLUS another annotation key (#711/#837's round-trip regression case for the byte-identity
+-- normalization decision: a definition's description must reattach to the body as the OUTERMOST
+-- annotation, merged with -- not nested around -- any other annotation key already present).
+moduleWithTermDescriptionAndOtherAnn :: String -> String -> String -> TypedTerm Module
+moduleWithTermDescriptionAndOtherAnn nsStr d otherVal = Packaging.module_
+  (nsLit nsStr) Phantoms.nothing
+  (Phantoms.list ([] :: [TypedTerm ModuleDependency]))
+  (Phantoms.list [Packaging.definitionTerm (termDefOf "impl"
+    (withDescriptionAndOtherAnn d otherVal (varT "y")))])
 
 -- | Print a module and compare against an exact expected string.
 modulePrintTest :: String -> TypedTerm Module -> String -> TypedTerm TestCaseWithMetadata
