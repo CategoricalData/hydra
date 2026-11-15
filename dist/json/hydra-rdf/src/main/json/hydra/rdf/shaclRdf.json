@@ -1671,9 +1671,93 @@
                                 "name": "qualifiedValueShape",
                                 "handler": {
                                   "lambda": {
-                                    "parameter": "_",
+                                    "parameter": "q",
                                     "domain": {"variable": "hydra.rdf.shacl.model.QualifiedValueShape"},
-                                    "body": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}}}]}},
+                                    "body": {
+                                      "application": {
+                                        "function": {
+                                          "typeApplication": {"body": {"variable": "hydra.core.lib.lists.concat"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}},
+                                        "argument": {
+                                          "list": [
+                                            {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {
+                                                                  "typeApplication": {"body": {"variable": "hydra.rdf.shaclRdf.referenceToTriples"}, "type": {"variable": "hydra.rdf.shacl.model.Shape"}}},
+                                                                "argument": {"variable": "subj"}}},
+                                                            "argument": {"literal": {"string": "qualifiedValueShape"}}}},
+                                                        "argument": {"variable": "hydra.rdf.shaclRdf.inlineShapeToTriples"}}},
+                                                    "argument": {"literal": {"integer": {"int32": 0}}}}},
+                                                "argument": {
+                                                  "application": {
+                                                    "function": {"project": {"typeName": "hydra.rdf.shacl.model.QualifiedValueShape", "fieldName": "qualifiedValueShape"}},
+                                                    "argument": {"variable": "q"}}}}},
+                                            {
+                                              "list": [
+                                                {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.tripleRIN"}, "argument": {"variable": "subj"}}},
+                                                        "argument": {
+                                                          "application": {"function": {"variable": "hydra.rdf.shaclRdf.sh"}, "argument": {"literal": {"string": "qualifiedMinCount"}}}}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {"variable": "hydra.rdf.shaclRdf.integerNode"},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {"project": {"typeName": "hydra.rdf.shacl.model.QualifiedValueShape", "fieldName": "qualifiedMinCount"}},
+                                                            "argument": {"variable": "q"}}}}}}},
+                                                {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.tripleRIN"}, "argument": {"variable": "subj"}}},
+                                                        "argument": {
+                                                          "application": {"function": {"variable": "hydra.rdf.shaclRdf.sh"}, "argument": {"literal": {"string": "qualifiedMaxCount"}}}}}},
+                                                    "argument": {
+                                                      "application": {
+                                                        "function": {"variable": "hydra.rdf.shaclRdf.integerNode"},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {"project": {"typeName": "hydra.rdf.shacl.model.QualifiedValueShape", "fieldName": "qualifiedMaxCount"}},
+                                                            "argument": {"variable": "q"}}}}}}}]},
+                                            {
+                                              "application": {
+                                                "function": {
+                                                  "application": {
+                                                    "function": {
+                                                      "application": {
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.optionals.match"}, "type": {"literal": "boolean"}}},
+                                                            "type": {"list": {"variable": "hydra.rdf.syntax.Triple"}}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "function": {"project": {"typeName": "hydra.rdf.shacl.model.QualifiedValueShape", "fieldName": "qualifiedValueShapesDisjoint"}},
+                                                            "argument": {"variable": "q"}}}}},
+                                                    "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}},
+                                                "argument": {
+                                                  "lambda": {
+                                                    "parameter": "b",
+                                                    "domain": {"literal": "boolean"},
+                                                    "body": {
+                                                      "list": [
+                                                        {
+                                                          "application": {
+                                                            "function": {
+                                                              "application": {
+                                                                "function": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.tripleRIN"}, "argument": {"variable": "subj"}}},
+                                                                "argument": {
+                                                                  "application": {"function": {"variable": "hydra.rdf.shaclRdf.sh"}, "argument": {"literal": {"string": "qualifiedValueShapesDisjoint"}}}}}},
+                                                            "argument": {"application": {"function": {"variable": "hydra.rdf.shaclRdf.booleanNode"}, "argument": {"variable": "b"}}}}}]}}}}}]}}}}}}]}},
                         "argument": {"variable": "psc"}}}}}}},
             "annotation": {
               "map": [
