@@ -170,6 +170,42 @@ spec = do
       [("and", ShaclModel.CommonConstraintAnd), ("or", ShaclModel.CommonConstraintOr),
        ("xone", ShaclModel.CommonConstraintXone)]
 
+ -- Regression tests for #838: a qualified value shape constraint serialized to zero triples.
+ H.describe "ShaclRdf serialization of qualified value shapes (#838)" $ do
+
+    mapM_ (\(name, mkRef, check) ->
+      H.it ("emits sh:qualifiedValueShape, counts and disjoint flag over a " ++ name ++ " reference") $ do
+        let q = ShaclModel.QualifiedValueShape {
+                  ShaclModel.qualifiedValueShapeQualifiedValueShape = mkRef,
+                  ShaclModel.qualifiedValueShapeQualifiedMaxCount = 5,
+                  ShaclModel.qualifiedValueShapeQualifiedMinCount = 2,
+                  ShaclModel.qualifiedValueShapeQualifiedValueShapesDisjoint = Just True}
+            triples = ShaclRdf.propertyShapeConstraintToTriples testSubject
+              (ShaclModel.PropertyShapeConstraintQualifiedValueShape q)
+        objectsOf triples testSubject (sh "qualifiedMinCount") `H.shouldBe` [intLit "2"]
+        objectsOf triples testSubject (sh "qualifiedMaxCount") `H.shouldBe` [intLit "5"]
+        objectsOf triples testSubject (sh "qualifiedValueShapesDisjoint") `H.shouldBe`
+          [Rdf.NodeLiteral $ Rdf.Literal "true" (Rdf.Iri "http://www.w3.org/2001/XMLSchema#boolean") Nothing]
+        check triples (objectsOf triples testSubject (sh "qualifiedValueShape")))
+      [("named", ShaclModel.ReferenceNamed iriB, \_ os -> os `H.shouldBe` [Rdf.NodeIri iriB]),
+       ("anonymous", ShaclModel.ReferenceAnonymous (ShaclModel.ShapeNode nodeB), \triples os -> case os of
+          [Rdf.NodeBnode b] ->
+            objectsOf triples (Rdf.ResourceBnode b) (sh "datatype") `H.shouldBe` [Rdf.NodeIri strIri]
+          _ -> H.expectationFailure $ "expected one blank node object, got " ++ show os),
+       ("definition", ShaclModel.ReferenceDefinition shapeDef, \triples os -> do
+          os `H.shouldBe` [Rdf.NodeIri iriB]
+          assertDefinitionTriples triples)]
+
+    H.it "omits sh:qualifiedValueShapesDisjoint when unset" $ do
+      let q = ShaclModel.QualifiedValueShape {
+                ShaclModel.qualifiedValueShapeQualifiedValueShape = ShaclModel.ReferenceNamed iriB,
+                ShaclModel.qualifiedValueShapeQualifiedMaxCount = 1,
+                ShaclModel.qualifiedValueShapeQualifiedMinCount = 0,
+                ShaclModel.qualifiedValueShapeQualifiedValueShapesDisjoint = Nothing}
+          triples = ShaclRdf.propertyShapeConstraintToTriples testSubject
+            (ShaclModel.PropertyShapeConstraintQualifiedValueShape q)
+      objectsOf triples testSubject (sh "qualifiedValueShapesDisjoint") `H.shouldBe` []
+
  -- Regression tests for #751 Bug 2: sh:in was emitted as N parallel triples (a conjunction, hence
  -- unsatisfiable for N > 1), and sh:languageIn was dropped. Both must be a single SHACL list.
  H.describe "ShaclRdf serialization of list-valued constraints (#751 Bug 2)" $ do
@@ -208,6 +244,7 @@ spec = do
     enumInstance = injectUnit (Name "test.Color") (Name "red")
     sh local = Rdf.Iri $ "http://www.w3.org/ns/shacl#" ++ local
     rdf local = Rdf.Iri $ "http://www.w3.org/1999/02/22-rdf-syntax-ns#" ++ local
+    intLit s = Rdf.NodeLiteral $ Rdf.Literal s (Rdf.Iri "http://www.w3.org/2001/XMLSchema#integer") Nothing
     lit s = Rdf.NodeLiteral $ Rdf.Literal s (Rdf.Iri "http://www.w3.org/2001/XMLSchema#string") Nothing
     objectsOf triples s p = [Rdf.tripleObject t | t <- triples, Rdf.tripleSubject t == s, Rdf.triplePredicate t == p]
     -- Follow an RDF collection from its head, returning its members if it is well-formed

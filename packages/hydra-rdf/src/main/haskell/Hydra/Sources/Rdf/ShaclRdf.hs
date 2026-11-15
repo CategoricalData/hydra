@@ -382,9 +382,20 @@ propertyShapeConstraintToTriples = define "propertyShapeConstraintToTriples" $
         list ([] :: [TypedTerm Rdf.Triple]),
       Shacl._PropertyShapeConstraint_uniqueLang>>: lambda "b" $
         list [tripleRIN @@ var "subj" @@ (sh @@ string "uniqueLang") @@ (booleanNode @@ var "b")],
-      Shacl._PropertyShapeConstraint_qualifiedValueShape>>: constant $
-        -- Complex; omit for now
-        list ([] :: [TypedTerm Rdf.Triple])]
+      Shacl._PropertyShapeConstraint_qualifiedValueShape>>: lambda "q" $
+        Lists.concat (list [
+          referenceToTriples @@ var "subj" @@ string "qualifiedValueShape" @@ inlineShapeToTriples @@ int32 0
+            @@ (project Shacl._QualifiedValueShape Shacl._QualifiedValueShape_qualifiedValueShape @@ var "q"),
+          list [
+            tripleRIN @@ var "subj" @@ (sh @@ string "qualifiedMinCount")
+              @@ (integerNode @@ (project Shacl._QualifiedValueShape Shacl._QualifiedValueShape_qualifiedMinCount @@ var "q")),
+            tripleRIN @@ var "subj" @@ (sh @@ string "qualifiedMaxCount")
+              @@ (integerNode @@ (project Shacl._QualifiedValueShape Shacl._QualifiedValueShape_qualifiedMaxCount @@ var "q"))],
+          Optionals.match
+            (project Shacl._QualifiedValueShape Shacl._QualifiedValueShape_qualifiedValueShapesDisjoint @@ var "q")
+            (list ([] :: [TypedTerm Rdf.Triple]))
+            (lambda "b" $ list [tripleRIN @@ var "subj" @@ (sh @@ string "qualifiedValueShapesDisjoint")
+              @@ (booleanNode @@ var "b")])])]
 
 -- | Convert a PropertyShape to triples, given a subject resource (may be blank node)
 propertyShapeToTriples :: TypedTermDefinition (Rdf.Resource -> Shacl.PropertyShape -> [Rdf.Triple])
