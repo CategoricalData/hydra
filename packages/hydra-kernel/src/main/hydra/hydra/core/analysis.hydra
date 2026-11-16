@@ -495,6 +495,83 @@ term isTailRecursiveInTailPosition =
       `_` = isFreeVariableInTerm funcName `term`}
       stripped
 
+## Lower a self-tail-recursive function body into an explicit TcoLoopPlan, or Nothing if the body is not self-tail-recursive. Mirrors the traversal of isTailRecursiveInTailPosition, but builds a TcoStep tree instead of a boolean verdict.
+term lowerSelfTailRecursion =
+  λfuncName, paramNames, body.ifElse
+      (isSelfTailRecursive funcName body)
+      given(TcoLoopPlan{params = paramNames, body = lowerTcoStep funcName paramNames body})
+      none
+
+## Lower a term in tail position into a TcoStep (continue/return/cases/let_)
+term lowerTcoStep =
+  λfuncName, paramNames, `term`.
+    let stripped := deannotateAndDetypeTerm `term`
+    in cases(Term){
+      application = λapp.
+          let gathered := gatherApplications stripped in
+          let gatherArgs := first gathered in
+          let gatherFun := second gathered in
+          let strippedFun := deannotateAndDetypeTerm gatherFun in
+          cases(Term){
+            variable = λvname.ifElse
+                  (equal vname funcName)
+                  TcoStep{
+                    continue = gatherArgs}
+                  TcoStep{return = `term`},
+            `cases` = λcs.
+                let tname := CaseStatement[typeName] cs in
+                let `cases_` := CaseStatement[`cases`] cs in
+                let dflt := CaseStatement[default] cs in
+                let loweredCases := lists.map
+                    (λfield.
+                      let handler := CaseAlternative[handler] field in
+                      let strippedHandler := deannotateAndDetypeTerm handler in
+                      cases(Term){
+                        lambda = λlam.
+                            let param := Lambda[parameter] lam in
+                            let lamBody := Lambda[body] lam in
+                            TcoCaseAlternative{
+                              name = CaseAlternative[name] field,
+                              parameter = param,
+                              handler = lowerTcoStep funcName paramNames lamBody},
+                        `_` = TcoCaseAlternative{
+                          name = CaseAlternative[name] field,
+                          parameter = Name{"_"},
+                          handler = lowerTcoStep funcName paramNames handler}}
+                        strippedHandler)
+                    `cases_` in
+                let loweredDflt := optionals.map
+                    (λd.lowerTcoStep funcName paramNames d)
+                    dflt in
+                let `scrutinee_` := optionals.withDefault
+                    `term`
+                    (lists.head gatherArgs) in
+                TcoStep{
+                  `cases` = TcoCaseStatement{
+                    typeName = tname,
+                    scrutinee = `scrutinee_`,
+                    default = loweredDflt,
+                    `cases` = loweredCases}},
+            `_` = TcoStep{return = `term`}}
+            strippedFun,
+      lambda = λlam.lowerTcoStep funcName paramNames (Lambda[body] lam),
+      `let` = λlt.
+          let loweredBindings := lists.map
+              (λb.TcoBinding{
+                  name = Binding[name] b,
+                  `term` = Binding[`term`] b,
+                  typeScheme = Binding[typeScheme] b})
+              (Let[bindings] lt)
+          in TcoStep{
+            `let_` = TcoLet{
+              bindings = loweredBindings,
+              body = lowerTcoStep
+                  funcName
+                  paramNames
+                  (Let[body] lt)}},
+      `_` = TcoStep{return = `term`}}
+      stripped
+
 ## Check whether a module contains any binary literal values
 term moduleContainsBinaryLiterals =
   λmod.

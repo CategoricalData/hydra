@@ -583,6 +583,218 @@ term typesByName =
             Term{variable = Name{"description"}} = Term{
               literal = Literal{
                 `string` = "A bidirectional encoder which maps between the same type and term languages on either side"}}}}}}@{`type` = Type},
+    Name{"hydra.core.coders.TcoBinding"} = Type{
+      annotated = AnnotatedType{
+        body = Type{
+          `record` = [
+            FieldType{
+              name = Name{"name"},
+              `type` = Type{
+                annotated = AnnotatedType{
+                  body = Type{variable = Name{"hydra.core.model.Name"}},
+                  annotation = Term{
+                    `map` = {
+                      Term{variable = Name{"description"}} = Term{literal = Literal{`string` = "The name of the bound variable"}}}}}}},
+            FieldType{
+              name = Name{"term"},
+              `type` = Type{
+                annotated = AnnotatedType{
+                  body = Type{variable = Name{"hydra.core.model.Term"}},
+                  annotation = Term{
+                    `map` = {
+                      Term{variable = Name{"description"}} = Term{literal = Literal{`string` = "The term to which the variable is bound; recomputed on every loop iteration"}}}}}}},
+            FieldType{
+              name = Name{"typeScheme"},
+              `type` = Type{
+                annotated = AnnotatedType{
+                  body = Type{
+                    `optional` = Type{
+                      variable = Name{"hydra.core.model.TypeScheme"}}},
+                  annotation = Term{
+                    `map` = {
+                      Term{variable = Name{"description"}} = Term{
+                        literal = Literal{
+                          `string` = "The optional type scheme of the binding, needed to declare its own type parameters"}}}}}}}]},
+        annotation = Term{
+          `map` = {
+            Term{variable = Name{"description"}} = Term{literal = Literal{`string` = "A 'let' binding within a TCO-lowered loop body, mirroring Core.Binding"}}}}}}@{`type` = Type},
+    Name{"hydra.core.coders.TcoCaseAlternative"} = Type{
+      annotated = AnnotatedType{
+        body = Type{
+          `record` = [
+            FieldType{
+              name = Name{"name"},
+              `type` = Type{
+                annotated = AnnotatedType{
+                  body = Type{variable = Name{"hydra.core.model.Name"}},
+                  annotation = Term{
+                    `map` = {
+                      Term{variable = Name{"description"}} = Term{literal = Literal{`string` = "The name of the union variant matched by this alternative"}}}}}}},
+            FieldType{
+              name = Name{"parameter"},
+              `type` = Type{
+                annotated = AnnotatedType{
+                  body = Type{variable = Name{"hydra.core.model.Name"}},
+                  annotation = Term{
+                    `map` = {
+                      Term{variable = Name{"description"}} = Term{
+                        literal = Literal{
+                          `string` = "The name bound to the matched variant's payload (from the original handler lambda)"}}}}}}},
+            FieldType{
+              name = Name{"handler"},
+              `type` = Type{
+                annotated = AnnotatedType{
+                  body = Type{variable = Name{"hydra.core.coders.TcoStep"}},
+                  annotation = Term{
+                    `map` = {
+                      Term{variable = Name{"description"}} = Term{literal = Literal{`string` = "The lowered handler body for the matched variant's payload"}}}}}}}]},
+        annotation = Term{
+          `map` = {
+            Term{variable = Name{"description"}} = Term{
+              literal = Literal{
+                `string` = "A single alternative of a TCO-lowered case statement, mirroring Core.CaseAlternative. The original handler is always a lambda binding the variant's payload; 'parameter' preserves that bound name so coders know what to bind when printing the branch."}}}}}}@{`type` = Type},
+    Name{"hydra.core.coders.TcoCaseStatement"} = Type{
+      annotated = AnnotatedType{
+        body = Type{
+          `record` = [
+            FieldType{
+              name = Name{"typeName"},
+              `type` = Type{
+                annotated = AnnotatedType{
+                  body = Type{variable = Name{"hydra.core.model.Name"}},
+                  annotation = Term{
+                    `map` = {
+                      Term{variable = Name{"description"}} = Term{literal = Literal{`string` = "The name of the union type"}}}}}}},
+            FieldType{
+              name = Name{"scrutinee"},
+              `type` = Type{
+                annotated = AnnotatedType{
+                  body = Type{variable = Name{"hydra.core.model.Term"}},
+                  annotation = Term{
+                    `map` = {
+                      Term{variable = Name{"description"}} = Term{literal = Literal{`string` = "The term being matched against; evaluated exactly once per dispatch"}}}}}}},
+            FieldType{
+              name = Name{"default"},
+              `type` = Type{
+                annotated = AnnotatedType{
+                  body = Type{
+                    `optional` = Type{
+                      variable = Name{"hydra.core.coders.TcoStep"}}},
+                  annotation = Term{
+                    `map` = {
+                      Term{variable = Name{"description"}} = Term{literal = Literal{`string` = "An optional default case, used if none of the explicit cases match"}}}}}}},
+            FieldType{
+              name = Name{"cases"},
+              `type` = Type{
+                annotated = AnnotatedType{
+                  body = Type{
+                    `list` = Type{
+                      variable = Name{"hydra.core.coders.TcoCaseAlternative"}}},
+                  annotation = Term{
+                    `map` = {
+                      Term{variable = Name{"description"}} = Term{literal = Literal{`string` = "A list of case alternatives, one per union variant being handled"}}}}}}}]},
+        annotation = Term{
+          `map` = {
+            Term{variable = Name{"description"}} = Term{literal = Literal{`string` = "A TCO-lowered union elimination, mirroring Core.CaseStatement"}}}}}}@{`type` = Type},
+    Name{"hydra.core.coders.TcoLet"} = Type{
+      annotated = AnnotatedType{
+        body = Type{
+          `record` = [
+            FieldType{
+              name = Name{"bindings"},
+              `type` = Type{
+                annotated = AnnotatedType{
+                  body = Type{
+                    `list` = Type{
+                      variable = Name{"hydra.core.coders.TcoBinding"}}},
+                  annotation = Term{
+                    `map` = {
+                      Term{variable = Name{"description"}} = Term{literal = Literal{`string` = "The list of variable bindings; recomputed on every loop iteration"}}}}}}},
+            FieldType{
+              name = Name{"body"},
+              `type` = Type{
+                annotated = AnnotatedType{
+                  body = Type{variable = Name{"hydra.core.coders.TcoStep"}},
+                  annotation = Term{
+                    `map` = {
+                      Term{variable = Name{"description"}} = Term{literal = Literal{`string` = "The lowered body term in which the variables are bound"}}}}}}}]},
+        annotation = Term{
+          `map` = {
+            Term{variable = Name{"description"}} = Term{literal = Literal{`string` = "A set of 'let' bindings together with a lowered body, mirroring Core.Let"}}}}}}@{`type` = Type},
+    Name{"hydra.core.coders.TcoLoopPlan"} = Type{
+      annotated = AnnotatedType{
+        body = Type{
+          `record` = [
+            FieldType{
+              name = Name{"params"},
+              `type` = Type{
+                annotated = AnnotatedType{
+                  body = Type{
+                    `list` = Type{
+                      variable = Name{"hydra.core.model.Name"}}},
+                  annotation = Term{
+                    `map` = {
+                      Term{variable = Name{"description"}} = Term{literal = Literal{`string` = "Parameter names, in order; these are the loop's mutable loop variables"}}}}}}},
+            FieldType{
+              name = Name{"body"},
+              `type` = Type{
+                annotated = AnnotatedType{
+                  body = Type{variable = Name{"hydra.core.coders.TcoStep"}},
+                  annotation = Term{
+                    `map` = {
+                      Term{variable = Name{"description"}} = Term{literal = Literal{`string` = "The loop body, with tail self-calls lowered to continuation steps"}}}}}}}]},
+        annotation = Term{
+          `map` = {
+            Term{variable = Name{"description"}} = Term{
+              literal = Literal{
+                `string` = "A self-tail-recursive function body, restructured into an explicit loop. Produced by lowerSelfTailRecursion; consumed by per-language coders to emit a native iteration construct."}}}}}}@{`type` = Type},
+    Name{"hydra.core.coders.TcoStep"} = Type{
+      annotated = AnnotatedType{
+        body = Type{
+          `union` = [
+            FieldType{
+              name = Name{"continue"},
+              `type` = Type{
+                annotated = AnnotatedType{
+                  body = Type{
+                    `list` = Type{
+                      variable = Name{"hydra.core.model.Term"}}},
+                  annotation = Term{
+                    `map` = {
+                      Term{variable = Name{"description"}} = Term{
+                        literal = Literal{
+                          `string` = "Reassign params to these new values, in the same order as TcoLoopPlan.params, and repeat the loop"}}}}}}},
+            FieldType{
+              name = Name{"return"},
+              `type` = Type{
+                annotated = AnnotatedType{
+                  body = Type{variable = Name{"hydra.core.model.Term"}},
+                  annotation = Term{
+                    `map` = {
+                      Term{variable = Name{"description"}} = Term{literal = Literal{`string` = "Exit the loop, yielding this value"}}}}}}},
+            FieldType{
+              name = Name{"cases"},
+              `type` = Type{
+                annotated = AnnotatedType{
+                  body = Type{variable = Name{"hydra.core.coders.TcoCaseStatement"}},
+                  annotation = Term{
+                    `map` = {
+                      Term{variable = Name{"description"}} = Term{
+                        literal = Literal{
+                          `string` = "Branch on a union elimination; mirrors Core.CaseStatement but handlers are TcoStep"}}}}}}},
+            FieldType{
+              name = Name{"let_"},
+              `type` = Type{
+                annotated = AnnotatedType{
+                  body = Type{variable = Name{"hydra.core.coders.TcoLet"}},
+                  annotation = Term{
+                    `map` = {
+                      Term{variable = Name{"description"}} = Term{literal = Literal{`string` = "Bindings that must be recomputed on every iteration, mirroring Core.Let"}}}}}}}]},
+        annotation = Term{
+          `map` = {
+            Term{variable = Name{"description"}} = Term{
+              literal = Literal{
+                `string` = "One node of a TCO-lowered function body: a loop continuation, a terminal value, or a branch"}}}}}}@{`type` = Type},
     Name{"hydra.core.coders.TraversalOrder"} = Type{
       annotated = AnnotatedType{
         body = Type{

@@ -45,7 +45,7 @@ term testGroupForSystemF =
                           variable = Name{"t0"}},
                         codomain = Type{
                           variable = Name{"t0"}}}},
-                    constraints = {}}}},
+                    constraints = {=}}}},
         description = none,
         tags = [],
         provisions = []},
@@ -77,7 +77,7 @@ term testGroupForSystemF =
                       literal = LiteralType{
                         integer = IntegerType{
                           `int32`}}},
-                    constraints = {}}}},
+                    constraints = {=}}}},
         description = none,
         tags = [],
         provisions = []},
@@ -113,7 +113,7 @@ term testGroupForSystemF =
                       literal = LiteralType{
                         integer = IntegerType{
                           `int32`}}},
-                    constraints = {}}}},
+                    constraints = {=}}}},
         description = none,
         tags = [],
         provisions = []},
@@ -153,7 +153,7 @@ term testGroupForSystemF =
                       literal = LiteralType{
                         integer = IntegerType{
                           `int32`}}},
-                    constraints = {}}}},
+                    constraints = {=}}}},
         description = none,
         tags = [],
         provisions = []},
@@ -190,7 +190,7 @@ term testGroupForSystemF =
                         codomain = Type{
                           `list` = Type{
                             variable = Name{"t0"}}}}},
-                    constraints = {}}}},
+                    constraints = {=}}}},
         description = none,
         tags = [],
         provisions = []},
@@ -239,7 +239,7 @@ term testGroupForSystemF =
                           `list` = Type{
                             literal = LiteralType{
                               `string`}}}}},
-                    constraints = {}}}},
+                    constraints = {=}}}},
         description = none,
         tags = [],
         provisions = []},
@@ -376,7 +376,7 @@ term testGroupForSystemF =
                                   `int32`}}},
                             codomain = Type{
                               variable = Name{"t0"}}}}}},
-                    constraints = {}}}},
+                    constraints = {=}}}},
         description = none,
         tags = [],
         provisions = []},
@@ -474,7 +474,7 @@ term testGroupForSystemF =
                                       `int32`}}},
                                 codomain = Type{
                                   variable = Name{"t1"}}}}}}}},
-                    constraints = {}}}},
+                    constraints = {=}}}},
         description = none,
         tags = [],
         provisions = []},
@@ -568,7 +568,7 @@ term testGroupForSystemF =
                                   variable = Name{"t2"}},
                                 codomain = Type{
                                   variable = Name{"t3"}}}}}}}},
-                    constraints = {}}}},
+                    constraints = {=}}}},
         description = none,
         tags = [],
         provisions = []},
@@ -668,7 +668,7 @@ term testGroupForSystemF =
                                       `int32`}}},
                                 codomain = Type{
                                   variable = Name{"t1"}}}}}}}},
-                    constraints = {}}}},
+                    constraints = {=}}}},
         description = none,
         tags = [],
         provisions = []},
@@ -768,7 +768,7 @@ term testGroupForSystemF =
                                       `int32`}}},
                                 codomain = Type{
                                   variable = Name{"t1"}}}}}}}},
-                    constraints = {}}}},
+                    constraints = {=}}}},
         description = none,
         tags = [],
         provisions = []}]}

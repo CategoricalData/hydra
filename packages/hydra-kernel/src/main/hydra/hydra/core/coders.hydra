@@ -148,6 +148,78 @@ type LanguageName = wrap(string)
 ## A bidirectional encoder which maps between the same type and term languages on either side
 type SymmetricAdapter = forall t, v, e. Adapter t t v v e
 
+## A 'let' binding within a TCO-lowered loop body, mirroring Core.Binding
+type TcoBinding = record{
+
+  ## The name of the bound variable
+  name: Name,
+
+  ## The term to which the variable is bound; recomputed on every loop iteration
+  `term`: Term,
+
+  ## The optional type scheme of the binding, needed to declare its own type parameters
+  typeScheme: optional<TypeScheme>}
+
+## A single alternative of a TCO-lowered case statement, mirroring Core.CaseAlternative. The original handler is always a lambda binding the variant's payload; 'parameter' preserves that bound name so coders know what to bind when printing the branch.
+type TcoCaseAlternative = record{
+
+  ## The name of the union variant matched by this alternative
+  name: Name,
+
+  ## The name bound to the matched variant's payload (from the original handler lambda)
+  parameter: Name,
+
+  ## The lowered handler body for the matched variant's payload
+  handler: TcoStep}
+
+## A TCO-lowered union elimination, mirroring Core.CaseStatement
+type TcoCaseStatement = record{
+
+  ## The name of the union type
+  typeName: Name,
+
+  ## The term being matched against; evaluated exactly once per dispatch
+  scrutinee: Term,
+
+  ## An optional default case, used if none of the explicit cases match
+  default: optional<TcoStep>,
+
+  ## A list of case alternatives, one per union variant being handled
+  `cases`: list<TcoCaseAlternative>}
+
+## A set of 'let' bindings together with a lowered body, mirroring Core.Let
+type TcoLet = record{
+
+  ## The list of variable bindings; recomputed on every loop iteration
+  bindings: list<TcoBinding>,
+
+  ## The lowered body term in which the variables are bound
+  body: TcoStep}
+
+## A self-tail-recursive function body, restructured into an explicit loop. Produced by lowerSelfTailRecursion; consumed by per-language coders to emit a native iteration construct.
+type TcoLoopPlan = record{
+
+  ## Parameter names, in order; these are the loop's mutable loop variables
+  params: list<Name>,
+
+  ## The loop body, with tail self-calls lowered to continuation steps
+  body: TcoStep}
+
+## One node of a TCO-lowered function body: a loop continuation, a terminal value, or a branch
+type TcoStep = union{
+
+  ## Reassign params to these new values, in the same order as TcoLoopPlan.params, and repeat the loop
+  continue: list<Term>,
+
+  ## Exit the loop, yielding this value
+  return: Term,
+
+  ## Branch on a union elimination; mirrors Core.CaseStatement but handlers are TcoStep
+  `cases`: TcoCaseStatement,
+
+  ## Bindings that must be recomputed on every iteration, mirroring Core.Let
+  `let_`: TcoLet}
+
 ## Specifies either a pre-order or post-order traversal
 type TraversalOrder = union{
 

@@ -17,7 +17,7 @@ term addGenerationPrefix = λ`ns_`.ModuleName{strings.concat2 "generation." (Mod
 
 ## Build a Term representing a convertCase function call
 term buildConvertCaseCall =
-  λfromConv,toConv,`input_`.Term{
+  λfromConv, toConv, `input_`.Term{
       application = Application{
         function = Term{
           application = Application{
@@ -64,11 +64,11 @@ term encodeCaseConvention =
         typeName = Name{"hydra.core.util.CaseConvention"},
         field = Field{
           name = cases(CaseConvention){
-              lowerSnake=λ`_`.Name{"lowerSnake"},
-              upperSnake=λ`_`.Name{"upperSnake"},
-              camel=λ`_`.Name{"camel"},
-              pascal=λ`_`.Name{"pascal"},
-              upperDashed=λ`_`.Name{"upperDashed"}}
+              lowerSnake = λ`_`.Name{"lowerSnake"},
+              upperSnake = λ`_`.Name{"upperSnake"},
+              camel = λ`_`.Name{"camel"},
+              pascal = λ`_`.Name{"pascal"},
+              upperDashed = λ`_`.Name{"upperDashed"}}
               conv,
           `term` = Term{`unit`}}}}
 

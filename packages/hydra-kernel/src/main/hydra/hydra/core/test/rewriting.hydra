@@ -1321,7 +1321,7 @@ term allTests =
                               `map` = mapKeys
                                   (λn.Term{
                                       variable = n})
-                                  {}}}}),
+                                  {=}}}}),
                 expected = λ`_`.model.term
                       Term{
                         annotated = AnnotatedTerm{
@@ -1332,7 +1332,7 @@ term allTests =
                             `map` = mapKeys
                                 (λn.Term{
                                     variable = n})
-                                {}}}}}},
+                                {=}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -1653,7 +1653,7 @@ term allTests =
                               `map` = mapKeys
                                   (λn.Term{
                                       variable = n})
-                                  {}}}}),
+                                  {=}}}}),
                 expected = λ`_`.model.term
                       Term{
                         annotated = AnnotatedTerm{
@@ -1668,7 +1668,7 @@ term allTests =
                             `map` = mapKeys
                                 (λn.Term{
                                     variable = n})
-                                {}}}}}},
+                                {=}}}}}},
             description = none,
             tags = [],
             provisions = []}]},

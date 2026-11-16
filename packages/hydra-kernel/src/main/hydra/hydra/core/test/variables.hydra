@@ -433,7 +433,7 @@ term allTests =
                               Binding{
                                 name = Name{"foo"},
                                 `term` = Term{literal = Literal{`string` = "foo"}},
-                                typeScheme = given(TypeScheme{variables = [], body = Type{literal = LiteralType{`string`}}, constraints = {}})}],
+                                typeScheme = given(TypeScheme{variables = [], body = Type{literal = LiteralType{`string`}}, constraints = {=}})}],
                             body = Term{
                               literal = Literal{
                                 integer = IntegerValue{
@@ -445,7 +445,7 @@ term allTests =
                             Binding{
                               name = Name{"foo"},
                               `term` = Term{literal = Literal{`string` = "foo"}},
-                              typeScheme = given(TypeScheme{variables = [], body = Type{literal = LiteralType{`string`}}, constraints = {}})}],
+                              typeScheme = given(TypeScheme{variables = [], body = Type{literal = LiteralType{`string`}}, constraints = {=}})}],
                           body = Term{
                             literal = Literal{
                               integer = IntegerValue{
@@ -465,7 +465,7 @@ term allTests =
                               Binding{
                                 name = Name{"foo"},
                                 `term` = Term{literal = Literal{`string` = "foo"}},
-                                typeScheme = given(TypeScheme{variables = [], body = Type{literal = LiteralType{`string`}}, constraints = {}})}],
+                                typeScheme = given(TypeScheme{variables = [], body = Type{literal = LiteralType{`string`}}, constraints = {=}})}],
                             body = Term{
                               literal = Literal{
                                 integer = IntegerValue{
@@ -477,7 +477,7 @@ term allTests =
                             Binding{
                               name = Name{"foo"},
                               `term` = Term{literal = Literal{`string` = "foo"}},
-                              typeScheme = given(TypeScheme{variables = [], body = Type{literal = LiteralType{`string`}}, constraints = {}})}],
+                              typeScheme = given(TypeScheme{variables = [], body = Type{literal = LiteralType{`string`}}, constraints = {=}})}],
                           body = Term{
                             literal = Literal{
                               integer = IntegerValue{
@@ -497,7 +497,7 @@ term allTests =
                               Binding{
                                 name = Name{"foo"},
                                 `term` = Term{variable = Name{"bar"}},
-                                typeScheme = given(TypeScheme{variables = [], body = Type{variable = Name{"a"}}, constraints = {}})}],
+                                typeScheme = given(TypeScheme{variables = [], body = Type{variable = Name{"a"}}, constraints = {=}})}],
                             body = Term{
                               literal = Literal{
                                 integer = IntegerValue{
@@ -509,7 +509,7 @@ term allTests =
                             Binding{
                               name = Name{"foo"},
                               `term` = Term{variable = Name{"bar"}},
-                              typeScheme = given(TypeScheme{variables = [], body = Type{variable = Name{"a"}}, constraints = {}})}],
+                              typeScheme = given(TypeScheme{variables = [], body = Type{variable = Name{"a"}}, constraints = {=}})}],
                           body = Term{
                             literal = Literal{
                               integer = IntegerValue{
@@ -529,7 +529,7 @@ term allTests =
                               Binding{
                                 name = Name{"foo"},
                                 `term` = Term{literal = Literal{`string` = "foo"}},
-                                typeScheme = given(TypeScheme{variables = [], body = Type{literal = LiteralType{`string`}}, constraints = {}})}],
+                                typeScheme = given(TypeScheme{variables = [], body = Type{literal = LiteralType{`string`}}, constraints = {=}})}],
                             body = Term{
                               lambda = Lambda{
                                 parameter = Name{"x"},
@@ -552,7 +552,7 @@ term allTests =
                             Binding{
                               name = Name{"foo"},
                               `term` = Term{literal = Literal{`string` = "foo"}},
-                              typeScheme = given(TypeScheme{variables = [], body = Type{literal = LiteralType{`string`}}, constraints = {}})}],
+                              typeScheme = given(TypeScheme{variables = [], body = Type{literal = LiteralType{`string`}}, constraints = {=}})}],
                           body = Term{
                             lambda = Lambda{
                               parameter = Name{"x"},
@@ -583,7 +583,7 @@ term allTests =
                               Binding{
                                 name = Name{"foo"},
                                 `term` = Term{variable = Name{"bar"}},
-                                typeScheme = given(TypeScheme{variables = [], body = Type{variable = Name{"a"}}, constraints = {}})}],
+                                typeScheme = given(TypeScheme{variables = [], body = Type{variable = Name{"a"}}, constraints = {=}})}],
                             body = Term{
                               lambda = Lambda{
                                 parameter = Name{"x"},
@@ -606,7 +606,7 @@ term allTests =
                             Binding{
                               name = Name{"foo"},
                               `term` = Term{variable = Name{"bar"}},
-                              typeScheme = given(TypeScheme{variables = [], body = Type{variable = Name{"a"}}, constraints = {}})}],
+                              typeScheme = given(TypeScheme{variables = [], body = Type{variable = Name{"a"}}, constraints = {=}})}],
                           body = Term{
                             lambda = Lambda{
                               parameter = Name{"x"},
@@ -643,7 +643,7 @@ term allTests =
                                       function = FunctionType{
                                         domain = Type{variable = Name{"a"}},
                                         codomain = Type{variable = Name{"a"}}}},
-                                    constraints = {}})}],
+                                    constraints = {=}})}],
                             body = Term{
                               application = Application{
                                 function = Term{
@@ -665,7 +665,7 @@ term allTests =
                                     function = FunctionType{
                                       domain = Type{variable = Name{"t0"}},
                                       codomain = Type{variable = Name{"t0"}}}},
-                                  constraints = {}})}],
+                                  constraints = {=}})}],
                           body = Term{
                             application = Application{
                               function = Term{
@@ -708,7 +708,7 @@ term allTests =
                                               variable = Name{"b"}},
                                             codomain = Type{
                                               variable = Name{"a"}}}}}},
-                                    constraints = {}})}],
+                                    constraints = {=}})}],
                             body = Term{
                               application = Application{
                                 function = Term{
@@ -748,7 +748,7 @@ term allTests =
                                             variable = Name{"t1"}},
                                           codomain = Type{
                                             variable = Name{"t0"}}}}}},
-                                  constraints = {}})}],
+                                  constraints = {=}})}],
                           body = Term{
                             application = Application{
                               function = Term{
@@ -783,7 +783,7 @@ term allTests =
                                       function = FunctionType{
                                         domain = Type{variable = Name{"a"}},
                                         codomain = Type{variable = Name{"a"}}}},
-                                    constraints = {}})}],
+                                    constraints = {=}})}],
                             body = Term{
                               lambda = Lambda{
                                 parameter = Name{"x"},
@@ -812,7 +812,7 @@ term allTests =
                                     function = FunctionType{
                                       domain = Type{variable = Name{"t0"}},
                                       codomain = Type{variable = Name{"t0"}}}},
-                                  constraints = {}})}],
+                                  constraints = {=}})}],
                           body = Term{
                             lambda = Lambda{
                               parameter = Name{"x"},
@@ -849,7 +849,7 @@ term allTests =
                                       function = FunctionType{
                                         domain = Type{variable = Name{"a"}},
                                         codomain = Type{variable = Name{"a"}}}},
-                                    constraints = {}})}],
+                                    constraints = {=}})}],
                             body = Term{
                               `let` = Let{
                                 bindings = [
@@ -862,7 +862,7 @@ term allTests =
                                           function = FunctionType{
                                             domain = Type{variable = Name{"b"}},
                                             codomain = Type{variable = Name{"b"}}}},
-                                        constraints = {}})}],
+                                        constraints = {=}})}],
                                 body = Term{
                                   application = Application{
                                     function = Term{
@@ -888,7 +888,7 @@ term allTests =
                                     function = FunctionType{
                                       domain = Type{variable = Name{"t0"}},
                                       codomain = Type{variable = Name{"t0"}}}},
-                                  constraints = {}})}],
+                                  constraints = {=}})}],
                           body = Term{
                             `let` = Let{
                               bindings = [
@@ -901,7 +901,7 @@ term allTests =
                                         function = FunctionType{
                                           domain = Type{variable = Name{"t0"}},
                                           codomain = Type{variable = Name{"t0"}}}},
-                                      constraints = {}})}],
+                                      constraints = {=}})}],
                               body = Term{
                                 application = Application{
                                   function = Term{
@@ -935,7 +935,7 @@ term allTests =
                                       function = FunctionType{
                                         domain = Type{variable = Name{"a"}},
                                         codomain = Type{variable = Name{"a"}}}},
-                                    constraints = {}})}],
+                                    constraints = {=}})}],
                             body = Term{
                               `let` = Let{
                                 bindings = [
@@ -948,7 +948,7 @@ term allTests =
                                           function = FunctionType{
                                             domain = Type{variable = Name{"a"}},
                                             codomain = Type{variable = Name{"a"}}}},
-                                        constraints = {}})}],
+                                        constraints = {=}})}],
                                 body = Term{
                                   application = Application{
                                     function = Term{
@@ -970,7 +970,7 @@ term allTests =
                                     function = FunctionType{
                                       domain = Type{variable = Name{"t0"}},
                                       codomain = Type{variable = Name{"t0"}}}},
-                                  constraints = {}})}],
+                                  constraints = {=}})}],
                           body = Term{
                             `let` = Let{
                               bindings = [
@@ -983,7 +983,7 @@ term allTests =
                                         function = FunctionType{
                                           domain = Type{variable = Name{"t0"}},
                                           codomain = Type{variable = Name{"t0"}}}},
-                                      constraints = {}})}],
+                                      constraints = {=}})}],
                               body = Term{
                                 application = Application{
                                   function = Term{
@@ -1022,7 +1022,7 @@ term allTests =
                                               function = FunctionType{
                                                 domain = Type{variable = Name{"a"}},
                                                 codomain = Type{variable = Name{"a"}}}},
-                                            constraints = {}})}],
+                                            constraints = {=}})}],
                                     body = Term{
                                       lambda = Lambda{
                                         parameter = Name{"y"},
@@ -1039,7 +1039,7 @@ term allTests =
                                       function = FunctionType{
                                         domain = Type{variable = Name{"a"}},
                                         codomain = Type{variable = Name{"a"}}}},
-                                    constraints = {}})}],
+                                    constraints = {=}})}],
                             body = Term{
                               application = Application{
                                 function = Term{
@@ -1070,7 +1070,7 @@ term allTests =
                                             function = FunctionType{
                                               domain = Type{variable = Name{"t1"}},
                                               codomain = Type{variable = Name{"t1"}}}},
-                                          constraints = {}})}],
+                                          constraints = {=}})}],
                                   body = Term{
                                     lambda = Lambda{
                                       parameter = Name{"y"},
@@ -1087,7 +1087,7 @@ term allTests =
                                     function = FunctionType{
                                       domain = Type{variable = Name{"t0"}},
                                       codomain = Type{variable = Name{"t0"}}}},
-                                  constraints = {}})}],
+                                  constraints = {=}})}],
                           body = Term{
                             application = Application{
                               function = Term{
@@ -1126,7 +1126,7 @@ term allTests =
                                               function = FunctionType{
                                                 domain = Type{variable = Name{"b"}},
                                                 codomain = Type{variable = Name{"b"}}}},
-                                            constraints = {}})}],
+                                            constraints = {=}})}],
                                     body = Term{
                                       lambda = Lambda{
                                         parameter = Name{"y"},
@@ -1143,7 +1143,7 @@ term allTests =
                                       function = FunctionType{
                                         domain = Type{variable = Name{"a"}},
                                         codomain = Type{variable = Name{"a"}}}},
-                                    constraints = {}})}],
+                                    constraints = {=}})}],
                             body = Term{
                               application = Application{
                                 function = Term{
@@ -1174,7 +1174,7 @@ term allTests =
                                             function = FunctionType{
                                               domain = Type{variable = Name{"t1"}},
                                               codomain = Type{variable = Name{"t1"}}}},
-                                          constraints = {}})}],
+                                          constraints = {=}})}],
                                   body = Term{
                                     lambda = Lambda{
                                       parameter = Name{"y"},
@@ -1191,7 +1191,7 @@ term allTests =
                                     function = FunctionType{
                                       domain = Type{variable = Name{"t0"}},
                                       codomain = Type{variable = Name{"t0"}}}},
-                                  constraints = {}})}],
+                                  constraints = {=}})}],
                           body = Term{
                             application = Application{
                               function = Term{
@@ -1243,7 +1243,7 @@ term allTests =
                                                               variable = Name{"c"}},
                                                             second = Type{
                                                               variable = Name{"b"}}}}}},
-                                                    constraints = {}})}],
+                                                    constraints = {=}})}],
                                             body = Term{
                                               application = Application{
                                                 function = Term{
@@ -1265,7 +1265,7 @@ term allTests =
                                                   variable = Name{"a"}},
                                                 second = Type{
                                                   variable = Name{"b"}}}}}}}},
-                                    constraints = {}})}],
+                                    constraints = {=}})}],
                             body = Term{
                               application = Application{
                                 function = Term{
@@ -1314,7 +1314,7 @@ term allTests =
                                                             variable = Name{"t2"}},
                                                           second = Type{
                                                             variable = Name{"t1"}}}}}},
-                                                  constraints = {}})}],
+                                                  constraints = {=}})}],
                                           body = Term{
                                             application = Application{
                                               function = Term{
@@ -1336,7 +1336,7 @@ term allTests =
                                                 variable = Name{"t0"}},
                                               second = Type{
                                                 variable = Name{"t1"}}}}}}}},
-                                  constraints = {}})}],
+                                  constraints = {=}})}],
                           body = Term{
                             application = Application{
                               function = Term{
@@ -2305,7 +2305,7 @@ term allTests =
                                   `map` = mapKeys
                                       (λn.Term{
                                           variable = n})
-                                      {}}}}}}),
+                                      {=}}}}}}),
                 expected = λ`_`.`term`
                       Term{
                         lambda = Lambda{
@@ -2323,7 +2323,7 @@ term allTests =
                                 `map` = mapKeys
                                     (λn.Term{
                                         variable = n})
-                                    {}}}}}}}},
+                                    {=}}}}}}}},
             description = none,
             tags = [],
             provisions = []},

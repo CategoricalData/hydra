@@ -65,7 +65,7 @@ term testGroupForMonomorphicConstraints =
                               literal = LiteralType{
                                 integer = IntegerType{
                                   `int32`}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -109,7 +109,7 @@ term testGroupForMonomorphicConstraints =
                             literal = LiteralType{
                               integer = IntegerType{
                                 `int32`}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -152,7 +152,7 @@ term testGroupForMonomorphicConstraints =
                               literal = LiteralType{
                                 integer = IntegerType{
                                   `int32`}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -188,7 +188,7 @@ term testGroupForMonomorphicConstraints =
                             literal = LiteralType{
                               integer = IntegerType{
                                 `int32`}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -226,7 +226,7 @@ term testGroupForMonomorphicConstraints =
                         body = Type{
                           literal = LiteralType{
                             `boolean`}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -265,7 +265,7 @@ term testGroupForMonomorphicConstraints =
                         body = Type{
                           literal = LiteralType{
                             `boolean`}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -296,7 +296,7 @@ term testGroupForMonomorphicConstraints =
                         variables = [],
                         body = Type{
                           variable = Name{"hydra.core.util.Comparison"}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -332,7 +332,7 @@ term testGroupForMonomorphicConstraints =
                             literal = LiteralType{
                               integer = IntegerType{
                                 `int32`}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]}],
@@ -1188,7 +1188,7 @@ term testGroupForPartialApplication =
                                     `string`}},
                                 values = Type{
                                   variable = Name{"t0"}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]}],
@@ -1513,7 +1513,7 @@ term testGroupForLetBindings =
                                 values = Type{
                                   literal = LiteralType{
                                     `string`}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]}],
@@ -2047,7 +2047,7 @@ term testGroupForCollectionTerms =
                             literal = LiteralType{
                               integer = IntegerType{
                                 `int32`}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -2124,7 +2124,7 @@ term testGroupForCollectionTerms =
                               literal = LiteralType{
                                 integer = IntegerType{
                                   `int32`}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},

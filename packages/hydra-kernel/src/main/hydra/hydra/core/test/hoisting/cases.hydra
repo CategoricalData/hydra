@@ -1647,7 +1647,7 @@ term allTests =
                                                 domain = none,
                                                 body = Term{variable = Name{"y"}}}}},
                                           CaseAlternative{name = Name{"nothing"}, handler = Term{literal = Literal{integer = IntegerValue{`int32` = 0:int32}}}}]}},
-                                    annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {}}}},
+                                    annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {=}}}},
                                 typeScheme = none}],
                             body = Term{
                               variable = Name{"f"}}}}),
@@ -1672,7 +1672,7 @@ term allTests =
                                               domain = none,
                                               body = Term{variable = Name{"y"}}}}},
                                         CaseAlternative{name = Name{"nothing"}, handler = Term{literal = Literal{integer = IntegerValue{`int32` = 0:int32}}}}]}},
-                                  annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {}}}},
+                                  annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {=}}}},
                               typeScheme = none}],
                           body = Term{
                             variable = Name{"f"}}}}}},

@@ -85,7 +85,7 @@ term allTests =
                               `map` = mapKeys
                                   (λn.Term{
                                       variable = n})
-                                  {}}}}),
+                                  {=}}}}),
                 expected = λ`_`.`term`
                       Term{
                         literal = Literal{
@@ -112,12 +112,12 @@ term allTests =
                                   `map` = mapKeys
                                       (λn.Term{
                                           variable = n})
-                                      {}}}},
+                                      {=}}}},
                             annotation = Term{
                               `map` = mapKeys
                                   (λn.Term{
                                       variable = n})
-                                  {}}}}),
+                                  {=}}}}),
                 expected = λ`_`.`term`
                       Term{
                         literal = Literal{
@@ -144,7 +144,7 @@ term allTests =
                               `map` = mapKeys
                                   (λn.Term{
                                       variable = n})
-                                  {}}}}),
+                                  {=}}}}),
                 expected = λ`_`.`term`
                       Term{
                         lambda = Lambda{
@@ -173,7 +173,7 @@ term allTests =
                               `map` = mapKeys
                                   (λn.Term{
                                       variable = n})
-                                  {}}}}),
+                                  {=}}}}),
                 expected = λ`_`.`term`
                       Term{
                         application = Application{
@@ -267,7 +267,7 @@ term allTests =
                               `map` = mapKeys
                                   (λn.Term{
                                       variable = n})
-                                  {}}}}),
+                                  {=}}}}),
                 expected = λ`_`.`type`
                       Type{
                         literal = LiteralType{
@@ -293,12 +293,12 @@ term allTests =
                                   `map` = mapKeys
                                       (λn.Term{
                                           variable = n})
-                                      {}}}},
+                                      {=}}}},
                             annotation = Term{
                               `map` = mapKeys
                                   (λn.Term{
                                       variable = n})
-                                  {}}}}),
+                                  {=}}}}),
                 expected = λ`_`.`type`
                       Type{
                         literal = LiteralType{
@@ -323,7 +323,7 @@ term allTests =
                               `map` = mapKeys
                                   (λn.Term{
                                       variable = n})
-                                  {}}}}),
+                                  {=}}}}),
                 expected = λ`_`.`type`
                       Type{
                         `list` = Type{
@@ -354,7 +354,7 @@ term allTests =
                               `map` = mapKeys
                                   (λn.Term{
                                       variable = n})
-                                  {}}}}),
+                                  {=}}}}),
                 expected = λ`_`.`type`
                       Type{
                         function = FunctionType{

@@ -451,7 +451,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             []))
                         Type{
                           literal = LiteralType{
@@ -467,7 +467,7 @@ term allTests =
                         "{",
                         strings.join
                           ", "
-                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{}}))),
+                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{=}}))),
                         "}"]}},
             description = none,
             tags = [],
@@ -489,7 +489,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             []))
                         Type{
                           literal = LiteralType{
@@ -503,7 +503,7 @@ term allTests =
                         "{",
                         strings.join
                           ", "
-                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{}}))),
+                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{=}}))),
                         "}"]}},
             description = none,
             tags = [],
@@ -525,7 +525,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             []))
                         Type{variable = Name{"a"}}
                         Type{variable = Name{"a"}}
@@ -535,7 +535,7 @@ term allTests =
                         "{",
                         strings.join
                           ", "
-                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{}}))),
+                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{=}}))),
                         "}"]}},
             description = none,
             tags = [],
@@ -557,7 +557,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             []))
                         Type{variable = Name{"a"}}
                         Type{
@@ -594,7 +594,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             []))
                         Type{
                           literal = LiteralType{
@@ -631,7 +631,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             []))
                         Type{variable = Name{"a"}}
                         Type{variable = Name{"b"}}
@@ -665,7 +665,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             []))
                         Type{
                           `list` = Type{
@@ -705,7 +705,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             []))
                         Type{
                           `list` = Type{
@@ -721,7 +721,7 @@ term allTests =
                         "{",
                         strings.join
                           ", "
-                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{}}))),
+                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{=}}))),
                         "}"]}},
             description = none,
             tags = [],
@@ -743,7 +743,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             []))
                         Type{
                           function = FunctionType{
@@ -794,7 +794,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             []))
                         Type{
                           function = FunctionType{
@@ -820,7 +820,7 @@ term allTests =
                         "{",
                         strings.join
                           ", "
-                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{}}))),
+                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{=}}))),
                         "}"]}},
             description = none,
             tags = [],
@@ -842,7 +842,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             []))
                         Type{
                           `optional` = Type{
@@ -882,7 +882,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             []))
                         Type{
                           pair = PairType{
@@ -933,7 +933,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             []))
                         Type{
                           `either` = EitherType{
@@ -984,7 +984,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             []))
                         Type{
                           `map` = MapType{
@@ -1035,7 +1035,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             []))
                         Type{
                           `set` = Type{
@@ -1075,7 +1075,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             []))
                         Type{`unit`}
                         Type{`unit`}
@@ -1085,7 +1085,7 @@ term allTests =
                         "{",
                         strings.join
                           ", "
-                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{}}))),
+                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{=}}))),
                         "}"]}},
             description = none,
             tags = [],
@@ -1107,7 +1107,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             []))
                         Type{
                           literal = LiteralType{
@@ -1138,7 +1138,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             []))
                         Type{
                           `list` = Type{
@@ -1177,7 +1177,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             []))
                         Type{variable = Name{"a"}}
                         Type{
@@ -1205,7 +1205,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             [Name{"Foo"}]))
                         Type{variable = Name{"Foo"}}
                         Type{variable = Name{"Foo"}}
@@ -1215,7 +1215,7 @@ term allTests =
                         "{",
                         strings.join
                           ", "
-                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{}}))),
+                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{=}}))),
                         "}"]}},
             description = none,
             tags = [],
@@ -1237,7 +1237,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             [Name{"Foo"}]))
                         Type{variable = Name{"Foo"}}
                         Type{variable = Name{"a"}}
@@ -1271,7 +1271,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             [Name{"Foo"}]))
                         Type{variable = Name{"a"}}
                         Type{variable = Name{"Foo"}}
@@ -1305,7 +1305,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{`record` = []}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{`record` = []}, constraints = {=}}))
                             [Name{"Foo"}]))
                         Type{variable = Name{"Foo"}}
                         Type{
@@ -1334,7 +1334,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{`record` = []}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{`record` = []}, constraints = {=}}))
                             [Name{"Foo"}]))
                         Type{
                           literal = LiteralType{
@@ -1363,7 +1363,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             [Name{"Foo"}]))
                         Type{variable = Name{"Foo"}}
                         Type{
@@ -1400,7 +1400,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             [Name{"Foo"}]))
                         Type{
                           `list` = Type{
@@ -1414,7 +1414,7 @@ term allTests =
                         "{",
                         strings.join
                           ", "
-                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{}}))),
+                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{=}}))),
                         "}"]}},
             description = none,
             tags = [],
@@ -1436,7 +1436,7 @@ term allTests =
                         emptyInferenceContext
                         (maps.fromList
                           (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {}}))
+                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
                             [Name{"Foo"}, Name{"Bar"}]))
                         Type{variable = Name{"Foo"}}
                         Type{variable = Name{"Bar"}}

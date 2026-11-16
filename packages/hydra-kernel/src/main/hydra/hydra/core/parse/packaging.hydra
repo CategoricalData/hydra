@@ -1,6 +1,7 @@
 ## Parsers for hydra.core.packaging types
 module hydra.core.parse.packaging
 
+import hydra.core.annotations
 import hydra.core.lib.chars
 import hydra.core.lib.eithers as eithers
 import hydra.core.lib.equality
@@ -745,6 +746,51 @@ term parseModuleWith =
               dependencies = Module[dependencies] parsed,
               definitions = cdefs})))
 
+## Parse several '.hydra' sources (path, text) that may reference each other and the given dependency modules (#842)
+term parseModules =
+  λdepModules, sources.
+    let parseOne := λpathText.
+        let path := first pathText in
+        let text := second pathText in
+        eithers.bimap
+          (λe.strings.concat [path, ": ", e])
+          (λm.m)
+          (parseModule text)
+    in eithers.bind
+      (eithers.mapList parseOne sources)
+      (λpass1.
+        let pathsAndMods := lists.zip (lists.map (λp.first p) sources) pass1 in
+        let depNames := sets.fromList (lists.map (λmod.Module[name] mod) depModules) in
+        let dupError := second
+            (lists.foldl
+              (λacc, pathMod.optionals.match
+                  (second acc)
+                  (let seen := first acc in
+                  let path := first pathMod in
+                  let nm := Module[name] (second pathMod) in
+                  ifElse
+                    (or (sets.member nm depNames) (sets.member nm seen))
+                    (
+                      seen,
+                      given(strings.concat
+                        [path, ": duplicate module name across inputs (or clashing with a dependency module): ", ModuleName[] nm]))
+                    (sets.insert nm seen, none))
+                  (λ`_`.acc))
+              (sets.empty, none)
+              pathsAndMods) in
+        optionals.match
+          dupError
+          (let allMods := lists.concat2 depModules pass1 in
+          let universe := universeNamesOf allMods in
+          let unionNames := unionTypeNamesOf allMods in
+          eithers.mapList
+            (λpathText.eithers.bimap
+                (λe.strings.concat [first pathText, ": ", e])
+                (λm.m)
+                (parseModuleWith universe unionNames (second pathText)))
+            sources)
+          (λerr.left(err)))
+
 ## Parse a primitive definition: ['##' doc comment] '[impure] [partial] primitive name : termSignature [= term]'
 term primitiveDefinitionParser =
   λmodName.parsers.bind
@@ -785,7 +831,71 @@ term primitiveModifiers =
 ## Qualify a bare local identifier into a full Name under the given module
 term qualifyLocalName = λmodName, local.unqualifyName QualifiedName{moduleName = given(modName), local = local}
 
-## Resolve a single bare name reference against the printer's universe: own-definitions first, then the unique owning import, hard error on zero or multiple owners (#5/#711)
+## Move a term's doc-comment description from EntityMetadata to a body-level '@{description=...}' annotation, matching the DSL-authoring convention (#837 flip byte-identity)
+term reattachTermDescriptionToBody =
+  λmmeta, t.optionals.match
+      mmeta
+      (mmeta, t)
+      (λem.
+        let mdesc := EntityMetadata[description] em
+        in optionals.match
+          mdesc
+          (mmeta, t)
+          (λd.
+            let newT := setTermDescription given(d) t in
+            let restComments := EntityMetadata[comments] em in
+            let restSeeAlso := EntityMetadata[seeAlso] em in
+            let restLifecycle := EntityMetadata[lifecycle] em in
+            let restProvisions := EntityMetadata[provisions] em in
+            let hasOtherFields := or
+                (not (lists.isEmpty restComments))
+                (or
+                  (not (lists.isEmpty restSeeAlso))
+                  (or (optionals.isGiven restLifecycle) (not (lists.isEmpty restProvisions)))) in
+            let newMmeta := ifElse
+                hasOtherFields
+                given(EntityMetadata{
+                  description = none,
+                  comments = restComments,
+                  seeAlso = restSeeAlso,
+                  lifecycle = restLifecycle,
+                  provisions = restProvisions})
+                none in
+            (newMmeta, newT)))
+
+## Move a type's doc-comment description from EntityMetadata to a body-level '@{description=...}' annotation, matching the DSL-authoring convention (#837 flip byte-identity)
+term reattachTypeDescriptionToBody =
+  λmmeta, t.optionals.match
+      mmeta
+      (mmeta, t)
+      (λem.
+        let mdesc := EntityMetadata[description] em
+        in optionals.match
+          mdesc
+          (mmeta, t)
+          (λd.
+            let newT := setTypeDescription given(d) t in
+            let restComments := EntityMetadata[comments] em in
+            let restSeeAlso := EntityMetadata[seeAlso] em in
+            let restLifecycle := EntityMetadata[lifecycle] em in
+            let restProvisions := EntityMetadata[provisions] em in
+            let hasOtherFields := or
+                (not (lists.isEmpty restComments))
+                (or
+                  (not (lists.isEmpty restSeeAlso))
+                  (or (optionals.isGiven restLifecycle) (not (lists.isEmpty restProvisions)))) in
+            let newMmeta := ifElse
+                hasOtherFields
+                given(EntityMetadata{
+                  description = none,
+                  comments = restComments,
+                  seeAlso = restSeeAlso,
+                  lifecycle = restLifecycle,
+                  provisions = restProvisions})
+                none in
+            (newMmeta, newT)))
+
+## Resolve a single bare name reference against the printer's universe: own-definitions first (qualified with modName), then the unique owning import, hard error on zero or multiple owners (#5/#711/#837)
 term resolveNameRefWith =
   λmodName, ownNames, universe, n.
     let s := Name[] n
@@ -794,7 +904,7 @@ term resolveNameRefWith =
       right(n)
       (ifElse
         (sets.member s ownNames)
-        right(n)
+        right(qname modName s)
         (let owners := lists.filter
             (λentry.and
                 (not (equal (first entry) modName))
@@ -936,12 +1046,25 @@ term resolveNameRefsInTermWith =
             boundHere
             (CaseAlternative[handler] alt)) in
     cases(Term){
-      annotated = λat.eithers.map
-            (λb.Term{
-                annotated = AnnotatedTerm{
-                  body = b,
-                  annotation = AnnotatedTerm[annotation] at}})
-            (recurse bound (AnnotatedTerm[body] at)),
+      annotated = λat.
+          let ann := AnnotatedTerm[annotation] at in
+          let forAnn := λp.eithers.map
+                (λv.(first p, v))
+                (recurse bound (second p)) in
+          eithers.bind
+            (cases(Term){
+              `map` = λm.eithers.map
+                    (λrpairs.Term{
+                        `map` = maps.fromList rpairs})
+                    (eithers.mapList forAnn (maps.toList m)),
+              `_` = right(ann)}
+              ann)
+            (λrann.eithers.map
+                (λb.Term{
+                    annotated = AnnotatedTerm{
+                      body = b,
+                      annotation = rann}})
+                (recurse bound (AnnotatedTerm[body] at))),
       application = λa.eithers.bind
             (recurse bound (Application[function] a))
             (λf.eithers.map
@@ -1222,12 +1345,14 @@ term termDefinitionParser =
                   (λmsig.parsers.bind
                       (keyword "=")
                       (λ`_`.parsers.map
-                          (λt.Definition{
+                          (λt.
+                            let reattached := reattachTermDescriptionToBody mmeta t
+                            in Definition{
                               `term` = TermDefinition{
                                 name = qualifyLocalName modName local,
-                                metadata = mmeta,
+                                metadata = first reattached,
                                 signature = msig,
-                                body = t}})
+                                body = second reattached}})
                           (token (parsers.map stripSpans core.term)))))))
 
 ## Parse a token followed by optional trailing whitespace
@@ -1244,13 +1369,17 @@ term typeDefinitionParser =
               (λlocal.parsers.bind
                   (keyword "=")
                   (λ`_`.parsers.map
-                      (λts.Definition{
+                      (λts.
+                        let reattached := reattachTypeDescriptionToBody
+                            mmeta
+                            (stripSpansInType (TypeScheme[body] ts))
+                        in Definition{
                           `type` = TypeDefinition{
                             name = qualifyLocalName modName local,
-                            metadata = mmeta,
+                            metadata = first reattached,
                             body = TypeScheme{
                               variables = TypeScheme[variables] ts,
-                              body = stripSpansInType (TypeScheme[body] ts),
+                              body = second reattached,
                               constraints = TypeScheme[constraints] ts}}})
                       (token core.typeScheme)))))
 
@@ -1262,6 +1391,40 @@ term typeEnvFromDefinitions =
           (λdef.cases(Definition){`type` = λtd.given((TypeDefinition[name] td, TypeScheme[body] (TypeDefinition[body] td))), `_` = none}
               def)
           defs))
+
+## Build the flat set of fully-qualified union type names across a list of modules (#842)
+term unionTypeNamesOf =
+  λmods.sets.fromList
+      (lists.concat
+        (lists.map
+          (λmod.optionals.givens
+              (lists.map
+                (λdef.cases(Definition){
+                    `type` = λtd.ifElse
+                          (isUnionType (TypeScheme[body] (TypeDefinition[body] td)))
+                          given(TypeDefinition[name] td)
+                          none,
+                    `term` = λ`_`.none,
+                    `primitive` = λ`_`.none}
+                    def)
+                (Module[definitions] mod)))
+          mods))
+
+## Build a module's (name, declared-names) universe entry (#842)
+term universeEntryOf =
+  λmod.(
+      Module[name] mod,
+      sets.fromList
+        (lists.map
+          (λdef.cases(Definition){
+              `type` = λtd.TypeDefinition[name] td,
+              `term` = λtd.TermDefinition[name] td,
+              `primitive` = λpd.PrimitiveDefinition[name] pd}
+              def)
+          (Module[definitions] mod)))
+
+## Build a universe map (module name -> its declared local names) from a list of modules (#842)
+term universeNamesOf = λmods.maps.fromList (lists.map universeEntryOf mods)
 
 ## Skip zero or more whitespace characters and ordinary (non-'##') '#' line comments
 term whitespace =

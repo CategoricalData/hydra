@@ -333,7 +333,7 @@ term testGroupForCollectionPrimitives =
                                 literal = LiteralType{
                                   integer = IntegerType{
                                     `int32`}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -481,7 +481,7 @@ term testGroupForCollectionPrimitives =
                             literal = LiteralType{
                               integer = IntegerType{
                                 `int32`}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -526,7 +526,7 @@ term testGroupForCollectionPrimitives =
                               literal = LiteralType{
                                 integer = IntegerType{
                                   `int32`}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -574,7 +574,7 @@ term testGroupForCollectionPrimitives =
                                 literal = LiteralType{
                                   integer = IntegerType{
                                     `int32`}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]}],
@@ -617,7 +617,7 @@ term testGroupForEithers =
                                 literal = LiteralType{
                                   integer = IntegerType{
                                     `int32`}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -645,7 +645,7 @@ term testGroupForEithers =
                                 `string`}},
                             `right` = Type{
                               variable = Name{"t0"}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -681,7 +681,7 @@ term testGroupForEithers =
                                 literal = LiteralType{
                                   integer = IntegerType{
                                     `int32`}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -711,7 +711,7 @@ term testGroupForEithers =
                               literal = LiteralType{
                                 integer = IntegerType{
                                   `int32`}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -743,7 +743,7 @@ term testGroupForEithers =
                                 variable = Name{"t0"}}},
                             `right` = Type{
                               variable = Name{"t1"}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -770,7 +770,7 @@ term testGroupForEithers =
                             `right` = Type{
                               `list` = Type{
                                 variable = Name{"t1"}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -812,7 +812,7 @@ term testGroupForEithers =
                               `right` = Type{
                                 literal = LiteralType{
                                   `boolean`}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -849,7 +849,7 @@ term testGroupForEithers =
                                   `right` = Type{
                                     literal = LiteralType{
                                       `boolean`}}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -888,7 +888,7 @@ term testGroupForEithers =
                                   variable = Name{"t0"}},
                                 `right` = Type{
                                   variable = Name{"t1"}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -922,7 +922,7 @@ term testGroupForEithers =
                                   variable = Name{"t1"}},
                                 `right` = Type{
                                   variable = Name{"t0"}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -958,7 +958,7 @@ term testGroupForEithers =
                                 literal = LiteralType{
                                   integer = IntegerType{
                                     `int32`}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -997,7 +997,7 @@ term testGroupForEithers =
                             second = Type{
                               `list` = Type{
                                 variable = Name{"t0"}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]}],
@@ -1084,7 +1084,7 @@ term testGroupForFolds =
                               literal = LiteralType{
                                 integer = IntegerType{
                                   `int32`}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -1126,7 +1126,7 @@ term testGroupForFolds =
                           literal = LiteralType{
                             integer = IntegerType{
                               `int32`}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -1179,7 +1179,7 @@ term testGroupForFolds =
                               literal = LiteralType{
                                 integer = IntegerType{
                                   `int32`}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -1219,7 +1219,7 @@ term testGroupForFolds =
                           literal = LiteralType{
                             integer = IntegerType{
                               `int32`}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -1256,7 +1256,7 @@ term testGroupForFolds =
                           literal = LiteralType{
                             integer = IntegerType{
                               `int32`}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -1299,7 +1299,7 @@ term testGroupForFolds =
                             codomain = Type{
                               `optional` = Type{
                                 variable = Name{"t0"}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -1346,7 +1346,7 @@ term testGroupForFolds =
                             codomain = Type{
                               `list` = Type{
                                 variable = Name{"t0"}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]}],
@@ -1381,7 +1381,7 @@ term testGroupForLists =
                           `list` = Type{
                             literal = LiteralType{
                               `string`}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -1410,7 +1410,7 @@ term testGroupForLists =
                             `list` = Type{
                               literal = LiteralType{
                                 `string`}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -1436,7 +1436,7 @@ term testGroupForLists =
                         body = Type{
                           `list` = Type{
                             variable = Name{"t0"}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -1463,7 +1463,7 @@ term testGroupForLists =
                           `list` = Type{
                             `list` = Type{
                               variable = Name{"t0"}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -1498,7 +1498,7 @@ term testGroupForLists =
                             codomain = Type{
                               `list` = Type{
                                 variable = Name{"t0"}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -1537,7 +1537,7 @@ term testGroupForLists =
                                 literal = LiteralType{
                                   integer = IntegerType{
                                     `int32`}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -1574,7 +1574,7 @@ term testGroupForLists =
                               `list` = Type{
                                 literal = LiteralType{
                                   `string`}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]}],
@@ -1611,7 +1611,7 @@ term testGroupForMaps =
                         values = Type{
                           literal = LiteralType{
                             `string`}}}},
-                    constraints = {}}}},
+                    constraints = {=}}}},
         description = none,
         tags = [],
         provisions = []},
@@ -1625,7 +1625,7 @@ term testGroupForMaps =
                   (inferTypeOf
                     testContext
                     testGraph
-                    Term{`map` = {}}),
+                    Term{`map` = {=}}),
             expected = λ`_`.typeScheme
                   TypeScheme{
                     variables = [Name{"t0"}, Name{"t1"}],
@@ -1716,7 +1716,7 @@ term testGroupForOptionals =
                         literal = LiteralType{
                           integer = IntegerType{
                             `int32`}}}},
-                    constraints = {}}}},
+                    constraints = {=}}}},
         description = none,
         tags = [],
         provisions = []},
@@ -1737,7 +1737,7 @@ term testGroupForOptionals =
                     body = Type{
                       `optional` = Type{
                         variable = Name{"t0"}}},
-                    constraints = {}}}},
+                    constraints = {=}}}},
         description = none,
         tags = [],
         provisions = []}]}
@@ -1776,7 +1776,7 @@ term testGroupForPairs =
                               literal = LiteralType{
                                 integer = IntegerType{
                                   `int32`}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -1810,7 +1810,7 @@ term testGroupForPairs =
                                 literal = LiteralType{
                                   float = FloatType{
                                     `float32`}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -1842,7 +1842,7 @@ term testGroupForPairs =
                             second = Type{
                               literal = LiteralType{
                                 `string`}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -1869,7 +1869,7 @@ term testGroupForPairs =
                             second = Type{
                               `list` = Type{
                                 variable = Name{"t1"}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -1910,7 +1910,7 @@ term testGroupForPairs =
                             second = Type{
                               literal = LiteralType{
                                 `boolean`}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -1950,7 +1950,7 @@ term testGroupForPairs =
                                     literal = LiteralType{
                                       float = FloatType{
                                         `float32`}}}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -1989,7 +1989,7 @@ term testGroupForPairs =
                                 second = Type{
                                   literal = LiteralType{
                                     `string`}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -2022,7 +2022,7 @@ term testGroupForPairs =
                                   variable = Name{"t0"}},
                                 second = Type{
                                   variable = Name{"t0"}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -2060,7 +2060,7 @@ term testGroupForPairs =
                                 literal = LiteralType{
                                   integer = IntegerType{
                                     `int32`}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -2088,7 +2088,7 @@ term testGroupForPairs =
                               second = Type{
                                 literal = LiteralType{
                                   `string`}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -2121,7 +2121,7 @@ term testGroupForPairs =
                             second = Type{
                               literal = LiteralType{
                                 `string`}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -2148,7 +2148,7 @@ term testGroupForPairs =
                             second = Type{
                               literal = LiteralType{
                                 `string`}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -2175,7 +2175,7 @@ term testGroupForPairs =
                             second = Type{
                               `list` = Type{
                                 variable = Name{"t1"}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]}],
@@ -2207,7 +2207,7 @@ term testGroupForSets =
                       `set` = Type{
                         literal = LiteralType{
                           `boolean`}}},
-                    constraints = {}}}},
+                    constraints = {=}}}},
         description = none,
         tags = [],
         provisions = []},

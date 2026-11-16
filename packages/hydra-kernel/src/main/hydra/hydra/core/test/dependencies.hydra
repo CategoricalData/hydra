@@ -824,7 +824,7 @@ term allTests =
                               `map` = maps.mapKeys
                                   (λn.Term{
                                       variable = n})
-                                  {}}}}),
+                                  {=}}}}),
                 expected = λ`_`.`term`
                       Term{
                         annotated = AnnotatedTerm{
@@ -845,7 +845,7 @@ term allTests =
                             `map` = maps.mapKeys
                                 (λn.Term{
                                     variable = n})
-                                {}}}}}},
+                                {=}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -874,7 +874,7 @@ term allTests =
                                   `map` = maps.mapKeys
                                       (λn.Term{
                                           variable = n})
-                                      {}}}}}}),
+                                      {=}}}}}}),
                 expected = λ`_`.`term`
                       Term{
                         lambda = Lambda{
@@ -895,7 +895,7 @@ term allTests =
                                 `map` = maps.mapKeys
                                     (λn.Term{
                                         variable = n})
-                                    {}}}}}}}},
+                                    {=}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -928,7 +928,7 @@ term allTests =
                                       `map` = maps.mapKeys
                                           (λn.Term{
                                               variable = n})
-                                          {}}}}}}}}),
+                                          {=}}}}}}}}),
                 expected = λ`_`.`term`
                       Term{
                         lambda = Lambda{
@@ -953,7 +953,7 @@ term allTests =
                                     `map` = maps.mapKeys
                                         (λn.Term{
                                             variable = n})
-                                        {}}}}}}}}}},
+                                        {=}}}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -982,7 +982,7 @@ term allTests =
                                       `map` = maps.mapKeys
                                           (λn.Term{
                                               variable = n})
-                                          {}}}}}}}}),
+                                          {=}}}}}}}}),
                 expected = λ`_`.`term`
                       Term{
                         lambda = Lambda{
@@ -1003,7 +1003,7 @@ term allTests =
                                     `map` = maps.mapKeys
                                         (λn.Term{
                                             variable = n})
-                                        {}}}}}}}}}},
+                                        {=}}}}}}}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -1032,7 +1032,7 @@ term allTests =
                               `map` = maps.mapKeys
                                   (λn.Term{
                                       variable = n})
-                                  {}}}}),
+                                  {=}}}}),
                 expected = λ`_`.`term`
                       Term{
                         annotated = AnnotatedTerm{
@@ -1053,7 +1053,7 @@ term allTests =
                             `map` = maps.mapKeys
                                 (λn.Term{
                                     variable = n})
-                                {}}}}}},
+                                {=}}}}}},
             description = none,
             tags = [],
             provisions = []},

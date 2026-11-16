@@ -50,7 +50,7 @@ term topLevelAnnotationsTests =
                           `map` = mapKeys
                               (λn.Term{
                                   variable = n})
-                              {}}}}),
+                              {=}}}}),
             expected = λ`_`.`type`
                   Type{
                     literal = LiteralType{
@@ -79,7 +79,7 @@ term topLevelAnnotationsTests =
                           `map` = mapKeys
                               (λn.Term{
                                   variable = n})
-                              {}}}}),
+                              {=}}}}),
             expected = λ`_`.`type`
                   Type{
                     `list` = Type{
@@ -113,7 +113,7 @@ term topLevelAnnotationsTests =
                           `map` = mapKeys
                               (λn.Term{
                                   variable = n})
-                              {}}}}),
+                              {=}}}}),
             expected = λ`_`.`type`
                   Type{
                     variable = testTypePersonName}}},
@@ -144,7 +144,7 @@ term topLevelAnnotationsTests =
                           `map` = mapKeys
                               (λn.Term{
                                   variable = n})
-                              {}}}}),
+                              {=}}}}),
             expected = λ`_`.`type`
                   Type{
                     `forall` = ForallType{
@@ -189,12 +189,12 @@ term nestedAnnotationsTests =
                               `map` = mapKeys
                                   (λn.Term{
                                       variable = n})
-                                  {}}}},
+                                  {=}}}},
                         annotation = Term{
                           `map` = mapKeys
                               (λn.Term{
                                   variable = n})
-                              {}}}}),
+                              {=}}}}),
             expected = λ`_`.`type`
                   Type{
                     literal = LiteralType{
@@ -220,11 +220,11 @@ term nestedAnnotationsTests =
                           Term{
                             annotated = AnnotatedTerm{
                               body = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
-                              annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {}}}},
+                              annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {=}}}},
                           Term{
                             annotated = AnnotatedTerm{
                               body = Term{literal = Literal{`string` = "hello"}},
-                              annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {}}}})}),
+                              annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {=}}}})}),
             expected = λ`_`.`type`
                   Type{
                     pair = PairType{
@@ -264,7 +264,7 @@ term nestedAnnotationsTests =
                               `map` = mapKeys
                                   (λn.Term{
                                       variable = n})
-                                  {}}}},
+                                  {=}}}},
                         argument = Term{
                           annotated = AnnotatedTerm{
                             body = Term{
@@ -275,7 +275,7 @@ term nestedAnnotationsTests =
                               `map` = mapKeys
                                   (λn.Term{
                                       variable = n})
-                                  {}}}}}}),
+                                  {=}}}}}}),
             expected = λ`_`.`type`
                   Type{
                     literal = LiteralType{
@@ -314,14 +314,14 @@ term annotationsInComplexContextsTests =
                                   literal = Literal{
                                     integer = IntegerValue{
                                       `int32` = 5:int32}}},
-                                annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {}}}},
+                                annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {=}}}},
                             typeScheme = none},
                           Binding{
                             name = Name{"y"},
                             `term` = Term{
                               annotated = AnnotatedTerm{
                                 body = Term{literal = Literal{`string` = "world"}},
-                                annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {}}}},
+                                annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {=}}}},
                             typeScheme = none}],
                         body = Term{
                           annotated = AnnotatedTerm{
@@ -331,7 +331,7 @@ term annotationsInComplexContextsTests =
                               `map` = mapKeys
                                   (λn.Term{
                                       variable = n})
-                                  {}}}}}}),
+                                  {=}}}}}}),
             expected = λ`_`.`type`
                   Type{
                     pair = PairType{
@@ -366,13 +366,13 @@ term annotationsInComplexContextsTests =
                             `term` = Term{
                               annotated = AnnotatedTerm{
                                 body = Term{literal = Literal{`string` = "Alice"}},
-                                annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {}}}}},
+                                annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {=}}}}},
                           Field{
                             name = Name{"lastName"},
                             `term` = Term{
                               annotated = AnnotatedTerm{
                                 body = Term{literal = Literal{`string` = "Smith"}},
-                                annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {}}}}},
+                                annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {=}}}}},
                           Field{
                             name = Name{"age"},
                             `term` = Term{
@@ -381,7 +381,7 @@ term annotationsInComplexContextsTests =
                                   literal = Literal{
                                     integer = IntegerValue{
                                       `int32` = 30:int32}}},
-                                annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {}}}}}]}}),
+                                annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {=}}}}}]}}),
             expected = λ`_`.`type`
                   Type{
                     variable = testTypePersonName}}},
@@ -408,7 +408,7 @@ term annotationsInComplexContextsTests =
                             `term` = Term{
                               annotated = AnnotatedTerm{
                                 body = Term{variable = Name{"hydra.core.lib.math.add"}},
-                                annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {}}}},
+                                annotation = Term{`map` = mapKeys (λn.Term{variable = n}) {=}}}},
                             typeScheme = none}],
                         body = Term{
                           application = Application{
@@ -426,7 +426,7 @@ term annotationsInComplexContextsTests =
                                       `map` = mapKeys
                                           (λn.Term{
                                               variable = n})
-                                          {}}}}}},
+                                          {=}}}}}},
                             argument = Term{
                               annotated = AnnotatedTerm{
                                 body = Term{
@@ -437,7 +437,7 @@ term annotationsInComplexContextsTests =
                                   `map` = mapKeys
                                       (λn.Term{
                                           variable = n})
-                                      {}}}}}}}}),
+                                      {=}}}}}}}}),
             expected = λ`_`.`type`
                   Type{
                     literal = LiteralType{

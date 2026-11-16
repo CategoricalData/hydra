@@ -55,7 +55,7 @@ term allTests =
                                             variable = Name{"a"}},
                                           codomain = Type{
                                             variable = Name{"a"}}}},
-                                      constraints = {}}),
+                                      constraints = {=}}),
                                 body = Term{
                                   lambda = Lambda{
                                     parameter = Name{"x"},
@@ -94,7 +94,7 @@ term allTests =
                                             variable = Name{"a"}},
                                           codomain = Type{
                                             variable = Name{"a"}}}},
-                                      constraints = {}}),
+                                      constraints = {=}}),
                                 body = Term{
                                   lambda = Lambda{
                                     parameter = Name{"x"},
@@ -113,7 +113,7 @@ term allTests =
                                             variable = Name{"a"}},
                                           codomain = Type{
                                             variable = Name{"a"}}}},
-                                      constraints = {}}),
+                                      constraints = {=}}),
                                 body = Term{
                                   lambda = Lambda{
                                     parameter = Name{"x"},
@@ -211,7 +211,7 @@ term allTests =
                                             variable = Name{"a"}},
                                           codomain = Type{
                                             variable = Name{"a"}}}},
-                                      constraints = {}}),
+                                      constraints = {=}}),
                                 body = Term{
                                   lambda = Lambda{
                                     parameter = Name{"x"},
@@ -276,7 +276,7 @@ term allTests =
                                               variable = Name{"a"}},
                                             codomain = Type{
                                               variable = Name{"a"}}}},
-                                        constraints = {}}),
+                                        constraints = {=}}),
                                   body = Term{
                                     lambda = Lambda{
                                       parameter = Name{"x"},
@@ -365,7 +365,7 @@ term allTests =
                                               variable = Name{"a"}},
                                             codomain = Type{
                                               variable = Name{"a"}}}},
-                                        constraints = {}}),
+                                        constraints = {=}}),
                                   body = Term{
                                     lambda = Lambda{
                                       parameter = Name{"x"},
@@ -461,7 +461,7 @@ term allTests =
                                               variable = Name{"a"}},
                                             codomain = Type{
                                               variable = Name{"a"}}}},
-                                        constraints = {}}),
+                                        constraints = {=}}),
                                   body = Term{
                                     lambda = Lambda{
                                       parameter = Name{"x"},
@@ -504,7 +504,7 @@ term allTests =
                                               variable = Name{"a"}},
                                             codomain = Type{
                                               variable = Name{"a"}}}},
-                                        constraints = {}}),
+                                        constraints = {=}}),
                                   body = Term{
                                     lambda = Lambda{
                                       parameter = Name{"x"},
@@ -574,7 +574,7 @@ term allTests =
                                               variable = Name{"a"}},
                                             codomain = Type{
                                               variable = Name{"a"}}}},
-                                        constraints = {}}),
+                                        constraints = {=}}),
                                   body = Term{
                                     lambda = Lambda{
                                       parameter = Name{"x"},
@@ -617,7 +617,7 @@ term allTests =
                                               variable = Name{"a"}},
                                             codomain = Type{
                                               variable = Name{"a"}}}},
-                                        constraints = {}}),
+                                        constraints = {=}}),
                                   body = Term{
                                     lambda = Lambda{
                                       parameter = Name{"x"},
@@ -702,7 +702,7 @@ term allTests =
                                                       variable = Name{"t2"}},
                                                     codomain = Type{
                                                       variable = Name{"t2"}}}}}}}},
-                                        constraints = {}}),
+                                        constraints = {=}}),
                                   body = Term{
                                     lambda = Lambda{
                                       parameter = Name{"x"},
@@ -831,7 +831,7 @@ term allTests =
                                               variable = Name{"a"}},
                                             codomain = Type{
                                               variable = Name{"a"}}}},
-                                        constraints = {}}),
+                                        constraints = {=}}),
                                   body = Term{
                                     lambda = Lambda{
                                       parameter = Name{"x"},
@@ -901,7 +901,7 @@ term allTests =
                                               variable = Name{"a"}},
                                             codomain = Type{
                                               variable = Name{"a"}}}},
-                                        constraints = {}}),
+                                        constraints = {=}}),
                                   body = Term{
                                     lambda = Lambda{
                                       parameter = Name{"x"},
@@ -944,7 +944,7 @@ term allTests =
                                               variable = Name{"a"}},
                                             codomain = Type{
                                               variable = Name{"a"}}}},
-                                        constraints = {}}),
+                                        constraints = {=}}),
                                   body = Term{
                                     lambda = Lambda{
                                       parameter = Name{"x"},
@@ -1022,7 +1022,7 @@ term allTests =
                                               variable = Name{"a"}},
                                             codomain = Type{
                                               variable = Name{"a"}}}},
-                                        constraints = {}}),
+                                        constraints = {=}}),
                                   body = Term{
                                     lambda = Lambda{
                                       parameter = Name{"x"},
@@ -1092,7 +1092,7 @@ term allTests =
                                               variable = Name{"a"}},
                                             codomain = Type{
                                               variable = Name{"a"}}}},
-                                        constraints = {}}),
+                                        constraints = {=}}),
                                   body = Term{
                                     lambda = Lambda{
                                       parameter = Name{"x"},
@@ -1135,7 +1135,7 @@ term allTests =
                                               variable = Name{"a"}},
                                             codomain = Type{
                                               variable = Name{"a"}}}},
-                                        constraints = {}}),
+                                        constraints = {=}}),
                                   body = Term{
                                     lambda = Lambda{
                                       parameter = Name{"x"},

@@ -134,12 +134,12 @@ term allTests =
                           (maps.bimap
                             (λk.mul k 2:int32)
                             (λv.strings.toUpper v)
-                            {}),
+                            {=}),
                     expected = λ`_`.(λm.model.map
                             (λn.printInt32 n)
                             (λs.printString s)
                             m)
-                          {}}},
+                          {=}}},
                 description = none,
                 tags = [],
                 provisions = [Name{"hydra.core.lib.maps.bimap.emptyInput"}]}]}],
@@ -209,7 +209,7 @@ term allTests =
                             m)
                           (maps.difference
                             {1:int32 = "a", 2:int32 = "b"}
-                            {}),
+                            {=}),
                     expected = λ`_`.(λm.model.map
                             (λn.printInt32 n)
                             (λs.printString s)
@@ -265,7 +265,7 @@ term allTests =
                 case = TestCase{
                   universal = UniversalTestCase{
                     actual = λ`_`.(λxs.model.list (λs.printString s) xs)
-                          (maps.elems {}),
+                          (maps.elems {=}),
                     expected = λ`_`.(λxs.model.list (λs.printString s) xs)
                           []}},
                 description = none,
@@ -290,7 +290,7 @@ term allTests =
                         (λn.printInt32 n)
                         (λs.printString s)
                         m)
-                      {}}},
+                      {=}}},
             description = none,
             tags = [],
             provisions = [Name{"hydra.core.lib.maps.empty.hasNoBindings"}]}]},
@@ -357,7 +357,7 @@ term allTests =
                             (λn.printInt32 n)
                             (λs.printString s)
                             m)
-                          {}}},
+                          {=}}},
                 description = none,
                 tags = [],
                 provisions = [Name{"hydra.core.lib.maps.filter.boundaryCases"}]},
@@ -377,12 +377,12 @@ term allTests =
                                     (λc.chars.toLower c)
                                     (strings.charAt 0:int32 v)))
                                 97:int32)
-                            {}),
+                            {=}),
                     expected = λ`_`.(λm.model.map
                             (λn.printInt32 n)
                             (λs.printString s)
                             m)
-                          {}}},
+                          {=}}},
                 description = none,
                 tags = [],
                 provisions = [Name{"hydra.core.lib.maps.filter.boundaryCases"}]}]}],
@@ -438,7 +438,7 @@ term allTests =
                             (λn.printInt32 n)
                             (λs.printString s)
                             m)
-                          {}}},
+                          {=}}},
                 description = none,
                 tags = [],
                 provisions = [Name{"hydra.core.lib.maps.filterWithKey.boundaryCases"}]},
@@ -452,12 +452,12 @@ term allTests =
                             m)
                           (maps.filterWithKey
                             (λk, v.gt k 1:int32)
-                            {}),
+                            {=}),
                     expected = λ`_`.(λm.model.map
                             (λn.printInt32 n)
                             (λs.printString s)
                             m)
-                          {}}},
+                          {=}}},
                 description = none,
                 tags = [],
                 provisions = [Name{"hydra.core.lib.maps.filterWithKey.boundaryCases"}]}]}],
@@ -561,7 +561,7 @@ term allTests =
                             (λn.printInt32 n)
                             (λs.printString s)
                             m)
-                          {}}},
+                          {=}}},
                 description = none,
                 tags = [],
                 provisions = [Name{"hydra.core.lib.maps.fromList.emptyInput"}]}]}],
@@ -624,7 +624,7 @@ term allTests =
                         (λn.printInt32 n)
                         (λs.printString s)
                         m)
-                      (maps.insert 1:int32 "x" {}),
+                      (maps.insert 1:int32 "x" {=}),
                 expected = λ`_`.(λm.model.map
                         (λn.printInt32 n)
                         (λs.printString s)
@@ -687,7 +687,7 @@ term allTests =
                             (λn.printInt32 n)
                             (λs.printString s)
                             m)
-                          {}}},
+                          {=}}},
                 description = none,
                 tags = [],
                 provisions = [Name{"hydra.core.lib.maps.intersection.emptyWhenNoOverlapOrEitherEmpty"}]},
@@ -701,12 +701,12 @@ term allTests =
                             m)
                           (maps.intersection
                             {1:int32 = "a", 2:int32 = "b"}
-                            {}),
+                            {=}),
                     expected = λ`_`.(λm.model.map
                             (λn.printInt32 n)
                             (λs.printString s)
                             m)
-                          {}}},
+                          {=}}},
                 description = none,
                 tags = [],
                 provisions = [Name{"hydra.core.lib.maps.intersection.emptyWhenNoOverlapOrEitherEmpty"}]}]}],
@@ -760,7 +760,7 @@ term allTests =
                 case = TestCase{
                   universal = UniversalTestCase{
                     actual = λ`_`.(λxs.model.list (λn.printInt32 n) xs)
-                          (maps.keys {}),
+                          (maps.keys {=}),
                     expected = λ`_`.(λxs.model.list (λn.printInt32 n) xs)
                           []}},
                 description = none,
@@ -812,7 +812,7 @@ term allTests =
                 case = TestCase{
                   universal = UniversalTestCase{
                     actual = λ`_`.(λmx.model.optional (λs.printString s) mx)
-                          (maps.lookup 1:int32 {}),
+                          (maps.lookup 1:int32 {=}),
                     expected = λ`_`.(λmx.model.optional (λs.printString s) mx)
                           none}},
                 description = none,
@@ -860,12 +860,12 @@ term allTests =
                             (λn.printInt32 n)
                             (λs.printString s)
                             m)
-                          (maps.map (λs.strings.toUpper s) {}),
+                          (maps.map (λs.strings.toUpper s) {=}),
                     expected = λ`_`.(λm.model.map
                             (λn.printInt32 n)
                             (λs.printString s)
                             m)
-                          {}}},
+                          {=}}},
                 description = none,
                 tags = [],
                 provisions = [Name{"hydra.core.lib.maps.map.emptyInput"}]}]}],
@@ -911,12 +911,12 @@ term allTests =
                             (λn.printInt32 n)
                             (λs.printString s)
                             m)
-                          (maps.mapKeys (λk.mul k 2:int32) {}),
+                          (maps.mapKeys (λk.mul k 2:int32) {=}),
                     expected = λ`_`.(λm.model.map
                             (λn.printInt32 n)
                             (λs.printString s)
                             m)
-                          {}}},
+                          {=}}},
                 description = none,
                 tags = [],
                 provisions = [Name{"hydra.core.lib.maps.mapKeys.emptyInput"}]}]}],
@@ -964,7 +964,7 @@ term allTests =
                 case = TestCase{
                   universal = UniversalTestCase{
                     actual = λ`_`.(λb.printBoolean b)
-                          (maps.member 1:int32 {}),
+                          (maps.member 1:int32 {=}),
                     expected = λ`_`.(λb.printBoolean b) false}},
                 description = none,
                 tags = [],
@@ -979,7 +979,7 @@ term allTests =
             name = "empty map",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.(λb.printBoolean b) (maps.isEmpty {}),
+                actual = λ`_`.(λb.printBoolean b) (maps.isEmpty {=}),
                 expected = λ`_`.(λb.printBoolean b) true}},
             description = none,
             tags = [],
@@ -1057,12 +1057,12 @@ term allTests =
                             (λn.printInt32 n)
                             (λs.printString s)
                             m)
-                          (maps.delete 1:int32 {}),
+                          (maps.delete 1:int32 {=}),
                     expected = λ`_`.(λm.model.map
                             (λn.printInt32 n)
                             (λs.printString s)
                             m)
-                          {}}},
+                          {=}}},
                 description = none,
                 tags = [],
                 provisions = [Name{"hydra.core.lib.maps.delete.noOpWhenAbsentOrEmpty"}]}]}],
@@ -1122,7 +1122,7 @@ term allTests =
             name = "empty map",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.(λn.printInt32 n) (maps.size {}),
+                actual = λ`_`.(λn.printInt32 n) (maps.size {=}),
                 expected = λ`_`.(λn.printInt32 n) 0:int32}},
             description = none,
             tags = [],
@@ -1198,7 +1198,7 @@ term allTests =
                                 (λs.printString s)
                                 p)
                             xs)
-                          (maps.toList {}),
+                          (maps.toList {=}),
                     expected = λ`_`.(λxs.model.list
                             (λp.model.pair
                                 (λn.printInt32 n)
@@ -1254,7 +1254,7 @@ term allTests =
                             (λn.printInt32 n)
                             (λs.printString s)
                             m)
-                          (maps.union {1:int32 = "a"} {}),
+                          (maps.union {1:int32 = "a"} {=}),
                     expected = λ`_`.(λm.model.map
                             (λn.printInt32 n)
                             (λs.printString s)
@@ -1271,7 +1271,7 @@ term allTests =
                             (λn.printInt32 n)
                             (λs.printString s)
                             m)
-                          (maps.union {} {1:int32 = "a"}),
+                          (maps.union {=} {1:int32 = "a"}),
                     expected = λ`_`.(λm.model.map
                             (λn.printInt32 n)
                             (λs.printString s)
@@ -1321,7 +1321,7 @@ term allTests =
                             (λs.printString s)
                             m)
                           (maps.unions
-                            [{1:int32 = "a"}, {}, {2:int32 = "b"}]),
+                            [{1:int32 = "a"}, {=}, {2:int32 = "b"}]),
                     expected = λ`_`.(λm.model.map
                             (λn.printInt32 n)
                             (λs.printString s)
@@ -1366,7 +1366,7 @@ term allTests =
                             (λn.printInt32 n)
                             (λs.printString s)
                             m)
-                          {}}},
+                          {=}}},
                 description = none,
                 tags = [],
                 provisions = [Name{"hydra.core.lib.maps.unions.emptyListOfMapsYieldsEmptyMap"}]}]}],

@@ -486,7 +486,7 @@ term monomorphicMapsTests =
                   (inferTypeOf
                     testContext
                     testGraph
-                    Term{`map` = {}}),
+                    Term{`map` = {=}}),
             expected = λ`_`.`type`
                   Type{
                     `forall` = ForallType{

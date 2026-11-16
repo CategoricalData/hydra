@@ -3896,7 +3896,7 @@ term primitiveTypeErrorTests =
                           literal = LiteralType{
                             float = FloatType{
                               `float64`}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -3939,7 +3939,7 @@ term primitiveTypeErrorTests =
                           literal = LiteralType{
                             float = FloatType{
                               `float64`}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]}],

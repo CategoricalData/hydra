@@ -50,7 +50,7 @@ term transparencyTests =
                           literal = LiteralType{
                             integer = IntegerType{
                               `int32`}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -79,7 +79,7 @@ term transparencyTests =
                         body = Type{
                           literal = LiteralType{
                             `string`}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -114,7 +114,7 @@ term transparencyTests =
                               variable = Name{"t0"}},
                             codomain = Type{
                               variable = Name{"t0"}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -140,7 +140,7 @@ term transparencyTests =
                                 integer = IntegerValue{
                                   `int32` = 42:int32}}},
                             annotation = Term{
-                              `map` = {}}}}),
+                              `map` = {=}}}}),
                 expected = λ`_`.typeScheme
                       TypeScheme{
                         variables = [],
@@ -148,7 +148,7 @@ term transparencyTests =
                           literal = LiteralType{
                             integer = IntegerType{
                               `int32`}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -178,7 +178,7 @@ term transparencyTests =
                           literal = LiteralType{
                             integer = IntegerType{
                               `int32`}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -218,7 +218,7 @@ term transparencyTests =
                           literal = LiteralType{
                             integer = IntegerType{
                               `int32`}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -241,9 +241,9 @@ term transparencyTests =
                                     integer = IntegerValue{
                                       `int32` = 42:int32}}},
                                 annotation = Term{
-                                  `map` = {}}}},
+                                  `map` = {=}}}},
                             annotation = Term{
-                              `map` = {}}}}),
+                              `map` = {=}}}}),
                 expected = λ`_`.typeScheme
                       TypeScheme{
                         variables = [],
@@ -251,7 +251,7 @@ term transparencyTests =
                           literal = LiteralType{
                             integer = IntegerType{
                               `int32`}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]}],

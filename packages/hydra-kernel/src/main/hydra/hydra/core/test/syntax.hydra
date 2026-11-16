@@ -34,9 +34,11 @@ term allTests =
       forallMultiBinderGroup,
       lambdaMultiBinderGroup,
       lazyParameterRoundtripGroup,
+      mapSetLiteralGroup,
       moduleAliasGroup,
       multiLineDocCommentGroup,
       nominalSugarGroup,
+      parseModulesGroup,
       sourceSpanGroup,
       sourcePositionGroup,
       termDocCommentGroup,
@@ -1503,6 +1505,89 @@ term lazyParameterRoundtripGroup =
         tags = [],
         provisions = []}]}
 
+## Empty-map vs. empty-set literal printing/round-trip (#711/#842)
+term mapSetLiteralGroup =
+  TestGroup{
+    name = "map/set literal disambiguation",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "empty map prints as '{=}', not '{}'",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.term Term{`map` = maps.empty},
+            expected = λ`_`."{=}"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "empty map round-trips to a map, not a set",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term Term{`map` = maps.empty})),
+            expected = λ`_`.model.term Term{`map` = maps.empty}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "nonempty map still prints with '=' entries",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.term
+                  Term{
+                    `map` = maps.fromList
+                        [(Term{literal = Literal{`string` = "k"}}, Term{literal = Literal{`string` = "v"}})]},
+            expected = λ`_`."{\"k\" = \"v\"}"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "nonempty map round-trips",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term
+                      Term{
+                        `map` = maps.fromList
+                            [(Term{literal = Literal{`string` = "k"}}, Term{literal = Literal{`string` = "v"}})]})),
+            expected = λ`_`.model.term
+                  Term{
+                    `map` = maps.fromList
+                        [(Term{literal = Literal{`string` = "k"}}, Term{literal = Literal{`string` = "v"}})]}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "empty set still prints as '{}' (unchanged)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.model.term Term{`set` = sets.empty},
+            expected = λ`_`."{}"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "empty set round-trips to a set, not a map",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt2.model.term t2)
+                  (parseTerm
+                    (model.term Term{`set` = sets.empty})),
+            expected = λ`_`.model.term Term{`set` = sets.empty}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
 ## Import aliasing: every cross-module dependency is aliased, and module->print->parse round-trips to an identical module (#711, #804, #805)
 term moduleAliasGroup =
   TestGroup{
@@ -2647,6 +2732,202 @@ term nominalSugarGroup =
         tags = [],
         provisions = []}]}
 
+## 'parseModules': the downstream '.hydra'-sources two-pass entry point (#842)
+term parseModulesGroup =
+  TestGroup{
+    name = "parseModules",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "parseModules resolves bare references between the caller's own files (#842)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λmods.strings.join
+                      "\n"
+                      (lists.map
+                        (λm.strings.concat
+                            [
+                              ModuleName[] (Module[name] m),
+                              "\n",
+                              strings.join
+                                "\n"
+                                (lists.map
+                                  (λd.cases(Definition){
+                                      `type` = λtd.strings.concat
+                                            [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
+                                      `term` = λtd.strings.concat
+                                            [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
+                                      `primitive` = λpd.Name[] (PrimitiveDefinition[name] pd)}
+                                      d)
+                                  (Module[definitions] m))])
+                        mods))
+                  (parseModules
+                    []
+                    [
+                      ("a.hydra", "module test.a\n\nimport test.b\n\nterm base = 1:int32\nterm useB = helper\n"),
+                      ("b.hydra", "module test.b\n\nimport test.a\n\nterm helper = base\n")]),
+            expected = λ`_`.strings.concat
+                  [
+                    strings.concat
+                      [
+                        ModuleName[]
+                          (Module[name]
+                            Module{
+                              name = ModuleName{"test.a"},
+                              metadata = none,
+                              dependencies = [],
+                              definitions = [
+                                Definition{
+                                  `term` = TermDefinition{
+                                    name = Name{"test.a.base"},
+                                    metadata = none,
+                                    signature = none,
+                                    body = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}}},
+                                Definition{
+                                  `term` = TermDefinition{
+                                    name = Name{"test.a.useB"},
+                                    metadata = none,
+                                    signature = none,
+                                    body = Term{variable = Name{"test.b.helper"}}}}]}),
+                        "\n",
+                        strings.join
+                          "\n"
+                          (lists.map
+                            (λd.cases(Definition){
+                                `type` = λtd.strings.concat
+                                      [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
+                                `term` = λtd.strings.concat
+                                      [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
+                                `primitive` = λpd.Name[] (PrimitiveDefinition[name] pd)}
+                                d)
+                            (Module[definitions]
+                              Module{
+                                name = ModuleName{"test.a"},
+                                metadata = none,
+                                dependencies = [],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"test.a.base"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}}},
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"test.a.useB"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{variable = Name{"test.b.helper"}}}}]}))],
+                    "\n",
+                    strings.concat
+                      [
+                        ModuleName[]
+                          (Module[name]
+                            Module{
+                              name = ModuleName{"test.b"},
+                              metadata = none,
+                              dependencies = [],
+                              definitions = [
+                                Definition{
+                                  `term` = TermDefinition{
+                                    name = Name{"test.b.helper"},
+                                    metadata = none,
+                                    signature = none,
+                                    body = Term{variable = Name{"test.a.base"}}}}]}),
+                        "\n",
+                        strings.join
+                          "\n"
+                          (lists.map
+                            (λd.cases(Definition){
+                                `type` = λtd.strings.concat
+                                      [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
+                                `term` = λtd.strings.concat
+                                      [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
+                                `primitive` = λpd.Name[] (PrimitiveDefinition[name] pd)}
+                                d)
+                            (Module[definitions]
+                              Module{
+                                name = ModuleName{"test.b"},
+                                metadata = none,
+                                dependencies = [],
+                                definitions = [
+                                  Definition{
+                                    `term` = TermDefinition{
+                                      name = Name{"test.b.helper"},
+                                      metadata = none,
+                                      signature = none,
+                                      body = Term{variable = Name{"test.a.base"}}}}]}))]]}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "parseModules rejects a duplicate module name across inputs (#842)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λmods.strings.join
+                      "\n"
+                      (lists.map
+                        (λm.strings.concat
+                            [
+                              ModuleName[] (Module[name] m),
+                              "\n",
+                              strings.join
+                                "\n"
+                                (lists.map
+                                  (λd.cases(Definition){
+                                      `type` = λtd.strings.concat
+                                            [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
+                                      `term` = λtd.strings.concat
+                                            [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
+                                      `primitive` = λpd.Name[] (PrimitiveDefinition[name] pd)}
+                                      d)
+                                  (Module[definitions] m))])
+                        mods))
+                  (parseModules
+                    []
+                    [("a.hydra", "module test.dup\n\nterm x = 1\n"), ("b.hydra", "module test.dup\n\nterm y = 2\n")]),
+            expected = λ`_`."b.hydra: duplicate module name across inputs (or clashing with a dependency module): test.dup"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "parseModules rejects an input clashing with a dependency module name (#842)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λmods.strings.join
+                      "\n"
+                      (lists.map
+                        (λm.strings.concat
+                            [
+                              ModuleName[] (Module[name] m),
+                              "\n",
+                              strings.join
+                                "\n"
+                                (lists.map
+                                  (λd.cases(Definition){
+                                      `type` = λtd.strings.concat
+                                            [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
+                                      `term` = λtd.strings.concat
+                                            [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
+                                      `primitive` = λpd.Name[] (PrimitiveDefinition[name] pd)}
+                                      d)
+                                  (Module[definitions] m))])
+                        mods))
+                  (parseModules
+                    [Module{name = ModuleName{"test.dep"}, metadata = none, dependencies = [], definitions = []}]
+                    [("a.hydra", "module test.dep\n\nterm x = 1\n")]),
+            expected = λ`_`."a.hydra: duplicate module name across inputs (or clashing with a dependency module): test.dep"}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
 ## Conversion of codepoint offsets to (line, column) positions, with UTF-16 column accounting (#815)
 term sourcePositionGroup =
   TestGroup{
@@ -3319,6 +3600,118 @@ term termDocCommentGroup =
                               `map` = maps.fromList
                                   [(Term{variable = Name{"description"}}, Term{literal = Literal{`string` = "inner desc"}})]}}}}}},
             expected = λ`_`."term wrapped = f x@{description = \"inner desc\"}"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "self-recursive term description round-trips (whole module, #837)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λm2.moduleDefinition m2)
+                  (parseModule
+                    (moduleDefinition
+                      Module{
+                        name = ModuleName{"test.selfrec.term"},
+                        metadata = none,
+                        dependencies = [],
+                        definitions = [
+                          Definition{
+                            `term` = TermDefinition{
+                              name = Name{"loop"},
+                              metadata = none,
+                              signature = none,
+                              body = Term{
+                                annotated = AnnotatedTerm{
+                                  body = Term{
+                                    lambda = Lambda{
+                                      parameter = Name{"x"},
+                                      domain = none,
+                                      body = Term{
+                                        application = Application{
+                                          function = Term{
+                                            variable = Name{"test.selfrec.term.loop"}},
+                                          argument = Term{
+                                            variable = Name{"x"}}}}}},
+                                  annotation = Term{
+                                    `map` = maps.fromList
+                                        [(Term{variable = Name{"description"}}, Term{literal = Literal{`string` = "Loop until done."}})]}}}}}]})),
+            expected = λ`_`.moduleDefinition
+                  Module{
+                    name = ModuleName{"test.selfrec.term"},
+                    metadata = none,
+                    dependencies = [],
+                    definitions = [
+                      Definition{
+                        `term` = TermDefinition{
+                          name = Name{"loop"},
+                          metadata = none,
+                          signature = none,
+                          body = Term{
+                            annotated = AnnotatedTerm{
+                              body = Term{
+                                lambda = Lambda{
+                                  parameter = Name{"x"},
+                                  domain = none,
+                                  body = Term{
+                                    application = Application{
+                                      function = Term{
+                                        variable = Name{"test.selfrec.term.loop"}},
+                                      argument = Term{
+                                        variable = Name{"x"}}}}}},
+                              annotation = Term{
+                                `map` = maps.fromList
+                                    [(Term{variable = Name{"description"}}, Term{literal = Literal{`string` = "Loop until done."}})]}}}}}]}}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "term description plus another annotation key round-trips (whole module)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λm2.moduleDefinition m2)
+                  (parseModule
+                    (moduleDefinition
+                      Module{
+                        name = ModuleName{"test.descplusann.term"},
+                        metadata = none,
+                        dependencies = [],
+                        definitions = [
+                          Definition{
+                            `term` = TermDefinition{
+                              name = Name{"impl"},
+                              metadata = none,
+                              signature = none,
+                              body = Term{
+                                annotated = AnnotatedTerm{
+                                  body = Term{variable = Name{"y"}},
+                                  annotation = Term{
+                                    `map` = maps.fromList
+                                        [
+                                          (Term{variable = Name{"description"}}, Term{literal = Literal{`string` = "Get a character by index"}}),
+                                          (Term{variable = Name{"availableSince"}}, Term{literal = Literal{`string` = "0.17.6"}})]}}}}}]})),
+            expected = λ`_`.moduleDefinition
+                  Module{
+                    name = ModuleName{"test.descplusann.term"},
+                    metadata = none,
+                    dependencies = [],
+                    definitions = [
+                      Definition{
+                        `term` = TermDefinition{
+                          name = Name{"impl"},
+                          metadata = none,
+                          signature = none,
+                          body = Term{
+                            annotated = AnnotatedTerm{
+                              body = Term{variable = Name{"y"}},
+                              annotation = Term{
+                                `map` = maps.fromList
+                                    [
+                                      (Term{variable = Name{"description"}}, Term{literal = Literal{`string` = "Get a character by index"}}),
+                                      (Term{variable = Name{"availableSince"}}, Term{literal = Literal{`string` = "0.17.6"}})]}}}}}]}}},
         description = none,
         tags = [],
         provisions = []}]}

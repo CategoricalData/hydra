@@ -137,7 +137,7 @@ term testGroupForNestedLet =
                                 codomain = Type{
                                   literal = LiteralType{
                                     `string`}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -290,7 +290,7 @@ term testGroupForNestedLet =
                                 second = Type{
                                   literal = LiteralType{
                                     `string`}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -459,7 +459,7 @@ term testGroupForNestedLet =
                                       variable = Name{"hydra.core.model.Name"}}}},
                                 second = Type{
                                   variable = Name{"hydra.core.model.Type"}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]}],

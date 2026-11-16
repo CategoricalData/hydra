@@ -1,9 +1,9 @@
 ## Validation functions for modules and packages
 module hydra.core.validate.packaging
 
+import hydra.core.analysis
 import hydra.core.annotations
 import hydra.core.constants
-import hydra.core.dependencies
 import hydra.core.error.packaging
 import hydra.core.formatting
 import hydra.core.lib.equality
@@ -19,9 +19,9 @@ import hydra.core.lib.strings as strings
 import hydra.core.model
 import hydra.core.names
 import hydra.core.packaging
+import hydra.core.strip
 import hydra.core.util
 import hydra.core.validation
-import hydra.core.variables
 
 ## Append a rule-tagged InvalidModuleError finding to a ValidationResult, classifying as error or warning per the profile and respecting maxErrors/maxWarnings bounds.
 term appendFindingModule =
@@ -105,7 +105,7 @@ term checkConflictingVariantNames =
             `type` = λtd.
                 let typeName := TypeDefinition[name] td in
                 let localTypeName := localNameOf typeName in
-                let typ := TypeScheme[body] (TypeDefinition[body] td) in
+                let typ := deannotateType (TypeScheme[body] (TypeDefinition[body] td)) in
                 cases(Type){
                   `union` = λfields.lists.foldl
                         (λinnerAcc, field.optionals.match
@@ -115,8 +115,16 @@ term checkConflictingVariantNames =
                             let constructorName := strings.concat2
                                 (capitalize localTypeName)
                                 (capitalize localFieldName) in
+                            let qualifiedConstructorName := strings.concat2
+                                (strings.concat2 (ModuleName[] ns) ".")
+                                constructorName in
                             ifElse
-                              (sets.member constructorName defNames)
+                              (and
+                                (sets.member constructorName defNames)
+                                (not
+                                  (sets.member
+                                    qualifiedConstructorName
+                                    conflictingVariantNameExemptions)))
                               given(InvalidModuleError{
                                 conflictingVariantName = ConflictingVariantNameError{
                                   moduleName = ns,
@@ -135,40 +143,31 @@ term checkConflictingVariantNames =
       none
       defs
 
-## Check that every top-level definition is wrapped in a description annotation
+## Check that every top-level definition has a description, via EntityMetadata or an annotation
 term checkDefinitionDocumentation =
   λmod.
-    let ns := Module[name] mod
-    in lists.foldl
+    let ns := Module[name] mod in
+    let hasDescriptionMeta := λmem.optionals.match
+          mem
+          false
+          (λem.not (equal (optionals.withDefault "" (EntityMetadata[description] em)) "")) in
+    lists.foldl
       (λacc, def.optionals.match
           acc
           (let name := definitionName def in
           let documented := cases(Definition){
-              `term` = λtd.
-                  let `term` := TermDefinition[body] td
-                  in cases(Term){
-                    annotated = λat.hasDescription
-                          (getAnnotationMap
-                            (AnnotatedTerm[annotation] at)),
-                    `_` = false}
-                    `term`,
-              `type` = λtd.
-                  let typ := TypeScheme[body] (TypeDefinition[body] td)
-                  in cases(Type){
-                    annotated = λat.hasDescription
-                          (getAnnotationMap
-                            (AnnotatedType[annotation] at)),
-                    `_` = false}
-                    typ,
-              `primitive` = λpd.optionals.match
-                    (PrimitiveDefinition[metadata] pd)
-                    false
-                    (λem.not
-                        (equal
-                          (optionals.withDefault
-                            ""
-                            (EntityMetadata[description] em))
-                          "")),
+              `term` = λtd.or
+                    (hasDescriptionMeta (TermDefinition[metadata] td))
+                    (optionals.isGiven
+                      (getTermAnnotation
+                        keyDescription
+                        (TermDefinition[body] td))),
+              `type` = λtd.or
+                    (hasDescriptionMeta (TypeDefinition[metadata] td))
+                    (hasTypeDescription
+                      (TypeScheme[body] (TypeDefinition[body] td))),
+              `primitive` = λpd.hasDescriptionMeta
+                    (PrimitiveDefinition[metadata] pd),
               `_` = false}
               def in
           ifElse
@@ -412,21 +411,7 @@ term checkUndeclaredDependencies =
         ns
         (sets.fromList
           (lists.map (λdep.ModuleDependency[`module`] dep) (Module[dependencies] mod))) in
-    let referencedNames := λdef.cases(Definition){
-          `term` = λtd.sets.union
-                (freeVariablesInTerm
-                  (TermDefinition[body] td))
-                (termDependencyNames
-                  false
-                  false
-                  true
-                  (TermDefinition[body] td)),
-          `type` = λtyd.typeDependencyNames
-                false
-                (TypeScheme[body]
-                  (TypeDefinition[body] tyd)),
-          `_` = sets.empty}
-          def in
+    let referencedNames := definitionReferencedNames in
     let findingForRef := λrefName.ifElse
           (sets.member refName primNames)
           none
@@ -444,6 +429,15 @@ term checkUndeclaredDependencies =
           findingForRef
           (sets.toList (referencedNames def)) in
     lists.concat (lists.map findingsForDef (Module[definitions] mod))
+
+## TEMPORARY: module-qualified constructor names exempted from checkConflictingVariantNames pending a Desk naming decision (#711/#837)
+term conflictingVariantNameExemptions =
+  sets.fromList
+    [
+      "hydra.core.regex.QuantifierRange",
+      "hydra.ext.azure.dtld.SchemaComplex",
+      "hydra.ext.azure.dtld.SchemaPrimitive",
+      "hydra.rust.syntax.TypePath"]
 
 ## Extract the name from a definition
 term definitionName =

@@ -69,7 +69,7 @@ term testGroupForCaseStatements =
                           literal = LiteralType{
                             integer = IntegerType{
                               `int32`}}}}},
-                    constraints = {}}}},
+                    constraints = {=}}}},
         description = none,
         tags = [],
         provisions = []},
@@ -119,7 +119,7 @@ term testGroupForCaseStatements =
                         codomain = Type{
                           literal = LiteralType{
                             `boolean`}}}},
-                    constraints = {}}}},
+                    constraints = {=}}}},
         description = none,
         tags = [],
         provisions = []}]}
@@ -158,7 +158,7 @@ term testGroupForProjections =
                             codomain = Type{
                               literal = LiteralType{
                                 `string`}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -192,7 +192,7 @@ term testGroupForProjections =
                                   variable = Name{"t1"}}}},
                             codomain = Type{
                               variable = Name{"t0"}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -218,7 +218,7 @@ term testGroupForProjections =
                         body = Type{
                           literal = LiteralType{
                             `string`}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]}],
@@ -255,7 +255,7 @@ term testGroupForRecords =
                         variables = [],
                         body = Type{
                           variable = testTypeLatLonName},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -286,7 +286,7 @@ term testGroupForRecords =
                               literal = LiteralType{
                                 float = FloatType{
                                   `float32`}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -327,7 +327,7 @@ term testGroupForRecords =
                                   literal = LiteralType{
                                     float = FloatType{
                                       `float32`}}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -364,7 +364,7 @@ term testGroupForRecords =
                                   variable = testTypeLatLonPolyName},
                                 argument = Type{
                                   variable = Name{"t0"}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -384,7 +384,7 @@ term testGroupForRecords =
                         variables = [],
                         body = Type{
                           variable = testTypePersonName},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -422,7 +422,7 @@ term testGroupForRecords =
                         variables = [],
                         body = Type{
                           variable = testTypeIntListName},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -465,7 +465,7 @@ term testGroupForRecords =
                         variables = [],
                         body = Type{
                           variable = testTypeIntListName},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -504,7 +504,7 @@ term testGroupForRecords =
                               literal = LiteralType{
                                 integer = IntegerType{
                                   `int32`}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -553,7 +553,7 @@ term testGroupForRecords =
                               literal = LiteralType{
                                 integer = IntegerType{
                                   `int32`}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -598,7 +598,7 @@ term testGroupForRecords =
                                   variable = testTypeListName},
                                 argument = Type{
                                   variable = Name{"t0"}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -652,7 +652,7 @@ term testGroupForRecords =
                               literal = LiteralType{
                                 integer = IntegerType{
                                   `int32`}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -697,7 +697,7 @@ term testGroupForRecords =
                                   variable = testTypeBuddyListAName},
                                 argument = Type{
                                   variable = Name{"t0"}}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]}],
@@ -737,7 +737,7 @@ term testGroupForVariants =
                         variables = [],
                         body = Type{
                           variable = testTypeTimestampName},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -764,7 +764,7 @@ term testGroupForVariants =
                         variables = [],
                         body = Type{
                           variable = testTypeUnionMonomorphicName},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -800,7 +800,7 @@ term testGroupForVariants =
                               variable = testTypeUnionPolymorphicRecursiveName},
                             argument = Type{
                               variable = Name{"t0"}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -832,7 +832,7 @@ term testGroupForVariants =
                             argument = Type{
                               literal = LiteralType{
                                 `string`}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -879,7 +879,7 @@ term testGroupForVariants =
                               literal = LiteralType{
                                 integer = IntegerType{
                                   `int32`}}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]}],
@@ -916,7 +916,7 @@ term testGroupForWrappers =
                         variables = [],
                         body = Type{
                           variable = testTypeStringAliasName},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -949,7 +949,7 @@ term testGroupForWrappers =
                                 `string`}},
                             codomain = Type{
                               variable = testTypeStringAliasName}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -980,7 +980,7 @@ term testGroupForWrappers =
                             codomain = Type{
                               literal = LiteralType{
                                 `string`}}}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []},
@@ -1010,7 +1010,7 @@ term testGroupForWrappers =
                         body = Type{
                           literal = LiteralType{
                             `string`}},
-                        constraints = {}}}},
+                        constraints = {=}}}},
             description = none,
             tags = [],
             provisions = []}]}],

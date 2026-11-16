@@ -837,24 +837,26 @@ term termExprAtPrecBudget =
             (letExprAliased budget aliases l),
       `list` = λels.bracketListAdaptive (lists.map (termExprAliased aliases) els),
       literal = λlit.cst (literal lit),
-      `map` = λm.
-          let entryExpr := λp.ifx
-                Op{
-                  symbol = sym "=",
-                  padding = Padding{
-                    `left` = Ws{space},
-                    `right` = Ws{space}},
-                  precedence = Precedence{0:int32},
-                  associativity = Associativity{`none`}}
-                (termExprAliased aliases (first p))
-                (termExprAliased aliases (second p)) in
-          let entryExprs := lists.map
-              entryExpr
-              (lists.sortBy first (maps.toList m)) in
-          chooseLayout
-            budget
-            (curlyBracesList none inlineStyle entryExprs)
-            (curlyBracesList none halfBlockStyle entryExprs),
+      `map` = λm.ifElse
+            (maps.isEmpty m)
+            (cst "{=}")
+            (let entryExpr := λp.ifx
+                  Op{
+                    symbol = sym "=",
+                    padding = Padding{
+                      `left` = Ws{space},
+                      `right` = Ws{space}},
+                    precedence = Precedence{0:int32},
+                    associativity = Associativity{`none`}}
+                  (termExprAliased aliases (first p))
+                  (termExprAliased aliases (second p)) in
+            let entryExprs := lists.map
+                entryExpr
+                (lists.sortBy first (maps.toList m)) in
+            chooseLayout
+              budget
+              (curlyBracesList none inlineStyle entryExprs)
+              (curlyBracesList none halfBlockStyle entryExprs)),
       `optional` = λmt.match
             mt
             (cst "none")
