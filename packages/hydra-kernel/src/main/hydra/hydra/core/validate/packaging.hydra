@@ -411,7 +411,7 @@ term checkUndeclaredDependencies =
         ns
         (sets.fromList
           (lists.map (λdep.ModuleDependency[`module`] dep) (Module[dependencies] mod))) in
-    let referencedNames := definitionReferencedNames in
+    let referencedNames := λd.definitionReferencedNames d in
     let findingForRef := λrefName.ifElse
           (sets.member refName primNames)
           none
