@@ -53,6 +53,7 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
+import qualified Hydra.Sources.Kernel.Terms.Annotations as KernelAnnotations
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Parse.Core as ParseCore
 import qualified Hydra.Sources.Kernel.Terms.Parse.Docs as ParseDocs
@@ -124,6 +125,7 @@ module_ = Module {
      toDefinition primitiveDefinitionParser,
      toDefinition primitiveModifiers,
      toDefinition qualifyLocalName,
+     toDefinition reattachTermDescriptionToBody,
      toDefinition resolveNameRefWith,
      toDefinition resolveNameRefsInDefinitionWith,
      toDefinition resolveNameRefsInTermSignatureWith,
@@ -1123,10 +1125,52 @@ typeDefinitionParser = define "typeDefinitionParser" $
                   (Core.typeSchemeConstraints $ var "ts")))) @@
             (token @@ (asTerm ParseCore.typeScheme))))))
 
+-- | Move a term definition's doc-comment description from its EntityMetadata to a
+-- body-level '@{description=...}' annotation on the term itself (via
+-- 'KernelAnnotations.setTermDescription'), with the EntityMetadata's description
+-- cleared -- collapsing to 'Nothing' entirely if nothing else remains, matching the
+-- generated 'dist/json' byte-identity staging decided on (#837's flip acceptance
+-- criterion): the DSL-authoring 'doc'/'setTermDescription' combinator attaches a
+-- term's description to its body at definition-creation time, never to EntityMetadata,
+-- so a parsed-from-'.hydra' term must do the same to stay byte-identical with a
+-- straight-from-DSL term. Other EntityMetadata fields (comments, seeAlso, lifecycle,
+-- provisions) are untouched and still read back from the leading '##' block as before
+-- -- only description moves. Type definitions are NOT affected (types already agree on
+-- EntityMetadata.description; only terms needed this normalization).
+reattachTermDescriptionToBody :: TypedTermDefinition (Maybe EntityMetadata -> Term -> (Maybe EntityMetadata, Term))
+reattachTermDescriptionToBody = define "reattachTermDescriptionToBody" $
+  doc ("Move a term's doc-comment description from EntityMetadata to a body-level"
+    <> " '@{description=...}' annotation, matching the DSL-authoring convention (#837 flip byte-identity)") $
+  "mmeta" ~> "t" ~>
+  Optionals.match (var "mmeta")
+    (pair (var "mmeta") (var "t"))
+    ("em" ~>
+      "mdesc" <~ Packaging.entityMetadataDescription (var "em") $
+      Optionals.match (var "mdesc")
+        (pair (var "mmeta") (var "t"))
+        ("d" ~>
+          "newT" <~ (KernelAnnotations.setTermDescription @@ (just $ var "d") @@ var "t") $
+          "restComments" <~ Packaging.entityMetadataComments (var "em") $
+          "restSeeAlso" <~ Packaging.entityMetadataSeeAlso (var "em") $
+          "restLifecycle" <~ Packaging.entityMetadataLifecycle (var "em") $
+          "restProvisions" <~ Packaging.entityMetadataProvisions (var "em") $
+          "hasOtherFields" <~ Logic.or
+            (Logic.not $ Lists.isEmpty (var "restComments" :: TypedTerm [String]))
+            (Logic.or
+              (Logic.not $ Lists.isEmpty (var "restSeeAlso" :: TypedTerm [EntityReference]))
+              (Logic.or
+                (Optionals.isGiven (var "restLifecycle" :: TypedTerm (Maybe LifecycleInfo)))
+                (Logic.not $ Lists.isEmpty (var "restProvisions" :: TypedTerm [Provision])))) $
+          "newMmeta" <~ Logic.ifElse (var "hasOtherFields")
+            (just $ Packaging.entityMetadata nothing (var "restComments") (var "restSeeAlso") (var "restLifecycle") (var "restProvisions"))
+            nothing $
+          pair (var "newMmeta") (var "newT")))
+
 -- | Parse a term definition: 'term name [: termSignature] = term'. The optional ': termSignature'
 -- ascription becomes the TermDefinition's signature, parsed directly as a TermSignature (not via
--- a TypeScheme bridge) so that a parameter's 'lazy' keyword (#800) round-trips. No doc-comment
--- parsing -- metadata is always Nothing.
+-- a TypeScheme bridge) so that a parameter's 'lazy' keyword (#800) round-trips. A leading '##' doc
+-- comment's description is reattached to the body as an annotation, not kept on EntityMetadata
+-- (see 'reattachTermDescriptionToBody' -- #837's flip byte-identity decision).
 termDefinitionParser :: TypedTermDefinition (ModuleName -> Parser Definition)
 termDefinitionParser = define "termDefinitionParser" $
   doc "Parse a term definition: ['##' doc comment] 'term name [: termSignature] = term'" $
@@ -1136,8 +1180,10 @@ termDefinitionParser = define "termDefinitionParser" $
       P.bind @@ identifier @@ ("local" ~>
         P.bind @@ (P.optional @@ ascribedSignature) @@ ("msig" ~>
           P.bind @@ (keyword @@ string "=") @@ (constant $
-            P.map @@ ("t" ~> Packaging.definitionTerm
-                (Packaging.termDefinition (qualifyLocalName @@ var "modName" @@ var "local") (var "mmeta") (var "msig") (var "t"))) @@
+            P.map @@ ("t" ~>
+                "reattached" <~ (reattachTermDescriptionToBody @@ var "mmeta" @@ var "t") $
+                Packaging.definitionTerm
+                (Packaging.termDefinition (qualifyLocalName @@ var "modName" @@ var "local") (Pairs.first $ var "reattached") (var "msig") (Pairs.second $ var "reattached"))) @@
               (token @@ (P.map @@ Positions.stripSpans @@ (asTerm ParseCore.term))))))))
   where
     ascribedSignature =

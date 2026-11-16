@@ -41,11 +41,11 @@ import qualified Hydra.Core.Dsl.Util                  as Util
 import qualified Hydra.Core.Dsl.Validation            as Validation
 import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms         as Phantoms
 import           Hydra.Sources.Kernel.Types.All
-import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants  as Constants
 import qualified Hydra.Sources.Kernel.Terms.Dependencies as Dependencies
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names      as Names
+import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Variables  as Variables
 import qualified Data.List                       as L
 import           Prelude hiding ((++))
@@ -61,7 +61,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Annotations.ns, Constants.ns, Dependencies.ns, Formatting.ns, Names.ns, Variables.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([Constants.ns, Dependencies.ns, Formatting.ns, Names.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata (Just "Validation functions for modules and packages")}
   where
     definitions = [
@@ -246,36 +246,41 @@ checkConflictingVariantNames = define "checkConflictingVariantNames" $
     nothing
     (var "defs")
 
--- | Check that every term-level definition's term, and every type-level definition's
--- type-scheme body, carries a description annotation at its outermost layer.
--- A definition whose top-level Term constructor is anything other than _Term_annotated,
--- or whose top-level annotation map lacks the description key, is reported as missing
--- documentation. This validator does not descend into the body of a term or type.
+-- | Check that every definition (term, type, or primitive) carries a non-empty
+-- description, in EITHER of the two conventions a definition's description can be
+-- found in: its own EntityMetadata (the #711 doc-comment convention: a definition's
+-- leading '##' description, as reconstructed by 'Parse.Packaging.parseModuleWith'
+-- from '.hydra' text), or a body-level '@{description=...}' annotation at the term's
+-- (or type scheme's) outermost layer (the raw DSL-authoring convention: 'doc'/
+-- 'setTermDescription' attach the description directly to the body, and promotion to
+-- EntityMetadata happens only during a print/parse round trip, not at DSL-definition
+-- time -- so a module built straight from DSL source never has EntityMetadata
+-- populated this way). Checking only one convention would wrongly fail whichever path
+-- doesn't use it. A definition with neither is reported as missing documentation.
 -- Fails on the first undocumented definition found.
 checkDefinitionDocumentation :: TypedTermDefinition (Module -> Maybe InvalidModuleError)
 checkDefinitionDocumentation = define "checkDefinitionDocumentation" $
-  doc "Check that every top-level definition is wrapped in a description annotation" $
+  doc "Check that every top-level definition has a description, via EntityMetadata or a body annotation" $
   "mod" ~>
   "ns" <~ Packaging.moduleName (var "mod") $
+  "hasDescriptionMeta" <~ ("mem" ~> Optionals.match (var "mem") false ("em" ~> Logic.not (Equality.equal
+      (Optionals.withDefault (string "") (Packaging.entityMetadataDescription $ var "em"))
+      (string "")))) $
   Lists.foldl
     ("acc" ~> "def" ~>
       Optionals.match (var "acc")
         ("name" <~ (definitionName @@ var "def") $
           "documented" <~ match _Definition (var "def") (Just false) [
             _Definition_term>>: "td" ~>
-              "term" <~ Packaging.termDefinitionBody (var "td") $
-              match _Term (var "term") (Just false) [
-                _Term_annotated>>: "at" ~>
-                  Annotations.hasDescription @@ (Annotations.getAnnotationMap @@ (Core.annotatedTermAnnotation $ var "at"))],
+              Logic.or
+                (var "hasDescriptionMeta" @@ (Packaging.termDefinitionMetadata $ var "td"))
+                (Optionals.isGiven $ Pairs.first $ PrintCore.peelTermDescriptionAnnotation @@ (Packaging.termDefinitionBody $ var "td")),
             _Definition_type>>: "td" ~>
-              "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "td")) $
-              match _Type (var "typ") (Just false) [
-                _Type_annotated>>: "at" ~>
-                  Annotations.hasDescription @@ (Annotations.getAnnotationMap @@ (Core.annotatedTypeAnnotation $ var "at"))],
+              Logic.or
+                (var "hasDescriptionMeta" @@ (Packaging.typeDefinitionMetadata $ var "td"))
+                (Optionals.isGiven $ Pairs.first $ PrintCore.peelDescriptionAnnotation @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody $ var "td")),
             _Definition_primitive>>: "pd" ~>
-              Optionals.match (Packaging.primitiveDefinitionMetadata $ var "pd") false ("em" ~> Logic.not (Equality.equal
-                  (Optionals.withDefault (string "") (Packaging.entityMetadataDescription $ var "em"))
-                  (string "")))] $
+              var "hasDescriptionMeta" @@ (Packaging.primitiveDefinitionMetadata $ var "pd")] $
           Logic.ifElse (var "documented")
             nothing
             (just $ ErrorPackaging.invalidModuleErrorMissingDocumentation $
