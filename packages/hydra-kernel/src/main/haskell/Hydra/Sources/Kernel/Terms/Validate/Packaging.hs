@@ -686,7 +686,8 @@ checkUndeclaredDependencies = define "checkUndeclaredDependencies" $
     :: TypedTerm (S.Set ModuleName)) $
   -- Names referenced by a single definition: the one shared rule (Analysis.definitionReferencedNames),
   -- also used to derive declared dependencies and the textual-syntax imports (#837).
-  "referencedNames" <~ (asTerm Analysis.definitionReferencedNames :: TypedTerm (Definition -> S.Set Name)) $
+  -- Eta-expanded: the Python coder mishandles point-free function-valued let-bindings
+  "referencedNames" <~ ("d" ~> (Analysis.definitionReferencedNames @@ var "d" :: TypedTerm (S.Set Name))) $
   -- For a referenced name: Just the finding if it has a known owner (unowned
   -- names -- e.g. a typo -- are out of scope for this check) which is
   -- neither this module itself nor a declared dependency, and the name is
