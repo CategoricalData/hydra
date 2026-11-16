@@ -3,5 +3,9 @@
   "name": "hydra-kernel",
   "description": "Hydra programming language kernel",
   "sourceLanguage": "haskell",
-  "dependencies": []
+  "dependencies": [],
+  "textualSources": "all",
+  "textualSourcesExclude": [
+    "hydra.core.lib."
+  ]
 }
