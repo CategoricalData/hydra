@@ -3,6 +3,7 @@
 module Hydra.Sources.Test.All where
 
 import Hydra.Kernel
+import Hydra.Sources.Kernel.AlignDependencies (alignDependencies)
 
 import qualified Hydra.Sources.Test.TestEnv as TestEnv
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
@@ -13,7 +14,7 @@ import qualified Hydra.Sources.Test.TestTypes as TestTypes
 
 -- | All test modules (including test suite modules that TestSuite depends on)
 testModules :: [Module]
-testModules = baseTestModules ++ TestSuite.testSuiteModules
+testModules = fmap alignDependencies (baseTestModules ++ TestSuite.testSuiteModules)
 
 -- | Base test modules (TestEnv is a type-only stub; TestGraph references it).
 -- TestEnv has hand-written per-language runtime counterparts and must not be

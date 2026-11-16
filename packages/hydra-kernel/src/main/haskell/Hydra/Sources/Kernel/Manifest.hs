@@ -89,7 +89,7 @@ mainModules = kernelTypesModules ++ kernelTermsModules ++ jsonModules ++ otherMo
 -- strings. Extend as consumers need more; the non-kernel and derived-category
 -- (hydra.core.encode.*/show.*/decode.*) demand is deferred.
 dslTermModules :: [Module]
-dslTermModules = [
+dslTermModules = fmap alignDependencies [
   Analysis.module_,
   Annotations.module_,
   Arity.module_,

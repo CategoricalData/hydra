@@ -55,9 +55,11 @@ module_ = Module {
       Phantoms.toDefinition forallMultiBinderGroup,
       Phantoms.toDefinition lambdaMultiBinderGroup,
       Phantoms.toDefinition lazyParameterRoundtripGroup,
+      Phantoms.toDefinition mapSetLiteralGroup,
       Phantoms.toDefinition moduleAliasGroup,
       Phantoms.toDefinition multiLineDocCommentGroup,
       Phantoms.toDefinition nominalSugarGroup,
+      Phantoms.toDefinition parseModulesGroup,
       Phantoms.toDefinition sourcePositionGroup,
       Phantoms.toDefinition sourceSpanGroup,
       Phantoms.toDefinition termDocCommentGroup,
@@ -72,8 +74,9 @@ allTests = define "allTests" $
     Testing.testGroup (string "textual syntax") nothing (list subgroups) (list ([] :: [TypedTerm TestCaseWithMetadata]))
   where
     subgroups = [annotationRoundtripGroup, corpusRoundtripGroup, doSugarGroup, forallMultiBinderGroup,
-                 lambdaMultiBinderGroup, lazyParameterRoundtripGroup, moduleAliasGroup, multiLineDocCommentGroup,
-                 nominalSugarGroup, sourceSpanGroup, sourcePositionGroup, termDocCommentGroup, unqualifiedNamesGroup]
+                 lambdaMultiBinderGroup, lazyParameterRoundtripGroup, mapSetLiteralGroup, moduleAliasGroup,
+                 multiLineDocCommentGroup, nominalSugarGroup, parseModulesGroup, sourceSpanGroup,
+                 sourcePositionGroup, termDocCommentGroup, unqualifiedNamesGroup]
 
 -- | Print a term signature, then parse the printed text back, and show the round-tripped
 -- signature. Compares against the original signature's own printed form, so the test both
@@ -169,6 +172,36 @@ lazyParameterRoundtripGroup = define "lazyParameterRoundtripGroup" $
       "\8704x.boolean \8594 x \8594 x",
 
     signatureRoundtripTest "no lazy parameters: round-trips cleanly" noLazyParamsSignature])
+
+-- | Empty-map vs. empty-set literal disambiguation (#711/#842): '{}' is reserved for the empty
+-- SET (syntax.md #3/'braceContent's grammar: nonempty braces are a map exactly when entries
+-- contain a top-level '='; '{}' is the empty set; '{=}' is the empty map). Printing an empty
+-- TermMap as '{}' (indistinguishable from an empty TermSet) made an empty-map annotation payload
+-- -- e.g. 'mapTermEmpty' in Test/Checking/Advanced.hs's 'annotationsInComplexContextsTests' --
+-- round-trip back as a TermSet, not a TermMap, failing inference on the reparsed test module
+-- ("cannot unify map<Name, t> with set<t>", #837's flipped-regen finding). Fixed in
+-- 'PrintCore.term''s '_Term_map' case to special-case the empty map as '{=}'.
+mapSetLiteralGroup :: TypedTermDefinition TestGroup
+mapSetLiteralGroup = define "mapSetLiteralGroup" $
+  doc "Empty-map vs. empty-set literal printing/round-trip (#711/#842)" $
+  Testing.testGroup (string "map/set literal disambiguation") nothing (list ([] :: [TypedTerm TestGroup])) (list [
+    termPrintTest "empty map prints as '{=}', not '{}'"
+      (Core.termMap (Maps.empty :: TypedTerm (M.Map Term Term)))
+      "{=}",
+
+    termRoundtripTest "empty map round-trips to a map, not a set" (Core.termMap (Maps.empty :: TypedTerm (M.Map Term Term))),
+
+    termPrintTest "nonempty map still prints with '=' entries"
+      (Core.termMap $ Maps.fromList $ Phantoms.list [Phantoms.pair (strT "k") (strT "v")])
+      "{\"k\" = \"v\"}",
+
+    termRoundtripTest "nonempty map round-trips" (Core.termMap $ Maps.fromList $ Phantoms.list [Phantoms.pair (strT "k") (strT "v")]),
+
+    termPrintTest "empty set still prints as '{}' (unchanged)"
+      (Core.termSet (Sets.empty :: TypedTerm (S.Set Term)))
+      "{}",
+
+    termRoundtripTest "empty set round-trips to a set, not a map" (Core.termSet (Sets.empty :: TypedTerm (S.Set Term)))])
 
 -- | Fixture: 'forall a. a' -- a single-binder forall, unaffected by the multi-binder collapsing
 -- (#711); the printer still emits exactly one binder before '.'.
@@ -1211,6 +1244,74 @@ plainParseHasNoSpansTest testName input = universalCase testName
 
 rootSpanTest :: String -> String -> String -> TypedTerm TestCaseWithMetadata
 rootSpanTest testName input expectedStr = spanAtPathTest testName input [] expectedStr
+
+-- | Run 'ParsePackaging.parseModules' and render the result as either the error string (on
+-- 'Left') or every parsed module's fingerprint, newline-joined in input order (on 'Right') --
+-- the two-pass downstream '.hydra'-sources entry point (#842), exercising its handling of bare
+-- references BETWEEN the caller's own files (which a single-file 'parseModule'/'parseModuleWith'
+-- call could never resolve on its own).
+parseModulesResultText :: [TypedTerm Module] -> [(String, String)] -> TypedTerm String
+parseModulesResultText depModules sources = Eithers.either
+  (Phantoms.lambda "e" $ Phantoms.var "e")
+  (Phantoms.lambda "mods" $ Strings.join (Phantoms.string "\n")
+    (Lists.map ("m" ~> moduleFingerprint (Phantoms.var "m")) (Phantoms.var "mods")))
+  (ParsePackaging.parseModules @@ (Phantoms.list depModules) @@
+    (Phantoms.list [Phantoms.pair (Phantoms.string p) (Phantoms.string t) | (p, t) <- sources]))
+
+-- | A minimal, no-module-metadata, no-dependency module whose term definitions are the given
+-- (localName, body) pairs (bodies already fully qualified, as 'parseModules' is expected to
+-- resolve them), each definition's OWN name also fully qualified ('nsStr.localName') -- matching
+-- how a real parsed module stores its definitions (and how 'defFingerprint' prints
+-- 'termDefinitionName' directly, unqualified-vs-qualified mismatches otherwise). For building
+-- 'parseModulesCrossFileTest''s expected side directly, rather than via 'testModule' (which only
+-- ever builds TYPE definitions).
+termsOnlyModule :: String -> [(String, TypedTerm Term)] -> TypedTerm Module
+termsOnlyModule nsStr termDefs = Packaging.module_
+  (nsLit nsStr) Phantoms.nothing
+  (Phantoms.list ([] :: [TypedTerm ModuleDependency]))
+  (Phantoms.list [Packaging.definitionTerm (Packaging.termDefinition (nm (nsStr L.++ "." L.++ localName)) nothing nothing body) | (localName, body) <- termDefs])
+
+-- | Two files referencing each other's declared names via BARE (unqualified) references:
+-- 'test.a' declares 'base' and uses 'test.b''s 'helper'; 'test.b' declares 'helper' and uses
+-- 'test.a''s 'base' right back -- confirming the universe built from pass 1 covers the full
+-- cross-file cycle, not just one direction. The expected side has each bare reference resolved
+-- to its FULLY QUALIFIED form, since that is what 'parseModuleWith' (pass 2) is expected to
+-- produce.
+parseModulesCrossFileTest :: TypedTerm TestCaseWithMetadata
+parseModulesCrossFileTest = universalCase "parseModules resolves bare references between the caller's own files (#842)"
+  (parseModulesResultText [] [
+    ("a.hydra", "module test.a\n\nimport test.b\n\nterm base = 1:int32\nterm useB = helper\n"),
+    ("b.hydra", "module test.b\n\nimport test.a\n\nterm helper = base\n")])
+  (Strings.concat $ list [
+    moduleFingerprint (termsOnlyModule "test.a" [("base", i32T 1), ("useB", varT "test.b.helper")]),
+    string "\n",
+    moduleFingerprint (termsOnlyModule "test.b" [("helper", varT "test.a.base")])])
+
+-- | A duplicate module name across the caller's OWN inputs is rejected with a clear error,
+-- before pass 2 ever runs (#842) -- otherwise one file's universe entry would silently overwrite
+-- the other's. Exact-matches the error message 'parseModules' itself builds.
+parseModulesDuplicateNameTest :: TypedTerm TestCaseWithMetadata
+parseModulesDuplicateNameTest = universalCase "parseModules rejects a duplicate module name across inputs (#842)"
+  (parseModulesResultText [] [
+    ("a.hydra", "module test.dup\n\nterm x = 1\n"),
+    ("b.hydra", "module test.dup\n\nterm y = 2\n")])
+  (string "b.hydra: duplicate module name across inputs (or clashing with a dependency module): test.dup")
+
+-- | A module name that duplicates one of the caller-supplied DEPENDENCY modules is rejected the
+-- same way (#842) -- the clash check covers both input-vs-input and input-vs-dependency.
+parseModulesDependencyClashTest :: TypedTerm TestCaseWithMetadata
+parseModulesDependencyClashTest = universalCase "parseModules rejects an input clashing with a dependency module name (#842)"
+  (parseModulesResultText [testModule "test.dep" [] ([] :: [(String, TypedTerm TypeScheme)])] [
+    ("a.hydra", "module test.dep\n\nterm x = 1\n")])
+  (string "a.hydra: duplicate module name across inputs (or clashing with a dependency module): test.dep")
+
+parseModulesGroup :: TypedTermDefinition TestGroup
+parseModulesGroup = define "parseModulesGroup" $
+  doc "'parseModules': the downstream '.hydra'-sources two-pass entry point (#842)" $
+  Testing.testGroup (string "parseModules") nothing (list ([] :: [TypedTerm TestGroup])) (list [
+    parseModulesCrossFileTest,
+    parseModulesDuplicateNameTest,
+    parseModulesDependencyClashTest])
 
 sourceSpanGroup :: TypedTermDefinition TestGroup
 sourceSpanGroup = define "sourceSpanGroup" $

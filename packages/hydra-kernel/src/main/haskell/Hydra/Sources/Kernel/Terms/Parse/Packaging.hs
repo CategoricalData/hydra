@@ -122,10 +122,12 @@ module_ = Module {
      toDefinition moduleParser,
      toDefinition parseModule,
      toDefinition parseModuleWith,
+     toDefinition parseModules,
      toDefinition primitiveDefinitionParser,
      toDefinition primitiveModifiers,
      toDefinition qualifyLocalName,
      toDefinition reattachTermDescriptionToBody,
+     toDefinition reattachTypeDescriptionToBody,
      toDefinition resolveNameRefWith,
      toDefinition resolveNameRefsInDefinitionWith,
      toDefinition resolveNameRefsInTermSignatureWith,
@@ -136,6 +138,9 @@ module_ = Module {
      toDefinition token,
      toDefinition typeDefinitionParser,
      toDefinition typeEnvFromDefinitions,
+     toDefinition unionTypeNamesOf,
+     toDefinition universeEntryOf,
+     toDefinition universeNamesOf,
      toDefinition whitespace]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
@@ -713,9 +718,21 @@ resolveNameRefsInTermWith = define "resolveNameRefsInTermWith" $
   "forCaseAlternative" <~ ("boundHere" ~> "alt" ~>
     Eithers.map ("h" ~> Core.caseAlternativeWithHandler (var "alt") (var "h")) (var "recurse" @@ var "boundHere" @@ (Core.caseAlternativeHandler $ var "alt"))) $
   match _Term (var "term") Nothing [
-    _Term_annotated>>: "at" ~> Eithers.map
-      ("b" ~> Core.termAnnotated $ Core.annotatedTerm (var "b") (Core.annotatedTermAnnotation $ var "at"))
-      (var "recurse" @@ var "bound" @@ (Core.annotatedTermBody $ var "at")),
+    -- The annotation of an annotated term is itself a term, normally a map literal whose KEYS are fixed annotation
+    -- keys ("description", "type", ...) and whose VALUES may be term references (e.g. the type in '@{type=Type}').
+    -- Only the values are resolved; recursing over the whole map would also try to resolve the keys (#837).
+    _Term_annotated>>: "at" ~>
+      "ann" <~ Core.annotatedTermAnnotation (var "at") $
+      "forAnn" <~ ("p" ~> Eithers.map ("v" ~> pair (Pairs.first $ var "p") (var "v"))
+        (var "recurse" @@ var "bound" @@ (Pairs.second $ var "p"))) $
+      "rann" <<~ match _Term (var "ann")
+        (Just $ right $ var "ann") [
+        _Term_map>>: "m" ~> Eithers.map
+          ("rpairs" ~> Core.termMap (Maps.fromList $ var "rpairs"))
+          (Eithers.mapList (var "forAnn") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term))))] $
+      Eithers.map
+        ("b" ~> Core.termAnnotated $ Core.annotatedTerm (var "b") (var "rann"))
+        (var "recurse" @@ var "bound" @@ (Core.annotatedTermBody $ var "at")),
     _Term_application>>: "a" ~> Eithers.bind (var "recurse" @@ var "bound" @@ (Core.applicationFunction $ var "a"))
       ("f" ~> Eithers.map ("x" ~> Core.termApplication $ Core.application (var "f") (var "x")) (var "recurse" @@ var "bound" @@ (Core.applicationArgument $ var "a"))),
     _Term_cases>>: "cs" ~>
@@ -964,6 +981,115 @@ isUnionType = define "isUnionType" $
   "typ" ~> match _Type (Strip.deannotateTypeParameters @@ var "typ") (Just false) [
     _Type_union>>: constant true]
 
+-- | Build one module's universe entry: its name, paired with the set of its own declared
+-- definition names (fully qualified, matching 'resolveNameRefWith''s own expectation of the
+-- universe map's values -- it compares a bare local reference against
+-- 'Sets.map Names.localNameOf' over each entry) -- exactly the per-module shape
+-- 'parseModuleWith'/'parseModules' need for their 'universe' argument. Used to build the universe
+-- from a list of already-parsed/in-memory modules (#842: the downstream '.hydra'-sources gap -- a
+-- caller previously had to assemble this map by hand, as every existing test case in
+-- Test/Syntax.hs still does).
+universeEntryOf :: TypedTermDefinition (Module -> (ModuleName, S.Set Name))
+universeEntryOf = define "universeEntryOf" $
+  doc "Build a module's (name, declared-names) universe entry (#842)" $
+  "mod" ~>
+  pair (Packaging.moduleName $ var "mod")
+    (Sets.fromList (Lists.map
+      ("def" ~> match _Definition (var "def") Nothing [
+        _Definition_type>>: "td" ~> Packaging.typeDefinitionName (var "td"),
+        _Definition_term>>: "td" ~> Packaging.termDefinitionName (var "td"),
+        _Definition_primitive>>: "pd" ~> Packaging.primitiveDefinitionName (var "pd")])
+      (Packaging.moduleDefinitions $ var "mod")))
+
+-- | Build the universe map ('parseModuleWith'/'parseModules''s first argument) from a list of
+-- modules: one 'universeEntryOf' per module (#842).
+universeNamesOf :: TypedTermDefinition ([Module] -> M.Map ModuleName (S.Set Name))
+universeNamesOf = define "universeNamesOf" $
+  doc "Build a universe map (module name -> its declared local names) from a list of modules (#842)" $
+  "mods" ~> Maps.fromList (Lists.map (asTerm universeEntryOf) (var "mods"))
+
+-- | Build the flat, fully-qualified union-type-name set ('parseModuleWith'/'parseModules''s
+-- second argument) from a list of modules: every type definition across every given module whose
+-- (deannotated) body 'isUnionType', keyed by its own fully-qualified name (#842). Mirrors
+-- 'crossModuleInjectionUnionNames' in Test/Syntax.hs, but derived from real modules instead of
+-- hand-listed for a single fixture.
+unionTypeNamesOf :: TypedTermDefinition ([Module] -> S.Set Name)
+unionTypeNamesOf = define "unionTypeNamesOf" $
+  doc "Build the flat set of fully-qualified union type names across a list of modules (#842)" $
+  "mods" ~>
+  Sets.fromList (Lists.concat (Lists.map
+    ("mod" ~> Optionals.givens (Lists.map
+      ("def" ~> match _Definition (var "def") Nothing [
+        _Definition_type>>: "td" ~>
+          Logic.ifElse (isUnionType @@ (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "td")))
+            (just $ Packaging.typeDefinitionName (var "td"))
+            nothing,
+        _Definition_term>>: constant nothing,
+        _Definition_primitive>>: constant nothing])
+      (Packaging.moduleDefinitions $ var "mod")))
+    (var "mods")))
+
+-- | Parse several '.hydra' sources that may reference each other AND the given dependency
+-- modules, resolving bare cross-file references correctly (#842: the downstream '.hydra'-sources
+-- gap). Each input is (path, text); errors are reported as "path: file:line:col: message", since
+-- a bare line:col is ambiguous across multiple files. Two passes, since a file's own universe
+-- entry is not known until it is itself parsed once:
+--   1. Run the context-free 'parseModule' on every text once -- genuinely tolerant of bare
+--      references to names this pass does not yet know about: 'parseModule'/'moduleParser' never
+--      calls name RESOLUTION ('resolveNameRefWith', used only by 'parseModuleWith'), only this
+--      module's own import-alias expansion and own-name qualification, leaving every other bare
+--      reference untouched. So pass 1 only needs each file's declared names
+--      ('universeEntryOf'/'unionTypeNamesOf' on the pass-1 results), not a separate tolerant
+--      parser.
+--   2. Build the universe/union-names from BOTH the pass-1 results and the caller-supplied
+--      dependency modules, then re-run 'parseModuleWith' on every text with that merged universe,
+--      so a bare reference to another one of the user's OWN files now resolves exactly like a
+--      reference into a dependency module does.
+-- Rejects (before pass 2) a duplicate module name across the inputs, or a clash with a dependency
+-- module's name -- each such module would silently overwrite the other's universe entry
+-- otherwise, a confusing failure far from its real cause.
+parseModules :: TypedTermDefinition ([Module] -> [(String, String)] -> Either String [Module])
+parseModules = define "parseModules" $
+  doc "Parse several '.hydra' sources (path, text) that may reference each other and the given dependency modules (#842)" $
+  "depModules" ~> "sources" ~>
+  "parseOne" <~ ("pathText" ~>
+    "path" <~ Pairs.first (var "pathText") $
+    "text" <~ Pairs.second (var "pathText") $
+    Eithers.bimap
+      ("e" ~> Strings.concat (list [var "path", string ": ", var "e"]))
+      ("m" ~> var "m")
+      (parseModule @@ var "text")) $
+  "pass1" <<~ Eithers.mapList (var "parseOne") (var "sources") $
+  "pathsAndMods" <~ Lists.zip (Lists.map ("p" ~> Pairs.first (var "p")) (var "sources")) (var "pass1") $
+  "depNames" <~ Sets.fromList (Lists.map ("mod" ~> Packaging.moduleName (var "mod")) (var "depModules")) $
+  "dupError" <~ Pairs.second (Lists.foldl
+    ("acc" ~> "pathMod" ~>
+      Optionals.match (Pairs.second (var "acc"))
+        ("seen" <~ (Pairs.first (var "acc") :: TypedTerm (S.Set ModuleName)) $
+          "path" <~ Pairs.first (var "pathMod") $
+          "nm" <~ Packaging.moduleName (Pairs.second $ var "pathMod") $
+          Logic.ifElse (Logic.or
+              (Sets.member (var "nm") (var "depNames" :: TypedTerm (S.Set ModuleName)))
+              (Sets.member (var "nm") (var "seen")))
+            (pair (var "seen") (just $ Strings.concat (list [
+              var "path", string ": duplicate module name across inputs (or clashing with a dependency module): ",
+              Packaging.unModuleName (var "nm")])))
+            (pair (Sets.insert (var "nm") (var "seen")) nothing))
+        (constant $ var "acc"))
+    (pair (Sets.empty :: TypedTerm (S.Set ModuleName)) (nothing :: TypedTerm (Maybe String)))
+    (var "pathsAndMods")) $
+  Optionals.match (var "dupError")
+    ("allMods" <~ (Lists.concat2 (var "depModules") (var "pass1")) $
+      "universe" <~ (universeNamesOf @@ var "allMods") $
+      "unionNames" <~ (unionTypeNamesOf @@ var "allMods") $
+      Eithers.mapList
+        ("pathText" ~> Eithers.bimap
+          ("e" ~> Strings.concat (list [Pairs.first (var "pathText"), string ": ", var "e"]))
+          ("m" ~> var "m")
+          (parseModuleWith @@ var "universe" @@ var "unionNames" @@ Pairs.second (var "pathText")))
+        (var "sources"))
+    ("err" ~> left (var "err"))
+
 -- | Build a type environment from a module's own type definitions: a map from each defined type's
 -- (fully-qualified) name to its scheme body (#809). The only consumer is 'correctInjectionsInTerm',
 -- which needs just enough schema to tell a union type from a record type. Imported types are not
@@ -1117,11 +1243,13 @@ typeDefinitionParser = define "typeDefinitionParser" $
     P.bind @@ (keyword @@ string "type") @@ (constant $
       P.bind @@ identifier @@ ("local" ~>
         P.bind @@ (keyword @@ string "=") @@ (constant $
-          P.map @@ ("ts" ~> Packaging.definitionType
+          P.map @@ ("ts" ~>
+              "reattached" <~ (reattachTypeDescriptionToBody @@ var "mmeta" @@ (stripSpansInType @@ (Core.typeSchemeBody $ var "ts"))) $
+              Packaging.definitionType
               (Packaging.typeDefinition (qualifyLocalName @@ var "modName" @@ var "local")
-                (var "mmeta")
+                (Pairs.first $ var "reattached")
                 (Core.typeScheme (Core.typeSchemeVariables $ var "ts")
-                  (stripSpansInType @@ (Core.typeSchemeBody $ var "ts"))
+                  (Pairs.second $ var "reattached")
                   (Core.typeSchemeConstraints $ var "ts")))) @@
             (token @@ (asTerm ParseCore.typeScheme))))))
 
@@ -1150,6 +1278,41 @@ reattachTermDescriptionToBody = define "reattachTermDescriptionToBody" $
         (pair (var "mmeta") (var "t"))
         ("d" ~>
           "newT" <~ (KernelAnnotations.setTermDescription @@ (just $ var "d") @@ var "t") $
+          "restComments" <~ Packaging.entityMetadataComments (var "em") $
+          "restSeeAlso" <~ Packaging.entityMetadataSeeAlso (var "em") $
+          "restLifecycle" <~ Packaging.entityMetadataLifecycle (var "em") $
+          "restProvisions" <~ Packaging.entityMetadataProvisions (var "em") $
+          "hasOtherFields" <~ Logic.or
+            (Logic.not $ Lists.isEmpty (var "restComments" :: TypedTerm [String]))
+            (Logic.or
+              (Logic.not $ Lists.isEmpty (var "restSeeAlso" :: TypedTerm [EntityReference]))
+              (Logic.or
+                (Optionals.isGiven (var "restLifecycle" :: TypedTerm (Maybe LifecycleInfo)))
+                (Logic.not $ Lists.isEmpty (var "restProvisions" :: TypedTerm [Provision])))) $
+          "newMmeta" <~ Logic.ifElse (var "hasOtherFields")
+            (just $ Packaging.entityMetadata nothing (var "restComments") (var "restSeeAlso") (var "restLifecycle") (var "restProvisions"))
+            nothing $
+          pair (var "newMmeta") (var "newT")))
+
+-- | The type-level counterpart of 'reattachTermDescriptionToBody' (#837): a parsed type definition's
+-- doc-comment description moves from EntityMetadata onto the type's body as the outermost
+-- '@{description=...}' annotation (via 'KernelAnnotations.setTypeDescription', the same function the
+-- DSL-authoring 'doc' combinator uses), so a parsed-from-'.hydra' type is byte-identical to a
+-- straight-from-DSL one in dist/json. EntityMetadata collapses to 'Nothing' when the description was its
+-- only content; comments, seeAlso, lifecycle and provisions are kept.
+reattachTypeDescriptionToBody :: TypedTermDefinition (Maybe EntityMetadata -> Type -> (Maybe EntityMetadata, Type))
+reattachTypeDescriptionToBody = define "reattachTypeDescriptionToBody" $
+  doc ("Move a type's doc-comment description from EntityMetadata to a body-level"
+    <> " '@{description=...}' annotation, matching the DSL-authoring convention (#837 flip byte-identity)") $
+  "mmeta" ~> "t" ~>
+  Optionals.match (var "mmeta")
+    (pair (var "mmeta") (var "t"))
+    ("em" ~>
+      "mdesc" <~ Packaging.entityMetadataDescription (var "em") $
+      Optionals.match (var "mdesc")
+        (pair (var "mmeta") (var "t"))
+        ("d" ~>
+          "newT" <~ (KernelAnnotations.setTypeDescription @@ (just $ var "d") @@ var "t") $
           "restComments" <~ Packaging.entityMetadataComments (var "em") $
           "restSeeAlso" <~ Packaging.entityMetadataSeeAlso (var "em") $
           "restLifecycle" <~ Packaging.entityMetadataLifecycle (var "em") $

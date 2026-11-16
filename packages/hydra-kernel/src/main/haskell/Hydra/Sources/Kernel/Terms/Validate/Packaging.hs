@@ -43,6 +43,7 @@ import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms         as Phantoms
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as KernelAnnotations
 import qualified Hydra.Sources.Kernel.Terms.Constants  as Constants
+import qualified Hydra.Sources.Kernel.Terms.Analysis as Analysis
 import qualified Hydra.Sources.Kernel.Terms.Dependencies as Dependencies
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names      as Names
@@ -683,24 +684,9 @@ checkUndeclaredDependencies = define "checkUndeclaredDependencies" $
       ("dep" ~> Packaging.moduleDependencyModule (var "dep"))
       (Packaging.moduleDependencies $ var "mod")))
     :: TypedTerm (S.Set ModuleName)) $
-  -- Free names referenced by a single definition's body.
-  -- Term definitions: term variables (via freeVariablesInTerm, scope-aware)
-  -- unioned with nominal type references (via termDependencyNames with
-  -- binds=False, which only the nominal-reference cases actually populate;
-  -- see Dependencies.hs). Type definitions: every type name appearing in
-  -- the type scheme's body (via typeDependencyNames; type-level names have
-  -- no notion of "bound", so schema variables are excluded by withSchema=
-  -- False and only structural nominal references remain). Primitive
-  -- definitions have no body to inspect here (their optional
-  -- defaultImplementation, if any, is not currently traversed).
-  "referencedNames" <~ (("def" ~> match _Definition (var "def")
-    (Just $ (Sets.empty :: TypedTerm (S.Set Name))) [
-    _Definition_term>>: "td" ~> Sets.union
-      (Variables.freeVariablesInTerm @@ (Packaging.termDefinitionBody $ var "td"))
-      (Dependencies.termDependencyNames @@ false @@ false @@ true @@ (Packaging.termDefinitionBody $ var "td")),
-    _Definition_type>>: "tyd" ~> Dependencies.typeDependencyNames @@ false @@
-      (Core.typeSchemeBody $ Packaging.typeDefinitionBody (var "tyd"))])
-    :: TypedTerm (Definition -> S.Set Name)) $
+  -- Names referenced by a single definition: the one shared rule (Analysis.definitionReferencedNames),
+  -- also used to derive declared dependencies and the textual-syntax imports (#837).
+  "referencedNames" <~ (asTerm Analysis.definitionReferencedNames :: TypedTerm (Definition -> S.Set Name)) $
   -- For a referenced name: Just the finding if it has a known owner (unowned
   -- names -- e.g. a typo -- are out of scope for this check) which is
   -- neither this module itself nor a declared dependency, and the name is

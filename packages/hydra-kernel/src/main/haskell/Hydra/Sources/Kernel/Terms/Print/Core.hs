@@ -1214,17 +1214,26 @@ termExprAtPrecBudget = define "termExprAtPrecBudget" $
       Serialization.bracketListAdaptive @@ Lists.map (termExprAliased @@ var "aliases") (var "els"),
     _Term_literal>>: "lit" ~> Serialization.cst @@ (literal @@ var "lit"),
     _Term_map>>: "m" ~>
-      "entryExpr" <~ ("p" ~> Serialization.ifx @@ (Ast.op
-          (Serialization.sym @@ string "=")
-          (Ast.padding Ast.wsSpace Ast.wsSpace)
-          (Ast.precedence $ int32 0)
-          Ast.associativityNone) @@
-          (termExprAliased @@ var "aliases" @@ (Pairs.first $ var "p")) @@
-          (termExprAliased @@ var "aliases" @@ (Pairs.second $ var "p"))) $
-      "entryExprs" <~ Lists.map (var "entryExpr") (Lists.sortBy (reify Pairs.first) (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))) $
-      Serialization.chooseLayout @@ var "budget"
-        @@ (Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ var "entryExprs")
-        @@ (Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@ var "entryExprs"),
+      -- An empty map prints as '{=}', NOT '{}' -- '{}' is reserved for the empty SET
+      -- (syntax.md #3/'braceContent's own grammar), so an empty map printed as '{}' would
+      -- round-trip back as a TermSet, not a TermMap (#711/#842's map/set literal bug: this
+      -- exact case -- a top-level empty-map annotation payload, 'mapTermEmpty' in
+      -- Test/Checking/Advanced.hs -- was the one real instance of it in the whole kernel test
+      -- corpus, surfaced only by the '.hydra' parse path, since a hand-built in-memory term
+      -- never round-trips through text).
+      Logic.ifElse (Maps.isEmpty (var "m" :: TypedTerm (M.Map Term Term)))
+        (Serialization.cst @@ string "{=}")
+        ("entryExpr" <~ ("p" ~> Serialization.ifx @@ (Ast.op
+            (Serialization.sym @@ string "=")
+            (Ast.padding Ast.wsSpace Ast.wsSpace)
+            (Ast.precedence $ int32 0)
+            Ast.associativityNone) @@
+            (termExprAliased @@ var "aliases" @@ (Pairs.first $ var "p")) @@
+            (termExprAliased @@ var "aliases" @@ (Pairs.second $ var "p"))) $
+        "entryExprs" <~ Lists.map (var "entryExpr") (Lists.sortBy (reify Pairs.first) (Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))) $
+        Serialization.chooseLayout @@ var "budget"
+          @@ (Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@ var "entryExprs")
+          @@ (Serialization.curlyBracesList @@ nothing @@ Serialization.halfBlockStyle @@ var "entryExprs")),
     _Term_optional>>: "mt" ~> Optionals.match (var "mt") (Serialization.cst @@ string "none")
       ("t" ~> Serialization.suffix @@ string ")" @@ (Serialization.prefix @@ string "given(" @@ (termExprAtPrecBudget @@ (Math.sub (var "budget") (int32 6)) @@ var "aliases" @@ int32 precMin @@ var "t"))),
     _Term_pair>>: "p" ~> Serialization.parenListAdaptive @@ list [
