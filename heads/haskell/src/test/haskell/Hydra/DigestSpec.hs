@@ -1,6 +1,7 @@
 -- | Regression tests for the per-package input digest: source-namespace
--- discovery (#400), per-package digest finalization (#606), and the
--- per-module Merkle-over-dependency-closure freshness key (#701).
+-- discovery (#400), per-package digest finalization (#606), the
+-- per-module Merkle-over-dependency-closure freshness key (#701), and
+-- textual .hydra source coverage (#837 / #839).
 --
 -- #400: the digest that gates regeneration of dist/haskell/hydra-{java,python}
 -- must cover the native-generator-owned hydra.<lang>.* modules (coder,
@@ -134,6 +135,76 @@ spec = do
     H.it "produces a hash entry for hydra.python.coder" $ do
       d <- Digest.hashUniverse nsFiles [nameOnly "hydra.python.coder"]
       M.member (ModuleName "hydra.python.coder") d `H.shouldBe` True
+
+  -- #837 / #839: the textual .hydra sources under packages/*/src/main/hydra
+  -- are a second input to Phase 1, so the universe digest must cover them.
+  -- Before #837, 'hashUniverse' hashed only the DSL source per module, so an
+  -- edit touching ONLY a .hydra file never changed the digest and the
+  -- freshness gate reported a cache hit (the #839 bug class).
+  H.describe "discoverHydraSourceFiles covers textual .hydra sources (#837)" $ do
+
+    hydraFiles <- H.runIO Digest.discoverHydraSourceFiles
+
+    H.it "finds hydra.core.ast and routes it to its .hydra source" $
+      case M.lookup (ModuleName "hydra.core.ast") hydraFiles of
+        Just fp -> ("hydra/core/ast.hydra" `L.isSuffixOf` fp) `H.shouldBe` True
+        Nothing -> H.expectationFailure "hydra.core.ast not discovered"
+
+    H.it "produces a hydraSource: entry for hydra.core.ast via hashUniverse" $ do
+      d <- Digest.hashUniverse nsFiles [nameOnly "hydra.core.ast"]
+      M.member (Digest.hydraSourceKey (ModuleName "hydra.core.ast")) d `H.shouldBe` True
+
+  H.describe "hashUniverseWith folds .hydra sources into the digest (#837)" $ do
+
+    -- A one-module universe with both a DSL source and a .hydra source,
+    -- pointed at a temp tree so the test controls the file contents.
+    let withTempSources name body = do
+          tmpRoot <- (</> name) <$> SD.getTemporaryDirectory
+          SD.removePathForcibly tmpRoot
+          SD.createDirectoryIfMissing True tmpRoot
+          let dslPath   = tmpRoot </> "A.hs"
+              hydraPath = tmpRoot </> "a.hydra"
+          writeFile dslPath   "ns = ModuleName \"pkg.a\"\n"
+          writeFile hydraPath "module pkg.a\n\ntype A = int32\n"
+          r <- body dslPath hydraPath
+          SD.removePathForcibly tmpRoot
+          return r
+        ns = ModuleName "pkg.a"
+        universe = [nameOnly "pkg.a"]
+
+    H.it "records both the DSL entry and the hydraSource: entry for a module" $
+      withTempSources "hydra-837-spec-both" $ \dslPath hydraPath -> do
+        d <- Digest.hashUniverseWith (M.fromList [(ns, dslPath)]) (M.fromList [(ns, hydraPath)]) universe
+        M.keysSet d `H.shouldBe` S.fromList [ns, Digest.hydraSourceKey ns]
+
+    H.it "is unchanged when neither source changes" $
+      withTempSources "hydra-837-spec-same" $ \dslPath hydraPath -> do
+        let dslMap   = M.fromList [(ns, dslPath)]
+            hydraMap = M.fromList [(ns, hydraPath)]
+        before <- Digest.hashUniverseWith dslMap hydraMap universe
+        again  <- Digest.hashUniverseWith dslMap hydraMap universe
+        again `H.shouldBe` before
+
+    H.it "changes when ONLY the .hydra source changes (the #839 bug class)" $
+      withTempSources "hydra-837-spec-edit" $ \dslPath hydraPath -> do
+        let dslMap   = M.fromList [(ns, dslPath)]
+            hydraMap = M.fromList [(ns, hydraPath)]
+        before <- Digest.hashUniverseWith dslMap hydraMap universe
+        -- Force 'before' fully before the .hydra file underneath it is
+        -- rewritten: 'hashFile' reads lazily and holds the handle open until
+        -- the hash is demanded (two 64-char SHA-256 hex strings).
+        length (concat (M.elems before)) `H.shouldBe` 128
+        writeFile hydraPath "module pkg.a\n\ntype A = int64\n"
+        after <- Digest.hashUniverseWith dslMap hydraMap universe
+        after `H.shouldNotBe` before
+        -- The DSL entry is untouched; only the hydraSource: entry moved.
+        M.lookup ns after `H.shouldBe` M.lookup ns before
+        M.lookup (Digest.hydraSourceKey ns) after `H.shouldNotBe` M.lookup (Digest.hydraSourceKey ns) before
+
+    H.it "omits the hydraSource: entry for a module with no .hydra source (pre-#837 shape)" $
+      withTempSources "hydra-837-spec-dsl-only" $ \dslPath _ -> do
+        d <- Digest.hashUniverseWith (M.fromList [(ns, dslPath)]) M.empty universe
+        M.keysSet d `H.shouldBe` S.singleton ns
 
   H.describe "structured generation provenance record (#413/#523)" $ do
 

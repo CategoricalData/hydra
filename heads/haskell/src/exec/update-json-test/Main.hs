@@ -14,6 +14,7 @@ import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap)
 import Hydra.Sources.All (mainModules)
 import Hydra.Sources.Ext (extRoutingInput, hydraBuildModules, hydraBuildTestModules, hydraPgModules, hydraPgTestModules)
 import Hydra.Sources.Test.All (testModules)
+import Hydra.TextualSources (substituteTextualSources)
 import System.Environment (getArgs)
 import System.Exit (exitFailure)
 import Control.Exception (catch, SomeException)
@@ -30,8 +31,13 @@ main = do
   -- no longer contain the build family after the extraction.
   -- #738: hydra-pg follows the same pattern as the second non-kernel package
   -- with test modules.
-  let allMainModules = mainModules ++ hydraBuildModules ++ hydraPgModules
-      allTestModules = testModules ++ hydraBuildTestModules ++ hydraPgTestModules
+  let allMainModulesDsl = mainModules ++ hydraBuildModules ++ hydraPgModules
+      allTestModulesDsl = testModules ++ hydraBuildTestModules ++ hydraPgTestModules
+
+  -- #837: modules a package declares in package.json "textualSources" (kernel main AND test modules) are
+  -- sourced from their .hydra files; the substitution keeps order, so split the list back afterwards.
+  substituted <- substituteTextualSources "../../packages" (allMainModulesDsl ++ allTestModulesDsl)
+  let (allMainModules, allTestModules) = splitAt (length allMainModulesDsl) substituted
 
   putStrLn "=== Generate Hydra test modules JSON ==="
   putStrLn ""

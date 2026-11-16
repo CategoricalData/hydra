@@ -162,6 +162,14 @@ executables:
     dependencies:
       - hydra
 
+  verify-hydra-sources:
+    main: Main.hs
+    source-dirs:
+      - src/exec/verify-hydra-sources
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
   digest-check:
     main: Main.hs
     source-dirs:

@@ -1563,12 +1563,19 @@ tryIncrementalInference routingMap distJsonRoot universeMods targetMods = do
           -- don't have direct access to here, but if they aren't
           -- in stored AND aren't in currentDigest, no source change
           -- is detectable so they're effectively unchanged.
-          let isSourceClean m =
+          let keyClean k =
+                case (M.lookup k currentDigest, M.lookup k stored) of
+                  (Just c, Just s) -> c == s
+                  (Nothing, Nothing) -> True
+                  _                -> False
+              -- #837: a module's source is clean only if BOTH its DSL entry
+              -- (<ns>) and its textual .hydra entry (hydraSource:<ns>) are
+              -- unchanged. Without the second check a .hydra-only edit
+              -- (which 'checkCacheHit' already reports as a miss) would find
+              -- zero dirty modules here and fall through to full inference.
+              isSourceClean m =
                 let ns = moduleName m
-                in case (M.lookup ns currentDigest, M.lookup ns stored) of
-                     (Just c, Just s) -> c == s
-                     (Nothing, Nothing) -> True
-                     _                -> False
+                in keyClean ns && keyClean (Digest.hydraSourceKey ns)
               -- Initial dirty set: modules whose own source hash changed.
               initialDirty = L.filter (not . isSourceClean) universeMods
               initialDirtyNs = S.fromList (fmap moduleName initialDirty)

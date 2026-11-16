@@ -10,8 +10,12 @@ module Hydra.Digest (
     -- v1 API (backwards-compatible namespace → hash map)
     DigestMap,
     discoverModuleNameFiles,
+    discoverHydraSourceFiles,
     hashFile,
     hashUniverse,
+    hashUniverseWith,
+    hydraSourceKey,
+    hydraSourceKeyPrefix,
     hashPackageJsonContent,
     jsonContentKeyPrefix,
     digestPath,
@@ -176,6 +180,47 @@ discoverModuleNameFiles = do
                _                    -> return Nothing
 
 
+-- | Walk packages/*/src/main/hydra/**/*.hydra (textual Hydra sources, #837)
+-- to build a namespace → file map. Each .hydra file declares its namespace
+-- with a @module <dotted.name>@ line at column 0, optionally preceded by
+-- @##@ comment lines; files without one are silently skipped.
+--
+-- The .hydra tree is a SECOND source of truth alongside the Haskell DSL
+-- (one .hydra file per module, at @<moduleNameToPath>.hydra@). It is kept
+-- in a separate map from 'discoverModuleNameFiles' rather than merged into
+-- it, because the two are hashed under different digest keys (see
+-- 'hashUniverseWith'): a module may have both a DSL source and a .hydra
+-- source, and an edit to EITHER must invalidate the Phase-1 cache (#839).
+discoverHydraSourceFiles :: IO (M.Map ModuleName FilePath)
+discoverHydraSourceFiles = do
+    exists <- SD.doesDirectoryExist packagesRoot
+    if not exists then return M.empty else do
+      pkgs <- SD.listDirectory packagesRoot
+      pairs <- L.concat <$> mapM scanPackage pkgs
+      return $ M.fromList pairs
+  where
+    scanPackage pkg = do
+      let srcDir = packagesRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "hydra"
+      isDir <- SD.doesDirectoryExist srcDir
+      if not isDir then return [] else do
+        files <- GenWalk.filterByExtension "hydra" <$> listFilesRecursive srcDir
+        Y.catMaybes <$> mapM extractHydraNs files
+
+    -- The header is `module <name>` at column 0 (the regex is multiline, so
+    -- `^` anchors at any line start). Leading `##` doc-comment lines do not
+    -- match because they don't start with the keyword.
+    extractHydraNs :: FilePath -> IO (Maybe (ModuleName, FilePath))
+    extractHydraNs fp = do
+      content <- E.try (readFile fp) :: IO (Either E.SomeException String)
+      case content of
+        Left _ -> return Nothing
+        Right s ->
+          let pat = "^module[[:space:]]+([A-Za-z0-9_.]+)" :: String
+          in case (s RE.=~ pat :: [[String]]) of
+               ([_, nsName]:_) -> return $ Just (ModuleName nsName, fp)
+               _               -> return Nothing
+
+
 -- | SHA-256 hex digest of the raw bytes of a file. Fails loudly if the file
 -- cannot be read — callers treat failures as "cache miss" upstream.
 hashFile :: FilePath -> IO String
@@ -184,23 +229,67 @@ hashFile fp = do
     return $ SHA.showDigest (SHA.sha256 bytes)
 
 
+-- | Prefix used to namespace textual-source (.hydra) entries inside a
+-- digest. Entries look like @hydraSource:<namespace>@ and sit beside the
+-- plain @<namespace>@ entry that hashes the same module's DSL source.
+--
+-- Like 'jsonContentKeyPrefix', the @:@ keeps these keys syntactically
+-- distinct from real namespaces (which never contain @:@), and they
+-- persist through the typed digest codec as ordinary moduleHashes keys.
+hydraSourceKeyPrefix :: String
+hydraSourceKeyPrefix = "hydraSource:"
+
+-- | The digest key under which a module's .hydra source hash is recorded.
+hydraSourceKey :: ModuleName -> ModuleName
+hydraSourceKey (ModuleName ns) = ModuleName (hydraSourceKeyPrefix ++ ns)
+
+
 -- | Hash every module in the given list against the namespace → file map.
 -- Modules whose source file isn't found (because discovery missed them, or
 -- they have no DSL source — e.g. generated coder modules loaded from JSON)
 -- are absent from the returned map. The caller treats that as "cannot verify
 -- freshness," which always falls through to full inference.
+--
+-- Since #837 each module that also has a textual .hydra source contributes a
+-- second entry keyed 'hydraSourceKey' (see 'hashUniverseWith'); the .hydra
+-- file map is discovered here so existing callers need no changes.
 hashUniverse :: M.Map ModuleName FilePath -> [Module] -> IO DigestMap
 hashUniverse nsFiles mods = do
+    hydraFiles <- discoverHydraSourceFiles
+    hashUniverseWith nsFiles hydraFiles mods
+
+-- | 'hashUniverse' with the .hydra file map supplied explicitly (so tests
+-- can point it at a temp tree instead of the real packages/ root).
+--
+-- For each module in 'mods', up to two entries are produced:
+--
+--   * @<namespace>@             — hash of the DSL source in 'nsFiles' (unchanged
+--                                 from the pre-#837 behavior);
+--   * @hydraSource:<namespace>@ — hash of the .hydra source in 'hydraFiles'.
+--
+-- Either entry is omitted when its file is undiscovered or unreadable, so a
+-- module with only one kind of source still gets its one entry. The two are
+-- kept as SEPARATE keys rather than folded into one hash so that the plain
+-- @<namespace>@ entry keeps its meaning for the per-module consumers that
+-- look it up by name (the Merkle fold, 'tryIncrementalInference',
+-- bootstrap-from-json's per-module skip), while whole-map comparisons
+-- ('checkCacheHit') see a .hydra-only edit as a miss (#839).
+hashUniverseWith :: M.Map ModuleName FilePath -> M.Map ModuleName FilePath -> [Module] -> IO DigestMap
+hashUniverseWith nsFiles hydraFiles mods = do
     let namespaces = map moduleName mods
-    pairs <- CM.forM namespaces $ \ns ->
-      case M.lookup ns nsFiles of
+    dslPairs   <- CM.forM namespaces $ \ns -> hashEntry ns ns nsFiles
+    hydraPairs <- CM.forM namespaces $ \ns -> hashEntry ns (hydraSourceKey ns) hydraFiles
+    return $ M.fromList (Y.catMaybes dslPairs ++ Y.catMaybes hydraPairs)
+  where
+    -- Look 'ns' up in 'files' and hash it, recording the result under 'key'.
+    hashEntry ns key files =
+      case M.lookup ns files of
         Nothing -> return Nothing
         Just fp -> do
           result <- E.try (hashFile fp) :: IO (Either E.SomeException String)
           case result of
             Left _  -> return Nothing
-            Right h -> return $ Just (ns, h)
-    return $ M.fromList (Y.catMaybes pairs)
+            Right h -> return $ Just (key, h)
 
 
 -- | Prefix used to namespace JSON-content entries inside a per-package
