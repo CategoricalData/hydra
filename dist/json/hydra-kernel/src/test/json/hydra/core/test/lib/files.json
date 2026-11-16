@@ -5,7 +5,16 @@
     "comments": [],
     "seeAlso": [],
     "provisions": []},
-  "dependencies": [{"module": "hydra.core.model"}, {"module": "hydra.core.file"}, {"module": "hydra.core.testing"}],
+  "dependencies": [
+    {"module": "hydra.core.file"},
+    {"module": "hydra.core.lib.effects"},
+    {"module": "hydra.core.lib.eithers"},
+    {"module": "hydra.core.lib.files"},
+    {"module": "hydra.core.lib.lists"},
+    {"module": "hydra.core.lib.literals"},
+    {"module": "hydra.core.lib.text"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.testing"}],
   "definitions": [
     {
       "term": {

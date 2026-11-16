@@ -2,12 +2,11 @@
   "name": "hydra.core.test.annotations",
   "metadata": {"description": "Test cases for hydra.core.annotations functions", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
-    {"module": "hydra.core.annotations"},
-    {"module": "hydra.core.lexical"},
-    {"module": "hydra.core.reduction"},
-    {"module": "hydra.core.print.model"},
+    {"module": "hydra.core.lib.eithers"},
+    {"module": "hydra.core.lib.maps"},
     {"module": "hydra.core.model"},
-    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.print.model"},
+    {"module": "hydra.core.reduction"},
     {"module": "hydra.core.test.testGraph"},
     {"module": "hydra.core.testing"}],
   "definitions": [

@@ -2,10 +2,10 @@
   "name": "hydra.core.test.lib.literals",
   "metadata": {"description": "Test cases for hydra.core.lib.literals primitives", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
-    {"module": "hydra.core.reduction"},
-    {"module": "hydra.core.print.model"},
+    {"module": "hydra.core.lib.eithers"},
     {"module": "hydra.core.model"},
-    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.print.model"},
+    {"module": "hydra.core.reduction"},
     {"module": "hydra.core.test.testGraph"},
     {"module": "hydra.core.testing"}],
   "definitions": [

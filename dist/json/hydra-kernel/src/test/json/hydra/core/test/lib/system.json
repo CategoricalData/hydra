@@ -6,10 +6,23 @@
     "seeAlso": [],
     "provisions": []},
   "dependencies": [
+    {"module": "hydra.core.error.system"},
+    {"module": "hydra.core.file"},
+    {"module": "hydra.core.lib.effects"},
+    {"module": "hydra.core.lib.eithers"},
+    {"module": "hydra.core.lib.equality"},
+    {"module": "hydra.core.lib.literals"},
+    {"module": "hydra.core.lib.logic"},
+    {"module": "hydra.core.lib.maps"},
+    {"module": "hydra.core.lib.optionals"},
+    {"module": "hydra.core.lib.ordering"},
+    {"module": "hydra.core.lib.strings"},
+    {"module": "hydra.core.lib.system"},
+    {"module": "hydra.core.lib.text"},
     {"module": "hydra.core.model"},
     {"module": "hydra.core.system"},
-    {"module": "hydra.core.error.system"},
-    {"module": "hydra.core.testing"}],
+    {"module": "hydra.core.testing"},
+    {"module": "hydra.core.time"}],
   "definitions": [
     {
       "term": {

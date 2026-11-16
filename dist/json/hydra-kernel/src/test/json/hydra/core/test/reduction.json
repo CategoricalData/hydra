@@ -2,12 +2,10 @@
   "name": "hydra.core.test.reduction",
   "metadata": {"description": "Test cases for term reduction/evaluation mechanics", "comments": [], "seeAlso": [], "provisions": []},
   "dependencies": [
-    {"module": "hydra.core.reduction"},
-    {"module": "hydra.core.inference"},
-    {"module": "hydra.core.print.model"},
-    {"module": "hydra.core.typing"},
+    {"module": "hydra.core.lib.eithers"},
     {"module": "hydra.core.model"},
-    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.print.model"},
+    {"module": "hydra.core.reduction"},
     {"module": "hydra.core.test.testGraph"},
     {"module": "hydra.core.testing"}],
   "definitions": [
