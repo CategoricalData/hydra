@@ -93,6 +93,61 @@ This is not a special case or a workaround: `inferAndWriteByPackage` is exactly 
 once per package in dependency order, with routing and file I/O wrapped around it. A single-package
 downstream project just skips the loop and the routing.
 
+## `.hydra` sources
+
+A project that writes its own modules as `.hydra` text (rather than building `Module` values
+directly in a host language) needs one more step before the pattern above: parsing those files
+into `Module`s. `hydra.core.parse.Packaging.parseModules(depModules, sources)` — translingual,
+generated to every host — is the supported entry point:
+
+- `depModules`: the modules your own `.hydra` files reference but don't declare, typically the
+  bundled kernel modules (see [`loadKernelModules()`](#kernel-leaf-types-referenced-by-primitives-640)
+  above) plus any other library modules you depend on.
+- `sources`: one `(path, text)` pair per `.hydra` file. The path is used only for error messages
+  (`path: line:col: message`), not resolved against the filesystem.
+
+It parses every file in two passes — first to discover each file's own declared names (so
+references between your OWN files resolve, not just references into `depModules`), then to fully
+resolve every bare name against the combined universe — and rejects a duplicate module name
+across your inputs, or a clash with a dependency module's name, before the second pass runs.
+
+Minimal Java example, continuing from the kernel-modules snippet above:
+
+```java
+List<Module> kernelModules = Generation.loadKernelModules();
+
+List<Pair<String, String>> sources = new ArrayList<>();
+for (Path p : myHydraFiles) {
+    sources.add(new Pair<>(p.toString(), Files.readString(p)));
+}
+
+Either<String, List<Module>> parsed = Packaging.parseModules(kernelModules, sources);
+List<Module> myModules = ((Either.Right<String, List<Module>>) parsed).value;
+
+// From here, the pattern is exactly the one above: fold kernelModules into the graph,
+// then inferModulesGiven(ctx, bsGraph, myModules, myModules), then generateSourceFiles.
+```
+
+Minimal Python example:
+
+```python
+from hydra.core.parse.packaging import parse_modules
+
+kernel_modules = load_kernel_modules()
+sources = [(str(p), p.read_text()) for p in my_hydra_files]
+
+result = parse_modules(kernel_modules, sources)
+if isinstance(result, Left):
+    raise ValueError(result.value)  # "path: line:col: message"
+my_modules = result.value
+
+# Same continuation: fold kernel_modules into the graph, infer_modules_given(...), generate_source_files(...).
+```
+
+Each host's own naming convention applies (`parseModules`/`parse_modules`, `Either`'s exact
+shape, etc.) — see that host's generated `hydra.core.parse.packaging` module for the precise
+signature.
+
 ## Adjacent gaps in the same flow
 
 Two related rough edges surface once a downstream driver reaches this level. Neither blocks the
