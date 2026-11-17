@@ -696,7 +696,7 @@
                             "handler": {
                               "lambda": {
                                 "parameter": "r",
-                                "domain": {"variable": "hydra.core.regex.QuantifierRange"},
+                                "domain": {"variable": "hydra.core.regex.Range"},
                                 "body": {
                                   "application": {
                                     "function": {"variable": "hydra.core.lib.strings.concat"},
@@ -707,17 +707,13 @@
                                           "application": {
                                             "function": {"variable": "hydra.core.lib.literals.printInt32"},
                                             "argument": {
-                                              "application": {
-                                                "function": {"project": {"typeName": "hydra.core.regex.QuantifierRange", "fieldName": "min"}},
-                                                "argument": {"variable": "r"}}}}},
+                                              "application": {"function": {"project": {"typeName": "hydra.core.regex.Range", "fieldName": "min"}}, "argument": {"variable": "r"}}}}},
                                         {"literal": {"string": ","}},
                                         {
                                           "application": {
                                             "function": {"variable": "hydra.core.lib.literals.printInt32"},
                                             "argument": {
-                                              "application": {
-                                                "function": {"project": {"typeName": "hydra.core.regex.QuantifierRange", "fieldName": "max"}},
-                                                "argument": {"variable": "r"}}}}},
+                                              "application": {"function": {"project": {"typeName": "hydra.core.regex.Range", "fieldName": "max"}}, "argument": {"variable": "r"}}}}},
                                         {"literal": {"string": "}"}}]}}}}}}]}},
                     "argument": {"variable": "q"}}}}},
             "annotation": {

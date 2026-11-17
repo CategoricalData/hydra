@@ -993,7 +993,7 @@
                                                                                               "name": "range",
                                                                                               "term": {
                                                                                                 "record": {
-                                                                                                  "typeName": "hydra.core.regex.QuantifierRange",
+                                                                                                  "typeName": "hydra.core.regex.Range",
                                                                                                   "fields": [{"name": "min", "term": {"variable": "n"}}, {"name": "max", "term": {"variable": "m"}}]}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}]}}}}},
                 "argument": {
                   "application": {

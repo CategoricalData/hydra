@@ -1273,7 +1273,7 @@
                     "name": "trait",
                     "type": {
                       "annotated": {
-                        "body": {"optional": {"variable": "hydra.rust.syntax.TypePath"}},
+                        "body": {"optional": {"variable": "hydra.rust.syntax.PathType"}},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The trait being implemented, if any"}}}]}}}},
                   {
                     "name": "negative",
@@ -1959,6 +1959,35 @@
                         "body": {"variable": "hydra.rust.syntax.GenericArguments"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Generic arguments, if any"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A segment within a type path"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.rust.syntax.PathType",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "global",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the path is absolute (starts with ::)"}}}]}}}},
+                  {
+                    "name": "segments",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.rust.syntax.PathSegment"}},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The segments of the path"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A path-based type, possibly with generic arguments"}}}]}}},
           "constraints": []}}},
     {
       "type": {
@@ -2804,7 +2833,7 @@
                     "name": "path",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.rust.syntax.TypePath"},
+                        "body": {"variable": "hydra.rust.syntax.PathType"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A path type, possibly with generic arguments"}}}]}}}},
                   {
@@ -2989,7 +3018,7 @@
                     "name": "trait",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.rust.syntax.TypePath"},
+                        "body": {"variable": "hydra.rust.syntax.PathType"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A trait bound"}}}]}}}},
                   {
                     "name": "lifetime",
@@ -2998,35 +3027,6 @@
                         "body": {"variable": "hydra.rust.syntax.Lifetime"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A lifetime bound"}}}]}}}}]},
               "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A bound on a type parameter"}}}]}}},
-          "constraints": []}}},
-    {
-      "type": {
-        "name": "hydra.rust.syntax.TypePath",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "record": [
-                  {
-                    "name": "global",
-                    "type": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the path is absolute (starts with ::)"}}}]}}}},
-                  {
-                    "name": "segments",
-                    "type": {
-                      "annotated": {
-                        "body": {"list": {"variable": "hydra.rust.syntax.PathSegment"}},
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The segments of the path"}}}]}}}}]},
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {"literal": {"string": "A path-based type, possibly with generic arguments"}}}]}}},
           "constraints": []}}},
     {
       "type": {

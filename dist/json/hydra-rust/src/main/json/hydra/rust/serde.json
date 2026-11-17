@@ -2930,7 +2930,7 @@
                           "application": {
                             "function": {"project": {"typeName": "hydra.rust.syntax.ImplBlock", "fieldName": "trait"}},
                             "argument": {"variable": "i"}}},
-                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.rust.syntax.TypePath"}}, "constraints": []}},
+                        "typeScheme": {"variables": [], "body": {"optional": {"variable": "hydra.rust.syntax.PathType"}}, "constraints": []}},
                       {
                         "name": "selfType",
                         "term": {
@@ -2961,14 +2961,14 @@
                                     "function": {
                                       "typeApplication": {
                                         "body": {
-                                          "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.match"}, "type": {"variable": "hydra.rust.syntax.TypePath"}}},
+                                          "typeApplication": {"body": {"variable": "hydra.core.lib.optionals.match"}, "type": {"variable": "hydra.rust.syntax.PathType"}}},
                                         "type": {"optional": {"variable": "hydra.core.ast.Expr"}}}},
                                     "argument": {"variable": "trait"}}},
                                 "argument": {"typeApplication": {"body": {"optional": null}, "type": {"variable": "hydra.core.ast.Expr"}}}}},
                             "argument": {
                               "lambda": {
                                 "parameter": "t",
-                                "domain": {"variable": "hydra.rust.syntax.TypePath"},
+                                "domain": {"variable": "hydra.rust.syntax.PathType"},
                                 "body": {
                                   "optional": {
                                     "application": {
@@ -6806,7 +6806,7 @@
                             "handler": {
                               "lambda": {
                                 "parameter": "tp",
-                                "domain": {"variable": "hydra.rust.syntax.TypePath"},
+                                "domain": {"variable": "hydra.rust.syntax.PathType"},
                                 "body": {"application": {"function": {"variable": "hydra.rust.serde.typePathToExpr"}, "argument": {"variable": "tp"}}}}}},
                           {
                             "name": "lifetime",
@@ -6831,14 +6831,14 @@
         "name": "hydra.rust.serde.typePathToExpr",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.rust.syntax.TypePath"}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.rust.syntax.PathType"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.core.ast.Expr"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "tp",
-                "domain": {"variable": "hydra.rust.syntax.TypePath"},
+                "domain": {"variable": "hydra.rust.syntax.PathType"},
                 "body": {
                   "let": {
                     "bindings": [
@@ -6846,14 +6846,14 @@
                         "name": "global",
                         "term": {
                           "application": {
-                            "function": {"project": {"typeName": "hydra.rust.syntax.TypePath", "fieldName": "global"}},
+                            "function": {"project": {"typeName": "hydra.rust.syntax.PathType", "fieldName": "global"}},
                             "argument": {"variable": "tp"}}},
                         "typeScheme": {"variables": [], "body": {"literal": "boolean"}, "constraints": []}},
                       {
                         "name": "segs",
                         "term": {
                           "application": {
-                            "function": {"project": {"typeName": "hydra.rust.syntax.TypePath", "fieldName": "segments"}},
+                            "function": {"project": {"typeName": "hydra.rust.syntax.PathType", "fieldName": "segments"}},
                             "argument": {"variable": "tp"}}},
                         "typeScheme": {"variables": [], "body": {"list": {"variable": "hydra.rust.syntax.PathSegment"}}, "constraints": []}},
                       {
@@ -6925,7 +6925,7 @@
                             "handler": {
                               "lambda": {
                                 "parameter": "tp",
-                                "domain": {"variable": "hydra.rust.syntax.TypePath"},
+                                "domain": {"variable": "hydra.rust.syntax.PathType"},
                                 "body": {"application": {"function": {"variable": "hydra.rust.serde.typePathToExpr"}, "argument": {"variable": "tp"}}}}}},
                           {
                             "name": "reference",

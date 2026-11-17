@@ -6859,6 +6859,230 @@
                   "value": {"literal": {"string": "DSL injection for the asynchronous variant of hydra.ext.azure.dtld.CommandType"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.ext.dsl.azure.dtld.complexSchemaComplexSchema",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedName"}, "argument": {"variable": "hydra.ext.azure.dtld.ComplexSchema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.ComplexSchema"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.ext.azure.dtld.ComplexSchema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.ext.dsl.azure.dtld.complexSchemaArray",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaArray"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.ComplexSchema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaArray"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.model.Term",
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.model.Injection",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.ComplexSchema"}}}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.model.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "array"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the array variant of hydra.ext.azure.dtld.ComplexSchema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.ext.dsl.azure.dtld.complexSchemaEnum",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaEnum"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.ComplexSchema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaEnum"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.model.Term",
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.model.Injection",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.ComplexSchema"}}}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.model.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "enum"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the enum variant of hydra.ext.azure.dtld.ComplexSchema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.ext.dsl.azure.dtld.complexSchemaMap",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaMap"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.ComplexSchema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaMap"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.model.Term",
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.model.Injection",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.ComplexSchema"}}}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.model.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "map"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the map variant of hydra.ext.azure.dtld.ComplexSchema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.ext.dsl.azure.dtld.complexSchemaObject",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaObject"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.ComplexSchema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaObject"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.model.Term",
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.model.Injection",
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.ComplexSchema"}}}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "typeName": "hydra.core.model.Field",
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "object"}}}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the object variant of hydra.ext.azure.dtld.ComplexSchema"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.ext.dsl.azure.dtld.componentComponent",
         "signature": {
           "typeParameters": [],
@@ -24098,6 +24322,438 @@
                   "value": {"literal": {"string": "DSL updater for the displayName field of hydra.ext.azure.dtld.MapValue"}}}]}}}}},
     {
       "term": {
+        "name": "hydra.ext.dsl.azure.dtld.primitiveSchemaPrimitiveSchema",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedName"},
+                "argument": {"variable": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL name token for hydra.ext.azure.dtld.PrimitiveSchema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.ext.dsl.azure.dtld.primitiveSchemaBoolean",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {"variable": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.model.Term",
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.model.Injection",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Field",
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "boolean"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the boolean variant of hydra.ext.azure.dtld.PrimitiveSchema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.ext.dsl.azure.dtld.primitiveSchemaDate",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {"variable": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.model.Term",
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.model.Injection",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Field",
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "date"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the date variant of hydra.ext.azure.dtld.PrimitiveSchema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.ext.dsl.azure.dtld.primitiveSchemaDateTime",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {"variable": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.model.Term",
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.model.Injection",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Field",
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "dateTime"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the dateTime variant of hydra.ext.azure.dtld.PrimitiveSchema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.ext.dsl.azure.dtld.primitiveSchemaDouble",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {"variable": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.model.Term",
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.model.Injection",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Field",
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "double"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the double variant of hydra.ext.azure.dtld.PrimitiveSchema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.ext.dsl.azure.dtld.primitiveSchemaDuration",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {"variable": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.model.Term",
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.model.Injection",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Field",
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "duration"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the duration variant of hydra.ext.azure.dtld.PrimitiveSchema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.ext.dsl.azure.dtld.primitiveSchemaFloat",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {"variable": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.model.Term",
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.model.Injection",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Field",
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "float"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the float variant of hydra.ext.azure.dtld.PrimitiveSchema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.ext.dsl.azure.dtld.primitiveSchemaInteger",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {"variable": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.model.Term",
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.model.Injection",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Field",
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "integer"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the integer variant of hydra.ext.azure.dtld.PrimitiveSchema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.ext.dsl.azure.dtld.primitiveSchemaLong",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {"variable": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.model.Term",
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.model.Injection",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Field",
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "long"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the long variant of hydra.ext.azure.dtld.PrimitiveSchema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.ext.dsl.azure.dtld.primitiveSchemaString",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {"variable": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.model.Term",
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.model.Injection",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Field",
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "string"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the string variant of hydra.ext.azure.dtld.PrimitiveSchema"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.ext.dsl.azure.dtld.primitiveSchemaTime",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {"variable": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedTerm",
+                "body": {
+                  "inject": {
+                    "typeName": "hydra.core.model.Term",
+                    "field": {
+                      "name": "inject",
+                      "term": {
+                        "record": {
+                          "typeName": "hydra.core.model.Injection",
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.PrimitiveSchema"}}}}},
+                            {
+                              "name": "field",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Field",
+                                  "fields": [
+                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "time"}}}}},
+                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL injection for the time variant of hydra.ext.azure.dtld.PrimitiveSchema"}}}]}}}}},
+    {
+      "term": {
         "name": "hydra.ext.dsl.azure.dtld.propertyProperty",
         "signature": {
           "typeParameters": [],
@@ -34730,7 +35386,7 @@
               "type": {
                 "application": {
                   "function": {"variable": "hydra.core.typed.TypedTerm"},
-                  "argument": {"variable": "hydra.ext.azure.dtld.SchemaPrimitive"}}},
+                  "argument": {"variable": "hydra.ext.azure.dtld.PrimitiveSchema"}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -34743,7 +35399,7 @@
                 "domain": {
                   "application": {
                     "function": {"variable": "hydra.core.typed.TypedTerm"},
-                    "argument": {"variable": "hydra.ext.azure.dtld.SchemaPrimitive"}}},
+                    "argument": {"variable": "hydra.ext.azure.dtld.PrimitiveSchema"}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.core.typed.TypedTerm",
@@ -34783,7 +35439,7 @@
             {
               "name": "arg0",
               "type": {
-                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaComplex"}}},
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.ComplexSchema"}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -34794,7 +35450,7 @@
               "lambda": {
                 "parameter": "x",
                 "domain": {
-                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaComplex"}}},
+                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.ComplexSchema"}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.core.typed.TypedTerm",
@@ -37117,230 +37773,6 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the displayName field of hydra.ext.azure.dtld.SchemaArray"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.ext.dsl.azure.dtld.schemaComplexSchemaComplex",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {"function": {"variable": "hydra.core.typed.TypedName"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaComplex"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "wrap": {
-                "typeName": "hydra.core.typed.TypedName",
-                "body": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.SchemaComplex"}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL name token for hydra.ext.azure.dtld.SchemaComplex"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.ext.dsl.azure.dtld.schemaComplexArray",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {
-                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaArray"}}},
-              "isLazy": false}],
-          "result": {
-            "type": {
-              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaComplex"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "x",
-                "domain": {
-                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaArray"}}},
-                "body": {
-                  "wrap": {
-                    "typeName": "hydra.core.typed.TypedTerm",
-                    "body": {
-                      "inject": {
-                        "typeName": "hydra.core.model.Term",
-                        "field": {
-                          "name": "inject",
-                          "term": {
-                            "record": {
-                              "typeName": "hydra.core.model.Injection",
-                              "fields": [
-                                {
-                                  "name": "typeName",
-                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.SchemaComplex"}}}}},
-                                {
-                                  "name": "field",
-                                  "term": {
-                                    "record": {
-                                      "typeName": "hydra.core.model.Field",
-                                      "fields": [
-                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "array"}}}}},
-                                        {
-                                          "name": "term",
-                                          "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the array variant of hydra.ext.azure.dtld.SchemaComplex"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.ext.dsl.azure.dtld.schemaComplexEnum",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {
-                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaEnum"}}},
-              "isLazy": false}],
-          "result": {
-            "type": {
-              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaComplex"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "x",
-                "domain": {
-                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaEnum"}}},
-                "body": {
-                  "wrap": {
-                    "typeName": "hydra.core.typed.TypedTerm",
-                    "body": {
-                      "inject": {
-                        "typeName": "hydra.core.model.Term",
-                        "field": {
-                          "name": "inject",
-                          "term": {
-                            "record": {
-                              "typeName": "hydra.core.model.Injection",
-                              "fields": [
-                                {
-                                  "name": "typeName",
-                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.SchemaComplex"}}}}},
-                                {
-                                  "name": "field",
-                                  "term": {
-                                    "record": {
-                                      "typeName": "hydra.core.model.Field",
-                                      "fields": [
-                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "enum"}}}}},
-                                        {
-                                          "name": "term",
-                                          "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the enum variant of hydra.ext.azure.dtld.SchemaComplex"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.ext.dsl.azure.dtld.schemaComplexMap",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {
-                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaMap"}}},
-              "isLazy": false}],
-          "result": {
-            "type": {
-              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaComplex"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "x",
-                "domain": {
-                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaMap"}}},
-                "body": {
-                  "wrap": {
-                    "typeName": "hydra.core.typed.TypedTerm",
-                    "body": {
-                      "inject": {
-                        "typeName": "hydra.core.model.Term",
-                        "field": {
-                          "name": "inject",
-                          "term": {
-                            "record": {
-                              "typeName": "hydra.core.model.Injection",
-                              "fields": [
-                                {
-                                  "name": "typeName",
-                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.SchemaComplex"}}}}},
-                                {
-                                  "name": "field",
-                                  "term": {
-                                    "record": {
-                                      "typeName": "hydra.core.model.Field",
-                                      "fields": [
-                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "map"}}}}},
-                                        {
-                                          "name": "term",
-                                          "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the map variant of hydra.ext.azure.dtld.SchemaComplex"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.ext.dsl.azure.dtld.schemaComplexObject",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {
-                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaObject"}}},
-              "isLazy": false}],
-          "result": {
-            "type": {
-              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaComplex"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "x",
-                "domain": {
-                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.ext.azure.dtld.SchemaObject"}}},
-                "body": {
-                  "wrap": {
-                    "typeName": "hydra.core.typed.TypedTerm",
-                    "body": {
-                      "inject": {
-                        "typeName": "hydra.core.model.Term",
-                        "field": {
-                          "name": "inject",
-                          "term": {
-                            "record": {
-                              "typeName": "hydra.core.model.Injection",
-                              "fields": [
-                                {
-                                  "name": "typeName",
-                                  "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.SchemaComplex"}}}}},
-                                {
-                                  "name": "field",
-                                  "term": {
-                                    "record": {
-                                      "typeName": "hydra.core.model.Field",
-                                      "fields": [
-                                        {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "object"}}}}},
-                                        {
-                                          "name": "term",
-                                          "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}]}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the object variant of hydra.ext.azure.dtld.SchemaComplex"}}}]}}}}},
     {
       "term": {
         "name": "hydra.ext.dsl.azure.dtld.schemaEnumSchemaEnum",
@@ -47490,438 +47922,6 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the displayName field of hydra.ext.azure.dtld.SchemaObject"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.ext.dsl.azure.dtld.schemaPrimitiveSchemaPrimitive",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {
-                "function": {"variable": "hydra.core.typed.TypedName"},
-                "argument": {"variable": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "wrap": {
-                "typeName": "hydra.core.typed.TypedName",
-                "body": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL name token for hydra.ext.azure.dtld.SchemaPrimitive"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.ext.dsl.azure.dtld.schemaPrimitiveBoolean",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {
-                "function": {"variable": "hydra.core.typed.TypedTerm"},
-                "argument": {"variable": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "wrap": {
-                "typeName": "hydra.core.typed.TypedTerm",
-                "body": {
-                  "inject": {
-                    "typeName": "hydra.core.model.Term",
-                    "field": {
-                      "name": "inject",
-                      "term": {
-                        "record": {
-                          "typeName": "hydra.core.model.Injection",
-                          "fields": [
-                            {
-                              "name": "typeName",
-                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-                            {
-                              "name": "field",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.model.Field",
-                                  "fields": [
-                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "boolean"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the boolean variant of hydra.ext.azure.dtld.SchemaPrimitive"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.ext.dsl.azure.dtld.schemaPrimitiveDate",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {
-                "function": {"variable": "hydra.core.typed.TypedTerm"},
-                "argument": {"variable": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "wrap": {
-                "typeName": "hydra.core.typed.TypedTerm",
-                "body": {
-                  "inject": {
-                    "typeName": "hydra.core.model.Term",
-                    "field": {
-                      "name": "inject",
-                      "term": {
-                        "record": {
-                          "typeName": "hydra.core.model.Injection",
-                          "fields": [
-                            {
-                              "name": "typeName",
-                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-                            {
-                              "name": "field",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.model.Field",
-                                  "fields": [
-                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "date"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the date variant of hydra.ext.azure.dtld.SchemaPrimitive"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.ext.dsl.azure.dtld.schemaPrimitiveDateTime",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {
-                "function": {"variable": "hydra.core.typed.TypedTerm"},
-                "argument": {"variable": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "wrap": {
-                "typeName": "hydra.core.typed.TypedTerm",
-                "body": {
-                  "inject": {
-                    "typeName": "hydra.core.model.Term",
-                    "field": {
-                      "name": "inject",
-                      "term": {
-                        "record": {
-                          "typeName": "hydra.core.model.Injection",
-                          "fields": [
-                            {
-                              "name": "typeName",
-                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-                            {
-                              "name": "field",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.model.Field",
-                                  "fields": [
-                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "dateTime"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the dateTime variant of hydra.ext.azure.dtld.SchemaPrimitive"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.ext.dsl.azure.dtld.schemaPrimitiveDouble",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {
-                "function": {"variable": "hydra.core.typed.TypedTerm"},
-                "argument": {"variable": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "wrap": {
-                "typeName": "hydra.core.typed.TypedTerm",
-                "body": {
-                  "inject": {
-                    "typeName": "hydra.core.model.Term",
-                    "field": {
-                      "name": "inject",
-                      "term": {
-                        "record": {
-                          "typeName": "hydra.core.model.Injection",
-                          "fields": [
-                            {
-                              "name": "typeName",
-                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-                            {
-                              "name": "field",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.model.Field",
-                                  "fields": [
-                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "double"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the double variant of hydra.ext.azure.dtld.SchemaPrimitive"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.ext.dsl.azure.dtld.schemaPrimitiveDuration",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {
-                "function": {"variable": "hydra.core.typed.TypedTerm"},
-                "argument": {"variable": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "wrap": {
-                "typeName": "hydra.core.typed.TypedTerm",
-                "body": {
-                  "inject": {
-                    "typeName": "hydra.core.model.Term",
-                    "field": {
-                      "name": "inject",
-                      "term": {
-                        "record": {
-                          "typeName": "hydra.core.model.Injection",
-                          "fields": [
-                            {
-                              "name": "typeName",
-                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-                            {
-                              "name": "field",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.model.Field",
-                                  "fields": [
-                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "duration"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the duration variant of hydra.ext.azure.dtld.SchemaPrimitive"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.ext.dsl.azure.dtld.schemaPrimitiveFloat",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {
-                "function": {"variable": "hydra.core.typed.TypedTerm"},
-                "argument": {"variable": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "wrap": {
-                "typeName": "hydra.core.typed.TypedTerm",
-                "body": {
-                  "inject": {
-                    "typeName": "hydra.core.model.Term",
-                    "field": {
-                      "name": "inject",
-                      "term": {
-                        "record": {
-                          "typeName": "hydra.core.model.Injection",
-                          "fields": [
-                            {
-                              "name": "typeName",
-                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-                            {
-                              "name": "field",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.model.Field",
-                                  "fields": [
-                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "float"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the float variant of hydra.ext.azure.dtld.SchemaPrimitive"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.ext.dsl.azure.dtld.schemaPrimitiveInteger",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {
-                "function": {"variable": "hydra.core.typed.TypedTerm"},
-                "argument": {"variable": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "wrap": {
-                "typeName": "hydra.core.typed.TypedTerm",
-                "body": {
-                  "inject": {
-                    "typeName": "hydra.core.model.Term",
-                    "field": {
-                      "name": "inject",
-                      "term": {
-                        "record": {
-                          "typeName": "hydra.core.model.Injection",
-                          "fields": [
-                            {
-                              "name": "typeName",
-                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-                            {
-                              "name": "field",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.model.Field",
-                                  "fields": [
-                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "integer"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the integer variant of hydra.ext.azure.dtld.SchemaPrimitive"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.ext.dsl.azure.dtld.schemaPrimitiveLong",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {
-                "function": {"variable": "hydra.core.typed.TypedTerm"},
-                "argument": {"variable": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "wrap": {
-                "typeName": "hydra.core.typed.TypedTerm",
-                "body": {
-                  "inject": {
-                    "typeName": "hydra.core.model.Term",
-                    "field": {
-                      "name": "inject",
-                      "term": {
-                        "record": {
-                          "typeName": "hydra.core.model.Injection",
-                          "fields": [
-                            {
-                              "name": "typeName",
-                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-                            {
-                              "name": "field",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.model.Field",
-                                  "fields": [
-                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "long"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the long variant of hydra.ext.azure.dtld.SchemaPrimitive"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.ext.dsl.azure.dtld.schemaPrimitiveString",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {
-                "function": {"variable": "hydra.core.typed.TypedTerm"},
-                "argument": {"variable": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "wrap": {
-                "typeName": "hydra.core.typed.TypedTerm",
-                "body": {
-                  "inject": {
-                    "typeName": "hydra.core.model.Term",
-                    "field": {
-                      "name": "inject",
-                      "term": {
-                        "record": {
-                          "typeName": "hydra.core.model.Injection",
-                          "fields": [
-                            {
-                              "name": "typeName",
-                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-                            {
-                              "name": "field",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.model.Field",
-                                  "fields": [
-                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "string"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the string variant of hydra.ext.azure.dtld.SchemaPrimitive"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.ext.dsl.azure.dtld.schemaPrimitiveTime",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {
-                "function": {"variable": "hydra.core.typed.TypedTerm"},
-                "argument": {"variable": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "wrap": {
-                "typeName": "hydra.core.typed.TypedTerm",
-                "body": {
-                  "inject": {
-                    "typeName": "hydra.core.model.Term",
-                    "field": {
-                      "name": "inject",
-                      "term": {
-                        "record": {
-                          "typeName": "hydra.core.model.Injection",
-                          "fields": [
-                            {
-                              "name": "typeName",
-                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.ext.azure.dtld.SchemaPrimitive"}}}}},
-                            {
-                              "name": "field",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.model.Field",
-                                  "fields": [
-                                    {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "time"}}}}},
-                                    {"name": "term", "term": {"inject": {"typeName": "hydra.core.model.Term", "field": {"name": "unit", "term": "unit"}}}}]}}}]}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL injection for the time variant of hydra.ext.azure.dtld.SchemaPrimitive"}}}]}}}}},
     {
       "term": {
         "name": "hydra.ext.dsl.azure.dtld.telemetryTelemetry",

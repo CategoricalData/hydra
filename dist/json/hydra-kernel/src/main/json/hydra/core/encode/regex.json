@@ -825,7 +825,7 @@
                     "handler": {
                       "lambda": {
                         "parameter": "y",
-                        "domain": {"variable": "hydra.core.regex.QuantifierRange"},
+                        "domain": {"variable": "hydra.core.regex.Range"},
                         "body": {
                           "inject": {
                             "typeName": "hydra.core.model.Term",
@@ -847,22 +847,22 @@
                                             {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "range"}}}}},
                                             {
                                               "name": "term",
-                                              "term": {"application": {"function": {"variable": "hydra.core.encode.regex.quantifierRange"}, "argument": {"variable": "y"}}}}]}}}]}}}}}}}}]}},
+                                              "term": {"application": {"function": {"variable": "hydra.core.encode.regex.range"}, "argument": {"variable": "y"}}}}]}}}]}}}}}}}}]}},
             "annotation": {
               "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.core.regex.Quantifier"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.core.encode.regex.quantifierRange",
+        "name": "hydra.core.encode.regex.range",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.regex.QuantifierRange"}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.core.regex.Range"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.core.model.Term"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "x",
-                "domain": {"variable": "hydra.core.regex.QuantifierRange"},
+                "domain": {"variable": "hydra.core.regex.Range"},
                 "body": {
                   "inject": {
                     "typeName": "hydra.core.model.Term",
@@ -874,7 +874,7 @@
                           "fields": [
                             {
                               "name": "typeName",
-                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.regex.QuantifierRange"}}}}},
+                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.regex.Range"}}}}},
                             {
                               "name": "fields",
                               "term": {
@@ -904,9 +904,7 @@
                                                               "name": "integer",
                                                               "term": {"inject": {"typeName": "hydra.core.model.IntegerValue", "field": {"name": "int32", "term": {"variable": "x"}}}}}}}}}}}},
                                               "argument": {
-                                                "application": {
-                                                  "function": {"project": {"typeName": "hydra.core.regex.QuantifierRange", "fieldName": "min"}},
-                                                  "argument": {"variable": "x"}}}}}}]}},
+                                                "application": {"function": {"project": {"typeName": "hydra.core.regex.Range", "fieldName": "min"}}, "argument": {"variable": "x"}}}}}}]}},
                                   {
                                     "record": {
                                       "typeName": "hydra.core.model.Field",
@@ -932,11 +930,8 @@
                                                               "name": "integer",
                                                               "term": {"inject": {"typeName": "hydra.core.model.IntegerValue", "field": {"name": "int32", "term": {"variable": "x"}}}}}}}}}}}},
                                               "argument": {
-                                                "application": {
-                                                  "function": {"project": {"typeName": "hydra.core.regex.QuantifierRange", "fieldName": "max"}},
-                                                  "argument": {"variable": "x"}}}}}}]}}]}}]}}}}}}},
-            "annotation": {
-              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.core.regex.QuantifierRange"}}}]}}}}},
+                                                "application": {"function": {"project": {"typeName": "hydra.core.regex.Range", "fieldName": "max"}}, "argument": {"variable": "x"}}}}}}]}}]}}]}}}}}}},
+            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Encoder for hydra.core.regex.Range"}}}]}}}}},
     {
       "term": {
         "name": "hydra.core.encode.regex.regex",

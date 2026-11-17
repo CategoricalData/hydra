@@ -2286,7 +2286,7 @@
                   "function": {"variable": "hydra.core.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"variable": "hydra.core.regex.QuantifierRange"},
+                      "body": {"variable": "hydra.core.regex.Range"},
                       "annotation": {
                         "map": [
                           {
@@ -2306,7 +2306,7 @@
                     "function": {"variable": "hydra.core.typed.TypedTerm"},
                     "argument": {
                       "annotated": {
-                        "body": {"variable": "hydra.core.regex.QuantifierRange"},
+                        "body": {"variable": "hydra.core.regex.Range"},
                         "annotation": {
                           "map": [
                             {
@@ -2344,27 +2344,24 @@
                   "value": {"literal": {"string": "DSL injection for the range variant of hydra.core.regex.Quantifier"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.core.dsl.regex.quantifierRangeQuantifierRange",
+        "name": "hydra.core.dsl.regex.rangeRange",
         "signature": {
           "typeParameters": [],
           "parameters": [],
           "result": {
             "type": {
-              "application": {"function": {"variable": "hydra.core.typed.TypedName"}, "argument": {"variable": "hydra.core.regex.QuantifierRange"}}}}},
+              "application": {"function": {"variable": "hydra.core.typed.TypedName"}, "argument": {"variable": "hydra.core.regex.Range"}}}}},
         "body": {
           "annotated": {
             "body": {
               "wrap": {
                 "typeName": "hydra.core.typed.TypedName",
-                "body": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.regex.QuantifierRange"}}}}}},
+                "body": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.regex.Range"}}}}}},
             "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL name token for hydra.core.regex.QuantifierRange"}}}]}}}}},
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.core.regex.Range"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.core.dsl.regex.quantifierRange2",
+        "name": "hydra.core.dsl.regex.range",
         "signature": {
           "typeParameters": [],
           "parameters": [
@@ -2394,7 +2391,7 @@
               "isLazy": false}],
           "result": {
             "type": {
-              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.QuantifierRange"}}}}},
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.Range"}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -2435,7 +2432,7 @@
                                   "fields": [
                                     {
                                       "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.regex.QuantifierRange"}}}}},
+                                      "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.regex.Range"}}}}},
                                     {
                                       "name": "fields",
                                       "term": {
@@ -2457,20 +2454,17 @@
                                                   "name": "term",
                                                   "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "max"}}}}]}}]}}]}}}}}}}}}}},
             "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL constructor for hydra.core.regex.QuantifierRange"}}}]}}}}},
+              "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.core.regex.Range"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.core.dsl.regex.quantifierRangeMin",
+        "name": "hydra.core.dsl.regex.rangeMin",
         "signature": {
           "typeParameters": [],
           "parameters": [
             {
               "name": "arg0",
               "type": {
-                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.QuantifierRange"}}},
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.Range"}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -2488,7 +2482,7 @@
               "lambda": {
                 "parameter": "x",
                 "domain": {
-                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.QuantifierRange"}}},
+                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.Range"}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.core.typed.TypedTerm",
@@ -2514,7 +2508,7 @@
                                             "fields": [
                                               {
                                                 "name": "typeName",
-                                                "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.regex.QuantifierRange"}}}}},
+                                                "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.regex.Range"}}}}},
                                               {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "min"}}}}}]}}}}}},
                                 {
                                   "name": "argument",
@@ -2523,17 +2517,17 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL accessor for the min field of hydra.core.regex.QuantifierRange"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL accessor for the min field of hydra.core.regex.Range"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.core.dsl.regex.quantifierRangeMax",
+        "name": "hydra.core.dsl.regex.rangeMax",
         "signature": {
           "typeParameters": [],
           "parameters": [
             {
               "name": "arg0",
               "type": {
-                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.QuantifierRange"}}},
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.Range"}}},
               "isLazy": false}],
           "result": {
             "type": {
@@ -2551,7 +2545,7 @@
               "lambda": {
                 "parameter": "x",
                 "domain": {
-                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.QuantifierRange"}}},
+                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.Range"}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.core.typed.TypedTerm",
@@ -2577,7 +2571,7 @@
                                             "fields": [
                                               {
                                                 "name": "typeName",
-                                                "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.regex.QuantifierRange"}}}}},
+                                                "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.regex.Range"}}}}},
                                               {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "max"}}}}}]}}}}}},
                                 {
                                   "name": "argument",
@@ -2586,17 +2580,17 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL accessor for the max field of hydra.core.regex.QuantifierRange"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL accessor for the max field of hydra.core.regex.Range"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.core.dsl.regex.quantifierRangeWithMin",
+        "name": "hydra.core.dsl.regex.rangeWithMin",
         "signature": {
           "typeParameters": [],
           "parameters": [
             {
               "name": "arg0",
               "type": {
-                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.QuantifierRange"}}},
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.Range"}}},
               "isLazy": false},
             {
               "name": "arg1",
@@ -2612,14 +2606,14 @@
               "isLazy": false}],
           "result": {
             "type": {
-              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.QuantifierRange"}}}}},
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.Range"}}}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "original",
                 "domain": {
-                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.QuantifierRange"}}},
+                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.Range"}}},
                 "body": {
                   "lambda": {
                     "parameter": "newVal",
@@ -2646,7 +2640,7 @@
                                   "fields": [
                                     {
                                       "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.regex.QuantifierRange"}}}}},
+                                      "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.regex.Range"}}}}},
                                     {
                                       "name": "fields",
                                       "term": {
@@ -2688,7 +2682,7 @@
                                                                           "fields": [
                                                                             {
                                                                               "name": "typeName",
-                                                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.regex.QuantifierRange"}}}}},
+                                                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.regex.Range"}}}}},
                                                                             {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "max"}}}}}]}}}}}},
                                                               {
                                                                 "name": "argument",
@@ -2697,17 +2691,17 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL updater for the min field of hydra.core.regex.QuantifierRange"}}}]}}}}},
+                  "value": {"literal": {"string": "DSL updater for the min field of hydra.core.regex.Range"}}}]}}}}},
     {
       "term": {
-        "name": "hydra.core.dsl.regex.quantifierRangeWithMax",
+        "name": "hydra.core.dsl.regex.rangeWithMax",
         "signature": {
           "typeParameters": [],
           "parameters": [
             {
               "name": "arg0",
               "type": {
-                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.QuantifierRange"}}},
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.Range"}}},
               "isLazy": false},
             {
               "name": "arg1",
@@ -2723,14 +2717,14 @@
               "isLazy": false}],
           "result": {
             "type": {
-              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.QuantifierRange"}}}}},
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.Range"}}}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "original",
                 "domain": {
-                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.QuantifierRange"}}},
+                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.regex.Range"}}},
                 "body": {
                   "lambda": {
                     "parameter": "newVal",
@@ -2757,7 +2751,7 @@
                                   "fields": [
                                     {
                                       "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.regex.QuantifierRange"}}}}},
+                                      "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.regex.Range"}}}}},
                                     {
                                       "name": "fields",
                                       "term": {
@@ -2791,7 +2785,7 @@
                                                                           "fields": [
                                                                             {
                                                                               "name": "typeName",
-                                                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.regex.QuantifierRange"}}}}},
+                                                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.core.regex.Range"}}}}},
                                                                             {"name": "fieldName", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "min"}}}}}]}}}}}},
                                                               {
                                                                 "name": "argument",
@@ -2808,4 +2802,4 @@
               "map": [
                 {
                   "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL updater for the max field of hydra.core.regex.QuantifierRange"}}}]}}}}}]}
+                  "value": {"literal": {"string": "DSL updater for the max field of hydra.core.regex.Range"}}}]}}}}}]}

@@ -28178,7 +28178,7 @@
                   "function": {"variable": "hydra.core.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"optional": {"variable": "hydra.rust.syntax.TypePath"}},
+                      "body": {"optional": {"variable": "hydra.rust.syntax.PathType"}},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The trait being implemented, if any"}}}]}}}}},
               "isLazy": false},
             {
@@ -28244,7 +28244,7 @@
                             "function": {"variable": "hydra.core.typed.TypedTerm"},
                             "argument": {
                               "annotated": {
-                                "body": {"optional": {"variable": "hydra.rust.syntax.TypePath"}},
+                                "body": {"optional": {"variable": "hydra.rust.syntax.PathType"}},
                                 "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The trait being implemented, if any"}}}]}}}}},
                         "body": {
                           "lambda": {
@@ -28493,7 +28493,7 @@
                 "function": {"variable": "hydra.core.typed.TypedTerm"},
                 "argument": {
                   "annotated": {
-                    "body": {"optional": {"variable": "hydra.rust.syntax.TypePath"}},
+                    "body": {"optional": {"variable": "hydra.rust.syntax.PathType"}},
                     "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The trait being implemented, if any"}}}]}}}}}}},
         "body": {
           "annotated": {
@@ -29244,7 +29244,7 @@
                   "function": {"variable": "hydra.core.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"optional": {"variable": "hydra.rust.syntax.TypePath"}},
+                      "body": {"optional": {"variable": "hydra.rust.syntax.PathType"}},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The trait being implemented, if any"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -29265,7 +29265,7 @@
                         "function": {"variable": "hydra.core.typed.TypedTerm"},
                         "argument": {
                           "annotated": {
-                            "body": {"optional": {"variable": "hydra.rust.syntax.TypePath"}},
+                            "body": {"optional": {"variable": "hydra.rust.syntax.PathType"}},
                             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The trait being implemented, if any"}}}]}}}}},
                     "body": {
                       "wrap": {
@@ -45062,6 +45062,467 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL updater for the arguments field of hydra.rust.syntax.PathSegment"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rust.dsl.syntax.pathTypePathType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedName"}, "argument": {"variable": "hydra.rust.syntax.PathType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "wrap": {
+                "typeName": "hydra.core.typed.TypedName",
+                "body": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.rust.syntax.PathType"}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.rust.syntax.PathType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rust.dsl.syntax.pathType",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": "boolean"},
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the path is absolute (starts with ::)"}}}]}}}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"list": {"variable": "hydra.rust.syntax.PathSegment"}},
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The segments of the path"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.PathType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "global",
+                "domain": {
+                  "application": {
+                    "function": {"variable": "hydra.core.typed.TypedTerm"},
+                    "argument": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the path is absolute (starts with ::)"}}}]}}}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "segments",
+                    "domain": {
+                      "application": {
+                        "function": {"variable": "hydra.core.typed.TypedTerm"},
+                        "argument": {
+                          "annotated": {
+                            "body": {"list": {"variable": "hydra.rust.syntax.PathSegment"}},
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The segments of the path"}}}]}}}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.core.typed.TypedTerm",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.model.Term",
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Record",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.rust.syntax.PathType"}}}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.model.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "global"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "global"}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.model.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "segments"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "segments"}}}}]}}]}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.rust.syntax.PathType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rust.dsl.syntax.pathTypeGlobal",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.PathType"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {
+                  "annotated": {
+                    "body": {"literal": "boolean"},
+                    "annotation": {
+                      "map": [
+                        {"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the path is absolute (starts with ::)"}}}]}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.PathType"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.model.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.model.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.model.Term",
+                                      "field": {
+                                        "name": "project",
+                                        "term": {
+                                          "record": {
+                                            "typeName": "hydra.core.model.Projection",
+                                            "fields": [
+                                              {
+                                                "name": "typeName",
+                                                "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.rust.syntax.PathType"}}}}},
+                                              {
+                                                "name": "fieldName",
+                                                "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "global"}}}}}]}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the global field of hydra.rust.syntax.PathType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rust.dsl.syntax.pathTypeSegments",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.PathType"}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {
+                "function": {"variable": "hydra.core.typed.TypedTerm"},
+                "argument": {
+                  "annotated": {
+                    "body": {"list": {"variable": "hydra.rust.syntax.PathSegment"}},
+                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The segments of the path"}}}]}}}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "x",
+                "domain": {
+                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.PathType"}}},
+                "body": {
+                  "wrap": {
+                    "typeName": "hydra.core.typed.TypedTerm",
+                    "body": {
+                      "inject": {
+                        "typeName": "hydra.core.model.Term",
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "typeName": "hydra.core.model.Application",
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "typeName": "hydra.core.model.Term",
+                                      "field": {
+                                        "name": "project",
+                                        "term": {
+                                          "record": {
+                                            "typeName": "hydra.core.model.Projection",
+                                            "fields": [
+                                              {
+                                                "name": "typeName",
+                                                "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.rust.syntax.PathType"}}}}},
+                                              {
+                                                "name": "fieldName",
+                                                "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "segments"}}}}}]}}}}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL accessor for the segments field of hydra.rust.syntax.PathType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rust.dsl.syntax.pathTypeWithGlobal",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.PathType"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"literal": "boolean"},
+                      "annotation": {
+                        "map": [
+                          {"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the path is absolute (starts with ::)"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.PathType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "original",
+                "domain": {
+                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.PathType"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "newVal",
+                    "domain": {
+                      "application": {
+                        "function": {"variable": "hydra.core.typed.TypedTerm"},
+                        "argument": {
+                          "annotated": {
+                            "body": {"literal": "boolean"},
+                            "annotation": {
+                              "map": [
+                                {"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the path is absolute (starts with ::)"}}}]}}}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.core.typed.TypedTerm",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.model.Term",
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Record",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.rust.syntax.PathType"}}}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.model.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "global"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "newVal"}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.model.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "segments"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.model.Term",
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "typeName": "hydra.core.model.Application",
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.model.Term",
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.model.Projection",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.rust.syntax.PathType"}}}}},
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "segments"}}}}}]}}}}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}}]}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the global field of hydra.rust.syntax.PathType"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.rust.dsl.syntax.pathTypeWithSegments",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [
+            {
+              "name": "arg0",
+              "type": {
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.PathType"}}},
+              "isLazy": false},
+            {
+              "name": "arg1",
+              "type": {
+                "application": {
+                  "function": {"variable": "hydra.core.typed.TypedTerm"},
+                  "argument": {
+                    "annotated": {
+                      "body": {"list": {"variable": "hydra.rust.syntax.PathSegment"}},
+                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The segments of the path"}}}]}}}}},
+              "isLazy": false}],
+          "result": {
+            "type": {
+              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.PathType"}}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "original",
+                "domain": {
+                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.PathType"}}},
+                "body": {
+                  "lambda": {
+                    "parameter": "newVal",
+                    "domain": {
+                      "application": {
+                        "function": {"variable": "hydra.core.typed.TypedTerm"},
+                        "argument": {
+                          "annotated": {
+                            "body": {"list": {"variable": "hydra.rust.syntax.PathSegment"}},
+                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The segments of the path"}}}]}}}}},
+                    "body": {
+                      "wrap": {
+                        "typeName": "hydra.core.typed.TypedTerm",
+                        "body": {
+                          "inject": {
+                            "typeName": "hydra.core.model.Term",
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "typeName": "hydra.core.model.Record",
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.rust.syntax.PathType"}}}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.model.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "global"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "typeName": "hydra.core.model.Term",
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "typeName": "hydra.core.model.Application",
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "typeName": "hydra.core.model.Term",
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "typeName": "hydra.core.model.Projection",
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.rust.syntax.PathType"}}}}},
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "global"}}}}}]}}}}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}},
+                                          {
+                                            "record": {
+                                              "typeName": "hydra.core.model.Field",
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "segments"}}}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "newVal"}}}}]}}]}}]}}}}}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "DSL updater for the segments field of hydra.rust.syntax.PathType"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.dsl.syntax.patternPattern",
@@ -67388,7 +67849,7 @@
                   "function": {"variable": "hydra.core.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"variable": "hydra.rust.syntax.TypePath"},
+                      "body": {"variable": "hydra.rust.syntax.PathType"},
                       "annotation": {
                         "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A path type, possibly with generic arguments"}}}]}}}}},
               "isLazy": false}],
@@ -67405,7 +67866,7 @@
                     "function": {"variable": "hydra.core.typed.TypedTerm"},
                     "argument": {
                       "annotated": {
-                        "body": {"variable": "hydra.rust.syntax.TypePath"},
+                        "body": {"variable": "hydra.rust.syntax.PathType"},
                         "annotation": {
                           "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A path type, possibly with generic arguments"}}}]}}}}},
                 "body": {
@@ -70618,7 +71079,7 @@
                   "function": {"variable": "hydra.core.typed.TypedTerm"},
                   "argument": {
                     "annotated": {
-                      "body": {"variable": "hydra.rust.syntax.TypePath"},
+                      "body": {"variable": "hydra.rust.syntax.PathType"},
                       "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A trait bound"}}}]}}}}},
               "isLazy": false}],
           "result": {
@@ -70634,7 +71095,7 @@
                     "function": {"variable": "hydra.core.typed.TypedTerm"},
                     "argument": {
                       "annotated": {
-                        "body": {"variable": "hydra.rust.syntax.TypePath"},
+                        "body": {"variable": "hydra.rust.syntax.PathType"},
                         "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A trait bound"}}}]}}}}},
                 "body": {
                   "wrap": {
@@ -70727,467 +71188,6 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "DSL injection for the lifetime variant of hydra.rust.syntax.TypeParamBound"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.rust.dsl.syntax.typePathTypePath",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [],
-          "result": {
-            "type": {
-              "application": {"function": {"variable": "hydra.core.typed.TypedName"}, "argument": {"variable": "hydra.rust.syntax.TypePath"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "wrap": {
-                "typeName": "hydra.core.typed.TypedName",
-                "body": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.rust.syntax.TypePath"}}}}}},
-            "annotation": {
-              "map": [
-                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL name token for hydra.rust.syntax.TypePath"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.rust.dsl.syntax.typePath2",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {
-                "application": {
-                  "function": {"variable": "hydra.core.typed.TypedTerm"},
-                  "argument": {
-                    "annotated": {
-                      "body": {"literal": "boolean"},
-                      "annotation": {
-                        "map": [
-                          {"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the path is absolute (starts with ::)"}}}]}}}}},
-              "isLazy": false},
-            {
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "function": {"variable": "hydra.core.typed.TypedTerm"},
-                  "argument": {
-                    "annotated": {
-                      "body": {"list": {"variable": "hydra.rust.syntax.PathSegment"}},
-                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The segments of the path"}}}]}}}}},
-              "isLazy": false}],
-          "result": {
-            "type": {
-              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.TypePath"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "global",
-                "domain": {
-                  "application": {
-                    "function": {"variable": "hydra.core.typed.TypedTerm"},
-                    "argument": {
-                      "annotated": {
-                        "body": {"literal": "boolean"},
-                        "annotation": {
-                          "map": [
-                            {"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the path is absolute (starts with ::)"}}}]}}}}},
-                "body": {
-                  "lambda": {
-                    "parameter": "segments",
-                    "domain": {
-                      "application": {
-                        "function": {"variable": "hydra.core.typed.TypedTerm"},
-                        "argument": {
-                          "annotated": {
-                            "body": {"list": {"variable": "hydra.rust.syntax.PathSegment"}},
-                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The segments of the path"}}}]}}}}},
-                    "body": {
-                      "wrap": {
-                        "typeName": "hydra.core.typed.TypedTerm",
-                        "body": {
-                          "inject": {
-                            "typeName": "hydra.core.model.Term",
-                            "field": {
-                              "name": "record",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.model.Record",
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.rust.syntax.TypePath"}}}}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "typeName": "hydra.core.model.Field",
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "global"}}}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "global"}}}}]}},
-                                          {
-                                            "record": {
-                                              "typeName": "hydra.core.model.Field",
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "segments"}}}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "segments"}}}}]}}]}}]}}}}}}}}}}},
-            "annotation": {
-              "map": [
-                {"key": {"variable": "description"}, "value": {"literal": {"string": "DSL constructor for hydra.rust.syntax.TypePath"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.rust.dsl.syntax.typePathGlobal",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {
-                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.TypePath"}}},
-              "isLazy": false}],
-          "result": {
-            "type": {
-              "application": {
-                "function": {"variable": "hydra.core.typed.TypedTerm"},
-                "argument": {
-                  "annotated": {
-                    "body": {"literal": "boolean"},
-                    "annotation": {
-                      "map": [
-                        {"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the path is absolute (starts with ::)"}}}]}}}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "x",
-                "domain": {
-                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.TypePath"}}},
-                "body": {
-                  "wrap": {
-                    "typeName": "hydra.core.typed.TypedTerm",
-                    "body": {
-                      "inject": {
-                        "typeName": "hydra.core.model.Term",
-                        "field": {
-                          "name": "application",
-                          "term": {
-                            "record": {
-                              "typeName": "hydra.core.model.Application",
-                              "fields": [
-                                {
-                                  "name": "function",
-                                  "term": {
-                                    "inject": {
-                                      "typeName": "hydra.core.model.Term",
-                                      "field": {
-                                        "name": "project",
-                                        "term": {
-                                          "record": {
-                                            "typeName": "hydra.core.model.Projection",
-                                            "fields": [
-                                              {
-                                                "name": "typeName",
-                                                "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.rust.syntax.TypePath"}}}}},
-                                              {
-                                                "name": "fieldName",
-                                                "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "global"}}}}}]}}}}}},
-                                {
-                                  "name": "argument",
-                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL accessor for the global field of hydra.rust.syntax.TypePath"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.rust.dsl.syntax.typePathSegments",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {
-                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.TypePath"}}},
-              "isLazy": false}],
-          "result": {
-            "type": {
-              "application": {
-                "function": {"variable": "hydra.core.typed.TypedTerm"},
-                "argument": {
-                  "annotated": {
-                    "body": {"list": {"variable": "hydra.rust.syntax.PathSegment"}},
-                    "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The segments of the path"}}}]}}}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "x",
-                "domain": {
-                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.TypePath"}}},
-                "body": {
-                  "wrap": {
-                    "typeName": "hydra.core.typed.TypedTerm",
-                    "body": {
-                      "inject": {
-                        "typeName": "hydra.core.model.Term",
-                        "field": {
-                          "name": "application",
-                          "term": {
-                            "record": {
-                              "typeName": "hydra.core.model.Application",
-                              "fields": [
-                                {
-                                  "name": "function",
-                                  "term": {
-                                    "inject": {
-                                      "typeName": "hydra.core.model.Term",
-                                      "field": {
-                                        "name": "project",
-                                        "term": {
-                                          "record": {
-                                            "typeName": "hydra.core.model.Projection",
-                                            "fields": [
-                                              {
-                                                "name": "typeName",
-                                                "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.rust.syntax.TypePath"}}}}},
-                                              {
-                                                "name": "fieldName",
-                                                "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "segments"}}}}}]}}}}}},
-                                {
-                                  "name": "argument",
-                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "x"}}}}]}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL accessor for the segments field of hydra.rust.syntax.TypePath"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.rust.dsl.syntax.typePathWithGlobal",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {
-                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.TypePath"}}},
-              "isLazy": false},
-            {
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "function": {"variable": "hydra.core.typed.TypedTerm"},
-                  "argument": {
-                    "annotated": {
-                      "body": {"literal": "boolean"},
-                      "annotation": {
-                        "map": [
-                          {"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the path is absolute (starts with ::)"}}}]}}}}},
-              "isLazy": false}],
-          "result": {
-            "type": {
-              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.TypePath"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "original",
-                "domain": {
-                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.TypePath"}}},
-                "body": {
-                  "lambda": {
-                    "parameter": "newVal",
-                    "domain": {
-                      "application": {
-                        "function": {"variable": "hydra.core.typed.TypedTerm"},
-                        "argument": {
-                          "annotated": {
-                            "body": {"literal": "boolean"},
-                            "annotation": {
-                              "map": [
-                                {"key": {"variable": "description"}, "value": {"literal": {"string": "Whether the path is absolute (starts with ::)"}}}]}}}}},
-                    "body": {
-                      "wrap": {
-                        "typeName": "hydra.core.typed.TypedTerm",
-                        "body": {
-                          "inject": {
-                            "typeName": "hydra.core.model.Term",
-                            "field": {
-                              "name": "record",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.model.Record",
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.rust.syntax.TypePath"}}}}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "typeName": "hydra.core.model.Field",
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "global"}}}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "newVal"}}}}]}},
-                                          {
-                                            "record": {
-                                              "typeName": "hydra.core.model.Field",
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "segments"}}}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {
-                                                    "inject": {
-                                                      "typeName": "hydra.core.model.Term",
-                                                      "field": {
-                                                        "name": "application",
-                                                        "term": {
-                                                          "record": {
-                                                            "typeName": "hydra.core.model.Application",
-                                                            "fields": [
-                                                              {
-                                                                "name": "function",
-                                                                "term": {
-                                                                  "inject": {
-                                                                    "typeName": "hydra.core.model.Term",
-                                                                    "field": {
-                                                                      "name": "project",
-                                                                      "term": {
-                                                                        "record": {
-                                                                          "typeName": "hydra.core.model.Projection",
-                                                                          "fields": [
-                                                                            {
-                                                                              "name": "typeName",
-                                                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.rust.syntax.TypePath"}}}}},
-                                                                            {
-                                                                              "name": "fieldName",
-                                                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "segments"}}}}}]}}}}}},
-                                                              {
-                                                                "name": "argument",
-                                                                "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}}]}}]}}}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL updater for the global field of hydra.rust.syntax.TypePath"}}}]}}}}},
-    {
-      "term": {
-        "name": "hydra.rust.dsl.syntax.typePathWithSegments",
-        "signature": {
-          "typeParameters": [],
-          "parameters": [
-            {
-              "name": "arg0",
-              "type": {
-                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.TypePath"}}},
-              "isLazy": false},
-            {
-              "name": "arg1",
-              "type": {
-                "application": {
-                  "function": {"variable": "hydra.core.typed.TypedTerm"},
-                  "argument": {
-                    "annotated": {
-                      "body": {"list": {"variable": "hydra.rust.syntax.PathSegment"}},
-                      "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The segments of the path"}}}]}}}}},
-              "isLazy": false}],
-          "result": {
-            "type": {
-              "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.TypePath"}}}}},
-        "body": {
-          "annotated": {
-            "body": {
-              "lambda": {
-                "parameter": "original",
-                "domain": {
-                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.rust.syntax.TypePath"}}},
-                "body": {
-                  "lambda": {
-                    "parameter": "newVal",
-                    "domain": {
-                      "application": {
-                        "function": {"variable": "hydra.core.typed.TypedTerm"},
-                        "argument": {
-                          "annotated": {
-                            "body": {"list": {"variable": "hydra.rust.syntax.PathSegment"}},
-                            "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The segments of the path"}}}]}}}}},
-                    "body": {
-                      "wrap": {
-                        "typeName": "hydra.core.typed.TypedTerm",
-                        "body": {
-                          "inject": {
-                            "typeName": "hydra.core.model.Term",
-                            "field": {
-                              "name": "record",
-                              "term": {
-                                "record": {
-                                  "typeName": "hydra.core.model.Record",
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.rust.syntax.TypePath"}}}}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "typeName": "hydra.core.model.Field",
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "global"}}}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {
-                                                    "inject": {
-                                                      "typeName": "hydra.core.model.Term",
-                                                      "field": {
-                                                        "name": "application",
-                                                        "term": {
-                                                          "record": {
-                                                            "typeName": "hydra.core.model.Application",
-                                                            "fields": [
-                                                              {
-                                                                "name": "function",
-                                                                "term": {
-                                                                  "inject": {
-                                                                    "typeName": "hydra.core.model.Term",
-                                                                    "field": {
-                                                                      "name": "project",
-                                                                      "term": {
-                                                                        "record": {
-                                                                          "typeName": "hydra.core.model.Projection",
-                                                                          "fields": [
-                                                                            {
-                                                                              "name": "typeName",
-                                                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "hydra.rust.syntax.TypePath"}}}}},
-                                                                            {
-                                                                              "name": "fieldName",
-                                                                              "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "global"}}}}}]}}}}}},
-                                                              {
-                                                                "name": "argument",
-                                                                "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "original"}}}}]}}}}}}]}},
-                                          {
-                                            "record": {
-                                              "typeName": "hydra.core.model.Field",
-                                              "fields": [
-                                                {"name": "name", "term": {"wrap": {"typeName": "hydra.core.model.Name", "body": {"literal": {"string": "segments"}}}}},
-                                                {
-                                                  "name": "term",
-                                                  "term": {"application": {"function": {"unwrap": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "newVal"}}}}]}}]}}]}}}}}}}}}}},
-            "annotation": {
-              "map": [
-                {
-                  "key": {"variable": "description"},
-                  "value": {"literal": {"string": "DSL updater for the segments field of hydra.rust.syntax.TypePath"}}}]}}}}},
     {
       "term": {
         "name": "hydra.rust.dsl.syntax.unaryExprUnaryExpr",

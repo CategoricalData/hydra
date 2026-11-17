@@ -231,6 +231,27 @@
           "constraints": []}}},
     {
       "type": {
+        "name": "hydra.ext.azure.dtld.ComplexSchema",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "array", "type": {"variable": "hydra.ext.azure.dtld.SchemaArray"}},
+                  {"name": "enum", "type": {"variable": "hydra.ext.azure.dtld.SchemaEnum"}},
+                  {"name": "map", "type": {"variable": "hydra.ext.azure.dtld.SchemaMap"}},
+                  {"name": "object", "type": {"variable": "hydra.ext.azure.dtld.SchemaObject"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "Complex schemas are designed for supporting complex data types made up of primitive data types. Currently the following complex schemas are provided: Array, Enum, Map, and Object. A complex schema can be specified directly as the value in a schema statement or described in the interface schemas set and referenced in the schema statement."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
         "name": "hydra.ext.azure.dtld.Component",
         "body": {
           "variables": [],
@@ -873,6 +894,91 @@
           "constraints": []}}},
     {
       "type": {
+        "name": "hydra.ext.azure.dtld.PrimitiveSchema",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "boolean",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A boolean value"}}}]}}}},
+                  {
+                    "name": "date",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A full-date as defined in section 5.6 of RFC 3339"}}}]}}}},
+                  {
+                    "name": "dateTime",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A date-time as defined in RFC 3339"}}}]}}}},
+                  {
+                    "name": "double",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An IEEE 8-byte floating point"}}}]}}}},
+                  {
+                    "name": "duration",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A duration in ISO 8601 format"}}}]}}}},
+                  {
+                    "name": "float",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An IEEE 4-byte floating point"}}}]}}}},
+                  {
+                    "name": "integer",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A signed 4-byte integer"}}}]}}}},
+                  {
+                    "name": "long",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A signed 8-byte integer"}}}]}}}},
+                  {
+                    "name": "string",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A UTF8 string"}}}]}}}},
+                  {
+                    "name": "time",
+                    "type": {
+                      "annotated": {
+                        "body": "unit",
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "A full-time as defined in section 5.6 of RFC 3339"}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A full set of primitive data types are provided and can be specified directly as the value in a schema statement in a digital twin interface."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
         "name": "hydra.ext.azure.dtld.Property",
         "body": {
           "variables": [],
@@ -1167,8 +1273,8 @@
             "annotated": {
               "body": {
                 "union": [
-                  {"name": "primitive", "type": {"variable": "hydra.ext.azure.dtld.SchemaPrimitive"}},
-                  {"name": "complex", "type": {"variable": "hydra.ext.azure.dtld.SchemaComplex"}}]},
+                  {"name": "primitive", "type": {"variable": "hydra.ext.azure.dtld.PrimitiveSchema"}},
+                  {"name": "complex", "type": {"variable": "hydra.ext.azure.dtld.ComplexSchema"}}]},
               "annotation": {
                 "map": [
                   {
@@ -1260,27 +1366,6 @@
                     "value": {
                       "literal": {
                         "string": "An Array describes an indexable data type where each element is of the same schema. An Array elements' schema can itself be a primitive or complex schema."}}}]}}},
-          "constraints": []}}},
-    {
-      "type": {
-        "name": "hydra.ext.azure.dtld.SchemaComplex",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "union": [
-                  {"name": "array", "type": {"variable": "hydra.ext.azure.dtld.SchemaArray"}},
-                  {"name": "enum", "type": {"variable": "hydra.ext.azure.dtld.SchemaEnum"}},
-                  {"name": "map", "type": {"variable": "hydra.ext.azure.dtld.SchemaMap"}},
-                  {"name": "object", "type": {"variable": "hydra.ext.azure.dtld.SchemaObject"}}]},
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {
-                      "literal": {
-                        "string": "Complex schemas are designed for supporting complex data types made up of primitive data types. Currently the following complex schemas are provided: Array, Enum, Map, and Object. A complex schema can be specified directly as the value in a schema statement or described in the interface schemas set and referenced in the schema statement."}}}]}}},
           "constraints": []}}},
     {
       "type": {
@@ -1654,91 +1739,6 @@
                     "value": {
                       "literal": {
                         "string": "An Object describes a data type made up of named fields (like a struct in C). The fields in an Object map can be primitive or complex schemas."}}}]}}},
-          "constraints": []}}},
-    {
-      "type": {
-        "name": "hydra.ext.azure.dtld.SchemaPrimitive",
-        "body": {
-          "variables": [],
-          "body": {
-            "annotated": {
-              "body": {
-                "union": [
-                  {
-                    "name": "boolean",
-                    "type": {
-                      "annotated": {
-                        "body": "unit",
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A boolean value"}}}]}}}},
-                  {
-                    "name": "date",
-                    "type": {
-                      "annotated": {
-                        "body": "unit",
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "A full-date as defined in section 5.6 of RFC 3339"}}}]}}}},
-                  {
-                    "name": "dateTime",
-                    "type": {
-                      "annotated": {
-                        "body": "unit",
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A date-time as defined in RFC 3339"}}}]}}}},
-                  {
-                    "name": "double",
-                    "type": {
-                      "annotated": {
-                        "body": "unit",
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An IEEE 8-byte floating point"}}}]}}}},
-                  {
-                    "name": "duration",
-                    "type": {
-                      "annotated": {
-                        "body": "unit",
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A duration in ISO 8601 format"}}}]}}}},
-                  {
-                    "name": "float",
-                    "type": {
-                      "annotated": {
-                        "body": "unit",
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An IEEE 4-byte floating point"}}}]}}}},
-                  {
-                    "name": "integer",
-                    "type": {
-                      "annotated": {
-                        "body": "unit",
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A signed 4-byte integer"}}}]}}}},
-                  {
-                    "name": "long",
-                    "type": {
-                      "annotated": {
-                        "body": "unit",
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A signed 8-byte integer"}}}]}}}},
-                  {
-                    "name": "string",
-                    "type": {
-                      "annotated": {
-                        "body": "unit",
-                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A UTF8 string"}}}]}}}},
-                  {
-                    "name": "time",
-                    "type": {
-                      "annotated": {
-                        "body": "unit",
-                        "annotation": {
-                          "map": [
-                            {
-                              "key": {"variable": "description"},
-                              "value": {"literal": {"string": "A full-time as defined in section 5.6 of RFC 3339"}}}]}}}}]},
-              "annotation": {
-                "map": [
-                  {
-                    "key": {"variable": "description"},
-                    "value": {
-                      "literal": {
-                        "string": "A full set of primitive data types are provided and can be specified directly as the value in a schema statement in a digital twin interface."}}}]}}},
           "constraints": []}}},
     {
       "type": {

@@ -3338,7 +3338,7 @@
                                                                                                     "name": "trait",
                                                                                                     "term": {
                                                                                                       "record": {
-                                                                                                        "typeName": "hydra.rust.syntax.TypePath",
+                                                                                                        "typeName": "hydra.rust.syntax.PathType",
                                                                                                         "fields": [
                                                                                                           {"name": "global", "term": {"literal": {"boolean": false}}},
                                                                                                           {
@@ -4771,7 +4771,7 @@
                           "name": "path",
                           "term": {
                             "record": {
-                              "typeName": "hydra.rust.syntax.TypePath",
+                              "typeName": "hydra.rust.syntax.PathType",
                               "fields": [
                                 {"name": "global", "term": {"literal": {"boolean": false}}},
                                 {
@@ -4834,7 +4834,7 @@
                               "name": "path",
                               "term": {
                                 "record": {
-                                  "typeName": "hydra.rust.syntax.TypePath",
+                                  "typeName": "hydra.rust.syntax.PathType",
                                   "fields": [
                                     {"name": "global", "term": {"literal": {"boolean": false}}},
                                     {
@@ -5111,7 +5111,7 @@
                       "name": "path",
                       "term": {
                         "record": {
-                          "typeName": "hydra.rust.syntax.TypePath",
+                          "typeName": "hydra.rust.syntax.PathType",
                           "fields": [
                             {"name": "global", "term": {"literal": {"boolean": false}}},
                             {
@@ -5151,7 +5151,7 @@
                       "name": "path",
                       "term": {
                         "record": {
-                          "typeName": "hydra.rust.syntax.TypePath",
+                          "typeName": "hydra.rust.syntax.PathType",
                           "fields": [
                             {"name": "global", "term": {"literal": {"boolean": false}}},
                             {

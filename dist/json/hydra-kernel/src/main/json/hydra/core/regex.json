@@ -307,7 +307,7 @@
                     "name": "range",
                     "type": {
                       "annotated": {
-                        "body": {"variable": "hydra.core.regex.QuantifierRange"},
+                        "body": {"variable": "hydra.core.regex.Range"},
                         "annotation": {
                           "map": [
                             {
@@ -323,7 +323,7 @@
           "constraints": []}}},
     {
       "type": {
-        "name": "hydra.core.regex.QuantifierRange",
+        "name": "hydra.core.regex.Range",
         "body": {
           "variables": [],
           "body": {
