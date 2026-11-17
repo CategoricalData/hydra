@@ -239,6 +239,36 @@ The bootstrap demo's per-target setup scripts
 `overlay/<lang>/hydra-kernel/` trees into their flat bootstrap output, so the
 bootstrapped sources stay consistent with the published distributions.
 
+## Textual (`.hydra`) sources
+
+The `hydra-kernel` modules are sourced from textual `.hydra` files under `packages/hydra-kernel/src/main/hydra/`
+(one file per module, path derived from the module name), not from the Haskell DSL definitions.
+Phase 1 (`update-json-main`, `update-json-test`) parses each `.hydra` file and substitutes the result for the
+compiled DSL module in the inference universe, so validation, inference, routing and JSON writing are unchanged.
+The scope is a property of the package, in its `package.json`:
+
+- `"textualSources"`: `"all"` (every module that has a `.hydra` file), `"main"` (like `"all"` but excluding
+  `hydra.core.test.*`), or an explicit list of module names.
+- `"textualSourcesExclude"`: module-name prefixes that stay DSL-sourced.
+  `hydra-kernel` is `"all"` with `["hydra.core.lib."]` excluded, because the textual format for primitive parameter
+  names and descriptions is not yet decided.
+
+So the kernel is `.hydra`-sourced except `hydra.core.lib.*`.
+Every package with textual sources logs a line such as
+`textual sources: hydra-kernel: 106 modules from .hydra (21 excluded) under ../../packages`,
+and a package that declares textual sources but substitutes no module fails the sync.
+Parse failures and a listed module without a `.hydra` file are fatal; there is no fallback to the DSL.
+The `.hydra` files are part of the Phase 1 input digest (`hydraSource:<module>` keys),
+so editing one regenerates its module.
+
+**Dual-edit rule until the DSL copies are deleted.**
+The Haskell DSL definitions of the `.hydra`-sourced modules still exist (the other generators and some tests
+still consume them), so a change to such a module must be made in both places, and the two must stay equal.
+`bin/verify-hydra-sources.sh` checks this: it regenerates `dist/json` from the `.hydra` files into a scratch root and
+fails on any byte difference from the committed `dist/json` (main and test modules).
+Re-print a `.hydra` file from the DSL when only the DSL side was edited.
+`hydra.core.lib.*` is edited in the DSL only.
+
 ## Phases of `bin/sync.sh`
 
 A full `bin/sync.sh` run executes five phases. Each phase has its own cache; phases run

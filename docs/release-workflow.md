@@ -51,7 +51,10 @@ by the release gates themselves land here first, then go to `main` with everythi
 The steps below assume that setup:
 
 1. Finalize any changes to the Hydra kernel
-   (whose source of truth is the `Hydra/Sources/Kernel` directory in Hydra-Haskell).
+   (whose source of truth is the textual `.hydra` modules under `packages/hydra-kernel/src/main/hydra`,
+   except `hydra.core.lib.*`, which is still authored in the Haskell DSL under
+   `Hydra/Sources/Kernel/Lib`; the DSL copies of the `.hydra` modules are kept in step until they are deleted;
+   see [Textual sources](build-system.md#textual-hydra-sources)).
 1. Regenerate all implementations using `bin/sync-all.sh` (see "Synchronizing all implementations" below).
 1. Run `./bin/prepare-release.sh` from the repository root.
    This verifies that all implementations are consistent and passing,

@@ -1256,7 +1256,9 @@ one mid-build is much harder than finding it up front.
 
 1. **Schema definition.** The DSL field name string in
    `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/<Module>.hs`.
-   This is the source of truth and should change first.
+   Together with the corresponding `.hydra` file under `packages/hydra-kernel/src/main/hydra/`, which is what Phase 1
+   actually reads, this is the source of truth and should change first. Until the DSL copies are deleted, edit both
+   and keep them equal (see [Textual sources](../build-system.md#textual-hydra-sources)).
 
 2. **Generated accessors and field-name constants.** Per-record helpers in
    `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/<Module>.hs`:
