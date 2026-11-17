@@ -3229,7 +3229,12 @@
                                     "bindings": [
                                       {
                                         "name": "referencedNames",
-                                        "term": {"variable": "hydra.core.analysis.definitionReferencedNames"},
+                                        "term": {
+                                          "lambda": {
+                                            "parameter": "d",
+                                            "domain": {"variable": "hydra.core.packaging.Definition"},
+                                            "body": {
+                                              "application": {"function": {"variable": "hydra.core.analysis.definitionReferencedNames"}, "argument": {"variable": "d"}}}}},
                                         "typeScheme": {
                                           "variables": [],
                                           "body": {
