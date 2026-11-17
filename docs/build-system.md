@@ -136,6 +136,57 @@ inference (#467).
 A complete sync of the matrix walks these in five phases (see
 [Phases](#phases-of-binsyncsh) below).
 
+### Textual sources for hydra-kernel (#837)
+
+The diagram above is the general case; `hydra-kernel` is a documented exception. As of batch 27
+(`f4def0b25f`), every `hydra-kernel` module **except `hydra.core.lib.*`** (the primitive
+libraries) is sourced from `.hydra` text under `packages/hydra-kernel/src/main/hydra/**/*.hydra`,
+not from its Haskell DSL module under `Hydra/Sources/`:
+
+```
+.hydra sources                                  JSON modules
+packages/hydra-kernel/src/main/hydra/**/*.hydra  →  dist/json/hydra-kernel/src/main/json/
+      (source of truth)                              (interchange format, unchanged)
+```
+
+A package opts into this via its `package.json`'s `"textualSources"` field (`"all"`, `"main"`
+— like `"all"` but excluding `hydra.core.test.*` — or an explicit module-name list) and an
+optional `"textualSourcesExclude"` list of name prefixes that stay DSL-sourced regardless
+(`hydra-kernel`'s is `["hydra.core.lib."]`, since the primitive-parameter format of the textual
+syntax is still undecided). `Hydra.TextualSources.substituteTextualSources` (in
+`heads/haskell/src/main/haskell/`) reads these fields and replaces the DSL-compiled module with
+the one parsed from its `.hydra` file before inference/routing/JSON-writing run — those
+downstream steps are unaware of the swap, so a correctly flipped module yields byte-identical
+JSON to what the DSL alone would have produced.
+
+**The dual-edit rule, effective from batch 27 (#837): any change to a textually-sourced kernel
+module must be made in its `.hydra` file AND in the matching Haskell DSL source under
+`Hydra/Sources/` (still present until the DSL copies are eventually deleted — see
+[extending-hydra-core.md](recipes/extending-hydra-core.md)), in the SAME commit. The two must
+stay byte-identical.** `hydra.core.lib.*` (primitives) is the one part of the kernel that stays
+Haskell-sourced for now and is exempt from this rule.
+
+Two tools enforce and support the dual-edit rule, one per direction:
+
+- **`bin/verify-hydra-sources.sh`** — the identity GUARD (parse `.hydra` → infer → compare
+  against the checked-in `dist/json`). Run by CI; catches drift between the two sides after the
+  fact.
+- **`heads/haskell/bin/print-hydra-sources.sh [module-name...]`** — the PRINT tool: regenerates
+  a `.hydra` file from its DSL source, so you never have to hand-write the text side of the
+  dual edit. Prints every textually-sourced module by default (respecting the same
+  `textualSources`/`textualSourcesExclude` fields the guard checks against), or only the named
+  modules when given. Prints from the DSL, parses the result back, and re-prints the parsed
+  module — only writes the file if that second print is identical to the first (a genuine
+  print → parse → print fixpoint), so a printer/parser mismatch is reported and left unwritten
+  rather than silently corrupting the committed `.hydra` corpus. Run it after any DSL-side edit,
+  before committing, and include its output in the same commit:
+  ```sh
+  heads/haskell/bin/print-hydra-sources.sh hydra.core.parse.packaging
+  ```
+  Does not yet respect a hand-added `#` comment in the target `.hydra` file (the comment-
+  preservation safe-write guard, #842 card 83, is planned but not yet implemented) — don't run it
+  against a file you know carries hand-added comments until that guard lands.
+
 ## Layers and scripts
 
 The sync infrastructure is layered. Each layer is content-hash gated, so a warm run

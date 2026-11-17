@@ -170,6 +170,14 @@ executables:
     dependencies:
       - hydra
 
+  print-hydra-sources:
+    main: Main.hs
+    source-dirs:
+      - src/exec/print-hydra-sources
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
   digest-check:
     main: Main.hs
     source-dirs:
