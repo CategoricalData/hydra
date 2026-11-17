@@ -1,0 +1,1091 @@
+## Test cases for Ord instance comparisons on complex Hydra types
+module hydra.core.test.ordering
+
+import hydra.core.lib.equality
+import hydra.core.lib.literals
+import hydra.core.lib.ordering
+import hydra.core.model
+import hydra.core.print.util
+import hydra.core.test.testTypes
+import hydra.core.testing
+import hydra.core.util
+
+## Test cases for Ord instance comparisons on complex Hydra types
+term allTests =
+  TestGroup{
+    name = "ordering",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "Name comparison",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "name less than (alphabetic)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          `wrap` = WrappedTerm{
+                            typeName = Name{"hydra.core.model.Name"},
+                            body = Term{
+                              literal = Literal{
+                                `string` = "apple"}}}}
+                        Term{
+                          `wrap` = WrappedTerm{
+                            typeName = Name{"hydra.core.model.Name"},
+                            body = Term{
+                              literal = Literal{
+                                `string` = "banana"}}}}),
+                expected = λ`_`.comparison Comparison{lessThan}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "name equal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          `wrap` = WrappedTerm{
+                            typeName = Name{"hydra.core.model.Name"},
+                            body = Term{
+                              literal = Literal{
+                                `string` = "hello"}}}}
+                        Term{
+                          `wrap` = WrappedTerm{
+                            typeName = Name{"hydra.core.model.Name"},
+                            body = Term{
+                              literal = Literal{
+                                `string` = "hello"}}}}),
+                expected = λ`_`.comparison Comparison{equalTo}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "name greater than",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          `wrap` = WrappedTerm{
+                            typeName = Name{"hydra.core.model.Name"},
+                            body = Term{
+                              literal = Literal{
+                                `string` = "zebra"}}}}
+                        Term{
+                          `wrap` = WrappedTerm{
+                            typeName = Name{"hydra.core.model.Name"},
+                            body = Term{
+                              literal = Literal{
+                                `string` = "apple"}}}}),
+                expected = λ`_`.comparison Comparison{greaterThan}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "qualified name less than",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          `wrap` = WrappedTerm{
+                            typeName = Name{"hydra.core.model.Name"},
+                            body = Term{
+                              literal = Literal{
+                                `string` = "hydra.core.model.Term"}}}}
+                        Term{
+                          `wrap` = WrappedTerm{
+                            typeName = Name{"hydra.core.model.Name"},
+                            body = Term{
+                              literal = Literal{
+                                `string` = "hydra.core.model.Type"}}}}),
+                expected = λ`_`.comparison Comparison{lessThan}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "qualified name equal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          `wrap` = WrappedTerm{
+                            typeName = Name{"hydra.core.model.Name"},
+                            body = Term{
+                              literal = Literal{
+                                `string` = "hydra.core.model.Term"}}}}
+                        Term{
+                          `wrap` = WrappedTerm{
+                            typeName = Name{"hydra.core.model.Name"},
+                            body = Term{
+                              literal = Literal{
+                                `string` = "hydra.core.model.Term"}}}}),
+                expected = λ`_`.comparison Comparison{equalTo}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "name equality true",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (equal
+                        Term{
+                          `wrap` = WrappedTerm{
+                            typeName = Name{"hydra.core.model.Name"},
+                            body = Term{
+                              literal = Literal{
+                                `string` = "foo"}}}}
+                        Term{
+                          `wrap` = WrappedTerm{
+                            typeName = Name{"hydra.core.model.Name"},
+                            body = Term{
+                              literal = Literal{
+                                `string` = "foo"}}}}),
+                expected = λ`_`.(λb.printBoolean b) true}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "name equality false",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (equal
+                        Term{
+                          `wrap` = WrappedTerm{
+                            typeName = Name{"hydra.core.model.Name"},
+                            body = Term{
+                              literal = Literal{
+                                `string` = "foo"}}}}
+                        Term{
+                          `wrap` = WrappedTerm{
+                            typeName = Name{"hydra.core.model.Name"},
+                            body = Term{
+                              literal = Literal{
+                                `string` = "bar"}}}}),
+                expected = λ`_`.(λb.printBoolean b) false}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Literal comparison",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "int32 literal less than",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 10:int32}}}
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 20:int32}}}),
+                expected = λ`_`.comparison Comparison{lessThan}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "int32 literal equal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 42:int32}}}
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 42:int32}}}),
+                expected = λ`_`.comparison Comparison{equalTo}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string literal less than",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          literal = Literal{
+                            `string` = "aaa"}}
+                        Term{
+                          literal = Literal{
+                            `string` = "bbb"}}),
+                expected = λ`_`.comparison Comparison{lessThan}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "boolean false < true",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          literal = Literal{
+                            `boolean` = false}}
+                        Term{
+                          literal = Literal{
+                            `boolean` = true}}),
+                expected = λ`_`.comparison Comparison{lessThan}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "boolean true == true",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          literal = Literal{
+                            `boolean` = true}}
+                        Term{
+                          literal = Literal{
+                            `boolean` = true}}),
+                expected = λ`_`.comparison Comparison{equalTo}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Decimal comparison",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "1.1 < 1.2 (different value)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          literal = Literal{
+                            `decimal` = 1.1}}
+                        Term{
+                          literal = Literal{
+                            `decimal` = 1.2}}),
+                expected = λ`_`.comparison Comparison{lessThan}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "1.1 compareTo 1.1 (same value, same scale)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          literal = Literal{
+                            `decimal` = 1.1}}
+                        Term{
+                          literal = Literal{
+                            `decimal` = 1.1}}),
+                expected = λ`_`.comparison Comparison{equalTo}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "1.1 equals 1.1 (same value, same scale)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (equal
+                        Term{
+                          literal = Literal{
+                            `decimal` = 1.1}}
+                        Term{
+                          literal = Literal{
+                            `decimal` = 1.1}}),
+                expected = λ`_`.(λb.printBoolean b) true}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Record comparison (monomorphic)",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "person less than by firstName",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          `record` = Record{
+                            typeName = testTypePersonName,
+                            fields = [
+                              Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                              Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Smith"}}},
+                              Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}}
+                        Term{
+                          `record` = Record{
+                            typeName = testTypePersonName,
+                            fields = [
+                              Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Bob"}}},
+                              Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Smith"}}},
+                              Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}}),
+                expected = λ`_`.comparison Comparison{lessThan}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "person less than by lastName",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          `record` = Record{
+                            typeName = testTypePersonName,
+                            fields = [
+                              Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                              Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Jones"}}},
+                              Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}}
+                        Term{
+                          `record` = Record{
+                            typeName = testTypePersonName,
+                            fields = [
+                              Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                              Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Smith"}}},
+                              Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}}),
+                expected = λ`_`.comparison Comparison{lessThan}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "person less than by age",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          `record` = Record{
+                            typeName = testTypePersonName,
+                            fields = [
+                              Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                              Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Smith"}}},
+                              Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 25:int32}}}}]}}
+                        Term{
+                          `record` = Record{
+                            typeName = testTypePersonName,
+                            fields = [
+                              Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                              Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Smith"}}},
+                              Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}}),
+                expected = λ`_`.comparison Comparison{lessThan}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "person equal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          `record` = Record{
+                            typeName = testTypePersonName,
+                            fields = [
+                              Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                              Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Smith"}}},
+                              Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}}
+                        Term{
+                          `record` = Record{
+                            typeName = testTypePersonName,
+                            fields = [
+                              Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                              Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Smith"}}},
+                              Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}}),
+                expected = λ`_`.comparison Comparison{equalTo}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "latLon less than by lat",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          `record` = Record{
+                            typeName = testTypeLatLonName,
+                            fields = [
+                              Field{name = Name{"lat"}, `term` = Term{literal = Literal{float = FloatValue{`float32` = 10.0:float32}}}},
+                              Field{name = Name{"lon"}, `term` = Term{literal = Literal{float = FloatValue{`float32` = 20.0:float32}}}}]}}
+                        Term{
+                          `record` = Record{
+                            typeName = testTypeLatLonName,
+                            fields = [
+                              Field{name = Name{"lat"}, `term` = Term{literal = Literal{float = FloatValue{`float32` = 15.0:float32}}}},
+                              Field{name = Name{"lon"}, `term` = Term{literal = Literal{float = FloatValue{`float32` = 20.0:float32}}}}]}}),
+                expected = λ`_`.comparison Comparison{lessThan}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "latLon less than by lon",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          `record` = Record{
+                            typeName = testTypeLatLonName,
+                            fields = [
+                              Field{name = Name{"lat"}, `term` = Term{literal = Literal{float = FloatValue{`float32` = 10.0:float32}}}},
+                              Field{name = Name{"lon"}, `term` = Term{literal = Literal{float = FloatValue{`float32` = 20.0:float32}}}}]}}
+                        Term{
+                          `record` = Record{
+                            typeName = testTypeLatLonName,
+                            fields = [
+                              Field{name = Name{"lat"}, `term` = Term{literal = Literal{float = FloatValue{`float32` = 10.0:float32}}}},
+                              Field{name = Name{"lon"}, `term` = Term{literal = Literal{float = FloatValue{`float32` = 25.0:float32}}}}]}}),
+                expected = λ`_`.comparison Comparison{lessThan}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "latLon equal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          `record` = Record{
+                            typeName = testTypeLatLonName,
+                            fields = [
+                              Field{name = Name{"lat"}, `term` = Term{literal = Literal{float = FloatValue{`float32` = 10.0:float32}}}},
+                              Field{name = Name{"lon"}, `term` = Term{literal = Literal{float = FloatValue{`float32` = 20.0:float32}}}}]}}
+                        Term{
+                          `record` = Record{
+                            typeName = testTypeLatLonName,
+                            fields = [
+                              Field{name = Name{"lat"}, `term` = Term{literal = Literal{float = FloatValue{`float32` = 10.0:float32}}}},
+                              Field{name = Name{"lon"}, `term` = Term{literal = Literal{float = FloatValue{`float32` = 20.0:float32}}}}]}}),
+                expected = λ`_`.comparison Comparison{equalTo}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "person equality true",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (equal
+                        Term{
+                          `record` = Record{
+                            typeName = testTypePersonName,
+                            fields = [
+                              Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                              Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Smith"}}},
+                              Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}}
+                        Term{
+                          `record` = Record{
+                            typeName = testTypePersonName,
+                            fields = [
+                              Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                              Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Smith"}}},
+                              Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}}),
+                expected = λ`_`.(λb.printBoolean b) true}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "person equality false",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (equal
+                        Term{
+                          `record` = Record{
+                            typeName = testTypePersonName,
+                            fields = [
+                              Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                              Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Smith"}}},
+                              Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}}
+                        Term{
+                          `record` = Record{
+                            typeName = testTypePersonName,
+                            fields = [
+                              Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Bob"}}},
+                              Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Smith"}}},
+                              Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}}),
+                expected = λ`_`.(λb.printBoolean b) false}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Polymorphic type comparison",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "LatLonPoly Int32 less than by lat",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `record` = Record{
+                                typeName = testTypeLatLonPolyName,
+                                fields = [
+                                  Field{name = Name{"lat"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}},
+                                  Field{name = Name{"lon"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}]}},
+                            `type` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `record` = Record{
+                                typeName = testTypeLatLonPolyName,
+                                fields = [
+                                  Field{name = Name{"lat"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 15:int32}}}},
+                                  Field{name = Name{"lon"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}]}},
+                            `type` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}),
+                expected = λ`_`.comparison Comparison{lessThan}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "LatLonPoly Int32 less than by lon",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `record` = Record{
+                                typeName = testTypeLatLonPolyName,
+                                fields = [
+                                  Field{name = Name{"lat"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}},
+                                  Field{name = Name{"lon"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}]}},
+                            `type` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `record` = Record{
+                                typeName = testTypeLatLonPolyName,
+                                fields = [
+                                  Field{name = Name{"lat"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}},
+                                  Field{name = Name{"lon"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 25:int32}}}}]}},
+                            `type` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}),
+                expected = λ`_`.comparison Comparison{lessThan}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "LatLonPoly Int32 equal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `record` = Record{
+                                typeName = testTypeLatLonPolyName,
+                                fields = [
+                                  Field{name = Name{"lat"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}},
+                                  Field{name = Name{"lon"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}]}},
+                            `type` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `record` = Record{
+                                typeName = testTypeLatLonPolyName,
+                                fields = [
+                                  Field{name = Name{"lat"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}},
+                                  Field{name = Name{"lon"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}]}},
+                            `type` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}),
+                expected = λ`_`.comparison Comparison{equalTo}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "LatLonPoly String less than",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `record` = Record{
+                                typeName = testTypeLatLonPolyName,
+                                fields = [
+                                  Field{name = Name{"lat"}, `term` = Term{literal = Literal{`string` = "10N"}}},
+                                  Field{name = Name{"lon"}, `term` = Term{literal = Literal{`string` = "20W"}}}]}},
+                            `type` = Type{
+                              literal = LiteralType{
+                                `string`}}}}
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `record` = Record{
+                                typeName = testTypeLatLonPolyName,
+                                fields = [
+                                  Field{name = Name{"lat"}, `term` = Term{literal = Literal{`string` = "15N"}}},
+                                  Field{name = Name{"lon"}, `term` = Term{literal = Literal{`string` = "20W"}}}]}},
+                            `type` = Type{
+                              literal = LiteralType{
+                                `string`}}}}),
+                expected = λ`_`.comparison Comparison{lessThan}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "LatLonPoly String equal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `record` = Record{
+                                typeName = testTypeLatLonPolyName,
+                                fields = [
+                                  Field{name = Name{"lat"}, `term` = Term{literal = Literal{`string` = "10N"}}},
+                                  Field{name = Name{"lon"}, `term` = Term{literal = Literal{`string` = "20W"}}}]}},
+                            `type` = Type{
+                              literal = LiteralType{
+                                `string`}}}}
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `record` = Record{
+                                typeName = testTypeLatLonPolyName,
+                                fields = [
+                                  Field{name = Name{"lat"}, `term` = Term{literal = Literal{`string` = "10N"}}},
+                                  Field{name = Name{"lon"}, `term` = Term{literal = Literal{`string` = "20W"}}}]}},
+                            `type` = Type{
+                              literal = LiteralType{
+                                `string`}}}}),
+                expected = λ`_`.comparison Comparison{equalTo}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "PersonOrSomething person vs person",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `inject` = Injection{
+                                typeName = testTypePersonOrSomethingName,
+                                field = Field{
+                                  name = Name{"person"},
+                                  `term` = Term{
+                                    `record` = Record{
+                                      typeName = testTypePersonName,
+                                      fields = [
+                                        Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                                        Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Smith"}}},
+                                        Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}}}}},
+                            `type` = Type{
+                              `list` = Type{
+                                variable = testTypePersonName}}}}
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `inject` = Injection{
+                                typeName = testTypePersonOrSomethingName,
+                                field = Field{
+                                  name = Name{"person"},
+                                  `term` = Term{
+                                    `record` = Record{
+                                      typeName = testTypePersonName,
+                                      fields = [
+                                        Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Bob"}}},
+                                        Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Smith"}}},
+                                        Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}}}}},
+                            `type` = Type{
+                              `list` = Type{
+                                variable = testTypePersonName}}}}),
+                expected = λ`_`.comparison Comparison{lessThan}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "PersonOrSomething person equal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `inject` = Injection{
+                                typeName = testTypePersonOrSomethingName,
+                                field = Field{
+                                  name = Name{"person"},
+                                  `term` = Term{
+                                    `record` = Record{
+                                      typeName = testTypePersonName,
+                                      fields = [
+                                        Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                                        Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Smith"}}},
+                                        Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}}}}},
+                            `type` = Type{
+                              `list` = Type{
+                                variable = testTypePersonName}}}}
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `inject` = Injection{
+                                typeName = testTypePersonOrSomethingName,
+                                field = Field{
+                                  name = Name{"person"},
+                                  `term` = Term{
+                                    `record` = Record{
+                                      typeName = testTypePersonName,
+                                      fields = [
+                                        Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                                        Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Smith"}}},
+                                        Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}}}}},
+                            `type` = Type{
+                              `list` = Type{
+                                variable = testTypePersonName}}}}),
+                expected = λ`_`.comparison Comparison{equalTo}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "LatLonPoly Int32 equality true",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (equal
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `record` = Record{
+                                typeName = testTypeLatLonPolyName,
+                                fields = [
+                                  Field{name = Name{"lat"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}},
+                                  Field{name = Name{"lon"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}]}},
+                            `type` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `record` = Record{
+                                typeName = testTypeLatLonPolyName,
+                                fields = [
+                                  Field{name = Name{"lat"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}},
+                                  Field{name = Name{"lon"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}]}},
+                            `type` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}),
+                expected = λ`_`.(λb.printBoolean b) true}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "LatLonPoly Int32 equality false",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (equal
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `record` = Record{
+                                typeName = testTypeLatLonPolyName,
+                                fields = [
+                                  Field{name = Name{"lat"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}},
+                                  Field{name = Name{"lon"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 20:int32}}}}]}},
+                            `type` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `record` = Record{
+                                typeName = testTypeLatLonPolyName,
+                                fields = [
+                                  Field{name = Name{"lat"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 10:int32}}}},
+                                  Field{name = Name{"lon"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 25:int32}}}}]}},
+                            `type` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}),
+                expected = λ`_`.(λb.printBoolean b) false}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "Union comparison",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "Number int variant less than",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          `inject` = Injection{
+                            typeName = testTypeNumberName,
+                            field = Field{
+                              name = Name{"int"},
+                              `term` = Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 10:int32}}}}}}
+                        Term{
+                          `inject` = Injection{
+                            typeName = testTypeNumberName,
+                            field = Field{
+                              name = Name{"int"},
+                              `term` = Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 20:int32}}}}}}),
+                expected = λ`_`.comparison Comparison{lessThan}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "Number int variant equal",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          `inject` = Injection{
+                            typeName = testTypeNumberName,
+                            field = Field{
+                              name = Name{"int"},
+                              `term` = Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 42:int32}}}}}}
+                        Term{
+                          `inject` = Injection{
+                            typeName = testTypeNumberName,
+                            field = Field{
+                              name = Name{"int"},
+                              `term` = Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 42:int32}}}}}}),
+                expected = λ`_`.comparison Comparison{equalTo}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "Number float variant less than",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          `inject` = Injection{
+                            typeName = testTypeNumberName,
+                            field = Field{
+                              name = Name{"float"},
+                              `term` = Term{
+                                literal = Literal{
+                                  float = FloatValue{
+                                    `float32` = 1.5:float32}}}}}}
+                        Term{
+                          `inject` = Injection{
+                            typeName = testTypeNumberName,
+                            field = Field{
+                              name = Name{"float"},
+                              `term` = Term{
+                                literal = Literal{
+                                  float = FloatValue{
+                                    `float32` = 2.5:float32}}}}}}),
+                expected = λ`_`.comparison Comparison{lessThan}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "Number float vs int -- by variant NAME not declared order (float < int)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          `inject` = Injection{
+                            typeName = testTypeNumberName,
+                            field = Field{
+                              name = Name{"float"},
+                              `term` = Term{
+                                literal = Literal{
+                                  float = FloatValue{
+                                    `float32` = 100.0:float32}}}}}}
+                        Term{
+                          `inject` = Injection{
+                            typeName = testTypeNumberName,
+                            field = Field{
+                              name = Name{"int"},
+                              `term` = Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 1:int32}}}}}}),
+                expected = λ`_`.comparison Comparison{lessThan}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "Number int vs float -- by variant NAME not declared order (int > float)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.comparison
+                      (compare
+                        Term{
+                          `inject` = Injection{
+                            typeName = testTypeNumberName,
+                            field = Field{
+                              name = Name{"int"},
+                              `term` = Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 1:int32}}}}}}
+                        Term{
+                          `inject` = Injection{
+                            typeName = testTypeNumberName,
+                            field = Field{
+                              name = Name{"float"},
+                              `term` = Term{
+                                literal = Literal{
+                                  float = FloatValue{
+                                    `float32` = 100.0:float32}}}}}}),
+                expected = λ`_`.comparison Comparison{greaterThan}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "Number int equality true",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (equal
+                        Term{
+                          `inject` = Injection{
+                            typeName = testTypeNumberName,
+                            field = Field{
+                              name = Name{"int"},
+                              `term` = Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 42:int32}}}}}}
+                        Term{
+                          `inject` = Injection{
+                            typeName = testTypeNumberName,
+                            field = Field{
+                              name = Name{"int"},
+                              `term` = Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 42:int32}}}}}}),
+                expected = λ`_`.(λb.printBoolean b) true}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "Number int equality false (different value)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (equal
+                        Term{
+                          `inject` = Injection{
+                            typeName = testTypeNumberName,
+                            field = Field{
+                              name = Name{"int"},
+                              `term` = Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 42:int32}}}}}}
+                        Term{
+                          `inject` = Injection{
+                            typeName = testTypeNumberName,
+                            field = Field{
+                              name = Name{"int"},
+                              `term` = Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 43:int32}}}}}}),
+                expected = λ`_`.(λb.printBoolean b) false}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "Number equality false (different variant)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (equal
+                        Term{
+                          `inject` = Injection{
+                            typeName = testTypeNumberName,
+                            field = Field{
+                              name = Name{"int"},
+                              `term` = Term{
+                                literal = Literal{
+                                  integer = IntegerValue{
+                                    `int32` = 42:int32}}}}}}
+                        Term{
+                          `inject` = Injection{
+                            typeName = testTypeNumberName,
+                            field = Field{
+                              name = Name{"float"},
+                              `term` = Term{
+                                literal = Literal{
+                                  float = FloatValue{
+                                    `float32` = 42.0:float32}}}}}}),
+                expected = λ`_`.(λb.printBoolean b) false}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}

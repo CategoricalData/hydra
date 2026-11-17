@@ -28,6 +28,7 @@
 #                             ^ source.hydra
 #                              ^^^^^^ source.hydra support.type.hydra
 #                                    ^^ source.hydra
+>
 >  ## The name of the term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -39,6 +40,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## The term with its phantom type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -112,6 +114,7 @@
 #                                    ^ source.hydra
 #                                     ^^^^^^ source.hydra support.type.hydra
 #                                           ^^ source.hydra
+>
 >  ## The name of the term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -123,6 +126,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## The term with its phantom type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

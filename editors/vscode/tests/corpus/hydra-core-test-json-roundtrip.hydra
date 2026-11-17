@@ -1,0 +1,3833 @@
+## Round-trip test cases for JSON encoding and decoding
+module hydra.core.test.json.roundtrip
+
+import hydra.core.json.decode
+import hydra.core.json.encode
+import hydra.core.json.model
+import hydra.core.json.writer
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.maps as maps
+import hydra.core.lib.strings
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.testing
+
+## Round-trip test cases for JSON encoding and decoding
+term allTests =
+  TestGroup{
+    name = "JSON round-trip",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "literal types",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "boolean true",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                `boolean`}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            `boolean`}}
+                        Term{
+                          literal = Literal{
+                            `boolean` = true}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "boolean false",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                `boolean`}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            `boolean`}}
+                        Term{
+                          literal = Literal{
+                            `boolean` = false}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "int8 positive",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int8`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int8`}}}
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int8` = 42:int8}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int8` = 42:int8}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "int8 negative",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int8`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int8`}}}
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int8` = -17:int8}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int8` = -17:int8}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "int16",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int16`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int16`}}}
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int16` = 1000:int16}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int16` = 1000:int16}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "int32",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 100000:int32}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = 100000:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "uint8",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `uint8`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `uint8`}}}
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `uint8` = 200:uint8}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `uint8` = 200:uint8}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "uint16",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `uint16`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `uint16`}}}
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `uint16` = 50000:uint16}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `uint16` = 50000:uint16}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "uint32",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `uint32`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `uint32`}}}
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `uint32` = 4000000000:uint32}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `uint32` = 4000000000:uint32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "int64",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int64`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int64`}}}
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int64` = 1000000000000:int64}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int64` = 1000000000000:int64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "float32",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                float = FloatType{
+                                  `float32`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            float = FloatType{
+                              `float32`}}}
+                        Term{
+                          literal = Literal{
+                            float = FloatValue{
+                              `float32` = 1.5:float32}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float32` = 1.5:float32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "float64",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                float = FloatType{
+                                  `float64`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            float = FloatType{
+                              `float64`}}}
+                        Term{
+                          literal = Literal{
+                            float = FloatValue{
+                              `float64` = 3.14159:float64}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = 3.14159:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "float32 NaN",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                float = FloatType{
+                                  `float32`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            float = FloatType{
+                              `float32`}}}
+                        Term{
+                          literal = Literal{
+                            float = FloatValue{
+                              `float32` = NaN:float32}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float32` = NaN:float32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "float32 positive infinity",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                float = FloatType{
+                                  `float32`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            float = FloatType{
+                              `float32`}}}
+                        Term{
+                          literal = Literal{
+                            float = FloatValue{
+                              `float32` = Infinity:float32}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float32` = Infinity:float32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "float32 negative infinity",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                float = FloatType{
+                                  `float32`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            float = FloatType{
+                              `float32`}}}
+                        Term{
+                          literal = Literal{
+                            float = FloatValue{
+                              `float32` = -Infinity:float32}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float32` = -Infinity:float32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "float32 negative zero",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                float = FloatType{
+                                  `float32`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            float = FloatType{
+                              `float32`}}}
+                        Term{
+                          literal = Literal{
+                            float = FloatValue{
+                              `float32` = -0.0:float32}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float32` = -0.0:float32}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "float64 NaN",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                float = FloatType{
+                                  `float64`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            float = FloatType{
+                              `float64`}}}
+                        Term{
+                          literal = Literal{
+                            float = FloatValue{
+                              `float64` = NaN:float64}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = NaN:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "float64 positive infinity",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                float = FloatType{
+                                  `float64`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            float = FloatType{
+                              `float64`}}}
+                        Term{
+                          literal = Literal{
+                            float = FloatValue{
+                              `float64` = Infinity:float64}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = Infinity:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "float64 negative infinity",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                float = FloatType{
+                                  `float64`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            float = FloatType{
+                              `float64`}}}
+                        Term{
+                          literal = Literal{
+                            float = FloatValue{
+                              `float64` = -Infinity:float64}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = -Infinity:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "float64 negative zero",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                float = FloatType{
+                                  `float64`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            float = FloatType{
+                              `float64`}}}
+                        Term{
+                          literal = Literal{
+                            float = FloatValue{
+                              `float64` = -0.0:float64}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          float = FloatValue{
+                            `float64` = -0.0:float64}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string simple",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                `string`}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            `string`}}
+                        Term{
+                          literal = Literal{
+                            `string` = "hello"}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = "hello"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string empty",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                `string`}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            `string`}}
+                        Term{
+                          literal = Literal{
+                            `string` = ""}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = ""}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string with spaces",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                `string`}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            `string`}}
+                        Term{
+                          literal = Literal{
+                            `string` = "hello world"}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = "hello world"}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "decimal precision",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "decimal zero",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                `decimal`}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            `decimal`}}
+                        Term{
+                          literal = Literal{
+                            `decimal` = 0}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `decimal` = 0}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "decimal whole",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                `decimal`}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            `decimal`}}
+                        Term{
+                          literal = Literal{
+                            `decimal` = 42}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `decimal` = 42}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "decimal negative whole",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                `decimal`}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            `decimal`}}
+                        Term{
+                          literal = Literal{
+                            `decimal` = -17}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `decimal` = -17}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "decimal fraction",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                `decimal`}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            `decimal`}}
+                        Term{
+                          literal = Literal{
+                            `decimal` = 3.14}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `decimal` = 3.14}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "decimal negative fraction",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                `decimal`}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            `decimal`}}
+                        Term{
+                          literal = Literal{
+                            `decimal` = -2.5}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `decimal` = -2.5}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "decimal tiny exponent",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                `decimal`}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            `decimal`}}
+                        Term{
+                          literal = Literal{
+                            `decimal` = 1.0e-20}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `decimal` = 1.0e-20}}}},
+            description = none,
+            tags = [Tag{"scaleDistinct"}],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "decimal huge exponent",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                `decimal`}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            `decimal`}}
+                        Term{
+                          literal = Literal{
+                            `decimal` = 100000000000000000000}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `decimal` = 100000000000000000000}}}},
+            description = none,
+            tags = [Tag{"scaleDistinct"}],
+            provisions = []}]},
+      TestGroup{
+        name = "collection types",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "list of integers",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `list` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `list` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}
+                        Term{
+                          `list` = [
+                            Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                            Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                            Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                          Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "list of strings",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `list` = Type{
+                                literal = LiteralType{
+                                  `string`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `list` = Type{
+                            literal = LiteralType{
+                              `string`}}}
+                        Term{
+                          `list` = [Term{literal = Literal{`string` = "a"}}, Term{literal = Literal{`string` = "b"}}]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [Term{literal = Literal{`string` = "a"}}, Term{literal = Literal{`string` = "b"}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "empty list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `list` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `list` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}
+                        Term{`list` = []}),
+                expected = λ`_`.`term` Term{`list` = []}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `list` = Type{
+                                `list` = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `list` = Type{
+                            `list` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          `list` = [
+                            Term{
+                              `list` = [
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]},
+                            Term{`list` = [Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [
+                          Term{
+                            `list` = [
+                              Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                              Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}]},
+                          Term{`list` = [Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}}]}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "set of strings",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `set` = Type{
+                                literal = LiteralType{
+                                  `string`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `set` = Type{
+                            literal = LiteralType{
+                              `string`}}}
+                        Term{
+                          `set` = {
+                            Term{literal = Literal{`string` = "a"}},
+                            Term{literal = Literal{`string` = "b"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `set` = {
+                          Term{literal = Literal{`string` = "a"}},
+                          Term{literal = Literal{`string` = "b"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "empty set",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `set` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `set` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}
+                        Term{`set` = {}}),
+                expected = λ`_`.`term` Term{`set` = {}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "optional types",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "optional string with value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `optional` = Type{
+                                literal = LiteralType{
+                                  `string`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `optional` = Type{
+                            literal = LiteralType{
+                              `string`}}}
+                        Term{
+                          `optional` = given(Term{
+                              literal = Literal{
+                                `string` = "hello"}})}),
+                expected = λ`_`.`term`
+                      Term{
+                        `optional` = given(Term{
+                            literal = Literal{
+                              `string` = "hello"}})}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "optional string nothing",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `optional` = Type{
+                                literal = LiteralType{
+                                  `string`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `optional` = Type{
+                            literal = LiteralType{
+                              `string`}}}
+                        Term{`optional` = none}),
+                expected = λ`_`.`term` Term{`optional` = none}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "optional int with value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `optional` = Type{
+                                literal = LiteralType{
+                                  integer = IntegerType{
+                                    `int32`}}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `optional` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}
+                        Term{
+                          `optional` = given(Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}})}),
+                expected = λ`_`.`term`
+                      Term{
+                        `optional` = given(Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 42:int32}}})}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested optional: nothing",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `optional` = Type{
+                                `optional` = Type{
+                                  literal = LiteralType{
+                                    `string`}}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `optional` = Type{
+                            `optional` = Type{
+                              literal = LiteralType{
+                                `string`}}}}
+                        Term{`optional` = none}),
+                expected = λ`_`.`term` Term{`optional` = none}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested optional: just nothing",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `optional` = Type{
+                                `optional` = Type{
+                                  literal = LiteralType{
+                                    `string`}}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `optional` = Type{
+                            `optional` = Type{
+                              literal = LiteralType{
+                                `string`}}}}
+                        Term{
+                          `optional` = given(Term{
+                              `optional` = none})}),
+                expected = λ`_`.`term`
+                      Term{
+                        `optional` = given(Term{
+                            `optional` = none})}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested optional: just just value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `optional` = Type{
+                                `optional` = Type{
+                                  literal = LiteralType{
+                                    `string`}}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `optional` = Type{
+                            `optional` = Type{
+                              literal = LiteralType{
+                                `string`}}}}
+                        Term{
+                          `optional` = given(Term{
+                              `optional` = given(Term{
+                                  literal = Literal{
+                                    `string` = "hello"}})})}),
+                expected = λ`_`.`term`
+                      Term{
+                        `optional` = given(Term{
+                            `optional` = given(Term{
+                                literal = Literal{
+                                  `string` = "hello"}})})}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "record types",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "record with required fields",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `record` = [
+                                FieldType{name = Name{"name"}, `type` = Type{literal = LiteralType{`string`}}},
+                                FieldType{name = Name{"age"}, `type` = Type{literal = LiteralType{integer = IntegerType{`int32`}}}}]}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `record` = [
+                            FieldType{name = Name{"name"}, `type` = Type{literal = LiteralType{`string`}}},
+                            FieldType{name = Name{"age"}, `type` = Type{literal = LiteralType{integer = IntegerType{`int32`}}}}]}
+                        Term{
+                          `record` = Record{
+                            typeName = Name{"test"},
+                            fields = [
+                              Field{name = Name{"name"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                              Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `record` = Record{
+                          typeName = Name{"test"},
+                          fields = [
+                            Field{name = Name{"name"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                            Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 30:int32}}}}]}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "record with optional field present",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `record` = [
+                                FieldType{name = Name{"name"}, `type` = Type{literal = LiteralType{`string`}}},
+                                FieldType{name = Name{"email"}, `type` = Type{`optional` = Type{literal = LiteralType{`string`}}}}]}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `record` = [
+                            FieldType{name = Name{"name"}, `type` = Type{literal = LiteralType{`string`}}},
+                            FieldType{name = Name{"email"}, `type` = Type{`optional` = Type{literal = LiteralType{`string`}}}}]}
+                        Term{
+                          `record` = Record{
+                            typeName = Name{"test"},
+                            fields = [
+                              Field{name = Name{"name"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                              Field{
+                                name = Name{"email"},
+                                `term` = Term{`optional` = given(Term{literal = Literal{`string` = "alice@example.com"}})}}]}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `record` = Record{
+                          typeName = Name{"test"},
+                          fields = [
+                            Field{name = Name{"name"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                            Field{
+                              name = Name{"email"},
+                              `term` = Term{`optional` = given(Term{literal = Literal{`string` = "alice@example.com"}})}}]}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "record with optional field absent",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `record` = [
+                                FieldType{name = Name{"name"}, `type` = Type{literal = LiteralType{`string`}}},
+                                FieldType{name = Name{"email"}, `type` = Type{`optional` = Type{literal = LiteralType{`string`}}}}]}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `record` = [
+                            FieldType{name = Name{"name"}, `type` = Type{literal = LiteralType{`string`}}},
+                            FieldType{name = Name{"email"}, `type` = Type{`optional` = Type{literal = LiteralType{`string`}}}}]}
+                        Term{
+                          `record` = Record{
+                            typeName = Name{"test"},
+                            fields = [
+                              Field{name = Name{"name"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                              Field{name = Name{"email"}, `term` = Term{`optional` = none}}]}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `record` = Record{
+                          typeName = Name{"test"},
+                          fields = [
+                            Field{name = Name{"name"}, `term` = Term{literal = Literal{`string` = "Alice"}}},
+                            Field{name = Name{"email"}, `term` = Term{`optional` = none}}]}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "record with mixed optional fields",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `record` = [
+                                FieldType{name = Name{"name"}, `type` = Type{literal = LiteralType{`string`}}},
+                                FieldType{name = Name{"email"}, `type` = Type{`optional` = Type{literal = LiteralType{`string`}}}},
+                                FieldType{name = Name{"age"}, `type` = Type{`optional` = Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}]}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `record` = [
+                            FieldType{name = Name{"name"}, `type` = Type{literal = LiteralType{`string`}}},
+                            FieldType{name = Name{"email"}, `type` = Type{`optional` = Type{literal = LiteralType{`string`}}}},
+                            FieldType{name = Name{"age"}, `type` = Type{`optional` = Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}]}
+                        Term{
+                          `record` = Record{
+                            typeName = Name{"test"},
+                            fields = [
+                              Field{name = Name{"name"}, `term` = Term{literal = Literal{`string` = "Bob"}}},
+                              Field{name = Name{"email"}, `term` = Term{`optional` = none}},
+                              Field{
+                                name = Name{"age"},
+                                `term` = Term{`optional` = given(Term{literal = Literal{integer = IntegerValue{`int32` = 25:int32}}})}}]}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `record` = Record{
+                          typeName = Name{"test"},
+                          fields = [
+                            Field{name = Name{"name"}, `term` = Term{literal = Literal{`string` = "Bob"}}},
+                            Field{name = Name{"email"}, `term` = Term{`optional` = none}},
+                            Field{
+                              name = Name{"age"},
+                              `term` = Term{`optional` = given(Term{literal = Literal{integer = IntegerValue{`int32` = 25:int32}}})}}]}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "record with nested optional field",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `record` = [
+                                FieldType{name = Name{"name"}, `type` = Type{literal = LiteralType{`string`}}},
+                                FieldType{
+                                  name = Name{"value"},
+                                  `type` = Type{`optional` = Type{`optional` = Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}}]}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `record` = [
+                            FieldType{name = Name{"name"}, `type` = Type{literal = LiteralType{`string`}}},
+                            FieldType{
+                              name = Name{"value"},
+                              `type` = Type{`optional` = Type{`optional` = Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}}]}
+                        Term{
+                          `record` = Record{
+                            typeName = Name{"test"},
+                            fields = [
+                              Field{name = Name{"name"}, `term` = Term{literal = Literal{`string` = "test"}}},
+                              Field{
+                                name = Name{"value"},
+                                `term` = Term{
+                                  `optional` = given(Term{
+                                      `optional` = given(Term{
+                                          literal = Literal{
+                                            integer = IntegerValue{
+                                              `int32` = 42:int32}}})})}}]}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `record` = Record{
+                          typeName = Name{"test"},
+                          fields = [
+                            Field{name = Name{"name"}, `term` = Term{literal = Literal{`string` = "test"}}},
+                            Field{
+                              name = Name{"value"},
+                              `term` = Term{
+                                `optional` = given(Term{
+                                    `optional` = given(Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 42:int32}}})})}}]}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "parametric types",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "type application of a polymorphic record",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            (maps.fromList
+                              [
+                                (
+                                  Name{"Relationship"},
+                                  Type{
+                                    `forall` = ForallType{
+                                      parameter = Name{"a"},
+                                      body = Type{
+                                        `record` = [
+                                          FieldType{name = Name{"target"}, `type` = Type{variable = Name{"a"}}},
+                                          FieldType{name = Name{"note"}, `type` = Type{literal = LiteralType{`string`}}}]}}})])
+                            true
+                            Name{"test"}
+                            Type{
+                              application = ApplicationType{
+                                function = Type{
+                                  variable = Name{"Relationship"}},
+                                argument = Type{
+                                  literal = LiteralType{
+                                    `string`}}}}
+                            json))
+                      (toJson
+                        (maps.fromList
+                          [
+                            (
+                              Name{"Relationship"},
+                              Type{
+                                `forall` = ForallType{
+                                  parameter = Name{"a"},
+                                  body = Type{
+                                    `record` = [
+                                      FieldType{name = Name{"target"}, `type` = Type{variable = Name{"a"}}},
+                                      FieldType{name = Name{"note"}, `type` = Type{literal = LiteralType{`string`}}}]}}})])
+                        true
+                        Name{"test"}
+                        Type{
+                          application = ApplicationType{
+                            function = Type{
+                              variable = Name{"Relationship"}},
+                            argument = Type{
+                              literal = LiteralType{
+                                `string`}}}}
+                        Term{
+                          `record` = Record{
+                            typeName = Name{"test"},
+                            fields = [
+                              Field{name = Name{"target"}, `term` = Term{literal = Literal{`string` = "example.AtomId"}}},
+                              Field{name = Name{"note"}, `term` = Term{literal = Literal{`string` = "authored by"}}}]}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `record` = Record{
+                          typeName = Name{"test"},
+                          fields = [
+                            Field{name = Name{"target"}, `term` = Term{literal = Literal{`string` = "example.AtomId"}}},
+                            Field{name = Name{"note"}, `term` = Term{literal = Literal{`string` = "authored by"}}}]}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "list of a type application",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            (maps.fromList
+                              [
+                                (
+                                  Name{"Relationship"},
+                                  Type{
+                                    `forall` = ForallType{
+                                      parameter = Name{"a"},
+                                      body = Type{
+                                        `record` = [
+                                          FieldType{name = Name{"target"}, `type` = Type{variable = Name{"a"}}},
+                                          FieldType{name = Name{"note"}, `type` = Type{literal = LiteralType{`string`}}}]}}})])
+                            true
+                            Name{"test"}
+                            Type{
+                              `list` = Type{
+                                application = ApplicationType{
+                                  function = Type{
+                                    variable = Name{"Relationship"}},
+                                  argument = Type{
+                                    literal = LiteralType{
+                                      `string`}}}}}
+                            json))
+                      (toJson
+                        (maps.fromList
+                          [
+                            (
+                              Name{"Relationship"},
+                              Type{
+                                `forall` = ForallType{
+                                  parameter = Name{"a"},
+                                  body = Type{
+                                    `record` = [
+                                      FieldType{name = Name{"target"}, `type` = Type{variable = Name{"a"}}},
+                                      FieldType{name = Name{"note"}, `type` = Type{literal = LiteralType{`string`}}}]}}})])
+                        true
+                        Name{"test"}
+                        Type{
+                          `list` = Type{
+                            application = ApplicationType{
+                              function = Type{
+                                variable = Name{"Relationship"}},
+                              argument = Type{
+                                literal = LiteralType{
+                                  `string`}}}}}
+                        Term{
+                          `list` = [
+                            Term{
+                              `record` = Record{
+                                typeName = Name{"test"},
+                                fields = [
+                                  Field{name = Name{"target"}, `term` = Term{literal = Literal{`string` = "example.AtomId1"}}},
+                                  Field{name = Name{"note"}, `term` = Term{literal = Literal{`string` = "authored by"}}}]}},
+                            Term{
+                              `record` = Record{
+                                typeName = Name{"test"},
+                                fields = [
+                                  Field{name = Name{"target"}, `term` = Term{literal = Literal{`string` = "example.AtomId2"}}},
+                                  Field{name = Name{"note"}, `term` = Term{literal = Literal{`string` = "cites"}}}]}}]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [
+                          Term{
+                            `record` = Record{
+                              typeName = Name{"test"},
+                              fields = [
+                                Field{name = Name{"target"}, `term` = Term{literal = Literal{`string` = "example.AtomId1"}}},
+                                Field{name = Name{"note"}, `term` = Term{literal = Literal{`string` = "authored by"}}}]}},
+                          Term{
+                            `record` = Record{
+                              typeName = Name{"test"},
+                              fields = [
+                                Field{name = Name{"target"}, `term` = Term{literal = Literal{`string` = "example.AtomId2"}}},
+                                Field{name = Name{"note"}, `term` = Term{literal = Literal{`string` = "cites"}}}]}}]}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "either types",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "either left",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `either` = EitherType{
+                                `left` = Type{
+                                  literal = LiteralType{
+                                    `string`}},
+                                `right` = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            `right` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          `either` = left(Term{
+                              literal = Literal{
+                                `string` = "hello"}})}),
+                expected = λ`_`.`term`
+                      Term{
+                        `either` = left(Term{
+                            literal = Literal{
+                              `string` = "hello"}})}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "either right",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `either` = EitherType{
+                                `left` = Type{
+                                  literal = LiteralType{
+                                    `string`}},
+                                `right` = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            `right` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          `either` = right(Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}})}),
+                expected = λ`_`.`term`
+                      Term{
+                        `either` = right(Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 42:int32}}})}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "either both keys present is rejected",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."rejected")
+                      (λdecoded.concat2 "unexpected: " (`term` decoded))
+                      (fromJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `either` = EitherType{
+                            `left` = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            `right` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Value{
+                          object = [("left", Value{`string` = "hello"}), ("right", Value{number = 42})]}),
+                expected = λ`_`."rejected"}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "union types",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "union non-unit variant (string)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `union` = [
+                                FieldType{name = Name{"bool"}, `type` = Type{literal = LiteralType{`boolean`}}},
+                                FieldType{name = Name{"string"}, `type` = Type{literal = LiteralType{`string`}}},
+                                FieldType{name = Name{"unit"}, `type` = Type{`unit`}}]}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `union` = [
+                            FieldType{name = Name{"bool"}, `type` = Type{literal = LiteralType{`boolean`}}},
+                            FieldType{name = Name{"string"}, `type` = Type{literal = LiteralType{`string`}}},
+                            FieldType{name = Name{"unit"}, `type` = Type{`unit`}}]}
+                        Term{
+                          `inject` = Injection{
+                            typeName = Name{"test"},
+                            field = Field{
+                              name = Name{"string"},
+                              `term` = Term{
+                                literal = Literal{
+                                  `string` = "hello"}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `inject` = Injection{
+                          typeName = Name{"test"},
+                          field = Field{
+                            name = Name{"string"},
+                            `term` = Term{
+                              literal = Literal{
+                                `string` = "hello"}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "union non-unit variant (bool)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `union` = [
+                                FieldType{name = Name{"bool"}, `type` = Type{literal = LiteralType{`boolean`}}},
+                                FieldType{name = Name{"string"}, `type` = Type{literal = LiteralType{`string`}}},
+                                FieldType{name = Name{"unit"}, `type` = Type{`unit`}}]}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `union` = [
+                            FieldType{name = Name{"bool"}, `type` = Type{literal = LiteralType{`boolean`}}},
+                            FieldType{name = Name{"string"}, `type` = Type{literal = LiteralType{`string`}}},
+                            FieldType{name = Name{"unit"}, `type` = Type{`unit`}}]}
+                        Term{
+                          `inject` = Injection{
+                            typeName = Name{"test"},
+                            field = Field{
+                              name = Name{"bool"},
+                              `term` = Term{
+                                literal = Literal{
+                                  `boolean` = true}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `inject` = Injection{
+                          typeName = Name{"test"},
+                          field = Field{
+                            name = Name{"bool"},
+                            `term` = Term{
+                              literal = Literal{
+                                `boolean` = true}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "union unit variant round-trip",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `union` = [
+                                FieldType{name = Name{"bool"}, `type` = Type{literal = LiteralType{`boolean`}}},
+                                FieldType{name = Name{"string"}, `type` = Type{literal = LiteralType{`string`}}},
+                                FieldType{name = Name{"unit"}, `type` = Type{`unit`}}]}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `union` = [
+                            FieldType{name = Name{"bool"}, `type` = Type{literal = LiteralType{`boolean`}}},
+                            FieldType{name = Name{"string"}, `type` = Type{literal = LiteralType{`string`}}},
+                            FieldType{name = Name{"unit"}, `type` = Type{`unit`}}]}
+                        Term{
+                          `inject` = Injection{
+                            typeName = Name{"test"},
+                            field = Field{
+                              name = Name{"unit"},
+                              `term` = Term{
+                                `unit`}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `inject` = Injection{
+                          typeName = Name{"test"},
+                          field = Field{
+                            name = Name{"unit"},
+                            `term` = Term{
+                              `unit`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "union unit variant wire shape",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `union` = [
+                            FieldType{name = Name{"bool"}, `type` = Type{literal = LiteralType{`boolean`}}},
+                            FieldType{name = Name{"string"}, `type` = Type{literal = LiteralType{`string`}}},
+                            FieldType{name = Name{"unit"}, `type` = Type{`unit`}}]}
+                        Term{
+                          `inject` = Injection{
+                            typeName = Name{"test"},
+                            field = Field{
+                              name = Name{"unit"},
+                              `term` = Term{
+                                `unit`}}}}),
+                expected = λ`_`."\"unit\""}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "union non-unit variant wire shape",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `union` = [
+                            FieldType{name = Name{"bool"}, `type` = Type{literal = LiteralType{`boolean`}}},
+                            FieldType{name = Name{"string"}, `type` = Type{literal = LiteralType{`string`}}},
+                            FieldType{name = Name{"unit"}, `type` = Type{`unit`}}]}
+                        Term{
+                          `inject` = Injection{
+                            typeName = Name{"test"},
+                            field = Field{
+                              name = Name{"string"},
+                              `term` = Term{
+                                literal = Literal{
+                                  `string` = "hello"}}}}}),
+                expected = λ`_`."{\"string\": \"hello\"}"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "union unit variant legacy object form",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λdecoded.`term` decoded)
+                      (fromJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `union` = [
+                            FieldType{name = Name{"bool"}, `type` = Type{literal = LiteralType{`boolean`}}},
+                            FieldType{name = Name{"string"}, `type` = Type{literal = LiteralType{`string`}}},
+                            FieldType{name = Name{"unit"}, `type` = Type{`unit`}}]}
+                        Value{
+                          object = [("unit", Value{object = []})]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `inject` = Injection{
+                          typeName = Name{"test"},
+                          field = Field{
+                            name = Name{"unit"},
+                            `term` = Term{
+                              `unit`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "map types",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "map with plain string keys",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  literal = LiteralType{
+                                    `string`}},
+                                values = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          `map` = maps.fromList
+                              [
+                                (Term{literal = Literal{`string` = "a"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}),
+                                (Term{literal = Literal{`string` = "b"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}})]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `map` = maps.fromList
+                            [
+                              (Term{literal = Literal{`string` = "a"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}),
+                              (Term{literal = Literal{`string` = "b"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}})]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "map with plain string keys wire shape",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          `map` = maps.fromList
+                              [
+                                (Term{literal = Literal{`string` = "a"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}),
+                                (Term{literal = Literal{`string` = "b"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}})]}),
+                expected = λ`_`."{\"a\": 1, \"b\": 2}"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "empty string-keyed map wire shape",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{`map` = maps.fromList []}),
+                expected = λ`_`."{}"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "map with plain string keys, compactMaps=False stays entry-array",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        false
+                        Name{"test"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          `map` = maps.fromList
+                              [
+                                (Term{literal = Literal{`string` = "a"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}),
+                                (Term{literal = Literal{`string` = "b"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}})]}),
+                expected = λ`_`."[{\"key\": \"a\", \"value\": 1}, {\"key\": \"b\", \"value\": 2}]"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "map with alias-to-string keys",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            (maps.fromList
+                              [(Name{"EmailAddress"}, Type{literal = LiteralType{`string`}})])
+                            true
+                            Name{"test"}
+                            Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  variable = Name{"EmailAddress"}},
+                                values = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}}}}
+                            json))
+                      (toJson
+                        (maps.fromList
+                          [(Name{"EmailAddress"}, Type{literal = LiteralType{`string`}})])
+                        true
+                        Name{"test"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              variable = Name{"EmailAddress"}},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          `map` = maps.fromList
+                              [
+                                (
+                                  Term{literal = Literal{`string` = "alice@example.com"}},
+                                  Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `map` = maps.fromList
+                            [
+                              (
+                                Term{literal = Literal{`string` = "alice@example.com"}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "map with alias-to-string keys wire shape (direct string type, same shape)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          `map` = maps.fromList
+                              [
+                                (
+                                  Term{literal = Literal{`string` = "alice@example.com"}},
+                                  Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})]}),
+                expected = λ`_`."{\"alice@example.com\": 1}"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "map with wrap(string) keys",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  `wrap` = Type{
+                                    literal = LiteralType{
+                                      `string`}}},
+                                values = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              `wrap` = Type{
+                                literal = LiteralType{
+                                  `string`}}},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          `map` = maps.fromList
+                              [
+                                (
+                                  Term{`wrap` = WrappedTerm{typeName = Name{"test"}, body = Term{literal = Literal{`string` = "k1"}}}},
+                                  Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `map` = maps.fromList
+                            [
+                              (
+                                Term{`wrap` = WrappedTerm{typeName = Name{"test"}, body = Term{literal = Literal{`string` = "k1"}}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "map with wrap(string) keys wire shape",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              `wrap` = Type{
+                                literal = LiteralType{
+                                  `string`}}},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          `map` = maps.fromList
+                              [
+                                (
+                                  Term{`wrap` = WrappedTerm{typeName = Name{"test"}, body = Term{literal = Literal{`string` = "k1"}}}},
+                                  Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})]}),
+                expected = λ`_`."{\"k1\": 1}"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "map with wrap(wrap(string)) keys (transitive)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  `wrap` = Type{
+                                    `wrap` = Type{
+                                      literal = LiteralType{
+                                        `string`}}}},
+                                values = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              `wrap` = Type{
+                                `wrap` = Type{
+                                  literal = LiteralType{
+                                    `string`}}}},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          `map` = maps.fromList
+                              [
+                                (
+                                  Term{
+                                    `wrap` = WrappedTerm{
+                                      typeName = Name{"test"},
+                                      body = Term{
+                                        `wrap` = WrappedTerm{
+                                          typeName = Name{"test"},
+                                          body = Term{literal = Literal{`string` = "k1"}}}}}},
+                                  Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `map` = maps.fromList
+                            [
+                              (
+                                Term{
+                                  `wrap` = WrappedTerm{
+                                    typeName = Name{"test"},
+                                    body = Term{
+                                      `wrap` = WrappedTerm{
+                                        typeName = Name{"test"},
+                                        body = Term{literal = Literal{`string` = "k1"}}}}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "map with wrap(alias-to-string) keys",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            (maps.fromList
+                              [(Name{"EmailAddress"}, Type{literal = LiteralType{`string`}})])
+                            true
+                            Name{"test"}
+                            Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  `wrap` = Type{
+                                    variable = Name{"EmailAddress"}}},
+                                values = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}}}}
+                            json))
+                      (toJson
+                        (maps.fromList
+                          [(Name{"EmailAddress"}, Type{literal = LiteralType{`string`}})])
+                        true
+                        Name{"test"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              `wrap` = Type{
+                                variable = Name{"EmailAddress"}}},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          `map` = maps.fromList
+                              [
+                                (
+                                  Term{`wrap` = WrappedTerm{typeName = Name{"test"}, body = Term{literal = Literal{`string` = "alice@example.com"}}}},
+                                  Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `map` = maps.fromList
+                            [
+                              (
+                                Term{`wrap` = WrappedTerm{typeName = Name{"test"}, body = Term{literal = Literal{`string` = "alice@example.com"}}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "map with plain string keys legacy array form",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λdecoded.`term` decoded)
+                      (fromJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Value{
+                          array = [
+                            Value{object = [("key", Value{`string` = "a"}), ("value", Value{number = 1})]},
+                            Value{object = [("key", Value{`string` = "b"}), ("value", Value{number = 2})]}]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `map` = maps.fromList
+                            [
+                              (Term{literal = Literal{`string` = "a"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}),
+                              (Term{literal = Literal{`string` = "b"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}})]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "map with record keys stays entry-array (even single-field record)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  `record` = [FieldType{name = Name{"value"}, `type` = Type{literal = LiteralType{`string`}}}]},
+                                values = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              `record` = [FieldType{name = Name{"value"}, `type` = Type{literal = LiteralType{`string`}}}]},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          `map` = maps.fromList
+                              [
+                                (
+                                  Term{
+                                    `record` = Record{
+                                      typeName = Name{"test"},
+                                      fields = [Field{name = Name{"value"}, `term` = Term{literal = Literal{`string` = "k1"}}}]}},
+                                  Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `map` = maps.fromList
+                            [
+                              (
+                                Term{
+                                  `record` = Record{
+                                    typeName = Name{"test"},
+                                    fields = [Field{name = Name{"value"}, `term` = Term{literal = Literal{`string` = "k1"}}}]}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "map with record keys wire shape (unchanged array form)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              `record` = [FieldType{name = Name{"value"}, `type` = Type{literal = LiteralType{`string`}}}]},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          `map` = maps.fromList
+                              [
+                                (
+                                  Term{
+                                    `record` = Record{
+                                      typeName = Name{"RecordKey"},
+                                      fields = [Field{name = Name{"value"}, `term` = Term{literal = Literal{`string` = "k1"}}}]}},
+                                  Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})]}),
+                expected = λ`_`."[{\"key\": {\"value\": \"k1\"}, \"value\": 1}]"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "map with union keys stays entry-array",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  `union` = [
+                                    FieldType{name = Name{"bool"}, `type` = Type{literal = LiteralType{`boolean`}}},
+                                    FieldType{name = Name{"string"}, `type` = Type{literal = LiteralType{`string`}}},
+                                    FieldType{name = Name{"unit"}, `type` = Type{`unit`}}]},
+                                values = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              `union` = [
+                                FieldType{name = Name{"bool"}, `type` = Type{literal = LiteralType{`boolean`}}},
+                                FieldType{name = Name{"string"}, `type` = Type{literal = LiteralType{`string`}}},
+                                FieldType{name = Name{"unit"}, `type` = Type{`unit`}}]},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          `map` = maps.fromList
+                              [
+                                (
+                                  Term{
+                                    `inject` = Injection{
+                                      typeName = Name{"test"},
+                                      field = Field{name = Name{"string"}, `term` = Term{literal = Literal{`string` = "k1"}}}}},
+                                  Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `map` = maps.fromList
+                            [
+                              (
+                                Term{
+                                  `inject` = Injection{
+                                    typeName = Name{"test"},
+                                    field = Field{name = Name{"string"}, `term` = Term{literal = Literal{`string` = "k1"}}}}},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "map with list keys stays entry-array",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  `list` = Type{
+                                    literal = LiteralType{
+                                      `string`}}},
+                                values = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              `list` = Type{
+                                literal = LiteralType{
+                                  `string`}}},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          `map` = maps.fromList
+                              [
+                                (
+                                  Term{`list` = [Term{literal = Literal{`string` = "k1"}}]},
+                                  Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `map` = maps.fromList
+                            [
+                              (
+                                Term{`list` = [Term{literal = Literal{`string` = "k1"}}]},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "map with optional keys stays entry-array",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  `optional` = Type{
+                                    literal = LiteralType{
+                                      `string`}}},
+                                values = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              `optional` = Type{
+                                literal = LiteralType{
+                                  `string`}}},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          `map` = maps.fromList
+                              [
+                                (
+                                  Term{`optional` = given(Term{literal = Literal{`string` = "k1"}})},
+                                  Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `map` = maps.fromList
+                            [
+                              (
+                                Term{`optional` = given(Term{literal = Literal{`string` = "k1"}})},
+                                Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}})]}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "variables",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "variable at a string-typed position",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                `string`}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            `string`}}
+                        Term{variable = Name{"lon42"}}),
+                expected = λ`_`.`term` Term{variable = Name{"lon42"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable at a string-typed position wire shape",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            `string`}}
+                        Term{variable = Name{"lon42"}}),
+                expected = λ`_`."{\"@var\": \"lon42\"}"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string value adjacent in shape to the variable marker is unaffected",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                `string`}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            `string`}}
+                        Term{
+                          literal = Literal{
+                            `string` = "@var"}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = "@var"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "string value adjacent in shape to the variable marker wire shape",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            `string`}}
+                        Term{
+                          literal = Literal{
+                            `string` = "@var"}}),
+                expected = λ`_`."\"@var\""}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable with a qualified name",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              literal = LiteralType{
+                                `string`}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            `string`}}
+                        Term{
+                          variable = Name{"example.ns.lon42"}}),
+                expected = λ`_`.`term`
+                      Term{
+                        variable = Name{"example.ns.lon42"}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable with a qualified name wire shape",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            `string`}}
+                        Term{
+                          variable = Name{"example.ns.lon42"}}),
+                expected = λ`_`."{\"@var\": \"example.ns.lon42\"}"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable in a record field",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `record` = [
+                                FieldType{name = Name{"latitude"}, `type` = Type{literal = LiteralType{float = FloatType{`float64`}}}},
+                                FieldType{name = Name{"longitude"}, `type` = Type{literal = LiteralType{float = FloatType{`float64`}}}}]}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `record` = [
+                            FieldType{name = Name{"latitude"}, `type` = Type{literal = LiteralType{float = FloatType{`float64`}}}},
+                            FieldType{name = Name{"longitude"}, `type` = Type{literal = LiteralType{float = FloatType{`float64`}}}}]}
+                        Term{
+                          `record` = Record{
+                            typeName = Name{"test"},
+                            fields = [
+                              Field{name = Name{"latitude"}, `term` = Term{literal = Literal{float = FloatValue{`float64` = 47.6:float64}}}},
+                              Field{name = Name{"longitude"}, `term` = Term{variable = Name{"lon42"}}}]}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `record` = Record{
+                          typeName = Name{"test"},
+                          fields = [
+                            Field{name = Name{"latitude"}, `term` = Term{literal = Literal{float = FloatValue{`float64` = 47.6:float64}}}},
+                            Field{name = Name{"longitude"}, `term` = Term{variable = Name{"lon42"}}}]}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable as a list element",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `list` = Type{
+                                literal = LiteralType{
+                                  `string`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `list` = Type{
+                            literal = LiteralType{
+                              `string`}}}
+                        Term{
+                          `list` = [Term{literal = Literal{`string` = "a"}}, Term{variable = Name{"b"}}, Term{literal = Literal{`string` = "c"}}]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `list` = [Term{literal = Literal{`string` = "a"}}, Term{variable = Name{"b"}}, Term{literal = Literal{`string` = "c"}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable as a set element",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `set` = Type{
+                                literal = LiteralType{
+                                  `string`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `set` = Type{
+                            literal = LiteralType{
+                              `string`}}}
+                        Term{
+                          `set` = {
+                            Term{variable = Name{"x"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `set` = {
+                          Term{variable = Name{"x"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable as an optional payload",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `optional` = Type{
+                                literal = LiteralType{
+                                  `string`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `optional` = Type{
+                            literal = LiteralType{
+                              `string`}}}
+                        Term{
+                          `optional` = given(Term{
+                              variable = Name{"opt1"}})}),
+                expected = λ`_`.`term`
+                      Term{
+                        `optional` = given(Term{
+                            variable = Name{"opt1"}})}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable as a union payload",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `union` = [
+                                FieldType{name = Name{"bool"}, `type` = Type{literal = LiteralType{`boolean`}}},
+                                FieldType{name = Name{"string"}, `type` = Type{literal = LiteralType{`string`}}},
+                                FieldType{name = Name{"unit"}, `type` = Type{`unit`}}]}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `union` = [
+                            FieldType{name = Name{"bool"}, `type` = Type{literal = LiteralType{`boolean`}}},
+                            FieldType{name = Name{"string"}, `type` = Type{literal = LiteralType{`string`}}},
+                            FieldType{name = Name{"unit"}, `type` = Type{`unit`}}]}
+                        Term{
+                          `inject` = Injection{
+                            typeName = Name{"test"},
+                            field = Field{
+                              name = Name{"string"},
+                              `term` = Term{
+                                variable = Name{"u1"}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `inject` = Injection{
+                          typeName = Name{"test"},
+                          field = Field{
+                            name = Name{"string"},
+                            `term` = Term{
+                              variable = Name{"u1"}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable as a wrapped-type body",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `wrap` = Type{
+                                literal = LiteralType{
+                                  `string`}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `wrap` = Type{
+                            literal = LiteralType{
+                              `string`}}}
+                        Term{
+                          `wrap` = WrappedTerm{
+                            typeName = Name{"test"},
+                            body = Term{
+                              variable = Name{"w1"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `wrap` = WrappedTerm{
+                          typeName = Name{"test"},
+                          body = Term{
+                            variable = Name{"w1"}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable as a map value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  literal = LiteralType{
+                                    `string`}},
+                                values = Type{
+                                  literal = LiteralType{
+                                    `string`}}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            values = Type{
+                              literal = LiteralType{
+                                `string`}}}}
+                        Term{
+                          `map` = maps.fromList
+                              [(Term{literal = Literal{`string` = "a"}}, Term{variable = Name{"v1"}})]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `map` = maps.fromList
+                            [(Term{literal = Literal{`string` = "a"}}, Term{variable = Name{"v1"}})]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable as a map key forces entry-array form for the whole map",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          `map` = maps.fromList
+                              [
+                                (Term{variable = Name{"k1"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}),
+                                (Term{literal = Literal{`string` = "k2"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}})]}),
+                expected = λ`_`."[{\"key\": \"k2\", \"value\": 2}, {\"key\": {\"@var\": \"k1\"}, \"value\": 1}]"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable as a map key round-trips",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            maps.empty
+                            true
+                            Name{"test"}
+                            Type{
+                              `map` = MapType{
+                                keys = Type{
+                                  literal = LiteralType{
+                                    `string`}},
+                                values = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}}}}
+                            json))
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          `map` = MapType{
+                            keys = Type{
+                              literal = LiteralType{
+                                `string`}},
+                            values = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}
+                        Term{
+                          `map` = maps.fromList
+                              [
+                                (Term{variable = Name{"k1"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}),
+                                (Term{literal = Literal{`string` = "k2"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}})]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `map` = maps.fromList
+                            [
+                              (Term{variable = Name{"k1"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}),
+                              (Term{literal = Literal{`string` = "k2"}}, Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}})]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "variable encoded via the untyped fallback path",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{variable = Name{"Unresolved"}}
+                        Term{variable = Name{"lon42"}}),
+                expected = λ`_`."{\"@var\": \"lon42\"}"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "malformed variable marker with a non-string payload is rejected",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."rejected")
+                      (λdecoded.concat2 "unexpected: " (`term` decoded))
+                      (fromJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            `string`}}
+                        Value{
+                          object = [("@var", Value{number = 1})]}),
+                expected = λ`_`."rejected"}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "wire shape",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "int8",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int8`}}}
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int8` = 42:int8}}}),
+                expected = λ`_`."42"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "int16",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int16`}}}
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int16` = 1000:int16}}}),
+                expected = λ`_`."1000"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "int32",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 100003:int32}}}),
+                expected = λ`_`."100003"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "uint8",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `uint8`}}}
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `uint8` = 200:uint8}}}),
+                expected = λ`_`."200"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "uint16",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `uint16`}}}
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `uint16` = 50003:uint16}}}),
+                expected = λ`_`."50003"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "uint32",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `uint32`}}}
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `uint32` = 4000000001:uint32}}}),
+                expected = λ`_`."4000000001"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "int64",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int64`}}}
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int64` = 1000000000007:int64}}}),
+                expected = λ`_`."\"1000000000007\""}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "uint64",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `uint64`}}}
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `uint64` = 1000000000007:uint64}}}),
+                expected = λ`_`."\"1000000000007\""}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "bigint",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.printJson json)
+                      (toJson
+                        maps.empty
+                        true
+                        Name{"test"}
+                        Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `bigint`}}}
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `bigint` = 1000000000007:bigint}}}),
+                expected = λ`_`."\"1000000000007\""}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}

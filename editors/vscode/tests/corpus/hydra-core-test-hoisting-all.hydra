@@ -1,0 +1,10 @@
+## Hydra's hoisting test suite
+module hydra.core.test.hoisting.all
+
+import hydra.core.test.hoisting.cases as cases
+import hydra.core.test.hoisting.let as let
+import hydra.core.testing
+
+## The group of all hoisting tests
+term allTests =
+  TestGroup{name = "hoisting", description = none, subgroups = [cases.allTests, let.allTests], `cases` = []}

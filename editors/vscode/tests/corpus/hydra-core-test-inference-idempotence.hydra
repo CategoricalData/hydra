@@ -1,0 +1,748 @@
+## Idempotence tests for type inference: infer(infer(e)) == infer(e). A curated corpus covering lambdas, let-polymorphism, primitives, and phantom type variables -- the term shapes most likely to exercise the re-inference cases (inferTypeOfTypeApplication, inferTypeOfTypeLambda) named in #611.
+module hydra.core.test.inference.idempotence
+
+import hydra.core.inference
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.pairs
+import hydra.core.lib.strings
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.test.testGraph
+import hydra.core.testing
+
+## The group of all inference idempotence tests
+term allTests =
+  TestGroup{
+    name = "Idempotence",
+    description = none,
+    subgroups = [testGroupForLambdas, testGroupForLet, testGroupForPrimitives],
+    `cases` = []}
+
+term testGroupForLambdas =
+  TestGroup{
+    name = "Lambdas",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "#1: identity",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2
+                      "INFERENCE ERROR (pass 1): "
+                      "failed")
+                  (λresult.eithers.either
+                      (λe.concat2
+                          "INFERENCE ERROR (pass 2): "
+                          "failed")
+                      (λresult.concat
+                          [`term` (first (first result)), " :: ", typeScheme (second (first result))])
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        (first (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          variable = Name{"x"}}}}),
+            expected = λ`_`.eithers.either
+                  (λe.concat2
+                      "INFERENCE ERROR (pass 1): "
+                      "failed")
+                  (λresult.concat
+                      [`term` (first (first result)), " :: ", typeScheme (second (first result))])
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          variable = Name{"x"}}}})}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#2: nested lambdas",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2
+                      "INFERENCE ERROR (pass 1): "
+                      "failed")
+                  (λresult.eithers.either
+                      (λe.concat2
+                          "INFERENCE ERROR (pass 2): "
+                          "failed")
+                      (λresult.concat
+                          [`term` (first (first result)), " :: ", typeScheme (second (first result))])
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        (first (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"y"},
+                            domain = none,
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.math.add"}},
+                                    argument = Term{
+                                      variable = Name{"x"}}}},
+                                argument = Term{
+                                  variable = Name{"y"}}}}}}}}),
+            expected = λ`_`.eithers.either
+                  (λe.concat2
+                      "INFERENCE ERROR (pass 1): "
+                      "failed")
+                  (λresult.concat
+                      [`term` (first (first result)), " :: ", typeScheme (second (first result))])
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"y"},
+                            domain = none,
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.math.add"}},
+                                    argument = Term{
+                                      variable = Name{"x"}}}},
+                                argument = Term{
+                                  variable = Name{"y"}}}}}}}})}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#3: shadowing",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2
+                      "INFERENCE ERROR (pass 1): "
+                      "failed")
+                  (λresult.eithers.either
+                      (λe.concat2
+                          "INFERENCE ERROR (pass 2): "
+                          "failed")
+                      (λresult.concat
+                          [`term` (first (first result)), " :: ", typeScheme (second (first result))])
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        (first (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.math.add"}},
+                                    argument = Term{
+                                      variable = Name{"x"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 42:int32}}}}}}}}}),
+            expected = λ`_`.eithers.either
+                  (λe.concat2
+                      "INFERENCE ERROR (pass 1): "
+                      "failed")
+                  (λresult.concat
+                      [`term` (first (first result)), " :: ", typeScheme (second (first result))])
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"x"},
+                        domain = none,
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.math.add"}},
+                                    argument = Term{
+                                      variable = Name{"x"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 42:int32}}}}}}}}})}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term testGroupForLet =
+  TestGroup{
+    name = "Let terms",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "#1: let-polymorphism",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2
+                      "INFERENCE ERROR (pass 1): "
+                      "failed")
+                  (λresult.eithers.either
+                      (λe.concat2
+                          "INFERENCE ERROR (pass 2): "
+                          "failed")
+                      (λresult.concat
+                          [`term` (first (first result)), " :: ", typeScheme (second (first result))])
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        (first (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"id"},
+                            `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          pair = (
+                              Term{
+                                application = Application{
+                                  function = Term{variable = Name{"id"}},
+                                  argument = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}}},
+                              Term{
+                                application = Application{
+                                  function = Term{variable = Name{"id"}},
+                                  argument = Term{literal = Literal{`string` = "foo"}}}})}}}),
+            expected = λ`_`.eithers.either
+                  (λe.concat2
+                      "INFERENCE ERROR (pass 1): "
+                      "failed")
+                  (λresult.concat
+                      [`term` (first (first result)), " :: ", typeScheme (second (first result))])
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"id"},
+                            `term` = Term{lambda = Lambda{parameter = Name{"x"}, domain = none, body = Term{variable = Name{"x"}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          pair = (
+                              Term{
+                                application = Application{
+                                  function = Term{variable = Name{"id"}},
+                                  argument = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}}},
+                              Term{
+                                application = Application{
+                                  function = Term{variable = Name{"id"}},
+                                  argument = Term{literal = Literal{`string` = "foo"}}}})}}})}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#2: nested let-polymorphism",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2
+                      "INFERENCE ERROR (pass 1): "
+                      "failed")
+                  (λresult.eithers.either
+                      (λe.concat2
+                          "INFERENCE ERROR (pass 2): "
+                          "failed")
+                      (λresult.concat
+                          [`term` (first (first result)), " :: ", typeScheme (second (first result))])
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        (first (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"sng"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{`list` = [Term{variable = Name{"x"}}]}}},
+                            typeScheme = none}],
+                        body = Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"foo"},
+                                `term` = Term{
+                                  application = Application{
+                                    function = Term{variable = Name{"sng"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 42:int32}}}}},
+                                typeScheme = none},
+                              Binding{
+                                name = Name{"bar"},
+                                `term` = Term{
+                                  application = Application{
+                                    function = Term{variable = Name{"sng"}},
+                                    argument = Term{literal = Literal{`string` = "bar"}}}},
+                                typeScheme = none},
+                              Binding{
+                                name = Name{"quux"},
+                                `term` = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{
+                                      application = Application{
+                                        function = Term{variable = Name{"sng"}},
+                                        argument = Term{variable = Name{"x"}}}}}},
+                                typeScheme = none}],
+                            body = Term{
+                              pair = (
+                                  Term{variable = Name{"foo"}},
+                                  Term{
+                                    pair = (
+                                        Term{variable = Name{"bar"}},
+                                        Term{application = Application{function = Term{variable = Name{"quux"}}, argument = Term{`list` = []}}})})}}}}}),
+            expected = λ`_`.eithers.either
+                  (λe.concat2
+                      "INFERENCE ERROR (pass 1): "
+                      "failed")
+                  (λresult.concat
+                      [`term` (first (first result)), " :: ", typeScheme (second (first result))])
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"sng"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{`list` = [Term{variable = Name{"x"}}]}}},
+                            typeScheme = none}],
+                        body = Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"foo"},
+                                `term` = Term{
+                                  application = Application{
+                                    function = Term{variable = Name{"sng"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 42:int32}}}}},
+                                typeScheme = none},
+                              Binding{
+                                name = Name{"bar"},
+                                `term` = Term{
+                                  application = Application{
+                                    function = Term{variable = Name{"sng"}},
+                                    argument = Term{literal = Literal{`string` = "bar"}}}},
+                                typeScheme = none},
+                              Binding{
+                                name = Name{"quux"},
+                                `term` = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{
+                                      application = Application{
+                                        function = Term{variable = Name{"sng"}},
+                                        argument = Term{variable = Name{"x"}}}}}},
+                                typeScheme = none}],
+                            body = Term{
+                              pair = (
+                                  Term{variable = Name{"foo"}},
+                                  Term{
+                                    pair = (
+                                        Term{variable = Name{"bar"}},
+                                        Term{application = Application{function = Term{variable = Name{"quux"}}, argument = Term{`list` = []}}})})}}}}})}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#3: recursive let",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2
+                      "INFERENCE ERROR (pass 1): "
+                      "failed")
+                  (λresult.eithers.either
+                      (λe.concat2
+                          "INFERENCE ERROR (pass 2): "
+                          "failed")
+                      (λresult.concat
+                          [`term` (first (first result)), " :: ", typeScheme (second (first result))])
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        (first (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"f"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"y"},
+                                    domain = none,
+                                    body = Term{
+                                      application = Application{
+                                        function = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"f"}},
+                                            argument = Term{
+                                              literal = Literal{
+                                                integer = IntegerValue{
+                                                  `int32` = 0:int32}}}}},
+                                        argument = Term{
+                                          variable = Name{"x"}}}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          variable = Name{"f"}}}}),
+            expected = λ`_`.eithers.either
+                  (λe.concat2
+                      "INFERENCE ERROR (pass 1): "
+                      "failed")
+                  (λresult.concat
+                      [`term` (first (first result)), " :: ", typeScheme (second (first result))])
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      `let` = Let{
+                        bindings = [
+                          Binding{
+                            name = Name{"f"},
+                            `term` = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"y"},
+                                    domain = none,
+                                    body = Term{
+                                      application = Application{
+                                        function = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"f"}},
+                                            argument = Term{
+                                              literal = Literal{
+                                                integer = IntegerValue{
+                                                  `int32` = 0:int32}}}}},
+                                        argument = Term{
+                                          variable = Name{"x"}}}}}}}},
+                            typeScheme = none}],
+                        body = Term{
+                          variable = Name{"f"}}}})}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term testGroupForPrimitives =
+  TestGroup{
+    name = "Primitives",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "#1: polymorphic primitive, bare",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2
+                      "INFERENCE ERROR (pass 1): "
+                      "failed")
+                  (λresult.eithers.either
+                      (λe.concat2
+                          "INFERENCE ERROR (pass 2): "
+                          "failed")
+                      (λresult.concat
+                          [`term` (first (first result)), " :: ", typeScheme (second (first result))])
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        (first (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      variable = Name{"hydra.core.lib.lists.concat"}}),
+            expected = λ`_`.eithers.either
+                  (λe.concat2
+                      "INFERENCE ERROR (pass 1): "
+                      "failed")
+                  (λresult.concat
+                      [`term` (first (first result)), " :: ", typeScheme (second (first result))])
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      variable = Name{"hydra.core.lib.lists.concat"}})}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#2: polymorphic primitive, applied",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2
+                      "INFERENCE ERROR (pass 1): "
+                      "failed")
+                  (λresult.eithers.either
+                      (λe.concat2
+                          "INFERENCE ERROR (pass 2): "
+                          "failed")
+                      (λresult.concat
+                          [`term` (first (first result)), " :: ", typeScheme (second (first result))])
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        (first (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"lists"},
+                        domain = none,
+                        body = Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.lists.length"}},
+                            argument = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.lists.concat"}},
+                                argument = Term{
+                                  variable = Name{"lists"}}}}}}}}),
+            expected = λ`_`.eithers.either
+                  (λe.concat2
+                      "INFERENCE ERROR (pass 1): "
+                      "failed")
+                  (λresult.concat
+                      [`term` (first (first result)), " :: ", typeScheme (second (first result))])
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"lists"},
+                        domain = none,
+                        body = Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.lists.length"}},
+                            argument = Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.lists.concat"}},
+                                argument = Term{
+                                  variable = Name{"lists"}}}}}}}})}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#3: phantom type variable",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2
+                      "INFERENCE ERROR (pass 1): "
+                      "failed")
+                  (λresult.eithers.either
+                      (λe.concat2
+                          "INFERENCE ERROR (pass 2): "
+                          "failed")
+                      (λresult.concat
+                          [`term` (first (first result)), " :: ", typeScheme (second (first result))])
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        (first (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      application = Application{
+                        function = Term{
+                          variable = Name{"hydra.core.lib.eithers.isLeft"}},
+                        argument = Term{
+                          `either` = left(Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}})}}}),
+            expected = λ`_`.eithers.either
+                  (λe.concat2
+                      "INFERENCE ERROR (pass 1): "
+                      "failed")
+                  (λresult.concat
+                      [`term` (first (first result)), " :: ", typeScheme (second (first result))])
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      application = Application{
+                        function = Term{
+                          variable = Name{"hydra.core.lib.eithers.isLeft"}},
+                        argument = Term{
+                          `either` = left(Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}})}}})}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "#4: conditional over polymorphic branches",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.concat2
+                      "INFERENCE ERROR (pass 1): "
+                      "failed")
+                  (λresult.eithers.either
+                      (λe.concat2
+                          "INFERENCE ERROR (pass 2): "
+                          "failed")
+                      (λresult.concat
+                          [`term` (first (first result)), " :: ", typeScheme (second (first result))])
+                      (inferTypeOf
+                        testContext
+                        testGraph
+                        (first (first result))))
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"b"},
+                        domain = none,
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"y"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"hydra.core.lib.logic.ifElse"}},
+                                            argument = Term{
+                                              variable = Name{"b"}}}},
+                                        argument = Term{
+                                          `list` = [Term{variable = Name{"x"}}]}}},
+                                    argument = Term{
+                                      `list` = [Term{variable = Name{"y"}}]}}}}}}}}}),
+            expected = λ`_`.eithers.either
+                  (λe.concat2
+                      "INFERENCE ERROR (pass 1): "
+                      "failed")
+                  (λresult.concat
+                      [`term` (first (first result)), " :: ", typeScheme (second (first result))])
+                  (inferTypeOf
+                    testContext
+                    testGraph
+                    Term{
+                      lambda = Lambda{
+                        parameter = Name{"b"},
+                        domain = none,
+                        body = Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"y"},
+                                domain = none,
+                                body = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"hydra.core.lib.logic.ifElse"}},
+                                            argument = Term{
+                                              variable = Name{"b"}}}},
+                                        argument = Term{
+                                          `list` = [Term{variable = Name{"x"}}]}}},
+                                    argument = Term{
+                                      `list` = [Term{variable = Name{"y"}}]}}}}}}}}})}},
+        description = none,
+        tags = [],
+        provisions = []}]}

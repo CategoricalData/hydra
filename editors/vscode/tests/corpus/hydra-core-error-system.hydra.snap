@@ -23,6 +23,7 @@
 #                  ^ source.hydra
 #                   ^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
+>
 >  ## POSIX ENOENT: the executable named by Command.program does not exist or is not found on PATH. Reported by the exec family (XSH, https://pubs.opengroup.org/onlinepubs/9799919799/functions/execve.html)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -34,6 +35,7 @@
 #                  ^ source.hydra
 #                   ^^^^^^^^ source.hydra variable.other.hydra
 #                           ^^ source.hydra
+>
 >  ## POSIX EACCES: the executable exists but is not executable, or a path component denies search permission
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -45,6 +47,7 @@
 #                   ^ source.hydra
 #                    ^^^^^^^^ source.hydra variable.other.hydra
 #                            ^^ source.hydra
+>
 >  ## POSIX ENOENT or ENOTDIR raised by the implied chdir() to Command.workingDirectory
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -56,6 +59,7 @@
 #                          ^ source.hydra
 #                           ^^^^^^^^ source.hydra variable.other.hydra
 #                                   ^^ source.hydra
+>
 >  ## The call was interrupted before the child produced a result (a portable abstraction over POSIX EINTR and host-level kills); the child's disposition is unknown
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -67,6 +71,7 @@
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
 #                   ^^ source.hydra
+>
 >  ## Any other failure, carrying the host-provided error message verbatim (covers errno values not modeled above, such as EMFILE, ENOMEM, or E2BIG)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

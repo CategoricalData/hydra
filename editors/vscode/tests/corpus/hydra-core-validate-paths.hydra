@@ -11,7 +11,7 @@ import hydra.core.paths
 term eraseSubtermPath =
   λpath.
     let steps := SubtermPath[] path in
-    let go := λacc,step.optionals.match
+    let go := λacc, step.optionals.match
           acc
           none
           (λstateP.
@@ -20,13 +20,13 @@ term eraseSubtermPath =
             ifElse
               pendingEntry
               (cases(SubtermStep){
-                pairFirst=λ`_`.given((concat2 out [SubtypeStep{mapKeys}], false)),
-                pairSecond=λ`_`.given((concat2 out [SubtypeStep{mapValues}], false)),
-                `_`=none}
+                pairFirst = λ`_`.given((concat2 out [SubtypeStep{mapKeys}], false)),
+                pairSecond = λ`_`.given((concat2 out [SubtypeStep{mapValues}], false)),
+                `_` = none}
                 step)
               (cases(SubtermStep){
-                mapEntry=λ`_`.given((out, true)),
-                `_`=optionals.map
+                mapEntry = λ`_`.given((out, true)),
+                `_` = optionals.map
                     (λst.(concat2 out [st], false))
                     (eraseSubtermStep step)}
                 step)) in
@@ -36,10 +36,10 @@ term eraseSubtermPath =
 ## The subtype-side analog of a subterm step on the data fragment, or nothing on the computation fragment
 term eraseSubtermStep =
   λstep.cases(SubtermStep){
-      listElement=λ`_`.given(SubtypeStep{listElement}),
-      setElement=λ`_`.given(SubtypeStep{setElement}),
-      optionalGiven=λ`_`.given(SubtypeStep{optionalElement}),
-      injectField=λn.given(SubtypeStep{unionField = n}),
-      recordField=λn.given(SubtypeStep{recordField = n}),
-      `_`=none}
+      listElement = λ`_`.given(SubtypeStep{listElement}),
+      setElement = λ`_`.given(SubtypeStep{setElement}),
+      optionalGiven = λ`_`.given(SubtypeStep{optionalElement}),
+      injectField = λn.given(SubtypeStep{unionField = n}),
+      recordField = λn.given(SubtypeStep{recordField = n}),
+      `_` = none}
       step

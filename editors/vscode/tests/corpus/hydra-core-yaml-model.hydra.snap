@@ -30,6 +30,7 @@
 #           ^ source.hydra
 #            ^^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## A mapping from nodes to nodes
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -47,6 +48,7 @@
 #                     ^^^^ source.hydra entity.name.type.hydra
 #                         ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                          ^^ source.hydra
+>
 >  ## A scalar value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -58,6 +60,7 @@
 #         ^ source.hydra
 #          ^^^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## A sequence of nodes
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -85,6 +88,7 @@
 #             ^ source.hydra
 #              ^^^^^ source.hydra support.type.hydra
 #                   ^^ source.hydra
+>
 >  ## Represents a true/false value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -96,6 +100,7 @@
 #       ^ source.hydra
 #        ^^^^^^^ source.hydra support.type.hydra
 #               ^^ source.hydra
+>
 >  ## An arbitrary-precision decimal number (lexically a valid JSON number)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -109,6 +114,7 @@
 #            ^ source.hydra
 #             ^^^^^^^ source.hydra support.type.hydra
 #                    ^^ source.hydra
+>
 >  ## Represents an approximation to real numbers
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -120,6 +126,7 @@
 #        ^ source.hydra
 #         ^^^^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
+>
 >  ## Represents arbitrary sized finite mathematical integers
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -131,6 +138,7 @@
 #      ^ source.hydra
 #       ^^^^^^ source.hydra support.type.hydra
 #             ^^ source.hydra
+>
 >  ## Represents the lack of a value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -142,6 +150,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra support.type.hydra
 #            ^^ source.hydra
+>
 >  ## A string value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

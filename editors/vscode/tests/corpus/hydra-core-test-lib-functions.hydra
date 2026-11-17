@@ -1,0 +1,263 @@
+## Test cases for hydra.core.lib.functions primitives
+module hydra.core.test.lib.functions
+
+import hydra.core.lib.eithers as eithers
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.reduction
+import hydra.core.test.testGraph
+import hydra.core.testing
+
+## Test cases for hydra.core.lib.functions primitives
+term allTests =
+  TestGroup{
+    name = "hydra.core.lib.functions primitives",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "identity",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "returnsArgumentUnchanged",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "integer",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.functions.identity"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 42:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 42:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.functions.identity.returnsArgumentUnchanged"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "const",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "returnsFirstArgumentIgnoringSecond",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "returns first argument, ignoring an int second argument",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.functions.const"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 5:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "ignored"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 5:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.functions.const.returnsFirstArgumentIgnoringSecond"}]},
+              TestCaseWithMetadata{
+                name = "returns first argument, ignoring a string second argument",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.functions.const"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 99:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `string` = "a"}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.functions.const.returnsFirstArgumentIgnoringSecond"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "compose",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "compose(negate, increment, 5) = negate(increment(5))",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.functions.compose"}},
+                                    argument = Term{
+                                      variable = Name{"hydra.core.lib.math.negate"}}}},
+                                argument = Term{
+                                  lambda = Lambda{
+                                    parameter = Name{"x"},
+                                    domain = none,
+                                    body = Term{
+                                      application = Application{
+                                        function = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"hydra.core.lib.math.add"}},
+                                            argument = Term{
+                                              variable = Name{"x"}}}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            integer = IntegerValue{
+                                              `int32` = 1:int32}}}}}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 5:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          integer = IntegerValue{
+                            `int32` = -6:int32}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "flip",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "swapsArgumentOrder",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "flip(gt, 5, 3) = gt(3, 5)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.functions.flip"}},
+                                        argument = Term{
+                                          variable = Name{"hydra.core.lib.ordering.gt"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 5:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 3:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.functions.flip.swapsArgumentOrder"}]},
+              TestCaseWithMetadata{
+                name = "flip(gt, 3, 5) = gt(5, 3)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.functions.flip"}},
+                                        argument = Term{
+                                          variable = Name{"hydra.core.lib.ordering.gt"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 3:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 5:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.functions.flip.swapsArgumentOrder"}]}]}],
+        `cases` = []}],
+    `cases` = []}

@@ -20,13 +20,13 @@ import hydra.core.substitution
 
 ## Decode a JSON value to a float term. Finite values arrive as JSON numbers; NaN/Inf/-0.0 arrive as JSON string sentinels. Float32 and Float64 are symmetric.
 term decodeFloat =
-  λft,value.cases(FloatType){
-      `float32`=λ`_`.cases(Value){
-            number=λn.right(Term{
+  λft, value.cases(FloatType){
+      `float32` = λ`_`.cases(Value){
+            number = λn.right(Term{
                   literal = Literal{
                     float = FloatValue{
                       `float32` = decimalToFloat32 n}}}),
-            `string`=λs.match
+            `string` = λs.match
                   (parseSpecialFloat32 s)
                   left(strings.concat
                     ["invalid float32 sentinel: ", s])
@@ -34,14 +34,14 @@ term decodeFloat =
                       literal = Literal{
                         float = FloatValue{
                           `float32` = v}}})),
-            `_`=left("expected number or special float string for float32")}
+            `_` = left("expected number or special float string for float32")}
             value,
-      `float64`=λ`_`.cases(Value){
-            number=λn.right(Term{
+      `float64` = λ`_`.cases(Value){
+            number = λn.right(Term{
                   literal = Literal{
                     float = FloatValue{
                       `float64` = decimalToFloat64 n}}}),
-            `string`=λs.match
+            `string` = λs.match
                   (parseSpecialFloat s)
                   left(strings.concat
                     ["invalid float64 sentinel: ", s])
@@ -49,14 +49,14 @@ term decodeFloat =
                       literal = Literal{
                         float = FloatValue{
                           `float64` = v}}})),
-            `_`=left("expected number or special float string for float64")}
+            `_` = left("expected number or special float string for float64")}
             value}
       ft
 
 ## Decode a JSON value to an integer term. Small ints from numbers; large ints from strings.
 term decodeInteger =
-  λit,value.cases(IntegerType){
-      `bigint`=λ`_`.
+  λit, value.cases(IntegerType){
+      `bigint` = λ`_`.
           let strResult := expectString value
           in eithers.either
             (λerr.left(err))
@@ -65,9 +65,12 @@ term decodeInteger =
               in match
                 parsed
                 left(strings.concat ["invalid bigint: ", s])
-                (λv.right(Term{literal = Literal{integer = IntegerValue{`bigint` = v}}})))
+                (λv.right(Term{
+                    literal = Literal{
+                      integer = IntegerValue{
+                        `bigint` = v}}})))
             strResult,
-      `int64`=λ`_`.
+      `int64` = λ`_`.
           let strResult := expectString value
           in eithers.either
             (λerr.left(err))
@@ -78,7 +81,7 @@ term decodeInteger =
                 left(strings.concat ["invalid int64: ", s])
                 (λv.right(Term{literal = Literal{integer = IntegerValue{`int64` = v}}})))
             strResult,
-      `uint64`=λ`_`.
+      `uint64` = λ`_`.
           let strResult := expectString value
           in eithers.either
             (λerr.left(err))
@@ -87,9 +90,12 @@ term decodeInteger =
               in match
                 parsed
                 left(strings.concat ["invalid uint64: ", s])
-                (λv.right(Term{literal = Literal{integer = IntegerValue{`uint64` = v}}})))
+                (λv.right(Term{
+                    literal = Literal{
+                      integer = IntegerValue{
+                        `uint64` = v}}})))
             strResult,
-      `int8`=λ`_`.
+      `int8` = λ`_`.
           let numResult := expectNumber value
           in eithers.map
             (λn.Term{
@@ -97,7 +103,7 @@ term decodeInteger =
                   integer = IntegerValue{
                     `int8` = bigintToInt8 (decimalToBigint n)}}})
             numResult,
-      `int16`=λ`_`.
+      `int16` = λ`_`.
           let numResult := expectNumber value
           in eithers.map
             (λn.Term{
@@ -105,7 +111,7 @@ term decodeInteger =
                   integer = IntegerValue{
                     `int16` = bigintToInt16 (decimalToBigint n)}}})
             numResult,
-      `int32`=λ`_`.
+      `int32` = λ`_`.
           let numResult := expectNumber value
           in eithers.map
             (λn.Term{
@@ -113,7 +119,7 @@ term decodeInteger =
                   integer = IntegerValue{
                     `int32` = bigintToInt32 (decimalToBigint n)}}})
             numResult,
-      `uint8`=λ`_`.
+      `uint8` = λ`_`.
           let numResult := expectNumber value
           in eithers.map
             (λn.Term{
@@ -121,7 +127,7 @@ term decodeInteger =
                   integer = IntegerValue{
                     `uint8` = bigintToUint8 (decimalToBigint n)}}})
             numResult,
-      `uint16`=λ`_`.
+      `uint16` = λ`_`.
           let numResult := expectNumber value
           in eithers.map
             (λn.Term{
@@ -129,12 +135,12 @@ term decodeInteger =
                   integer = IntegerValue{
                     `uint16` = bigintToUint16 (decimalToBigint n)}}})
             numResult,
-      `uint32`=λ`_`.cases(Value){
-            number=λn.right(Term{
+      `uint32` = λ`_`.cases(Value){
+            number = λn.right(Term{
                   literal = Literal{
                     integer = IntegerValue{
                       `uint32` = bigintToUint32 (decimalToBigint n)}}}),
-            `string`=λs.
+            `string` = λs.
                 let parsed := parseUint32 s
                 in match
                   parsed
@@ -143,59 +149,62 @@ term decodeInteger =
                       literal = Literal{
                         integer = IntegerValue{
                           `uint32` = v}}})),
-            `_`=left("expected number or string for uint32")}
+            `_` = left("expected number or string for uint32")}
             value}
       it
 
 ## Decode a JSON value to a literal term
 term decodeLiteral =
-  λlt,value.cases(LiteralType){
-      `binary`=λ`_`.
+  λlt, value.cases(LiteralType){
+      `binary` = λ`_`.
           let strResult := expectString value
           in eithers.map
             (λs.Term{literal = Literal{`binary` = base64ToBinary s}})
             strResult,
-      `boolean`=λ`_`.cases(Value){
-            `boolean`=λb.right(Term{literal = Literal{`boolean` = b}}),
-            `_`=left("expected boolean")}
+      `boolean` = λ`_`.cases(Value){
+            `boolean` = λb.right(Term{
+                  literal = Literal{
+                    `boolean` = b}}),
+            `_` = left("expected boolean")}
             value,
-      `decimal`=λ`_`.cases(Value){
-            number=λn.right(Term{literal = Literal{`decimal` = n}}),
-            `_`=left("expected number for decimal")}
+      `decimal` = λ`_`.cases(Value){
+            number = λn.right(Term{literal = Literal{`decimal` = n}}),
+            `_` = left("expected number for decimal")}
             value,
-      float=λft.decodeFloat ft value,
-      integer=λit.decodeInteger it value,
-      `string`=λ`_`.
+      float = λft.decodeFloat ft value,
+      integer = λit.decodeInteger it value,
+      `string` = λ`_`.
           let strResult := expectString value
           in eithers.map (λs.Term{literal = Literal{`string` = s}}) strResult}
       lt
 
 ## Extract an array from a JSON value
-term expectArray = λvalue.cases(Value){array=λarr.right(arr), `_`=left("expected array")} value
+term expectArray = λvalue.cases(Value){array = λarr.right(arr), `_` = left("expected array")} value
 
 ## Extract a number from a JSON value
-term expectNumber = λvalue.cases(Value){number=λn.right(n), `_`=left("expected number")} value
+term expectNumber = λvalue.cases(Value){number = λn.right(n), `_` = left("expected number")} value
 
 ## Extract an object from a JSON value as a name-keyed map. Field order is not preserved here; decoding looks fields up by name.
-term expectObject = λvalue.cases(Value){object=λobj.right(maps.fromList obj), `_`=left("expected object")} value
+term expectObject =
+  λvalue.cases(Value){object = λobj.right(maps.fromList obj), `_` = left("expected object")} value
 
 ## Extract a string from a JSON value
-term expectString = λvalue.cases(Value){`string`=λs.right(s), `_`=left("expected string")} value
+term expectString = λvalue.cases(Value){`string` = λs.right(s), `_` = left("expected string")} value
 
 ## Decode a JSON value to a Hydra term given a type and type name. Returns Left for type mismatches. The compactMaps flag mirrors toJson's: it must be False for any caller reading the checked-in dist/json module-bootstrapping representation, since a byte-stable published-host decoder must be able to read that data unmodified.
 term fromJson =
-  λtypes,compactMaps,tname,typ,value.
+  λtypes, compactMaps, tname, typ, value.
     let stripped := deannotateType typ in
     let typeDefersVariableCheck := cases(Type){
-        `optional`=λ`_`.true,
-        `wrap`=λ`_`.true,
-        `_`=false}
+        `optional` = λ`_`.true,
+        `wrap` = λ`_`.true,
+        `_` = false}
         stripped in
     let asVariablePayload := ifElse
         typeDefersVariableCheck
         none
         (cases(Value){
-          object=λpairs.ifElse
+          object = λpairs.ifElse
                 (equal (lists.length pairs) 1:int32)
                 (let onlyPair := withDefault
                     ("", Value{null})
@@ -205,7 +214,7 @@ term fromJson =
                   given(second onlyPair)
                   none)
                 none,
-          `_`=none}
+          `_` = none}
           value) in
     match
       asVariablePayload
@@ -213,19 +222,19 @@ term fromJson =
           let fn := deannotateType (ApplicationType[function] app) in
           let arg := ApplicationType[argument] app in
           cases(Type){
-            application=λinnerApp.eithers.either
+            application = λinnerApp.eithers.either
                   (λerr.left(err))
                   (λreducedFn.reduceApp
                       ApplicationType{
                         function = reducedFn,
                         argument = arg})
                   (reduceApp innerApp),
-            `forall`=λft.right(substInType
+            `forall` = λft.right(substInType
                   (singletonTypeSubst
                     (ForallType[parameter] ft)
                     arg)
                   (ForallType[body] ft)),
-            variable=λname.
+            variable = λname.
                 let lookedUp := maps.lookup name types
                 in match
                   lookedUp
@@ -235,11 +244,11 @@ term fromJson =
                       ApplicationType{
                         function = resolvedFn,
                         argument = arg}),
-            `_`=left(strings.concat
+            `_` = left(strings.concat
                 ["cannot apply a non-parametric type: ", `type` fn])}
             fn
       in cases(Type){
-        application=λat.eithers.either
+        application = λat.eithers.either
               (λerr.left(err))
               (λreducedType.fromJson
                   types
@@ -248,14 +257,14 @@ term fromJson =
                   reducedType
                   value)
               (reduceApp at),
-        `forall`=λft.fromJson
+        `forall` = λft.fromJson
               types
               compactMaps
               tname
               (ForallType[body] ft)
               value,
-        literal=λlt.decodeLiteral lt value,
-        `list`=λelemType.
+        literal = λlt.decodeLiteral lt value,
+        `list` = λelemType.
             let decodeElem := λv.fromJson
                   types
                   compactMaps
@@ -263,8 +272,8 @@ term fromJson =
                   elemType
                   v
             in cases(Value){
-              null=λ`_`.right(Term{`list` = []}),
-              `_`=eithers.either
+              null = λ`_`.right(Term{`list` = []}),
+              `_` = eithers.either
                   (λerr.left(err))
                   (λarr.
                     let decoded := eithers.mapList decodeElem arr
@@ -273,7 +282,7 @@ term fromJson =
                       decoded)
                   (expectArray value)}
               value,
-        `set`=λelemType.
+        `set` = λelemType.
             let decodeElem := λv.fromJson
                   types
                   compactMaps
@@ -281,8 +290,9 @@ term fromJson =
                   elemType
                   v
             in cases(Value){
-              null=λ`_`.right(Term{`set` = sets.empty}),
-              `_`=eithers.either
+              null = λ`_`.right(Term{
+                    `set` = sets.empty}),
+              `_` = eithers.either
                   (λerr.left(err))
                   (λarr.
                     let decoded := eithers.mapList decodeElem arr
@@ -292,11 +302,11 @@ term fromJson =
                       decoded)
                   (expectArray value)}
               value,
-        `optional`=λinnerType.
+        `optional` = λinnerType.
             let innerStripped := deannotateType innerType in
             let isNestedMaybe := cases(Type){
-                `optional`=λ`_`.true,
-                `_`=false}
+                `optional` = λ`_`.true,
+                `_` = false}
                 innerStripped in
             ifElse
               isNestedMaybe
@@ -323,16 +333,17 @@ term fromJson =
                       (decodeJust arr)
                       left("expected single-element array for Just")) in
               cases(Value){
-                null=λ`_`.right(Term{
+                null = λ`_`.right(Term{
                       `optional` = none}),
-                array=λarr.decodeMaybeArray arr,
-                `_`=left("expected null or single-element array for nested Maybe")}
+                array = λarr.decodeMaybeArray arr,
+                `_` = left("expected null or single-element array for nested Maybe")}
                 value)
               (cases(Value){
-                null=λ`_`.right(Term{
+                null = λ`_`.right(Term{
                       `optional` = none}),
-                `_`=eithers.map
-                    (λv.Term{`optional` = given(v)})
+                `_` = eithers.map
+                    (λv.Term{
+                        `optional` = given(v)})
                     (fromJson
                       types
                       compactMaps
@@ -340,7 +351,7 @@ term fromJson =
                       innerType
                       value)}
                 value),
-        `record`=λrt.
+        `record` = λrt.
             let objResult := expectObject value
             in eithers.either
               (λerr.left(err))
@@ -349,7 +360,8 @@ term fromJson =
                     let fname := FieldType[name] ft in
                     let ftype := FieldType[`type`] ft in
                     let mval := maps.lookup (Name[] fname) obj in
-                    let defaultVal := Value{null} in
+                    let defaultVal := Value{
+                      null} in
                     let jsonVal := withDefault defaultVal mval in
                     let decoded := fromJson
                         types
@@ -370,8 +382,8 @@ term fromJson =
                         fields = fs}})
                   decodedFields)
               objResult,
-        `union`=λrt.
-            let decodeVariant := λkey,val,ftype.
+        `union` = λrt.
+            let decodeVariant := λkey, val, ftype.
                 let jsonVal := withDefault Value{
                     null} val in
                 let decoded := fromJson
@@ -388,7 +400,7 @@ term fromJson =
                           name = wrap(Name){key},
                           `term` = v}}})
                   decoded in
-            let findAndDecode := λkey,val,fts.match
+            let findAndDecode := λkey, val, fts.match
                   (lists.find
                     (λft.equal (Name[] (FieldType[name] ft)) key)
                     fts)
@@ -416,32 +428,40 @@ term fromJson =
                   (λft.
                     let ftypeStripped := deannotateType (FieldType[`type`] ft)
                     in cases(Type){
-                      `unit`=λ`_`.right(Term{
+                      `unit` = λ`_`.right(Term{
                             `inject` = Injection{
                               typeName = tname,
                               field = Field{
                                 name = wrap(Name){s},
                                 `term` = Term{
                                   `unit`}}}}),
-                      `_`=left(strings.concat
+                      `_` = left(strings.concat
                           ["compact string form requires unit-typed variant, got non-unit type for variant: ", s])}
                       ftypeStripped) in
             cases(Value){
-              `string`=λs.decodeCompactString s,
-              object=λobj.
+              `string` = λs.decodeCompactString s,
+              object = λobj.
                   let objAsMap := maps.fromList obj
                   in processUnion objAsMap,
-              `_`=left("expected string or object for union")}
+              `_` = left("expected string or object for union")}
               value,
-        `unit`=λ`_`.
+        `unit` = λ`_`.
             let objResult := expectObject value
             in eithers.map (λ`_`.Term{`unit`}) objResult,
-        `wrap`=λwn.
-            let decoded := fromJson types compactMaps tname wn value
+        `wrap` = λwn.
+            let decoded := fromJson
+                types
+                compactMaps
+                tname
+                wn
+                value
             in eithers.map
-              (λv.Term{`wrap` = WrappedTerm{typeName = tname, body = v}})
+              (λv.Term{
+                  `wrap` = WrappedTerm{
+                    typeName = tname,
+                    body = v}})
               decoded,
-        `map`=λmt.
+        `map` = λmt.
             let keyType := MapType[keys] mt in
             let valType := MapType[values] mt in
             let compact := and
@@ -517,15 +537,16 @@ term fromJson =
                     entries)
                   left("duplicate key in compact map object") in
             cases(Value){
-              null=λ`_`.right(Term{`map` = maps.empty}),
-              array=λarr.decodeArrayForm arr,
-              object=λobj.ifElse
+              null = λ`_`.right(Term{
+                    `map` = maps.empty}),
+              array = λarr.decodeArrayForm arr,
+              object = λobj.ifElse
                     compact
                     (decodeCompactForm obj)
                     left("expected array for map with non-string-resolving key type"),
-              `_`=left("expected object or array for map")}
+              `_` = left("expected object or array for map")}
               value,
-        pair=λpt.
+        pair = λpt.
             let firstType := PairType[first] pt in
             let secondType := PairType[second] pt in
             let objResult := expectObject value in
@@ -560,7 +581,7 @@ term fromJson =
                               decodedSecond)
                           decodedFirst)))
               objResult,
-        `either`=λet.
+        `either` = λet.
             let leftType := EitherType[`left`] et in
             let rightType := EitherType[`right`] et in
             let objResult := expectObject value in
@@ -598,7 +619,7 @@ term fromJson =
                         (λv.Term{`either` = left(v)})
                         decoded)))
               objResult,
-        variable=λname.
+        variable = λname.
             let lookedUp := maps.lookup name types
             in match
               lookedUp
@@ -610,12 +631,12 @@ term fromJson =
                   name
                   resolvedType
                   value),
-        `_`=left(strings.concat
+        `_` = left(strings.concat
             ["unsupported type for JSON decoding: ", `type` typ])}
         stripped)
       (λpayload.cases(Value){
-          `string`=λs.right(Term{variable = wrap(Name){s}}),
-          `_`=left("expected a JSON string as the \"@var\" variable name")}
+          `string` = λs.right(Term{variable = wrap(Name){s}}),
+          `_` = left("expected a JSON string as the \"@var\" variable name")}
           payload)
 
 ## Parse an IEEE sentinel string (NaN, Infinity, -Infinity, -0.0) to a float64. Returns Nothing for unrecognized strings.

@@ -27,6 +27,7 @@
 #                 ^ source.hydra
 #                  ^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
+>
 >  ## A primitive definition
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -40,6 +41,7 @@
 #              ^ source.hydra
 #               ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                  ^^ source.hydra
+>
 >  ## A term definition
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -53,6 +55,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                        ^^ source.hydra
+>
 >  ## A type definition
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -79,6 +82,7 @@
 #                          ^ source.hydra
 #                           ^^^^^ source.hydra support.type.hydra
 #                                ^^ source.hydra
+>
 >  ## A reference to a primitive definition, by name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -92,6 +96,7 @@
 #              ^ source.hydra
 #               ^^^^ source.hydra variable.other.hydra
 #                   ^^ source.hydra
+>
 >  ## A reference to a term definition, by name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -105,6 +110,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra variable.other.hydra
 #              ^^ source.hydra
+>
 >  ## A reference to a type definition, by name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -131,6 +137,7 @@
 #                      ^ source.hydra
 #                       ^^^^^ source.hydra support.type.hydra
 #                            ^^ source.hydra
+>
 >  ## A dependency exported transitively to consumers of this package (e.g. Gradle `api`, Cabal `build-depends`): present at both compile time and runtime, and visible downstream
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -142,6 +149,7 @@
 #      ^ source.hydra
 #       ^^^^ source.hydra support.type.hydra
 #           ^^ source.hydra
+>
 >  ## A dependency required at runtime but not at compile time
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -153,6 +161,7 @@
 #          ^ source.hydra
 #           ^^^^ source.hydra support.type.hydra
 #               ^^ source.hydra
+>
 >  ## A dependency required only to compile and run the package's tests
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -164,6 +173,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra support.type.hydra
 #            ^^ source.hydra
+>
 >  ## A build-tool-only dependency, used to generate or process sources at build time but not present in the compiled artifact (e.g. an ANTLR tool jar or an annotation processor)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -188,6 +198,7 @@
 #                     ^ source.hydra
 #                      ^^^^^^ source.hydra support.type.hydra
 #                            ^^ source.hydra
+>
 >  ## An optional, concise one-line human-readable summary of the entity.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -202,6 +213,7 @@
 #                        ^^^^^^ source.hydra support.type.hydra
 #                              ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                               ^^ source.hydra
+>
 >  ## Zero or more long-form prose paragraphs: cross-cutting semantic conventions, caveats, and references that would otherwise be repeated across the entity's constituents.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -216,6 +228,7 @@
 #                 ^^^^^^ source.hydra support.type.hydra
 #                       ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                        ^^ source.hydra
+>
 >  ## Typed cross-references to related entities, for navigation and documentation.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -230,6 +243,7 @@
 #                ^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                ^^ source.hydra
+>
 >  ## Optional version-lifecycle milestones for the entity.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -244,6 +258,7 @@
 #                      ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                    ^^ source.hydra
+>
 >  ## Named normative provisions (requirements and recommendations) concerning this entity. Empty when the entity states none.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -271,6 +286,7 @@
 #                      ^ source.hydra
 #                       ^^^^^ source.hydra support.type.hydra
 #                            ^^ source.hydra
+>
 >  ## A reference to a definition (type, term, or primitive), by name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -282,6 +298,7 @@
 #             ^ source.hydra
 #              ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                 ^^ source.hydra
+>
 >  ## A reference to a module, by name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -295,6 +312,7 @@
 #           ^ source.hydra
 #            ^^^^^^^^^^ source.hydra variable.other.hydra
 #                      ^^ source.hydra
+>
 >  ## A reference to a package, by name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -306,6 +324,7 @@
 #          ^ source.hydra
 #           ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                      ^^ source.hydra
+>
 >  ## An inline term expression in Hydra textual syntax
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -317,6 +336,7 @@
 #           ^ source.hydra
 #            ^^^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## An inline type expression in Hydra textual syntax
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -341,6 +361,7 @@
 #                    ^ source.hydra
 #                     ^^^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
+>
 >  ## The version in which the entity was introduced, if known.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -355,6 +376,7 @@
 #                           ^^^^^^^ source.hydra entity.name.type.hydra
 #                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                   ^^ source.hydra
+>
 >  ## The version in which the entity was deprecated, if applicable.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -382,6 +404,7 @@
 #             ^ source.hydra
 #              ^^^^^^ source.hydra support.type.hydra
 #                    ^^ source.hydra
+>
 >  ## The name of the module, which is also the common prefix for all element names in the module
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -393,6 +416,7 @@
 #       ^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.hydra
 #                  ^^ source.hydra
+>
 >  ## Optional documentation and lifecycle metadata for the module
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -407,6 +431,7 @@
 #                     ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                    ^^ source.hydra
+>
 >  ## Any modules which this module directly depends on
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -421,6 +446,7 @@
 #                     ^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                      ^^ source.hydra
+>
 >  ## The definitions in this module
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -448,6 +474,7 @@
 #                       ^ source.hydra
 #                        ^^^^^^ source.hydra support.type.hydra
 #                              ^^ source.hydra
+>
 >  ## The name of the depended-on module
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -461,6 +488,7 @@
 #           ^ source.hydra
 #            ^^^^^^^^^^ source.hydra variable.other.hydra
 #                      ^^ source.hydra
+>
 >  ## The package providing the depended-on module, if disambiguation is required
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -503,6 +531,7 @@
 #              ^ source.hydra
 #               ^^^^^^ source.hydra support.type.hydra
 #                     ^^ source.hydra
+>
 >  ## The name of the package
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -514,6 +543,7 @@
 #       ^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                   ^^ source.hydra
+>
 >  ## Optional documentation and lifecycle metadata for the package
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -528,6 +558,7 @@
 #                     ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                    ^^ source.hydra
+>
 >  ## The packages which this package depends on
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -542,6 +573,7 @@
 #                     ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                       ^^ source.hydra
+>
 >  ## The modules in this package
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -569,6 +601,7 @@
 #                        ^ source.hydra
 #                         ^^^^^^ source.hydra support.type.hydra
 #                               ^^ source.hydra
+>
 >  ## The name of the depended-on package
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -580,6 +613,7 @@
 #       ^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                   ^^ source.hydra
+>
 >  ## The version-range constraint on the depended-on package
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -591,6 +625,7 @@
 #          ^ source.hydra
 #           ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                           ^^ source.hydra
+>
 >  ## The scope in which the dependency is required, if specified. Normally absent for Hydra inter-package dependencies; specified for third-party dependencies whose build scope (compile/runtime/test/tool) is significant.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -633,6 +668,7 @@
 #                          ^ source.hydra
 #                           ^^^^^^ source.hydra support.type.hydra
 #                                 ^^ source.hydra
+>
 >  ## The name of the primitive
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -644,6 +680,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## Optional documentation and lifecycle metadata for the primitive.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -658,6 +695,7 @@
 #                     ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                    ^^ source.hydra
+>
 >  ## The signature of the primitive. Always explicit, never inferred.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -669,6 +707,7 @@
 #            ^ source.hydra
 #             ^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                          ^^ source.hydra
+>
 >  ## Whether the primitive is pure (referentially transparent, no observable side effects). Normally true.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -680,6 +719,7 @@
 #         ^ source.hydra
 #          ^^^^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## Whether the primitive is total (terminates on every input of its declared type). Normally true.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -691,6 +731,7 @@
 #          ^ source.hydra
 #           ^^^^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## An optional cross-compilable reference implementation of the primitive, expressed as a Hydra term. Used by interpreters lacking a native implementation and as a proof-friendly reference. Distinct from the per-host Primitive.implementation.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -718,6 +759,7 @@
 #                ^ source.hydra
 #                 ^^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
+>
 >  ## The fully-qualified name of the provision: the enclosing entity's name extended by one segment (e.g. hydra.core.lib.lists.concat.emptyLists). Composed at definition time by a helper that prefixes the entity's name, exactly as a definition's name is composed from its module's name -- so the author writes only the final segment, but the stored value is the full name.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -729,6 +771,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## Whether this provision is a requirement or a recommendation.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -740,6 +783,7 @@
 #       ^ source.hydra
 #        ^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                     ^^ source.hydra
+>
 >  ## The normative statement itself, as markdown prose: the falsifiable claim.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -764,6 +808,7 @@
 #                    ^ source.hydra
 #                     ^^^^^ source.hydra support.type.hydra
 #                          ^^ source.hydra
+>
 >  ## A requirement: no deviation is permitted if conformance is to be claimed (MUST).
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -775,6 +820,7 @@
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
 #                   ^^ source.hydra
+>
 >  ## A recommendation: observed strictly by the Hydra kernel and codebase, but a downstream project may opt out (SHOULD).
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -799,6 +845,7 @@
 #                     ^ source.hydra
 #                      ^^^^^^ source.hydra support.type.hydra
 #                            ^^ source.hydra
+>
 >  ## The name of the term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -810,6 +857,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## Optional documentation and lifecycle metadata for the term definition
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -824,6 +872,7 @@
 #                     ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                    ^^ source.hydra
+>
 >  ## The optional signature of the term. When absent, the signature has yet to be inferred.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -838,6 +887,7 @@
 #                      ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                    ^^ source.hydra
+>
 >  ## The term being defined
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -862,6 +912,7 @@
 #                     ^ source.hydra
 #                      ^^^^^^ source.hydra support.type.hydra
 #                            ^^ source.hydra
+>
 >  ## The name of the type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -873,6 +924,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## Optional documentation and lifecycle metadata for the type definition
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -887,6 +939,7 @@
 #                     ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                    ^^ source.hydra
+>
 >  ## The type scheme being defined
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -926,6 +979,7 @@
 #                   ^ source.hydra
 #                    ^^^^^^ source.hydra support.type.hydra
 #                          ^^ source.hydra
+>
 >  ## The inclusive lower bound, if any (the minimum acceptable version).
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -940,6 +994,7 @@
 #                           ^^^^^^^ source.hydra entity.name.type.hydra
 #                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                   ^^ source.hydra
+>
 >  ## The exclusive upper bound, if any (versions strictly below this are acceptable).
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -967,6 +1022,7 @@
 #                       ^ source.hydra
 #                        ^^^^^ source.hydra support.type.hydra
 #                             ^^ source.hydra
+>
 >  ## Any version satisfies the dependency
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -978,6 +1034,7 @@
 #      ^ source.hydra
 #       ^^^^ source.hydra support.type.hydra
 #           ^^ source.hydra
+>
 >  ## Exactly the given version satisfies the dependency; used to pin a specific release
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -989,6 +1046,7 @@
 #        ^ source.hydra
 #         ^^^^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## Any version greater than or equal to the given version (e.g. PyPI ">=7.0")
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1000,6 +1058,7 @@
 #          ^ source.hydra
 #           ^^^^^^^ source.hydra variable.other.hydra
 #                  ^^ source.hydra
+>
 >  ## A version range with an optional inclusive lower bound and optional exclusive upper bound (e.g. ">=3.7,<4.0")
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

@@ -1,0 +1,30 @@
+## Hydra's inference test suite
+module hydra.core.test.inference.all
+
+import hydra.core.test.inference.algebraicTypes as algebraicTypes
+import hydra.core.test.inference.algorithmW as algorithmW
+import hydra.core.test.inference.annotations as annotations
+import hydra.core.test.inference.classes as classes
+import hydra.core.test.inference.failures as failures
+import hydra.core.test.inference.fundamentals as fundamentals
+import hydra.core.test.inference.idempotence as idempotence
+import hydra.core.test.inference.kernelExamples as kernelExamples
+import hydra.core.test.inference.nominalTypes as nominalTypes
+import hydra.core.testing
+
+## The group of all inference tests
+term allTests =
+  TestGroup{
+    name = "inference",
+    description = none,
+    subgroups = [
+      algebraicTypes.allTests,
+      algorithmW.allTests,
+      annotations.allTests,
+      classes.allTests,
+      failures.allTests,
+      fundamentals.allTests,
+      idempotence.allTests,
+      kernelExamples.allTests,
+      nominalTypes.allTests],
+    `cases` = []}

@@ -24,7 +24,7 @@ import hydra.core.typing
 
 ## Build a Graph from element bindings, environment, and primitives
 term buildGraph =
-  λelements,environment,primitives.
+  λelements, environment, primitives.
     let elementTerms := maps.fromList
         (lists.map (λb.(Binding[name] b, Binding[`term`] b)) elements) in
     let letTerms := maps.fromList
@@ -33,7 +33,7 @@ term buildGraph =
           (maps.toList environment)) in
     let mergedTerms := maps.union elementTerms letTerms in
     let filteredTerms := maps.filterWithKey
-        (λk,`_v`.not (maps.member k primitives))
+        (λk, `_v`.not (maps.member k primitives))
         mergedTerms in
     let elementTypes := maps.fromList
         (optionals.givens
@@ -43,7 +43,7 @@ term buildGraph =
                 (Binding[typeScheme] b))
             elements)) in
     let filteredTypes := maps.filterWithKey
-        (λk,`_v`.not (maps.member k primitives))
+        (λk, `_v`.not (maps.member k primitives))
         elementTypes in
     Graph{
       boundTerms = filteredTerms,
@@ -59,7 +59,7 @@ term buildGraph =
 
 ## Pick a name that does not collide with a reserved set, by appending a numeric suffix to the requested name when necessary
 term chooseUniqueName =
-  λreserved,name.
+  λreserved, name.
     let tryName := λindex.
         let candidate := ifElse
             (equal index 1:int32)
@@ -70,10 +70,10 @@ term chooseUniqueName =
 
 ## Resolve a schema type through a chain of zero or more typedefs
 term dereferenceSchemaType =
-  λname,types.
+  λname, types.
     let forType := λt.cases(Type){
-          annotated=λat.forType (AnnotatedType[body] at),
-          `forall`=λft.optionals.map
+          annotated = λat.forType (AnnotatedType[body] at),
+          `forall` = λft.optionals.map
                 (λts.TypeScheme{
                     variables = lists.cons
                         (ForallType[parameter] ft)
@@ -81,8 +81,11 @@ term dereferenceSchemaType =
                     body = TypeScheme[body] ts,
                     constraints = TypeScheme[constraints] ts})
                 (forType (ForallType[body] ft)),
-          variable=λv.dereferenceSchemaType v types,
-          `_`=given(TypeScheme{variables = [], body = t, constraints = maps.empty})}
+          variable = λv.dereferenceSchemaType v types,
+          `_` = given(TypeScheme{
+              variables = [],
+              body = t,
+              constraints = maps.empty})}
           t
     in optionals.bind
       (maps.lookup name types)
@@ -95,14 +98,14 @@ term dereferenceSchemaType =
 
 ## Look up a binding by name in a graph, returning Either an error or the binding
 term dereferenceVariable =
-  λgraph,name.optionals.match
+  λgraph, name.optionals.match
       (lookupBinding graph name)
       left(Error{resolution = ResolutionError{noSuchBinding = NoSuchBindingError{name = name}}})
       (λ`right_`.right(`right_`))
 
 ## Create a graph from a parent graph, schema types, and list of element bindings
 term elementsToGraph =
-  λparent,schemaTypes,elements.
+  λparent, schemaTypes, elements.
     let prims := Graph[primitives] parent in
     let g := buildGraph elements maps.empty prims in
     Graph{
@@ -134,12 +137,16 @@ term emptyInferenceContext = InferenceContext{freshTypeVariableCount = 0:int32, 
 term fieldsOf =
   λt.
     let stripped := deannotateType t
-    in cases(Type){`forall`=λforallType.fieldsOf (ForallType[body] forallType), `record`=λrt.rt, `union`=λrt.rt, `_`=[]}
+    in cases(Type){
+      `forall` = λforallType.fieldsOf (ForallType[body] forallType),
+      `record` = λrt.rt,
+      `union` = λrt.rt,
+      `_` = []}
       stripped
 
 ## Look up a field by name in a record's field map and decode its value, failing if the field is missing
 term getField =
-  λm,fname,decode.optionals.match
+  λm, fname, decode.optionals.match
       (maps.lookup fname m)
       left(Error{resolution = ResolutionError{noMatchingField = NoMatchingFieldError{fieldName = fname}}})
       decode
@@ -155,7 +162,7 @@ term graphToBindings =
 
 ## Build a graph with primitives assembled from built-in and user-provided lists. User-provided primitives shadow built-in ones.
 term graphWithPrimitives =
-  λbuiltIn,userProvided.
+  λbuiltIn, userProvided.
     let toMap := λps.maps.fromList
           (lists.map (λp.(PrimitiveDefinition[name] (Primitive[definition] p), p)) ps) in
     let prims := maps.union (toMap userProvided) (toMap builtIn) in
@@ -163,31 +170,34 @@ term graphWithPrimitives =
 
 ## Look up a binding in a graph by name
 term lookupBinding =
-  λgraph,name.optionals.map
-      (λ`term`.Binding{name = name, `term` = `term`, typeScheme = maps.lookup name (Graph[boundTypes] graph)})
+  λgraph, name.optionals.map
+      (λ`term`.Binding{
+          name = name,
+          `term` = `term`,
+          typeScheme = maps.lookup name (Graph[boundTypes] graph)})
       (maps.lookup name (Graph[boundTerms] graph))
 
 ## Look up a primitive function in a graph by name
-term lookupPrimitive = λgraph,name.maps.lookup name (Graph[primitives] graph)
+term lookupPrimitive = λgraph, name.maps.lookup name (Graph[primitives] graph)
 
 ## Look up a term by name in a graph
-term lookupTerm = λgraph,name.maps.lookup name (Graph[boundTerms] graph)
+term lookupTerm = λgraph, name.maps.lookup name (Graph[boundTerms] graph)
 
 ## Match a term against an enum type, dispatching on the variant name to a value from the supplied list
 term matchEnum =
-  λgraph,tname,pairs.matchUnion graph tname (lists.map (λpair.matchUnitField (first pair) (second pair)) pairs)
+  λgraph, tname, pairs.matchUnion graph tname (lists.map (λpair.matchUnitField (first pair) (second pair)) pairs)
 
 ## Match a term against a record type and decode its fields, failing if the term is not a record
 term matchRecord =
-  λgraph,decode,`term`.
+  λgraph, decode, `term`.
     let stripped := deannotateAndDetypeTerm `term`
     in cases(Term){
-      `record`=λ`record`.decode
+      `record` = λ`record`.decode
             (maps.fromList
               (lists.map
                 (λfield.(Field[name] field, Field[`term`] field))
                 (Record[fields] `record`))),
-      `_`=left(Error{
+      `_` = left(Error{
           resolution = ResolutionError{
             unexpectedShape = UnexpectedShapeError{
               expected = "record",
@@ -196,14 +206,14 @@ term matchRecord =
 
 ## Match a term against a union type, dispatching on the injected variant to the appropriate decoder. Variable terms are dereferenced through the graph before matching.
 term matchUnion =
-  λgraph,tname,pairs,`term`.
+  λgraph, tname, pairs, `term`.
     let stripped := deannotateAndDetypeTerm `term` in
     let mapping := maps.fromList pairs in
     cases(Term){
-      variable=λname.eithers.bind
+      variable = λname.eithers.bind
             (requireBinding graph name)
             (λel.matchUnion graph tname pairs (Binding[`term`] el)),
-      `inject`=λinjection.
+      `inject` = λinjection.
           let exp := let fname := Field[name] (Injection[field] injection) in
             let val := Field[`term`]
                 (Injection[field] injection) in
@@ -215,7 +225,9 @@ term matchUnion =
                     fieldName = fname}}})
               (λf.f val)
           in ifElse
-            (equal (Name[] (Injection[typeName] injection)) (Name[] tname))
+            (equal
+              (Name[] (Injection[typeName] injection))
+              (Name[] tname))
             exp
             left(Error{
               resolution = ResolutionError{
@@ -224,7 +236,7 @@ term matchUnion =
                       "injection for type "
                       (Name[] tname),
                   actual = model.term `term`}}}),
-      `_`=left(Error{
+      `_` = left(Error{
           resolution = ResolutionError{
             unexpectedShape = UnexpectedShapeError{
               expected = strings.concat2
@@ -234,11 +246,11 @@ term matchUnion =
       stripped
 
 ## Build a (fieldName, decoder) pair for a unit-valued union variant: the decoder ignores its argument and returns a fixed value
-term matchUnitField = λfname,x.(fname, λignored.right(x))
+term matchUnitField = λfname, x.(fname, λignored.right(x))
 
 ## Look up a binding in a graph by name, failing with a list of available names if it is not found
 term requireBinding =
-  λgraph,name.
+  λgraph, name.
     let showAll := false in
     let ellipsis := λstrings.ifElse
           (and (gt (lists.length strings) 3:int32) (not showAll))
@@ -256,14 +268,14 @@ term requireBinding =
 
 ## Look up a primitive in a graph by name, failing if it is not registered
 term requirePrimitive =
-  λgraph,name.optionals.match
+  λgraph, name.optionals.match
       (lookupPrimitive graph name)
       left(Error{resolution = ResolutionError{noSuchPrimitive = NoSuchPrimitiveError{name = name}}})
       (λx.right(x))
 
 ## Look up a primitive's type scheme in a graph by name, failing if the primitive is not registered
 term requirePrimitiveType =
-  λtx,name.
+  λtx, name.
     let mts := optionals.map
         (λ`_p`.termSignatureToTypeScheme (PrimitiveDefinition[signature] (Primitive[definition] `_p`)))
         (maps.lookup name (Graph[primitives] tx))
@@ -274,37 +286,37 @@ term requirePrimitiveType =
 
 ## Resolve a name to a term in the graph, following variable references, and fail if the name is not bound
 term requireTerm =
-  λgraph,name.optionals.match
+  λgraph, name.optionals.match
       (resolveTerm graph name)
       left(Error{resolution = ResolutionError{noSuchBinding = NoSuchBindingError{name = name}}})
       (λx.right(x))
 
 ## TODO: distinguish between lambda-bound and let-bound variables
 term resolveTerm =
-  λgraph,name.
+  λgraph, name.
     let recurse := λ`term`.
         let stripped := deannotateTerm `term`
-        in cases(Term){variable=λ`name'`.resolveTerm graph `name'`, `_`=given(`term`)}
+        in cases(Term){variable = λ`name'`.resolveTerm graph `name'`, `_` = given(`term`)}
           stripped
     in optionals.match (lookupTerm graph name) none recurse
 
 ## Strip annotations and type lambdas/applications from a term, then follow variable references through the graph until a non-variable term is reached
 term stripAndDereferenceTerm =
-  λgraph,`term`.
+  λgraph, `term`.
     let stripped := deannotateAndDetypeTerm `term`
     in cases(Term){
-      variable=λv.eithers.bind (requireTerm graph v) (λt.stripAndDereferenceTerm graph t),
-      `_`=right(stripped)}
+      variable = λv.eithers.bind (requireTerm graph v) (λt.stripAndDereferenceTerm graph t),
+      `_` = right(stripped)}
       stripped
 
 ## Strip annotations and dereference variables, returning Either an error or the resolved term
 term stripAndDereferenceTermEither =
-  λgraph,`term`.
+  λgraph, `term`.
     let stripped := deannotateAndDetypeTerm `term`
     in cases(Term){
-      variable=λv.eithers.either
+      variable = λv.eithers.either
             (λ`left_`.left(`left_`))
             (λbinding.stripAndDereferenceTermEither graph (Binding[`term`] binding))
             (dereferenceVariable graph v),
-      `_`=right(stripped)}
+      `_` = right(stripped)}
       stripped

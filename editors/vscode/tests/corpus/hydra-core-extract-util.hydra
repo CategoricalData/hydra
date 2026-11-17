@@ -11,7 +11,7 @@ import hydra.core.util
 
 ## Extract a comparison from a term
 term comparison =
-  λcx,graph,`term`.bind
+  λcx, graph, `term`.bind
       (unitVariant Name{"hydra.core.util.Comparison"} graph `term`)
       (λfname.ifElse
           (equal (Name[] fname) "equalTo")

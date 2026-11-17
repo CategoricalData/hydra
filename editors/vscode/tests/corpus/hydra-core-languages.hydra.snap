@@ -44,7 +44,7 @@
 #     ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
->  let literalVariants := fromList reflect.literalVariants, floatTypes := fromList reflect.floatTypes, integerTypes := fromList reflect.integerTypes, termVariants := fromList reflect.termVariants, typeVariants := fromList reflect.typeVariants, types := λt.cases(Type){`_`=true} t
+>  let literalVariants := fromList reflect.literalVariants, floatTypes := fromList reflect.floatTypes, integerTypes := fromList reflect.integerTypes, termVariants := fromList reflect.termVariants, typeVariants := fromList reflect.typeVariants, types := λt.cases(Type){`_` = true} t
 #^^ source.hydra
 #  ^^^ source.hydra keyword.control.hydra
 #     ^ source.hydra
@@ -102,10 +102,12 @@
 #                                                                                                                                                                                                                                                                           ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                                                                                                                                                                                                                                                                            ^ source.hydra variable.other.escaped.hydra
 #                                                                                                                                                                                                                                                                             ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                                                                                                                                                                                                                                                                              ^ source.hydra keyword.operator.equals.hydra
-#                                                                                                                                                                                                                                                                               ^^^^ source.hydra constant.language.boolean.hydra
-#                                                                                                                                                                                                                                                                                   ^^ source.hydra
-#                                                                                                                                                                                                                                                                                     ^ source.hydra variable.other.hydra
+#                                                                                                                                                                                                                                                                              ^ source.hydra
+#                                                                                                                                                                                                                                                                               ^ source.hydra keyword.operator.equals.hydra
+#                                                                                                                                                                                                                                                                                ^ source.hydra
+#                                                                                                                                                                                                                                                                                 ^^^^ source.hydra constant.language.boolean.hydra
+#                                                                                                                                                                                                                                                                                     ^^ source.hydra
+#                                                                                                                                                                                                                                                                                       ^ source.hydra variable.other.hydra
 >  in Language{
 #^^ source.hydra
 #  ^^ source.hydra keyword.control.hydra

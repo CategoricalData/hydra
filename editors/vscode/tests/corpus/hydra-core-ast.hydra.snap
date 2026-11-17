@@ -65,6 +65,7 @@
 #                 ^ source.hydra
 #                  ^^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
+>
 >  ## An optional indentation string
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -79,6 +80,7 @@
 #                   ^^^^^^ source.hydra support.type.hydra
 #                         ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                          ^^ source.hydra
+>
 >  ## Whether to place a newline before the content
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -90,6 +92,7 @@
 #                       ^ source.hydra
 #                        ^^^^^^^ source.hydra support.type.hydra
 #                               ^^ source.hydra
+>
 >  ## Whether to place a newline after the content
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -114,6 +117,7 @@
 #                  ^ source.hydra
 #                   ^^^^^^ source.hydra support.type.hydra
 #                         ^^ source.hydra
+>
 >  ## The bracket pair enclosing the expression
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -125,6 +129,7 @@
 #           ^ source.hydra
 #            ^^^^^^^^ source.hydra variable.other.hydra
 #                    ^^ source.hydra
+>
 >  ## The expression within the brackets
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -136,6 +141,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## The formatting style for the bracketed block
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -160,6 +166,7 @@
 #               ^ source.hydra
 #                ^^^^^^ source.hydra support.type.hydra
 #                      ^^ source.hydra
+>
 >  ## The opening bracket symbol
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -171,6 +178,7 @@
 #       ^ source.hydra
 #        ^^^^^^ source.hydra variable.other.hydra
 #              ^^ source.hydra
+>
 >  ## The closing bracket symbol
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -195,6 +203,7 @@
 #           ^ source.hydra
 #            ^^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## A constant symbol
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -206,6 +215,7 @@
 #        ^ source.hydra
 #         ^^^^^^ source.hydra variable.other.hydra
 #               ^^ source.hydra
+>
 >  ## An indented expression
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -217,6 +227,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                            ^^ source.hydra
+>
 >  ## An operator expression
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -228,6 +239,7 @@
 #     ^ source.hydra
 #      ^^^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## A bracketed expression
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -239,6 +251,7 @@
 #           ^ source.hydra
 #            ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                       ^^ source.hydra
+>
 >  ## A sequence of expressions joined by a separator, treated as structural layout (not subject to parenthesization)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -263,6 +276,7 @@
 #                  ^ source.hydra
 #                   ^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
+>
 >  ## Indent all lines with the given string
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -274,6 +288,7 @@
 #           ^ source.hydra
 #            ^^^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## Indent only lines after the first with the given string
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -298,6 +313,7 @@
 #                         ^ source.hydra
 #                          ^^^^^^ source.hydra support.type.hydra
 #                                ^^ source.hydra
+>
 >  ## The indentation style
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -309,6 +325,7 @@
 #        ^ source.hydra
 #         ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                    ^^ source.hydra
+>
 >  ## The expression to be indented
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -333,6 +350,7 @@
 #         ^ source.hydra
 #          ^^^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
+>
 >  ## The operator symbol
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -344,6 +362,7 @@
 #         ^ source.hydra
 #          ^^^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## The padding around the operator
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -355,6 +374,7 @@
 #          ^ source.hydra
 #           ^^^^^^^ source.hydra variable.other.hydra
 #                  ^^ source.hydra
+>
 >  ## The precedence of the operator
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -366,6 +386,7 @@
 #             ^ source.hydra
 #              ^^^^^^^^^^ source.hydra variable.other.hydra
 #                        ^^ source.hydra
+>
 >  ## The associativity of the operator
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -390,6 +411,7 @@
 #             ^ source.hydra
 #              ^^^^^^ source.hydra support.type.hydra
 #                    ^^ source.hydra
+>
 >  ## The operator
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -401,6 +423,7 @@
 #     ^ source.hydra
 #      ^^ source.hydra variable.other.hydra
 #        ^^ source.hydra
+>
 >  ## The left-hand side operand
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -412,6 +435,7 @@
 #      ^ source.hydra
 #       ^^^^ source.hydra variable.other.hydra
 #           ^^ source.hydra
+>
 >  ## The right-hand side operand
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -436,6 +460,7 @@
 #              ^ source.hydra
 #               ^^^^^^ source.hydra support.type.hydra
 #                     ^^ source.hydra
+>
 >  ## Padding to the left of the operator
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -449,6 +474,7 @@
 #         ^ source.hydra
 #          ^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## Padding to the right of the operator
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -490,6 +516,7 @@
 #              ^ source.hydra
 #               ^^^^^^ source.hydra support.type.hydra
 #                     ^^ source.hydra
+>
 >  ## The separator operator
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -501,6 +528,7 @@
 #     ^ source.hydra
 #      ^^ source.hydra variable.other.hydra
 #        ^^ source.hydra
+>
 >  ## The expressions to join
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -543,6 +571,7 @@
 #         ^ source.hydra
 #          ^^^^^ source.hydra support.type.hydra
 #               ^^ source.hydra
+>
 >  ## No whitespace
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -556,6 +585,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra support.type.hydra
 #              ^^ source.hydra
+>
 >  ## A single space
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -567,6 +597,7 @@
 #        ^ source.hydra
 #         ^^^^ source.hydra support.type.hydra
 #             ^^ source.hydra
+>
 >  ## A line break
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -578,6 +609,7 @@
 #        ^ source.hydra
 #         ^^^^ source.hydra support.type.hydra
 #             ^^ source.hydra
+>
 >  ## A line break followed by indentation
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -589,6 +621,7 @@
 #                 ^ source.hydra
 #                  ^^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
+>
 >  ## Two line breaks
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

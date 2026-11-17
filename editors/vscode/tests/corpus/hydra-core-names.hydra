@@ -20,7 +20,7 @@ import hydra.core.util
 
 ## Pick a string label that does not collide with a reserved set, by appending a numeric suffix when necessary
 term chooseUniqueLabel =
-  λreserved,label.
+  λreserved, label.
     let tryLabel := λindex.
         let candidate := ifElse
             (equal index 1:int32)
@@ -31,7 +31,7 @@ term chooseUniqueLabel =
 
 ## Given a mapping of namespaces to prefixes, convert a name to a compact string representation
 term compactName =
-  λnamespaces,name.
+  λnamespaces, name.
     let qualName := qualifyName name, mns := QualifiedName[moduleName] qualName, local := QualifiedName[local] qualName
     in match
       mns
@@ -39,11 +39,11 @@ term compactName =
       (λns.match (lookup ns namespaces) local (λpre.strings.concat [pre, ":", local]))
 
 ## Compose a provision's fully-qualified name from its enclosing entity's name and its local segment
-term composeProvisionName = λentityName,localName.Name{strings.concat [Name[] entityName, ".", localName]}
+term composeProvisionName = λentityName, localName.Name{strings.concat [Name[] entityName, ".", localName]}
 
 ## Generate a binding name for a derived function from a type/term name, given the category's namespace segments
 term derivedBindingName =
-  λcategoryPrefix,alwaysDropFirst,n.derivedDefinitionName
+  λcategoryPrefix, alwaysDropFirst, n.derivedDefinitionName
       categoryPrefix
       alwaysDropFirst
       false
@@ -52,7 +52,7 @@ term derivedBindingName =
 
 ## Generate a derived element name from a source name's namespace and an explicit local name
 term derivedDefinitionName =
-  λcategoryPrefix,`_alwaysDropFirst`,prefixWhenNoNamespace,n,localName.
+  λcategoryPrefix, `_alwaysDropFirst`, prefixWhenNoNamespace, n, localName.
     let localResult := wrap(Name){localName} in
     let prefixedResult := Name{strings.join
       "."
@@ -80,7 +80,7 @@ term derivedDefinitionName =
 
 ## Generate a derived module name by inserting the category after the package root (hydra.<pkgroot>)
 term derivedModuleName =
-  λcategoryPrefix,`_alwaysDropFirst`,ns.
+  λcategoryPrefix, `_alwaysDropFirst`, ns.
     let parts := strings.splitOn "." (ModuleName[] ns) in
     let root := lists.take 2:int32 parts in
     let rest := lists.drop 2:int32 parts in
@@ -98,8 +98,8 @@ term freshName =
 
 ## Generate multiple fresh type variable names, threading InferenceContext
 term freshNames =
-  λn,cx.
-    let go := λacc,`_`.
+  λn, cx.
+    let go := λacc, `_`.
         let names := first acc in
         let cx0 := second acc in
         let result := freshName cx0 in
@@ -116,7 +116,7 @@ term moduleNameOf = λ`arg_`.QualifiedName[moduleName] (qualifyName `arg_`)
 
 ## Convert a module name to a file path with the given case convention and file extension
 term moduleNameToFilePath =
-  λcaseConv,ext,ns.
+  λcaseConv, ext, ns.
     let parts := lists.map
         (convertCase CaseConvention{camel} caseConv)
         (strings.splitOn "." (ModuleName[] ns))
@@ -124,7 +124,7 @@ term moduleNameToFilePath =
 
 ## Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator
 term nameToFilePath =
-  λnsConv,localConv,ext,name.
+  λnsConv, localConv, ext, name.
     let qualName := qualifyName name in
     let ns := QualifiedName[moduleName] qualName in
     let local := QualifiedName[local] qualName in
@@ -150,12 +150,12 @@ term normalTypeVariable = λi.Name{strings.concat2 "t" (printInt32 i)}
 
 ## Prepend a SubtermStep to the InferenceContext's trace. The trace is accumulated backwards as inference descends through subterms; at error-emission time the list is reversed and wrapped into a SubtermPath stamped onto the error.
 term pushSubtermStep =
-  λstep,cx.InferenceContext{
+  λstep, cx.InferenceContext{
       freshTypeVariableCount = InferenceContext[freshTypeVariableCount] cx,
       trace = lists.cons step (InferenceContext[trace] cx)}
 
 ## Construct a qualified (dot-separated) name
-term qname = λns,name.Name{strings.concat [ModuleName[] ns, ".", name]}
+term qname = λns, name.Name{strings.concat [ModuleName[] ns, ".", name]}
 
 ## Split a dot-separated name into a namespace and local name
 term qualifyName =
@@ -176,7 +176,7 @@ term qualifyName =
 
 ## Restore the original trace from baseCx, while keeping the freshTypeVariableCount from newCx. Used between sibling sub-inferences (e.g. application LHS vs RHS) so that an error in the second sibling doesn't include the first sibling's trace path. Returns a new InferenceContext.
 term restoreTrace =
-  λbaseCx,newCx.InferenceContext{
+  λbaseCx, newCx.InferenceContext{
       freshTypeVariableCount = InferenceContext[freshTypeVariableCount] newCx,
       trace = InferenceContext[trace] baseCx}
 

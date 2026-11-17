@@ -1,0 +1,165 @@
+## Test cases for hydra.core.lib.pairs primitives
+module hydra.core.test.lib.pairs
+
+import hydra.core.lib.literals
+import hydra.core.lib.math
+import hydra.core.lib.pairs
+import hydra.core.lib.strings
+import hydra.core.model
+import hydra.core.testing
+
+## Test cases for hydra.core.lib.pairs primitives
+term allTests =
+  TestGroup{
+    name = "hydra.core.lib.pairs primitives",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "mapsBothElementsIndependently",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "transform both elements",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λp.concat
+                        ["(", printInt32 (first p), ", ", printInt32 (second p), ")"])
+                      (bimap
+                        (λx.mul x 2:int32)
+                        (λs.length s)
+                        (5:int32, "ab")),
+                expected = λ`_`.(λp.concat
+                        ["(", printInt32 (first p), ", ", printInt32 (second p), ")"])
+                      (10:int32, 2:int32)}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.pairs.bimap.mapsBothElementsIndependently"}]},
+          TestCaseWithMetadata{
+            name = "with zero",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λp.concat
+                        ["(", printInt32 (first p), ", ", printInt32 (second p), ")"])
+                      (bimap
+                        (λx.mul x 2:int32)
+                        (λs.length s)
+                        (0:int32, "hello")),
+                expected = λ`_`.(λp.concat
+                        ["(", printInt32 (first p), ", ", printInt32 (second p), ")"])
+                      (0:int32, 5:int32)}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.pairs.bimap.mapsBothElementsIndependently"}]}]},
+      TestGroup{
+        name = "returnsFirstComponent",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "extract first element",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n)
+                      (first (42:int32, "hello")),
+                expected = λ`_`.(λn.printInt32 n) 42:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.pairs.first.returnsFirstComponent"}]},
+          TestCaseWithMetadata{
+            name = "with zero",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n)
+                      (first (0:int32, "world")),
+                expected = λ`_`.(λn.printInt32 n) 0:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.pairs.first.returnsFirstComponent"}]},
+          TestCaseWithMetadata{
+            name = "negative number",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n)
+                      (first (-5:int32, "test")),
+                expected = λ`_`.(λn.printInt32 n) -5:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.pairs.first.returnsFirstComponent"}]}]},
+      TestGroup{
+        name = "constructsFromTwoValues",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "construct a pair",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λp.concat
+                        ["(", printInt32 (first p), ", ", second p, ")"])
+                      (pair 42:int32 "hello"),
+                expected = λ`_`.(λp.concat
+                        ["(", printInt32 (first p), ", ", second p, ")"])
+                      (42:int32, "hello")}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.pairs.pair.constructsFromTwoValues"}]},
+          TestCaseWithMetadata{
+            name = "with zero",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λp.concat
+                        ["(", printInt32 (first p), ", ", second p, ")"])
+                      (pair 0:int32 "world"),
+                expected = λ`_`.(λp.concat
+                        ["(", printInt32 (first p), ", ", second p, ")"])
+                      (0:int32, "world")}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.pairs.pair.constructsFromTwoValues"}]},
+          TestCaseWithMetadata{
+            name = "negative number",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λp.concat
+                        ["(", printInt32 (first p), ", ", second p, ")"])
+                      (pair -5:int32 "test"),
+                expected = λ`_`.(λp.concat
+                        ["(", printInt32 (first p), ", ", second p, ")"])
+                      (-5:int32, "test")}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.pairs.pair.constructsFromTwoValues"}]}]},
+      TestGroup{
+        name = "returnsSecondComponent",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "extract second element",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λs.s) (second (42:int32, "hello")),
+                expected = λ`_`.(λs.s) "hello"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.pairs.second.returnsSecondComponent"}]},
+          TestCaseWithMetadata{
+            name = "empty string",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λs.s) (second (0:int32, "")),
+                expected = λ`_`.(λs.s) ""}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.pairs.second.returnsSecondComponent"}]},
+          TestCaseWithMetadata{
+            name = "long string",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λs.s) (second (123:int32, "testing")),
+                expected = λ`_`.(λs.s) "testing"}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.pairs.second.returnsSecondComponent"}]}]}],
+    `cases` = []}

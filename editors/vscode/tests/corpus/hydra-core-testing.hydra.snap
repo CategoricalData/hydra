@@ -23,6 +23,7 @@
 #                        ^ source.hydra
 #                         ^^^^^^ source.hydra support.type.hydra
 #                               ^^ source.hydra
+>
 >  ## A thunk producing the effect to be interpreted by the test runner. The thunk defers construction of the effect until the runner forces it.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -41,6 +42,7 @@
 #                        ^^^^^^ source.hydra support.type.hydra
 #                              ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                               ^^ source.hydra
+>
 >  ## A thunk producing the expected result string.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -84,6 +86,7 @@
 #               ^ source.hydra
 #                ^^^^^ source.hydra support.type.hydra
 #                     ^^ source.hydra
+>
 >  ## An effectful test case (interpret an effect, then string comparison)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -95,6 +98,7 @@
 #            ^ source.hydra
 #             ^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                              ^^ source.hydra
+>
 >  ## A universal test case (string comparison)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -119,6 +123,7 @@
 #                           ^ source.hydra
 #                            ^^^^^^ source.hydra support.type.hydra
 #                                  ^^ source.hydra
+>
 >  ## A short name for the test case
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -130,6 +135,7 @@
 #       ^ source.hydra
 #        ^^^^^^ source.hydra support.type.hydra
 #              ^^ source.hydra
+>
 >  ## The test case itself
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -141,6 +147,7 @@
 #       ^ source.hydra
 #        ^^^^^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## An optional longer description of the test case
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -155,6 +162,7 @@
 #                        ^^^^^^ source.hydra support.type.hydra
 #                              ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                               ^^ source.hydra
+>
 >  ## Zero or more tags for the test case
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -169,6 +177,7 @@
 #             ^^^ source.hydra entity.name.type.hydra
 #                ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                 ^^ source.hydra
+>
 >  ## The fully-qualified names of zero or more provisions (hydra.core.packaging.Provision) which this test case confirms. A provision is authoritative with zero, one, or many confirming tests.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -196,6 +205,7 @@
 #                ^ source.hydra
 #                 ^^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
+>
 >  ## A short name for the test group
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -207,6 +217,7 @@
 #       ^ source.hydra
 #        ^^^^^^ source.hydra support.type.hydra
 #              ^^ source.hydra
+>
 >  ## An optional longer description of the test group
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -221,6 +232,7 @@
 #                        ^^^^^^ source.hydra support.type.hydra
 #                              ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                               ^^ source.hydra
+>
 >  ## Zero or more subgroups
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -235,6 +247,7 @@
 #                  ^^^^^^^^^ source.hydra entity.name.type.hydra
 #                           ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                            ^^ source.hydra
+>
 >  ## Zero or more test cases
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -264,6 +277,7 @@
 #                        ^ source.hydra
 #                         ^^^^^^ source.hydra support.type.hydra
 #                               ^^ source.hydra
+>
 >  ## A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -279,6 +293,7 @@
 #                ^ source.hydra
 #                 ^^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
+>
 >  ## A thunk producing the expected result string.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

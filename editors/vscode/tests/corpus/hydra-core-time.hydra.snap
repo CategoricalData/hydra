@@ -18,6 +18,7 @@
 #               ^ source.hydra
 #                ^^^^^^ source.hydra support.type.hydra
 #                      ^^ source.hydra
+>
 >  ## Whole seconds since the Unix Epoch; signed, so instants in the far past or distant future are representable
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -29,6 +30,7 @@
 #          ^ source.hydra
 #           ^^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
+>
 >  ## Nanoseconds within the second, in the range [0, 999999999]; unsigned, as the value is never negative
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

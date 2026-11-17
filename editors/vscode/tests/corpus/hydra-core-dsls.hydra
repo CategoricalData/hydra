@@ -31,15 +31,15 @@ import hydra.core.variants
 ## Collect forall type variable names from a type
 term collectForallVars =
   λtyp.cases(Type){
-      annotated=λat.collectForallVars (AnnotatedType[body] at),
-      `forall`=λft.lists.cons (ForallType[parameter] ft) (collectForallVars (ForallType[body] ft)),
-      `_`=[]}
+      annotated = λat.collectForallVars (AnnotatedType[body] at),
+      `forall` = λft.lists.cons (ForallType[parameter] ft) (collectForallVars (ForallType[body] ft)),
+      `_` = []}
       typ
 
 ## Deduplicate bindings by appending numeric suffixes to duplicate names
 term deduplicateBindings =
   λbindings.lists.foldl
-      (λacc,b.
+      (λacc, b.
         let usedNames := sets.fromList (lists.map (λa.Binding[name] a) acc) in
         let uniqueName := chooseUniqueName usedNames (Binding[name] b) in
         lists.concat2
@@ -56,14 +56,14 @@ term dslDefinitionName = derivedDefinitionName ["dsl"] false true
 
 ## Transform a source module into a DSL module
 term dslModule =
-  λcx,graph,mod.eithers.bind
+  λcx, graph, mod.eithers.bind
       (filterTypeBindings
         cx
         graph
         (optionals.givens
           (lists.map
             (λd.cases(Definition){
-                `type`=λtd.given((λname,typ.
+                `type` = λtd.given((λname, typ.
                       let schemaTerm := Term{
                         variable = Name{"hydra.core.model.Type"}} in
                       let dataTerm := normalizeTermAnnotations
@@ -82,7 +82,7 @@ term dslModule =
                             constraints = maps.empty})})
                       (TypeDefinition[name] td)
                       (TypeScheme[body] (TypeDefinition[body] td))),
-                `_`=none}
+                `_` = none}
                 d)
             (Module[definitions] mod))))
       (λtypeBindings.eithers.bind
@@ -157,18 +157,18 @@ term dslSignatureTypeScheme =
           variable = Name{"hydra.core.typed.TypedTerm"}},
         argument = resultType}} in
     let funType := lists.foldr
-        (λparamType,acc.Type{
+        (λparamType, acc.Type{
             function = FunctionType{
               domain = ifElse
                   ((λt.cases(Type){
-                      application=λa.cases(Type){
-                            variable=λv.equal
+                      application = λa.cases(Type){
+                            variable = λv.equal
                                   v
                                   Name{"hydra.core.typed.TypedName"},
-                            `_`=false}
+                            `_` = false}
                             (deannotateType
                               (ApplicationType[function] a)),
-                      `_`=false}
+                      `_` = false}
                       (deannotateType t))
                     (deannotateType paramType))
                   paramType
@@ -184,7 +184,7 @@ term dslSignatureTypeScheme =
 
 ## Build a TypeScheme with TypedTerm-wrapped parameter and result types
 term dslTypeScheme =
-  λorigType,paramTypes,resultType.
+  λorigType, paramTypes, resultType.
     let typeVars := collectForallVars origType in
     let wrappedResult := Type{
       application = ApplicationType{
@@ -192,7 +192,7 @@ term dslTypeScheme =
           variable = Name{"hydra.core.typed.TypedTerm"}},
         argument = resultType}} in
     let funType := lists.foldr
-        (λparamType,acc.Type{
+        (λparamType, acc.Type{
             function = FunctionType{
               domain = Type{
                 application = ApplicationType{
@@ -206,42 +206,42 @@ term dslTypeScheme =
 
 ## Filter bindings to only DSL-eligible type definitions
 term filterTypeBindings =
-  λcx,graph,bindings.eithers.map
+  λcx, graph, bindings.eithers.map
       optionals.givens
       (eithers.mapList (isDslEligibleBinding cx graph) (lists.filter isNativeType bindings))
 
 ## Generate all DSL bindings for a type binding
 term generateBindingsForType =
-  λcx,graph,b.
+  λcx, graph, b.
     let typeName := Binding[name] b
     in eithers.bind
       (decode.model.type graph (Binding[`term`] b))
       (λrawType.
         let typ := deannotateTypeParameters (deannotateType rawType)
         in right(cases(Type){
-          `record`=λfts.lists.concat
+          `record` = λfts.lists.concat
                 [
                   [generateTypeNameToken rawType typeName],
                   generateParametricRefBuilders rawType typeName,
                   generateRecordConstructor rawType typeName fts,
                   lists.map (generateRecordAccessor rawType typeName) fts,
                   lists.map (generateRecordWithUpdater rawType typeName fts) fts],
-          `union`=λfts.lists.concat
+          `union` = λfts.lists.concat
                 [
                   [generateTypeNameToken rawType typeName],
                   generateParametricRefBuilders rawType typeName,
                   lists.map (generateUnionInjector rawType typeName) fts],
-          `wrap`=λinnerType.lists.concat
+          `wrap` = λinnerType.lists.concat
                 [
                   [generateTypeNameToken rawType typeName],
                   generateParametricRefBuilders rawType typeName,
                   generateWrappedTypeAccessors rawType typeName innerType],
-          `_`=[]}
+          `_` = []}
           typ))
 
 ## Generate encode/decode composition builders for a parametric type definition
 term generateParametricRefBuilders =
-  λorigType,typeName.
+  λorigType, typeName.
     let vars := collectForallVars origType
     in ifElse
       (lists.isEmpty vars)
@@ -265,7 +265,7 @@ term generateParametricRefBuilders =
                           variable = Name{"hydra.core.model.Term"}}}}}}))
             vars in
         let appBody := lists.foldl
-            (λacc,pp.Term{
+            (λacc, pp.Term{
                 `inject` = Injection{
                   typeName = Name{"hydra.core.model.Term"},
                   field = Field{
@@ -295,7 +295,7 @@ term generateParametricRefBuilders =
             paramPairs in
         let builderTerm := Term{`wrap` = WrappedTerm{typeName = Name{"hydra.core.typed.TypedTerm"}, body = appBody}} in
         let rawBody := lists.foldl
-            (λacc,pp.Term{lambda = Lambda{parameter = Name{first pp}, domain = given(second pp), body = acc}})
+            (λacc, pp.Term{lambda = Lambda{parameter = Name{first pp}, domain = given(second pp), body = acc}})
             builderTerm
             (lists.reverse paramPairs) in
         let description := strings.concat ["DSL composition builder for the ", "encode", "r of ", Name[] typeName] in
@@ -342,7 +342,7 @@ term generateParametricRefBuilders =
                                   variable = v}}}}}}}}}))
             vars in
         let appBody := lists.foldl
-            (λacc,pp.Term{
+            (λacc, pp.Term{
                 `inject` = Injection{
                   typeName = Name{"hydra.core.model.Term"},
                   field = Field{
@@ -372,7 +372,7 @@ term generateParametricRefBuilders =
             paramPairs in
         let builderTerm := Term{`wrap` = WrappedTerm{typeName = Name{"hydra.core.typed.TypedTerm"}, body = appBody}} in
         let rawBody := lists.foldl
-            (λacc,pp.Term{lambda = Lambda{parameter = Name{first pp}, domain = given(second pp), body = acc}})
+            (λacc, pp.Term{lambda = Lambda{parameter = Name{first pp}, domain = given(second pp), body = acc}})
             builderTerm
             (lists.reverse paramPairs) in
         let description := strings.concat ["DSL composition builder for the ", "decode", "r of ", Name[] typeName] in
@@ -412,7 +412,7 @@ term generateParametricRefBuilders =
 
 ## Generate a record field accessor function
 term generateRecordAccessor =
-  λorigType,typeName,ft.
+  λorigType, typeName, ft.
     let fieldName := FieldType[name] ft in
     let accessorLocalName := strings.concat
         [
@@ -477,7 +477,7 @@ term generateRecordAccessor =
 
 ## Generate a record constructor function
 term generateRecordConstructor =
-  λorigType,typeName,fieldTypes.
+  λorigType, typeName, fieldTypes.
     let dFields := lists.map
         (λft.Term{
             `record` = Record{
@@ -526,7 +526,7 @@ term generateRecordConstructor =
                 argument = FieldType[`type`] ft}}))
         fieldTypes in
     let rawBody := lists.foldl
-        (λacc,pp.Term{
+        (λacc, pp.Term{
             lambda = Lambda{
               parameter = Name{first pp},
               domain = given(second pp),
@@ -542,7 +542,7 @@ term generateRecordConstructor =
 
 ## Generate a withXxx record field updater function
 term generateRecordWithUpdater =
-  λorigType,typeName,allFields,targetField.
+  λorigType, typeName, allFields, targetField.
     let targetFieldName := FieldType[name] targetField in
     let updaterLocalName := strings.concat
         [
@@ -658,32 +658,32 @@ term generateRecordWithUpdater =
 ## Generate typed reference DSL bindings for a primitive (or signature-carrying term) definition
 term generateRefBindings =
   λd.cases(Definition){
-      `type`=λ`_`.right([]),
-      `term`=λtd.optionals.match
+      `type` = λ`_`.right([]),
+      `term` = λtd.optionals.match
             (TermDefinition[signature] td)
             right([])
             (λsig.ifElse
                 (signatureIsVoidFree sig)
                 right([generateSignatureRef (TermDefinition[name] td) sig])
                 right([])),
-      `primitive`=λpd.ifElse
+      `primitive` = λpd.ifElse
             (signatureIsVoidFree (PrimitiveDefinition[signature] pd))
             right([generateSignatureRef (PrimitiveDefinition[name] pd) (PrimitiveDefinition[signature] pd)])
             right([]),
-      `_`=right([])}
+      `_` = right([])}
       d
 
 ## Generate a typed-reference DSL wrapper from a term/primitive name and signature
 term generateSignatureRef =
-  λrefName,sig.
+  λrefName, sig.
     let params := TermSignature[parameters] sig in
     let paramFlags := lists.map
         (λp.(
             Name[] (Parameter[name] p),
             (λt.cases(Type){
-                application=λa.cases(Type){variable=λv.equal v Name{"hydra.core.typed.TypedName"}, `_`=false}
+                application = λa.cases(Type){variable = λv.equal v Name{"hydra.core.typed.TypedName"}, `_` = false}
                       (deannotateType (ApplicationType[function] a)),
-                `_`=false}
+                `_` = false}
                 (deannotateType t))
               (deannotateType (Parameter[`type`] p))))
         params in
@@ -694,16 +694,16 @@ term generateSignatureRef =
             Name[] (Parameter[name] p),
             ifElse
               ((λt.cases(Type){
-                  application=λa.cases(Type){variable=λv.equal v Name{"hydra.core.typed.TypedName"}, `_`=false}
+                  application = λa.cases(Type){variable = λv.equal v Name{"hydra.core.typed.TypedName"}, `_` = false}
                         (deannotateType (ApplicationType[function] a)),
-                  `_`=false}
+                  `_` = false}
                   (deannotateType t))
                 (deannotateType pt))
               pt
               Type{application = ApplicationType{function = Type{variable = Name{"hydra.core.typed.TypedTerm"}}, argument = pt}}))
         params in
     let appBody := lists.foldl
-        (λacc,pf.Term{
+        (λacc, pf.Term{
             `inject` = Injection{
               typeName = Name{"hydra.core.model.Term"},
               field = Field{
@@ -746,7 +746,7 @@ term generateSignatureRef =
         paramFlags in
     let refTerm := Term{`wrap` = WrappedTerm{typeName = Name{"hydra.core.typed.TypedTerm"}, body = appBody}} in
     let rawBody := lists.foldl
-        (λacc,pp.Term{
+        (λacc, pp.Term{
             lambda = Lambda{
               parameter = Name{first pp},
               domain = given(second pp),
@@ -763,7 +763,7 @@ term generateSignatureRef =
 
 ## Generate a TypedName token constant for a type definition
 term generateTypeNameToken =
-  λorigType,typeName.
+  λorigType, typeName.
     let localName := localNameOf typeName in
     let tokenLocalName := strings.concat [decapitalize localName, localName] in
     let tokenName := dslDefinitionName typeName tokenLocalName in
@@ -791,7 +791,7 @@ term generateTypeNameToken =
 
 ## Generate a union injection helper
 term generateUnionInjector =
-  λorigType,typeName,ft.
+  λorigType, typeName, ft.
     let fieldName := FieldType[name] ft in
     let fieldType := FieldType[`type`] ft in
     let injectorLocalName := strings.concat
@@ -799,7 +799,8 @@ term generateUnionInjector =
           decapitalize (localNameOf typeName),
           strings.join "" (lists.map (λs.capitalize s) (strings.splitOn "." (Name[] fieldName)))] in
     let injectorName := dslDefinitionName typeName injectorLocalName in
-    let isUnit := (λt.cases(Type){`unit`=λ`_`.true, `_`=false} (deannotateType t)) fieldType in
+    let isUnit := (λt.cases(Type){`unit` = λ`_`.true, `_` = false} (deannotateType t))
+        fieldType in
     let dFieldValue := ifElse
         isUnit
         Term{
@@ -869,7 +870,7 @@ term generateUnionInjector =
 
 ## Generate wrap/unwrap accessors for a wrapped type
 term generateWrappedTypeAccessors =
-  λorigType,typeName,innerType.
+  λorigType, typeName, innerType.
     let localName := localNameOf typeName in
     let wrapName := dslDefinitionName typeName (decapitalize localName) in
     let unwrapLocalName := strings.concat ["un", localName] in
@@ -951,7 +952,8 @@ term generateWrappedTypeAccessors =
                             application = Application{
                               function = Term{`unwrap` = Name{"hydra.core.typed.TypedTerm"}},
                               argument = Term{variable = Name{"x"}}}}}]}}}}}}}}} in
-    let unwrapDescription := strings.concat ["DSL accessor for the body of ", Name[] typeName] in
+    let unwrapDescription := strings.concat
+        ["DSL accessor for the body of ", Name[] typeName] in
     let unwrapBody := setTermDescription given(unwrapDescription) rawUnwrapBody in
     let wrapTs := dslTypeScheme origType [innerType] wrapperType in
     let unwrapTs := dslTypeScheme origType [wrapperType] innerType in
@@ -961,16 +963,16 @@ term generateWrappedTypeAccessors =
 
 ## Check if a binding is eligible for DSL generation
 term isDslEligibleBinding =
-  λcx,graph,b.
+  λcx, graph, b.
     let ns := moduleNameOf (Binding[name] b)
     in ifElse (equal (optionals.match ns "" ModuleName[]) "hydra.core.typed") right(none) right(given(b))
 
 ## Build the nominal result type with type applications for forall variables
 term nominalResultType =
-  λtypeName,origType.
+  λtypeName, origType.
     let vars := collectForallVars origType
     in lists.foldl
-      (λacc,v.Type{application = ApplicationType{function = acc, argument = Type{variable = v}}})
+      (λacc, v.Type{application = ApplicationType{function = acc, argument = Type{variable = v}}})
       Type{variable = typeName}
       vars
 
@@ -979,11 +981,11 @@ term signatureIsVoidFree =
   λsig.
     let paramTypes := lists.map (λp.Parameter[`type`] p) (TermSignature[parameters] sig) in
     let resultType := Result[`type`] (TermSignature[result] sig) in
-    lists.foldl (λacc,t.and acc (typeIsVoidFree t)) (typeIsVoidFree resultType) paramTypes
+    lists.foldl (λacc, t.and acc (typeIsVoidFree t)) (typeIsVoidFree resultType) paramTypes
 
 ## Check whether a type contains no occurrence of the void type at any depth
 term typeIsVoidFree =
   λtyp.
     let allVariants := sets.fromList
-        (lists.map typeVariant (foldOverType TraversalOrder{pre} (λm,t.lists.cons t m) [] typ))
+        (lists.map typeVariant (foldOverType TraversalOrder{pre} (λm, t.lists.cons t m) [] typ))
     in not (sets.member TypeVariant{`void`} allVariants)

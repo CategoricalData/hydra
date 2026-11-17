@@ -1,0 +1,515 @@
+## Test cases for topological sorting algorithms
+module hydra.core.test.sorting
+
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.literals
+import hydra.core.lib.strings
+import hydra.core.print.model
+import hydra.core.sorting
+import hydra.core.testing
+
+## Test cases for topological sorting
+term allTests =
+  TestGroup{
+    name = "sorting",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "topological sort",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "empty set",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λcs.concat2
+                          "left("
+                          (concat2
+                            (`list` (`list` printInt32) cs)
+                            ")"))
+                      (λxs.concat2
+                          "right("
+                          (concat2 (`list` printInt32 xs) ")"))
+                      (topologicalSort []),
+                expected = λ`_`.eithers.either
+                      (λcs.concat2
+                          "left("
+                          (concat2
+                            (`list` (`list` printInt32) cs)
+                            ")"))
+                      (λxs.concat2
+                          "right("
+                          (concat2 (`list` printInt32 xs) ")"))
+                      right([])}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "singleton set",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λcs.concat2
+                          "left("
+                          (concat2
+                            (`list` (`list` printInt32) cs)
+                            ")"))
+                      (λxs.concat2
+                          "right("
+                          (concat2 (`list` printInt32 xs) ")"))
+                      (topologicalSort [(1:int32, [])]),
+                expected = λ`_`.eithers.either
+                      (λcs.concat2
+                          "left("
+                          (concat2
+                            (`list` (`list` printInt32) cs)
+                            ")"))
+                      (λxs.concat2
+                          "right("
+                          (concat2 (`list` printInt32 xs) ")"))
+                      right([1:int32])}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "discrete set with multiple elements",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λcs.concat2
+                          "left("
+                          (concat2
+                            (`list` (`list` printInt32) cs)
+                            ")"))
+                      (λxs.concat2
+                          "right("
+                          (concat2 (`list` printInt32 xs) ")"))
+                      (topologicalSort
+                        [(3:int32, []), (1:int32, []), (2:int32, [])]),
+                expected = λ`_`.eithers.either
+                      (λcs.concat2
+                          "left("
+                          (concat2
+                            (`list` (`list` printInt32) cs)
+                            ")"))
+                      (λxs.concat2
+                          "right("
+                          (concat2 (`list` printInt32 xs) ")"))
+                      right([1:int32, 2:int32, 3:int32])}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "linked list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λcs.concat2
+                          "left("
+                          (concat2
+                            (`list` (`list` printInt32) cs)
+                            ")"))
+                      (λxs.concat2
+                          "right("
+                          (concat2 (`list` printInt32 xs) ")"))
+                      (topologicalSort
+                        [(3:int32, [1:int32]), (2:int32, [3:int32]), (1:int32, [])]),
+                expected = λ`_`.eithers.either
+                      (λcs.concat2
+                          "left("
+                          (concat2
+                            (`list` (`list` printInt32) cs)
+                            ")"))
+                      (λxs.concat2
+                          "right("
+                          (concat2 (`list` printInt32 xs) ")"))
+                      right([1:int32, 3:int32, 2:int32])}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "binary tree",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λcs.concat2
+                          "left("
+                          (concat2
+                            (`list` (`list` printInt32) cs)
+                            ")"))
+                      (λxs.concat2
+                          "right("
+                          (concat2 (`list` printInt32 xs) ")"))
+                      (topologicalSort
+                        [
+                          (3:int32, [1:int32, 4:int32]),
+                          (4:int32, [6:int32, 2:int32]),
+                          (1:int32, [5:int32]),
+                          (2:int32, []),
+                          (6:int32, []),
+                          (5:int32, [])]),
+                expected = λ`_`.eithers.either
+                      (λcs.concat2
+                          "left("
+                          (concat2
+                            (`list` (`list` printInt32) cs)
+                            ")"))
+                      (λxs.concat2
+                          "right("
+                          (concat2 (`list` printInt32 xs) ")"))
+                      right([5:int32, 1:int32, 2:int32, 6:int32, 4:int32, 3:int32])}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "two trees",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λcs.concat2
+                          "left("
+                          (concat2
+                            (`list` (`list` printInt32) cs)
+                            ")"))
+                      (λxs.concat2
+                          "right("
+                          (concat2 (`list` printInt32 xs) ")"))
+                      (topologicalSort
+                        [
+                          (3:int32, [1:int32, 4:int32]),
+                          (5:int32, [6:int32, 2:int32]),
+                          (2:int32, [7:int32]),
+                          (1:int32, []),
+                          (4:int32, []),
+                          (6:int32, []),
+                          (7:int32, [])]),
+                expected = λ`_`.eithers.either
+                      (λcs.concat2
+                          "left("
+                          (concat2
+                            (`list` (`list` printInt32) cs)
+                            ")"))
+                      (λxs.concat2
+                          "right("
+                          (concat2 (`list` printInt32 xs) ")"))
+                      right([1:int32, 7:int32, 2:int32, 4:int32, 3:int32, 6:int32, 5:int32])}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "diamond DAG",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λcs.concat2
+                          "left("
+                          (concat2
+                            (`list` (`list` printInt32) cs)
+                            ")"))
+                      (λxs.concat2
+                          "right("
+                          (concat2 (`list` printInt32 xs) ")"))
+                      (topologicalSort
+                        [(1:int32, [3:int32, 4:int32]), (3:int32, [2:int32]), (4:int32, [2:int32]), (2:int32, [5:int32]), (5:int32, [])]),
+                expected = λ`_`.eithers.either
+                      (λcs.concat2
+                          "left("
+                          (concat2
+                            (`list` (`list` printInt32) cs)
+                            ")"))
+                      (λxs.concat2
+                          "right("
+                          (concat2 (`list` printInt32 xs) ")"))
+                      right([5:int32, 2:int32, 3:int32, 4:int32, 1:int32])}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "two-node cycle",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λcs.concat2
+                          "left("
+                          (concat2
+                            (`list` (`list` printInt32) cs)
+                            ")"))
+                      (λxs.concat2
+                          "right("
+                          (concat2 (`list` printInt32 xs) ")"))
+                      (topologicalSort
+                        [(1:int32, [2:int32]), (2:int32, [1:int32])]),
+                expected = λ`_`.eithers.either
+                      (λcs.concat2
+                          "left("
+                          (concat2
+                            (`list` (`list` printInt32) cs)
+                            ")"))
+                      (λxs.concat2
+                          "right("
+                          (concat2 (`list` printInt32 xs) ")"))
+                      left([[1:int32, 2:int32]])}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "cycle with incoming and outgoing edges",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λcs.concat2
+                          "left("
+                          (concat2
+                            (`list` (`list` printInt32) cs)
+                            ")"))
+                      (λxs.concat2
+                          "right("
+                          (concat2 (`list` printInt32 xs) ")"))
+                      (topologicalSort
+                        [(1:int32, [3:int32]), (3:int32, [2:int32]), (2:int32, [3:int32, 4:int32]), (4:int32, [5:int32]), (5:int32, [])]),
+                expected = λ`_`.eithers.either
+                      (λcs.concat2
+                          "left("
+                          (concat2
+                            (`list` (`list` printInt32) cs)
+                            ")"))
+                      (λxs.concat2
+                          "right("
+                          (concat2 (`list` printInt32 xs) ")"))
+                      left([[2:int32, 3:int32]])}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "topological sort SCC",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "empty set",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`list`
+                      (`list` printInt32)
+                      (topologicalSortComponents []),
+                expected = λ`_`.`list` (`list` printInt32) []}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "singleton set",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`list`
+                      (`list` printInt32)
+                      (topologicalSortComponents
+                        [(1:int32, [])]),
+                expected = λ`_`.`list` (`list` printInt32) [[1:int32]]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "discrete set with multiple elements",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`list`
+                      (`list` printInt32)
+                      (topologicalSortComponents
+                        [(3:int32, []), (1:int32, []), (2:int32, [])]),
+                expected = λ`_`.`list`
+                      (`list` printInt32)
+                      [[1:int32], [2:int32], [3:int32]]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "single two-element component #1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`list`
+                      (`list` printInt32)
+                      (topologicalSortComponents
+                        [(1:int32, [2:int32]), (2:int32, [])]),
+                expected = λ`_`.`list`
+                      (`list` printInt32)
+                      [[2:int32], [1:int32]]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "single two-element component #2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`list`
+                      (`list` printInt32)
+                      (topologicalSortComponents
+                        [(2:int32, [1:int32]), (1:int32, [])]),
+                expected = λ`_`.`list`
+                      (`list` printInt32)
+                      [[1:int32], [2:int32]]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "multiple-element component",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`list`
+                      (`list` printInt32)
+                      (topologicalSortComponents
+                        [(2:int32, [1:int32, 3:int32]), (1:int32, [3:int32]), (3:int32, [])]),
+                expected = λ`_`.`list`
+                      (`list` printInt32)
+                      [[3:int32], [1:int32], [2:int32]]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "cycle of two nodes #1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`list`
+                      (`list` printInt32)
+                      (topologicalSortComponents
+                        [(1:int32, [2:int32]), (2:int32, [1:int32])]),
+                expected = λ`_`.`list`
+                      (`list` printInt32)
+                      [[1:int32, 2:int32]]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "cycle of two nodes #2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`list`
+                      (`list` printInt32)
+                      (topologicalSortComponents
+                        [(2:int32, [1:int32]), (1:int32, [2:int32])]),
+                expected = λ`_`.`list`
+                      (`list` printInt32)
+                      [[1:int32, 2:int32]]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "cycle of three nodes #1",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`list`
+                      (`list` printInt32)
+                      (topologicalSortComponents
+                        [(1:int32, [2:int32]), (2:int32, [3:int32]), (3:int32, [1:int32])]),
+                expected = λ`_`.`list`
+                      (`list` printInt32)
+                      [[1:int32, 2:int32, 3:int32]]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "cycle of three nodes #2",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`list`
+                      (`list` printInt32)
+                      (topologicalSortComponents
+                        [(2:int32, [1:int32]), (3:int32, [2:int32]), (1:int32, [3:int32])]),
+                expected = λ`_`.`list`
+                      (`list` printInt32)
+                      [[1:int32, 2:int32, 3:int32]]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "multiple disconnected cycles",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`list`
+                      (`list` printInt32)
+                      (topologicalSortComponents
+                        [
+                          (200:int32, []),
+                          (100:int32, []),
+                          (300:int32, []),
+                          (10:int32, [20:int32]),
+                          (20:int32, [10:int32]),
+                          (1:int32, [2:int32]),
+                          (2:int32, [3:int32]),
+                          (3:int32, [1:int32])]),
+                expected = λ`_`.`list`
+                      (`list` printInt32)
+                      [[1:int32, 2:int32, 3:int32], [10:int32, 20:int32], [100:int32], [200:int32], [300:int32]]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "complex cycles",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`list`
+                      (`list` printInt32)
+                      (topologicalSortComponents
+                        [(1:int32, [2:int32, 3:int32]), (2:int32, [3:int32]), (3:int32, [1:int32])]),
+                expected = λ`_`.`list`
+                      (`list` printInt32)
+                      [[1:int32, 2:int32, 3:int32]]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "chain of three SCCs",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`list`
+                      (`list` printInt32)
+                      (topologicalSortComponents
+                        [
+                          (1:int32, [2:int32, 10:int32]),
+                          (2:int32, [3:int32]),
+                          (3:int32, [1:int32]),
+                          (10:int32, [20:int32]),
+                          (20:int32, [100:int32, 10:int32]),
+                          (100:int32, [])]),
+                expected = λ`_`.`list`
+                      (`list` printInt32)
+                      [[100:int32], [10:int32, 20:int32], [1:int32, 2:int32, 3:int32]]}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "SCCs with dependencies to/from non-SCC nodes",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`list`
+                      (`list` printInt32)
+                      (topologicalSortComponents
+                        [
+                          (1:int32, [2:int32, 3:int32, 10:int32]),
+                          (2:int32, [3:int32]),
+                          (3:int32, [1:int32]),
+                          (10:int32, [20:int32, 30:int32]),
+                          (20:int32, [30:int32]),
+                          (30:int32, []),
+                          (100:int32, [200:int32, 2:int32]),
+                          (200:int32, []),
+                          (300:int32, [100:int32]),
+                          (1000:int32, []),
+                          (2000:int32, [])]),
+                expected = λ`_`.`list`
+                      (`list` printInt32)
+                      [
+                        [30:int32],
+                        [20:int32],
+                        [10:int32],
+                        [1:int32, 2:int32, 3:int32],
+                        [200:int32],
+                        [100:int32],
+                        [300:int32],
+                        [1000:int32],
+                        [2000:int32]]}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}

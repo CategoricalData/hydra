@@ -18,7 +18,7 @@ import hydra.core.variables
 
 ## Compose two type substitutions
 term composeTypeSubst =
-  λs1,s2.ifElse
+  λs1, s2.ifElse
       (maps.isEmpty (TypeSubst[] s1))
       s2
       (ifElse (maps.isEmpty (TypeSubst[] s2)) s1 (composeTypeSubstNonEmpty s1 s2))
@@ -28,25 +28,25 @@ term composeTypeSubstList = lists.foldl composeTypeSubst idTypeSubst
 
 ## Compose two non-empty type substitutions (internal helper)
 term composeTypeSubstNonEmpty =
-  λs1,s2.
-    let isExtra := λk,v.optionals.isNone (maps.lookup k (TypeSubst[] s1)), withExtra := maps.filterWithKey isExtra (TypeSubst[] s2)
+  λs1, s2.
+    let isExtra := λk, v.optionals.isNone (maps.lookup k (TypeSubst[] s1)), withExtra := maps.filterWithKey isExtra (TypeSubst[] s2)
     in TypeSubst{maps.union withExtra (maps.map (substInType s2) (TypeSubst[] s1))}
 
 ## The identity type substitution
 term idTypeSubst = wrap(TypeSubst){maps.empty}
 
 ## Create a type substitution with a single variable mapping
-term singletonTypeSubst = λv,t.TypeSubst{maps.singleton v t}
+term singletonTypeSubst = λv, t.TypeSubst{maps.singleton v t}
 
 ## Apply a type substitution to class constraints, propagating to free variables or discharging/retaining on concrete resolution
 term substInClassConstraints =
-  λsubst,constraints.
+  λsubst, constraints.
     let substMap := TypeSubst[] subst
     in ifElse
       (or (maps.isEmpty substMap) (maps.isEmpty constraints))
       constraints
       (let isGenuineVarName := λname.lte (lists.length (splitOn "." (Name[] name))) 1:int32 in
-      let insertOrMerge := λvarName,metadata,acc.optionals.match
+      let insertOrMerge := λvarName, metadata, acc.optionals.match
             (maps.lookup varName acc)
             (maps.insert varName metadata acc)
             (λexisting.
@@ -58,7 +58,7 @@ term substInClassConstraints =
                       metadata)}
               in maps.insert varName merged acc) in
       lists.foldl
-        (λacc,pair.
+        (λacc, pair.
           let varName := first pair in
           let metadata := second pair in
           optionals.match
@@ -71,13 +71,13 @@ term substInClassConstraints =
               in ifElse
                 (not (lists.isEmpty genuineVars))
                 (lists.foldl
-                  (λacc2,freeVar.insertOrMerge freeVar metadata acc2)
+                  (λacc2, freeVar.insertOrMerge freeVar metadata acc2)
                   acc
                   genuineVars)
                 (let unsatisfied := sets.filter
                     (λc.not
                         (classIsSatisfiedByType
-                          (cases(TypeClassConstraint){simple=λn.n} c)
+                          (cases(TypeClassConstraint){simple = λn.n} c)
                           targetType))
                     (TypeVariableConstraints[classes] metadata)
                 in ifElse
@@ -89,7 +89,7 @@ term substInClassConstraints =
 
 ## Apply a type substitution to a graph's bound types and class constraints
 term substInContext =
-  λsubst,cx.
+  λsubst, cx.
     let newBoundTypes := maps.map (substInTypeScheme subst) (Graph[boundTypes] cx) in
     let newClassConstraints := substInClassConstraints subst (Graph[classConstraints] cx) in
     let cx2 := Graph{
@@ -112,13 +112,13 @@ term substInContext =
       typeVariables = Graph[typeVariables] cx2}
 
 ## Apply a type substitution to a type
-term substInType = λsubst,typ0.ifElse (maps.isEmpty (TypeSubst[] subst)) typ0 (substInTypeNonEmpty subst typ0)
+term substInType = λsubst, typ0.ifElse (maps.isEmpty (TypeSubst[] subst)) typ0 (substInTypeNonEmpty subst typ0)
 
 ## Apply a non-empty type substitution to a type (internal helper)
 term substInTypeNonEmpty =
-  λsubst,typ0.
-    let rewrite := λrecurse,typ.cases(Type){
-          `forall`=λlt.optionals.match
+  λsubst, typ0.
+    let rewrite := λrecurse, typ.cases(Type){
+          `forall` = λlt.optionals.match
                 (maps.lookup
                   (ForallType[parameter] lt)
                   (TypeSubst[] subst))
@@ -129,19 +129,19 @@ term substInTypeNonEmpty =
                       body = substInType
                           (removeVar (ForallType[parameter] lt))
                           (ForallType[body] lt)}}),
-          variable=λv.optionals.match
+          variable = λv.optionals.match
                 (maps.lookup v (TypeSubst[] subst))
                 typ
                 (λstyp.styp),
-          `_`=recurse typ}
+          `_` = recurse typ}
           typ, removeVar := λv.TypeSubst{maps.delete v (TypeSubst[] subst)}
     in rewriteType rewrite typ0
 
 ## Apply a type substitution to a type scheme. The scheme's quantifier variables shadow the substitution: any name in typeSchemeVariables is removed from subst before substituting into the body and constraints. Without this, a substitution like {t0 -> Foo} applied to `forall [t0]. t0 -> t0` would incorrectly replace the bound t0.
 term substInTypeScheme =
-  λsubst,ts.
+  λsubst, ts.
     let scopedSubst := TypeSubst{lists.foldl
-      (λm,v.maps.delete v m)
+      (λm, v.maps.delete v m)
       (TypeSubst[] subst)
       (TypeScheme[variables] ts)}
     in TypeScheme{
@@ -151,8 +151,8 @@ term substInTypeScheme =
 
 ## Apply a type substitution to the type annotations within a term
 term substTypesInTerm =
-  λsubst,term0.
-    let rewrite := λrecurse,`term`.
+  λsubst, term0.
+    let rewrite := λrecurse, `term`.
         let dflt := recurse `term`, forLambda := λl.Term{
               lambda = Lambda{
                 parameter = Lambda[parameter] l,
@@ -189,35 +189,35 @@ term substTypesInTerm =
                     subst2
                     (TypeLambda[body] ta)}}
         in cases(Term){
-          lambda=λl.forLambda l,
-          `let`=λl.forLet l,
-          typeApplication=λta.forTypeApplication ta,
-          typeLambda=λtl.forTypeLambda tl,
-          `_`=dflt}
+          lambda = λl.forLambda l,
+          `let` = λl.forLet l,
+          typeApplication = λta.forTypeApplication ta,
+          typeLambda = λtl.forTypeLambda tl,
+          `_` = dflt}
           `term`
     in rewriteTerm rewrite term0
 
 ## Apply a term substitution to a binding
 term substituteInBinding =
-  λsubst,b.Binding{
+  λsubst, b.Binding{
       name = Binding[name] b,
       `term` = substituteInTerm subst (Binding[`term`] b),
       typeScheme = Binding[typeScheme] b}
 
 ## Apply a type substitution to a type constraint
 term substituteInConstraint =
-  λsubst,c.TypeConstraint{
+  λsubst, c.TypeConstraint{
       `left` = substInType subst (TypeConstraint[`left`] c),
       `right` = substInType subst (TypeConstraint[`right`] c),
       comment = TypeConstraint[comment] c}
 
 ## Apply a type substitution to a list of type constraints
-term substituteInConstraints = λsubst,cs.lists.map (substituteInConstraint subst) cs
+term substituteInConstraints = λsubst, cs.lists.map (substituteInConstraint subst) cs
 
 ## Apply a term substitution to a term
 term substituteInTerm =
-  λsubst,term0.
-    let s := TermSubst[] subst, rewrite := λrecurse,`term`.
+  λsubst, term0.
+    let s := TermSubst[] subst, rewrite := λrecurse, `term`.
         let withLambda := λl.
             let v := Lambda[parameter] l, subst2 := TermSubst{maps.delete v s}
             in Term{
@@ -227,7 +227,7 @@ term substituteInTerm =
                 body = substituteInTerm subst2 (Lambda[body] l)}}, withLet := λlt.
             let bindings := Let[bindings] lt, names := sets.fromList
                 (lists.map Binding[name] bindings), subst2 := TermSubst{maps.filterWithKey
-              (λk,v.not (sets.member k names))
+              (λk, v.not (sets.member k names))
               s}, rewriteBinding := λb.Binding{
                   name = Binding[name] b,
                   `term` = substituteInTerm
@@ -239,12 +239,12 @@ term substituteInTerm =
                 bindings = lists.map rewriteBinding bindings,
                 body = substituteInTerm subst2 (Let[body] lt)}}
         in cases(Term){
-          lambda=λl.withLambda l,
-          `let`=λl.withLet l,
-          variable=λname.optionals.match
+          lambda = λl.withLambda l,
+          `let` = λl.withLet l,
+          variable = λname.optionals.match
                 (maps.lookup name s)
                 (recurse `term`)
                 (λsterm.sterm),
-          `_`=recurse `term`}
+          `_` = recurse `term`}
           `term`
     in rewriteTerm rewrite term0

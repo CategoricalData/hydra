@@ -1,0 +1,1224 @@
+## Test cases for core term and type validation
+module hydra.core.test.validate.model
+
+import hydra.core.error.model
+import hydra.core.lib.lists as lists
+import hydra.core.lib.optionals
+import hydra.core.lib.sets as sets
+import hydra.core.lib.strings as strings
+import hydra.core.model
+import hydra.core.paths
+import hydra.core.print.error.model
+import hydra.core.test.testGraph
+import hydra.core.testing
+import hydra.core.validate.model
+import hydra.core.validation
+
+## Test cases for core term and type validation
+term allTests =
+  TestGroup{
+    name = "validate.core",
+    description = none,
+    subgroups = [
+      annotationTests,
+      duplicateBindingsTests,
+      duplicateFieldsTests,
+      emptyLetBindingsTests,
+      identityApplicationTests,
+      profileBehaviourTests,
+      unknownPrimitiveTests,
+      untypedTermVariableTests,
+      variableShadowingTests],
+    `cases` = []}
+
+term annotationTests =
+  TestGroup{
+    name = "annotations",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "annotated term is valid",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 42:int32}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term duplicateBindingsTests =
+  TestGroup{
+    name = "duplicate bindings",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "no bindings (literal)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 42:int32}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "single binding",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              variable = Name{"x"}}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "distinct bindings",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                typeScheme = none},
+                              Binding{
+                                name = Name{"y"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              variable = Name{"x"}}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "duplicate bindings at top level",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                typeScheme = none},
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              variable = Name{"x"}}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  given(InvalidTermError{
+                    duplicateBinding = DuplicateBindingError{
+                      location = SubtermPath{[]},
+                      name = Name{"x"}}})
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "duplicate bindings in lambda body",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"f"},
+                            domain = none,
+                            body = Term{
+                              `let` = Let{
+                                bindings = [
+                                  Binding{
+                                    name = Name{"a"},
+                                    `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    typeScheme = none},
+                                  Binding{
+                                    name = Name{"a"},
+                                    `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    typeScheme = none}],
+                                body = Term{
+                                  variable = Name{"a"}}}}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  given(InvalidTermError{
+                    duplicateBinding = DuplicateBindingError{
+                      location = SubtermPath{[SubtermStep{lambdaBody}]},
+                      name = Name{"a"}}})
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "duplicate bindings in let body",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              `let` = Let{
+                                bindings = [
+                                  Binding{
+                                    name = Name{"y"},
+                                    `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    typeScheme = none},
+                                  Binding{
+                                    name = Name{"y"},
+                                    `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 3:int32}}},
+                                    typeScheme = none}],
+                                body = Term{
+                                  variable = Name{"y"}}}}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  given(InvalidTermError{
+                    duplicateBinding = DuplicateBindingError{
+                      location = SubtermPath{[SubtermStep{letBody}]},
+                      name = Name{"y"}}})
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "duplicate bindings in let binding value",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{
+                                  `let` = Let{
+                                    bindings = [
+                                      Binding{
+                                        name = Name{"a"},
+                                        `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                        typeScheme = none},
+                                      Binding{
+                                        name = Name{"a"},
+                                        `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                        typeScheme = none}],
+                                    body = Term{variable = Name{"a"}}}},
+                                typeScheme = none}],
+                            body = Term{
+                              variable = Name{"x"}}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  given(InvalidTermError{
+                    duplicateBinding = DuplicateBindingError{
+                      location = SubtermPath{[SubtermStep{letBinding = Name{"x"}}]},
+                      name = Name{"a"}}})
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "same name in different scopes is valid",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              `let` = Let{
+                                bindings = [
+                                  Binding{
+                                    name = Name{"x"},
+                                    `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}},
+                                    typeScheme = none}],
+                                body = Term{
+                                  variable = Name{"x"}}}}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term duplicateFieldsTests =
+  TestGroup{
+    name = "duplicate fields",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "no fields (literal)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          literal = Literal{
+                            integer = IntegerValue{
+                              `int32` = 42:int32}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "distinct record fields",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          `record` = Record{
+                            typeName = Name{"Point"},
+                            fields = [
+                              Field{name = Name{"x"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}},
+                              Field{name = Name{"y"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}}]}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "duplicate record fields at top level",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          `record` = Record{
+                            typeName = Name{"Point"},
+                            fields = [
+                              Field{name = Name{"x"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}},
+                              Field{name = Name{"x"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}}]}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  given(InvalidTermError{
+                    duplicateField = DuplicateFieldError{
+                      location = SubtermPath{[]},
+                      name = Name{"x"}}})
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "duplicate fields in record inside lambda",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"f"},
+                            domain = none,
+                            body = Term{
+                              `record` = Record{
+                                typeName = Name{"Point"},
+                                fields = [
+                                  Field{name = Name{"x"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}},
+                                  Field{name = Name{"x"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}}]}}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  given(InvalidTermError{
+                    duplicateField = DuplicateFieldError{
+                      location = SubtermPath{[SubtermStep{lambdaBody}]},
+                      name = Name{"x"}}})
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "duplicate fields in record inside let body",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"r"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 0:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              `record` = Record{
+                                typeName = Name{"Point"},
+                                fields = [
+                                  Field{name = Name{"x"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}},
+                                  Field{name = Name{"x"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 2:int32}}}}]}}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  given(InvalidTermError{
+                    duplicateField = DuplicateFieldError{
+                      location = SubtermPath{[SubtermStep{letBody}]},
+                      name = Name{"x"}}})
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term emptyLetBindingsTests =
+  TestGroup{
+    name = "empty let bindings",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "let with bindings is valid",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          `let` = Let{
+                            bindings = [
+                              Binding{
+                                name = Name{"x"},
+                                `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                typeScheme = none}],
+                            body = Term{
+                              variable = Name{"x"}}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "empty let bindings",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          `let` = Let{
+                            bindings = [],
+                            body = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 0:int32}}}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  given(InvalidTermError{
+                    emptyLetBindings = EmptyLetBindingsError{
+                      location = SubtermPath{[]}}})
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term identityApplicationTests =
+  TestGroup{
+    name = "identity application",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "non-identity lambda application is valid",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          application = Application{
+                            function = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 1:int32}}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 2:int32}}}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "identity lambda application",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          application = Application{
+                            function = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  variable = Name{"x"}}}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 42:int32}}}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  given(InvalidTermError{
+                    unnecessaryIdentityApplication = UnnecessaryIdentityApplicationError{
+                      location = SubtermPath{[]}}})
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term profileBehaviourTests =
+  TestGroup{
+    name = "profile-aware behaviour",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "multi-error accumulation: two empty-let errors collected",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  (strings.concat2
+                    "errors=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λe.invalidTermError e)
+                          (ValidationResult[errors]
+                            (`term`
+                              ValidationProfile{
+                                errorRules = sets.fromList
+                                    [Name{"hydra.core.error.model.InvalidTermError.emptyLetBindings"}],
+                                warningRules = sets.fromList [],
+                                maxErrors = 5:int32,
+                                maxWarnings = 5:int32}
+                              false
+                              testGraph
+                              Term{
+                                `let` = Let{
+                                  bindings = [],
+                                  body = Term{
+                                    `let` = Let{
+                                      bindings = [],
+                                      body = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 0:int32}}}}}}}))))
+                      "]"))
+                  (strings.concat2
+                    " warnings=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λw.invalidTermError w)
+                          (ValidationResult[warnings]
+                            (`term`
+                              ValidationProfile{
+                                errorRules = sets.fromList
+                                    [Name{"hydra.core.error.model.InvalidTermError.emptyLetBindings"}],
+                                warningRules = sets.fromList [],
+                                maxErrors = 5:int32,
+                                maxWarnings = 5:int32}
+                              false
+                              testGraph
+                              Term{
+                                `let` = Let{
+                                  bindings = [],
+                                  body = Term{
+                                    `let` = Let{
+                                      bindings = [],
+                                      body = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 0:int32}}}}}}}))))
+                      "]")),
+            expected = λ`_`.strings.concat2
+                  (strings.concat2
+                    "errors=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λe.invalidTermError e)
+                          (ValidationResult[errors]
+                            ValidationResult{
+                              errors = [
+                                InvalidTermError{emptyLetBindings = EmptyLetBindingsError{location = SubtermPath{[]}}},
+                                InvalidTermError{emptyLetBindings = EmptyLetBindingsError{location = SubtermPath{[SubtermStep{letBody}]}}}],
+                              warnings = []})))
+                      "]"))
+                  (strings.concat2
+                    " warnings=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λw.invalidTermError w)
+                          (ValidationResult[warnings]
+                            ValidationResult{
+                              errors = [
+                                InvalidTermError{emptyLetBindings = EmptyLetBindingsError{location = SubtermPath{[]}}},
+                                InvalidTermError{emptyLetBindings = EmptyLetBindingsError{location = SubtermPath{[SubtermStep{letBody}]}}}],
+                              warnings = []})))
+                      "]"))}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "warning classification: empty-let demoted to warnings",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  (strings.concat2
+                    "errors=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λe.invalidTermError e)
+                          (ValidationResult[errors]
+                            (`term`
+                              ValidationProfile{
+                                errorRules = sets.fromList [],
+                                warningRules = sets.fromList
+                                    [Name{"hydra.core.error.model.InvalidTermError.emptyLetBindings"}],
+                                maxErrors = 5:int32,
+                                maxWarnings = 5:int32}
+                              false
+                              testGraph
+                              Term{
+                                `let` = Let{
+                                  bindings = [],
+                                  body = Term{
+                                    `let` = Let{
+                                      bindings = [],
+                                      body = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 0:int32}}}}}}}))))
+                      "]"))
+                  (strings.concat2
+                    " warnings=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λw.invalidTermError w)
+                          (ValidationResult[warnings]
+                            (`term`
+                              ValidationProfile{
+                                errorRules = sets.fromList [],
+                                warningRules = sets.fromList
+                                    [Name{"hydra.core.error.model.InvalidTermError.emptyLetBindings"}],
+                                maxErrors = 5:int32,
+                                maxWarnings = 5:int32}
+                              false
+                              testGraph
+                              Term{
+                                `let` = Let{
+                                  bindings = [],
+                                  body = Term{
+                                    `let` = Let{
+                                      bindings = [],
+                                      body = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 0:int32}}}}}}}))))
+                      "]")),
+            expected = λ`_`.strings.concat2
+                  (strings.concat2
+                    "errors=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λe.invalidTermError e)
+                          (ValidationResult[errors]
+                            ValidationResult{
+                              errors = [],
+                              warnings = [
+                                InvalidTermError{emptyLetBindings = EmptyLetBindingsError{location = SubtermPath{[]}}},
+                                InvalidTermError{emptyLetBindings = EmptyLetBindingsError{location = SubtermPath{[SubtermStep{letBody}]}}}]})))
+                      "]"))
+                  (strings.concat2
+                    " warnings=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λw.invalidTermError w)
+                          (ValidationResult[warnings]
+                            ValidationResult{
+                              errors = [],
+                              warnings = [
+                                InvalidTermError{emptyLetBindings = EmptyLetBindingsError{location = SubtermPath{[]}}},
+                                InvalidTermError{emptyLetBindings = EmptyLetBindingsError{location = SubtermPath{[SubtermStep{letBody}]}}}]})))
+                      "]"))}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "rule disabling: empty-let omitted from profile",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  (strings.concat2
+                    "errors=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λe.invalidTermError e)
+                          (ValidationResult[errors]
+                            (`term`
+                              ValidationProfile{
+                                errorRules = sets.fromList [],
+                                warningRules = sets.fromList [],
+                                maxErrors = 5:int32,
+                                maxWarnings = 5:int32}
+                              false
+                              testGraph
+                              Term{
+                                `let` = Let{
+                                  bindings = [],
+                                  body = Term{
+                                    literal = Literal{
+                                      integer = IntegerValue{
+                                        `int32` = 0:int32}}}}}))))
+                      "]"))
+                  (strings.concat2
+                    " warnings=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λw.invalidTermError w)
+                          (ValidationResult[warnings]
+                            (`term`
+                              ValidationProfile{
+                                errorRules = sets.fromList [],
+                                warningRules = sets.fromList [],
+                                maxErrors = 5:int32,
+                                maxWarnings = 5:int32}
+                              false
+                              testGraph
+                              Term{
+                                `let` = Let{
+                                  bindings = [],
+                                  body = Term{
+                                    literal = Literal{
+                                      integer = IntegerValue{
+                                        `int32` = 0:int32}}}}}))))
+                      "]")),
+            expected = λ`_`.strings.concat2
+                  (strings.concat2
+                    "errors=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λe.invalidTermError e)
+                          (ValidationResult[errors]
+                            ValidationResult{
+                              errors = [],
+                              warnings = []})))
+                      "]"))
+                  (strings.concat2
+                    " warnings=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λw.invalidTermError w)
+                          (ValidationResult[warnings]
+                            ValidationResult{
+                              errors = [],
+                              warnings = []})))
+                      "]"))}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "maxErrors bound: only first error collected when maxErrors=1",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.strings.concat2
+                  (strings.concat2
+                    "errors=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λe.invalidTermError e)
+                          (ValidationResult[errors]
+                            (`term`
+                              ValidationProfile{
+                                errorRules = sets.fromList
+                                    [Name{"hydra.core.error.model.InvalidTermError.emptyLetBindings"}],
+                                warningRules = sets.fromList [],
+                                maxErrors = 1:int32,
+                                maxWarnings = 5:int32}
+                              false
+                              testGraph
+                              Term{
+                                `let` = Let{
+                                  bindings = [],
+                                  body = Term{
+                                    `let` = Let{
+                                      bindings = [],
+                                      body = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 0:int32}}}}}}}))))
+                      "]"))
+                  (strings.concat2
+                    " warnings=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λw.invalidTermError w)
+                          (ValidationResult[warnings]
+                            (`term`
+                              ValidationProfile{
+                                errorRules = sets.fromList
+                                    [Name{"hydra.core.error.model.InvalidTermError.emptyLetBindings"}],
+                                warningRules = sets.fromList [],
+                                maxErrors = 1:int32,
+                                maxWarnings = 5:int32}
+                              false
+                              testGraph
+                              Term{
+                                `let` = Let{
+                                  bindings = [],
+                                  body = Term{
+                                    `let` = Let{
+                                      bindings = [],
+                                      body = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 0:int32}}}}}}}))))
+                      "]")),
+            expected = λ`_`.strings.concat2
+                  (strings.concat2
+                    "errors=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λe.invalidTermError e)
+                          (ValidationResult[errors]
+                            ValidationResult{
+                              errors = [InvalidTermError{emptyLetBindings = EmptyLetBindingsError{location = SubtermPath{[]}}}],
+                              warnings = []})))
+                      "]"))
+                  (strings.concat2
+                    " warnings=["
+                    (strings.concat2
+                      (strings.join
+                        ";"
+                        (lists.map
+                          (λw.invalidTermError w)
+                          (ValidationResult[warnings]
+                            ValidationResult{
+                              errors = [InvalidTermError{emptyLetBindings = EmptyLetBindingsError{location = SubtermPath{[]}}}],
+                              warnings = []})))
+                      "]"))}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term unknownPrimitiveTests =
+  TestGroup{
+    name = "unknown primitive",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "qualified reference to a bound (non-primitive) kernel term is valid",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          variable = Name{"hydra.core.constants.keyDescription"}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "unresolvable qualified name is an unknown primitive",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          variable = Name{"hydra.lib.nonexistent.foo"}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  given(InvalidTermError{
+                    unknownPrimitiveName = UnknownPrimitiveNameError{
+                      location = SubtermPath{[]},
+                      name = Name{"hydra.lib.nonexistent.foo"}}})
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term untypedTermVariableTests =
+  TestGroup{
+    name = "untyped term variable",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "unannotated lambda parameter is untyped in typed mode",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        true
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              variable = Name{"x"}}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  given(InvalidTermError{
+                    untypedTermVariable = UntypedTermVariableError{
+                      location = SubtermPath{[]},
+                      name = Name{"x"}}})
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "unannotated lambda parameter is valid in untyped mode",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              variable = Name{"x"}}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+term variableShadowingTests =
+  TestGroup{
+    name = "variable shadowing",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "lambda with fresh variable is valid",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              variable = Name{"x"}}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "lambda shadows outer lambda",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              lambda = Lambda{
+                                parameter = Name{"x"},
+                                domain = none,
+                                body = Term{
+                                  variable = Name{"x"}}}}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "let binding shadows lambda parameter",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.match
+                  (lists.head
+                    (ValidationResult[errors]
+                      (`term`
+                        kernelDefaultCoreProfile
+                        false
+                        testGraph
+                        Term{
+                          lambda = Lambda{
+                            parameter = Name{"x"},
+                            domain = none,
+                            body = Term{
+                              `let` = Let{
+                                bindings = [
+                                  Binding{
+                                    name = Name{"x"},
+                                    `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                    typeScheme = none}],
+                                body = Term{
+                                  variable = Name{"x"}}}}}})))
+                  "valid"
+                  (λe.invalidTermError e),
+            expected = λ`_`.match
+                  none
+                  "valid"
+                  (λe.invalidTermError e)}},
+        description = none,
+        tags = [],
+        provisions = []}]}

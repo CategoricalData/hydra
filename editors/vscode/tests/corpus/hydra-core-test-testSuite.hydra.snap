@@ -1,0 +1,610 @@
+>## Hydra's common test suite, which is designed to run identically in each Hydra implementation; the criterion for a true Hydra implementation is that all test cases pass.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>module hydra.core.test.testSuite
+#^^^^^^ source.hydra keyword.control.module.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>import hydra.core.test.annotations as annotations
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                  ^ source.hydra
+#                                   ^^ source.hydra keyword.control.import.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.checking.all as checking.all
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                   ^ source.hydra
+#                                    ^^ source.hydra keyword.control.import.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.dependencies as dependencies
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                   ^ source.hydra
+#                                    ^^ source.hydra keyword.control.import.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.differentiation as differentiation
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                      ^ source.hydra
+#                                       ^^ source.hydra keyword.control.import.hydra
+#                                         ^ source.hydra
+#                                          ^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.etaExpansion as etaExpansion
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                   ^ source.hydra
+#                                    ^^ source.hydra keyword.control.import.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.formatting as formatting
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                 ^ source.hydra
+#                                  ^^ source.hydra keyword.control.import.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.generation as generation
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                 ^ source.hydra
+#                                  ^^ source.hydra keyword.control.import.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.hoisting.all as hoisting.all
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                   ^ source.hydra
+#                                    ^^ source.hydra keyword.control.import.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.inference.all as inference.all
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                    ^ source.hydra
+#                                     ^^ source.hydra keyword.control.import.hydra
+#                                       ^ source.hydra
+#                                        ^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.json.parser as parser
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                  ^ source.hydra
+#                                   ^^ source.hydra keyword.control.import.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.json.roundtrip as roundtrip
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                     ^ source.hydra
+#                                      ^^ source.hydra keyword.control.import.hydra
+#                                        ^ source.hydra
+#                                         ^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.json.writer as writer
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                  ^ source.hydra
+#                                   ^^ source.hydra keyword.control.import.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.json.yaml as yaml
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                ^ source.hydra
+#                                 ^^ source.hydra keyword.control.import.hydra
+#                                   ^ source.hydra
+#                                    ^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.lib.chars as chars
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                ^ source.hydra
+#                                 ^^ source.hydra keyword.control.import.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.lib.effects as effects
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                  ^ source.hydra
+#                                   ^^ source.hydra keyword.control.import.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.lib.eithers as eithers
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                  ^ source.hydra
+#                                   ^^ source.hydra keyword.control.import.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.lib.equality as equality
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                   ^ source.hydra
+#                                    ^^ source.hydra keyword.control.import.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.lib.files as files
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                ^ source.hydra
+#                                 ^^ source.hydra keyword.control.import.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.lib.functions as functions
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                    ^ source.hydra
+#                                     ^^ source.hydra keyword.control.import.hydra
+#                                       ^ source.hydra
+#                                        ^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.lib.hashing as hashing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                  ^ source.hydra
+#                                   ^^ source.hydra keyword.control.import.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.lib.lists as lists
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                ^ source.hydra
+#                                 ^^ source.hydra keyword.control.import.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.lib.literals as literals
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                   ^ source.hydra
+#                                    ^^ source.hydra keyword.control.import.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.lib.logic as logic
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                ^ source.hydra
+#                                 ^^ source.hydra keyword.control.import.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.lib.maps as maps
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                               ^ source.hydra
+#                                ^^ source.hydra keyword.control.import.hydra
+#                                  ^ source.hydra
+#                                   ^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.lib.math as math
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                               ^ source.hydra
+#                                ^^ source.hydra keyword.control.import.hydra
+#                                  ^ source.hydra
+#                                   ^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.lib.optionals as optionals
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                    ^ source.hydra
+#                                     ^^ source.hydra keyword.control.import.hydra
+#                                       ^ source.hydra
+#                                        ^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.lib.ordering as lib.ordering
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                   ^ source.hydra
+#                                    ^^ source.hydra keyword.control.import.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.lib.pairs as pairs
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                ^ source.hydra
+#                                 ^^ source.hydra keyword.control.import.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.lib.regex as regex
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                ^ source.hydra
+#                                 ^^ source.hydra keyword.control.import.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.lib.sets as sets
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                               ^ source.hydra
+#                                ^^ source.hydra keyword.control.import.hydra
+#                                  ^ source.hydra
+#                                   ^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.lib.strings as strings
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                  ^ source.hydra
+#                                   ^^ source.hydra keyword.control.import.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.lib.system as system
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                 ^ source.hydra
+#                                  ^^ source.hydra keyword.control.import.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.lib.text as text
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                               ^ source.hydra
+#                                ^^ source.hydra keyword.control.import.hydra
+#                                  ^ source.hydra
+#                                   ^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.names as names
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                            ^ source.hydra
+#                             ^^ source.hydra keyword.control.import.hydra
+#                               ^ source.hydra
+#                                ^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.ordering as ordering
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                               ^ source.hydra
+#                                ^^ source.hydra keyword.control.import.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.reduction as reduction
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                ^ source.hydra
+#                                 ^^ source.hydra keyword.control.import.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.rewriting as rewriting
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                ^ source.hydra
+#                                 ^^ source.hydra keyword.control.import.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.serialization as serialization
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                    ^ source.hydra
+#                                     ^^ source.hydra keyword.control.import.hydra
+#                                       ^ source.hydra
+#                                        ^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.sorting as sorting
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                              ^ source.hydra
+#                               ^^ source.hydra keyword.control.import.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.strip as strip
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                            ^ source.hydra
+#                             ^^ source.hydra keyword.control.import.hydra
+#                               ^ source.hydra
+#                                ^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.substitution as substitution
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                   ^ source.hydra
+#                                    ^^ source.hydra keyword.control.import.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.subterms as subterms
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                               ^ source.hydra
+#                                ^^ source.hydra keyword.control.import.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.syntax as syntax
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                             ^ source.hydra
+#                              ^^ source.hydra keyword.control.import.hydra
+#                                ^ source.hydra
+#                                 ^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.unification as unification
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                  ^ source.hydra
+#                                   ^^ source.hydra keyword.control.import.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.validate.all as validate.all
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                   ^ source.hydra
+#                                    ^^ source.hydra keyword.control.import.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.variables as variables
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                ^ source.hydra
+#                                 ^^ source.hydra keyword.control.import.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.testing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>## The group of all common tests
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term allTests =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra keyword.operator.equals.hydra
+>  TestGroup{
+#^^ source.hydra
+#  ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#           ^^ source.hydra
+>    name = "common",
+#^^^^ source.hydra
+#    ^^^^ source.hydra variable.other.hydra
+#        ^ source.hydra
+#         ^ source.hydra keyword.operator.equals.hydra
+#          ^ source.hydra
+#           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#            ^^^^^^ source.hydra string.quoted.double.hydra
+#                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                   ^^ source.hydra
+>    description = none,
+#^^^^ source.hydra
+#    ^^^^^^^^^^^ source.hydra variable.other.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.equals.hydra
+#                 ^ source.hydra
+#                  ^^^^ source.hydra keyword.control.hydra
+#                      ^^ source.hydra
+>    subgroups = [
+#^^^^ source.hydra
+#    ^^^^^^^^^ source.hydra variable.other.hydra
+#             ^ source.hydra
+#              ^ source.hydra keyword.operator.equals.hydra
+#               ^^^ source.hydra
+>      chars.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                    ^^ source.hydra
+>      effects.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                      ^^ source.hydra
+>      eithers.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                      ^^ source.hydra
+>      equality.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                       ^^ source.hydra
+>      files.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                    ^^ source.hydra
+>      functions.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                        ^^ source.hydra
+>      hashing.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                      ^^ source.hydra
+>      lists.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                    ^^ source.hydra
+>      literals.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                       ^^ source.hydra
+>      logic.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                    ^^ source.hydra
+>      maps.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                   ^^ source.hydra
+>      math.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                   ^^ source.hydra
+>      optionals.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                        ^^ source.hydra
+>      lib.ordering.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                           ^^ source.hydra
+>      pairs.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                    ^^ source.hydra
+>      regex.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                    ^^ source.hydra
+>      sets.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                   ^^ source.hydra
+>      strings.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                      ^^ source.hydra
+>      system.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                     ^^ source.hydra
+>      text.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                   ^^ source.hydra
+>      annotations.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                          ^^ source.hydra
+>      checking.all.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                           ^^ source.hydra
+>      dependencies.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                           ^^ source.hydra
+>      differentiation.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                              ^^ source.hydra
+>      etaExpansion.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                           ^^ source.hydra
+>      formatting.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                         ^^ source.hydra
+>      generation.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                         ^^ source.hydra
+>      hoisting.all.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                           ^^ source.hydra
+>      inference.all.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                            ^^ source.hydra
+>      parser.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                     ^^ source.hydra
+>      roundtrip.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                        ^^ source.hydra
+>      writer.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                     ^^ source.hydra
+>      yaml.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                   ^^ source.hydra
+>      names.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                    ^^ source.hydra
+>      ordering.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                       ^^ source.hydra
+>      reduction.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                        ^^ source.hydra
+>      rewriting.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                        ^^ source.hydra
+>      serialization.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                            ^^ source.hydra
+>      sorting.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                      ^^ source.hydra
+>      strip.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                    ^^ source.hydra
+>      subterms.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                       ^^ source.hydra
+>      substitution.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                           ^^ source.hydra
+>      syntax.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                     ^^ source.hydra
+>      unification.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                          ^^ source.hydra
+>      validate.all.allTests,
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                           ^^ source.hydra
+>      variables.allTests],
+#^^^^^^ source.hydra
+#      ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                        ^^^ source.hydra
+>    `cases` = []}
+#^^^^ source.hydra
+#    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#     ^^^^^ source.hydra variable.other.escaped.hydra
+#          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#           ^ source.hydra
+#            ^ source.hydra keyword.operator.equals.hydra
+#             ^^^^^ source.hydra

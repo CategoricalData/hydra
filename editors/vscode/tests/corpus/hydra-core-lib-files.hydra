@@ -5,6 +5,9 @@ module hydra.core.lib.files
 
 import hydra.core.error.file
 import hydra.core.file
+import hydra.core.model
+import hydra.core.packaging
+import hydra.core.typing
 
 ## Append bytes to the end of a file.
 ##

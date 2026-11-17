@@ -32,23 +32,25 @@ term definitionAsTypeApplicationTerm =
       (λts.right(TypeApplicationTerm{body = Binding[`term`] el, `type` = TypeScheme[body] ts}))
 
 ## Convert bindings and a body to a let expression
-term graphAsLet = λbindings,body.Let{bindings = bindings, body = body}
+term graphAsLet = λbindings, body.Let{bindings = bindings, body = body}
 
 ## Convert bindings and a body to a term, using let-term duality
-term graphAsTerm = λbindings,body.Term{`let` = graphAsLet bindings body}
+term graphAsTerm = λbindings, body.Term{`let` = graphAsLet bindings body}
 
 ## Decode a list of type-encoding bindings into a map of named types
 term graphAsTypes =
-  λgraph,els.
-    let toPair := λel.eithers.map (λtyp.(Binding[name] el, typ)) (decode.model.type graph (Binding[`term`] el))
+  λgraph, els.
+    let toPair := λel.eithers.map
+          (λtyp.(Binding[name] el, typ))
+          (decode.model.type graph (Binding[`term`] el))
     in eithers.map maps.fromList (eithers.mapList toPair els)
 
 ## Partition a list of definitions into type definitions and term definitions
 term partitionDefinitions =
   λdefs.
-    let getType := λdef.cases(Definition){`type`=λtd.given(td), `term`=λ`_`.none, `primitive`=λ`_`.none}
+    let getType := λdef.cases(Definition){`type` = λtd.given(td), `term` = λ`_`.none, `primitive` = λ`_`.none}
           def in
-    let getTerm := λdef.cases(Definition){`type`=λ`_`.none, `term`=λtd.given(td), `primitive`=λ`_`.none}
+    let getTerm := λdef.cases(Definition){`type` = λ`_`.none, `term` = λtd.given(td), `primitive` = λ`_`.none}
           def in
     (optionals.givens (lists.map getType defs), optionals.givens (lists.map getTerm defs))
 
@@ -66,11 +68,11 @@ term reorderDefs =
     let termDefsWrapped := lists.map (λtd.Definition{`term` = td}) (second partitioned) in
     let sortedTermDefs := lists.concat
         (topologicalSortNodes
-          (λd.cases(Definition){`term`=λtd.TermDefinition[name] td} d)
+          (λd.cases(Definition){`term` = λtd.TermDefinition[name] td} d)
           (λd.cases(Definition){
-              `term`=λtd.sets.toList
+              `term` = λtd.sets.toList
                     (eagerFreeVariablesInTerm (TermDefinition[body] td)),
-              `_`=[]}
+              `_` = []}
               d)
           termDefsWrapped) in
     lists.concat [typeDefs, sortedTermDefs]
@@ -78,11 +80,11 @@ term reorderDefs =
 ## Convert a schema graph to a typing environment (Either version)
 term schemaGraphToTypingEnvironment =
   λg.
-    let toTypeScheme := λvars,typ.cases(Type){
-          `forall`=λft.toTypeScheme
+    let toTypeScheme := λvars, typ.cases(Type){
+          `forall` = λft.toTypeScheme
                 (lists.cons (ForallType[parameter] ft) vars)
                 (ForallType[body] ft),
-          `_`=TypeScheme{
+          `_` = TypeScheme{
             variables = lists.reverse vars,
             body = typ,
             constraints = maps.empty}}
@@ -97,7 +99,7 @@ term schemaGraphToTypingEnvironment =
           (decode.model.typeScheme g `term`) in
     let toPair := λel.
         let forTerm := λ`term`.cases(Term){
-              `record`=λr.ifElse
+              `record` = λr.ifElse
                     (equal
                       (Record[typeName] r)
                       Name{"hydra.core.model.TypeScheme"})
@@ -105,7 +107,7 @@ term schemaGraphToTypingEnvironment =
                       optionals.given
                       (decodeTypeScheme (Binding[`term`] el)))
                     right(none),
-              `inject`=λi.ifElse
+              `inject` = λi.ifElse
                     (equal
                       (Injection[typeName] i)
                       Name{"hydra.core.model.Type"})
@@ -113,7 +115,7 @@ term schemaGraphToTypingEnvironment =
                       (λdecoded.given(toTypeScheme [] decoded))
                       (decodeType (Binding[`term`] el)))
                     right(none),
-              `_`=right(none)}
+              `_` = right(none)}
               `term`
         in eithers.bind
           (optionals.match
@@ -140,7 +142,7 @@ term schemaGraphToTypingEnvironment =
     eithers.map (λmpairs.maps.fromList (optionals.givens mpairs)) (eithers.mapList toPair (graphToBindings g))
 
 ## Extract the bindings from a let term, or return an empty list for other terms
-term termAsBindings = λ`term`.cases(Term){`let`=λlt.Let[bindings] lt, `_`=[]} (deannotateTerm `term`)
+term termAsBindings = λ`term`.cases(Term){`let` = λlt.Let[bindings] lt, `_` = []} (deannotateTerm `term`)
 
 ## Encode a map of named types to a list of bindings
 term typesToDefinitions =
@@ -152,18 +154,21 @@ term typesToDefinitions =
 
 ## Execute a computation in the context of a lambda body, extending the type context with the lambda parameter
 term withLambdaContext =
-  λgetContext,setContext,env,lam,body.
+  λgetContext, setContext, env, lam, body.
     let newContext := extendGraphForLambda (getContext env) lam
     in body (setContext newContext env)
 
 ## Execute a computation in the context of a let body, extending the type context with the let bindings
 term withLetContext =
-  λgetContext,setContext,forBinding,env,letrec,body.
-    let newContext := extendGraphForLet forBinding (getContext env) letrec
+  λgetContext, setContext, forBinding, env, letrec, body.
+    let newContext := extendGraphForLet
+        forBinding
+        (getContext env)
+        letrec
     in body (setContext newContext env)
 
 ## Execute a computation in the context of a type lambda body, extending the type context with the type parameter
 term withTypeLambdaContext =
-  λgetContext,setContext,env,tlam,body.
+  λgetContext, setContext, env, tlam, body.
     let newContext := extendGraphForTypeLambda (getContext env) tlam
     in body (setContext newContext env)

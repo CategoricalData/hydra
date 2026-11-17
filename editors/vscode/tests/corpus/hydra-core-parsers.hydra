@@ -13,10 +13,10 @@ import hydra.core.parsing
 
 ## Try the first parser; if it fails without consuming input, try the second
 term alt =
-  λp1,p2.
+  λp1, p2.
     let parse := λinput.cases(ParseResult){
-          success=λs.ParseResult{success = s},
-          failure=λe.ifElse
+          success = λs.ParseResult{success = s},
+          failure = λe.ifElse
                 (equal
                   (ParseInput[offset] (ParseError[remainder] e))
                   (ParseInput[offset] input))
@@ -30,32 +30,33 @@ term anyChar = satisfy (λ`_`.true)
 
 ## Apply a parser containing a function to a parser containing a value
 term apply =
-  λpf,pa.
+  λpf, pa.
     let parse := λinput.cases(ParseResult){
-          success=λsf.cases(ParseResult){
-                success=λsa.ParseResult{
+          success = λsf.cases(ParseResult){
+                success = λsa.ParseResult{
                       success = ParseSuccess{
                         value = ParseSuccess[value]
                             sf
                             (ParseSuccess[value] sa),
                         remainder = ParseSuccess[remainder] sa}},
-                failure=λe.ParseResult{failure = e}}
+                failure = λe.ParseResult{
+                      failure = e}}
                 (Parser[] pa (ParseSuccess[remainder] sf)),
-          failure=λe.ParseResult{failure = e}}
+          failure = λe.ParseResult{failure = e}}
           (Parser[] pf input)
     in wrap(Parser){parse}
 
 ## Parse something between an opening and closing parser
-term between = λopen,close,p.bind open (λ`_`.bind p (λx.bind close (λ`_`.pure x)))
+term between = λopen, close, p.bind open (λ`_`.bind p (λx.bind close (λ`_`.pure x)))
 
 ## Sequence two parsers, passing the result of the first to a function that produces the second
 term bind =
-  λpa,f.
+  λpa, f.
     let parse := λinput.cases(ParseResult){
-          success=λs.Parser[]
+          success = λs.Parser[]
                 (f (ParseSuccess[value] s))
                 (ParseSuccess[remainder] s),
-          failure=λe.ParseResult{failure = e}}
+          failure = λe.ParseResult{failure = e}}
           (Parser[] pa input)
     in wrap(Parser){parse}
 
@@ -83,12 +84,12 @@ term many = λp.let parse := λinput.manyLoop p input [] in wrap(Parser){parse}
 
 ## Repeatedly apply a parser, accumulating results, until it fails
 term manyLoop =
-  λp,input,acc.cases(ParseResult){
-      success=λs.manyLoop
+  λp, input, acc.cases(ParseResult){
+      success = λs.manyLoop
             p
             (ParseSuccess[remainder] s)
             (lists.cons (ParseSuccess[value] s) acc),
-      failure=λ`_`.ParseResult{
+      failure = λ`_`.ParseResult{
             success = ParseSuccess{
               value = lists.reverse acc,
               remainder = input}}}
@@ -96,13 +97,13 @@ term manyLoop =
 
 ## Apply a function to the result of a parser
 term map =
-  λf,pa.
+  λf, pa.
     let parse := λinput.cases(ParseResult){
-          success=λs.ParseResult{
+          success = λs.ParseResult{
                 success = ParseSuccess{
                   value = f (ParseSuccess[value] s),
                   remainder = ParseSuccess[remainder] s}},
-          failure=λe.ParseResult{failure = e}}
+          failure = λe.ParseResult{failure = e}}
           (Parser[] pa input)
     in wrap(Parser){parse}
 
@@ -124,7 +125,7 @@ term pure = λa.Parser{λinput.ParseResult{success = ParseSuccess{value = a, rem
 
 ## Run a parser on the given input string. The string is converted to a codepoint list once, up front, so that the parser itself can consume characters in constant time.
 term runParser =
-  λp,input.Parser[] p ParseInput{offset = 0:int32, tokenEnd = 0:int32, codepoints = strings.toList input}
+  λp, input.Parser[] p ParseInput{offset = 0:int32, tokenEnd = 0:int32, codepoints = strings.toList input}
 
 ## Parse a character (codepoint) that satisfies the given predicate
 term satisfy =
@@ -151,10 +152,10 @@ term satisfy =
     in wrap(Parser){parse}
 
 ## Parse zero or more occurrences separated by a separator
-term sepBy = λp,sep.alt (sepBy1 p sep) (pure [])
+term sepBy = λp, sep.alt (sepBy1 p sep) (pure [])
 
 ## Parse one or more occurrences separated by a separator
-term sepBy1 = λp,sep.bind p (λx.bind (many (bind sep (λ`_`.p))) (λxs.pure (lists.cons x xs)))
+term sepBy1 = λp, sep.bind p (λx.bind (many (bind sep (λ`_`.p))) (λxs.pure (lists.cons x xs)))
 
 ## Parse one or more occurrences of the given parser
 term some = λp.bind p (λx.bind (many p) (λxs.pure (lists.cons x xs)))
@@ -163,7 +164,7 @@ term some = λp.bind p (λx.bind (many p) (λxs.pure (lists.cons x xs)))
 term spanned =
   λp.
     let parse := λinput.cases(ParseResult){
-          success=λs.
+          success = λs.
               let start := ParseInput[offset] input in
               let end := max
                   start
@@ -172,7 +173,7 @@ term spanned =
                 success = ParseSuccess{
                   value = (ParseSuccess[value] s, SourceSpan{start = start, end = end}),
                   remainder = ParseSuccess[remainder] s}},
-          failure=λe.ParseResult{failure = e}}
+          failure = λe.ParseResult{failure = e}}
           (Parser[] p input)
     in wrap(Parser){parse}
 
@@ -200,8 +201,8 @@ term string =
 term try =
   λp.
     let parse := λinput.cases(ParseResult){
-          success=λs.ParseResult{success = s},
-          failure=λe.ParseResult{
+          success = λs.ParseResult{success = s},
+          failure = λe.ParseResult{
                 failure = ParseError{
                   message = ParseError[message] e,
                   remainder = input}}}

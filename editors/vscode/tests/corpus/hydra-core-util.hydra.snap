@@ -110,6 +110,7 @@
 #                            ^ source.hydra
 #                             ^^^^^^ source.hydra support.type.hydra
 #                                   ^^ source.hydra
+>
 >  ## The module name in focus, together with its associated value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -123,6 +124,7 @@
 #                    ^^ source.hydra
 #                      ^ source.hydra variable.other.hydra
 #                       ^^^ source.hydra
+>
 >  ## A mapping of module names to values
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -153,6 +155,7 @@
 #                ^ source.hydra
 #                 ^^^^^ source.hydra support.type.hydra
 #                      ^^ source.hydra
+>
 >  ## Arbitrary precision
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -164,6 +167,7 @@
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## Precision to a specified number of bits
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -188,6 +192,7 @@
 #                    ^ source.hydra
 #                     ^^^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
+>
 >  ## The optional module name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -202,6 +207,7 @@
 #                       ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                  ^^ source.hydra
+>
 >  ## The local name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

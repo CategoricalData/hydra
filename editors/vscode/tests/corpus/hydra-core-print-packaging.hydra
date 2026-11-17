@@ -20,14 +20,14 @@ import hydra.core.serialization
 
 ## Build a candidate alias from the last n dotted segments of a module's full name
 term aliasFromSuffix =
-  λsegs,n.let dropCount := sub (lists.length segs) n in strings.join "." (lists.drop dropCount segs)
+  λsegs, n.let dropCount := sub (lists.length segs) n in strings.join "." (lists.drop dropCount segs)
 
 ## Show a definition as a string, shortening nominal references via the given import-alias map (#803)
 term definition =
-  λaliases,def.cases(Definition){
-      `primitive`=λpd.primitiveDefinition aliases pd,
-      `term`=λtd.termDefinition aliases td,
-      `type`=λtyd.typeDefinition aliases tyd}
+  λaliases, def.cases(Definition){
+      `primitive` = λpd.primitiveDefinition aliases pd,
+      `term` = λtd.termDefinition aliases td,
+      `type` = λtyd.typeDefinition aliases tyd}
       def
 
 ## Split a (possibly multi-line) string into '## '-prefixed doc-comment lines, one per embedded newline
@@ -56,7 +56,9 @@ term entityMetadataDoc =
           lists.concat2 avail depr) in
     let provisionLines := lists.map
         (λp.
-          let localName := localNameOf (Provision[name] p), tag := cases(ProvisionKind){requirement=λ`_`."@requirement", recommendation=λ`_`."@recommendation"}
+          let localName := localNameOf (Provision[name] p), tag := cases(ProvisionKind){
+              requirement = λ`_`."@requirement",
+              recommendation = λ`_`."@recommendation"}
               (Provision[kind] p)
           in strings.concat ["## ", tag, " ", localName, ": ", Provision[statement] p])
         (EntityMetadata[provisions] em) in
@@ -67,20 +69,20 @@ term entityMetadataDoc =
 ## Show an EntityReference using the type/term/primitive/module/package/term-expr/type-expr tags
 term entityReferenceDoc =
   λref.cases(EntityReference){
-      definition=λdefRef.cases(DefinitionReference){
-            `type`=λn.strings.concat2 "type " (Name[] n),
-            `term`=λn.strings.concat2 "term " (Name[] n),
-            `primitive`=λn.strings.concat2 "primitive " (Name[] n)}
+      definition = λdefRef.cases(DefinitionReference){
+            `type` = λn.strings.concat2 "type " (Name[] n),
+            `term` = λn.strings.concat2 "term " (Name[] n),
+            `primitive` = λn.strings.concat2 "primitive " (Name[] n)}
             defRef,
-      `module`=λmn.strings.concat2 "module " (ModuleName[] mn),
-      package=λpn.strings.concat2 "package " (PackageName[] pn),
-      termExpr=λt.strings.concat2 "term-expr " t,
-      typeExpr=λt.strings.concat2 "type-expr " t}
+      `module` = λmn.strings.concat2 "module " (ModuleName[] mn),
+      package = λpn.strings.concat2 "package " (PackageName[] pn),
+      termExpr = λt.strings.concat2 "term-expr " t,
+      typeExpr = λt.strings.concat2 "type-expr " t}
       ref
 
 ## One growth round of the alias-collision fixed point: colliding non-shortest members grow
 term growAliasesStep =
-  λsegsMap,state,`_ign`.
+  λsegsMap, state, `_ign`.
     let nss := maps.keys segsMap in
     let segsFor := λnm.withDefault [] (maps.lookup nm segsMap) in
     let takenFor := λnm.withDefault 1:int32 (maps.lookup nm state) in
@@ -92,14 +94,14 @@ term growAliasesStep =
     let aliasKey := λe.second (second (second e)) in
     let segCountOf := λe.first (second (second e)) in
     let aliasCounts := lists.foldl
-        (λm,e.maps.insert
+        (λm, e.maps.insert
             (aliasKey e)
             (add 1:int32 (withDefault 0:int32 (maps.lookup (aliasKey e) m)))
             m)
         maps.empty
         entries in
     let aliasMinSegs := lists.foldl
-        (λm,e.
+        (λm, e.
           let k := aliasKey e in
           let segCount := segCountOf e in
           maps.insert
@@ -112,7 +114,7 @@ term growAliasesStep =
         maps.empty
         entries in
     let aliasMinSegsCount := lists.foldl
-        (λm,e.
+        (λm, e.
           let k := aliasKey e in
           let segCount := segCountOf e in
           let minSegs := withDefault segCount (maps.lookup k aliasMinSegs) in
@@ -143,14 +145,17 @@ term growAliasesStep =
 
 ## Show a module dependency as an import declaration, using the given alias map
 term importDecl =
-  λaliases,d.
+  λaliases, d.
     let depMod := ModuleDependency[`module`] d in
     let modNameStr := moduleNameString depMod in
     let aliasSuffix := match
         (maps.lookup depMod aliases)
         ""
         (λalias.ifElse (strings.isEmpty alias) "" (strings.concat [" as ", alias])) in
-    let pkgSuffix := match (ModuleDependency[package] d) "" (λpkg.strings.concat [" from ", PackageName[] pkg]) in
+    let pkgSuffix := match
+        (ModuleDependency[package] d)
+        ""
+        (λpkg.strings.concat [" from ", PackageName[] pkg]) in
     strings.concat ["import ", modNameStr, aliasSuffix, pkgSuffix]
 
 ## Compute the printing alias for every module referenced by the given module's definitions, plus the module's own namespace (mapped to the empty alias, for self-reference shortening, #711); context-free, so every real dependency stays aliased
@@ -158,7 +163,7 @@ term moduleAliases = λmod.moduleAliasesWith maps.empty mod
 
 ## Compute the printing alias for every module referenced by the given module's definitions, given the full declared-name universe of modules in scope (#5/#711); the printed module's own namespace is always mapped to the empty alias for self-reference shortening (#711/#803)
 term moduleAliasesWith =
-  λuniverse,mod.
+  λuniverse, mod.
     let ownNs := Module[name] mod in
     let defs := Module[definitions] mod in
     let namesByModRaw := definitionDependencyNamesByModule defs in
@@ -168,9 +173,9 @@ term moduleAliasesWith =
         (lists.map
           (λdef.localNameOf
               (cases(Definition){
-                `type`=λtd.TypeDefinition[name] td,
-                `term`=λtd.TermDefinition[name] td,
-                `primitive`=λpd.PrimitiveDefinition[name] pd}
+                `type` = λtd.TypeDefinition[name] td,
+                `term` = λtd.TermDefinition[name] td,
+                `primitive` = λpd.PrimitiveDefinition[name] pd}
                 def))
           defs) in
     let declaredImportNames := nssAsList in
@@ -205,7 +210,7 @@ term moduleAliasesWith =
     let segmentsOf := λnm.strings.splitOn "." (ModuleName[] nm) in
     let segsMap := maps.fromList (lists.map (λnm.(nm, segmentsOf nm)) aliasedList) in
     let maxSegs := lists.foldl
-        (λa,b.ifElse (gt a b) a b)
+        (λa, b.ifElse (gt a b) a b)
         1:int32
         (lists.map (λnm.lists.length (segmentsOf nm)) aliasedList) in
     let initialState := maps.fromList (lists.map (λnm.(nm, 1:int32)) aliasedList) in
@@ -223,7 +228,7 @@ term moduleDefinition = λmod.moduleDefinitionWith maps.empty mod
 
 ## Show a module as a string, given the full declared-name universe of modules in scope (#5/#711)
 term moduleDefinitionWith =
-  λuniverse,mod.
+  λuniverse, mod.
     let headerStr := withDefinitionDoc
         (Module[metadata] mod)
         (strings.concat ["module ", moduleNameString (Module[name] mod)]) in
@@ -250,7 +255,7 @@ term moduleNameString = λn.ModuleName[] n
 
 ## Show a primitive definition as a string, shortening nominal references via the given import-alias map (#803)
 term primitiveDefinition =
-  λaliases,pd.
+  λaliases, pd.
     let localName := localNameOf (PrimitiveDefinition[name] pd) in
     let impureStr := ifElse (PrimitiveDefinition[isPure] pd) "" "impure " in
     let partialStr := ifElse (PrimitiveDefinition[isTotal] pd) "" "partial " in
@@ -265,7 +270,7 @@ term primitiveDefinition =
 
 ## Show a term definition as a string, shortening nominal references via the given import-alias map (#803)
 term termDefinition =
-  λaliases,td.
+  λaliases, td.
     let localName := localNameOf (TermDefinition[name] td) in
     let sigStr := match
         (TermDefinition[signature] td)
@@ -290,7 +295,7 @@ term termDefinition =
 
 ## Show a type definition as a string, shortening nominal references via the given import-alias map (#803)
 term typeDefinition =
-  λaliases,td.
+  λaliases, td.
     let localName := localNameOf (TypeDefinition[name] td) in
     let scheme := TypeDefinition[body] td in
     let body := TypeScheme[body] scheme in
@@ -310,7 +315,7 @@ term typeDefinition =
 
 ## Prepend a definition's '##' doc-comment block to its printed declaration, if present
 term withDefinitionDoc =
-  λmmeta,declStr.match
+  λmmeta, declStr.match
       mmeta
       declStr
       (λmeta.

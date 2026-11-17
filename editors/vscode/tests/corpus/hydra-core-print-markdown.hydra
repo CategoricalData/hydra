@@ -13,15 +13,15 @@ import hydra.core.markdown
 ## Render a single Block to its Markdown text form
 term block =
   λb.cases(Block){
-      codeBlock=λcb.codeBlock cb,
-      `list`=λl.`list` l,
-      paragraph=λp.inlines (Paragraph[content] p),
-      raw=λs.s,
-      section=λs.
+      codeBlock = λcb.codeBlock cb,
+      `list` = λl.`list` l,
+      paragraph = λp.inlines (Paragraph[content] p),
+      raw = λs.s,
+      section = λs.
           let h := Section[heading] s in
           let content := Section[content] s in
           strings.join "\n\n" (lists.cons (heading h) (lists.map block content)),
-      table=λt.table t}
+      table = λt.table t}
       b
 
 ## Render a list of Blocks, joined by a blank line
@@ -53,11 +53,11 @@ term heading =
 ## Render a single Inline to its Markdown text form
 term inline =
   λi.cases(Inline){
-      code=λs.strings.concat2 (strings.concat2 "`" s) "`",
-      emphasis=λis.strings.concat2 (strings.concat2 "*" (inlines is)) "*",
-      link=λlk.link lk,
-      strong=λis.strings.concat2 (strings.concat2 "**" (inlines is)) "**",
-      text=λs.s}
+      code = λs.strings.concat2 (strings.concat2 "`" s) "`",
+      emphasis = λis.strings.concat2 (strings.concat2 "*" (inlines is)) "*",
+      link = λlk.link lk,
+      strong = λis.strings.concat2 (strings.concat2 "**" (inlines is)) "**",
+      text = λs.s}
       i
 
 ## Render a list of Inlines, concatenated with no separator

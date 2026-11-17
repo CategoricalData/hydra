@@ -26,6 +26,7 @@
 #                        ^ source.hydra
 #                         ^^^^^ source.hydra support.type.hydra
 #                              ^^ source.hydra
+>
 >  ## Leave this position unchanged
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -37,6 +38,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra support.type.hydra
 #              ^^ source.hydra
+>
 >  ## Set this position to the given value (upsert: prior presence is irrelevant)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -50,6 +52,7 @@
 #        ^ source.hydra
 #         ^ source.hydra variable.other.hydra
 #          ^^ source.hydra
+>
 >  ## Remove this position (valid only at a removable position, e.g. a record field or collection element)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -61,6 +64,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra support.type.hydra
 #              ^^ source.hydra
+>
 >  ## Edit specific immediate children, one StepEdit per changed step
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -97,6 +101,7 @@
 #                     ^ source.hydra
 #                      ^^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
+>
 >  ## Fill the hole here: a function from the old value (context) to the filled value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -112,6 +117,7 @@
 #              ^ source.hydra
 #               ^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## Leave the hole open, to be supplied by an enclosing context where this value is embedded
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -144,6 +150,7 @@
 #                        ^ source.hydra
 #                         ^^^^^^ source.hydra support.type.hydra
 #                               ^^ source.hydra
+>
 >  ## The value-path (sequence of steps) to the position needing a value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -158,6 +165,7 @@
 #             ^ source.hydra entity.name.type.hydra
 #              ^ source.hydra punctuation.definition.typeargs.end.hydra
 #               ^^ source.hydra
+>
 >  ## The 'type' a fill must produce at this hole
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -192,6 +200,7 @@
 #                              ^ source.hydra
 #                               ^^^^^^ source.hydra support.type.hydra
 #                                     ^^ source.hydra
+>
 >  ## The path of the residual hole being supplied
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -206,6 +215,7 @@
 #             ^ source.hydra entity.name.type.hydra
 #              ^ source.hydra punctuation.definition.typeargs.end.hydra
 #               ^^ source.hydra
+>
 >  ## The value supplied for that hole
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -241,6 +251,7 @@
 #                                       ^ source.hydra
 #                                        ^^^^^ source.hydra support.type.hydra
 #                                             ^^ source.hydra
+>
 >  ## A fillNow produced a value that does not inhabit the hole's type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -256,6 +267,7 @@
 #                  ^ source.hydra
 #                   ^ source.hydra variable.other.hydra
 #                    ^^ source.hydra
+>
 >  ## A hole received no fill
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -271,6 +283,7 @@
 #                     ^ source.hydra
 #                      ^ source.hydra variable.other.hydra
 #                       ^^ source.hydra
+>
 >  ## A surplus fill at this index, with no hole to answer
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -306,6 +319,7 @@
 #                                     ^ source.hydra
 #                                      ^^^^^ source.hydra support.type.hydra
 #                                           ^^ source.hydra
+>
 >  ## The input value is not a valid instance of the old type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -317,6 +331,7 @@
 #                ^ source.hydra
 #                 ^ source.hydra variable.other.hydra
 #                  ^^ source.hydra
+>
 >  ## A value failed a narrowing conversion (e.g. numeric overflow); fail-fast rather than truncate
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -328,6 +343,7 @@
 #             ^ source.hydra
 #              ^ source.hydra variable.other.hydra
 #               ^^ source.hydra
+>
 >  ## An instance of a removed union variant whose handler is reject
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -339,6 +355,7 @@
 #                  ^ source.hydra
 #                   ^ source.hydra variable.other.hydra
 #                    ^^ source.hydra
+>
 >  ## A fill or resolver produced a value that does not inhabit the hole's type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -354,6 +371,7 @@
 #                            ^ source.hydra
 #                             ^ source.hydra variable.other.hydra
 #                              ^^ source.hydra
+>
 >  ## A deferred hole reached application time still unanswered
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -393,6 +411,7 @@
 #                                    ^ source.hydra
 #                                     ^^^^^^ source.hydra support.type.hydra
 #                                           ^^ source.hydra
+>
 >  ## The schema diff: an edit per changed type, keyed by type name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -414,6 +433,7 @@
 #                       ^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                         ^^ source.hydra
+>
 >  ## The ordered holes across all changed types, for the user to answer
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -458,6 +478,7 @@
 #                               ^ source.hydra
 #                                ^^^^^^ source.hydra support.type.hydra
 #                                      ^^ source.hydra
+>
 >  ## Deferred holes that an enclosing context must supply when composing this migrator
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -476,6 +497,7 @@
 #                             ^ source.hydra entity.name.type.hydra
 #                              ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                               ^^ source.hydra
+>
 >  ## Migrate a value, given values for the residual holes; fails with a MigrationError per instance
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -535,6 +557,7 @@
 #                            ^ source.hydra
 #                             ^^^^^^ source.hydra support.type.hydra
 #                                   ^^ source.hydra
+>
 >  ## The offending value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -546,6 +569,7 @@
 #        ^ source.hydra
 #         ^ source.hydra variable.other.hydra
 #          ^^ source.hydra
+>
 >  ## The type the value did not inhabit
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -583,6 +607,7 @@
 #                                 ^ source.hydra
 #                                  ^^^^^^ source.hydra support.type.hydra
 #                                        ^^ source.hydra
+>
 >  ## The name of the type (a schema entry) containing this hole
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -594,6 +619,7 @@
 #           ^ source.hydra
 #            ^ source.hydra variable.other.hydra
 #             ^^ source.hydra
+>
 >  ## The hole within that type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -630,6 +656,7 @@
 #                            ^ source.hydra
 #                             ^^^^^^ source.hydra support.type.hydra
 #                                   ^^ source.hydra
+>
 >  ## The immediate step to descend into
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -641,6 +668,7 @@
 #       ^ source.hydra
 #        ^ source.hydra variable.other.hydra
 #         ^^ source.hydra
+>
 >  ## The edit to apply at that step
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

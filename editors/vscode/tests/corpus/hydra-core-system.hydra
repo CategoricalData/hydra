@@ -5,12 +5,16 @@ import hydra.core.file
 
 ## A description of a program to run, supplying the inputs the POSIX posix_spawn / execve family takes: the executable, its argument vector, and optionally a working directory and a replacement environment. Only the portable subset is modeled; POSIX file actions, spawn attributes, and signal masks are omitted. See https://pubs.opengroup.org/onlinepubs/9799919799/functions/posix_spawn.html and https://pubs.opengroup.org/onlinepubs/9799919799/functions/execve.html
 type Command = record{
+
   ## The executable to run; a POSIX pathname, resolved against PATH by the host when it contains no slash (as for the execvp/execlp family). POSIX argv[0] (the program name) is supplied by the host from this field
   program: FilePath,
+
   ## The arguments following the program name, becoming argv[1..] for the child. The program name (argv[0]) is not included here
   arguments: list<string>,
+
   ## The directory in which to run the child, as if chdir() (XSH, https://pubs.opengroup.org/onlinepubs/9799919799/functions/chdir.html) were called before exec. None inherits the parent's working directory
   workingDirectory: optional<FilePath>,
+
   ## The complete environment for the child (POSIX environ). None inherits the parent's environment; given(m) replaces it entirely, as execve's envp argument does. There is no partial-merge form; merge in pure code before calling
   environment: optional<map<EnvironmentVariable, string>>}
 
@@ -19,10 +23,13 @@ type EnvironmentVariable = wrap(string)
 
 ## The outcome of a child process that ran to completion, as obtained by wait() / waitpid() (XSH, https://pubs.opengroup.org/onlinepubs/9799919799/functions/wait.html) together with its captured output. Only normal termination is modeled directly; abnormal termination (POSIX WIFSIGNALED) is surfaced through exitCode using the host's convention rather than as a separate field
 type ProcessResult = record{
+
   ## The child's exit status (POSIX WEXITSTATUS); 0 denotes success by convention
   exitCode: StatusCode,
+
   ## The bytes the child wrote to file descriptor 1, standard output (XBD STDOUT_FILENO)
   stdout: binary,
+
   ## The bytes the child wrote to file descriptor 2, standard error (XBD STDERR_FILENO)
   stderr: binary}
 

@@ -15,7 +15,7 @@ term parseSubtermPath =
   λs.optionals.map
       (λx.wrap(SubtermPath){x})
       (lists.foldl
-        (λmacc,tok.optionals.bind macc (λacc.optionals.map (λst.lists.concat2 acc [st]) (parseSubtermStep tok)))
+        (λmacc, tok.optionals.bind macc (λacc.optionals.map (λst.lists.concat2 acc [st]) (parseSubtermStep tok)))
         given([])
         (strings.splitOn "/" s))
 
@@ -97,7 +97,7 @@ term parseSubtypePath =
   λs.optionals.map
       (λx.wrap(SubtypePath){x})
       (lists.foldl
-        (λmacc,tok.optionals.bind macc (λacc.optionals.map (λst.lists.concat2 acc [st]) (parseSubtypeStep tok)))
+        (λmacc, tok.optionals.bind macc (λacc.optionals.map (λst.lists.concat2 acc [st]) (parseSubtypeStep tok)))
         given([])
         (strings.splitOn "/" s))
 
@@ -170,28 +170,28 @@ term subtermPath = λpath.strings.join "/" (lists.map subtermStep (SubtermPath[]
 ## Print a subterm step in its round-trippable notation
 term subtermStep =
   λstep.cases(SubtermStep){
-      annotatedAnnotation=λ`_`."annotatedAnnotation",
-      annotatedBody=λ`_`."annotatedBody",
-      applicationArgument=λ`_`."applicationArgument",
-      applicationFunction=λ`_`."applicationFunction",
-      casesCase=λname.strings.concat2 "casesCase:" (Name[] name),
-      casesDefault=λ`_`."casesDefault",
-      eitherLeft=λ`_`."eitherLeft",
-      eitherRight=λ`_`."eitherRight",
-      injectField=λname.strings.concat2 "injectField:" (Name[] name),
-      lambdaBody=λ`_`."lambdaBody",
-      letBinding=λname.strings.concat2 "letBinding:" (Name[] name),
-      letBody=λ`_`."letBody",
-      listElement=λi.strings.concat2 "listElement:" (printInt32 i),
-      mapEntry=λi.strings.concat2 "mapEntry:" (printInt32 i),
-      optionalGiven=λ`_`."optionalGiven",
-      pairFirst=λ`_`."pairFirst",
-      pairSecond=λ`_`."pairSecond",
-      recordField=λname.strings.concat2 "recordField:" (Name[] name),
-      setElement=λi.strings.concat2 "setElement:" (printInt32 i),
-      typeApplicationBody=λ`_`."typeApplicationBody",
-      typeLambdaBody=λ`_`."typeLambdaBody",
-      wrapBody=λ`_`."wrapBody"}
+      annotatedAnnotation = λ`_`."annotatedAnnotation",
+      annotatedBody = λ`_`."annotatedBody",
+      applicationArgument = λ`_`."applicationArgument",
+      applicationFunction = λ`_`."applicationFunction",
+      casesCase = λname.strings.concat2 "casesCase:" (Name[] name),
+      casesDefault = λ`_`."casesDefault",
+      eitherLeft = λ`_`."eitherLeft",
+      eitherRight = λ`_`."eitherRight",
+      injectField = λname.strings.concat2 "injectField:" (Name[] name),
+      lambdaBody = λ`_`."lambdaBody",
+      letBinding = λname.strings.concat2 "letBinding:" (Name[] name),
+      letBody = λ`_`."letBody",
+      listElement = λi.strings.concat2 "listElement:" (printInt32 i),
+      mapEntry = λi.strings.concat2 "mapEntry:" (printInt32 i),
+      optionalGiven = λ`_`."optionalGiven",
+      pairFirst = λ`_`."pairFirst",
+      pairSecond = λ`_`."pairSecond",
+      recordField = λname.strings.concat2 "recordField:" (Name[] name),
+      setElement = λi.strings.concat2 "setElement:" (printInt32 i),
+      typeApplicationBody = λ`_`."typeApplicationBody",
+      typeLambdaBody = λ`_`."typeLambdaBody",
+      wrapBody = λ`_`."wrapBody"}
       step
 
 ## Print a subtype path as its steps joined by '/'
@@ -200,23 +200,23 @@ term subtypePath = λpath.strings.join "/" (lists.map subtypeStep (SubtypePath[]
 ## Print a subtype step in its round-trippable notation
 term subtypeStep =
   λstep.cases(SubtypeStep){
-      annotatedBody=λ`_`."annotatedBody",
-      applicationArgument=λ`_`."applicationArgument",
-      applicationFunction=λ`_`."applicationFunction",
-      effectValue=λ`_`."effectValue",
-      eitherLeft=λ`_`."eitherLeft",
-      eitherRight=λ`_`."eitherRight",
-      forallBody=λ`_`."forallBody",
-      functionCodomain=λ`_`."functionCodomain",
-      functionDomain=λ`_`."functionDomain",
-      listElement=λ`_`."listElement",
-      mapKeys=λ`_`."mapKeys",
-      mapValues=λ`_`."mapValues",
-      optionalElement=λ`_`."optionalElement",
-      pairFirst=λ`_`."pairFirst",
-      pairSecond=λ`_`."pairSecond",
-      recordField=λname.strings.concat2 "recordField:" (Name[] name),
-      setElement=λ`_`."setElement",
-      unionField=λname.strings.concat2 "unionField:" (Name[] name),
-      wrapBody=λ`_`."wrapBody"}
+      annotatedBody = λ`_`."annotatedBody",
+      applicationArgument = λ`_`."applicationArgument",
+      applicationFunction = λ`_`."applicationFunction",
+      effectValue = λ`_`."effectValue",
+      eitherLeft = λ`_`."eitherLeft",
+      eitherRight = λ`_`."eitherRight",
+      forallBody = λ`_`."forallBody",
+      functionCodomain = λ`_`."functionCodomain",
+      functionDomain = λ`_`."functionDomain",
+      listElement = λ`_`."listElement",
+      mapKeys = λ`_`."mapKeys",
+      mapValues = λ`_`."mapValues",
+      optionalElement = λ`_`."optionalElement",
+      pairFirst = λ`_`."pairFirst",
+      pairSecond = λ`_`."pairSecond",
+      recordField = λname.strings.concat2 "recordField:" (Name[] name),
+      setElement = λ`_`."setElement",
+      unionField = λname.strings.concat2 "unionField:" (Name[] name),
+      wrapBody = λ`_`."wrapBody"}
       step

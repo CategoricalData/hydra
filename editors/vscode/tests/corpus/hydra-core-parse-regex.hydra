@@ -16,7 +16,7 @@ term alternation =
   parsers.bind
     (parsers.sepBy1 (parsers.lazy (λ`_`.regexSequence)) (parsers.char 124:int32))
     (λbranches.
-      let hasEmpty := foldl (λacc,b.or acc (isEmpty b)) false branches, multi := gt (length branches) 1:int32
+      let hasEmpty := foldl (λacc, b.or acc (isEmpty b)) false branches, multi := gt (length branches) 1:int32
       in ifElse (and hasEmpty multi) (parsers.fail "empty alternation branch") (parsers.pure branches))
 
 ## Parse a single atom: a group ( ... ), a class [ ... ], ., an anchor ^ or $, or a literal.
@@ -62,7 +62,7 @@ term escapedChar = parsers.bind (parsers.char 92:int32) (λ`_`.parsers.anyChar)
 ## True if the codepoint is a top-level regex metacharacter that must be escaped to match literally.
 term isMetachar =
   λc.foldl
-      (λacc,m.or acc (equal c m))
+      (λacc, m.or acc (equal c m))
       false
       [
         46:int32,
@@ -87,11 +87,11 @@ term literalAtom =
 ## Parse a full regex pattern string into a hydra.core.regex AST. Returns nothing if the pattern is ill-formed or does not consume all input; a well-formed pattern is exactly one that parses here, so 'well-formed' is portable across all hosts.
 term parseRegex =
   λinput.cases(ParseResult){
-      success=λs.ifElse
+      success = λs.ifElse
             (isEmpty (ParseInput[codepoints] (ParseSuccess[remainder] s)))
             given(ParseSuccess[value] s)
             none,
-      failure=λe.none}
+      failure = λe.none}
       (parsers.runParser regex input)
 
 ## Parse an atom followed by an optional quantifier.
@@ -133,5 +133,5 @@ term regexSequence = parsers.many quantified
 ## Parse a non-negative decimal integer (one or more digits).
 term unsignedInt =
   parsers.map
-    (λdigits.foldl (λacc,d.add (mul acc 10:int32) (sub d 48:int32)) 0:int32 digits)
+    (λdigits.foldl (λacc, d.add (mul acc 10:int32) (sub d 48:int32)) 0:int32 digits)
     (parsers.some (parsers.satisfy (λc.and (gte c 48:int32) (lte c 57:int32))))

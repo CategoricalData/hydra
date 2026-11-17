@@ -98,19 +98,21 @@
 #     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                         ^ source.hydra
 #                          ^ source.hydra keyword.operator.equals.hydra
->  λfromConv,toConv,`input_`.Term{
+>  λfromConv, toConv, `input_`.Term{
 #^^ source.hydra
 #  ^ source.hydra keyword.operator.lambda.hydra
 #   ^^^^^^^^ source.hydra variable.parameter.hydra
 #           ^ source.hydra punctuation.separator.binder.hydra
-#            ^^^^^^ source.hydra variable.parameter.hydra
-#                  ^ source.hydra punctuation.separator.binder.hydra
-#                   ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
-#                    ^^^^^^ source.hydra variable.other.escaped.hydra
-#                          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                           ^ source.hydra punctuation.separator.binder.hydra
-#                            ^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^^ source.hydra
+#            ^ source.hydra
+#             ^^^^^^ source.hydra variable.parameter.hydra
+#                   ^ source.hydra punctuation.separator.binder.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                      ^^^^^^ source.hydra variable.other.escaped.hydra
+#                            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                             ^ source.hydra punctuation.separator.binder.hydra
+#                              ^^^^ source.hydra entity.name.type.nominal.hydra
+#                                  ^^ source.hydra
 >      application = Application{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^ source.hydra variable.other.hydra
@@ -493,81 +495,91 @@
 #                      ^ source.hydra
 #                       ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                     ^^^ source.hydra
->              lowerSnake=λ`_`.Name{"lowerSnake"},
+>              lowerSnake = λ`_`.Name{"lowerSnake"},
 #^^^^^^^^^^^^^^ source.hydra
 #              ^^^^^^^^^^ source.hydra variable.other.hydra
-#                        ^ source.hydra keyword.operator.equals.hydra
-#                         ^ source.hydra keyword.operator.lambda.hydra
-#                          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
-#                           ^ source.hydra variable.other.escaped.hydra
-#                            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                             ^ source.hydra punctuation.separator.binder.hydra
-#                              ^^^^ source.hydra entity.name.type.nominal.hydra
-#                                  ^ source.hydra
-#                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                    ^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                               ^^^ source.hydra
->              upperSnake=λ`_`.Name{"upperSnake"},
-#^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^^^^^^ source.hydra variable.other.hydra
-#                        ^ source.hydra keyword.operator.equals.hydra
-#                         ^ source.hydra keyword.operator.lambda.hydra
-#                          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
-#                           ^ source.hydra variable.other.escaped.hydra
-#                            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                             ^ source.hydra punctuation.separator.binder.hydra
-#                              ^^^^ source.hydra entity.name.type.nominal.hydra
-#                                  ^ source.hydra
-#                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                    ^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                               ^^^ source.hydra
->              camel=λ`_`.Name{"camel"},
-#^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^ source.hydra variable.other.hydra
-#                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^ source.hydra keyword.operator.lambda.hydra
-#                     ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
-#                      ^ source.hydra variable.other.escaped.hydra
-#                       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                        ^ source.hydra punctuation.separator.binder.hydra
-#                         ^^^^ source.hydra entity.name.type.nominal.hydra
-#                             ^ source.hydra
-#                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                               ^^^^^ source.hydra string.quoted.double.hydra
-#                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                     ^^^ source.hydra
->              pascal=λ`_`.Name{"pascal"},
-#^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^^ source.hydra variable.other.hydra
-#                    ^ source.hydra keyword.operator.equals.hydra
-#                     ^ source.hydra keyword.operator.lambda.hydra
-#                      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
-#                       ^ source.hydra variable.other.escaped.hydra
-#                        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                         ^ source.hydra punctuation.separator.binder.hydra
-#                          ^^^^ source.hydra entity.name.type.nominal.hydra
-#                              ^ source.hydra
-#                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                ^^^^^^ source.hydra string.quoted.double.hydra
-#                                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                       ^^^ source.hydra
->              upperDashed=λ`_`.Name{"upperDashed"}}
-#^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
-#                          ^ source.hydra keyword.operator.lambda.hydra
-#                           ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
-#                            ^ source.hydra variable.other.escaped.hydra
-#                             ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                              ^ source.hydra punctuation.separator.binder.hydra
-#                               ^^^^ source.hydra entity.name.type.nominal.hydra
-#                                   ^ source.hydra
-#                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                     ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.lambda.hydra
+#                            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                             ^ source.hydra variable.other.escaped.hydra
+#                              ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                               ^ source.hydra punctuation.separator.binder.hydra
+#                                ^^^^ source.hydra entity.name.type.nominal.hydra
+#                                    ^ source.hydra
+#                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                      ^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                                 ^^^ source.hydra
+>              upperSnake = λ`_`.Name{"upperSnake"},
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^^^^^^^ source.hydra variable.other.hydra
+#                        ^ source.hydra
+#                         ^ source.hydra keyword.operator.equals.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.lambda.hydra
+#                            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                             ^ source.hydra variable.other.escaped.hydra
+#                              ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                               ^ source.hydra punctuation.separator.binder.hydra
+#                                ^^^^ source.hydra entity.name.type.nominal.hydra
+#                                    ^ source.hydra
+#                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                      ^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                 ^^^ source.hydra
+>              camel = λ`_`.Name{"camel"},
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^^ source.hydra variable.other.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra keyword.operator.equals.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra keyword.operator.lambda.hydra
+#                       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                        ^ source.hydra variable.other.escaped.hydra
+#                         ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                          ^ source.hydra punctuation.separator.binder.hydra
+#                           ^^^^ source.hydra entity.name.type.nominal.hydra
+#                               ^ source.hydra
+#                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                 ^^^^^ source.hydra string.quoted.double.hydra
+#                                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                       ^^^ source.hydra
+>              pascal = λ`_`.Name{"pascal"},
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^^^ source.hydra variable.other.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra keyword.operator.equals.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra keyword.operator.lambda.hydra
+#                        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                         ^ source.hydra variable.other.escaped.hydra
+#                          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                           ^ source.hydra punctuation.separator.binder.hydra
+#                            ^^^^ source.hydra entity.name.type.nominal.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                  ^^^^^^ source.hydra string.quoted.double.hydra
+#                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                         ^^^ source.hydra
+>              upperDashed = λ`_`.Name{"upperDashed"}}
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.equals.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.lambda.hydra
+#                             ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                              ^ source.hydra variable.other.escaped.hydra
+#                               ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                ^ source.hydra punctuation.separator.binder.hydra
+#                                 ^^^^ source.hydra entity.name.type.nominal.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                       ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                   ^^^ source.hydra
 >              conv,
 #^^^^^^^^^^^^^^ source.hydra
 #              ^^^^ source.hydra variable.other.hydra

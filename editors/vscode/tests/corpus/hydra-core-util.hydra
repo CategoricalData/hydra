@@ -19,21 +19,27 @@ type Comparison = union{
 
 ## A mapping from module names to values of type n, with a focus on one module name
 type ModuleNames = forall n. record{
+
   ## The module name in focus, together with its associated value
   focus: (ModuleName, n),
+
   ## A mapping of module names to values
   mapping: map<ModuleName, n>}
 
 ## Numeric precision: arbitrary precision, or precision to a specified number of bits
 type Precision = union{
+
   ## Arbitrary precision
   arbitrary: unit,
+
   ## Precision to a specified number of bits
   bits: int32}
 
 ## A qualified name consisting of an optional module name together with a mandatory local name
 type QualifiedName = record{
+
   ## The optional module name
   moduleName: optional<ModuleName>,
+
   ## The local name
   local: string}

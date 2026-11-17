@@ -83,7 +83,7 @@
 #     ^ source.hydra keyword.operator.lambda.hydra
 #      ^^^^^^^^ source.hydra variable.parameter.hydra
 #              ^ source.hydra punctuation.separator.binder.hydra
->      let hasEmpty := foldl (λacc,b.or acc (isEmpty b)) false branches, multi := gt (length branches) 1:int32
+>      let hasEmpty := foldl (λacc, b.or acc (isEmpty b)) false branches, multi := gt (length branches) 1:int32
 #^^^^^^ source.hydra
 #      ^^^ source.hydra keyword.control.hydra
 #         ^ source.hydra
@@ -96,33 +96,34 @@
 #                             ^ source.hydra keyword.operator.lambda.hydra
 #                              ^^^ source.hydra variable.parameter.hydra
 #                                 ^ source.hydra punctuation.separator.binder.hydra
-#                                  ^ source.hydra variable.parameter.hydra
-#                                   ^ source.hydra punctuation.separator.binder.hydra
-#                                    ^^ source.hydra variable.other.hydra
-#                                      ^ source.hydra
-#                                       ^^^ source.hydra variable.other.hydra
-#                                          ^^ source.hydra
-#                                            ^^^^^^^ source.hydra variable.other.hydra
-#                                                   ^ source.hydra
-#                                                    ^ source.hydra variable.other.hydra
-#                                                     ^^^ source.hydra
-#                                                        ^^^^^ source.hydra constant.language.boolean.hydra
-#                                                             ^ source.hydra
-#                                                              ^^^^^^^^ source.hydra variable.other.hydra
-#                                                                      ^^ source.hydra
-#                                                                        ^^^^^ source.hydra variable.other.hydra
-#                                                                             ^ source.hydra
-#                                                                              ^^ source.hydra keyword.operator.assignment.hydra
-#                                                                                ^ source.hydra
-#                                                                                 ^^ source.hydra variable.other.hydra
-#                                                                                   ^^ source.hydra
-#                                                                                     ^^^^^^ source.hydra variable.other.hydra
-#                                                                                           ^ source.hydra
-#                                                                                            ^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                    ^^ source.hydra
-#                                                                                                      ^ source.hydra constant.numeric.integer.hydra
-#                                                                                                       ^ source.hydra punctuation.separator.type.hydra
-#                                                                                                        ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                  ^ source.hydra
+#                                   ^ source.hydra variable.parameter.hydra
+#                                    ^ source.hydra punctuation.separator.binder.hydra
+#                                     ^^ source.hydra variable.other.hydra
+#                                       ^ source.hydra
+#                                        ^^^ source.hydra variable.other.hydra
+#                                           ^^ source.hydra
+#                                             ^^^^^^^ source.hydra variable.other.hydra
+#                                                    ^ source.hydra
+#                                                     ^ source.hydra variable.other.hydra
+#                                                      ^^^ source.hydra
+#                                                         ^^^^^ source.hydra constant.language.boolean.hydra
+#                                                              ^ source.hydra
+#                                                               ^^^^^^^^ source.hydra variable.other.hydra
+#                                                                       ^^ source.hydra
+#                                                                         ^^^^^ source.hydra variable.other.hydra
+#                                                                              ^ source.hydra
+#                                                                               ^^ source.hydra keyword.operator.assignment.hydra
+#                                                                                 ^ source.hydra
+#                                                                                  ^^ source.hydra variable.other.hydra
+#                                                                                    ^^ source.hydra
+#                                                                                      ^^^^^^ source.hydra variable.other.hydra
+#                                                                                            ^ source.hydra
+#                                                                                             ^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                                     ^^ source.hydra
+#                                                                                                       ^ source.hydra constant.numeric.integer.hydra
+#                                                                                                        ^ source.hydra punctuation.separator.type.hydra
+#                                                                                                         ^^^^^ source.hydra support.type.literal.integer.hydra
 >      in ifElse (and hasEmpty multi) (parsers.fail "empty alternation branch") (parsers.pure branches))
 #^^^^^^ source.hydra
 #      ^^ source.hydra keyword.control.hydra
@@ -548,23 +549,24 @@
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
 #     ^^^^^ source.hydra variable.other.hydra
->      (λacc,m.or acc (equal c m))
+>      (λacc, m.or acc (equal c m))
 #^^^^^^^ source.hydra
 #       ^ source.hydra keyword.operator.lambda.hydra
 #        ^^^ source.hydra variable.parameter.hydra
 #           ^ source.hydra punctuation.separator.binder.hydra
-#            ^ source.hydra variable.parameter.hydra
-#             ^ source.hydra punctuation.separator.binder.hydra
-#              ^^ source.hydra variable.other.hydra
-#                ^ source.hydra
-#                 ^^^ source.hydra variable.other.hydra
-#                    ^^ source.hydra
-#                      ^^^^^ source.hydra variable.other.hydra
-#                           ^ source.hydra
-#                            ^ source.hydra variable.other.hydra
-#                             ^ source.hydra
-#                              ^ source.hydra variable.other.hydra
-#                               ^^^ source.hydra
+#            ^ source.hydra
+#             ^ source.hydra variable.parameter.hydra
+#              ^ source.hydra punctuation.separator.binder.hydra
+#               ^^ source.hydra variable.other.hydra
+#                 ^ source.hydra
+#                  ^^^ source.hydra variable.other.hydra
+#                     ^^ source.hydra
+#                       ^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra variable.other.hydra
+#                              ^ source.hydra
+#                               ^ source.hydra variable.other.hydra
+#                                ^^^ source.hydra
 >      false
 #^^^^^^ source.hydra
 #      ^^^^^ source.hydra constant.language.boolean.hydra
@@ -713,14 +715,16 @@
 #              ^ source.hydra
 #               ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                          ^^^ source.hydra
->      success=λs.ifElse
+>      success = λs.ifElse
 #^^^^^^ source.hydra
 #      ^^^^^^^ source.hydra variable.other.hydra
-#             ^ source.hydra keyword.operator.equals.hydra
-#              ^ source.hydra keyword.operator.lambda.hydra
-#               ^ source.hydra variable.parameter.hydra
-#                ^ source.hydra punctuation.separator.binder.hydra
-#                 ^^^^^^ source.hydra variable.other.hydra
+#             ^ source.hydra
+#              ^ source.hydra keyword.operator.equals.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.lambda.hydra
+#                 ^ source.hydra variable.parameter.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^^^^^^ source.hydra variable.other.hydra
 >            (isEmpty (ParseInput[codepoints] (ParseSuccess[remainder] s)))
 #^^^^^^^^^^^^^ source.hydra
 #             ^^^^^^^ source.hydra variable.other.hydra
@@ -749,15 +753,17 @@
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^ source.hydra keyword.control.hydra
 #                ^^ source.hydra
->      failure=λe.none}
+>      failure = λe.none}
 #^^^^^^ source.hydra
 #      ^^^^^^^ source.hydra variable.other.hydra
-#             ^ source.hydra keyword.operator.equals.hydra
-#              ^ source.hydra keyword.operator.lambda.hydra
-#               ^ source.hydra variable.parameter.hydra
-#                ^ source.hydra punctuation.separator.binder.hydra
-#                 ^^^^ source.hydra keyword.control.hydra
-#                     ^^ source.hydra
+#             ^ source.hydra
+#              ^ source.hydra keyword.operator.equals.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.lambda.hydra
+#                 ^ source.hydra variable.parameter.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^^^^ source.hydra keyword.control.hydra
+#                       ^^ source.hydra
 >      (parsers.runParser regex input)
 #^^^^^^^ source.hydra
 #       ^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
@@ -1083,7 +1089,7 @@
 >  parsers.map
 #^^ source.hydra
 #  ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->    (λdigits.foldl (λacc,d.add (mul acc 10:int32) (sub d 48:int32)) 0:int32 digits)
+>    (λdigits.foldl (λacc, d.add (mul acc 10:int32) (sub d 48:int32)) 0:int32 digits)
 #^^^^^ source.hydra
 #     ^ source.hydra keyword.operator.lambda.hydra
 #      ^^^^^^ source.hydra variable.parameter.hydra
@@ -1093,32 +1099,33 @@
 #                    ^ source.hydra keyword.operator.lambda.hydra
 #                     ^^^ source.hydra variable.parameter.hydra
 #                        ^ source.hydra punctuation.separator.binder.hydra
-#                         ^ source.hydra variable.parameter.hydra
-#                          ^ source.hydra punctuation.separator.binder.hydra
-#                           ^^^ source.hydra variable.other.hydra
-#                              ^^ source.hydra
-#                                ^^^ source.hydra variable.other.hydra
-#                                   ^ source.hydra
-#                                    ^^^ source.hydra variable.other.hydra
-#                                       ^ source.hydra
-#                                        ^^ source.hydra constant.numeric.integer.hydra
-#                                          ^ source.hydra punctuation.separator.type.hydra
-#                                           ^^^^^ source.hydra support.type.literal.integer.hydra
-#                                                ^^^ source.hydra
-#                                                   ^^^ source.hydra variable.other.hydra
-#                                                      ^ source.hydra
-#                                                       ^ source.hydra variable.other.hydra
-#                                                        ^ source.hydra
-#                                                         ^^ source.hydra constant.numeric.integer.hydra
-#                                                           ^ source.hydra punctuation.separator.type.hydra
-#                                                            ^^^^^ source.hydra support.type.literal.integer.hydra
-#                                                                 ^^^ source.hydra
-#                                                                    ^ source.hydra constant.numeric.integer.hydra
-#                                                                     ^ source.hydra punctuation.separator.type.hydra
-#                                                                      ^^^^^ source.hydra support.type.literal.integer.hydra
-#                                                                           ^ source.hydra
-#                                                                            ^^^^^^ source.hydra variable.other.hydra
-#                                                                                  ^^ source.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra variable.parameter.hydra
+#                           ^ source.hydra punctuation.separator.binder.hydra
+#                            ^^^ source.hydra variable.other.hydra
+#                               ^^ source.hydra
+#                                 ^^^ source.hydra variable.other.hydra
+#                                    ^ source.hydra
+#                                     ^^^ source.hydra variable.other.hydra
+#                                        ^ source.hydra
+#                                         ^^ source.hydra constant.numeric.integer.hydra
+#                                           ^ source.hydra punctuation.separator.type.hydra
+#                                            ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                                 ^^^ source.hydra
+#                                                    ^^^ source.hydra variable.other.hydra
+#                                                       ^ source.hydra
+#                                                        ^ source.hydra variable.other.hydra
+#                                                         ^ source.hydra
+#                                                          ^^ source.hydra constant.numeric.integer.hydra
+#                                                            ^ source.hydra punctuation.separator.type.hydra
+#                                                             ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                                                  ^^^ source.hydra
+#                                                                     ^ source.hydra constant.numeric.integer.hydra
+#                                                                      ^ source.hydra punctuation.separator.type.hydra
+#                                                                       ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                                                            ^ source.hydra
+#                                                                             ^^^^^^ source.hydra variable.other.hydra
+#                                                                                   ^^ source.hydra
 >    (parsers.some (parsers.satisfy (λc.and (gte c 48:int32) (lte c 57:int32))))
 #^^^^^ source.hydra
 #     ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra

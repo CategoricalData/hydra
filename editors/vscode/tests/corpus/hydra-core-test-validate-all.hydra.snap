@@ -1,0 +1,70 @@
+>## Hydra's validation test suite
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>module hydra.core.test.validate.all
+#^^^^^^ source.hydra keyword.control.module.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>import hydra.core.test.validate.model as model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                     ^ source.hydra
+#                                      ^^ source.hydra keyword.control.import.hydra
+#                                        ^ source.hydra
+#                                         ^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.validate.packaging as packaging
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+#                                         ^ source.hydra
+#                                          ^^ source.hydra keyword.control.import.hydra
+#                                            ^ source.hydra
+#                                             ^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.testing
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>## The group of all validation tests
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term allTests =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^ source.hydra entity.name.function.hydra
+#             ^ source.hydra
+#              ^ source.hydra keyword.operator.equals.hydra
+>  TestGroup{name = "validation", description = none, subgroups = [model.allTests, packaging.allTests], `cases` = []}
+#^^ source.hydra
+#  ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#           ^ source.hydra
+#            ^^^^ source.hydra variable.other.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.equals.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                    ^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                               ^^ source.hydra
+#                                 ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                            ^ source.hydra
+#                                             ^ source.hydra keyword.operator.equals.hydra
+#                                              ^ source.hydra
+#                                               ^^^^ source.hydra keyword.control.hydra
+#                                                   ^^ source.hydra
+#                                                     ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                              ^ source.hydra
+#                                                               ^ source.hydra keyword.operator.equals.hydra
+#                                                                ^^ source.hydra
+#                                                                  ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                ^^ source.hydra
+#                                                                                  ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                    ^^^ source.hydra
+#                                                                                                       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                                                                                        ^^^^^ source.hydra variable.other.escaped.hydra
+#                                                                                                             ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                                                                                              ^ source.hydra
+#                                                                                                               ^ source.hydra keyword.operator.equals.hydra
+#                                                                                                                ^^^^^ source.hydra

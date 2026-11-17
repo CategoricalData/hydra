@@ -80,13 +80,14 @@
 #     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                         ^ source.hydra
 #                          ^ source.hydra keyword.operator.equals.hydra
->  λg,lam.
+>  λg, lam.
 #^^ source.hydra
 #  ^ source.hydra keyword.operator.lambda.hydra
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
-#     ^^^ source.hydra variable.parameter.hydra
-#        ^ source.hydra punctuation.separator.binder.hydra
+#     ^ source.hydra
+#      ^^^ source.hydra variable.parameter.hydra
+#         ^ source.hydra punctuation.separator.binder.hydra
 >    let var := Lambda[parameter] lam
 #^^^^ source.hydra
 #    ^^^ source.hydra keyword.control.hydra
@@ -250,15 +251,17 @@
 #     ^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                      ^ source.hydra
 #                       ^ source.hydra keyword.operator.equals.hydra
->  λforBinding,g,letrec.
+>  λforBinding, g, letrec.
 #^^ source.hydra
 #  ^ source.hydra keyword.operator.lambda.hydra
 #   ^^^^^^^^^^ source.hydra variable.parameter.hydra
 #             ^ source.hydra punctuation.separator.binder.hydra
-#              ^ source.hydra variable.parameter.hydra
-#               ^ source.hydra punctuation.separator.binder.hydra
-#                ^^^^^^ source.hydra variable.parameter.hydra
-#                      ^ source.hydra punctuation.separator.binder.hydra
+#              ^ source.hydra
+#               ^ source.hydra variable.parameter.hydra
+#                ^ source.hydra punctuation.separator.binder.hydra
+#                 ^ source.hydra
+#                  ^^^^^^ source.hydra variable.parameter.hydra
+#                        ^ source.hydra punctuation.separator.binder.hydra
 >    let bindings := Let[bindings] letrec in
 #^^^^ source.hydra
 #    ^^^ source.hydra keyword.control.hydra
@@ -300,32 +303,33 @@
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
 #                   ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->          (maps.fromList (lists.map (λb.(Binding[name] b, Binding[`term`] b)) bindings))
+>          (maps.fromList
 #^^^^^^^^^^^ source.hydra
 #           ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                        ^^ source.hydra
-#                          ^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                   ^^ source.hydra
-#                                     ^ source.hydra keyword.operator.lambda.hydra
-#                                      ^ source.hydra variable.parameter.hydra
-#                                       ^ source.hydra punctuation.separator.binder.hydra
-#                                        ^ source.hydra
-#                                         ^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                ^ source.hydra
-#                                                 ^^^^ source.hydra variable.other.hydra
-#                                                     ^^ source.hydra
-#                                                       ^ source.hydra variable.other.hydra
-#                                                        ^^ source.hydra
-#                                                          ^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                 ^ source.hydra
-#                                                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
-#                                                                   ^^^^ source.hydra variable.other.escaped.hydra
-#                                                                       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                                                                        ^^ source.hydra
-#                                                                          ^ source.hydra variable.other.hydra
-#                                                                           ^^^ source.hydra
-#                                                                              ^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                      ^^^ source.hydra
+>            (lists.map (λb.(Binding[name] b, Binding[`term`] b)) bindings))
+#^^^^^^^^^^^^^ source.hydra
+#             ^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                      ^^ source.hydra
+#                        ^ source.hydra keyword.operator.lambda.hydra
+#                         ^ source.hydra variable.parameter.hydra
+#                          ^ source.hydra punctuation.separator.binder.hydra
+#                           ^ source.hydra
+#                            ^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                   ^ source.hydra
+#                                    ^^^^ source.hydra variable.other.hydra
+#                                        ^^ source.hydra
+#                                          ^ source.hydra variable.other.hydra
+#                                           ^^ source.hydra
+#                                             ^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                    ^ source.hydra
+#                                                     ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                                      ^^^^ source.hydra variable.other.escaped.hydra
+#                                                          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                                           ^^ source.hydra
+#                                                             ^ source.hydra variable.other.hydra
+#                                                              ^^^ source.hydra
+#                                                                 ^^^^^^^^ source.hydra variable.other.hydra
+#                                                                         ^^^ source.hydra
 >          (Graph[boundTerms] g),
 #^^^^^^^^^^^ source.hydra
 #           ^^^^^ source.hydra entity.name.type.nominal.hydra
@@ -406,23 +410,24 @@
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
 #                        ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->          (λs,b.sets.delete (Binding[name] b) s)
+>          (λs, b.sets.delete (Binding[name] b) s)
 #^^^^^^^^^^^ source.hydra
 #           ^ source.hydra keyword.operator.lambda.hydra
 #            ^ source.hydra variable.parameter.hydra
 #             ^ source.hydra punctuation.separator.binder.hydra
-#              ^ source.hydra variable.parameter.hydra
-#               ^ source.hydra punctuation.separator.binder.hydra
-#                ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                           ^^ source.hydra
-#                             ^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                    ^ source.hydra
-#                                     ^^^^ source.hydra variable.other.hydra
-#                                         ^^ source.hydra
-#                                           ^ source.hydra variable.other.hydra
-#                                            ^^ source.hydra
-#                                              ^ source.hydra variable.other.hydra
-#                                               ^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra variable.parameter.hydra
+#                ^ source.hydra punctuation.separator.binder.hydra
+#                 ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                            ^^ source.hydra
+#                              ^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                     ^ source.hydra
+#                                      ^^^^ source.hydra variable.other.hydra
+#                                          ^^ source.hydra
+#                                            ^ source.hydra variable.other.hydra
+#                                             ^^ source.hydra
+#                                               ^ source.hydra variable.other.hydra
+#                                                ^^ source.hydra
 >          (Graph[lambdaVariables] g)
 #^^^^^^^^^^^ source.hydra
 #           ^^^^^ source.hydra entity.name.type.nominal.hydra
@@ -448,13 +453,14 @@
 >          (lists.foldl
 #^^^^^^^^^^^ source.hydra
 #           ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->            (λgAcc,b.
+>            (λgAcc, b.
 #^^^^^^^^^^^^^ source.hydra
 #             ^ source.hydra keyword.operator.lambda.hydra
 #              ^^^^ source.hydra variable.parameter.hydra
 #                  ^ source.hydra punctuation.separator.binder.hydra
-#                   ^ source.hydra variable.parameter.hydra
-#                    ^ source.hydra punctuation.separator.binder.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra variable.parameter.hydra
+#                     ^ source.hydra punctuation.separator.binder.hydra
 >              let m := Graph[metadata] gAcc in
 #^^^^^^^^^^^^^^ source.hydra
 #              ^^^ source.hydra keyword.control.hydra
@@ -666,13 +672,14 @@
 #     ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                             ^ source.hydra
 #                              ^ source.hydra keyword.operator.equals.hydra
->  λg,tlam.
+>  λg, tlam.
 #^^ source.hydra
 #  ^ source.hydra keyword.operator.lambda.hydra
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
-#     ^^^^ source.hydra variable.parameter.hydra
-#         ^ source.hydra punctuation.separator.binder.hydra
+#     ^ source.hydra
+#      ^^^^ source.hydra variable.parameter.hydra
+#          ^ source.hydra punctuation.separator.binder.hydra
 >    let name := TypeLambda[parameter] tlam
 #^^^^ source.hydra
 #    ^^^ source.hydra keyword.control.hydra
@@ -802,13 +809,14 @@
 #     ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
->  λbindings,g.
+>  λbindings, g.
 #^^ source.hydra
 #  ^ source.hydra keyword.operator.lambda.hydra
 #   ^^^^^^^^ source.hydra variable.parameter.hydra
 #           ^ source.hydra punctuation.separator.binder.hydra
-#            ^ source.hydra variable.parameter.hydra
-#             ^ source.hydra punctuation.separator.binder.hydra
+#            ^ source.hydra
+#             ^ source.hydra variable.parameter.hydra
+#              ^ source.hydra punctuation.separator.binder.hydra
 >    let newTerms := maps.fromList (lists.map (λb.(Binding[name] b, Binding[`term`] b)) bindings) in
 #^^^^ source.hydra
 #    ^^^ source.hydra keyword.control.hydra
@@ -1010,7 +1018,7 @@
 #  ^ source.hydra keyword.operator.lambda.hydra
 #   ^^^ source.hydra variable.parameter.hydra
 #      ^ source.hydra punctuation.separator.binder.hydra
->    let stripAnnotations := λt.cases(Type){annotated=λat.stripAnnotations (AnnotatedType[body] at), `_`=t} t in
+>    let stripAnnotations := λt.cases(Type){annotated = λat.stripAnnotations (AnnotatedType[body] at), `_` = t} t in
 #^^^^ source.hydra
 #    ^^^ source.hydra keyword.control.hydra
 #       ^ source.hydra
@@ -1026,28 +1034,32 @@
 #                                     ^^^^ source.hydra variable.other.hydra
 #                                         ^^ source.hydra
 #                                           ^^^^^^^^^ source.hydra variable.other.hydra
-#                                                    ^ source.hydra keyword.operator.equals.hydra
-#                                                     ^ source.hydra keyword.operator.lambda.hydra
-#                                                      ^^ source.hydra variable.parameter.hydra
-#                                                        ^ source.hydra punctuation.separator.binder.hydra
-#                                                         ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                         ^^ source.hydra
-#                                                                           ^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                                        ^ source.hydra
-#                                                                                         ^^^^ source.hydra variable.other.hydra
-#                                                                                             ^^ source.hydra
-#                                                                                               ^^ source.hydra variable.other.hydra
-#                                                                                                 ^^^ source.hydra
-#                                                                                                    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
-#                                                                                                     ^ source.hydra variable.other.escaped.hydra
-#                                                                                                      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                                                                                                       ^ source.hydra keyword.operator.equals.hydra
-#                                                                                                        ^ source.hydra variable.other.hydra
-#                                                                                                         ^^ source.hydra
-#                                                                                                           ^ source.hydra variable.other.hydra
-#                                                                                                            ^ source.hydra
-#                                                                                                             ^^ source.hydra keyword.control.hydra
->    let gatherForall := λvars,typ.cases(Type){
+#                                                    ^ source.hydra
+#                                                     ^ source.hydra keyword.operator.equals.hydra
+#                                                      ^ source.hydra
+#                                                       ^ source.hydra keyword.operator.lambda.hydra
+#                                                        ^^ source.hydra variable.parameter.hydra
+#                                                          ^ source.hydra punctuation.separator.binder.hydra
+#                                                           ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                           ^^ source.hydra
+#                                                                             ^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                                                          ^ source.hydra
+#                                                                                           ^^^^ source.hydra variable.other.hydra
+#                                                                                               ^^ source.hydra
+#                                                                                                 ^^ source.hydra variable.other.hydra
+#                                                                                                   ^^^ source.hydra
+#                                                                                                      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                                                                                       ^ source.hydra variable.other.escaped.hydra
+#                                                                                                        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                                                                                         ^ source.hydra
+#                                                                                                          ^ source.hydra keyword.operator.equals.hydra
+#                                                                                                           ^ source.hydra
+#                                                                                                            ^ source.hydra variable.other.hydra
+#                                                                                                             ^^ source.hydra
+#                                                                                                               ^ source.hydra variable.other.hydra
+#                                                                                                                ^ source.hydra
+#                                                                                                                 ^^ source.hydra keyword.control.hydra
+>    let gatherForall := λvars, typ.cases(Type){
 #^^^^ source.hydra
 #    ^^^ source.hydra keyword.control.hydra
 #       ^ source.hydra
@@ -1058,22 +1070,25 @@
 #                        ^ source.hydra keyword.operator.lambda.hydra
 #                         ^^^^ source.hydra variable.parameter.hydra
 #                             ^ source.hydra punctuation.separator.binder.hydra
-#                              ^^^ source.hydra variable.parameter.hydra
-#                                 ^ source.hydra punctuation.separator.binder.hydra
-#                                  ^^^^^ source.hydra keyword.control.hydra
-#                                       ^ source.hydra
-#                                        ^^^^ source.hydra variable.other.hydra
-#                                            ^^^ source.hydra
->          `forall`=λft.gatherForall
+#                              ^ source.hydra
+#                               ^^^ source.hydra variable.parameter.hydra
+#                                  ^ source.hydra punctuation.separator.binder.hydra
+#                                   ^^^^^ source.hydra keyword.control.hydra
+#                                        ^ source.hydra
+#                                         ^^^^ source.hydra variable.other.hydra
+#                                             ^^^ source.hydra
+>          `forall` = λft.gatherForall
 #^^^^^^^^^^ source.hydra
 #          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #           ^^^^^^ source.hydra variable.other.escaped.hydra
 #                 ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                  ^ source.hydra keyword.operator.equals.hydra
-#                   ^ source.hydra keyword.operator.lambda.hydra
-#                    ^^ source.hydra variable.parameter.hydra
-#                      ^ source.hydra punctuation.separator.binder.hydra
-#                       ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.equals.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra keyword.operator.lambda.hydra
+#                      ^^ source.hydra variable.parameter.hydra
+#                        ^ source.hydra punctuation.separator.binder.hydra
+#                         ^^^^^^^^^^^^ source.hydra variable.other.hydra
 >                (lists.cons (ForallType[parameter] ft) vars)
 #^^^^^^^^^^^^^^^^^ source.hydra
 #                 ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
@@ -1094,14 +1109,16 @@
 #                                ^^ source.hydra
 #                                  ^^ source.hydra variable.other.hydra
 #                                    ^^^ source.hydra
->          `_`=TypeScheme{
+>          `_` = TypeScheme{
 #^^^^^^^^^^ source.hydra
 #          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #           ^ source.hydra variable.other.escaped.hydra
 #            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                        ^^ source.hydra
+#             ^ source.hydra
+#              ^ source.hydra keyword.operator.equals.hydra
+#               ^ source.hydra
+#                ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                          ^^ source.hydra
 >            variables = lists.reverse vars,
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^^^^ source.hydra variable.other.hydra
@@ -1231,39 +1248,40 @@
 #             ^^ source.hydra keyword.operator.assignment.hydra
 #               ^ source.hydra
 #                ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->        (λacc,p.Type{function = FunctionType{domain = Parameter[`type`] p, codomain = acc}})
+>        (λacc, p.Type{function = FunctionType{domain = Parameter[`type`] p, codomain = acc}})
 #^^^^^^^^^ source.hydra
 #         ^ source.hydra keyword.operator.lambda.hydra
 #          ^^^ source.hydra variable.parameter.hydra
 #             ^ source.hydra punctuation.separator.binder.hydra
-#              ^ source.hydra variable.parameter.hydra
-#               ^ source.hydra punctuation.separator.binder.hydra
-#                ^^^^ source.hydra entity.name.type.nominal.hydra
-#                    ^ source.hydra
-#                     ^^^^^^^^ source.hydra variable.other.hydra
-#                             ^ source.hydra
-#                              ^ source.hydra keyword.operator.equals.hydra
-#                               ^ source.hydra
-#                                ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                            ^ source.hydra
-#                                             ^^^^^^ source.hydra variable.other.hydra
-#                                                   ^ source.hydra
-#                                                    ^ source.hydra keyword.operator.equals.hydra
-#                                                     ^ source.hydra
-#                                                      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                               ^ source.hydra
-#                                                                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
-#                                                                 ^^^^ source.hydra variable.other.escaped.hydra
-#                                                                     ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                                                                      ^^ source.hydra
-#                                                                        ^ source.hydra variable.other.hydra
-#                                                                         ^^ source.hydra
-#                                                                           ^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                   ^ source.hydra
-#                                                                                    ^ source.hydra keyword.operator.equals.hydra
-#                                                                                     ^ source.hydra
-#                                                                                      ^^^ source.hydra variable.other.hydra
-#                                                                                         ^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra variable.parameter.hydra
+#                ^ source.hydra punctuation.separator.binder.hydra
+#                 ^^^^ source.hydra entity.name.type.nominal.hydra
+#                     ^ source.hydra
+#                      ^^^^^^^^ source.hydra variable.other.hydra
+#                              ^ source.hydra
+#                               ^ source.hydra keyword.operator.equals.hydra
+#                                ^ source.hydra
+#                                 ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                             ^ source.hydra
+#                                              ^^^^^^ source.hydra variable.other.hydra
+#                                                    ^ source.hydra
+#                                                     ^ source.hydra keyword.operator.equals.hydra
+#                                                      ^ source.hydra
+#                                                       ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                                ^ source.hydra
+#                                                                 ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                                                  ^^^^ source.hydra variable.other.escaped.hydra
+#                                                                      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                                                       ^^ source.hydra
+#                                                                         ^ source.hydra variable.other.hydra
+#                                                                          ^^ source.hydra
+#                                                                            ^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                    ^ source.hydra
+#                                                                                     ^ source.hydra keyword.operator.equals.hydra
+#                                                                                      ^ source.hydra
+#                                                                                       ^^^ source.hydra variable.other.hydra
+#                                                                                          ^^^^ source.hydra
 >        (Result[`type`] result)
 #^^^^^^^^^ source.hydra
 #         ^^^^^^ source.hydra entity.name.type.nominal.hydra
@@ -1391,43 +1409,44 @@
 #                                 ^^ source.hydra variable.other.hydra
 #                                   ^ source.hydra
 #                                    ^^ source.hydra keyword.control.hydra
->    lists.foldl (λt,v.Type{`forall` = ForallType{parameter = v, body = t}}) body (lists.reverse vars)
+>    lists.foldl (λt, v.Type{`forall` = ForallType{parameter = v, body = t}}) body (lists.reverse vars)
 #^^^^ source.hydra
 #    ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #               ^^ source.hydra
 #                 ^ source.hydra keyword.operator.lambda.hydra
 #                  ^ source.hydra variable.parameter.hydra
 #                   ^ source.hydra punctuation.separator.binder.hydra
-#                    ^ source.hydra variable.parameter.hydra
-#                     ^ source.hydra punctuation.separator.binder.hydra
-#                      ^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^ source.hydra
-#                           ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
-#                            ^^^^^^ source.hydra variable.other.escaped.hydra
-#                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                                   ^ source.hydra
-#                                    ^ source.hydra keyword.operator.equals.hydra
-#                                     ^ source.hydra
-#                                      ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                ^ source.hydra
-#                                                 ^^^^^^^^^ source.hydra variable.other.hydra
-#                                                          ^ source.hydra
-#                                                           ^ source.hydra keyword.operator.equals.hydra
-#                                                            ^ source.hydra
-#                                                             ^ source.hydra variable.other.hydra
-#                                                              ^^ source.hydra
-#                                                                ^^^^ source.hydra variable.other.hydra
-#                                                                    ^ source.hydra
-#                                                                     ^ source.hydra keyword.operator.equals.hydra
-#                                                                      ^ source.hydra
-#                                                                       ^ source.hydra variable.other.hydra
-#                                                                        ^^^^ source.hydra
-#                                                                            ^^^^ source.hydra variable.other.hydra
-#                                                                                ^^ source.hydra
-#                                                                                  ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                                                               ^ source.hydra
-#                                                                                                ^^^^ source.hydra variable.other.hydra
-#                                                                                                    ^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra variable.parameter.hydra
+#                      ^ source.hydra punctuation.separator.binder.hydra
+#                       ^^^^ source.hydra entity.name.type.nominal.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                             ^^^^^^ source.hydra variable.other.escaped.hydra
+#                                   ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                    ^ source.hydra
+#                                     ^ source.hydra keyword.operator.equals.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                 ^ source.hydra
+#                                                  ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                           ^ source.hydra
+#                                                            ^ source.hydra keyword.operator.equals.hydra
+#                                                             ^ source.hydra
+#                                                              ^ source.hydra variable.other.hydra
+#                                                               ^^ source.hydra
+#                                                                 ^^^^ source.hydra variable.other.hydra
+#                                                                     ^ source.hydra
+#                                                                      ^ source.hydra keyword.operator.equals.hydra
+#                                                                       ^ source.hydra
+#                                                                        ^ source.hydra variable.other.hydra
+#                                                                         ^^^^ source.hydra
+#                                                                             ^^^^ source.hydra variable.other.hydra
+#                                                                                 ^^ source.hydra
+#                                                                                   ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                                                                ^ source.hydra
+#                                                                                                 ^^^^ source.hydra variable.other.hydra
+#                                                                                                     ^^ source.hydra
 >
 >## Convert a TypeScheme to a TermSignature. Type variables and class constraints are preserved exactly. Value-parameter names are synthesized as arg0, arg1, .... Per-parameter descriptions are nothing and isLazy defaults to false.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1547,7 +1566,7 @@
 #        ^^^^^^^^^ source.hydra variable.other.hydra
 #                 ^ source.hydra
 #                  ^^ source.hydra keyword.control.hydra
->    let peel := λacc,t.cases(Type){
+>    let peel := λacc, t.cases(Type){
 #^^^^ source.hydra
 #    ^^^ source.hydra keyword.control.hydra
 #       ^ source.hydra
@@ -1558,20 +1577,23 @@
 #                ^ source.hydra keyword.operator.lambda.hydra
 #                 ^^^ source.hydra variable.parameter.hydra
 #                    ^ source.hydra punctuation.separator.binder.hydra
-#                     ^ source.hydra variable.parameter.hydra
-#                      ^ source.hydra punctuation.separator.binder.hydra
-#                       ^^^^^ source.hydra keyword.control.hydra
-#                            ^ source.hydra
-#                             ^^^^ source.hydra variable.other.hydra
-#                                 ^^^ source.hydra
->          function=λft.peel
+#                     ^ source.hydra
+#                      ^ source.hydra variable.parameter.hydra
+#                       ^ source.hydra punctuation.separator.binder.hydra
+#                        ^^^^^ source.hydra keyword.control.hydra
+#                             ^ source.hydra
+#                              ^^^^ source.hydra variable.other.hydra
+#                                  ^^^ source.hydra
+>          function = λft.peel
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^ source.hydra variable.other.hydra
-#                  ^ source.hydra keyword.operator.equals.hydra
-#                   ^ source.hydra keyword.operator.lambda.hydra
-#                    ^^ source.hydra variable.parameter.hydra
-#                      ^ source.hydra punctuation.separator.binder.hydra
-#                       ^^^^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.equals.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra keyword.operator.lambda.hydra
+#                      ^^ source.hydra variable.parameter.hydra
+#                        ^ source.hydra punctuation.separator.binder.hydra
+#                         ^^^^ source.hydra variable.other.hydra
 >                (lists.cons (FunctionType[domain] ft) acc)
 #^^^^^^^^^^^^^^^^^ source.hydra
 #                 ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
@@ -1592,19 +1614,20 @@
 #                                      ^^ source.hydra
 #                                        ^^ source.hydra variable.other.hydra
 #                                          ^^^ source.hydra
->          `_`=(lists.reverse acc, t)}
+>          `_` = (lists.reverse acc, t)}
 #^^^^^^^^^^ source.hydra
 #          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #           ^ source.hydra variable.other.escaped.hydra
 #            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#             ^ source.hydra keyword.operator.equals.hydra
-#              ^ source.hydra
-#               ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                            ^ source.hydra
-#                             ^^^ source.hydra variable.other.hydra
-#                                ^^ source.hydra
-#                                  ^ source.hydra variable.other.hydra
-#                                   ^^^ source.hydra
+#             ^ source.hydra
+#              ^ source.hydra keyword.operator.equals.hydra
+#               ^^ source.hydra
+#                 ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                              ^ source.hydra
+#                               ^^^ source.hydra variable.other.hydra
+#                                  ^^ source.hydra
+#                                    ^ source.hydra variable.other.hydra
+#                                     ^^^ source.hydra
 >          t in
 #^^^^^^^^^^ source.hydra
 #          ^ source.hydra variable.other.hydra
@@ -1664,13 +1687,14 @@
 >          (lists.foldl
 #^^^^^^^^^^^ source.hydra
 #           ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->            (λacc,ty.
+>            (λacc, ty.
 #^^^^^^^^^^^^^ source.hydra
 #             ^ source.hydra keyword.operator.lambda.hydra
 #              ^^^ source.hydra variable.parameter.hydra
 #                 ^ source.hydra punctuation.separator.binder.hydra
-#                  ^^ source.hydra variable.parameter.hydra
-#                    ^ source.hydra punctuation.separator.binder.hydra
+#                  ^ source.hydra
+#                   ^^ source.hydra variable.parameter.hydra
+#                     ^ source.hydra punctuation.separator.binder.hydra
 >              let pairAcc := first acc in
 #^^^^^^^^^^^^^^ source.hydra
 #              ^^^ source.hydra keyword.control.hydra

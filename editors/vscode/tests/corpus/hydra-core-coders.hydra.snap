@@ -60,6 +60,7 @@
 #                                        ^ source.hydra
 #                                         ^^^^^^ source.hydra support.type.hydra
 #                                               ^^ source.hydra
+>
 >  ## Whether information may be lost in the course of this adaptation
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -71,6 +72,7 @@
 #          ^ source.hydra
 #           ^^^^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## The source type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -82,6 +84,7 @@
 #         ^ source.hydra
 #          ^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## The target type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -93,6 +96,7 @@
 #         ^ source.hydra
 #          ^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## The coder for transforming instances of the source type to instances of the target type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -123,6 +127,7 @@
 #                     ^ source.hydra
 #                      ^^^^^^ source.hydra support.type.hydra
 #                            ^^ source.hydra
+>
 >  ## The underlying graph of elements and primitives
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -134,6 +139,7 @@
 #        ^ source.hydra
 #         ^^^^^ source.hydra variable.other.hydra
 #              ^^ source.hydra
+>
 >  ## The language being encoded or decoded
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -145,6 +151,7 @@
 #           ^ source.hydra
 #            ^^^^^^^^ source.hydra variable.other.hydra
 #                    ^^ source.hydra
+>
 >  ## A map of type names to adapters for those types
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -202,6 +209,7 @@
 #                                        ^ source.hydra
 #                                         ^^^^^^ source.hydra support.type.hydra
 #                                               ^^ source.hydra
+>
 >  ## A function from source types to adapters
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -227,6 +235,7 @@
 #                                  ^ source.hydra
 #                                   ^ source.hydra variable.other.hydra
 #                                    ^^ source.hydra
+>
 >  ## A function from target types to adapters
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -265,6 +274,7 @@
 #                      ^ source.hydra
 #                       ^^^^^^ source.hydra support.type.hydra
 #                             ^^ source.hydra
+>
 >  ## Convention for compile-time constant names
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -276,6 +286,7 @@
 #           ^ source.hydra
 #            ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                          ^^ source.hydra
+>
 >  ## Convention for each directory level in the emitted source tree
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -287,6 +298,7 @@
 #            ^ source.hydra
 #             ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                           ^^ source.hydra
+>
 >  ## Convention for enum-variant value names
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -298,6 +310,7 @@
 #            ^ source.hydra
 #             ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                           ^^ source.hydra
+>
 >  ## Convention for record field names
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -309,6 +322,7 @@
 #        ^ source.hydra
 #         ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                       ^^ source.hydra
+>
 >  ## Convention for the source-file basename
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -320,6 +334,7 @@
 #       ^ source.hydra
 #        ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                      ^^ source.hydra
+>
 >  ## Convention for a single segment of a module name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -333,6 +348,7 @@
 #           ^ source.hydra
 #            ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                          ^^ source.hydra
+>
 >  ## Convention for top-level term definitions (functions, module-level values)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -346,6 +362,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                        ^^ source.hydra
+>
 >  ## Convention for locally-bound term names (lambda parameters, let-bindings)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -357,6 +374,7 @@
 #               ^ source.hydra
 #                ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                              ^^ source.hydra
+>
 >  ## Convention for type names
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -370,6 +388,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                        ^^ source.hydra
+>
 >  ## Convention for type-level variable names
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -405,6 +424,7 @@
 #                              ^ source.hydra
 #                               ^^^^^^ source.hydra support.type.hydra
 #                                     ^^ source.hydra
+>
 >  ## A function which encodes a domain value to a codomain value, with the possibility of failure
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -426,6 +446,7 @@
 #                         ^^ source.hydra entity.name.type.hydra
 #                           ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                            ^^ source.hydra
+>
 >  ## A function which decodes a codomain value to a domain value, with the possibility of failure
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -487,6 +508,7 @@
 #               ^ source.hydra
 #                ^^^^^^ source.hydra support.type.hydra
 #                      ^^ source.hydra
+>
 >  ## The unique name of the language
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -498,6 +520,7 @@
 #       ^ source.hydra
 #        ^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                    ^^ source.hydra
+>
 >  ## Constraints which characterize the language's type and term grammars
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -509,6 +532,7 @@
 #              ^ source.hydra
 #               ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                  ^^ source.hydra
+>
 >  ## Target-language or target-runtime capabilities the emitter may assume are available
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -523,6 +547,7 @@
 #                         ^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                        ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                         ^^ source.hydra
+>
 >  ## Per-target case conventions for the various kinds of identifiers emitted by the coder
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -534,6 +559,7 @@
 #                  ^ source.hydra
 #                   ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                  ^^ source.hydra
+>
 >  ## Conventional file extension for emitted source files, without the leading dot (e.g. "scala", "py")
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -558,6 +584,7 @@
 #                          ^ source.hydra
 #                           ^^^^^^ source.hydra support.type.hydra
 #                                 ^^ source.hydra
+>
 >  ## All supported literal variants
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -572,6 +599,7 @@
 #                       ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                      ^^ source.hydra
+>
 >  ## All supported float types
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -586,6 +614,7 @@
 #                  ^^^^^^^^^ source.hydra entity.name.type.hydra
 #                           ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                            ^^ source.hydra
+>
 >  ## All supported integer types
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -600,6 +629,7 @@
 #                    ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                ^^ source.hydra
+>
 >  ## All supported term variants
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -614,6 +644,7 @@
 #                    ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                ^^ source.hydra
+>
 >  ## All supported type variants
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -628,6 +659,7 @@
 #                    ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                ^^ source.hydra
+>
 >  ## A logical set of types, as a predicate which tests a type for inclusion
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -656,6 +688,7 @@
 #                      ^ source.hydra
 #                       ^^^^^ source.hydra support.type.hydra
 #                            ^^ source.hydra
+>
 >  ## The target runtime can invoke an n-ary function with fewer than n arguments without error. When absent, the emitter eta-expands partially-applied terms.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -667,6 +700,7 @@
 #                     ^ source.hydra
 #                      ^^^^ source.hydra support.type.hydra
 #                          ^^ source.hydra
+>
 >  ## The target runtime can handle deeply nested case statements without stack issues. When absent, the emitter hoists cases out into top-level helpers.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -678,6 +712,7 @@
 #                       ^ source.hydra
 #                        ^^^^ source.hydra support.type.hydra
 #                            ^^ source.hydra
+>
 >  ## The target language permits polymorphic let-bindings in expression position. When absent, the emitter hoists polymorphic lets to top level.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -738,6 +773,326 @@
 #                                                       ^ source.hydra
 #                                                        ^ source.hydra variable.other.hydra
 >
+>## A 'let' binding within a TCO-lowered loop body, mirroring Core.Binding
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type TcoBinding = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^ source.hydra entity.name.type.hydra
+#               ^ source.hydra
+#                ^ source.hydra keyword.operator.equals.hydra
+#                 ^ source.hydra
+#                  ^^^^^^ source.hydra support.type.hydra
+#                        ^^ source.hydra
+>
+>  ## The name of the bound variable
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  name: Name,
+#^^ source.hydra
+#  ^^^^ source.hydra variable.other.hydra
+#      ^ source.hydra punctuation.separator.type.hydra
+#       ^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
+>
+>  ## The term to which the variable is bound; recomputed on every loop iteration
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  `term`: Term,
+#^^ source.hydra
+#  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#   ^^^^ source.hydra variable.other.escaped.hydra
+#       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
+>
+>  ## The optional type scheme of the binding, needed to declare its own type parameters
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  typeScheme: optional<TypeScheme>}
+#^^ source.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^ source.hydra punctuation.separator.type.hydra
+#             ^ source.hydra
+#              ^^^^^^^^ source.hydra support.type.hydra
+#                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                       ^^^^^^^^^^ source.hydra entity.name.type.hydra
+#                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                  ^^ source.hydra
+>
+>## A single alternative of a TCO-lowered case statement, mirroring Core.CaseAlternative. The original handler is always a lambda binding the variant's payload; 'parameter' preserves that bound name so coders know what to bind when printing the branch.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type TcoCaseAlternative = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
+#                       ^ source.hydra
+#                        ^ source.hydra keyword.operator.equals.hydra
+#                         ^ source.hydra
+#                          ^^^^^^ source.hydra support.type.hydra
+#                                ^^ source.hydra
+>
+>  ## The name of the union variant matched by this alternative
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  name: Name,
+#^^ source.hydra
+#  ^^^^ source.hydra variable.other.hydra
+#      ^ source.hydra punctuation.separator.type.hydra
+#       ^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^^ source.hydra
+>
+>  ## The name bound to the matched variant's payload (from the original handler lambda)
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  parameter: Name,
+#^^ source.hydra
+#  ^^^^^^^^^ source.hydra variable.other.hydra
+#           ^ source.hydra punctuation.separator.type.hydra
+#            ^ source.hydra
+#             ^^^^ source.hydra variable.other.hydra
+#                 ^^ source.hydra
+>
+>  ## The lowered handler body for the matched variant's payload
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  handler: TcoStep}
+#^^ source.hydra
+#  ^^^^^^^ source.hydra variable.other.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^^^^ source.hydra variable.other.hydra
+#                  ^^ source.hydra
+>
+>## A TCO-lowered union elimination, mirroring Core.CaseStatement
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type TcoCaseStatement = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra keyword.operator.equals.hydra
+#                       ^ source.hydra
+#                        ^^^^^^ source.hydra support.type.hydra
+#                              ^^ source.hydra
+>
+>  ## The name of the union type
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  typeName: Name,
+#^^ source.hydra
+#  ^^^^^^^^ source.hydra variable.other.hydra
+#          ^ source.hydra punctuation.separator.type.hydra
+#           ^ source.hydra
+#            ^^^^ source.hydra variable.other.hydra
+#                ^^ source.hydra
+>
+>  ## The term being matched against; evaluated exactly once per dispatch
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  scrutinee: Term,
+#^^ source.hydra
+#  ^^^^^^^^^ source.hydra variable.other.hydra
+#           ^ source.hydra punctuation.separator.type.hydra
+#            ^ source.hydra
+#             ^^^^ source.hydra variable.other.hydra
+#                 ^^ source.hydra
+>
+>  ## An optional default case, used if none of the explicit cases match
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  default: optional<TcoStep>,
+#^^ source.hydra
+#  ^^^^^^^ source.hydra variable.other.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^^^^^ source.hydra support.type.hydra
+#                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                    ^^^^^^^ source.hydra entity.name.type.hydra
+#                           ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                            ^^ source.hydra
+>
+>  ## A list of case alternatives, one per union variant being handled
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  `cases`: list<TcoCaseAlternative>}
+#^^ source.hydra
+#  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#   ^^^^^ source.hydra variable.other.escaped.hydra
+#        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^ source.hydra support.type.hydra
+#               ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
+#                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                   ^^ source.hydra
+>
+>## A set of 'let' bindings together with a lowered body, mirroring Core.Let
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type TcoLet = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^ source.hydra entity.name.type.hydra
+#           ^ source.hydra
+#            ^ source.hydra keyword.operator.equals.hydra
+#             ^ source.hydra
+#              ^^^^^^ source.hydra support.type.hydra
+#                    ^^ source.hydra
+>
+>  ## The list of variable bindings; recomputed on every loop iteration
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  bindings: list<TcoBinding>,
+#^^ source.hydra
+#  ^^^^^^^^ source.hydra variable.other.hydra
+#          ^ source.hydra punctuation.separator.type.hydra
+#           ^ source.hydra
+#            ^^^^ source.hydra support.type.hydra
+#                ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                 ^^^^^^^^^^ source.hydra entity.name.type.hydra
+#                           ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                            ^^ source.hydra
+>
+>  ## The lowered body term in which the variables are bound
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  body: TcoStep}
+#^^ source.hydra
+#  ^^^^ source.hydra variable.other.hydra
+#      ^ source.hydra punctuation.separator.type.hydra
+#       ^ source.hydra
+#        ^^^^^^^ source.hydra variable.other.hydra
+#               ^^ source.hydra
+>
+>## A self-tail-recursive function body, restructured into an explicit loop. Produced by lowerSelfTailRecursion; consumed by per-language coders to emit a native iteration construct.
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type TcoLoopPlan = record{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^ source.hydra entity.name.type.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.equals.hydra
+#                  ^ source.hydra
+#                   ^^^^^^ source.hydra support.type.hydra
+#                         ^^ source.hydra
+>
+>  ## Parameter names, in order; these are the loop's mutable loop variables
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  params: list<Name>,
+#^^ source.hydra
+#  ^^^^^^ source.hydra variable.other.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^ source.hydra support.type.hydra
+#              ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#               ^^^^ source.hydra entity.name.type.hydra
+#                   ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                    ^^ source.hydra
+>
+>  ## The loop body, with tail self-calls lowered to continuation steps
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  body: TcoStep}
+#^^ source.hydra
+#  ^^^^ source.hydra variable.other.hydra
+#      ^ source.hydra punctuation.separator.type.hydra
+#       ^ source.hydra
+#        ^^^^^^^ source.hydra variable.other.hydra
+#               ^^ source.hydra
+>
+>## One node of a TCO-lowered function body: a loop continuation, a terminal value, or a branch
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>type TcoStep = union{
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^ source.hydra entity.name.type.hydra
+#            ^ source.hydra
+#             ^ source.hydra keyword.operator.equals.hydra
+#              ^ source.hydra
+#               ^^^^^ source.hydra support.type.hydra
+#                    ^^ source.hydra
+>
+>  ## Reassign params to these new values, in the same order as TcoLoopPlan.params, and repeat the loop
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  continue: list<Term>,
+#^^ source.hydra
+#  ^^^^^^^^ source.hydra variable.other.hydra
+#          ^ source.hydra punctuation.separator.type.hydra
+#           ^ source.hydra
+#            ^^^^ source.hydra support.type.hydra
+#                ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                 ^^^^ source.hydra entity.name.type.hydra
+#                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                      ^^ source.hydra
+>
+>  ## Exit the loop, yielding this value
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  return: Term,
+#^^ source.hydra
+#  ^^^^^^ source.hydra variable.other.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
+>
+>  ## Branch on a union elimination; mirrors Core.CaseStatement but handlers are TcoStep
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  `cases`: TcoCaseStatement,
+#^^ source.hydra
+#  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#   ^^^^^ source.hydra variable.other.escaped.hydra
+#        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#         ^ source.hydra punctuation.separator.type.hydra
+#          ^ source.hydra
+#           ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                           ^^ source.hydra
+>
+>  ## Bindings that must be recomputed on every iteration, mirroring Core.Let
+#^^ source.hydra
+#  ^^ source.hydra comment.block.documentation.hydra
+#    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>  `let_`: TcoLet}
+#^^ source.hydra
+#  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#   ^^^^ source.hydra variable.other.escaped.hydra
+#       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#        ^ source.hydra punctuation.separator.type.hydra
+#         ^ source.hydra
+#          ^^^^^^ source.hydra variable.other.hydra
+#                ^^ source.hydra
+>
 >## Specifies either a pre-order or post-order traversal
 #^^ source.hydra comment.block.documentation.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
@@ -750,6 +1105,7 @@
 #                     ^ source.hydra
 #                      ^^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
+>
 >  ## Pre-order traversal
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -761,6 +1117,7 @@
 #      ^ source.hydra
 #       ^^^^ source.hydra support.type.hydra
 #           ^^ source.hydra
+>
 >  ## Post-order traversal
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

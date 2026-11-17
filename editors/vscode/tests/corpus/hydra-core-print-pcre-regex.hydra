@@ -17,12 +17,12 @@ term alternation =
 ## Render a single atom; the . metacharacter renders as [\s\S] to preserve newline-inclusive 'any'.
 term atom =
   λa.cases(Atom){
-      literal=λc.escapeLiteral c,
-      any=λ`_`."[\\s\\S]",
-      anchorStart=λ`_`."^",
-      anchorEnd=λ`_`."$",
-      group=λg.strings.concat ["(", alternation g, ")"],
-      class=λcc.characterClass cc}
+      literal = λc.escapeLiteral c,
+      any = λ`_`."[\\s\\S]",
+      anchorStart = λ`_`."^",
+      anchorEnd = λ`_`."$",
+      group = λg.strings.concat ["(", alternation g, ")"],
+      class = λcc.characterClass cc}
       a
 
 ## Render a character class, including the leading ^ for a negated class.
@@ -33,22 +33,22 @@ term characterClass =
 ## Render one character-class member (a single character or an inclusive range).
 term classItem =
   λitem.cases(ClassItem){
-      character=λc.escapeClassChar c,
-      range=λr.strings.concat
+      character = λc.escapeClassChar c,
+      range = λr.strings.concat
             [escapeClassChar (CharacterRange[`from`] r), "-", escapeClassChar (CharacterRange[to] r)]}
       item
 
 ## Render a code point inside a character class, uniformly escaping the class metacharacters \ ] ^ -.
 term escapeClassChar =
   λc.
-    let isMeta := foldl (λacc,m.or acc (equal c m)) false [92:int32, 93:int32, 94:int32, 45:int32]
+    let isMeta := foldl (λacc, m.or acc (equal c m)) false [92:int32, 93:int32, 94:int32, 45:int32]
     in ifElse isMeta (strings.concat2 "\\" (printCodePoint c)) (printCodePoint c)
 
 ## Render a literal code point in top-level context, backslash-escaping PCRE/ECMA metacharacters.
 term escapeLiteral =
   λc.
     let isMeta := foldl
-        (λacc,m.or acc (equal c m))
+        (λacc, m.or acc (equal c m))
         false
         [
           46:int32,
@@ -79,13 +79,13 @@ term quantified = λqa.strings.concat2 (atom (Quantified[atom] qa)) (quantifier 
 ## Render a quantifier suffix; the 'one' quantifier renders as the empty string.
 term quantifier =
   λq.cases(Quantifier){
-      one=λ`_`."",
-      zeroOrOne=λ`_`."?",
-      zeroOrMore=λ`_`."*",
-      oneOrMore=λ`_`."+",
-      exactly=λn.strings.concat ["{", printInt32 n, "}"],
-      atLeast=λn.strings.concat ["{", printInt32 n, ",}"],
-      range=λr.strings.concat
+      one = λ`_`."",
+      zeroOrOne = λ`_`."?",
+      zeroOrMore = λ`_`."*",
+      oneOrMore = λ`_`."+",
+      exactly = λn.strings.concat ["{", printInt32 n, "}"],
+      atLeast = λn.strings.concat ["{", printInt32 n, ",}"],
+      range = λr.strings.concat
             ["{", printInt32 (QuantifierRange[min] r), ",", printInt32 (QuantifierRange[max] r), "}"]}
       q
 

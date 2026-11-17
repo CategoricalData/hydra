@@ -1,0 +1,506 @@
+>## Term definitions for the test suite
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>module hydra.core.test.testTerms
+#^^^^^^ source.hydra keyword.control.module.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>import hydra.core.lib.maps
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.model
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>import hydra.core.test.testTypes
+#^^^^^^ source.hydra keyword.control.import.hydra
+#      ^ source.hydra
+#       ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.namespace.hydra
+>
+>term latlonRecord =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.equals.hydra
+>  λlat, lon.Term{
+#^^ source.hydra
+#  ^ source.hydra keyword.operator.lambda.hydra
+#   ^^^ source.hydra variable.parameter.hydra
+#      ^ source.hydra punctuation.separator.binder.hydra
+#       ^ source.hydra
+#        ^^^ source.hydra variable.parameter.hydra
+#           ^ source.hydra punctuation.separator.binder.hydra
+#            ^^^^ source.hydra entity.name.type.nominal.hydra
+#                ^^ source.hydra
+>      `record` = Record{
+#^^^^^^ source.hydra
+#      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#       ^^^^^^ source.hydra variable.other.escaped.hydra
+#             ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.equals.hydra
+#                ^ source.hydra
+#                 ^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                       ^^ source.hydra
+>        typeName = testTypeLatLonName,
+#^^^^^^^^ source.hydra
+#        ^^^^^^^^ source.hydra variable.other.hydra
+#                ^ source.hydra
+#                 ^ source.hydra keyword.operator.equals.hydra
+#                  ^ source.hydra
+#                   ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                     ^^ source.hydra
+>        fields = [
+#^^^^^^^^ source.hydra
+#        ^^^^^^ source.hydra variable.other.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.equals.hydra
+#                ^^^ source.hydra
+>          Field{name = Name{"lat"}, `term` = Term{literal = Literal{float = FloatValue{`float32` = lat}}}},
+#^^^^^^^^^^ source.hydra
+#          ^^^^^ source.hydra entity.name.type.nominal.hydra
+#               ^ source.hydra
+#                ^^^^ source.hydra variable.other.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra keyword.operator.equals.hydra
+#                      ^ source.hydra
+#                       ^^^^ source.hydra entity.name.type.nominal.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                             ^^^ source.hydra string.quoted.double.hydra
+#                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                 ^^^ source.hydra
+#                                    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                     ^^^^ source.hydra variable.other.escaped.hydra
+#                                         ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                          ^ source.hydra
+#                                           ^ source.hydra keyword.operator.equals.hydra
+#                                            ^ source.hydra
+#                                             ^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                 ^ source.hydra
+#                                                  ^^^^^^^ source.hydra variable.other.hydra
+#                                                         ^ source.hydra
+#                                                          ^ source.hydra keyword.operator.equals.hydra
+#                                                           ^ source.hydra
+#                                                            ^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                                   ^ source.hydra
+#                                                                    ^^^^^ source.hydra variable.other.hydra
+#                                                                         ^ source.hydra
+#                                                                          ^ source.hydra keyword.operator.equals.hydra
+#                                                                           ^ source.hydra
+#                                                                            ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                                                      ^ source.hydra
+#                                                                                       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                                                                        ^^^^^^^ source.hydra variable.other.escaped.hydra
+#                                                                                               ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                                                                                ^ source.hydra
+#                                                                                                 ^ source.hydra keyword.operator.equals.hydra
+#                                                                                                  ^ source.hydra
+#                                                                                                   ^^^ source.hydra variable.other.hydra
+#                                                                                                      ^^^^^^ source.hydra
+>          Field{name = Name{"lon"}, `term` = Term{literal = Literal{float = FloatValue{`float32` = lon}}}}]}}
+#^^^^^^^^^^ source.hydra
+#          ^^^^^ source.hydra entity.name.type.nominal.hydra
+#               ^ source.hydra
+#                ^^^^ source.hydra variable.other.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra keyword.operator.equals.hydra
+#                      ^ source.hydra
+#                       ^^^^ source.hydra entity.name.type.nominal.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                             ^^^ source.hydra string.quoted.double.hydra
+#                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                 ^^^ source.hydra
+#                                    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                     ^^^^ source.hydra variable.other.escaped.hydra
+#                                         ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                          ^ source.hydra
+#                                           ^ source.hydra keyword.operator.equals.hydra
+#                                            ^ source.hydra
+#                                             ^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                 ^ source.hydra
+#                                                  ^^^^^^^ source.hydra variable.other.hydra
+#                                                         ^ source.hydra
+#                                                          ^ source.hydra keyword.operator.equals.hydra
+#                                                           ^ source.hydra
+#                                                            ^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                                   ^ source.hydra
+#                                                                    ^^^^^ source.hydra variable.other.hydra
+#                                                                         ^ source.hydra
+#                                                                          ^ source.hydra keyword.operator.equals.hydra
+#                                                                           ^ source.hydra
+#                                                                            ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                                                      ^ source.hydra
+#                                                                                       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                                                                        ^^^^^^^ source.hydra variable.other.escaped.hydra
+#                                                                                               ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                                                                                ^ source.hydra
+#                                                                                                 ^ source.hydra keyword.operator.equals.hydra
+#                                                                                                  ^ source.hydra
+#                                                                                                   ^^^ source.hydra variable.other.hydra
+#                                                                                                      ^^^^^^^^ source.hydra
+>
+>term testDataArthur =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra keyword.operator.equals.hydra
+>  Term{
+#^^ source.hydra
+#  ^^^^ source.hydra entity.name.type.nominal.hydra
+#      ^^ source.hydra
+>    `record` = Record{
+#^^^^ source.hydra
+#    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#     ^^^^^^ source.hydra variable.other.escaped.hydra
+#           ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#            ^ source.hydra
+#             ^ source.hydra keyword.operator.equals.hydra
+#              ^ source.hydra
+#               ^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                     ^^ source.hydra
+>      typeName = testTypePersonName,
+#^^^^^^ source.hydra
+#      ^^^^^^^^ source.hydra variable.other.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.equals.hydra
+#                ^ source.hydra
+#                 ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                   ^^ source.hydra
+>      fields = [
+#^^^^^^ source.hydra
+#      ^^^^^^ source.hydra variable.other.hydra
+#            ^ source.hydra
+#             ^ source.hydra keyword.operator.equals.hydra
+#              ^^^ source.hydra
+>        Field{name = Name{"firstName"}, `term` = Term{literal = Literal{`string` = "Arthur"}}},
+#^^^^^^^^ source.hydra
+#        ^^^^^ source.hydra entity.name.type.nominal.hydra
+#             ^ source.hydra
+#              ^^^^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.equals.hydra
+#                    ^ source.hydra
+#                     ^^^^ source.hydra entity.name.type.nominal.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                           ^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                     ^^^ source.hydra
+#                                        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                         ^^^^ source.hydra variable.other.escaped.hydra
+#                                             ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                              ^ source.hydra
+#                                               ^ source.hydra keyword.operator.equals.hydra
+#                                                ^ source.hydra
+#                                                 ^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                     ^ source.hydra
+#                                                      ^^^^^^^ source.hydra variable.other.hydra
+#                                                             ^ source.hydra
+#                                                              ^ source.hydra keyword.operator.equals.hydra
+#                                                               ^ source.hydra
+#                                                                ^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                                       ^ source.hydra
+#                                                                        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                                                         ^^^^^^ source.hydra variable.other.escaped.hydra
+#                                                                               ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                                                                ^ source.hydra
+#                                                                                 ^ source.hydra keyword.operator.equals.hydra
+#                                                                                  ^ source.hydra
+#                                                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                                                    ^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                                           ^^^^^ source.hydra
+>        Field{name = Name{"lastName"}, `term` = Term{literal = Literal{`string` = "Dent"}}},
+#^^^^^^^^ source.hydra
+#        ^^^^^ source.hydra entity.name.type.nominal.hydra
+#             ^ source.hydra
+#              ^^^^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.equals.hydra
+#                    ^ source.hydra
+#                     ^^^^ source.hydra entity.name.type.nominal.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                           ^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                    ^^^ source.hydra
+#                                       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                        ^^^^ source.hydra variable.other.escaped.hydra
+#                                            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                             ^ source.hydra
+#                                              ^ source.hydra keyword.operator.equals.hydra
+#                                               ^ source.hydra
+#                                                ^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                    ^ source.hydra
+#                                                     ^^^^^^^ source.hydra variable.other.hydra
+#                                                            ^ source.hydra
+#                                                             ^ source.hydra keyword.operator.equals.hydra
+#                                                              ^ source.hydra
+#                                                               ^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                                      ^ source.hydra
+#                                                                       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                                                        ^^^^^^ source.hydra variable.other.escaped.hydra
+#                                                                              ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                                                               ^ source.hydra
+#                                                                                ^ source.hydra keyword.operator.equals.hydra
+#                                                                                 ^ source.hydra
+#                                                                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                                                   ^^^^ source.hydra string.quoted.double.hydra
+#                                                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                                        ^^^^^ source.hydra
+>        Field{name = Name{"age"}, `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 42:int32}}}}]}}
+#^^^^^^^^ source.hydra
+#        ^^^^^ source.hydra entity.name.type.nominal.hydra
+#             ^ source.hydra
+#              ^^^^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.equals.hydra
+#                    ^ source.hydra
+#                     ^^^^ source.hydra entity.name.type.nominal.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                           ^^^ source.hydra string.quoted.double.hydra
+#                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                               ^^^ source.hydra
+#                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                   ^^^^ source.hydra variable.other.escaped.hydra
+#                                       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                        ^ source.hydra
+#                                         ^ source.hydra keyword.operator.equals.hydra
+#                                          ^ source.hydra
+#                                           ^^^^ source.hydra entity.name.type.nominal.hydra
+#                                               ^ source.hydra
+#                                                ^^^^^^^ source.hydra variable.other.hydra
+#                                                       ^ source.hydra
+#                                                        ^ source.hydra keyword.operator.equals.hydra
+#                                                         ^ source.hydra
+#                                                          ^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                                 ^ source.hydra
+#                                                                  ^^^^^^^ source.hydra variable.other.hydra
+#                                                                         ^ source.hydra
+#                                                                          ^ source.hydra keyword.operator.equals.hydra
+#                                                                           ^ source.hydra
+#                                                                            ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                                                        ^ source.hydra
+#                                                                                         ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                                                                                          ^^^^^ source.hydra variable.other.escaped.hydra
+#                                                                                               ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                                                                                                ^ source.hydra
+#                                                                                                 ^ source.hydra keyword.operator.equals.hydra
+#                                                                                                  ^ source.hydra
+#                                                                                                   ^^ source.hydra constant.numeric.integer.hydra
+#                                                                                                     ^ source.hydra punctuation.separator.type.hydra
+#                                                                                                      ^^^^^ source.hydra support.type.literal.integer.hydra
+#                                                                                                           ^^^^^^^^ source.hydra
+>
+>term testElementArthur =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra keyword.operator.equals.hydra
+>  Binding{
+#^^ source.hydra
+#  ^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#         ^^ source.hydra
+>    name = Name{"firstName"},
+#^^^^ source.hydra
+#    ^^^^ source.hydra variable.other.hydra
+#        ^ source.hydra
+#         ^ source.hydra keyword.operator.equals.hydra
+#          ^ source.hydra
+#           ^^^^ source.hydra entity.name.type.nominal.hydra
+#               ^ source.hydra
+#                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                 ^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                           ^^^ source.hydra
+>    `term` = testDataArthur,
+#^^^^ source.hydra
+#    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#     ^^^^ source.hydra variable.other.escaped.hydra
+#         ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#          ^ source.hydra
+#           ^ source.hydra keyword.operator.equals.hydra
+#            ^ source.hydra
+#             ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                           ^^ source.hydra
+>    typeScheme = given(TypeScheme{
+#^^^^ source.hydra
+#    ^^^^^^^^^^ source.hydra variable.other.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.equals.hydra
+#                ^ source.hydra
+#                 ^^^^^ source.hydra keyword.control.hydra
+#                      ^ source.hydra
+#                       ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                 ^^ source.hydra
+>        variables = [],
+#^^^^^^^^ source.hydra
+#        ^^^^^^^^^ source.hydra variable.other.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.equals.hydra
+#                   ^^^^^ source.hydra
+>        body = Type{variable = testTypePersonName},
+#^^^^^^^^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^ source.hydra
+#             ^ source.hydra keyword.operator.equals.hydra
+#              ^ source.hydra
+#               ^^^^ source.hydra entity.name.type.nominal.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra keyword.operator.equals.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                 ^^^ source.hydra
+>        constraints = empty})}
+#^^^^^^^^ source.hydra
+#        ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra keyword.operator.equals.hydra
+#                     ^ source.hydra
+#                      ^^^^^ source.hydra variable.other.hydra
+#                           ^^^^ source.hydra
+>
+>term testElementFirstName =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.equals.hydra
+>  Binding{
+#^^ source.hydra
+#  ^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#         ^^ source.hydra
+>    name = Name{"firstName"},
+#^^^^ source.hydra
+#    ^^^^ source.hydra variable.other.hydra
+#        ^ source.hydra
+#         ^ source.hydra keyword.operator.equals.hydra
+#          ^ source.hydra
+#           ^^^^ source.hydra entity.name.type.nominal.hydra
+#               ^ source.hydra
+#                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                 ^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                           ^^^ source.hydra
+>    `term` = Term{`project` = Projection{typeName = testTypePersonName, fieldName = Name{"firstName"}}},
+#^^^^ source.hydra
+#    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#     ^^^^ source.hydra variable.other.escaped.hydra
+#         ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#          ^ source.hydra
+#           ^ source.hydra keyword.operator.equals.hydra
+#            ^ source.hydra
+#             ^^^^ source.hydra entity.name.type.nominal.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                   ^^^^^^^ source.hydra variable.other.escaped.hydra
+#                          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.equals.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                        ^ source.hydra
+#                                         ^^^^^^^^ source.hydra variable.other.hydra
+#                                                 ^ source.hydra
+#                                                  ^ source.hydra keyword.operator.equals.hydra
+#                                                   ^ source.hydra
+#                                                    ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                      ^^ source.hydra
+#                                                                        ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                 ^ source.hydra
+#                                                                                  ^ source.hydra keyword.operator.equals.hydra
+#                                                                                   ^ source.hydra
+#                                                                                    ^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                                                        ^ source.hydra
+#                                                                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                                                          ^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                                                    ^^^^^ source.hydra
+>    typeScheme = given(TypeScheme{
+#^^^^ source.hydra
+#    ^^^^^^^^^^ source.hydra variable.other.hydra
+#              ^ source.hydra
+#               ^ source.hydra keyword.operator.equals.hydra
+#                ^ source.hydra
+#                 ^^^^^ source.hydra keyword.control.hydra
+#                      ^ source.hydra
+#                       ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                 ^^ source.hydra
+>        variables = [],
+#^^^^^^^^ source.hydra
+#        ^^^^^^^^^ source.hydra variable.other.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.equals.hydra
+#                   ^^^^^ source.hydra
+>        body = Type{
+#^^^^^^^^ source.hydra
+#        ^^^^ source.hydra variable.other.hydra
+#            ^ source.hydra
+#             ^ source.hydra keyword.operator.equals.hydra
+#              ^ source.hydra
+#               ^^^^ source.hydra entity.name.type.nominal.hydra
+#                   ^^ source.hydra
+>          function = FunctionType{
+#^^^^^^^^^^ source.hydra
+#          ^^^^^^^^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.equals.hydra
+#                    ^ source.hydra
+#                     ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                 ^^ source.hydra
+>            domain = Type{
+#^^^^^^^^^^^^ source.hydra
+#            ^^^^^^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.equals.hydra
+#                    ^ source.hydra
+#                     ^^^^ source.hydra entity.name.type.nominal.hydra
+#                         ^^ source.hydra
+>              variable = testTypePersonName},
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^^^^^ source.hydra variable.other.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra keyword.operator.equals.hydra
+#                        ^ source.hydra
+#                         ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                           ^^^ source.hydra
+>            codomain = Type{
+#^^^^^^^^^^^^ source.hydra
+#            ^^^^^^^^ source.hydra variable.other.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra keyword.operator.equals.hydra
+#                      ^ source.hydra
+#                       ^^^^ source.hydra entity.name.type.nominal.hydra
+#                           ^^ source.hydra
+>              literal = LiteralType{
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^^^^ source.hydra variable.other.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra keyword.operator.equals.hydra
+#                       ^ source.hydra
+#                        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                   ^^ source.hydra
+>                `string`}}}},
+#^^^^^^^^^^^^^^^^ source.hydra
+#                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                 ^^^^^^ source.hydra variable.other.escaped.hydra
+#                       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                        ^^^^^^ source.hydra
+>        constraints = empty})}
+#^^^^^^^^ source.hydra
+#        ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra keyword.operator.equals.hydra
+#                     ^ source.hydra
+#                      ^^^^^ source.hydra variable.other.hydra
+#                           ^^^^ source.hydra

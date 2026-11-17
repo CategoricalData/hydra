@@ -35,6 +35,7 @@
 #            ^ source.hydra
 #             ^^^^^^ source.hydra support.type.hydra
 #                   ^^ source.hydra
+>
 >  ## The terms bound by all term variables in scope
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -52,6 +53,7 @@
 #                        ^^^^ source.hydra entity.name.type.hydra
 #                            ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                             ^^ source.hydra
+>
 >  ## The type schemes of all term variables in scope
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -69,6 +71,7 @@
 #                        ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                   ^^ source.hydra
+>
 >  ## A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -86,6 +89,7 @@
 #                              ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                      ^^ source.hydra
+>
 >  ## The set of term variables introduced by specifically by lambdas
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -100,6 +104,7 @@
 #                       ^^^^ source.hydra entity.name.type.hydra
 #                           ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                            ^^ source.hydra
+>
 >  ## Any additional metadata bound to term variables in scope
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -117,6 +122,7 @@
 #                      ^^^^ source.hydra entity.name.type.hydra
 #                          ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                           ^^ source.hydra
+>
 >  ## All primitive functions and constants by name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -134,6 +140,7 @@
 #                        ^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                  ^^ source.hydra
+>
 >  ## All schema types (type schemes) in scope
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -151,6 +158,7 @@
 #                         ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                    ^^ source.hydra
+>
 >  ## The set of type variables introduced specifically by type lambdas
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -178,6 +186,7 @@
 #              ^ source.hydra
 #               ^^^^^^ source.hydra support.type.hydra
 #                     ^^ source.hydra
+>
 >  ## A common prefix for all primitive function names in the library
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -189,6 +198,7 @@
 #       ^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.hydra
 #                  ^^ source.hydra
+>
 >  ## A preferred namespace prefix for function names in the library
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -200,6 +210,7 @@
 #         ^ source.hydra
 #          ^^^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
+>
 >  ## The primitives defined in this library
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -227,6 +238,7 @@
 #                ^ source.hydra
 #                 ^^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
+>
 >  ## The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -238,6 +250,7 @@
 #             ^ source.hydra
 #              ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                 ^^ source.hydra
+>
 >  ## A concrete, host-specific implementation of the primitive function: given the current graph, a mapping from a list of argument terms to a result term, or an error. Arguments are reduced and stripped of annotations by the interpreter before the implementation is invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive whose result shape is fixed by its data argument can return an unreduced applicative term and let the outer reducer fold it (no graph needed). The graph is retained for the higher-order primitives that must evaluate a function argument mid-computation (e.g. lists.filter): evaluating that function resolves primitive names against the graph's primitive table. The legacy `InferenceContext` parameter was vestigial and has been removed (https://github.com/CategoricalData/hydra/issues/446).
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -284,6 +297,7 @@
 #                          ^ source.hydra
 #                           ^^^^^^ source.hydra support.type.hydra
 #                                 ^^ source.hydra
+>
 >  ## The Hydra type of encoded terms
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -297,6 +311,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra variable.other.hydra
 #              ^^ source.hydra
+>
 >  ## An encode function from terms to native values
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -326,6 +341,7 @@
 #                                                          ^ source.hydra entity.name.type.hydra
 #                                                           ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                                            ^^ source.hydra
+>
 >  ## A decode function from native values to terms
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

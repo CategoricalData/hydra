@@ -33,6 +33,7 @@
 #           ^ source.hydra
 #            ^^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## A literal character, matched exactly. The character is a Unicode scalar value in the range [U+0000, U+10FFFF] (surrogates excluded), held as an int32 code point (the range fits in signed 32-bit, and int32 matches Hydra's string/parser code-point representation). In concrete syntax, a metacharacter is written escaped (e.g. \.); escaping is purely a concrete-syntax concern, so the AST holds the bare code point.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -44,6 +45,7 @@
 #          ^ source.hydra
 #           ^^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
+>
 >  ## The . metacharacter; matches any single character, INCLUDING newline (unlike most host engines, whose native . excludes newline). To exclude newline, write [^\n] explicitly.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -55,6 +57,7 @@
 #      ^ source.hydra
 #       ^^^^ source.hydra support.type.hydra
 #           ^^ source.hydra
+>
 >  ## The ^ anchor; matches the empty string at the start of input.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -66,6 +69,7 @@
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
 #                   ^^ source.hydra
+>
 >  ## The $ anchor; matches the empty string at the end of input.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -77,6 +81,7 @@
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## A parenthesized sub-expression, ( ... ); groups an alternation for quantification.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -88,6 +93,7 @@
 #        ^ source.hydra
 #         ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                    ^^ source.hydra
+>
 >  ## A character class, [ ... ]; matches any single character in (or, if negated, not in) the set.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -112,6 +118,7 @@
 #                     ^ source.hydra
 #                      ^^^^^^ source.hydra support.type.hydra
 #                            ^^ source.hydra
+>
 >  ## True for a negated class ([^ ... ]), which matches any character NOT listed.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -123,6 +130,7 @@
 #          ^ source.hydra
 #           ^^^^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## The class members: individual characters and/or character ranges. Must be non-empty; the empty class [] and negated-empty class [^] are excluded from the core (they are not in the POSIX/PCRE/ECMA intersection). hydra.core.parse.regex rejects an empty class.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -150,6 +158,7 @@
 #                     ^ source.hydra
 #                      ^^^^^^ source.hydra support.type.hydra
 #                            ^^ source.hydra
+>
 >  ## The first character of the range (inclusive), as an int32 Unicode scalar value.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -163,6 +172,7 @@
 #         ^ source.hydra
 #          ^^^^^ source.hydra support.type.hydra
 #               ^^ source.hydra
+>
 >  ## The last character of the range (inclusive), as an int32 Unicode scalar value.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -187,6 +197,7 @@
 #                ^ source.hydra
 #                 ^^^^^ source.hydra support.type.hydra
 #                      ^^ source.hydra
+>
 >  ## A single character (int32 Unicode scalar value) in the class.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -198,6 +209,7 @@
 #            ^ source.hydra
 #             ^^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## An inclusive range of characters, e.g. a-z.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -222,6 +234,7 @@
 #                 ^ source.hydra
 #                  ^^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
+>
 >  ## The atom being quantified.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -233,6 +246,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## The quantifier; use 'one' for an unquantified atom.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -257,6 +271,7 @@
 #                 ^ source.hydra
 #                  ^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
+>
 >  ## No quantifier; matches exactly one occurrence.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -268,6 +283,7 @@
 #      ^ source.hydra
 #       ^^^^ source.hydra support.type.hydra
 #           ^^ source.hydra
+>
 >  ## The ? quantifier; matches zero or one occurrence.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -279,6 +295,7 @@
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## The * quantifier; matches zero or more occurrences.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -290,6 +307,7 @@
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## The + quantifier; matches one or more occurrences.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -301,6 +319,7 @@
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## The {n} quantifier; matches exactly n occurrences.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -312,6 +331,7 @@
 #          ^ source.hydra
 #           ^^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
+>
 >  ## The {n,} quantifier; matches at least n occurrences.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -323,6 +343,7 @@
 #          ^ source.hydra
 #           ^^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
+>
 >  ## The {n,m} quantifier; matches between n and m (inclusive) occurrences.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -347,6 +368,7 @@
 #                      ^ source.hydra
 #                       ^^^^^^ source.hydra support.type.hydra
 #                             ^^ source.hydra
+>
 >  ## The minimum number of occurrences (inclusive).
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -358,6 +380,7 @@
 #      ^ source.hydra
 #       ^^^^^ source.hydra support.type.hydra
 #            ^^ source.hydra
+>
 >  ## The maximum number of occurrences (inclusive).
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

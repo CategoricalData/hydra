@@ -512,186 +512,246 @@
 #            ^ source.hydra
 #             ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                             ^^^ source.hydra
->        constantCondition=constantConditionError,
+>        constantCondition = constantConditionError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                         ^ source.hydra keyword.operator.equals.hydra
-#                          ^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                ^^ source.hydra
->        duplicateBinding=duplicateBindingError,
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.equals.hydra
+#                           ^ source.hydra
+#                            ^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                  ^^ source.hydra
+>        duplicateBinding = duplicateBindingError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                        ^ source.hydra keyword.operator.equals.hydra
-#                         ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                              ^^ source.hydra
->        duplicateField=duplicateFieldError,
+#                        ^ source.hydra
+#                         ^ source.hydra keyword.operator.equals.hydra
+#                          ^ source.hydra
+#                           ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                ^^ source.hydra
+>        duplicateField = duplicateFieldError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                      ^ source.hydra keyword.operator.equals.hydra
-#                       ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                          ^^ source.hydra
->        emptyCaseStatement=emptyCaseStatementError,
+#                      ^ source.hydra
+#                       ^ source.hydra keyword.operator.equals.hydra
+#                        ^ source.hydra
+#                         ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                            ^^ source.hydra
+>        emptyCaseStatement = emptyCaseStatementError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                          ^ source.hydra keyword.operator.equals.hydra
-#                           ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                  ^^ source.hydra
->        emptyLetBindings=emptyLetBindingsError,
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.equals.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                    ^^ source.hydra
+>        emptyLetBindings = emptyLetBindingsError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                        ^ source.hydra keyword.operator.equals.hydra
-#                         ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                              ^^ source.hydra
->        emptyTermAnnotation=emptyTermAnnotationError,
+#                        ^ source.hydra
+#                         ^ source.hydra keyword.operator.equals.hydra
+#                          ^ source.hydra
+#                           ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                ^^ source.hydra
+>        emptyTermAnnotation = emptyTermAnnotationError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                           ^ source.hydra keyword.operator.equals.hydra
-#                            ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                    ^^ source.hydra
->        emptyTypeNameInTerm=emptyTypeNameInTermError,
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.equals.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                      ^^ source.hydra
+>        emptyTypeNameInTerm = emptyTypeNameInTermError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                           ^ source.hydra keyword.operator.equals.hydra
-#                            ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                    ^^ source.hydra
->        extraRecordFields=extraRecordFieldsError,
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.equals.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                      ^^ source.hydra
+>        extraRecordFields = extraRecordFieldsError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                         ^ source.hydra keyword.operator.equals.hydra
-#                          ^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                ^^ source.hydra
->        invalidLambdaParameterName=invalidLambdaParameterNameError,
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.equals.hydra
+#                           ^ source.hydra
+#                            ^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                  ^^ source.hydra
+>        invalidLambdaParameterName = invalidLambdaParameterNameError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                  ^ source.hydra keyword.operator.equals.hydra
-#                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                  ^^ source.hydra
->        invalidLetBindingName=invalidLetBindingNameError,
+#                                  ^ source.hydra
+#                                   ^ source.hydra keyword.operator.equals.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                    ^^ source.hydra
+>        invalidLetBindingName = invalidLetBindingNameError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                             ^ source.hydra keyword.operator.equals.hydra
-#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                        ^^ source.hydra
->        invalidTypeLambdaParameterName=invalidTypeLambdaParameterNameError,
+#                             ^ source.hydra
+#                              ^ source.hydra keyword.operator.equals.hydra
+#                               ^ source.hydra
+#                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                          ^^ source.hydra
+>        invalidTypeLambdaParameterName = invalidTypeLambdaParameterNameError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                      ^ source.hydra keyword.operator.equals.hydra
-#                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                          ^^ source.hydra
->        missingCaseBranches=missingCaseBranchesError,
+#                                      ^ source.hydra
+#                                       ^ source.hydra keyword.operator.equals.hydra
+#                                        ^ source.hydra
+#                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                            ^^ source.hydra
+>        missingCaseBranches = missingCaseBranchesError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                           ^ source.hydra keyword.operator.equals.hydra
-#                            ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                    ^^ source.hydra
->        missingRecordFields=missingRecordFieldsError,
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.equals.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                      ^^ source.hydra
+>        missingRecordFields = missingRecordFieldsError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                           ^ source.hydra keyword.operator.equals.hydra
-#                            ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                    ^^ source.hydra
->        nestedTermAnnotation=nestedTermAnnotationError,
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.equals.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                      ^^ source.hydra
+>        nestedTermAnnotation = nestedTermAnnotationError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                            ^ source.hydra keyword.operator.equals.hydra
-#                             ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                      ^^ source.hydra
->        nominalTypeKindMismatch=nominalTypeKindMismatchError,
+#                            ^ source.hydra
+#                             ^ source.hydra keyword.operator.equals.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                        ^^ source.hydra
+>        nominalTypeKindMismatch = nominalTypeKindMismatchError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                               ^ source.hydra keyword.operator.equals.hydra
-#                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                            ^^ source.hydra
->        redundantWrapUnwrap=redundantWrapUnwrapError,
+#                               ^ source.hydra
+#                                ^ source.hydra keyword.operator.equals.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                              ^^ source.hydra
+>        redundantWrapUnwrap = redundantWrapUnwrapError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                           ^ source.hydra keyword.operator.equals.hydra
-#                            ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                    ^^ source.hydra
->        selfApplication=selfApplicationError,
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.equals.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                      ^^ source.hydra
+>        selfApplication = selfApplicationError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                       ^ source.hydra keyword.operator.equals.hydra
-#                        ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                            ^^ source.hydra
->        termVariableShadowing=termVariableShadowingError,
+#                       ^ source.hydra
+#                        ^ source.hydra keyword.operator.equals.hydra
+#                         ^ source.hydra
+#                          ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                              ^^ source.hydra
+>        termVariableShadowing = termVariableShadowingError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                             ^ source.hydra keyword.operator.equals.hydra
-#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                        ^^ source.hydra
->        typeVariableShadowingInTypeLambda=typeVariableShadowingInTypeLambdaError,
+#                             ^ source.hydra
+#                              ^ source.hydra keyword.operator.equals.hydra
+#                               ^ source.hydra
+#                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                          ^^ source.hydra
+>        typeVariableShadowingInTypeLambda = typeVariableShadowingInTypeLambdaError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                         ^ source.hydra keyword.operator.equals.hydra
-#                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                ^^ source.hydra
->        undeclaredVariant=undeclaredVariantError,
+#                                         ^ source.hydra
+#                                          ^ source.hydra keyword.operator.equals.hydra
+#                                           ^ source.hydra
+#                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                  ^^ source.hydra
+>        undeclaredVariant = undeclaredVariantError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                         ^ source.hydra keyword.operator.equals.hydra
-#                          ^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                ^^ source.hydra
->        undefinedTermVariable=undefinedTermVariableError,
+#                         ^ source.hydra
+#                          ^ source.hydra keyword.operator.equals.hydra
+#                           ^ source.hydra
+#                            ^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                  ^^ source.hydra
+>        undefinedTermVariable = undefinedTermVariableError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                             ^ source.hydra keyword.operator.equals.hydra
-#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                        ^^ source.hydra
->        undefinedTypeVariableInBindingType=undefinedTypeVariableInBindingTypeError,
+#                             ^ source.hydra
+#                              ^ source.hydra keyword.operator.equals.hydra
+#                               ^ source.hydra
+#                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                          ^^ source.hydra
+>        undefinedTypeVariableInBindingType = undefinedTypeVariableInBindingTypeError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                          ^ source.hydra keyword.operator.equals.hydra
-#                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                  ^^ source.hydra
->        undefinedTypeVariableInLambdaDomain=undefinedTypeVariableInLambdaDomainError,
+#                                          ^ source.hydra
+#                                           ^ source.hydra keyword.operator.equals.hydra
+#                                            ^ source.hydra
+#                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                    ^^ source.hydra
+>        undefinedTypeVariableInLambdaDomain = undefinedTypeVariableInLambdaDomainError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^ source.hydra keyword.operator.equals.hydra
-#                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                    ^^ source.hydra
->        undefinedTypeVariableInTypeApplication=undefinedTypeVariableInTypeApplicationError,
+#                                           ^ source.hydra
+#                                            ^ source.hydra keyword.operator.equals.hydra
+#                                             ^ source.hydra
+#                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                      ^^ source.hydra
+>        undefinedTypeVariableInTypeApplication = undefinedTypeVariableInTypeApplicationError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                              ^ source.hydra keyword.operator.equals.hydra
-#                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                          ^^ source.hydra
->        unknownCaseAlternative=unknownCaseAlternativeError,
+#                                              ^ source.hydra
+#                                               ^ source.hydra keyword.operator.equals.hydra
+#                                                ^ source.hydra
+#                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                            ^^ source.hydra
+>        unknownCaseAlternative = unknownCaseAlternativeError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                              ^ source.hydra keyword.operator.equals.hydra
-#                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                          ^^ source.hydra
->        unknownPrimitiveName=unknownPrimitiveNameError,
+#                              ^ source.hydra
+#                               ^ source.hydra keyword.operator.equals.hydra
+#                                ^ source.hydra
+#                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                            ^^ source.hydra
+>        unknownPrimitiveName = unknownPrimitiveNameError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                            ^ source.hydra keyword.operator.equals.hydra
-#                             ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                      ^^ source.hydra
->        unknownProjectedField=unknownProjectedFieldError,
+#                            ^ source.hydra
+#                             ^ source.hydra keyword.operator.equals.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                        ^^ source.hydra
+>        unknownProjectedField = unknownProjectedFieldError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                             ^ source.hydra keyword.operator.equals.hydra
-#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                        ^^ source.hydra
->        unnecessaryIdentityApplication=unnecessaryIdentityApplicationError,
+#                             ^ source.hydra
+#                              ^ source.hydra keyword.operator.equals.hydra
+#                               ^ source.hydra
+#                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                          ^^ source.hydra
+>        unnecessaryIdentityApplication = unnecessaryIdentityApplicationError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                      ^ source.hydra keyword.operator.equals.hydra
-#                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                          ^^ source.hydra
->        unresolvedNominalType=unresolvedNominalTypeError,
+#                                      ^ source.hydra
+#                                       ^ source.hydra keyword.operator.equals.hydra
+#                                        ^ source.hydra
+#                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                            ^^ source.hydra
+>        unresolvedNominalType = unresolvedNominalTypeError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                             ^ source.hydra keyword.operator.equals.hydra
-#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                        ^^ source.hydra
->        untypedTermVariable=untypedTermVariableError}
+#                             ^ source.hydra
+#                              ^ source.hydra keyword.operator.equals.hydra
+#                               ^ source.hydra
+#                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                          ^^ source.hydra
+>        untypedTermVariable = untypedTermVariableError}
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                           ^ source.hydra keyword.operator.equals.hydra
-#                            ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                    ^^ source.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.equals.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                      ^^ source.hydra
 >        e)
 #^^^^^^^^ source.hydra
 #        ^ source.hydra variable.other.hydra
@@ -723,90 +783,118 @@
 #            ^ source.hydra
 #             ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                             ^^^ source.hydra
->        duplicateRecordTypeFieldNames=duplicateRecordTypeFieldNamesError,
+>        duplicateRecordTypeFieldNames = duplicateRecordTypeFieldNamesError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                     ^ source.hydra keyword.operator.equals.hydra
-#                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                        ^^ source.hydra
->        duplicateUnionTypeFieldNames=duplicateUnionTypeFieldNamesError,
+#                                     ^ source.hydra
+#                                      ^ source.hydra keyword.operator.equals.hydra
+#                                       ^ source.hydra
+#                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                          ^^ source.hydra
+>        duplicateUnionTypeFieldNames = duplicateUnionTypeFieldNamesError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                    ^ source.hydra keyword.operator.equals.hydra
-#                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                      ^^ source.hydra
->        emptyRecordType=emptyRecordTypeError,
+#                                    ^ source.hydra
+#                                     ^ source.hydra keyword.operator.equals.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                        ^^ source.hydra
+>        emptyRecordType = emptyRecordTypeError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                       ^ source.hydra keyword.operator.equals.hydra
-#                        ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                            ^^ source.hydra
->        emptyTypeAnnotation=emptyTypeAnnotationError,
+#                       ^ source.hydra
+#                        ^ source.hydra keyword.operator.equals.hydra
+#                         ^ source.hydra
+#                          ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                              ^^ source.hydra
+>        emptyTypeAnnotation = emptyTypeAnnotationError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                           ^ source.hydra keyword.operator.equals.hydra
-#                            ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                    ^^ source.hydra
->        emptyUnionType=emptyUnionTypeError,
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.equals.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                      ^^ source.hydra
+>        emptyUnionType = emptyUnionTypeError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                      ^ source.hydra keyword.operator.equals.hydra
-#                       ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                          ^^ source.hydra
->        invalidForallParameterName=invalidForallParameterNameError,
+#                      ^ source.hydra
+#                       ^ source.hydra keyword.operator.equals.hydra
+#                        ^ source.hydra
+#                         ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                            ^^ source.hydra
+>        invalidForallParameterName = invalidForallParameterNameError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                  ^ source.hydra keyword.operator.equals.hydra
-#                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                  ^^ source.hydra
->        invalidTypeSchemeVariableName=invalidTypeSchemeVariableNameError,
+#                                  ^ source.hydra
+#                                   ^ source.hydra keyword.operator.equals.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                    ^^ source.hydra
+>        invalidTypeSchemeVariableName = invalidTypeSchemeVariableNameError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                     ^ source.hydra keyword.operator.equals.hydra
-#                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                        ^^ source.hydra
->        nestedTypeAnnotation=nestedTypeAnnotationError,
+#                                     ^ source.hydra
+#                                      ^ source.hydra keyword.operator.equals.hydra
+#                                       ^ source.hydra
+#                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                          ^^ source.hydra
+>        nestedTypeAnnotation = nestedTypeAnnotationError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                            ^ source.hydra keyword.operator.equals.hydra
-#                             ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                      ^^ source.hydra
->        nonComparableMapKeyType=nonComparableMapKeyTypeError,
+#                            ^ source.hydra
+#                             ^ source.hydra keyword.operator.equals.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                        ^^ source.hydra
+>        nonComparableMapKeyType = nonComparableMapKeyTypeError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                               ^ source.hydra keyword.operator.equals.hydra
-#                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                            ^^ source.hydra
->        nonComparableSetElementType=nonComparableSetElementTypeError,
+#                               ^ source.hydra
+#                                ^ source.hydra keyword.operator.equals.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                              ^^ source.hydra
+>        nonComparableSetElementType = nonComparableSetElementTypeError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                   ^ source.hydra keyword.operator.equals.hydra
-#                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                    ^^ source.hydra
->        singleVariantUnion=singleVariantUnionError,
+#                                   ^ source.hydra
+#                                    ^ source.hydra keyword.operator.equals.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                      ^^ source.hydra
+>        singleVariantUnion = singleVariantUnionError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                          ^ source.hydra keyword.operator.equals.hydra
-#                           ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                  ^^ source.hydra
->        typeVariableShadowingInForall=typeVariableShadowingInForallError,
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.equals.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                    ^^ source.hydra
+>        typeVariableShadowingInForall = typeVariableShadowingInForallError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                     ^ source.hydra keyword.operator.equals.hydra
-#                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                        ^^ source.hydra
->        undefinedTypeVariable=undefinedTypeVariableError,
+#                                     ^ source.hydra
+#                                      ^ source.hydra keyword.operator.equals.hydra
+#                                       ^ source.hydra
+#                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                          ^^ source.hydra
+>        undefinedTypeVariable = undefinedTypeVariableError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                             ^ source.hydra keyword.operator.equals.hydra
-#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                        ^^ source.hydra
->        voidInNonBottomPosition=voidInNonBottomPositionError}
+#                             ^ source.hydra
+#                              ^ source.hydra keyword.operator.equals.hydra
+#                               ^ source.hydra
+#                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                          ^^ source.hydra
+>        voidInNonBottomPosition = voidInNonBottomPositionError}
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                               ^ source.hydra keyword.operator.equals.hydra
-#                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                            ^^ source.hydra
+#                               ^ source.hydra
+#                                ^ source.hydra keyword.operator.equals.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                              ^^ source.hydra
 >        e)
 #^^^^^^^^ source.hydra
 #        ^ source.hydra variable.other.hydra

@@ -44,6 +44,7 @@
 #                                    ^ source.hydra
 #                                     ^^^^^^ source.hydra support.type.hydra
 #                                           ^^ source.hydra
+>
 >  ## Mapping from source ordering to target ordering
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -65,6 +66,7 @@
 #                         ^ source.hydra entity.name.type.hydra
 #                          ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                           ^^ source.hydra
+>
 >  ## Mapping from target ordering to source ordering
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -99,6 +101,7 @@
 #                  ^ source.hydra
 #                   ^^^^^^ source.hydra support.type.hydra
 #                         ^^ source.hydra
+>
 >  ## Next available index for vertices in the DFS traversal
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -110,6 +113,7 @@
 #          ^ source.hydra
 #           ^^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
+>
 >  ## Mapping from vertices to their indices in the DFS traversal
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -127,6 +131,7 @@
 #                       ^^^^^ source.hydra support.type.hydra
 #                            ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                             ^^ source.hydra
+>
 >  ## Mapping from vertices to their lowest reachable index in the DFS traversal
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -144,6 +149,7 @@
 #                        ^^^^^ source.hydra support.type.hydra
 #                             ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                              ^^ source.hydra
+>
 >  ## Current DFS stack, with vertices in reverse order
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -158,6 +164,7 @@
 #              ^^^^^^ source.hydra entity.name.type.hydra
 #                    ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                     ^^ source.hydra
+>
 >  ## Set of vertices currently on the stack, for quick lookup
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -172,6 +179,7 @@
 #               ^^^^^^ source.hydra entity.name.type.hydra
 #                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                      ^^ source.hydra
+>
 >  ## Accumulated strongly connected components, each a list of vertices
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

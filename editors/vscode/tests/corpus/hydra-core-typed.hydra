@@ -5,8 +5,10 @@ import hydra.core.model
 
 ## An association of a named term (element) with a phantom type
 type TypedBinding = forall a. record{
+
   ## The name of the term
   name: Name,
+
   ## The term with its phantom type
   `term`: TypedTerm a}
 
@@ -18,7 +20,9 @@ type TypedTerm = forall a. wrap(Term)
 
 ## An association of a term definition with a phantom type
 type TypedTermDefinition = forall a. record{
+
   ## The name of the term
   name: Name,
+
   ## The term with its phantom type
   `term`: TypedTerm a}

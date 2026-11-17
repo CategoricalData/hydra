@@ -1,0 +1,563 @@
+## Test cases for hydra.core.lib.logic primitives
+module hydra.core.test.lib.logic
+
+import hydra.core.lib.eithers as eithers
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.reduction
+import hydra.core.test.testGraph
+import hydra.core.testing
+
+## Test cases for hydra.core.lib.logic primitives
+term allTests =
+  TestGroup{
+    name = "hydra.core.lib.logic primitives",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "and",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "trueOnlyWhenBothTrue",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "true and true",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.logic.and"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `boolean` = true}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `boolean` = true}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.logic.and.trueOnlyWhenBothTrue"}]},
+              TestCaseWithMetadata{
+                name = "true and false",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.logic.and"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `boolean` = true}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `boolean` = false}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.logic.and.trueOnlyWhenBothTrue"}]},
+              TestCaseWithMetadata{
+                name = "false and true",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.logic.and"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `boolean` = false}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `boolean` = true}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.logic.and.trueOnlyWhenBothTrue"}]},
+              TestCaseWithMetadata{
+                name = "false and false",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.logic.and"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `boolean` = false}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `boolean` = false}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.logic.and.trueOnlyWhenBothTrue"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "ifElse",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "selectsBranchByCondition",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "true condition returns then",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.logic.ifElse"}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            `boolean` = true}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `boolean` = true}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `boolean` = false}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.logic.ifElse.selectsBranchByCondition"}]},
+              TestCaseWithMetadata{
+                name = "false condition returns else",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.logic.ifElse"}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            `boolean` = false}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `boolean` = true}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `boolean` = false}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.logic.ifElse.selectsBranchByCondition"}]},
+              TestCaseWithMetadata{
+                name = "true selects first int",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.logic.ifElse"}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            `boolean` = true}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 42:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 0:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 42:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.logic.ifElse.selectsBranchByCondition"}]},
+              TestCaseWithMetadata{
+                name = "false selects second int",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.logic.ifElse"}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            `boolean` = false}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 42:int32}}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 0:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 0:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.logic.ifElse.selectsBranchByCondition"}]},
+              TestCaseWithMetadata{
+                name = "true selects first string",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.logic.ifElse"}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            `boolean` = true}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "yes"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "no"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `string` = "yes"}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.logic.ifElse.selectsBranchByCondition"}]},
+              TestCaseWithMetadata{
+                name = "false selects second string",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.logic.ifElse"}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            `boolean` = false}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "yes"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "no"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `string` = "no"}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.logic.ifElse.selectsBranchByCondition"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "not",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "negatesBoolean",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "not true",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.logic.not"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `boolean` = true}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.logic.not.negatesBoolean"}]},
+              TestCaseWithMetadata{
+                name = "not false",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.logic.not"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `boolean` = false}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.logic.not.negatesBoolean"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "or",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "trueWhenEitherTrue",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "true or true",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.logic.or"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `boolean` = true}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `boolean` = true}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.logic.or.trueWhenEitherTrue"}]},
+              TestCaseWithMetadata{
+                name = "true or false",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.logic.or"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `boolean` = true}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `boolean` = false}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.logic.or.trueWhenEitherTrue"}]},
+              TestCaseWithMetadata{
+                name = "false or true",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.logic.or"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `boolean` = false}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `boolean` = true}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.logic.or.trueWhenEitherTrue"}]},
+              TestCaseWithMetadata{
+                name = "false or false",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.logic.or"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `boolean` = false}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `boolean` = false}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.logic.or.trueWhenEitherTrue"}]}]}],
+        `cases` = []}],
+    `cases` = []}

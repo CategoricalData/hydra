@@ -1,0 +1,219 @@
+## Test cases for hydra.core.lib.text primitives
+module hydra.core.test.lib.text
+
+import hydra.core.lib.eithers as eithers
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.reduction
+import hydra.core.test.testGraph
+import hydra.core.testing
+
+## Test cases for hydra.core.lib.text primitives
+term allTests =
+  TestGroup{
+    name = "hydra.core.lib.text primitives",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "decodeUtf8",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "decodesValidUtf8",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "empty bytes",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.text.decodeUtf8"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `binary` = "":binary}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `either` = right(Term{
+                                literal = Literal{
+                                  `string` = ""}})}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.text.decodeUtf8.decodesValidUtf8"}]},
+              TestCaseWithMetadata{
+                name = "ASCII text",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.text.decodeUtf8"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `binary` = "aGVsbG8=":binary}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `either` = right(Term{
+                                literal = Literal{
+                                  `string` = "hello"}})}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.text.decodeUtf8.decodesValidUtf8"}]},
+              TestCaseWithMetadata{
+                name = "multi-byte UTF-8 text",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.text.decodeUtf8"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `binary` = "w6l2w6luZW1lbnQ=":binary}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `either` = right(Term{
+                                literal = Literal{
+                                  `string` = "événement"}})}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.text.decodeUtf8.decodesValidUtf8"}]}]},
+          TestGroup{
+            name = "leftOnInvalidUtf8",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "invalid lone continuation byte",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.eithers.isLeft"}},
+                                argument = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.text.decodeUtf8"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `binary` = "gA==":binary}}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.text.decodeUtf8.leftOnInvalidUtf8"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "encodesExactUtf8Bytes",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "empty string",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.text.encodeUtf8"}},
+                            argument = Term{
+                              literal = Literal{
+                                `string` = ""}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `binary` = "":binary}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.text.encodeUtf8.encodesExactUtf8Bytes"}]},
+          TestCaseWithMetadata{
+            name = "ASCII text",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.text.encodeUtf8"}},
+                            argument = Term{
+                              literal = Literal{
+                                `string` = "hello"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `binary` = "aGVsbG8=":binary}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.text.encodeUtf8.encodesExactUtf8Bytes"}]},
+          TestCaseWithMetadata{
+            name = "multi-byte UTF-8 text",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.text.encodeUtf8"}},
+                            argument = Term{
+                              literal = Literal{
+                                `string` = "événement"}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `binary` = "w6l2w6luZW1lbnQ=":binary}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.text.encodeUtf8.encodesExactUtf8Bytes"}]}]}],
+    `cases` = []}

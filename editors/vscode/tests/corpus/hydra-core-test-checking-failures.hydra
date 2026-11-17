@@ -1,0 +1,16 @@
+## Type checking failure test cases
+module hydra.core.test.checking.failures
+
+import hydra.core.testing
+
+## Type checking failure test cases
+term allTests = TestGroup{name = "Failures", description = none, subgroups = [failOnUntypedTests], `cases` = []}
+
+term failOnUntypedTests =
+  TestGroup{
+    name = "Fail on untyped (pre-inference) terms",
+    description = none,
+    subgroups = [untypedLambdasTests],
+    `cases` = []}
+
+term untypedLambdasTests = TestGroup{name = "Untyped lambdas", description = none, subgroups = [], `cases` = []}

@@ -15,22 +15,22 @@ term primitiveArity =
 ## Find the arity (expected number of arguments) of a term
 term termArity =
   cases(Term){
-    application=λ`arg_`.(λ`arg_`.(λxapp.sub xapp 1:int32) (termArity `arg_`))
+    application = λ`arg_`.(λ`arg_`.(λxapp.sub xapp 1:int32) (termArity `arg_`))
           (Application[function] `arg_`),
-    `cases`=λ`_`.1:int32,
-    lambda=λ`arg_`.(λi.add 1:int32 i) ((λ`arg_`.termArity (Lambda[body] `arg_`)) `arg_`),
-    `project`=λ`_`.1:int32,
-    `unwrap`=λ`_`.1:int32,
-    `_`=0:int32}
+    `cases` = λ`_`.1:int32,
+    lambda = λ`arg_`.(λi.add 1:int32 i) ((λ`arg_`.termArity (Lambda[body] `arg_`)) `arg_`),
+    `project` = λ`_`.1:int32,
+    `unwrap` = λ`_`.1:int32,
+    `_` = 0:int32}
 
 ## Find the arity (expected number of arguments) of a type
 term typeArity =
   cases(Type){
-    annotated=λ`arg_`.typeArity (AnnotatedType[body] `arg_`),
-    application=λ`arg_`.typeArity (ApplicationType[function] `arg_`),
-    `forall`=λ`arg_`.typeArity (ForallType[body] `arg_`),
-    function=λf.add 1:int32 ((λ`arg_`.typeArity (FunctionType[codomain] `arg_`)) f),
-    `_`=0:int32}
+    annotated = λ`arg_`.typeArity (AnnotatedType[body] `arg_`),
+    application = λ`arg_`.typeArity (ApplicationType[function] `arg_`),
+    `forall` = λ`arg_`.typeArity (ForallType[body] `arg_`),
+    function = λf.add 1:int32 ((λ`arg_`.typeArity (FunctionType[codomain] `arg_`)) f),
+    `_` = 0:int32}
 
 ## Find the arity (expected number of arguments) of a type scheme
 term typeSchemeArity = λ`arg_`.typeArity (TypeScheme[body] `arg_`)
@@ -38,9 +38,11 @@ term typeSchemeArity = λ`arg_`.typeArity (TypeScheme[body] `arg_`)
 ## Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)
 term uncurryType =
   λt.cases(Type){
-      annotated=λ`arg_`.uncurryType (AnnotatedType[body] `arg_`),
-      application=λ`arg_`.uncurryType (ApplicationType[function] `arg_`),
-      `forall`=λ`arg_`.uncurryType (ForallType[body] `arg_`),
-      function=λft.cons (FunctionType[domain] ft) ((λ`arg_`.uncurryType (FunctionType[codomain] `arg_`)) ft),
-      `_`=[t]}
+      annotated = λ`arg_`.uncurryType (AnnotatedType[body] `arg_`),
+      application = λ`arg_`.uncurryType (ApplicationType[function] `arg_`),
+      `forall` = λ`arg_`.uncurryType (ForallType[body] `arg_`),
+      function = λft.cons
+            (FunctionType[domain] ft)
+            ((λ`arg_`.uncurryType (FunctionType[codomain] `arg_`)) ft),
+      `_` = [t]}
       t

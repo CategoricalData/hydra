@@ -105,6 +105,7 @@
 #                      ^ source.hydra
 #                       ^^^^^^ source.hydra support.type.hydra
 #                             ^^ source.hydra
+>
 >  ## The optional header row of the table. If present, the header must have the same number of cells as each data row.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -119,6 +120,7 @@
 #                   ^^^^^^^^^ source.hydra entity.name.type.hydra
 #                            ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                             ^^ source.hydra
+>
 >  ## The data rows of the table. Each row must have the same number of cells.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

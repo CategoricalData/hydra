@@ -43,7 +43,7 @@ term buildSchemaMap = λg.maps.map (λts.deannotateType (TypeScheme[body] ts)) (
 
 ## Decode a single module from a JSON value
 term decodeModuleFromJson =
-  λbsGraph,universeModules,jsonVal.
+  λbsGraph, universeModules, jsonVal.
     let graph := modulesToGraph bsGraph universeModules universeModules in
     let schemaMap := buildSchemaMap graph in
     let modType := Type{variable = Name{"hydra.core.packaging.Module"}} in
@@ -66,7 +66,7 @@ term escapeControlCharsInJson =
           48:int32,
           hexDigit (optionals.withDefault 0:int32 (math.div b 16:int32)),
           hexDigit (optionals.withDefault 0:int32 (math.mod b 16:int32))] in
-    let go := λinStr,esc,bytes.optionals.match
+    let go := λinStr, esc, bytes.optionals.match
           (lists.uncons bytes)
           []
           (λuc.
@@ -104,7 +104,7 @@ term formatTermBinding =
 
 ## Format a type binding for the lexicon
 term formatTypeBinding =
-  λgraph,binding.eithers.bind
+  λgraph, binding.eithers.bind
       (eithers.bimap
         (λ`_e`.Error{decoding = `_e`})
         (λ`_a`.`_a`)
@@ -115,7 +115,7 @@ term formatTypeBinding =
 
 ## Generate encoder or decoder modules for a list of type modules
 term generateCoderModules =
-  λcodec,bsGraph,universeModules,typeModules,cx.
+  λcodec, bsGraph, universeModules, typeModules, cx.
     let universe := maps.fromList
         (lists.map
           (λm.(Module[name] m, m))
@@ -126,7 +126,7 @@ term generateCoderModules =
           (λm.optionals.givens
               (lists.map
                 (λd.cases(Definition){
-                    `type`=λtd.given((λname,typ.
+                    `type` = λtd.given((λname, typ.
                           let schemaTerm := Term{
                             variable = Name{"hydra.core.model.Type"}} in
                           let dataTerm := normalizeTermAnnotations
@@ -146,7 +146,7 @@ term generateCoderModules =
                           (TypeDefinition[name] td)
                           (TypeScheme[body]
                             (TypeDefinition[body] td))),
-                    `_`=none}
+                    `_` = none}
                     d)
                 (Module[definitions] m)))
           closureModules) in
@@ -155,13 +155,13 @@ term generateCoderModules =
           (λm.optionals.givens
               (lists.map
                 (λd.cases(Definition){
-                    `term`=λtd.given(Binding{
+                    `term` = λtd.given(Binding{
                           name = TermDefinition[name] td,
                           `term` = TermDefinition[body] td,
                           typeScheme = optionals.map
                               termSignatureToTypeScheme
                               (TermDefinition[signature] td)}),
-                    `_`=none}
+                    `_` = none}
                     d)
                 (Module[definitions] m)))
           closureModules) in
@@ -205,7 +205,7 @@ term generateModuleDoc =
   λmod.
     let sections := lists.map
         (λd.cases(Definition){
-            `primitive`=λpd.
+            `primitive` = λpd.
                 let name := Name[] (PrimitiveDefinition[name] pd) in
                 let mdoc := optionals.bind
                     (PrimitiveDefinition[metadata] pd)
@@ -260,7 +260,7 @@ term generateModuleDoc =
                               paragraph = let pname := Provision[name] p in
                                 let pkind := Provision[kind] p in
                                 let pstatement := Provision[statement] p in
-                                let kindStr := cases(ProvisionKind){requirement=λ`_`."requirement", recommendation=λ`_`."recommendation"}
+                                let kindStr := cases(ProvisionKind){requirement = λ`_`."requirement", recommendation = λ`_`."recommendation"}
                                     pkind in
                                 let upperDashed := nameToUpperDashed pname in
                                 Paragraph{
@@ -273,7 +273,7 @@ term generateModuleDoc =
                                   anchor = given(upperDashed)}})
                           provisions],
                   anchor = none},
-            `term`=λtd.
+            `term` = λtd.
                 let name := Name[] (TermDefinition[name] td) in
                 let mdoc := optionals.bind
                     (TermDefinition[metadata] td)
@@ -331,7 +331,7 @@ term generateModuleDoc =
                               paragraph = let pname := Provision[name] p in
                                 let pkind := Provision[kind] p in
                                 let pstatement := Provision[statement] p in
-                                let kindStr := cases(ProvisionKind){requirement=λ`_`."requirement", recommendation=λ`_`."recommendation"}
+                                let kindStr := cases(ProvisionKind){requirement = λ`_`."requirement", recommendation = λ`_`."recommendation"}
                                     pkind in
                                 let upperDashed := nameToUpperDashed pname in
                                 Paragraph{
@@ -344,7 +344,7 @@ term generateModuleDoc =
                                   anchor = given(upperDashed)}})
                           provisions],
                   anchor = none},
-            `type`=λtyd.
+            `type` = λtyd.
                 let name := Name[] (TypeDefinition[name] tyd) in
                 let mdoc := optionals.bind
                     (TypeDefinition[metadata] tyd)
@@ -397,7 +397,7 @@ term generateModuleDoc =
                               paragraph = let pname := Provision[name] p in
                                 let pkind := Provision[kind] p in
                                 let pstatement := Provision[statement] p in
-                                let kindStr := cases(ProvisionKind){requirement=λ`_`."requirement", recommendation=λ`_`."recommendation"}
+                                let kindStr := cases(ProvisionKind){requirement = λ`_`."requirement", recommendation = λ`_`."recommendation"}
                                     pkind in
                                 let upperDashed := nameToUpperDashed pname in
                                 Paragraph{
@@ -426,7 +426,7 @@ term generateModuleDoc =
 
 ## Pure core of code generation: given a coder, language, infer flag, bootstrap graph, universe, and modules to generate, produce a list of (filePath, content) pairs. Emission flags doExpand/doHoistCaseStatements/doHoistPolymorphicLetBindings are derived from the absence of the matching LanguageFeature in lang.supportedFeatures: a target that lacks partialApplication needs eta expansion (doExpand=true), and so on.
 term generateSourceFiles =
-  λprintDefinitions,lang,doInfer,bsGraph,universeModules,modsToGenerate,cx.
+  λprintDefinitions, lang, doInfer, bsGraph, universeModules, modsToGenerate, cx.
     let namespaceMap := maps.fromList
         (lists.map
           (λm.(Module[name] m, m))
@@ -456,7 +456,7 @@ term generateSourceFiles =
               (optionals.givens
                 (lists.map
                   (λd.cases(Definition){
-                      `type`=λtd.given((λname,typ.
+                      `type` = λtd.given((λname, typ.
                             let schemaTerm := Term{
                               variable = Name{"hydra.core.model.Type"}} in
                             let dataTerm := normalizeTermAnnotations
@@ -476,7 +476,7 @@ term generateSourceFiles =
                             (TypeDefinition[name] td)
                             (TypeScheme[body]
                               (TypeDefinition[body] td))),
-                      `_`=none}
+                      `_` = none}
                       d)
                   (Module[definitions] mod)))))
         modsToGenerate in
@@ -486,13 +486,13 @@ term generateSourceFiles =
               (optionals.givens
                 (lists.map
                   (λd.cases(Definition){
-                      `term`=λtd.given(Binding{
+                      `term` = λtd.given(Binding{
                             name = TermDefinition[name] td,
                             `term` = TermDefinition[body] td,
                             typeScheme = optionals.map
                                 termSignatureToTypeScheme
                                 (TermDefinition[signature] td)}),
-                      `_`=none}
+                      `_` = none}
                       d)
                   (Module[definitions] mod)))))
         modsToGenerate in
@@ -506,7 +506,7 @@ term generateSourceFiles =
           (λm.optionals.givens
               (lists.map
                 (λd.cases(Definition){
-                    `type`=λtd.given((λname,typ.
+                    `type` = λtd.given((λname, typ.
                           let schemaTerm := Term{
                             variable = Name{"hydra.core.model.Type"}} in
                           let dataTerm := normalizeTermAnnotations
@@ -526,7 +526,7 @@ term generateSourceFiles =
                           (TypeDefinition[name] td)
                           (TypeScheme[body]
                             (TypeDefinition[body] td))),
-                    `_`=none}
+                    `_` = none}
                     d)
                 (Module[definitions] m)))
           closureMods) in
@@ -535,13 +535,13 @@ term generateSourceFiles =
           (λm.optionals.givens
               (lists.map
                 (λd.cases(Definition){
-                    `term`=λtd.given(Binding{
+                    `term` = λtd.given(Binding{
                           name = TermDefinition[name] td,
                           `term` = TermDefinition[body] td,
                           typeScheme = optionals.map
                               termSignatureToTypeScheme
                               (TermDefinition[signature] td)}),
-                    `_`=none}
+                    `_` = none}
                     d)
                 (Module[definitions] m)))
           closureMods) in
@@ -566,8 +566,8 @@ term generateSourceFiles =
             (λm.optionals.givens
                 (lists.map
                   (λd.cases(Definition){
-                      `type`=λtd.given(TypeDefinition[name] td),
-                      `_`=none}
+                      `type` = λtd.given(TypeDefinition[name] td),
+                      `_` = none}
                       d)
                   (Module[definitions] m)))
             typeModulesToGenerate
@@ -599,7 +599,8 @@ term generateSourceFiles =
                     (printDefinitions
                       mod
                       (lists.map
-                        (λd.Definition{`type` = d})
+                        (λd.Definition{
+                            `type` = d})
                         defs)
                       cx
                       schemaGraphWithTypes))
@@ -626,20 +627,20 @@ term generateSourceFiles =
                 let g1 := first dataResult in
                 let defLists := second dataResult in
                 let defName := λd.cases(Definition){
-                      `term`=λtd.TermDefinition[name] td,
-                      `type`=λtd.TypeDefinition[name] td,
-                      `primitive`=λpd.PrimitiveDefinition[name] pd}
+                      `term` = λtd.TermDefinition[name] td,
+                      `type` = λtd.TypeDefinition[name] td,
+                      `primitive` = λpd.PrimitiveDefinition[name] pd}
                       d in
-                let refreshModule := λels,m.Module{
+                let refreshModule := λels, m.Module{
                       name = Module[name] m,
                       metadata = Module[metadata] m,
                       dependencies = Module[dependencies] m,
                       definitions = optionals.givens
                           (lists.map
                             (λd.cases(Definition){
-                                `type`=λtd.given(Definition{
+                                `type` = λtd.given(Definition{
                                       `type` = td}),
-                                `term`=λtd.optionals.map
+                                `term` = λtd.optionals.map
                                       (λb.Definition{
                                           `term` = TermDefinition{
                                             name = Binding[name] b,
@@ -653,7 +654,7 @@ term generateSourceFiles =
                                             (Binding[name] b)
                                             (TermDefinition[name] td))
                                         els),
-                                `primitive`=λpd.given(Definition{
+                                `primitive` = λpd.given(Definition{
                                       `primitive` = pd})}
                                 d)
                             (Module[definitions] m))} in
@@ -664,8 +665,8 @@ term generateSourceFiles =
                 let termDefNames := λm.optionals.givens
                       (lists.map
                         (λd.cases(Definition){
-                            `term`=λtd.given(TermDefinition[name] td),
-                            `_`=none}
+                            `term` = λtd.given(TermDefinition[name] td),
+                            `_` = none}
                             d)
                         (Module[definitions] m)) in
                 let g1Primitives := Graph[primitives] g1 in
@@ -726,7 +727,7 @@ term generateSourceFiles =
                           refreshedModsChecked
                           dedupedDefLists))))))
           (λtermFiles.
-            let mergeFileEntry := λacc,p.maps.alter
+            let mergeFileEntry := λacc, p.maps.alter
                   (λmv.given(optionals.match
                       mv
                       (second p)
@@ -743,20 +744,20 @@ term generateSourceFiles =
 
 ## Perform type inference and generate the lexicon for a set of modules
 term inferAndGenerateLexicon =
-  λcx,bsGraph,kernelModules.
+  λcx, bsGraph, kernelModules.
     let g0 := modulesToGraph bsGraph kernelModules kernelModules in
     let dataElements := lists.concat
         (lists.map
           (λm.optionals.givens
               (lists.map
                 (λd.cases(Definition){
-                    `term`=λtd.given(Binding{
+                    `term` = λtd.given(Binding{
                           name = TermDefinition[name] td,
                           `term` = TermDefinition[body] td,
                           typeScheme = optionals.map
                               termSignatureToTypeScheme
                               (TermDefinition[signature] td)}),
-                    `_`=none}
+                    `_` = none}
                     d)
                 (Module[definitions] m)))
           kernelModules) in
@@ -769,7 +770,7 @@ term inferAndGenerateLexicon =
               (λm.optionals.givens
                   (lists.map
                     (λd.cases(Definition){
-                        `type`=λtd.given((λname,typ.
+                        `type` = λtd.given((λname, typ.
                               let schemaTerm := Term{
                                 variable = Name{"hydra.core.model.Type"}} in
                               let dataTerm := normalizeTermAnnotations
@@ -789,7 +790,7 @@ term inferAndGenerateLexicon =
                               (TypeDefinition[name] td)
                               (TypeScheme[body]
                                 (TypeDefinition[body] td))),
-                        `_`=none}
+                        `_` = none}
                         d)
                     (Module[definitions] m)))
               kernelModules) in
@@ -830,20 +831,20 @@ term inferAndGenerateLexicon =
 
 ## Perform type inference on modules and reconstruct with inferred types
 term inferModules =
-  λcx,bsGraph,universeMods,targetMods.
+  λcx, bsGraph, universeMods, targetMods.
     let g0 := modulesToGraph bsGraph universeMods targetMods in
     let dataElements := lists.concat
         (lists.map
           (λm.optionals.givens
               (lists.map
                 (λd.cases(Definition){
-                    `term`=λtd.given(Binding{
+                    `term` = λtd.given(Binding{
                           name = TermDefinition[name] td,
                           `term` = TermDefinition[body] td,
                           typeScheme = optionals.map
                               termSignatureToTypeScheme
                               (TermDefinition[signature] td)}),
-                    `_`=none}
+                    `_` = none}
                     d)
                 (Module[definitions] m)))
           (lists.concat2 universeMods targetMods)) in
@@ -856,7 +857,7 @@ term inferModules =
 
 ## Infer types for target modules in the context of a typed universe
 term inferModulesGiven =
-  λcx,bsGraph,universeMods,targetMods.
+  λcx, bsGraph, universeMods, targetMods.
     let g0 := modulesToGraph bsGraph universeMods targetMods in
     let nsMap := maps.fromList
         (lists.map
@@ -867,17 +868,19 @@ term inferModulesGiven =
     let termBindings := lists.concat
         (lists.map
           (λm.
-            let isTarget := sets.member (Module[name] m) targetNamespaces in
+            let isTarget := sets.member
+                (Module[name] m)
+                targetNamespaces in
             let bs := optionals.givens
                 (lists.map
                   (λd.cases(Definition){
-                      `term`=λtd.given(Binding{
+                      `term` = λtd.given(Binding{
                             name = TermDefinition[name] td,
                             `term` = TermDefinition[body] td,
                             typeScheme = optionals.map
                                 termSignatureToTypeScheme
                                 (TermDefinition[signature] td)}),
-                      `_`=none}
+                      `_` = none}
                       d)
                   (Module[definitions] m)) in
             ifElse
@@ -896,7 +899,7 @@ term inferModulesGiven =
             let bs := optionals.givens
                 (lists.map
                   (λd.cases(Definition){
-                      `primitive`=λpd.optionals.map
+                      `primitive` = λpd.optionals.map
                             (λimpl.Binding{
                                 name = PrimitiveDefinition[name] pd,
                                 `term` = impl,
@@ -904,7 +907,7 @@ term inferModulesGiven =
                                     (PrimitiveDefinition[signature] pd))})
                             (PrimitiveDefinition[defaultImplementation]
                               pd),
-                      `_`=none}
+                      `_` = none}
                       d)
                   (Module[definitions] m)) in
             ifElse isTarget bs [])
@@ -919,13 +922,13 @@ term inferModulesGiven =
             let bs := optionals.givens
                 (lists.map
                   (λd.cases(Definition){
-                      `term`=λtd.given(Binding{
+                      `term` = λtd.given(Binding{
                             name = TermDefinition[name] td,
                             `term` = TermDefinition[body] td,
                             typeScheme = optionals.map
                                 termSignatureToTypeScheme
                                 (TermDefinition[signature] td)}),
-                      `_`=none}
+                      `_` = none}
                       d)
                   (Module[definitions] m)) in
             ifElse
@@ -957,7 +960,7 @@ term lowerPrimitiveDefinitions =
           constraints = maps.empty} in
     let origDefs := Module[definitions] m in
     let hasPrim := lists.foldl
-        (λacc,d.or acc (cases(Definition){`primitive`=λ`_`.true, `_`=false} d))
+        (λacc, d.or acc (cases(Definition){`primitive` = λ`_`.true, `_` = false} d))
         false
         origDefs in
     ifElse
@@ -965,13 +968,13 @@ term lowerPrimitiveDefinitions =
       m
       (let newDefs := lists.map
           (λd.cases(Definition){
-              `primitive`=λpd.Definition{
+              `primitive` = λpd.Definition{
                     `term` = TermDefinition{
                       name = PrimitiveDefinition[name] pd,
                       metadata = none,
                       signature = given(primDefSig),
                       body = encode.packaging.primitiveDefinition pd}},
-              `_`=d}
+              `_` = d}
               d)
           origDefs in
       let currentDeps := Module[dependencies] m in
@@ -987,7 +990,7 @@ term lowerPrimitiveDefinitions =
 
 ## Compute transitive closure of dependencies for a set of modules
 term moduleDepsTransitive =
-  λnsMap,modules.
+  λnsMap, modules.
     let closure := sets.union
         (transitiveDeps
           (λm.lists.map (λdep.ModuleDependency[`module`] dep) (Module[dependencies] m))
@@ -1001,7 +1004,7 @@ term moduleNameToPath = λns.strings.join "/" (strings.splitOn "." (ModuleName[]
 
 ## Convert a Module to a JSON string
 term moduleToJson =
-  λschemaMap,m.
+  λschemaMap, m.
     let `term` := encode.packaging.module m in
     let modType := Type{variable = Name{"hydra.core.packaging.Module"}} in
     eithers.map
@@ -1046,7 +1049,7 @@ term moduleToSourceModule =
 
 ## Build a graph from universe modules and working modules, using an explicit bootstrap graph
 term modulesToGraph =
-  λbsGraph,universeModules,modules.
+  λbsGraph, universeModules, modules.
     let universe := maps.fromList
         (lists.map
           (λm.(Module[name] m, m))
@@ -1059,7 +1062,7 @@ term modulesToGraph =
           (λm.optionals.givens
               (lists.map
                 (λd.cases(Definition){
-                    `type`=λtd.given((λname,typ.
+                    `type` = λtd.given((λname, typ.
                           let schemaTerm := Term{
                             variable = Name{"hydra.core.model.Type"}} in
                           let dataTerm := normalizeTermAnnotations
@@ -1079,7 +1082,7 @@ term modulesToGraph =
                           (TypeDefinition[name] td)
                           (TypeScheme[body]
                             (TypeDefinition[body] td))),
-                    `_`=none}
+                    `_` = none}
                     d)
                 (Module[definitions] m)))
           closureModules) in
@@ -1088,13 +1091,13 @@ term modulesToGraph =
           (λm.optionals.givens
               (lists.map
                 (λd.cases(Definition){
-                    `term`=λtd.given(Binding{
+                    `term` = λtd.given(Binding{
                           name = TermDefinition[name] td,
                           `term` = TermDefinition[body] td,
                           typeScheme = optionals.map
                               termSignatureToTypeScheme
                               (TermDefinition[signature] td)}),
-                    `_`=none}
+                    `_` = none}
                     d)
                 (Module[definitions] m)))
           closureModules) in
@@ -1109,13 +1112,13 @@ term modulesToGraph =
           (λm.optionals.givens
               (lists.map
                 (λd.cases(Definition){
-                    `term`=λtd.given(Binding{
+                    `term` = λtd.given(Binding{
                           name = TermDefinition[name] td,
                           `term` = TermDefinition[body] td,
                           typeScheme = optionals.map
                               termSignatureToTypeScheme
                               (TermDefinition[signature] td)}),
-                    `_`=none}
+                    `_` = none}
                     d)
                 (Module[definitions] m)))
           universeModules) in
@@ -1138,20 +1141,20 @@ term modulesToGraph =
 
 ## Rebuild a module's term definitions using freshly inferred bindings
 term refreshModule =
-  λinferredElements,m.ifElse
+  λinferredElements, m.ifElse
       (not
         (not
           (lists.isEmpty
             (optionals.givens
               (lists.map
                 (λd.cases(Definition){
-                    `term`=λtd.given(Binding{
+                    `term` = λtd.given(Binding{
                           name = TermDefinition[name] td,
                           `term` = TermDefinition[body] td,
                           typeScheme = optionals.map
                               termSignatureToTypeScheme
                               (TermDefinition[signature] td)}),
-                    `_`=none}
+                    `_` = none}
                     d)
                 (Module[definitions] m))))))
       m
@@ -1162,8 +1165,8 @@ term refreshModule =
         definitions = optionals.givens
             (lists.map
               (λd.cases(Definition){
-                  `type`=λtd.given(Definition{`type` = td}),
-                  `term`=λtd.optionals.map
+                  `type` = λtd.given(Definition{`type` = td}),
+                  `term` = λtd.optionals.map
                         (λb.Definition{
                             `term` = TermDefinition{
                               name = Binding[name] b,
@@ -1177,19 +1180,19 @@ term refreshModule =
                               (Binding[name] b)
                               (TermDefinition[name] td))
                           inferredElements),
-                  `primitive`=λpd.given(Definition{`primitive` = pd})}
+                  `primitive` = λpd.given(Definition{`primitive` = pd})}
                   d)
               (Module[definitions] m))}
 
 ## Compute transitive closure of module dependencies
 term transitiveDeps =
-  λgetDeps,nsMap,startMods.
+  λgetDeps, nsMap, startMods.
     let initialDeps := sets.fromList
         (lists.concat
           (lists.map
             (λm.lists.filter (λdep.not (equal dep (Module[name] m))) (getDeps m))
             startMods)) in
-    let go := λpending,visited.ifElse
+    let go := λpending, visited.ifElse
           (sets.isEmpty pending)
           visited
           (let newVisited := sets.union visited pending in

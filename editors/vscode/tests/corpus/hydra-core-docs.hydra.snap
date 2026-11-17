@@ -23,6 +23,7 @@
 #                 ^ source.hydra
 #                  ^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
+>
 >  ## An inline reference to a Hydra entity
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -34,6 +35,7 @@
 #      ^ source.hydra
 #       ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                      ^^ source.hydra
+>
 >  ## A raw prose fragment, passed through verbatim
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

@@ -15,7 +15,7 @@ import hydra.core.typing
 
 ## Extend a graph by descending into a lambda body
 term extendGraphForLambda =
-  λg,lam.
+  λg, lam.
     let var := Lambda[parameter] lam
     in Graph{
       boundTerms = Graph[boundTerms] g,
@@ -32,12 +32,13 @@ term extendGraphForLambda =
 
 ## Extend a graph by descending into a let body
 term extendGraphForLet =
-  λforBinding,g,letrec.
+  λforBinding, g, letrec.
     let bindings := Let[bindings] letrec in
     let g2 := extendGraphWithBindings bindings g in
     Graph{
       boundTerms = maps.union
-          (maps.fromList (lists.map (λb.(Binding[name] b, Binding[`term`] b)) bindings))
+          (maps.fromList
+            (lists.map (λb.(Binding[name] b, Binding[`term`] b)) bindings))
           (Graph[boundTerms] g),
       boundTypes = maps.union
           (maps.fromList
@@ -48,12 +49,12 @@ term extendGraphForLet =
           (Graph[boundTypes] g),
       classConstraints = Graph[classConstraints] g,
       lambdaVariables = lists.foldl
-          (λs,b.sets.delete (Binding[name] b) s)
+          (λs, b.sets.delete (Binding[name] b) s)
           (Graph[lambdaVariables] g)
           bindings,
       metadata = Graph[metadata]
           (lists.foldl
-            (λgAcc,b.
+            (λgAcc, b.
               let m := Graph[metadata] gAcc in
               let newMeta := optionals.match
                   (forBinding gAcc b)
@@ -76,7 +77,7 @@ term extendGraphForLet =
 
 ## Extend a graph by descending into a type lambda body
 term extendGraphForTypeLambda =
-  λg,tlam.
+  λg, tlam.
     let name := TypeLambda[parameter] tlam
     in Graph{
       boundTerms = Graph[boundTerms] g,
@@ -90,7 +91,7 @@ term extendGraphForTypeLambda =
 
 ## Add bindings to an existing graph
 term extendGraphWithBindings =
-  λbindings,g.
+  λbindings, g.
     let newTerms := maps.fromList (lists.map (λb.(Binding[name] b, Binding[`term`] b)) bindings) in
     let newTypes := maps.fromList
         (optionals.givens
@@ -110,12 +111,12 @@ term extendGraphWithBindings =
 ## Convert a forall type to a type scheme
 term fTypeToTypeScheme =
   λtyp.
-    let stripAnnotations := λt.cases(Type){annotated=λat.stripAnnotations (AnnotatedType[body] at), `_`=t} t in
-    let gatherForall := λvars,typ.cases(Type){
-          `forall`=λft.gatherForall
+    let stripAnnotations := λt.cases(Type){annotated = λat.stripAnnotations (AnnotatedType[body] at), `_` = t} t in
+    let gatherForall := λvars, typ.cases(Type){
+          `forall` = λft.gatherForall
                 (lists.cons (ForallType[parameter] ft) vars)
                 (ForallType[body] ft),
-          `_`=TypeScheme{
+          `_` = TypeScheme{
             variables = lists.reverse vars,
             body = typ,
             constraints = maps.empty}}
@@ -130,7 +131,7 @@ term termSignatureToTypeScheme =
     let result := TermSignature[result] sig in
     let variables := lists.map (λtp.TypeParameter[name] tp) typeParams in
     let body := lists.foldl
-        (λacc,p.Type{function = FunctionType{domain = Parameter[`type`] p, codomain = acc}})
+        (λacc, p.Type{function = FunctionType{domain = Parameter[`type`] p, codomain = acc}})
         (Result[`type`] result)
         (lists.reverse params) in
     let constraints := maps.fromList
@@ -144,7 +145,7 @@ term typeSchemeToFType =
   λts.
     let vars := TypeScheme[variables] ts in
     let body := TypeScheme[body] ts in
-    lists.foldl (λt,v.Type{`forall` = ForallType{parameter = v, body = t}}) body (lists.reverse vars)
+    lists.foldl (λt, v.Type{`forall` = ForallType{parameter = v, body = t}}) body (lists.reverse vars)
 
 ## Convert a TypeScheme to a TermSignature. Type variables and class constraints are preserved exactly. Value-parameter names are synthesized as arg0, arg1, .... Per-parameter descriptions are nothing and isLazy defaults to false.
 term typeSchemeToTermSignature =
@@ -160,11 +161,11 @@ term typeSchemeToTermSignature =
                 []
                 (λtvm.sets.toList (TypeVariableConstraints[classes] tvm))})
         variables in
-    let peel := λacc,t.cases(Type){
-          function=λft.peel
+    let peel := λacc, t.cases(Type){
+          function = λft.peel
                 (lists.cons (FunctionType[domain] ft) acc)
                 (FunctionType[codomain] ft),
-          `_`=(lists.reverse acc, t)}
+          `_` = (lists.reverse acc, t)}
           t in
     let peeled := peel [] body in
     let paramTypes := first peeled in
@@ -172,7 +173,7 @@ term typeSchemeToTermSignature =
     let params := lists.reverse
         (first
           (lists.foldl
-            (λacc,ty.
+            (λacc, ty.
               let pairAcc := first acc in
               let i := second acc in
               (

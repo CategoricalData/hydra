@@ -17,7 +17,7 @@ import hydra.core.topology
 ## Convert an adjacency list to a map, concatenating values for duplicate keys
 term adjacencyListToMap =
   λpairs.lists.foldl
-      (λmp,p.
+      (λmp, p.
         let k := first p in
         let vs := second p in
         let existing := optionals.match (maps.lookup k mp) [] identity in
@@ -59,7 +59,7 @@ term adjacencyListsToGraph =
 
 ## Construct an OrderingIsomorphism between two orderings of the same elements. The two list arguments must be permutations of each other; the result is a pair of mappings that transport an element list from one ordering to the other.
 term createOrderingIsomorphism =
-  λsourceOrd,targetOrd.
+  λsourceOrd, targetOrd.
     let sourceToTargetMapping := λels.
         let mp := maps.fromList (lists.zip sourceOrd els)
         in optionals.givens (lists.map (λn.maps.lookup n mp) targetOrd) in
@@ -70,13 +70,13 @@ term createOrderingIsomorphism =
 
 ## Given an adjacency function and a distinguished root node, find all reachable nodes (including the root node)
 term findReachableNodes =
-  λadj,root.
-    let visit := λvisited,node.
+  λadj, root.
+    let visit := λvisited, node.
         let toVisit := sets.difference (adj node) visited
         in ifElse
           (sets.isEmpty toVisit)
           visited
-          (lists.foldl (λv,n.visit (sets.insert n v) n) visited (sets.toList toVisit))
+          (lists.foldl (λv, n.visit (sets.insert n v) n) visited (sets.toList toVisit))
     in visit (sets.singleton root) root
 
 ## Initial state for Tarjan's algorithm
@@ -91,8 +91,8 @@ term initialState =
 
 ## Pop vertices off the stack until the given vertex is reached, collecting the current strongly connected component
 term popStackUntil =
-  λv,st0.
-    let go := λacc,st.optionals.match
+  λv, st0.
+    let go := λacc, st.optionals.match
           (lists.uncons (TarjanState[stack] st))
           (lists.reverse acc, st)
           (λuc.
@@ -118,7 +118,7 @@ term popStackUntil =
 
 ## Given a graph as an adjacency list of edges and a list of explicit tags per node, compute the full set of tags for each node by propagating tags through edges. If there is an edge from n1 to n2 and n2 has tag t, then n1 also has tag t. Note: pairs in the output are not ordered.
 term propagateTags =
-  λedges,nodeTags.
+  λedges, nodeTags.
     let adjMap := adjacencyListToMap edges in
     let tagMap := maps.map sets.fromList (adjacencyListToMap nodeTags) in
     let allNodes := sets.toList
@@ -136,7 +136,7 @@ term propagateTags =
 
 ## Visit a vertex and recursively explore its successors
 term strongConnect =
-  λgraph,v,st.
+  λgraph, v, st.
     let i := TarjanState[counter] st in
     let newSt := TarjanState{
       counter = add i 1:int32,
@@ -146,7 +146,7 @@ term strongConnect =
       onStack = sets.insert v (TarjanState[onStack] st),
       sccs = TarjanState[sccs] st} in
     let neighbors := maps.findWithDefault [] v graph in
-    let processNeighbor := λ`st_`,w.
+    let processNeighbor := λ`st_`, w.
         let lowLink := λs.
             let lowV1 := maps.findWithDefault
                 maxInt32
@@ -169,7 +169,10 @@ term strongConnect =
         in ifElse
           (not (maps.member w (TarjanState[indices] `st_`)))
           (let stAfter := strongConnect graph w `st_` in
-          let lowV2 := maps.findWithDefault maxInt32 v (TarjanState[lowLinks] stAfter) in
+          let lowV2 := maps.findWithDefault
+              maxInt32
+              v
+              (TarjanState[lowLinks] stAfter) in
           let `low_w` := maps.findWithDefault
               maxInt32
               w
@@ -207,7 +210,7 @@ term stronglyConnectedComponents =
   λgraph.
     let verts := maps.keys graph in
     let finalState := lists.foldl
-        (λst,v.ifElse (maps.member v (TarjanState[indices] st)) st (strongConnect graph v st))
+        (λst, v.ifElse (maps.member v (TarjanState[indices] st)) st (strongConnect graph v st))
         initialState
         verts in
     lists.reverse (lists.map lists.sort (TarjanState[sccs] finalState))
@@ -229,7 +232,7 @@ term topologicalSortComponents =
 
 ## Sort a directed acyclic graph (DAG) of nodes using two helper functions: one for node keys, and one for the adjacency list of connected node keys. The result is a list of strongly-connected components (cycles), in which singleton lists represent acyclic nodes.
 term topologicalSortNodes =
-  λgetKey,getAdj,nodes.
+  λgetKey, getAdj, nodes.
     let nodesByKey := maps.fromList (lists.map (λn.(getKey n, n)) nodes) in
     let pairs := lists.map (λn.(getKey n, getAdj n)) nodes in
     let comps := topologicalSortComponents pairs in

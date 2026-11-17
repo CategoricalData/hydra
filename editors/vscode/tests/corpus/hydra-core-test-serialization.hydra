@@ -1,0 +1,252 @@
+## Test cases for AST serialization
+module hydra.core.test.serialization
+
+import hydra.core.ast
+import hydra.core.lib.math
+import hydra.core.serialization
+import hydra.core.testing
+
+term arrowOp = op "->" (negate 1:int32) Associativity{`right`}
+
+term gtOp = op ">" 4:int32 Associativity{`none`}
+
+term plusOp = op "+" 6:int32 Associativity{both}
+
+term multOp = op "*" 7:int32 Associativity{both}
+
+term lambdaOp = op "->" (negate 1:int32) Associativity{`right`}
+
+term caseOp = op "->" 0:int32 Associativity{`none`}
+
+## Test cases for AST serialization
+term allTests =
+  TestGroup{
+    name = "serialization",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "associativity",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "right-associative operator",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printExpr
+                      (parenthesize
+                        (ifx
+                          arrowOp
+                          (ifx arrowOp (cst "a") (cst "b"))
+                          (ifx arrowOp (cst "c") (cst "d")))),
+                expected = λ`_`."(a -> b) -> c -> d"}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "case statements",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "simple case statement",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printExpr
+                      (parenthesize
+                        (ifx
+                          Op{
+                            symbol = Symbol{"of"},
+                            padding = Padding{
+                              `left` = Ws{
+                                space},
+                              `right` = Ws{
+                                breakAndIndent = "  "}},
+                            precedence = Precedence{0:int32},
+                            associativity = Associativity{
+                              `none`}}
+                          (spaceSep
+                            [cst "case", ifx gtOp (cst "x") (num 42:int32)])
+                          (newlineSep
+                            [ifx caseOp (cst "False") (cst "Big"), ifx caseOp (cst "True") (cst "Small")]))),
+                expected = λ`_`."case x > 42 of\n  False -> Big\n  True -> Small"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested case statement",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printExpr
+                      (parenthesize
+                        (ifx
+                          Op{
+                            symbol = Symbol{"of"},
+                            padding = Padding{
+                              `left` = Ws{
+                                space},
+                              `right` = Ws{
+                                breakAndIndent = "  "}},
+                            precedence = Precedence{0:int32},
+                            associativity = Associativity{
+                              `none`}}
+                          (spaceSep
+                            [cst "case", ifx gtOp (cst "x") (num 42:int32)])
+                          (newlineSep
+                            [
+                              ifx
+                                caseOp
+                                (cst "True")
+                                (ifx
+                                  Op{
+                                    symbol = Symbol{"of"},
+                                    padding = Padding{`left` = Ws{space}, `right` = Ws{breakAndIndent = "  "}},
+                                    precedence = Precedence{0:int32},
+                                    associativity = Associativity{`none`}}
+                                  (spaceSep [cst "case", ifx gtOp (cst "x") (num 100:int32)])
+                                  (newlineSep [ifx caseOp (cst "True") (cst "ReallyBig"), ifx caseOp (cst "False") (cst "Big")])),
+                              ifx caseOp (cst "False") (cst "Small")]))),
+                expected = λ`_`."case x > 42 of\n  True -> case x > 100 of\n    True -> ReallyBig\n    False -> Big\n  False -> Small"}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "lambdas",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "simple lambda",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printExpr
+                      (parenthesize
+                        (ifx
+                          lambdaOp
+                          (cst "\\x y")
+                          (ifx plusOp (cst "x") (cst "y")))),
+                expected = λ`_`."\\x y -> x + y"}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "lists",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "empty list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printExpr
+                      (parenthesize
+                        (bracketList inlineStyle [])),
+                expected = λ`_`."[]"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "simple non-empty list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printExpr
+                      (parenthesize
+                        (bracketList
+                          inlineStyle
+                          [num 1:int32, num 2:int32, num 3:int32])),
+                expected = λ`_`."[1, 2, 3]"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "nested list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printExpr
+                      (parenthesize
+                        (bracketList
+                          inlineStyle
+                          [bracketList inlineStyle [num 1:int32, num 3:int32], num 2:int32])),
+                expected = λ`_`."[[1, 3], 2]"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "list with parenthesized expression inside",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printExpr
+                      (parenthesize
+                        (bracketList
+                          inlineStyle
+                          [
+                            bracketList
+                              inlineStyle
+                              [num 1:int32, ifx multOp (ifx plusOp (num 2:int32) (num 3:int32)) (ifx plusOp (num 1:int32) (num 10:int32))],
+                            num 2:int32])),
+                expected = λ`_`."[[1, (2 + 3) * (1 + 10)], 2]"}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "precedence",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "operators with different precedence - no parens needed",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printExpr
+                      (parenthesize
+                        (ifx
+                          plusOp
+                          (ifx multOp (num 2:int32) (num 3:int32))
+                          (ifx multOp (num 1:int32) (num 10:int32)))),
+                expected = λ`_`."2 * 3 + 1 * 10"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "operators with different precedence - parens needed",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printExpr
+                      (parenthesize
+                        (ifx
+                          multOp
+                          (ifx plusOp (num 2:int32) (num 3:int32))
+                          (ifx plusOp (num 1:int32) (num 10:int32)))),
+                expected = λ`_`."(2 + 3) * (1 + 10)"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "associative operator left nesting",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printExpr
+                      (parenthesize
+                        (ifx
+                          multOp
+                          (cst "x")
+                          (ifx multOp (cst "y") (cst "z")))),
+                expected = λ`_`."x * y * z"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "associative operator right nesting",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.printExpr
+                      (parenthesize
+                        (ifx
+                          multOp
+                          (ifx multOp (cst "x") (cst "y"))
+                          (cst "z"))),
+                expected = λ`_`."x * y * z"}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}

@@ -23,6 +23,7 @@
 #                              ^ source.hydra
 #                               ^^^^^^ source.hydra support.type.hydra
 #                                     ^^ source.hydra
+>
 >  ## The name of the lambda-bound variable
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -34,6 +35,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## The id of the node at the binding lambda
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -45,6 +47,7 @@
 #              ^ source.hydra
 #               ^^^^^^^^^^ source.hydra variable.other.hydra
 #                         ^^ source.hydra
+>
 >  ## The type of the variable
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -71,6 +74,7 @@
 #                           ^ source.hydra
 #                            ^^^^^^ source.hydra support.type.hydra
 #                                  ^^ source.hydra
+>
 >  ## The name of the let-bound variable
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -82,6 +86,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## The id of the node at the bound term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -93,6 +98,7 @@
 #              ^ source.hydra
 #               ^^^^^^^^^^ source.hydra variable.other.hydra
 #                         ^^ source.hydra
+>
 >  ## The type of the variable
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -119,6 +125,7 @@
 #                           ^ source.hydra
 #                            ^^^^^^ source.hydra support.type.hydra
 #                                  ^^ source.hydra
+>
 >  ## The name of the referenced schema type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -143,6 +150,7 @@
 #                         ^ source.hydra
 #                          ^^^^^^ source.hydra support.type.hydra
 #                                ^^ source.hydra
+>
 >  ## The name of the primitive
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -154,6 +162,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## The type of the primitive
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -180,6 +189,7 @@
 #                  ^ source.hydra
 #                   ^^^^^^ source.hydra support.type.hydra
 #                         ^^ source.hydra
+>
 >  ## The step by which the child subterm is reached
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -191,6 +201,7 @@
 #       ^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                   ^^ source.hydra
+>
 >  ## The child node (inline; the structure is a tree)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -233,6 +244,7 @@
 #                  ^ source.hydra
 #                   ^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
+>
 >  ## Access the annotation of an annotated term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -244,6 +256,7 @@
 #                      ^ source.hydra
 #                       ^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
+>
 >  ## Access the body of an annotated term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -255,6 +268,7 @@
 #                ^ source.hydra
 #                 ^^^^ source.hydra support.type.hydra
 #                     ^^ source.hydra
+>
 >  ## Access the argument of an application term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -266,6 +280,7 @@
 #                      ^ source.hydra
 #                       ^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
+>
 >  ## Access the function of an application term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -277,6 +292,7 @@
 #                      ^ source.hydra
 #                       ^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
+>
 >  ## Access the handler of a specific case of a case statement by field name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -288,6 +304,7 @@
 #            ^ source.hydra
 #             ^^^^ source.hydra variable.other.hydra
 #                 ^^ source.hydra
+>
 >  ## Access the default case of a case statement
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -299,6 +316,7 @@
 #               ^ source.hydra
 #                ^^^^ source.hydra support.type.hydra
 #                    ^^ source.hydra
+>
 >  ## Access the left term of an either value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -310,6 +328,7 @@
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## Access the right term of an either value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -321,6 +340,7 @@
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
 #                   ^^ source.hydra
+>
 >  ## Access the injected term of a union injection by field name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -332,6 +352,7 @@
 #              ^ source.hydra
 #               ^^^^ source.hydra variable.other.hydra
 #                   ^^ source.hydra
+>
 >  ## Access the body of a lambda term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -343,6 +364,7 @@
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## Access a specific binding in a let term by variable name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -354,6 +376,7 @@
 #             ^ source.hydra
 #              ^^^^ source.hydra variable.other.hydra
 #                  ^^ source.hydra
+>
 >  ## Access the body of a let term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -365,6 +388,7 @@
 #          ^ source.hydra
 #           ^^^^ source.hydra support.type.hydra
 #               ^^ source.hydra
+>
 >  ## Access an element of a list by index
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -376,6 +400,7 @@
 #              ^ source.hydra
 #               ^^^^^ source.hydra support.type.hydra
 #                    ^^ source.hydra
+>
 >  ## Access the map entry at the given index as a pair (k, v). Accessing this step constructs the pair; the entry is not itself a subterm occurrence, though its key and value components are, reached via pairFirst/pairSecond. Entry indexes follow the total order on serializable terms.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -387,6 +412,7 @@
 #           ^ source.hydra
 #            ^^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## Access the term inside a given (present) optional value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -398,6 +424,7 @@
 #                ^ source.hydra
 #                 ^^^^ source.hydra support.type.hydra
 #                     ^^ source.hydra
+>
 >  ## Access the first term of a pair
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -409,6 +436,7 @@
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## Access the second term of a pair
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -420,6 +448,7 @@
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## Access a field of a record by field name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -431,6 +460,7 @@
 #              ^ source.hydra
 #               ^^^^ source.hydra variable.other.hydra
 #                   ^^ source.hydra
+>
 >  ## Access an element of a set by index
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -442,6 +472,7 @@
 #             ^ source.hydra
 #              ^^^^^ source.hydra support.type.hydra
 #                   ^^ source.hydra
+>
 >  ## Access the body of a type application term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -453,6 +484,7 @@
 #                      ^ source.hydra
 #                       ^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
+>
 >  ## Access the body of a type lambda term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -464,6 +496,7 @@
 #                 ^ source.hydra
 #                  ^^^^ source.hydra support.type.hydra
 #                      ^^ source.hydra
+>
 >  ## Access the body of a wrapped term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -488,6 +521,7 @@
 #                  ^ source.hydra
 #                   ^^^^^^ source.hydra support.type.hydra
 #                         ^^ source.hydra
+>
 >  ## The step by which the child subtype is reached
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -499,6 +533,7 @@
 #       ^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                   ^^ source.hydra
+>
 >  ## The child node (inline; the structure is a tree)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -541,6 +576,7 @@
 #                  ^ source.hydra
 #                   ^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
+>
 >  ## Access the body of an annotated type (the annotation is a term; there is no step for it)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -552,6 +588,7 @@
 #                ^ source.hydra
 #                 ^^^^ source.hydra support.type.hydra
 #                     ^^ source.hydra
+>
 >  ## Access the argument of an application type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -563,6 +600,7 @@
 #                      ^ source.hydra
 #                       ^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
+>
 >  ## Access the function of an application type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -574,6 +612,7 @@
 #                      ^ source.hydra
 #                       ^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
+>
 >  ## Access the value type of an effect type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -585,6 +624,7 @@
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
 #                   ^^ source.hydra
+>
 >  ## Access the left type of an either type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -596,6 +636,7 @@
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## Access the right type of an either type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -607,6 +648,7 @@
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
 #                   ^^ source.hydra
+>
 >  ## Access the body of a universally quantified type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -618,6 +660,7 @@
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## Access the codomain type of a function type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -629,6 +672,7 @@
 #                   ^ source.hydra
 #                    ^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
+>
 >  ## Access the domain type of a function type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -640,6 +684,7 @@
 #                 ^ source.hydra
 #                  ^^^^ source.hydra support.type.hydra
 #                      ^^ source.hydra
+>
 >  ## Access the element type of a list type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -651,6 +696,7 @@
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
 #                   ^^ source.hydra
+>
 >  ## Access the key type of a map type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -662,6 +708,7 @@
 #          ^ source.hydra
 #           ^^^^ source.hydra support.type.hydra
 #               ^^ source.hydra
+>
 >  ## Access the value type of a map type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -673,6 +720,7 @@
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## Access the element type of an optional type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -684,6 +732,7 @@
 #                  ^ source.hydra
 #                   ^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
+>
 >  ## Access the first type of a pair type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -695,6 +744,7 @@
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## Access the second type of a pair type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -706,6 +756,7 @@
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## Access a field type of a record type by field name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -717,6 +768,7 @@
 #              ^ source.hydra
 #               ^^^^ source.hydra variable.other.hydra
 #                   ^^ source.hydra
+>
 >  ## Access the element type of a set type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -728,6 +780,7 @@
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## Access a field type of a union type by field name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -739,6 +792,7 @@
 #             ^ source.hydra
 #              ^^^^ source.hydra variable.other.hydra
 #                  ^^ source.hydra
+>
 >  ## Access the body type of a wrapped type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -763,6 +817,7 @@
 #                        ^ source.hydra
 #                         ^^^^^ source.hydra support.type.hydra
 #                              ^^ source.hydra
+>
 >  ## The name of the union type eliminated by a case statement
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -774,6 +829,7 @@
 #                ^ source.hydra
 #                 ^^^^ source.hydra variable.other.hydra
 #                     ^^ source.hydra
+>
 >  ## The name of the union type of an injection
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -785,6 +841,7 @@
 #                 ^ source.hydra
 #                  ^^^^ source.hydra variable.other.hydra
 #                      ^^ source.hydra
+>
 >  ## The (given) domain type of a lambda
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -796,6 +853,7 @@
 #                    ^ source.hydra
 #                     ^^^^ source.hydra variable.other.hydra
 #                         ^^ source.hydra
+>
 >  ## The parameter name of a lambda
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -807,6 +865,7 @@
 #                  ^ source.hydra
 #                   ^^^^ source.hydra variable.other.hydra
 #                       ^^ source.hydra
+>
 >  ## The name of a let binding together with its (given) type scheme
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -820,6 +879,7 @@
 #                                  ^^ source.hydra
 #                                    ^^^^^^^^^^ source.hydra variable.other.hydra
 #                                              ^^^ source.hydra
+>
 >  ## The literal value of a literal term (a leaf)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -831,6 +891,7 @@
 #          ^ source.hydra
 #           ^^^^^^^ source.hydra variable.other.hydra
 #                  ^^ source.hydra
+>
 >  ## The name of the field projected by a projection
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -842,6 +903,7 @@
 #                   ^ source.hydra
 #                    ^^^^ source.hydra variable.other.hydra
 #                        ^^ source.hydra
+>
 >  ## The name of the record type of a projection
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -853,6 +915,7 @@
 #                  ^ source.hydra
 #                   ^^^^ source.hydra variable.other.hydra
 #                       ^^ source.hydra
+>
 >  ## The name of the record type of a record term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -864,6 +927,7 @@
 #                 ^ source.hydra
 #                  ^^^^ source.hydra variable.other.hydra
 #                      ^^ source.hydra
+>
 >  ## The type argument of a type application term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -875,6 +939,7 @@
 #                      ^ source.hydra
 #                       ^^^^ source.hydra variable.other.hydra
 #                           ^^ source.hydra
+>
 >  ## The type-variable parameter of a type lambda term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -886,6 +951,7 @@
 #                      ^ source.hydra
 #                       ^^^^ source.hydra variable.other.hydra
 #                           ^^ source.hydra
+>
 >  ## The name of the wrapper type eliminated by an unwrap
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -897,6 +963,7 @@
 #                 ^ source.hydra
 #                  ^^^^ source.hydra variable.other.hydra
 #                      ^^ source.hydra
+>
 >  ## The name of the wrapper type of a wrapped term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -921,6 +988,7 @@
 #                ^ source.hydra
 #                 ^^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
+>
 >  ## The root nodes, keyed by binding name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -951,6 +1019,7 @@
 #               ^ source.hydra
 #                ^^^^^ source.hydra support.type.hydra
 #                     ^^ source.hydra
+>
 >  ## A non-term constituent of this node's term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -962,6 +1031,7 @@
 #            ^ source.hydra
 #             ^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                              ^^ source.hydra
+>
 >  ## A variable or primitive occurrence
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -973,6 +1043,7 @@
 #            ^ source.hydra
 #             ^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                              ^^ source.hydra
+>
 >  ## An immediate subterm, carried inline
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -997,6 +1068,7 @@
 #               ^ source.hydra
 #                ^^^^^^ source.hydra support.type.hydra
 #                      ^^ source.hydra
+>
 >  ## The subterm as written
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1010,6 +1082,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra variable.other.hydra
 #              ^^ source.hydra
+>
 >  ## The subterm's type (a binding's forall type at roots), via hydra.core.checking
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1023,6 +1096,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra variable.other.hydra
 #              ^^ source.hydra
+>
 >  ## The outgoing links of the node
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1050,6 +1124,7 @@
 #                 ^ source.hydra
 #                  ^^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
+>
 >  ## The name of the root binding
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1061,6 +1136,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## The subterm path from the root
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1085,6 +1161,7 @@
 #                    ^ source.hydra
 #                     ^^^^^ source.hydra support.type.hydra
 #                          ^^ source.hydra
+>
 >  ## A reference to a lambda-bound variable
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1096,6 +1173,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                 ^^ source.hydra
+>
 >  ## A reference to a let-bound variable
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1109,6 +1187,7 @@
 #        ^ source.hydra
 #         ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                             ^^ source.hydra
+>
 >  ## A reference to a primitive function
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1135,6 +1214,7 @@
 #                        ^ source.hydra
 #                         ^^^^^^ source.hydra support.type.hydra
 #                               ^^ source.hydra
+>
 >  ## The step by which the occurrence is reached
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1146,6 +1226,7 @@
 #       ^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                   ^^ source.hydra
+>
 >  ## The referenced binding, lambda parameter, or primitive
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1170,6 +1251,7 @@
 #                        ^ source.hydra
 #                         ^^^^^ source.hydra support.type.hydra
 #                              ^^ source.hydra
+>
 >  ## The annotation of an annotated type (a term; not descended into)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1181,6 +1263,7 @@
 #                      ^ source.hydra
 #                       ^^^^ source.hydra variable.other.hydra
 #                           ^^ source.hydra
+>
 >  ## The type-variable parameter of a universally quantified type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1192,6 +1275,7 @@
 #                  ^ source.hydra
 #                   ^^^^ source.hydra variable.other.hydra
 #                       ^^ source.hydra
+>
 >  ## The literal type of a literal type (a leaf)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1216,6 +1300,7 @@
 #                ^ source.hydra
 #                 ^^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
+>
 >  ## The root nodes, keyed by type name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1246,6 +1331,7 @@
 #               ^ source.hydra
 #                ^^^^^ source.hydra support.type.hydra
 #                     ^^ source.hydra
+>
 >  ## A non-type constituent of this node's type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1257,6 +1343,7 @@
 #            ^ source.hydra
 #             ^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                              ^^ source.hydra
+>
 >  ## A named-type or type-variable occurrence
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1268,6 +1355,7 @@
 #            ^ source.hydra
 #             ^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                              ^^ source.hydra
+>
 >  ## An immediate subtype, carried inline
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1292,6 +1380,7 @@
 #               ^ source.hydra
 #                ^^^^^^ source.hydra support.type.hydra
 #                      ^^ source.hydra
+>
 >  ## The subtype as written (needed for linkless leaves: literal types, unit, void)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1305,6 +1394,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra variable.other.hydra
 #              ^^ source.hydra
+>
 >  ## The outgoing links of the node
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1332,6 +1422,7 @@
 #                 ^ source.hydra
 #                  ^^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
+>
 >  ## The name of the root type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1343,6 +1434,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## The subtype path from the root
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1367,6 +1459,7 @@
 #                    ^ source.hydra
 #                     ^^^^^ source.hydra support.type.hydra
 #                          ^^ source.hydra
+>
 >  ## A reference to a named type of the schema
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1378,6 +1471,7 @@
 #          ^ source.hydra
 #           ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                               ^^ source.hydra
+>
 >  ## A reference to a forall-bound type variable
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1402,6 +1496,7 @@
 #                        ^ source.hydra
 #                         ^^^^^^ source.hydra support.type.hydra
 #                               ^^ source.hydra
+>
 >  ## The step by which the occurrence is reached
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1413,6 +1508,7 @@
 #       ^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                   ^^ source.hydra
+>
 >  ## The referenced named type or type variable
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1437,6 +1533,7 @@
 #                            ^ source.hydra
 #                             ^^^^^^ source.hydra support.type.hydra
 #                                   ^^ source.hydra
+>
 >  ## The name of the forall-bound type variable
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1448,6 +1545,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## The id of the node at the binding forall
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

@@ -452,48 +452,62 @@
 #            ^ source.hydra
 #             ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                               ^^^ source.hydra
->        conflictingVariantName=conflictingVariantNameError,
+>        conflictingVariantName = conflictingVariantNameError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                              ^ source.hydra keyword.operator.equals.hydra
-#                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                          ^^ source.hydra
->        definitionNotInModuleName=definitionNotInModuleNameError,
+#                              ^ source.hydra
+#                               ^ source.hydra keyword.operator.equals.hydra
+#                                ^ source.hydra
+#                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                            ^^ source.hydra
+>        definitionNotInModuleName = definitionNotInModuleNameError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                 ^ source.hydra keyword.operator.equals.hydra
-#                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                ^^ source.hydra
->        definitionsOutOfOrder=definitionsOutOfOrderError,
+#                                 ^ source.hydra
+#                                  ^ source.hydra keyword.operator.equals.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                  ^^ source.hydra
+>        definitionsOutOfOrder = definitionsOutOfOrderError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                             ^ source.hydra keyword.operator.equals.hydra
-#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                        ^^ source.hydra
->        duplicateDefinitionName=duplicateDefinitionNameError,
+#                             ^ source.hydra
+#                              ^ source.hydra keyword.operator.equals.hydra
+#                               ^ source.hydra
+#                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                          ^^ source.hydra
+>        duplicateDefinitionName = duplicateDefinitionNameError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                               ^ source.hydra keyword.operator.equals.hydra
-#                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                            ^^ source.hydra
->        invalidDefinitionName=invalidDefinitionNameError,
+#                               ^ source.hydra
+#                                ^ source.hydra keyword.operator.equals.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                              ^^ source.hydra
+>        invalidDefinitionName = invalidDefinitionNameError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                             ^ source.hydra keyword.operator.equals.hydra
-#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                        ^^ source.hydra
->        invalidModuleNameConvention=invalidModuleNameConventionError,
+#                             ^ source.hydra
+#                              ^ source.hydra keyword.operator.equals.hydra
+#                               ^ source.hydra
+#                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                          ^^ source.hydra
+>        invalidModuleNameConvention = invalidModuleNameConventionError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                   ^ source.hydra keyword.operator.equals.hydra
-#                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                    ^^ source.hydra
->        missingDocumentation=missingDocumentationError}
+#                                   ^ source.hydra
+#                                    ^ source.hydra keyword.operator.equals.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                      ^^ source.hydra
+>        missingDocumentation = missingDocumentationError}
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                            ^ source.hydra keyword.operator.equals.hydra
-#                             ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                      ^^ source.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra keyword.operator.equals.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                        ^^ source.hydra
 >        e)
 #^^^^^^^^ source.hydra
 #        ^ source.hydra variable.other.hydra
@@ -565,48 +579,62 @@
 #            ^ source.hydra
 #             ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                ^^^ source.hydra
->        conflictingModuleName=conflictingModuleNameError,
+>        conflictingModuleName = conflictingModuleNameError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                             ^ source.hydra keyword.operator.equals.hydra
-#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                        ^^ source.hydra
->        duplicateModuleName=duplicateModuleNameError,
+#                             ^ source.hydra
+#                              ^ source.hydra keyword.operator.equals.hydra
+#                               ^ source.hydra
+#                                ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                          ^^ source.hydra
+>        duplicateModuleName = duplicateModuleNameError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                           ^ source.hydra keyword.operator.equals.hydra
-#                            ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                    ^^ source.hydra
->        invalidModule=invalidModuleError,
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.equals.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                      ^^ source.hydra
+>        invalidModule = invalidModuleError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                     ^ source.hydra keyword.operator.equals.hydra
-#                      ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                        ^^ source.hydra
->        invalidPackageName=invalidPackageNameError,
+#                     ^ source.hydra
+#                      ^ source.hydra keyword.operator.equals.hydra
+#                       ^ source.hydra
+#                        ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                          ^^ source.hydra
+>        invalidPackageName = invalidPackageNameError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                          ^ source.hydra keyword.operator.equals.hydra
-#                           ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                  ^^ source.hydra
->        moduleInMultiplePackages=moduleInMultiplePackagesError,
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.equals.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                    ^^ source.hydra
+>        moduleInMultiplePackages = moduleInMultiplePackagesError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                ^ source.hydra keyword.operator.equals.hydra
-#                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                              ^^ source.hydra
->        nestedModuleName=nestedModuleNameError,
+#                                ^ source.hydra
+#                                 ^ source.hydra keyword.operator.equals.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                ^^ source.hydra
+>        nestedModuleName = nestedModuleNameError,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                        ^ source.hydra keyword.operator.equals.hydra
-#                         ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                              ^^ source.hydra
->        undeclaredDependency=undeclaredDependencyError}
+#                        ^ source.hydra
+#                         ^ source.hydra keyword.operator.equals.hydra
+#                          ^ source.hydra
+#                           ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                ^^ source.hydra
+>        undeclaredDependency = undeclaredDependencyError}
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                            ^ source.hydra keyword.operator.equals.hydra
-#                             ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                      ^^ source.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra keyword.operator.equals.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                        ^^ source.hydra
 >        e)
 #^^^^^^^^ source.hydra
 #        ^ source.hydra variable.other.hydra

@@ -20,10 +20,10 @@ import hydra.core.typing
 
 ## Join two types, producing a list of type constraints.The comment is used to provide context for the constraints.
 term joinTypes =
-  λcx,`left`,`right`,comment.
+  λcx, `left`, `right`, comment.
     let sleft := deannotateType `left` in
     let sright := deannotateType `right` in
-    let joinOne := λl,r.TypeConstraint{
+    let joinOne := λl, r.TypeConstraint{
           `left` = l,
           `right` = r,
           comment = strings.concat2 "join types; " comment} in
@@ -38,20 +38,20 @@ term joinTypes =
               " with ")
             (`type` sright)}) in
     let assertEqual := ifElse (equal sleft sright) right([]) cannotUnify in
-    let joinList := λlefts,rights.ifElse
+    let joinList := λlefts, rights.ifElse
           (equal (lists.length lefts) (lists.length rights))
           right(lists.zipWith joinOne lefts rights)
           cannotUnify in
-    let joinRowTypes := λ`left`,`right`.ifElse
+    let joinRowTypes := λ`left`, `right`.ifElse
           (and
             (equal
               (lists.length (lists.map FieldType[name] `left`))
               (lists.length (lists.map FieldType[name] `right`)))
             (lists.foldl
-              (λacc,x.and acc x)
+              (λacc, x.and acc x)
               true
               (lists.zipWith
-                (λ`left`,`right`.equal (Name[] `left`) (Name[] `right`))
+                (λ`left`, `right`.equal (Name[] `left`) (Name[] `right`))
                 (lists.map FieldType[name] `left`)
                 (lists.map FieldType[name] `right`))))
           (joinList
@@ -59,48 +59,52 @@ term joinTypes =
             (lists.map FieldType[`type`] `right`))
           cannotUnify in
     cases(Type){
-      application=λl.cases(Type){
-            application=λr.right([
+      application = λl.cases(Type){
+            application = λr.right([
                   joinOne (ApplicationType[function] l) (ApplicationType[function] r),
                   joinOne (ApplicationType[argument] l) (ApplicationType[argument] r)]),
-            `_`=cannotUnify}
+            `_` = cannotUnify}
             sright,
-      `either`=λl.cases(Type){
-            `either`=λr.right([joinOne (EitherType[`left`] l) (EitherType[`left`] r), joinOne (EitherType[`right`] l) (EitherType[`right`] r)]),
-            `_`=cannotUnify}
+      `either` = λl.cases(Type){
+            `either` = λr.right([joinOne (EitherType[`left`] l) (EitherType[`left`] r), joinOne (EitherType[`right`] l) (EitherType[`right`] r)]),
+            `_` = cannotUnify}
             sright,
-      `effect`=λl.cases(Type){`effect`=λr.right([joinOne l r]), `_`=cannotUnify}
+      `effect` = λl.cases(Type){`effect` = λr.right([joinOne l r]), `_` = cannotUnify}
             sright,
-      function=λl.cases(Type){
-            function=λr.right([
+      function = λl.cases(Type){
+            function = λr.right([
                   joinOne (FunctionType[domain] l) (FunctionType[domain] r),
                   joinOne (FunctionType[codomain] l) (FunctionType[codomain] r)]),
-            `_`=cannotUnify}
+            `_` = cannotUnify}
             sright,
-      `list`=λl.cases(Type){`list`=λr.right([joinOne l r]), `_`=cannotUnify}
+      `list` = λl.cases(Type){`list` = λr.right([joinOne l r]), `_` = cannotUnify}
             sright,
-      literal=λ`_`.assertEqual,
-      `map`=λl.cases(Type){
-            `map`=λr.right([joinOne (MapType[keys] l) (MapType[keys] r), joinOne (MapType[values] l) (MapType[values] r)]),
-            `_`=cannotUnify}
+      literal = λ`_`.assertEqual,
+      `map` = λl.cases(Type){
+            `map` = λr.right([joinOne (MapType[keys] l) (MapType[keys] r), joinOne (MapType[values] l) (MapType[values] r)]),
+            `_` = cannotUnify}
             sright,
-      `optional`=λl.cases(Type){`optional`=λr.right([joinOne l r]), `_`=cannotUnify}
+      `optional` = λl.cases(Type){
+            `optional` = λr.right([joinOne l r]),
+            `_` = cannotUnify}
             sright,
-      pair=λl.cases(Type){
-            pair=λr.right([joinOne (PairType[first] l) (PairType[first] r), joinOne (PairType[second] l) (PairType[second] r)]),
-            `_`=cannotUnify}
+      pair = λl.cases(Type){
+            pair = λr.right([joinOne (PairType[first] l) (PairType[first] r), joinOne (PairType[second] l) (PairType[second] r)]),
+            `_` = cannotUnify}
             sright,
-      `record`=λl.cases(Type){`record`=λr.joinRowTypes l r, `_`=cannotUnify}
+      `record` = λl.cases(Type){`record` = λr.joinRowTypes l r, `_` = cannotUnify}
             sright,
-      `set`=λl.cases(Type){`set`=λr.right([joinOne l r]), `_`=cannotUnify}
+      `set` = λl.cases(Type){`set` = λr.right([joinOne l r]), `_` = cannotUnify}
             sright,
-      `union`=λl.cases(Type){`union`=λr.joinRowTypes l r, `_`=cannotUnify}
+      `union` = λl.cases(Type){`union` = λr.joinRowTypes l r, `_` = cannotUnify}
             sright,
-      `unit`=λ`_`.cases(Type){`unit`=λ`_`.right([]), `_`=cannotUnify} sright,
-      `void`=λ`_`.cases(Type){`void`=λ`_`.right([]), `_`=cannotUnify} sright,
-      `wrap`=λl.cases(Type){`wrap`=λr.right([joinOne l r]), `_`=cannotUnify}
+      `unit` = λ`_`.cases(Type){`unit` = λ`_`.right([]), `_` = cannotUnify}
             sright,
-      `_`=cannotUnify}
+      `void` = λ`_`.cases(Type){`void` = λ`_`.right([]), `_` = cannotUnify}
+            sright,
+      `wrap` = λl.cases(Type){`wrap` = λr.right([joinOne l r]), `_` = cannotUnify}
+            sright,
+      `_` = cannotUnify}
       sleft
 
 ## Robinson's algorithm, following https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf
@@ -110,12 +114,12 @@ term joinTypes =
 ##   * Unify({(x, x)} ∪ E) = Unify(E)
 ##   * Unify({(f(s1, ..., sn), f(t1, ..., tn))} ∪ E) = Unify({(s1, t1), ..., (sn, tn)} ∪ E))
 term unifyTypeConstraints =
-  λcx,schemaTypes,constraints.
-    let withConstraint := λc,rest.
+  λcx, schemaTypes, constraints.
+    let withConstraint := λc, rest.
         let sleft := deannotateType (TypeConstraint[`left`] c) in
         let sright := deannotateType (TypeConstraint[`right`] c) in
         let comment := TypeConstraint[comment] c in
-        let bind := λv,t.
+        let bind := λv, t.
             let subst := singletonTypeSubst v t in
             let withResult := λs.composeTypeSubst subst s in
             eithers.map
@@ -124,7 +128,7 @@ term unifyTypeConstraints =
                 cx
                 schemaTypes
                 (substituteInConstraints subst rest)) in
-        let tryBinding := λv,t.ifElse
+        let tryBinding := λv, t.ifElse
               (variableOccursInType v t)
               left(UnificationError{
                 leftType = sleft,
@@ -142,12 +146,12 @@ term unifyTypeConstraints =
                     ")"})
               (bind v t) in
         let isNominalSchemaType := λts.cases(Type){
-              `record`=λ`_`.true,
-              `union`=λ`_`.true,
-              `wrap`=λ`_`.true,
-              `_`=false}
+              `record` = λ`_`.true,
+              `union` = λ`_`.true,
+              `wrap` = λ`_`.true,
+              `_` = false}
               (deannotateType (TypeScheme[body] ts)) in
-        let tryBindOrSchema := λv,t.match
+        let tryBindOrSchema := λv, t.match
               (lookup v schemaTypes)
               (tryBinding v t)
               (λts.ifElse
@@ -177,12 +181,12 @@ term unifyTypeConstraints =
             (joinTypes cx sleft sright comment)
             withConstraints in
         let dflt := cases(Type){
-            variable=λname.tryBindOrSchema name sleft,
-            `_`=noVars}
+            variable = λname.tryBindOrSchema name sleft,
+            `_` = noVars}
             sright in
         cases(Type){
-          variable=λname.cases(Type){
-                variable=λname2.ifElse
+          variable = λname.cases(Type){
+                variable = λname2.ifElse
                       (equal (Name[] name) (Name[] name2))
                       (unifyTypeConstraints cx schemaTypes rest)
                       (ifElse
@@ -207,9 +211,9 @@ term unifyTypeConstraints =
                                 ")"})
                           (bind name2 sleft))
                         (bind name sright)),
-                `_`=tryBindOrSchema name sright}
+                `_` = tryBindOrSchema name sright}
                 sright,
-          `_`=dflt}
+          `_` = dflt}
           sleft
     in match
       (lists.uncons constraints)
@@ -218,19 +222,22 @@ term unifyTypeConstraints =
 
 ## Unify two lists of types pairwise, producing a single substitution that satisfies every pair. The lists must have the same length; the comment is attached to each generated constraint for diagnostics.
 term unifyTypeLists =
-  λcx,schemaTypes,l,r,comment.
-    let toConstraint := λl,r.TypeConstraint{`left` = l, `right` = r, comment = comment}
+  λcx, schemaTypes, l, r, comment.
+    let toConstraint := λl, r.TypeConstraint{
+          `left` = l,
+          `right` = r,
+          comment = comment}
     in unifyTypeConstraints cx schemaTypes (lists.zipWith toConstraint l r)
 
 ## Unify two types, producing a substitution that makes them equal (or an error). The comment is attached to the generated constraint for diagnostics.
 term unifyTypes =
-  λcx,schemaTypes,l,r,comment.unifyTypeConstraints
+  λcx, schemaTypes, l, r, comment.unifyTypeConstraints
       cx
       schemaTypes
       [TypeConstraint{`left` = l, `right` = r, comment = comment}]
 
 ## Determine whether a type variable appears within a type expression.No distinction is made between free and bound type variables.
 term variableOccursInType =
-  λvar,typ0.
-    let tryType := λb,typ.cases(Type){variable=λv.or b (equal (Name[] v) (Name[] var)), `_`=b} typ
+  λvar, typ0.
+    let tryType := λb, typ.cases(Type){variable = λv.or b (equal (Name[] v) (Name[] var)), `_` = b} typ
     in foldOverType TraversalOrder{pre} tryType false typ0

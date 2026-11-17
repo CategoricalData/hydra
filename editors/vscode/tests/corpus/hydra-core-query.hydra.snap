@@ -78,6 +78,7 @@
 #           ^ source.hydra
 #            ^^^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## The name of a record type, for which the edge also specifies an out- and an in- projection
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -91,6 +92,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra variable.other.hydra
 #              ^^ source.hydra
+>
 >  ## The field representing the out-projection of the edge. Defaults to 'out'.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -105,6 +107,7 @@
 #                ^^^^ source.hydra entity.name.type.hydra
 #                    ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                     ^^ source.hydra
+>
 >  ## The field representing the in-projection of the edge. Defaults to 'in'.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -134,6 +137,7 @@
 #                   ^ source.hydra
 #                    ^^^^^^ source.hydra support.type.hydra
 #                          ^^ source.hydra
+>
 >  ## The name of the component graph
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -145,6 +149,7 @@
 #        ^ source.hydra
 #         ^^^^ source.hydra variable.other.hydra
 #             ^^ source.hydra
+>
 >  ## The patterns to match within the subgraph
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -172,6 +177,7 @@
 #           ^ source.hydra
 #            ^^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## A graph term; an expression which is valid in the graph being matched
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -185,6 +191,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra variable.other.hydra
 #              ^^ source.hydra
+>
 >  ## A query variable, not to be confused with a variable term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -196,6 +203,7 @@
 #           ^ source.hydra
 #            ^^^^^^^^ source.hydra variable.other.hydra
 #                    ^^ source.hydra
+>
 >  ## An anonymous variable which we do not care to join across patterns
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -220,6 +228,7 @@
 #           ^ source.hydra
 #            ^^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## A path given by a single step
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -231,6 +240,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## A path given by a regular expression quantifier applied to another path
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -242,6 +252,7 @@
 #        ^ source.hydra
 #         ^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                      ^^ source.hydra
+>
 >  ## A path given by the inverse of another path
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -266,6 +277,7 @@
 #                   ^ source.hydra
 #                    ^^^^^^ source.hydra support.type.hydra
 #                          ^^ source.hydra
+>
 >  ## The left-hand side of the equation
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -279,6 +291,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra variable.other.hydra
 #              ^^ source.hydra
+>
 >  ## The right-hand side of the equation
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -305,6 +318,7 @@
 #              ^ source.hydra
 #               ^^^^^ source.hydra support.type.hydra
 #                    ^^ source.hydra
+>
 >  ## A subject/predicate/object pattern
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -316,6 +330,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                       ^^ source.hydra
+>
 >  ## The negation of another pattern
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -327,6 +342,7 @@
 #           ^ source.hydra
 #            ^^^^^^^ source.hydra variable.other.hydra
 #                   ^^ source.hydra
+>
 >  ## The conjunction ('and') of several other patterns
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -341,6 +357,7 @@
 #                    ^^^^^^^ source.hydra entity.name.type.hydra
 #                           ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                            ^^ source.hydra
+>
 >  ## The disjunction (inclusive 'or') of several other patterns
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -355,6 +372,7 @@
 #                    ^^^^^^^ source.hydra entity.name.type.hydra
 #                           ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                            ^^ source.hydra
+>
 >  ## A pattern which matches within a named subgraph
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -379,6 +397,7 @@
 #                         ^ source.hydra
 #                          ^^^^^^ source.hydra support.type.hydra
 #                                ^^ source.hydra
+>
 >  ## The pattern which, if it matches, triggers the constraint
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -390,6 +409,7 @@
 #             ^ source.hydra
 #              ^^^^^^^ source.hydra variable.other.hydra
 #                     ^^ source.hydra
+>
 >  ## The pattern which must also match when the antecedent matches
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -414,6 +434,7 @@
 #            ^ source.hydra
 #             ^^^^^^ source.hydra support.type.hydra
 #                   ^^ source.hydra
+>
 >  ## The variables selected by the query
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -428,6 +449,7 @@
 #                  ^^^^^^^^ source.hydra entity.name.type.hydra
 #                          ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                           ^^ source.hydra
+>
 >  ## The patterns to be matched
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -455,6 +477,7 @@
 #            ^ source.hydra
 #             ^^^^^^ source.hydra support.type.hydra
 #                   ^^ source.hydra
+>
 >  ## The minimum value (inclusive)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -466,6 +489,7 @@
 #      ^ source.hydra
 #       ^^^^^ source.hydra support.type.hydra
 #            ^^ source.hydra
+>
 >  ## The maximum value (inclusive)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -490,6 +514,7 @@
 #                      ^ source.hydra
 #                       ^^^^^ source.hydra support.type.hydra
 #                            ^^ source.hydra
+>
 >  ## No quantifier; matches a single occurrence
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -501,6 +526,7 @@
 #      ^ source.hydra
 #       ^^^^ source.hydra support.type.hydra
 #           ^^ source.hydra
+>
 >  ## The ? quanifier; matches zero or one occurrence
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -512,6 +538,7 @@
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## The * quantifier; matches any number of occurrences
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -523,6 +550,7 @@
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## The + quantifier; matches one or more occurrences
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -534,6 +562,7 @@
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## The {n} quantifier; matches exactly n occurrences
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -545,6 +574,7 @@
 #          ^ source.hydra
 #           ^^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
+>
 >  ## The {n,} quantifier; matches at least n occurrences
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -556,6 +586,7 @@
 #          ^ source.hydra
 #           ^^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
+>
 >  ## The {n, m} quantifier; matches between n and m (inclusive) occurrences
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -580,6 +611,7 @@
 #                    ^ source.hydra
 #                     ^^^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
+>
 >  ## The path to which the quantifier applies
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -591,6 +623,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## The quantifier
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -615,6 +648,7 @@
 #           ^ source.hydra
 #            ^^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## An out-to-in traversal of an abstract edge
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -626,6 +660,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## A projection from a record through one of its fields
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -639,6 +674,7 @@
 #            ^ source.hydra
 #             ^^^^^^^^^^ source.hydra variable.other.hydra
 #                       ^^ source.hydra
+>
 >  ## A comparison of two terms
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -663,6 +699,7 @@
 #                    ^ source.hydra
 #                     ^^^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
+>
 >  ## The subject of the pattern
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -674,6 +711,7 @@
 #          ^ source.hydra
 #           ^^^^ source.hydra variable.other.hydra
 #               ^^ source.hydra
+>
 >  ## The predicate (property) of the pattern
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -685,6 +723,7 @@
 #            ^ source.hydra
 #             ^^^^ source.hydra variable.other.hydra
 #                 ^^ source.hydra
+>
 >  ## The object of the pattern
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

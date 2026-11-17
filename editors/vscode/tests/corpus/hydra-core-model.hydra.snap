@@ -18,6 +18,7 @@
 #                    ^ source.hydra
 #                     ^^^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
+>
 >  ## The term being annotated
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -29,6 +30,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## The annotation as a single term. By convention this is a map term (Name -> Term) so that multiple independent annotations can coexist, but applications are free to use any term shape.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -53,6 +55,7 @@
 #                    ^ source.hydra
 #                     ^^^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
+>
 >  ## The type being annotated
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -64,6 +67,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## The annotation as a single term. By convention this is a map term (Name -> Term) so that multiple independent annotations can coexist, but applications are free to use any term shape.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -88,6 +92,7 @@
 #                  ^ source.hydra
 #                   ^^^^^^ source.hydra support.type.hydra
 #                         ^^ source.hydra
+>
 >  ## The left-hand side of the application
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -99,6 +104,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## The right-hand side of the application
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -123,6 +129,7 @@
 #                      ^ source.hydra
 #                       ^^^^^^ source.hydra support.type.hydra
 #                             ^^ source.hydra
+>
 >  ## The left-hand side of the application
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -134,6 +141,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## The right-hand side of the application
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -158,6 +166,7 @@
 #              ^ source.hydra
 #               ^^^^^^ source.hydra support.type.hydra
 #                     ^^ source.hydra
+>
 >  ## The name of the bound variable
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -169,6 +178,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## The term to which the variable is bound
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -182,6 +192,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra variable.other.hydra
 #              ^^ source.hydra
+>
 >  ## The optional type scheme of the bound term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -209,6 +220,7 @@
 #                      ^ source.hydra
 #                       ^^^^^^ source.hydra support.type.hydra
 #                             ^^ source.hydra
+>
 >  ## The name of the union variant matched by this alternative
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -220,6 +232,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## The handler applied to the matched variant's payload
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -244,6 +257,7 @@
 #                    ^ source.hydra
 #                     ^^^^^^ source.hydra support.type.hydra
 #                           ^^ source.hydra
+>
 >  ## The name of the union type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -255,6 +269,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## An optional default case, used if none of the explicit cases match
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -269,6 +284,7 @@
 #                    ^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                         ^^ source.hydra
+>
 >  ## A list of case alternatives, one per union variant being handled
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -298,6 +314,7 @@
 #                 ^ source.hydra
 #                  ^^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
+>
 >  ## The 'left' alternative
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -311,6 +328,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra variable.other.hydra
 #              ^^ source.hydra
+>
 >  ## The 'right' alternative
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -337,6 +355,7 @@
 #            ^ source.hydra
 #             ^^^^^^ source.hydra support.type.hydra
 #                   ^^ source.hydra
+>
 >  ## The name of the field
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -348,6 +367,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## The value of the field
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -374,6 +394,7 @@
 #                ^ source.hydra
 #                 ^^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
+>
 >  ## The name of the field
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -385,6 +406,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## The type of the field
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -411,6 +433,7 @@
 #                ^ source.hydra
 #                 ^^^^^ source.hydra support.type.hydra
 #                      ^^ source.hydra
+>
 >  ## A 32-bit floating-point type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -424,6 +447,7 @@
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## A 64-bit floating-point type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -450,6 +474,7 @@
 #                 ^ source.hydra
 #                  ^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
+>
 >  ## A 32-bit floating-point value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -463,6 +488,7 @@
 #            ^ source.hydra
 #             ^^^^^^^ source.hydra support.type.hydra
 #                    ^^ source.hydra
+>
 >  ## A 64-bit floating-point value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -489,6 +515,7 @@
 #                 ^ source.hydra
 #                  ^^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
+>
 >  ## The variable which is bound by the lambda
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -500,6 +527,7 @@
 #            ^ source.hydra
 #             ^^^^ source.hydra variable.other.hydra
 #                 ^^ source.hydra
+>
 >  ## The body of the lambda
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -524,6 +552,7 @@
 #                   ^ source.hydra
 #                    ^^^^^^ source.hydra support.type.hydra
 #                          ^^ source.hydra
+>
 >  ## The domain (input) type of the function
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -535,6 +564,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra variable.other.hydra
 #              ^^ source.hydra
+>
 >  ## The codomain (output) type of the function
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -559,6 +589,7 @@
 #                ^ source.hydra
 #                 ^^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
+>
 >  ## The name of the union type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -570,6 +601,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## The field being injected, including its name and value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -594,6 +626,7 @@
 #                  ^ source.hydra
 #                   ^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
+>
 >  ## An arbitrary-precision integer type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -607,6 +640,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
+>
 >  ## An 8-bit signed integer type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -620,6 +654,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra support.type.hydra
 #              ^^ source.hydra
+>
 >  ## A 16-bit signed integer type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -633,6 +668,7 @@
 #          ^ source.hydra
 #           ^^^^ source.hydra support.type.hydra
 #               ^^ source.hydra
+>
 >  ## A 32-bit signed integer type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -646,6 +682,7 @@
 #          ^ source.hydra
 #           ^^^^ source.hydra support.type.hydra
 #               ^^ source.hydra
+>
 >  ## A 64-bit signed integer type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -659,6 +696,7 @@
 #          ^ source.hydra
 #           ^^^^ source.hydra support.type.hydra
 #               ^^ source.hydra
+>
 >  ## An 8-bit unsigned integer type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -672,6 +710,7 @@
 #          ^ source.hydra
 #           ^^^^ source.hydra support.type.hydra
 #               ^^ source.hydra
+>
 >  ## A 16-bit unsigned integer type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -685,6 +724,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
+>
 >  ## A 32-bit unsigned integer type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -698,6 +738,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
+>
 >  ## A 64-bit unsigned integer type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -724,6 +765,7 @@
 #                   ^ source.hydra
 #                    ^^^^^ source.hydra support.type.hydra
 #                         ^^ source.hydra
+>
 >  ## An arbitrary-precision integer value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -737,6 +779,7 @@
 #           ^ source.hydra
 #            ^^^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## An 8-bit signed integer value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -750,6 +793,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra support.type.hydra
 #              ^^ source.hydra
+>
 >  ## A 16-bit signed integer value (short value)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -763,6 +807,7 @@
 #          ^ source.hydra
 #           ^^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
+>
 >  ## A 32-bit signed integer value (int value)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -776,6 +821,7 @@
 #          ^ source.hydra
 #           ^^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
+>
 >  ## A 64-bit signed integer value (long value)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -789,6 +835,7 @@
 #          ^ source.hydra
 #           ^^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
+>
 >  ## An 8-bit unsigned integer value (byte)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -802,6 +849,7 @@
 #          ^ source.hydra
 #           ^^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
+>
 >  ## A 16-bit unsigned integer value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -815,6 +863,7 @@
 #           ^ source.hydra
 #            ^^^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## A 32-bit unsigned integer value (unsigned int)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -828,6 +877,7 @@
 #           ^ source.hydra
 #            ^^^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## A 64-bit unsigned integer value (unsigned long)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -854,6 +904,7 @@
 #             ^ source.hydra
 #              ^^^^^^ source.hydra support.type.hydra
 #                    ^^ source.hydra
+>
 >  ## The parameter of the lambda
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -865,6 +916,7 @@
 #            ^ source.hydra
 #             ^^^^ source.hydra variable.other.hydra
 #                 ^^ source.hydra
+>
 >  ## An optional domain type for the lambda
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -879,6 +931,7 @@
 #                   ^^^^ source.hydra entity.name.type.hydra
 #                       ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                        ^^ source.hydra
+>
 >  ## The body of the lambda
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -903,6 +956,7 @@
 #          ^ source.hydra
 #           ^^^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## The list of variable bindings
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -917,6 +971,7 @@
 #                 ^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                         ^^ source.hydra
+>
 >  ## The body term in which the variables are bound
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -941,6 +996,7 @@
 #              ^ source.hydra
 #               ^^^^^ source.hydra support.type.hydra
 #                    ^^ source.hydra
+>
 >  ## A binary literal
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -954,6 +1010,7 @@
 #           ^ source.hydra
 #            ^^^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## A boolean literal
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -967,6 +1024,7 @@
 #            ^ source.hydra
 #             ^^^^^^^ source.hydra support.type.hydra
 #                    ^^ source.hydra
+>
 >  ## An arbitrary-precision decimal literal
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -980,6 +1038,7 @@
 #            ^ source.hydra
 #             ^^^^^^^ source.hydra support.type.hydra
 #                    ^^ source.hydra
+>
 >  ## A floating-point literal
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -991,6 +1050,7 @@
 #        ^ source.hydra
 #         ^^^^^^^^^^ source.hydra variable.other.hydra
 #                   ^^ source.hydra
+>
 >  ## An integer literal
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1002,6 +1062,7 @@
 #          ^ source.hydra
 #           ^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                       ^^ source.hydra
+>
 >  ## A string literal
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1028,6 +1089,7 @@
 #                  ^ source.hydra
 #                   ^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
+>
 >  ## The type of a binary (byte string) value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1041,6 +1103,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
+>
 >  ## The type of a boolean (true/false) value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1054,6 +1117,7 @@
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## The type of an arbitrary-precision decimal value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1067,6 +1131,7 @@
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## The type of a floating-point value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1078,6 +1143,7 @@
 #        ^ source.hydra
 #         ^^^^^^^^^ source.hydra variable.other.hydra
 #                  ^^ source.hydra
+>
 >  ## The type of an integer value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1089,6 +1155,7 @@
 #          ^ source.hydra
 #           ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                      ^^ source.hydra
+>
 >  ## The type of a string value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1115,6 +1182,7 @@
 #              ^ source.hydra
 #               ^^^^^^ source.hydra support.type.hydra
 #                     ^^ source.hydra
+>
 >  ## The type of keys in the map
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1126,6 +1194,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## The type of values in the map
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1165,6 +1234,7 @@
 #               ^ source.hydra
 #                ^^^^^^ source.hydra support.type.hydra
 #                      ^^ source.hydra
+>
 >  ## The first component of the pair
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1176,6 +1246,7 @@
 #        ^ source.hydra
 #         ^^^^ source.hydra variable.other.hydra
 #             ^^ source.hydra
+>
 >  ## The second component of the pair
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1200,6 +1271,7 @@
 #                 ^ source.hydra
 #                  ^^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
+>
 >  ## The name of the record type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1211,6 +1283,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## The name of the projected field
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1235,6 +1308,7 @@
 #             ^ source.hydra
 #              ^^^^^^ source.hydra support.type.hydra
 #                    ^^ source.hydra
+>
 >  ## The name of the record type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1246,6 +1320,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## The fields of the record, as a list of name/term pairs
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1273,6 +1348,7 @@
 #           ^ source.hydra
 #            ^^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## A term annotated with metadata
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1284,6 +1360,7 @@
 #            ^ source.hydra
 #             ^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                          ^^ source.hydra
+>
 >  ## A function application
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1295,6 +1372,7 @@
 #              ^ source.hydra
 #               ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                          ^^ source.hydra
+>
 >  ## A union elimination; a case statement
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1308,6 +1386,7 @@
 #          ^ source.hydra
 #           ^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                        ^^ source.hydra
+>
 >  ## An either value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1327,6 +1406,7 @@
 #                         ^^^^ source.hydra entity.name.type.hydra
 #                             ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                              ^^ source.hydra
+>
 >  ## An injection; an instance of a union type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1340,6 +1420,7 @@
 #           ^ source.hydra
 #            ^^^^^^^^^ source.hydra variable.other.hydra
 #                     ^^ source.hydra
+>
 >  ## A function abstraction (lambda)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1351,6 +1432,7 @@
 #         ^ source.hydra
 #          ^^^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## A 'let' term, which binds variables to terms
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1364,6 +1446,7 @@
 #        ^ source.hydra
 #         ^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## A list
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1380,6 +1463,7 @@
 #               ^^^^ source.hydra entity.name.type.hydra
 #                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                    ^^ source.hydra
+>
 >  ## A literal value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1391,6 +1475,7 @@
 #          ^ source.hydra
 #           ^^^^^^^ source.hydra variable.other.hydra
 #                  ^^ source.hydra
+>
 >  ## A map of keys to values
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1410,6 +1495,7 @@
 #                   ^^^^ source.hydra entity.name.type.hydra
 #                       ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                        ^^ source.hydra
+>
 >  ## An optional value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1426,6 +1512,7 @@
 #                       ^^^^ source.hydra entity.name.type.hydra
 #                           ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                            ^^ source.hydra
+>
 >  ## A pair (2-tuple)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1439,6 +1526,7 @@
 #             ^^ source.hydra
 #               ^^^^ source.hydra variable.other.hydra
 #                   ^^^ source.hydra
+>
 >  ## A record elimination; a projection
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1452,6 +1540,7 @@
 #            ^ source.hydra
 #             ^^^^^^^^^^ source.hydra variable.other.hydra
 #                       ^^ source.hydra
+>
 >  ## A record term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1465,6 +1554,7 @@
 #           ^ source.hydra
 #            ^^^^^^ source.hydra variable.other.hydra
 #                  ^^ source.hydra
+>
 >  ## A set of values
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1481,6 +1571,7 @@
 #             ^^^^ source.hydra entity.name.type.hydra
 #                 ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                  ^^ source.hydra
+>
 >  ## A System F type application term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1492,6 +1583,7 @@
 #                  ^ source.hydra
 #                   ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                      ^^ source.hydra
+>
 >  ## A System F type abstraction term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1503,6 +1595,7 @@
 #             ^ source.hydra
 #              ^^^^^^^^^^ source.hydra variable.other.hydra
 #                        ^^ source.hydra
+>
 >  ## A unit value; a term with no value
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1516,6 +1609,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra support.type.hydra
 #              ^^ source.hydra
+>
 >  ## An unwrap elimination; the inverse of a wrap. Given the name of a wrapper type, unwraps an instance of that type to its underlying body value.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1529,6 +1623,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## A variable reference
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1540,6 +1635,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## A wrapped term; an instance of a wrapper type (newtype)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1566,6 +1662,7 @@
 #           ^ source.hydra
 #            ^^^^^ source.hydra support.type.hydra
 #                 ^^ source.hydra
+>
 >  ## An annotated type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1577,6 +1674,7 @@
 #            ^ source.hydra
 #             ^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                          ^^ source.hydra
+>
 >  ## A type application
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1588,6 +1686,7 @@
 #              ^ source.hydra
 #               ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                              ^^ source.hydra
+>
 >  ## An effectful computation which, when interpreted by a host application, may perform host interactions and produce a value of the given type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1601,6 +1700,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## An either (sum) type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1614,6 +1714,7 @@
 #           ^ source.hydra
 #            ^^^^^^^^^^ source.hydra variable.other.hydra
 #                      ^^ source.hydra
+>
 >  ## A universally quantified (polymorphic) type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1627,6 +1728,7 @@
 #           ^ source.hydra
 #            ^^^^^^^^^^ source.hydra variable.other.hydra
 #                      ^^ source.hydra
+>
 >  ## A function type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1638,6 +1740,7 @@
 #           ^ source.hydra
 #            ^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                        ^^ source.hydra
+>
 >  ## A list type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1651,6 +1754,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra variable.other.hydra
 #              ^^ source.hydra
+>
 >  ## A literal type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1662,6 +1766,7 @@
 #          ^ source.hydra
 #           ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                      ^^ source.hydra
+>
 >  ## A map type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1675,6 +1780,7 @@
 #        ^ source.hydra
 #         ^^^^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## An optional type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1688,6 +1794,7 @@
 #             ^ source.hydra
 #              ^^^^ source.hydra variable.other.hydra
 #                  ^^ source.hydra
+>
 >  ## A pair (2-tuple) type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1699,6 +1806,7 @@
 #       ^ source.hydra
 #        ^^^^^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## A record type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1715,6 +1823,7 @@
 #                 ^^^^^^^^^ source.hydra entity.name.type.hydra
 #                          ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                           ^^ source.hydra
+>
 >  ## A set type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1728,6 +1837,7 @@
 #        ^ source.hydra
 #         ^^^^ source.hydra variable.other.hydra
 #             ^^ source.hydra
+>
 >  ## A union type with field names
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1744,6 +1854,7 @@
 #                ^^^^^^^^^ source.hydra entity.name.type.hydra
 #                         ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                          ^^ source.hydra
+>
 >  ## The unit type — the nullary conjunction; one inhabitant. Dual to `void`.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1757,6 +1868,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra support.type.hydra
 #              ^^ source.hydra
+>
 >  ## A type variable
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1768,6 +1880,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## The void (uninhabited, or bottom) type — the nullary disjunction; zero inhabitants. Dual to `unit`.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1781,6 +1894,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra support.type.hydra
 #              ^^ source.hydra
+>
 >  ## A wrapped type (newtype). There is no corresponding `unwrap` variant at the type level: wrap is the introduction form, and a wrapper type's underlying body type is given by the `wrap` variant's argument.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1807,6 +1921,7 @@
 #                          ^ source.hydra
 #                           ^^^^^^ source.hydra support.type.hydra
 #                                 ^^ source.hydra
+>
 >  ## The term being applied to a type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1818,6 +1933,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## The type argument
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1844,6 +1960,7 @@
 #                          ^ source.hydra
 #                           ^^^^^ source.hydra support.type.hydra
 #                                ^^ source.hydra
+>
 >  ## A simple type class constraint, naming a single type class
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1868,6 +1985,7 @@
 #                 ^ source.hydra
 #                  ^^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
+>
 >  ## The type variable introduced by the abstraction
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1879,6 +1997,7 @@
 #            ^ source.hydra
 #             ^^^^ source.hydra variable.other.hydra
 #                 ^^ source.hydra
+>
 >  ## The body of the abstraction
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1903,6 +2022,7 @@
 #                 ^ source.hydra
 #                  ^^^^^^ source.hydra support.type.hydra
 #                        ^^ source.hydra
+>
 >  ## The free type variables
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1917,6 +2037,7 @@
 #                  ^^^^ source.hydra entity.name.type.hydra
 #                      ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                       ^^ source.hydra
+>
 >  ## The type expression
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1928,6 +2049,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## Constraints on type variables, including typeclass constraints. The map keys are type variable names; an empty map means no constraints.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1958,6 +2080,7 @@
 #                              ^ source.hydra
 #                               ^^^^^^ source.hydra support.type.hydra
 #                                     ^^ source.hydra
+>
 >  ## The typeclass constraints on this type variable
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1985,6 +2108,7 @@
 #                  ^ source.hydra
 #                   ^^^^^^ source.hydra support.type.hydra
 #                         ^^ source.hydra
+>
 >  ## The name of the wrapper type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -1996,6 +2120,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## The wrapped term
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

@@ -23,6 +23,7 @@
 #                ^ source.hydra
 #                 ^^^^^ source.hydra support.type.hydra
 #                      ^^ source.hydra
+>
 >  ## A path already exists where one was required not to (POSIX EEXIST), e.g. creating a directory that is already present
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -34,6 +35,7 @@
 #                ^ source.hydra
 #                 ^^^^^^^^ source.hydra variable.other.hydra
 #                         ^^ source.hydra
+>
 >  ## The path is syntactically invalid or cannot be represented by the host file system
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -45,6 +47,7 @@
 #              ^ source.hydra
 #               ^^^^^^ source.hydra support.type.hydra
 #                     ^^ source.hydra
+>
 >  ## The requested path does not exist
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -56,6 +59,7 @@
 #           ^ source.hydra
 #            ^^^^^^^^ source.hydra variable.other.hydra
 #                    ^^ source.hydra
+>
 >  ## Any other file-system error, represented as a host-provided message
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -67,6 +71,7 @@
 #        ^ source.hydra
 #         ^^^^^^ source.hydra support.type.hydra
 #               ^^ source.hydra
+>
 >  ## The host denied access to the requested path
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

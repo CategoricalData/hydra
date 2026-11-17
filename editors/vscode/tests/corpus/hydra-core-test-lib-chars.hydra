@@ -1,0 +1,1011 @@
+## Test cases for hydra.core.lib.chars primitives
+module hydra.core.test.lib.chars
+
+import hydra.core.lib.eithers as eithers
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.reduction
+import hydra.core.test.testGraph
+import hydra.core.testing
+
+## Test cases for hydra.core.lib.chars primitives
+term allTests =
+  TestGroup{
+    name = "hydra.core.lib.chars primitives",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "isAlpha",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "lowercase letter",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.chars.isAlpha"}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 97:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "uppercase letter",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.chars.isAlpha"}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 65:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "digit",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.chars.isAlpha"}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 53:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "space",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.chars.isAlpha"}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 32:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "punctuation",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.chars.isAlpha"}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 46:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "isAlphaNum",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "classifiesAlphanumeric",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "letter",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.isAlphaNum"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 97:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.isAlphaNum.classifiesAlphanumeric"}]},
+              TestCaseWithMetadata{
+                name = "digit",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.isAlphaNum"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 53:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.isAlphaNum.classifiesAlphanumeric"}]}]},
+          TestGroup{
+            name = "classifiesNonAlphanumeric",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "space",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.isAlphaNum"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 32:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.isAlphaNum.classifiesNonAlphanumeric"}]},
+              TestCaseWithMetadata{
+                name = "punctuation",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.isAlphaNum"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 46:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.isAlphaNum.classifiesNonAlphanumeric"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "isDigit",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "ascii digit",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.chars.isDigit"}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 53:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "ascii zero",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.chars.isDigit"}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 48:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "ascii nine",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.chars.isDigit"}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 57:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = true}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "letter",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.chars.isDigit"}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 97:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "non-ascii unicode digit",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.chars.isDigit"}},
+                            argument = Term{
+                              literal = Literal{
+                                integer = IntegerValue{
+                                  `int32` = 1632:int32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `boolean` = false}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "isLower",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "classifiesLowercase",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "lowercase",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.isLower"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 97:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.isLower.classifiesLowercase"}]}]},
+          TestGroup{
+            name = "classifiesNonLowercase",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "uppercase",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.isLower"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 65:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.isLower.classifiesNonLowercase"}]},
+              TestCaseWithMetadata{
+                name = "digit",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.isLower"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 53:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.isLower.classifiesNonLowercase"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "isSpace",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "classifiesWhitespace",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "space",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.isSpace"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 32:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.isSpace.classifiesWhitespace"}]},
+              TestCaseWithMetadata{
+                name = "tab",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.isSpace"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 9:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.isSpace.classifiesWhitespace"}]},
+              TestCaseWithMetadata{
+                name = "newline",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.isSpace"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 10:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.isSpace.classifiesWhitespace"}]}]},
+          TestGroup{
+            name = "classifiesNonWhitespace",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "letter",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.isSpace"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 97:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.isSpace.classifiesNonWhitespace"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "isUpper",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "classifiesUppercase",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "uppercase",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.isUpper"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 65:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.isUpper.classifiesUppercase"}]}]},
+          TestGroup{
+            name = "classifiesNonUppercase",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "lowercase",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.isUpper"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 97:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.isUpper.classifiesNonUppercase"}]},
+              TestCaseWithMetadata{
+                name = "digit",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.isUpper"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 53:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.isUpper.classifiesNonUppercase"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "toLower",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "mapsToLowercaseOrUnchanged",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "uppercase",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.toLower"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 65:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 97:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.toLower.mapsToLowercaseOrUnchanged"}]},
+              TestCaseWithMetadata{
+                name = "lowercase",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.toLower"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 97:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 97:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.toLower.mapsToLowercaseOrUnchanged"}]},
+              TestCaseWithMetadata{
+                name = "digit",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.toLower"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 53:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 53:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.toLower.mapsToLowercaseOrUnchanged"}]}]},
+          TestGroup{
+            name = "usesSimpleNotFullMapping",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "dotted capital I",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.toLower"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 304:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 105:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.toLower.usesSimpleNotFullMapping"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "toUpper",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "mapsToUppercaseOrUnchanged",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "lowercase",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.toUpper"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 97:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 65:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.toUpper.mapsToUppercaseOrUnchanged"}]},
+              TestCaseWithMetadata{
+                name = "uppercase",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.toUpper"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 65:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 65:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.toUpper.mapsToUppercaseOrUnchanged"}]},
+              TestCaseWithMetadata{
+                name = "digit",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.toUpper"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 53:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 53:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.toUpper.mapsToUppercaseOrUnchanged"}]}]},
+          TestGroup{
+            name = "usesSimpleNotFullMapping",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "sharp s",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.toUpper"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 223:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 223:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.toUpper.usesSimpleNotFullMapping"}]},
+              TestCaseWithMetadata{
+                name = "n preceded by apostrophe",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.toUpper"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 329:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 329:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.toUpper.usesSimpleNotFullMapping"}]},
+              TestCaseWithMetadata{
+                name = "greek alpha with psili and ypogegrammeni",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.chars.toUpper"}},
+                                argument = Term{
+                                  literal = Literal{
+                                    integer = IntegerValue{
+                                      `int32` = 8064:int32}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 8072:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.chars.toUpper.usesSimpleNotFullMapping"}]}]}],
+        `cases` = []}],
+    `cases` = []}

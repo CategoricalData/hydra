@@ -10,7 +10,7 @@ import hydra.core.model
 
 ## Differentiate a binary primitive application given both arguments and their derivatives
 term differentiateBinary =
-  λbfname,a,b,da,db.ifElse
+  λbfname, a, b, da, db.ifElse
       (or
         (equal bfname Name{"hydra.core.lib.math.add"})
         (equal bfname Name{"hydra.core.lib.math.addFloat64"}))
@@ -284,8 +284,8 @@ term differentiateBinary =
 ## Differentiate a function term (Float64 -> Float64) with respect to its parameter
 term differentiateFunction =
   λ`term`.cases(Term){
-      annotated=λat.differentiateFunction (AnnotatedTerm[body] at),
-      lambda=λl.
+      annotated = λat.differentiateFunction (AnnotatedTerm[body] at),
+      lambda = λl.
           let paramName := Lambda[parameter] l in
           let body := Lambda[body] l in
           Term{
@@ -293,22 +293,22 @@ term differentiateFunction =
               parameter = paramName,
               domain = Lambda[domain] l,
               body = differentiateTerm paramName body}},
-      `_`=`term`}
+      `_` = `term`}
       `term`
 
 ## Differentiate a term with respect to a named variable
 term differentiateTerm =
-  λdx,`term`.cases(Term){
-      variable=λv.ifElse
+  λdx, `term`.cases(Term){
+      variable = λv.ifElse
             (equal v dx)
             Term{literal = Literal{float = FloatValue{`float64` = 1.0:float64}}}
             Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
-      literal=λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
-      application=λapp.
+      literal = λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
+      application = λapp.
           let func := Application[function] app in
           let arg := Application[argument] app in
           cases(Term){
-            variable=λfname.match
+            variable = λfname.match
                   (primitiveDerivative fname)
                   (differentiateTerm
                     dx
@@ -327,17 +327,17 @@ term differentiateTerm =
                                 function = derivTerm,
                                 argument = arg}}}},
                         argument = differentiateTerm dx arg}}),
-            application=λinnerApp.
+            application = λinnerApp.
                 let innerFunc := Application[function] innerApp in
                 let innerArg := Application[argument] innerApp in
                 cases(Term){
-                  variable=λbfname.differentiateBinary
+                  variable = λbfname.differentiateBinary
                         bfname
                         innerArg
                         arg
                         (differentiateTerm dx innerArg)
                         (differentiateTerm dx arg),
-                  `_`=Term{
+                  `_` = Term{
                     application = Application{
                       function = Term{
                         application = Application{
@@ -351,7 +351,7 @@ term differentiateTerm =
                                   argument = arg}}}},
                       argument = differentiateTerm dx arg}}}
                   innerFunc,
-            `_`=Term{
+            `_` = Term{
               application = Application{
                 function = Term{
                   application = Application{
@@ -365,7 +365,7 @@ term differentiateTerm =
                             argument = arg}}}},
                 argument = differentiateTerm dx arg}}}
             func,
-      lambda=λl.ifElse
+      lambda = λl.ifElse
             (equal (Lambda[parameter] l) dx)
             Term{
               lambda = Lambda{
@@ -380,10 +380,10 @@ term differentiateTerm =
                 parameter = Lambda[parameter] l,
                 domain = Lambda[domain] l,
                 body = differentiateTerm dx (Lambda[body] l)}},
-      `cases`=λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
-      `project`=λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
-      `unwrap`=λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
-      `let`=λl.Term{
+      `cases` = λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
+      `project` = λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
+      `unwrap` = λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
+      `let` = λl.Term{
             `let` = Let{
               bindings = lists.map
                   (λb.Binding{
@@ -392,10 +392,10 @@ term differentiateTerm =
                       typeScheme = none})
                   (Let[bindings] l),
               body = differentiateTerm dx (Let[body] l)}},
-      annotated=λat.differentiateTerm dx (AnnotatedTerm[body] at),
-      `list`=λelems.Term{`list` = lists.map (differentiateTerm dx) elems},
-      pair=λp.Term{pair = (differentiateTerm dx (first p), differentiateTerm dx (second p))},
-      `record`=λr.Term{
+      annotated = λat.differentiateTerm dx (AnnotatedTerm[body] at),
+      `list` = λelems.Term{`list` = lists.map (differentiateTerm dx) elems},
+      pair = λp.Term{pair = (differentiateTerm dx (first p), differentiateTerm dx (second p))},
+      `record` = λr.Term{
             `record` = Record{
               typeName = Record[typeName] r,
               fields = lists.map
@@ -403,20 +403,20 @@ term differentiateTerm =
                       name = Field[name] fld,
                       `term` = differentiateTerm dx (Field[`term`] fld)})
                   (Record[fields] r)}},
-      typeApplication=λta.differentiateTerm dx (TypeApplicationTerm[body] ta),
-      typeLambda=λtl.differentiateTerm dx (TypeLambda[body] tl),
-      `unit`=λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
-      `set`=λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
-      `map`=λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
-      `either`=λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
-      `optional`=λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
-      `inject`=λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
-      `wrap`=λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}}}
+      typeApplication = λta.differentiateTerm dx (TypeApplicationTerm[body] ta),
+      typeLambda = λtl.differentiateTerm dx (TypeLambda[body] tl),
+      `unit` = λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
+      `set` = λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
+      `map` = λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
+      `either` = λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
+      `optional` = λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
+      `inject` = λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}},
+      `wrap` = λ`_`.Term{literal = Literal{float = FloatValue{`float64` = 0.0:float64}}}}
       `term`
 
 ## Compute the gradient of a term as a record of partial derivatives
 term gradient =
-  λtypeName,vars,`term`.Term{
+  λtypeName, vars, `term`.Term{
       `record` = Record{
         typeName = typeName,
         fields = lists.map

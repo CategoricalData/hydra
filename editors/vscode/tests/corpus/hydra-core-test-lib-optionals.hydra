@@ -1,0 +1,446 @@
+## Test cases for hydra.core.lib.optionals primitives
+module hydra.core.test.lib.optionals
+
+import hydra.core.lib.literals
+import hydra.core.lib.logic
+import hydra.core.lib.math
+import hydra.core.lib.optionals as optionals
+import hydra.core.lib.ordering
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.testing
+
+## Test cases for hydra.core.lib.optionals primitives
+term allTests =
+  TestGroup{
+    name = "hydra.core.lib.optionals primitives",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "appliesFunctionWhenBothGiven",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "both given",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      (optionals.apply
+                        given(λx.add 3:int32 x)
+                        given(5:int32)),
+                expected = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      given(8:int32)}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.apply.appliesFunctionWhenBothGiven"}]},
+          TestCaseWithMetadata{
+            name = "none function",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      (optionals.apply none given(5:int32)),
+                expected = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      none}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.apply.appliesFunctionWhenBothGiven"}]},
+          TestCaseWithMetadata{
+            name = "none value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      (optionals.apply
+                        given(λx.add 3:int32 x)
+                        none),
+                expected = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      none}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.apply.appliesFunctionWhenBothGiven"}]}]},
+      TestGroup{
+        name = "chainsOnGivenPropagatesNone",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "given to given",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      (optionals.bind
+                        given(5:int32)
+                        (λx.given(mul x 2:int32))),
+                expected = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      given(10:int32)}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.bind.chainsOnGivenPropagatesNone"}]},
+          TestCaseWithMetadata{
+            name = "none to none",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      (optionals.bind
+                        none
+                        (λx.given(mul x 2:int32))),
+                expected = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      none}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.bind.chainsOnGivenPropagatesNone"}]}]},
+      TestGroup{
+        name = "kleisliComposesShortCircuitingOnNone",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "both succeed",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      (optionals.compose
+                        (λx.ifElse
+                            (lte x 5:int32)
+                            given(add x 1:int32)
+                            none)
+                        (λy.ifElse
+                            (gte y 5:int32)
+                            given(mul y 2:int32)
+                            none)
+                        5:int32),
+                expected = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      given(12:int32)}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.compose.kleisliComposesShortCircuitingOnNone"}]},
+          TestCaseWithMetadata{
+            name = "first fails",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      (optionals.compose
+                        (λx.ifElse
+                            (lte x 5:int32)
+                            given(add x 1:int32)
+                            none)
+                        (λy.ifElse
+                            (gte y 5:int32)
+                            given(mul y 2:int32)
+                            none)
+                        10:int32),
+                expected = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      none}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.compose.kleisliComposesShortCircuitingOnNone"}]},
+          TestCaseWithMetadata{
+            name = "second fails",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      (optionals.compose
+                        (λx.ifElse
+                            (lte x 5:int32)
+                            given(add x 1:int32)
+                            none)
+                        (λy.ifElse
+                            (gte y 5:int32)
+                            given(mul y 2:int32)
+                            none)
+                        3:int32),
+                expected = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      none}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.compose.kleisliComposesShortCircuitingOnNone"}]}]},
+      TestGroup{
+        name = "wrapsValueAsPresent",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "wraps integer",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      (optionals.given 42:int32),
+                expected = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      given(42:int32)}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.given.wrapsValueAsPresent"}]},
+          TestCaseWithMetadata{
+            name = "wraps string",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λmx.`optional` (λs.printString s) mx)
+                      (optionals.given "hello"),
+                expected = λ`_`.(λmx.`optional` (λs.printString s) mx)
+                      given("hello")}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.given.wrapsValueAsPresent"}]}]},
+      TestGroup{
+        name = "keepsPresentValuesPreservingOrder",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "keeps present values",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λxs.`list` (λn.printInt32 n) xs)
+                      (optionals.givens
+                        [given(1:int32), none, given(3:int32)]),
+                expected = λ`_`.(λxs.`list` (λn.printInt32 n) xs)
+                      [1:int32, 3:int32]}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.givens.keepsPresentValuesPreservingOrder"}]},
+          TestCaseWithMetadata{
+            name = "single given",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λxs.`list` (λn.printInt32 n) xs)
+                      (optionals.givens [given(5:int32)]),
+                expected = λ`_`.(λxs.`list` (λn.printInt32 n) xs)
+                      [5:int32]}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.givens.keepsPresentValuesPreservingOrder"}]},
+          TestCaseWithMetadata{
+            name = "all none",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λxs.`list` (λn.printInt32 n) xs)
+                      (optionals.givens [none, none]),
+                expected = λ`_`.(λxs.`list` (λn.printInt32 n) xs) []}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.givens.keepsPresentValuesPreservingOrder"}]},
+          TestCaseWithMetadata{
+            name = "empty list",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λxs.`list` (λn.printInt32 n) xs)
+                      (optionals.givens []),
+                expected = λ`_`.(λxs.`list` (λn.printInt32 n) xs) []}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.givens.keepsPresentValuesPreservingOrder"}]}]},
+      TestGroup{
+        name = "testsPresentVariant",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "given value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (optionals.isGiven given(42:int32)),
+                expected = λ`_`.(λb.printBoolean b) true}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.isGiven.testsPresentVariant"}]},
+          TestCaseWithMetadata{
+            name = "none",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (optionals.isGiven none),
+                expected = λ`_`.(λb.printBoolean b) false}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.isGiven.testsPresentVariant"}]}]},
+      TestGroup{
+        name = "testsAbsentVariant",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "given value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (optionals.isNone given(42:int32)),
+                expected = λ`_`.(λb.printBoolean b) false}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.isNone.testsAbsentVariant"}]},
+          TestCaseWithMetadata{
+            name = "none",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λb.printBoolean b)
+                      (optionals.isNone none),
+                expected = λ`_`.(λb.printBoolean b) true}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.isNone.testsAbsentVariant"}]}]},
+      TestGroup{
+        name = "mapsGivenLeavesNoneUnchanged",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "maps given value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      (optionals.map
+                        (λx.mul x 2:int32)
+                        given(5:int32)),
+                expected = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      given(10:int32)}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.map.mapsGivenLeavesNoneUnchanged"}]},
+          TestCaseWithMetadata{
+            name = "none unchanged",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      (optionals.map (λx.mul x 2:int32) none),
+                expected = λ`_`.(λmx.`optional` (λn.printInt32 n) mx)
+                      none}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.map.mapsGivenLeavesNoneUnchanged"}]}]},
+      TestGroup{
+        name = "filtersAndTransformsKeepingGiven",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "filter and transform",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λxs.`list` (λn.printInt32 n) xs)
+                      (optionals.mapOptional
+                        (λx.ifElse
+                            (gt x 2:int32)
+                            given(mul x 2:int32)
+                            none)
+                        [1:int32, 2:int32, 3:int32, 4:int32, 5:int32]),
+                expected = λ`_`.(λxs.`list` (λn.printInt32 n) xs)
+                      [6:int32, 8:int32, 10:int32]}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.mapOptional.filtersAndTransformsKeepingGiven"}]},
+          TestCaseWithMetadata{
+            name = "empty result",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λxs.`list` (λn.printInt32 n) xs)
+                      (optionals.mapOptional
+                        (λx.ifElse
+                            (gt x 2:int32)
+                            given(mul x 2:int32)
+                            none)
+                        [1:int32, 2:int32]),
+                expected = λ`_`.(λxs.`list` (λn.printInt32 n) xs) []}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.mapOptional.filtersAndTransformsKeepingGiven"}]},
+          TestCaseWithMetadata{
+            name = "empty input",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λxs.`list` (λn.printInt32 n) xs)
+                      (optionals.mapOptional
+                        (λx.ifElse
+                            (gt x 2:int32)
+                            given(mul x 2:int32)
+                            none)
+                        []),
+                expected = λ`_`.(λxs.`list` (λn.printInt32 n) xs) []}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.mapOptional.filtersAndTransformsKeepingGiven"}]}]},
+      TestGroup{
+        name = "eliminatesByVariant",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "given applies function",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n)
+                      (optionals.match
+                        given(5:int32)
+                        0:int32
+                        (λx.mul x 2:int32)),
+                expected = λ`_`.(λn.printInt32 n) 10:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.match.eliminatesByVariant"}]},
+          TestCaseWithMetadata{
+            name = "none returns default",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n)
+                      (optionals.match
+                        none
+                        99:int32
+                        (λx.mul x 2:int32)),
+                expected = λ`_`.(λn.printInt32 n) 99:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.match.eliminatesByVariant"}]}]},
+      TestGroup{
+        name = "convertsGivenToSingletonNoneToEmpty",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "given value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λxs.`list` (λn.printInt32 n) xs)
+                      (optionals.toList given(42:int32)),
+                expected = λ`_`.(λxs.`list` (λn.printInt32 n) xs)
+                      [42:int32]}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.toList.convertsGivenToSingletonNoneToEmpty"}]},
+          TestCaseWithMetadata{
+            name = "none",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λxs.`list` (λn.printInt32 n) xs)
+                      (optionals.toList none),
+                expected = λ`_`.(λxs.`list` (λn.printInt32 n) xs) []}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.toList.convertsGivenToSingletonNoneToEmpty"}]}]},
+      TestGroup{
+        name = "returnsContainedValueOrDefault",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "given returns value",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n)
+                      (optionals.withDefault
+                        0:int32
+                        given(7:int32)),
+                expected = λ`_`.(λn.printInt32 n) 7:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.withDefault.returnsContainedValueOrDefault"}]},
+          TestCaseWithMetadata{
+            name = "none returns default",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.(λn.printInt32 n)
+                      (optionals.withDefault 99:int32 none),
+                expected = λ`_`.(λn.printInt32 n) 99:int32}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.optionals.withDefault.returnsContainedValueOrDefault"}]}]}],
+    `cases` = []}

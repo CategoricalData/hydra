@@ -8,44 +8,60 @@ import hydra.core.typing
 
 ## A graph, or lexical environment which binds names to terms, types, primitives, and metadata
 type Graph = record{
+
   ## The terms bound by all term variables in scope
   boundTerms: map<Name, Term>,
+
   ## The type schemes of all term variables in scope
   boundTypes: map<Name, TypeScheme>,
+
   ## A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered.
   classConstraints: map<Name, TypeVariableConstraints>,
+
   ## The set of term variables introduced by specifically by lambdas
   lambdaVariables: set<Name>,
+
   ## Any additional metadata bound to term variables in scope
   metadata: map<Name, Term>,
+
   ## All primitive functions and constants by name
   primitives: map<Name, Primitive>,
+
   ## All schema types (type schemes) in scope
   schemaTypes: map<Name, TypeScheme>,
+
   ## The set of type variables introduced specifically by type lambdas
   typeVariables: set<Name>}
 
 ## A library of primitive functions
 type Library = record{
+
   ## A common prefix for all primitive function names in the library
   name: ModuleName,
+
   ## A preferred namespace prefix for function names in the library
   prefix: string,
+
   ## The primitives defined in this library
   primitives: list<Primitive>}
 
 ## A built-in function or constant, consisting of the host-independent PrimitiveDefinition (name, signature, metadata) plus a host-specific implementation.
 type Primitive = record{
+
   ## The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation.
   definition: PrimitiveDefinition,
+
   ## A concrete, host-specific implementation of the primitive function: given the current graph, a mapping from a list of argument terms to a result term, or an error. Arguments are reduced and stripped of annotations by the interpreter before the implementation is invoked, so the implementation can pattern-match the argument terms directly; a higher-order primitive whose result shape is fixed by its data argument can return an unreduced applicative term and let the outer reducer fold it (no graph needed). The graph is retained for the higher-order primitives that must evaluate a function argument mid-computation (e.g. lists.filter): evaluating that function resolves primitive names against the graph's primitive table. The legacy `InferenceContext` parameter was vestigial and has been removed (https://github.com/CategoricalData/hydra/issues/446).
   implementation: Graph → list<Term> → either<Error, Term>}
 
 ## A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms.
 type TermCoder = forall a. record{
+
   ## The Hydra type of encoded terms
   `type`: Type,
+
   ## An encode function from terms to native values
   encode: InferenceContext → Graph → Term → either<Error, a>,
+
   ## A decode function from native values to terms
   decode: InferenceContext → a → either<Error, Term>}

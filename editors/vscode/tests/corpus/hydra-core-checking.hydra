@@ -39,18 +39,18 @@ term allEqual =
   λels.optionals.match
       (lists.uncons els)
       true
-      (λuc.let h := first uc in let t := second uc in lists.foldl (λb,x.and b (equal x h)) true t)
+      (λuc.let h := first uc in let t := second uc in lists.foldl (λb, x.and b (equal x h)) true t)
 
 ## Apply type arguments to a type, substituting forall-bound variables. Paper: inference.tex, 'Checking the witness' (consuming the pending-type-argument stack).
 term applyTypeArgumentsToType =
-  λcx,tx,typeArgs,t.optionals.match
+  λcx, tx, typeArgs, t.optionals.match
       (lists.uncons typeArgs)
       right(t)
       (λuc.
         let ah := first uc in
         let at := second uc in
         cases(Type){
-          `forall`=λft.
+          `forall` = λft.
               let v := ForallType[parameter] ft in
               let tbody := ForallType[body] ft in
               applyTypeArgumentsToType
@@ -58,7 +58,7 @@ term applyTypeArgumentsToType =
                 tx
                 at
                 (substInType TypeSubst{maps.singleton v ah} tbody),
-          variable=λtname.eithers.either
+          variable = λtname.eithers.either
                 (λ`_`.left(Error{
                     extraction = ExtractionError{
                       unexpectedShape = UnexpectedShapeError{
@@ -70,15 +70,15 @@ term applyTypeArgumentsToType =
                   let schemaBody := deannotateType
                       (TypeScheme[body] schemaType) in
                   cases(Type){
-                    `forall`=λ`_`.applyTypeArgumentsToType
+                    `forall` = λ`_`.applyTypeArgumentsToType
                           cx
                           tx
                           typeArgs
                           schemaBody,
-                    `_`=right(t)}
+                    `_` = right(t)}
                     schemaBody)
                 (requireSchemaType cx (Graph[schemaTypes] tx) tname),
-          `_`=left(Error{
+          `_` = left(Error{
               extraction = ExtractionError{
                 unexpectedShape = UnexpectedShapeError{
                   expected = "forall type",
@@ -96,12 +96,14 @@ term applyTypeArgumentsToType =
 
 ## Check that a term has no unbound type variables (Either version). Paper: inference.tex, 'Checking the witness' (always-on finalization invariant).
 term checkForUnboundTypeVariables =
-  λcx,tx,term0.
+  λcx, tx, term0.
     let svars := sets.fromList (maps.keys (Graph[schemaTypes] tx)) in
-    let checkRecursive := λvars,trace,lbinding,`term`.
+    let checkRecursive := λvars, trace, lbinding, `term`.
         let recurse := checkRecursive vars trace lbinding in
         let dflt := eithers.bind
-            (eithers.mapList recurse (subterms `term`))
+            (eithers.mapList
+              recurse
+              (subterms `term`))
             (λ`_`.right(unit)) in
         let check := λtyp.
             let freevars := freeVariablesInType typ in
@@ -120,10 +122,10 @@ term checkForUnboundTypeVariables =
               (eithers.mapOptional check m)
               (λ`_`.right(unit)) in
         cases(Term){
-          lambda=λl.eithers.bind
+          lambda = λl.eithers.bind
                 (checkOptional (Lambda[domain] l))
                 (λ`_`.recurse (Lambda[body] l)),
-          `let`=λl.
+          `let` = λl.
               let forBinding := λb.
                   let bterm := Binding[`term`] b in
                   let newVars := optionals.match
@@ -145,21 +147,21 @@ term checkForUnboundTypeVariables =
                   forBinding
                   (Let[bindings] l))
                 (λ`_`.recurse (Let[body] l)),
-          typeApplication=λtt.eithers.bind
+          typeApplication = λtt.eithers.bind
                 (check (TypeApplicationTerm[`type`] tt))
                 (λ`_`.recurse (TypeApplicationTerm[body] tt)),
-          typeLambda=λtl.eithers.bind
+          typeLambda = λtl.eithers.bind
                 (check
                   Type{
                     variable = TypeLambda[parameter] tl})
                 (λ`_`.recurse (TypeLambda[body] tl)),
-          `_`=dflt}
+          `_` = dflt}
           `term` in
     checkRecursive sets.empty ["top level"] none term0
 
 ## Ensure all types in a list are equal and return the common type
 term checkSameType =
-  λcx,tx,desc,types.
+  λcx, tx, desc, types.
     let unequalErr := left(Error{
         checking = CheckingError{
           unequalTypes = UnequalTypesError{
@@ -172,11 +174,15 @@ term checkSameType =
 
 ## Sanity-check a type substitution arising from unification. Specifically, check that schema types have not been inappropriately unified with type variables inferred from terms. Paper: inference.tex, 'Checking the witness' (always-on invariant: a substitution may not bind a type name as if it were an inference variable).
 term checkTypeSubst =
-  λcx,tx,subst.
+  λcx, tx, subst.
     let s := TypeSubst[] subst in
     let vars := sets.fromList (maps.keys s) in
     let suspectVars := sets.intersection vars (sets.fromList (maps.keys (Graph[schemaTypes] tx))) in
-    let isNominal := λts.cases(Type){`record`=λ`_`.true, `union`=λ`_`.true, `wrap`=λ`_`.true, `_`=false}
+    let isNominal := λts.cases(Type){
+          `record` = λ`_`.true,
+          `union` = λ`_`.true,
+          `wrap` = λ`_`.true,
+          `_` = false}
           (deannotateType (TypeScheme[body] ts)) in
     let badVars := sets.fromList
         (lists.filter
@@ -194,7 +200,7 @@ term checkTypeSubst =
 
 ## Check if a type contains any type variable from the current scope
 term containsInScopeTypeVars =
-  λtx,t.
+  λtx, t.
     let vars := Graph[typeVariables] tx in
     let freeVars := freeVariablesInTypeSimple t in
     not (sets.isEmpty (sets.intersection vars freeVars))
@@ -202,15 +208,15 @@ term containsInScopeTypeVars =
 ## Normalize free type variables in a type to canonical names based on order of first occurrence. This allows comparing types that differ only in the naming of free type variables. Paper: inference.tex, 'Checking the witness' (effective equality).
 term normalizeTypeFreeVars =
   λtyp.
-    let collectVars := λacc,t.cases(Type){
-          variable=λv.ifElse
+    let collectVars := λacc, t.cases(Type){
+          variable = λv.ifElse
                 (maps.member v acc)
                 acc
                 (maps.insert
                   v
                   Name{strings.concat2 "_tv" (printInt32 (maps.size acc))}
                   acc),
-          `_`=acc}
+          `_` = acc}
           t in
     let subst := foldOverType TraversalOrder{pre} collectVars maps.empty typ in
     substituteTypeVariables subst typ
@@ -220,54 +226,54 @@ term toFContext = λcx.maps.map typeSchemeToFType (Graph[boundTypes] cx)
 
 ## Check whether two lists of types are effectively equal, disregarding type aliases
 term typeListsEffectivelyEqual =
-  λtx,tlist1,tlist2.ifElse
+  λtx, tlist1, tlist2.ifElse
       (equal (lists.length tlist1) (lists.length tlist2))
       (lists.foldl and true (lists.zipWith (typesEffectivelyEqual tx) tlist1 tlist2))
       false
 
 ## Given a type context, reconstruct the type of a System F term. Paper: inference.tex, 'Checking the witness' -- the executable form of the System F typing judgment in the soundness theorem.
 term typeOf =
-  λcx,tx,typeArgs,`term`.
+  λcx, tx, typeArgs, `term`.
     let cx1 := cx
     in cases(Term){
-      annotated=typeOfAnnotatedTerm cx1 tx typeArgs,
-      application=typeOfApplication cx1 tx typeArgs,
-      `cases`=typeOfCaseStatement cx1 tx typeArgs,
-      `either`=typeOfEither cx1 tx typeArgs,
-      lambda=typeOfLambda cx1 tx typeArgs,
-      `let`=typeOfLet cx1 tx typeArgs,
-      `list`=typeOfList cx1 tx typeArgs,
-      literal=typeOfLiteral cx1 tx typeArgs,
-      `map`=typeOfMap cx1 tx typeArgs,
-      `optional`=typeOfMaybe cx1 tx typeArgs,
-      pair=typeOfPair cx1 tx typeArgs,
-      `project`=typeOfProjection cx1 tx typeArgs,
-      `record`=typeOfRecord cx1 tx typeArgs,
-      `set`=typeOfSet cx1 tx typeArgs,
-      typeApplication=typeOfTypeApplication cx1 tx typeArgs,
-      typeLambda=typeOfTypeLambda cx1 tx typeArgs,
-      `inject`=typeOfInjection cx1 tx typeArgs,
-      `unit`=λ`_`.typeOfUnit cx1 tx typeArgs,
-      `unwrap`=typeOfUnwrap cx1 tx typeArgs,
-      variable=typeOfVariable cx1 tx typeArgs,
-      `wrap`=typeOfWrappedTerm cx1 tx typeArgs,
-      `_`=left(Error{
+      annotated = typeOfAnnotatedTerm cx1 tx typeArgs,
+      application = typeOfApplication cx1 tx typeArgs,
+      `cases` = typeOfCaseStatement cx1 tx typeArgs,
+      `either` = typeOfEither cx1 tx typeArgs,
+      lambda = typeOfLambda cx1 tx typeArgs,
+      `let` = typeOfLet cx1 tx typeArgs,
+      `list` = typeOfList cx1 tx typeArgs,
+      literal = typeOfLiteral cx1 tx typeArgs,
+      `map` = typeOfMap cx1 tx typeArgs,
+      `optional` = typeOfMaybe cx1 tx typeArgs,
+      pair = typeOfPair cx1 tx typeArgs,
+      `project` = typeOfProjection cx1 tx typeArgs,
+      `record` = typeOfRecord cx1 tx typeArgs,
+      `set` = typeOfSet cx1 tx typeArgs,
+      typeApplication = typeOfTypeApplication cx1 tx typeArgs,
+      typeLambda = typeOfTypeLambda cx1 tx typeArgs,
+      `inject` = typeOfInjection cx1 tx typeArgs,
+      `unit` = λ`_`.typeOfUnit cx1 tx typeArgs,
+      `unwrap` = typeOfUnwrap cx1 tx typeArgs,
+      variable = typeOfVariable cx1 tx typeArgs,
+      `wrap` = typeOfWrappedTerm cx1 tx typeArgs,
+      `_` = left(Error{
           checking = CheckingError{
             unsupportedTermVariant = UnsupportedTermVariantError{
               termVariant = reflect.termVariant `term`}}})}
       `term`
 
 ## Reconstruct the type of an annotated term (Either/InferenceContext version). Paper: inference.tex, rule Ann (checking side).
-term typeOfAnnotatedTerm = λcx,tx,typeArgs,at.typeOf cx tx typeArgs (AnnotatedTerm[body] at)
+term typeOfAnnotatedTerm = λcx, tx, typeArgs, at.typeOf cx tx typeArgs (AnnotatedTerm[body] at)
 
 ## Reconstruct the type of an application term (Either/InferenceContext version). Paper: inference.tex, rule App (checking side).
 term typeOfApplication =
-  λcx,tx,typeArgs,app.
+  λcx, tx, typeArgs, app.
     let fun := Application[function] app in
     let arg := Application[argument] app in
-    let tryType := λcx0,tfun,targ.cases(Type){
-          `forall`=λft.tryType cx0 (ForallType[body] ft) targ,
-          function=λft.
+    let tryType := λcx0, tfun, targ.cases(Type){
+          `forall` = λft.tryType cx0 (ForallType[body] ft) targ,
+          function = λft.
               let dom := FunctionType[domain] ft in
               let cod := FunctionType[codomain] ft in
               ifElse
@@ -278,12 +284,12 @@ term typeOfApplication =
                     typeMismatch = TypeMismatchError{
                       expectedType = dom,
                       actualType = targ}}}),
-          variable=λv.
+          variable = λv.
               let nameResult := freshName cx0 in
               let freshN := first nameResult in
               let cx1 := second nameResult in
               right((Type{variable = freshN}, cx1)),
-          `_`=left(Error{
+          `_` = left(Error{
               checking = CheckingError{
                 notAFunctionType = NotAFunctionTypeError{
                   `type` = tfun}}})}
@@ -309,7 +315,7 @@ term typeOfApplication =
 
 ## Reconstruct the type of a case statement (Either/InferenceContext version). Paper: inference.tex, rules Case and Case_d (checking side).
 term typeOfCaseStatement =
-  λcx,tx,typeArgs,cs.
+  λcx, tx, typeArgs, cs.
     let tname := CaseStatement[typeName] cs in
     let dflt := CaseStatement[default] cs in
     let match := CaseStatement[`cases`] cs in
@@ -320,7 +326,7 @@ term typeOfCaseStatement =
         let tdflt := optionals.map first dfltResult in
         let cx2 := optionals.match dfltResult cx second in
         let foldResult := lists.foldl
-            (λacc,`term`.eithers.bind
+            (λacc, `term`.eithers.bind
                 acc
                 (λaccR.
                   let types := first accR in
@@ -339,7 +345,7 @@ term typeOfCaseStatement =
             let tcterms := first foldR in
             let cx3 := second foldR in
             let fcodsResult := lists.foldl
-                (λacc,t.eithers.bind
+                (λacc, t.eithers.bind
                     acc
                     (λaccR.
                       let cods := first accR
@@ -360,7 +366,7 @@ term typeOfCaseStatement =
 
 ## Reconstruct the type of an either value (Either/InferenceContext version). Paper: inference.tex, rules Eith_L and Eith_R (checking side).
 term typeOfEither =
-  λcx,tx,typeArgs,et.
+  λcx, tx, typeArgs, et.
     let n := lists.length typeArgs in
     let arityErr := left(Error{
         checking = CheckingError{
@@ -404,7 +410,7 @@ term typeOfEither =
 
 ## Reconstruct the type of a union injection (Either/InferenceContext version). Paper: inference.tex, rule Inj (checking side).
 term typeOfInjection =
-  λcx,tx,typeArgs,injection.
+  λcx, tx, typeArgs, injection.
     let tname := Injection[typeName] injection in
     let field := Injection[field] injection in
     let fname := Field[name] field in
@@ -424,7 +430,7 @@ term typeOfInjection =
 
 ## Reconstruct the type of a lambda function (Either/InferenceContext version). Paper: inference.tex, rule Abs (checking side).
 term typeOfLambda =
-  λcx,tx,typeArgs,l.
+  λcx, tx, typeArgs, l.
     let v := Lambda[parameter] l in
     let mdom := Lambda[domain] l in
     let body := Lambda[body] l in
@@ -461,7 +467,7 @@ term typeOfLambda =
 
 ## Reconstruct the type of a let binding (Either/InferenceContext version). Paper: inference.tex, rule Let (checking side).
 term typeOfLet =
-  λcx,tx,typeArgs,letTerm.
+  λcx, tx, typeArgs, letTerm.
     let bs := Let[bindings] letTerm in
     let body := Let[body] letTerm in
     let bnames := lists.map Binding[name] bs in
@@ -473,7 +479,7 @@ term typeOfLet =
                 binding = b}}})
           (λts.right(typeSchemeToFType ts)) in
     let btypesResult := lists.foldl
-        (λacc,b.eithers.bind
+        (λacc, b.eithers.bind
             acc
             (λaccR.
               let types := first accR
@@ -509,7 +515,7 @@ term typeOfLet =
 
 ## Reconstruct the type of a list (Either/InferenceContext version). Paper: inference.tex, rules Lst_0 and Lst_+ (checking side).
 term typeOfList =
-  λcx,tx,typeArgs,els.
+  λcx, tx, typeArgs, els.
     let listArityErr := left(Error{
         checking = CheckingError{
           typeArityMismatch = TypeArityMismatchError{
@@ -526,7 +532,7 @@ term typeOfList =
         (optionals.match (lists.head typeArgs) listArityErr (λta0.right((Type{`list` = ta0}, cx))))
         listArityErr)
       (let foldResult := lists.foldl
-          (λacc,`term`.eithers.bind
+          (λacc, `term`.eithers.bind
               acc
               (λaccR.
                 let types := first accR in
@@ -550,13 +556,13 @@ term typeOfList =
 
 ## Reconstruct the type of a literal (Either/InferenceContext version). Paper: inference.tex, rule Lit (checking side).
 term typeOfLiteral =
-  λcx,tx,typeArgs,lit.
+  λcx, tx, typeArgs, lit.
     let t := Type{literal = reflect.literalType lit}
     in eithers.bind (applyTypeArgumentsToType cx tx typeArgs t) (λapplied.right((applied, cx)))
 
 ## Reconstruct the type of a map (Either/InferenceContext version). Paper: inference.tex, rules Map_0 and Map_+ (checking side).
 term typeOfMap =
-  λcx,tx,typeArgs,m.
+  λcx, tx, typeArgs, m.
     let mapArityErr := left(Error{
         checking = CheckingError{
           typeArityMismatch = TypeArityMismatchError{
@@ -581,11 +587,13 @@ term typeOfMap =
             in optionals.match
               (lists.uncons (second uc0))
               mapArityErr
-              (λuc1.let ta1 := first uc1 in right((Type{`map` = MapType{keys = ta0, values = ta1}}, cx)))))
+              (λuc1.
+                let ta1 := first uc1
+                in right((Type{`map` = MapType{keys = ta0, values = ta1}}, cx)))))
         mapArityErr)
       (let pairs := maps.toList m in
       let keyFoldResult := lists.foldl
-          (λacc,p.eithers.bind
+          (λacc, p.eithers.bind
               acc
               (λaccR.
                 let types := first accR in
@@ -607,7 +615,7 @@ term typeOfMap =
             (checkSameType cx2 tx "map keys" keyTypes)
             (λkt.
               let valFoldResult := lists.foldl
-                  (λacc,p.eithers.bind
+                  (λacc, p.eithers.bind
                       acc
                       (λaccR.
                         let types := first accR in
@@ -637,7 +645,7 @@ term typeOfMap =
 
 ## Reconstruct the type of an optional value (Either/InferenceContext version). Paper: inference.tex, rules Opt_0 and Opt_1 (checking side).
 term typeOfMaybe =
-  λcx,tx,typeArgs,mt.
+  λcx, tx, typeArgs, mt.
     let forNothing := let n := lists.length typeArgs in
       let maybeArityErr := left(Error{
           checking = CheckingError{
@@ -668,7 +676,7 @@ term typeOfMaybe =
 
 ## Reconstruct the type of a pair (Either/InferenceContext version). Paper: inference.tex, rule Pair (checking side).
 term typeOfPair =
-  λcx,tx,typeArgs,p.
+  λcx, tx, typeArgs, p.
     let n := lists.length typeArgs
     in ifElse
       (equal n 2:int32)
@@ -700,7 +708,7 @@ term typeOfPair =
 
 ## Reconstruct the type of a primitive function (Either/InferenceContext version). Paper: inference.tex, rule Prim (checking side).
 term typeOfPrimitive =
-  λcx,tx,typeArgs,name.
+  λcx, tx, typeArgs, name.
     let rawTs := optionals.map
         (λ`_p`.termSignatureToTypeScheme
             (PrimitiveDefinition[signature] (Primitive[definition] `_p`)))
@@ -716,11 +724,13 @@ term typeOfPrimitive =
         let ts := first instResult in
         let cx2 := second instResult in
         let t := typeSchemeToFType ts in
-        eithers.bind (applyTypeArgumentsToType cx2 tx typeArgs t) (λapplied.right((applied, cx2))))
+        eithers.bind
+          (applyTypeArgumentsToType cx2 tx typeArgs t)
+          (λapplied.right((applied, cx2))))
 
 ## Reconstruct the type of a record projection (Either/InferenceContext version). Paper: inference.tex, rule Proj (checking side).
 term typeOfProjection =
-  λcx,tx,typeArgs,p.
+  λcx, tx, typeArgs, p.
     let tname := Projection[typeName] p in
     let fname := Projection[fieldName] p in
     eithers.bind
@@ -741,11 +751,11 @@ term typeOfProjection =
 
 ## Reconstruct the type of a record (Either/InferenceContext version). Paper: inference.tex, rule Rec (checking side).
 term typeOfRecord =
-  λcx,tx,typeArgs,`record`.
+  λcx, tx, typeArgs, `record`.
     let tname := Record[typeName] `record` in
     let fields := Record[fields] `record` in
     let foldResult := lists.foldl
-        (λacc,`term`.eithers.bind
+        (λacc, `term`.eithers.bind
             acc
             (λaccR.
               let types := first accR in
@@ -764,7 +774,7 @@ term typeOfRecord =
 
 ## Reconstruct the type of a set (Either/InferenceContext version). Paper: inference.tex, rules Set_0 and Set_+ (checking side).
 term typeOfSet =
-  λcx,tx,typeArgs,els.
+  λcx, tx, typeArgs, els.
     let setArityErr := left(Error{
         checking = CheckingError{
           typeArityMismatch = TypeArityMismatchError{
@@ -781,7 +791,7 @@ term typeOfSet =
         (optionals.match (lists.head typeArgs) setArityErr (λta0.right((Type{`set` = ta0}, cx))))
         setArityErr)
       (let foldResult := lists.foldl
-          (λacc,`term`.eithers.bind
+          (λacc, `term`.eithers.bind
               acc
               (λaccR.
                 let types := first accR in
@@ -804,18 +814,18 @@ term typeOfSet =
             (λunifiedType.right((Type{`set` = unifiedType}, cx2)))))
 
 ## Check the type of a term
-term typeOfTerm = λcx,g,`term`.eithers.map first (typeOf cx g [] `term`)
+term typeOfTerm = λcx, g, `term`.eithers.map first (typeOf cx g [] `term`)
 
 ## Reconstruct the type of a type application term (Either/InferenceContext version). Paper: inference.tex, 'Checking the witness' (pushes onto the pending-type-argument stack).
 term typeOfTypeApplication =
-  λcx,tx,typeArgs,tyapp.
+  λcx, tx, typeArgs, tyapp.
     let body := TypeApplicationTerm[body] tyapp in
     let t := TypeApplicationTerm[`type`] tyapp in
     typeOf cx tx (lists.cons t typeArgs) body
 
 ## Reconstruct the type of a type lambda (type abstraction) term (Either/InferenceContext version). Paper: inference.tex, type abstraction terms in the elaborated Term grammar.
 term typeOfTypeLambda =
-  λcx,tx,typeArgs,tl.
+  λcx, tx, typeArgs, tl.
     let v := TypeLambda[parameter] tl in
     let body := TypeLambda[body] tl in
     let vars := Graph[typeVariables] tx in
@@ -843,11 +853,11 @@ term typeOfTypeLambda =
 
 ## Reconstruct the type of the unit term (Either/InferenceContext version). Paper: inference.tex, rule Unit (checking side).
 term typeOfUnit =
-  λcx,tx,typeArgs.eithers.bind (applyTypeArgumentsToType cx tx typeArgs Type{`unit`}) (λapplied.right((applied, cx)))
+  λcx, tx, typeArgs.eithers.bind (applyTypeArgumentsToType cx tx typeArgs Type{`unit`}) (λapplied.right((applied, cx)))
 
 ## Reconstruct the type of an unwrap operation (Either/InferenceContext version). Paper: inference.tex, rule Unwr (checking side).
 term typeOfUnwrap =
-  λcx,tx,typeArgs,tname.eithers.bind
+  λcx, tx, typeArgs, tname.eithers.bind
       (requireSchemaType cx (Graph[schemaTypes] tx) tname)
       (λschemaResult.
         let schemaType := first schemaResult in
@@ -863,7 +873,7 @@ term typeOfUnwrap =
 
 ## Reconstruct the type of a variable (Either/InferenceContext version). Paper: inference.tex, rules Var and Prim (checking side); note the primitives-first lookup order, the reverse of inference.
 term typeOfVariable =
-  λcx,tx,typeArgs,name.
+  λcx, tx, typeArgs, name.
     let forScheme := λts.
         let tResult := ifElse
             (lists.isEmpty typeArgs)
@@ -891,7 +901,7 @@ term typeOfVariable =
 
 ## Reconstruct the type of a wrapped term (Either/InferenceContext version). Paper: inference.tex, rule Wrp (checking side).
 term typeOfWrappedTerm =
-  λcx,tx,typeArgs,wt.
+  λcx, tx, typeArgs, wt.
     let tname := WrappedTerm[typeName] wt in
     let body := WrappedTerm[body] wt in
     eithers.bind
@@ -900,13 +910,13 @@ term typeOfWrappedTerm =
 
 ## Check whether a list of types are effectively equal, disregarding type aliases and free type variable naming. Also treats free type variables (not in schema) as wildcards, since inference has already verified consistency.
 term typesAllEffectivelyEqual =
-  λtx,tlist.
+  λtx, tlist.
     let types := Graph[schemaTypes] tx in
     let containsFreeVar := λt.
         let allVars := freeVariablesInTypeSimple t in
         let schemaNames := sets.fromList (maps.keys types) in
         not (sets.isEmpty (sets.difference allVars schemaNames)) in
-    let anyContainsFreeVar := lists.foldl (λacc,t.or acc (containsFreeVar t)) false tlist in
+    let anyContainsFreeVar := lists.foldl (λacc, t.or acc (containsFreeVar t)) false tlist in
     ifElse
       anyContainsFreeVar
       true
@@ -917,7 +927,7 @@ term typesAllEffectivelyEqual =
 
 ## Check whether two types are effectively equal, disregarding type aliases, forall quantifiers, and treating in-scope type variables as wildcards. Paper: inference.tex, 'Checking the witness' (effective equality, the type-level analogue of the referential-transparency equality of terms).
 term typesEffectivelyEqual =
-  λtx,t1,t2.or
+  λtx, t1, t2.or
       (containsInScopeTypeVars tx t1)
       (or
         (containsInScopeTypeVars tx t2)

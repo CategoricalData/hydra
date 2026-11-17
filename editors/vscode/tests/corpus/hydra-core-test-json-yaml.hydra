@@ -1,0 +1,185 @@
+## Round-trip test cases for the JSON<->YAML bridge, focused on decimal precision
+module hydra.core.test.json.yaml
+
+import hydra.core.json.model
+import hydra.core.json.writer
+import hydra.core.json.yaml.decode
+import hydra.core.json.yaml.encode
+import hydra.core.lib.eithers
+import hydra.core.testing
+
+## Round-trip test cases for the JSON<->YAML decimal bridge
+term allTests =
+  TestGroup{
+    name = "JSON<->YAML bridge",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "decimal round-trip",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "zero",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`either`
+                      (λe.e)
+                      (λback.printJson back)
+                      (yamlToJson
+                        (jsonToYaml Value{number = 0})),
+                expected = λ`_`.printJson Value{number = 0}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "positive whole",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`either`
+                      (λe.e)
+                      (λback.printJson back)
+                      (yamlToJson
+                        (jsonToYaml Value{number = 42})),
+                expected = λ`_`.printJson Value{number = 42}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "negative whole",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`either`
+                      (λe.e)
+                      (λback.printJson back)
+                      (yamlToJson
+                        (jsonToYaml Value{number = -17})),
+                expected = λ`_`.printJson Value{number = -17}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "fraction",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`either`
+                      (λe.e)
+                      (λback.printJson back)
+                      (yamlToJson
+                        (jsonToYaml Value{number = 3.14})),
+                expected = λ`_`.printJson Value{number = 3.14}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "negative fraction",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`either`
+                      (λe.e)
+                      (λback.printJson back)
+                      (yamlToJson
+                        (jsonToYaml Value{number = -2.5})),
+                expected = λ`_`.printJson Value{number = -2.5}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "tiny exponent",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`either`
+                      (λe.e)
+                      (λback.printJson back)
+                      (yamlToJson
+                        (jsonToYaml Value{number = 1.0e-20})),
+                expected = λ`_`.printJson Value{number = 1.0e-20}}},
+            description = none,
+            tags = [Tag{"scaleDistinct"}],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "huge exponent",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`either`
+                      (λe.e)
+                      (λback.printJson back)
+                      (yamlToJson
+                        (jsonToYaml
+                          Value{
+                            number = 100000000000000000000})),
+                expected = λ`_`.printJson
+                      Value{
+                        number = 100000000000000000000}}},
+            description = none,
+            tags = [Tag{"scaleDistinct"}],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "null",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`either`
+                      (λe.e)
+                      (λback.printJson back)
+                      (yamlToJson (jsonToYaml Value{null})),
+                expected = λ`_`.printJson Value{null}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "true",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`either`
+                      (λe.e)
+                      (λback.printJson back)
+                      (yamlToJson
+                        (jsonToYaml Value{`boolean` = true})),
+                expected = λ`_`.printJson Value{`boolean` = true}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "false",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`either`
+                      (λe.e)
+                      (λback.printJson back)
+                      (yamlToJson
+                        (jsonToYaml Value{`boolean` = false})),
+                expected = λ`_`.printJson Value{`boolean` = false}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "simple string",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`either`
+                      (λe.e)
+                      (λback.printJson back)
+                      (yamlToJson
+                        (jsonToYaml Value{`string` = "hello"})),
+                expected = λ`_`.printJson Value{`string` = "hello"}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "mixed array",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.`either`
+                      (λe.e)
+                      (λback.printJson back)
+                      (yamlToJson
+                        (jsonToYaml
+                          Value{
+                            array = [Value{number = 1}, Value{number = 1.0e-20}, Value{`string` = "note"}]})),
+                expected = λ`_`.printJson
+                      Value{
+                        array = [Value{number = 1}, Value{number = 1.0e-20}, Value{`string` = "note"}]}}},
+            description = none,
+            tags = [],
+            provisions = []}]}],
+    `cases` = []}

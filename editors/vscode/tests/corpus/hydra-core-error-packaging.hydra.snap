@@ -31,6 +31,7 @@
 #                                 ^ source.hydra
 #                                  ^^^^^^ source.hydra support.type.hydra
 #                                        ^^ source.hydra
+>
 >  ## The first module name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -42,6 +43,7 @@
 #        ^ source.hydra
 #         ^^^^^^^^^^ source.hydra variable.other.hydra
 #                   ^^ source.hydra
+>
 >  ## The second module name that conflicts with the first
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -66,6 +68,7 @@
 #                                  ^ source.hydra
 #                                   ^^^^^^ source.hydra support.type.hydra
 #                                         ^^ source.hydra
+>
 >  ## The name of the module containing the conflict
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -77,6 +80,7 @@
 #             ^ source.hydra
 #              ^^^^^^^^^^ source.hydra variable.other.hydra
 #                        ^^ source.hydra
+>
 >  ## The name of the union type
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -88,6 +92,7 @@
 #           ^ source.hydra
 #            ^^^^ source.hydra variable.other.hydra
 #                ^^ source.hydra
+>
 >  ## The name of the variant field causing the conflict
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -99,6 +104,7 @@
 #              ^ source.hydra
 #               ^^^^ source.hydra variable.other.hydra
 #                   ^^ source.hydra
+>
 >  ## The name of the other type definition that conflicts with the generated constructor name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -123,6 +129,7 @@
 #                                     ^ source.hydra
 #                                      ^^^^^^ source.hydra support.type.hydra
 #                                            ^^ source.hydra
+>
 >  ## The name of the module
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -134,6 +141,7 @@
 #             ^ source.hydra
 #              ^^^^^^^^^^ source.hydra variable.other.hydra
 #                        ^^ source.hydra
+>
 >  ## The definition name that does not match the module name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -158,6 +166,7 @@
 #                                 ^ source.hydra
 #                                  ^^^^^^ source.hydra support.type.hydra
 #                                        ^^ source.hydra
+>
 >  ## The name of the module containing the misordered definitions
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -169,6 +178,7 @@
 #             ^ source.hydra
 #              ^^^^^^^^^^ source.hydra variable.other.hydra
 #                        ^^ source.hydra
+>
 >  ## The definition that appears first in the list
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -180,6 +190,7 @@
 #                ^ source.hydra
 #                 ^^^^ source.hydra variable.other.hydra
 #                     ^^ source.hydra
+>
 >  ## The definition that appears next, but should sort earlier than precedingName
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -204,6 +215,7 @@
 #                                   ^ source.hydra
 #                                    ^^^^^^ source.hydra support.type.hydra
 #                                          ^^ source.hydra
+>
 >  ## The name of the module containing the duplicates
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -215,6 +227,7 @@
 #             ^ source.hydra
 #              ^^^^^^^^^^ source.hydra variable.other.hydra
 #                        ^^ source.hydra
+>
 >  ## The duplicated definition name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -239,6 +252,7 @@
 #                               ^ source.hydra
 #                                ^^^^^^ source.hydra support.type.hydra
 #                                      ^^ source.hydra
+>
 >  ## The duplicated module name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -263,6 +277,7 @@
 #                                 ^ source.hydra
 #                                  ^^^^^^ source.hydra support.type.hydra
 #                                        ^^ source.hydra
+>
 >  ## The name of the module containing the definition
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -274,6 +289,7 @@
 #             ^ source.hydra
 #              ^^^^^^^^^^ source.hydra variable.other.hydra
 #                        ^^ source.hydra
+>
 >  ## The definition name that violates the naming convention
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -285,6 +301,7 @@
 #       ^ source.hydra
 #        ^^^^ source.hydra variable.other.hydra
 #            ^^ source.hydra
+>
 >  ## The case convention the name should have followed (camel for term-level, pascal for type-level)
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -309,6 +326,7 @@
 #                         ^ source.hydra
 #                          ^^^^^ source.hydra support.type.hydra
 #                               ^^ source.hydra
+>
 >  ## A union variant name that conflicts with another type definition when mapped to a target language
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -320,6 +338,7 @@
 #                         ^ source.hydra
 #                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                     ^^ source.hydra
+>
 >  ## A definition whose name does not have the module's name as a prefix
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -331,6 +350,7 @@
 #                            ^ source.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                           ^^ source.hydra
+>
 >  ## Two consecutive definitions in the definitions list that are not in alphabetical order
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -342,6 +362,7 @@
 #                        ^ source.hydra
 #                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                   ^^ source.hydra
+>
 >  ## Two or more definitions in the same module share the same name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -353,6 +374,7 @@
 #                          ^ source.hydra
 #                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                       ^^ source.hydra
+>
 >  ## A definition whose local name does not match the expected naming convention
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -364,6 +386,7 @@
 #                        ^ source.hydra
 #                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                   ^^ source.hydra
+>
 >  ## A module whose name does not match the module-name naming convention
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -375,6 +398,7 @@
 #                              ^ source.hydra
 #                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                               ^^ source.hydra
+>
 >  ## A top-level definition lacking a description annotation
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -399,6 +423,7 @@
 #                                       ^ source.hydra
 #                                        ^^^^^^ source.hydra support.type.hydra
 #                                              ^^ source.hydra
+>
 >  ## The module name that violates the convention
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -423,6 +448,7 @@
 #                          ^ source.hydra
 #                           ^^^^^ source.hydra support.type.hydra
 #                                ^^ source.hydra
+>
 >  ## Two module names that conflict when mapped to a target language
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -434,6 +460,7 @@
 #                        ^ source.hydra
 #                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                   ^^ source.hydra
+>
 >  ## Two or more modules in the same package share the same name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -445,6 +472,7 @@
 #                      ^ source.hydra
 #                       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                               ^^ source.hydra
+>
 >  ## A module within the package is invalid
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -456,6 +484,7 @@
 #                ^ source.hydra
 #                 ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                   ^^ source.hydra
+>
 >  ## A package whose name does not match the package-name naming convention
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -467,6 +496,7 @@
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                             ^^ source.hydra
+>
 >  ## A module namespace declared by more than one package
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -478,6 +508,7 @@
 #                           ^ source.hydra
 #                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                         ^^ source.hydra
+>
 >  ## A module namespace that is a strict dotted-prefix of another module namespace in the same package
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -489,6 +520,7 @@
 #                   ^ source.hydra
 #                    ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                         ^^ source.hydra
+>
 >  ## A module references a name owned by another module that is not among its declared dependencies
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -513,6 +545,7 @@
 #                              ^ source.hydra
 #                               ^^^^^^ source.hydra support.type.hydra
 #                                     ^^ source.hydra
+>
 >  ## The package name that violates the convention
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -537,6 +570,7 @@
 #                                ^ source.hydra
 #                                 ^^^^^^ source.hydra support.type.hydra
 #                                       ^^ source.hydra
+>
 >  ## The name of the module containing the undocumented definition
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -548,6 +582,7 @@
 #             ^ source.hydra
 #              ^^^^^^^^^^ source.hydra variable.other.hydra
 #                        ^^ source.hydra
+>
 >  ## The name of the undocumented definition
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -572,6 +607,7 @@
 #                                    ^ source.hydra
 #                                     ^^^^^^ source.hydra support.type.hydra
 #                                           ^^ source.hydra
+>
 >  ## The module namespace declared by more than one package
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -583,6 +619,7 @@
 #             ^ source.hydra
 #              ^^^^^^^^^^ source.hydra variable.other.hydra
 #                        ^^ source.hydra
+>
 >  ## The name of the first package declaring the module
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -594,6 +631,7 @@
 #               ^ source.hydra
 #                ^^^^^^^^^^^ source.hydra variable.other.hydra
 #                           ^^ source.hydra
+>
 >  ## The name of the second package declaring the module
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -618,6 +656,7 @@
 #                            ^ source.hydra
 #                             ^^^^^^ source.hydra support.type.hydra
 #                                   ^^ source.hydra
+>
 >  ## The shorter namespace, a strict dotted-prefix of the inner namespace
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -629,6 +668,7 @@
 #        ^ source.hydra
 #         ^^^^^^^^^^ source.hydra variable.other.hydra
 #                   ^^ source.hydra
+>
 >  ## The longer namespace, which has the outer namespace as a strict dotted-prefix
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -653,6 +693,7 @@
 #                                ^ source.hydra
 #                                 ^^^^^^ source.hydra support.type.hydra
 #                                       ^^ source.hydra
+>
 >  ## The name of the module containing the undeclared reference
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -664,6 +705,7 @@
 #             ^ source.hydra
 #              ^^^^^^^^^^ source.hydra variable.other.hydra
 #                        ^^ source.hydra
+>
 >  ## The free name referenced by the module's definitions
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -675,6 +717,7 @@
 #                 ^ source.hydra
 #                  ^^^^ source.hydra variable.other.hydra
 #                      ^^ source.hydra
+>
 >  ## The name of the module that actually defines the referenced name
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

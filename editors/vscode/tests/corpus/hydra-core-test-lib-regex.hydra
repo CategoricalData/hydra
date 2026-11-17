@@ -1,0 +1,2922 @@
+## Test cases for hydra.core.lib.regex primitives
+module hydra.core.test.lib.regex
+
+import hydra.core.lib.eithers as eithers
+import hydra.core.model
+import hydra.core.print.model
+import hydra.core.reduction
+import hydra.core.test.testGraph
+import hydra.core.testing
+
+## Test cases for hydra.core.lib.regex primitives
+term allTests =
+  TestGroup{
+    name = "hydra.core.lib.regex primitives",
+    description = none,
+    subgroups = [
+      TestGroup{
+        name = "matches",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "isWholeStringAnchored",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "exact match",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "hello"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.isWholeStringAnchored"}]},
+              TestCaseWithMetadata{
+                name = "partial content does not match",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[a-z]+"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello123"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.isWholeStringAnchored"}]},
+              TestCaseWithMetadata{
+                name = "mixed pattern",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[a-z]+[0-9]+"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello123"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.isWholeStringAnchored"}]}]},
+          TestGroup{
+            name = "testsMinimalCoreGrammar",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "pattern match",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[a-z]+"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "digit pattern",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[0-9]+"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "12345"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "empty pattern matches empty",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = ""}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = ""}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "star matches empty",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a*"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = ""}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "alternation",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "cat|dog"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "cat"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "alternation second",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "cat|dog"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "dog"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "quantifier",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "ab?c"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "ac"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "quantifier with optional",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "ab?c"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "abc"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]}]},
+          TestGroup{
+            name = "falseWhenNoMatchOrIllFormed",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "no match",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[0-9]+"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.falseWhenNoMatchOrIllFormed"}]},
+              TestCaseWithMetadata{
+                name = "empty pattern does not match non-empty",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = ""}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.falseWhenNoMatchOrIllFormed"}]},
+              TestCaseWithMetadata{
+                name = "alternation no match",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "cat|dog"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "bird"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.falseWhenNoMatchOrIllFormed"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "find",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "returnsLeftmostLongestMatch",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "simple find",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.find"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[0-9]+"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "abc123def"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `optional` = given(Term{
+                                literal = Literal{
+                                  `string` = "123"}})}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.find.returnsLeftmostLongestMatch"}]},
+              TestCaseWithMetadata{
+                name = "find first",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.find"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[a-z]+"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "123abc456def"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `optional` = given(Term{
+                                literal = Literal{
+                                  `string` = "abc"}})}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.find.returnsLeftmostLongestMatch"}]},
+              TestCaseWithMetadata{
+                name = "full match",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.find"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = ".*"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `optional` = given(Term{
+                                literal = Literal{
+                                  `string` = "hello"}})}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.find.returnsLeftmostLongestMatch"}]}]},
+          TestGroup{
+            name = "noneWhenNoMatch",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "no match",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.find"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[0-9]+"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "abcdef"}}}}),
+                    expected = λ`_`.`term` Term{`optional` = none}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.find.noneWhenNoMatch"}]},
+              TestCaseWithMetadata{
+                name = "empty input",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.find"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[0-9]+"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = ""}}}}),
+                    expected = λ`_`.`term` Term{`optional` = none}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.find.noneWhenNoMatch"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "findAll",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "returnsAllNonOverlappingMatchesInOrder",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "multiple matches",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.findAll"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[0-9]+"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a1b2c3"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `list` = [
+                              Term{literal = Literal{`string` = "1"}},
+                              Term{literal = Literal{`string` = "2"}},
+                              Term{literal = Literal{`string` = "3"}}]}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.findAll.returnsAllNonOverlappingMatchesInOrder"}]},
+              TestCaseWithMetadata{
+                name = "overlapping words",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.findAll"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[a-z]+"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "abc def ghi"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `list` = [
+                              Term{literal = Literal{`string` = "abc"}},
+                              Term{literal = Literal{`string` = "def"}},
+                              Term{literal = Literal{`string` = "ghi"}}]}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.findAll.returnsAllNonOverlappingMatchesInOrder"}]},
+              TestCaseWithMetadata{
+                name = "single match",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.findAll"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "hello"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "say hello world"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `list` = [Term{literal = Literal{`string` = "hello"}}]}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.findAll.returnsAllNonOverlappingMatchesInOrder"}]}]},
+          TestGroup{
+            name = "emptyListWhenNoMatch",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "no matches",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.findAll"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[0-9]+"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "abc"}}}}),
+                    expected = λ`_`.`term` Term{`list` = []}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.findAll.emptyListWhenNoMatch"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "replace",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "replacesLeftmostLongestMatch",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "basic replace",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.regex.replace"}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            `string` = "[0-9]+"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "X"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "abc123def456"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `string` = "abcXdef456"}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.replace.replacesLeftmostLongestMatch"}]},
+              TestCaseWithMetadata{
+                name = "replace at start",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.regex.replace"}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            `string` = "^[a-z]+"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "X"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "abc123"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `string` = "X123"}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.replace.replacesLeftmostLongestMatch"}]},
+              TestCaseWithMetadata{
+                name = "empty replacement",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.regex.replace"}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            `string` = "[0-9]+"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = ""}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "abc123def"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `string` = "abcdef"}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.replace.replacesLeftmostLongestMatch"}]}]},
+          TestGroup{
+            name = "unchangedWhenNoMatch",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "no match",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.regex.replace"}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            `string` = "[0-9]+"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "X"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "abcdef"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `string` = "abcdef"}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.replace.unchangedWhenNoMatch"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "replaceAll",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "replacesEveryNonOverlappingMatch",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "replace all digits",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.regex.replaceAll"}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            `string` = "[0-9]+"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "X"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a1b2c3"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `string` = "aXbXcX"}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.replaceAll.replacesEveryNonOverlappingMatch"}]},
+              TestCaseWithMetadata{
+                name = "replace all words",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.regex.replaceAll"}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            `string` = "[a-z]+"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "X"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "abc 123 def"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `string` = "X 123 X"}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.replaceAll.replacesEveryNonOverlappingMatch"}]},
+              TestCaseWithMetadata{
+                name = "empty replacement",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.regex.replaceAll"}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            `string` = "[0-9]+"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = ""}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a1b2c3"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `string` = "abc"}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.replaceAll.replacesEveryNonOverlappingMatch"}]}]},
+          TestGroup{
+            name = "unchangedWhenNoMatch",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "no match",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.regex.replaceAll"}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            `string` = "[0-9]+"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "X"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "abc"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `string` = "abc"}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.replaceAll.unchangedWhenNoMatch"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "split",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "splitsOnEveryNonOverlappingMatch",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "split on comma",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.split"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = ","}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a,b,c"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `list` = [
+                              Term{literal = Literal{`string` = "a"}},
+                              Term{literal = Literal{`string` = "b"}},
+                              Term{literal = Literal{`string` = "c"}}]}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.split.splitsOnEveryNonOverlappingMatch"}]},
+              TestCaseWithMetadata{
+                name = "split on spaces",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.split"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = " +"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a b  c"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `list` = [
+                              Term{literal = Literal{`string` = "a"}},
+                              Term{literal = Literal{`string` = "b"}},
+                              Term{literal = Literal{`string` = "c"}}]}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.split.splitsOnEveryNonOverlappingMatch"}]},
+              TestCaseWithMetadata{
+                name = "split on digits",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.split"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[0-9]+"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a1b2c"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `list` = [
+                              Term{literal = Literal{`string` = "a"}},
+                              Term{literal = Literal{`string` = "b"}},
+                              Term{literal = Literal{`string` = "c"}}]}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.split.splitsOnEveryNonOverlappingMatch"}]},
+              TestCaseWithMetadata{
+                name = "trailing delimiter",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.split"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = ","}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a,b,"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `list` = [
+                              Term{literal = Literal{`string` = "a"}},
+                              Term{literal = Literal{`string` = "b"}},
+                              Term{literal = Literal{`string` = ""}}]}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.split.splitsOnEveryNonOverlappingMatch"}]}]},
+          TestGroup{
+            name = "singleElementListWhenNoMatchOrIllFormed",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "no match",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.split"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = ","}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "abc"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `list` = [Term{literal = Literal{`string` = "abc"}}]}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.split.singleElementListWhenNoMatchOrIllFormed"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "conformance (docs/specification/regex.md)",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "dot includes newline",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "dot matches newline",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a.b"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a\nb"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "dot-star spans newline",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a.*b"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a\nx\ny\nb"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "find dot matches newline char",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.find"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "."}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "\n"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `optional` = given(Term{
+                                literal = Literal{
+                                  `string` = "\n"}})}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.find.returnsLeftmostLongestMatch"}]},
+              TestCaseWithMetadata{
+                name = "explicit non-newline class excludes it",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a[^\n]b"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a\nb"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "explicit non-newline class matches other chars",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a[^\n]b"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "aXb"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]}]},
+          TestGroup{
+            name = "leftmost-longest match preference",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "alternation prefers the longer branch",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.find"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a|ab"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "ab"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `optional` = given(Term{
+                                literal = Literal{
+                                  `string` = "ab"}})}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.find.returnsLeftmostLongestMatch"}]},
+              TestCaseWithMetadata{
+                name = "alternation longer-branch-first is equivalent",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.find"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "ab|a"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "ab"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `optional` = given(Term{
+                                literal = Literal{
+                                  `string` = "ab"}})}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.find.returnsLeftmostLongestMatch"}]},
+              TestCaseWithMetadata{
+                name = "whole-string alternation picks the matching length",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a|ab"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "ab"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "quantifier greediness picks the longest run",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.find"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a+"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "aaa"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `optional` = given(Term{
+                                literal = Literal{
+                                  `string` = "aaa"}})}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.find.returnsLeftmostLongestMatch"}]}]},
+          TestGroup{
+            name = "whole-string anchors",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "matches is anchored without explicit anchors",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "abc"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "abc"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "matches rejects a proper substring",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "abc"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "xabcx"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "^ and $ do not match at internal line breaks",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "^b$"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a\nb\nc"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "^ anchors to the start of the whole input, not a line",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.find"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "^b"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a\nb"}}}}),
+                    expected = λ`_`.`term` Term{`optional` = none}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.find.noneWhenNoMatch"}]},
+              TestCaseWithMetadata{
+                name = "$ anchors to the end of the whole input, not a line",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.find"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "b$"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "b\nc"}}}}),
+                    expected = λ`_`.`term` Term{`optional` = none}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.find.noneWhenNoMatch"}]},
+              TestCaseWithMetadata{
+                name = "^...$ spanning the whole multi-line input matches",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "^a\n.*c$"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a\nb\nc"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]}]},
+          TestGroup{
+            name = "minimal-core grammar",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "character class range",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[a-z]+"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "negated character class",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[^0-9]+"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "negated character class rejects a member",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[^0-9]+"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "hello1"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "zero-or-one quantifier",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "colou?r"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "color"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "zero-or-one quantifier with the optional char",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "colou?r"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "colour"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "exact-count quantifier {n}",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a{3}"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "aaa"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "exact-count quantifier {n} rejects short input",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a{3}"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "aa"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "at-least quantifier {n,}",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a{2,}"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "aaaa"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "at-least quantifier {n,} rejects short input",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a{2,}"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "range quantifier {n,m}",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a{2,4}"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "aaa"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "range quantifier {n,m} rejects out-of-range",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a{2,4}"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "aaaaa"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "non-capturing group with quantifier",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "(ab)+"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "ababab"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "empty group matches the empty string",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a()b"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "ab"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "empty whole pattern matches only the empty string",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = ""}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = ""}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "nested groups",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "((a)(b))+"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "abab"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "alternation nested inside a group",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "(cat|dog)s"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "cats"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "alternation nested inside a group, other branch",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "(cat|dog)s"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "dogs"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "quantified group of an alternation",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "(a|b){2,3}"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "aba"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]},
+              TestCaseWithMetadata{
+                name = "quantified group of an alternation rejects out-of-range",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "(a|b){2,3}"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.testsMinimalCoreGrammar"}]}]},
+          TestGroup{
+            name = "escaping rules",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "escaped metacharacter matches literally",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a\\.b"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a.b"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}]},
+              TestCaseWithMetadata{
+                name = "escaped metacharacter does not match the wildcard behavior",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a\\.b"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "aXb"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}]},
+              TestCaseWithMetadata{
+                name = "escaped star matches a literal star",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a\\*b"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a*b"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}]},
+              TestCaseWithMetadata{
+                name = "escaped open-paren matches a literal paren",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a\\(b"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a(b"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}]},
+              TestCaseWithMetadata{
+                name = "escaped pipe matches a literal pipe, not alternation",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a\\|b"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a|b"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}]},
+              TestCaseWithMetadata{
+                name = "unescaped dash at top level is a literal, not a range",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a-b"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a-b"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}]},
+              TestCaseWithMetadata{
+                name = "top-level dash does not form a range",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a-b"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "aXb"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}]},
+              TestCaseWithMetadata{
+                name = "escaped dash inside a class is a literal dash",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[a\\-z]"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "-"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}]},
+              TestCaseWithMetadata{
+                name = "unescaped dash forms a range inside a class",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[a-z]"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "-"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}]},
+              TestCaseWithMetadata{
+                name = "escaped bracket inside a class is a literal bracket",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[\\]]"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "]"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}]},
+              TestCaseWithMetadata{
+                name = "escaped caret inside a class is a literal caret (not negation)",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[a\\^]"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "^"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}]},
+              TestCaseWithMetadata{
+                name = "escaped backslash inside a class is a literal backslash",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "[a\\\\]"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "\\"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.treatsEscapedMetacharactersAsLiterals"}]}]},
+          TestGroup{
+            name = "ill-formed patterns fail as portable no-match",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "unbalanced open paren is ill-formed, so matches is false",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "(a"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.falseWhenNoMatchOrIllFormed"}]},
+              TestCaseWithMetadata{
+                name = "unbalanced open paren is ill-formed, so find is none",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.find"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "(a"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a"}}}}),
+                    expected = λ`_`.`term` Term{`optional` = none}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.find.noneWhenNoMatch"}]},
+              TestCaseWithMetadata{
+                name = "unbalanced open paren is ill-formed, so findAll is empty",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.findAll"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "(a"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "aaa"}}}}),
+                    expected = λ`_`.`term` Term{`list` = []}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.findAll.emptyListWhenNoMatch"}]},
+              TestCaseWithMetadata{
+                name = "unbalanced open paren is ill-formed, so replace is a no-op",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.regex.replace"}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            `string` = "(a"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "X"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "aaa"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `string` = "aaa"}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.replace.unchangedWhenNoMatch"}]},
+              TestCaseWithMetadata{
+                name = "unbalanced open paren is ill-formed, so replaceAll is a no-op",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          variable = Name{"hydra.core.lib.regex.replaceAll"}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            `string` = "(a"}}}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "X"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "aaa"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `string` = "aaa"}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.replaceAll.unchangedWhenNoMatch"}]},
+              TestCaseWithMetadata{
+                name = "unbalanced open paren is ill-formed, so split returns the input unsplit",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.split"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "(a"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "aaa"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `list` = [Term{literal = Literal{`string` = "aaa"}}]}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.split.singleElementListWhenNoMatchOrIllFormed"}]},
+              TestCaseWithMetadata{
+                name = "empty alternation branch is ill-formed",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a|"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.falseWhenNoMatchOrIllFormed"}]},
+              TestCaseWithMetadata{
+                name = "empty character class is ill-formed",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a[]b"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "ab"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.falseWhenNoMatchOrIllFormed"}]},
+              TestCaseWithMetadata{
+                name = "up-to-m quantifier form is not in the minimal core, so it is ill-formed",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.regex.matches"}},
+                                    argument = Term{
+                                      literal = Literal{
+                                        `string` = "a{,2}"}}}},
+                                argument = Term{
+                                  literal = Literal{
+                                    `string` = "a"}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = false}}}},
+                description = none,
+                tags = [],
+                provisions = [Name{"hydra.core.lib.regex.matches.falseWhenNoMatchOrIllFormed"}]}]}],
+        `cases` = []}],
+    `cases` = []}

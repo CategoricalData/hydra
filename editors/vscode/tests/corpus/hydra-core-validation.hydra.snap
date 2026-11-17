@@ -23,6 +23,7 @@
 #                        ^ source.hydra
 #                         ^^^^^^ source.hydra support.type.hydra
 #                               ^^ source.hydra
+>
 >  ## The set of fully qualified rule names whose findings are treated as errors. Each name has the form 'hydra.core.error.<package>.<UnionType>.<variant>', e.g. 'hydra.core.error.model.InvalidTermError.duplicateBinding'.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -37,6 +38,7 @@
 #                  ^^^^ source.hydra entity.name.type.hydra
 #                      ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                       ^^ source.hydra
+>
 >  ## The set of fully qualified rule names whose findings are treated as warnings. Same name format as errorRules.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -51,6 +53,7 @@
 #                    ^^^^ source.hydra entity.name.type.hydra
 #                        ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                         ^^ source.hydra
+>
 >  ## Hard upper bound on collected errors. Validation terminates as soon as the errors list reaches this length. A value of 1 reproduces the legacy 'first error wins' behaviour.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -62,6 +65,7 @@
 #            ^ source.hydra
 #             ^^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
+>
 >  ## Soft upper bound on collected warnings. Once the warnings list reaches this length, further warning matches are silently dropped, but validation does not terminate; it continues until maxErrors is reached or the traversal completes.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -91,6 +95,7 @@
 #                                 ^ source.hydra
 #                                  ^^^^^^ source.hydra support.type.hydra
 #                                        ^^ source.hydra
+>
 >  ## Findings classified as errors, in traversal order, bounded by the profile's maxErrors.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
@@ -105,6 +110,7 @@
 #               ^ source.hydra entity.name.type.hydra
 #                ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                 ^^ source.hydra
+>
 >  ## Findings classified as warnings, in traversal order, bounded by the profile's maxWarnings.
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra

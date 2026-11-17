@@ -5,6 +5,7 @@ import hydra.core.annotations
 import hydra.core.lib.eithers
 import hydra.core.lib.equality
 import hydra.core.lib.lists as lists
+import hydra.core.lib.literals
 import hydra.core.lib.logic
 import hydra.core.lib.maps as maps
 import hydra.core.lib.math
@@ -19,7 +20,7 @@ import hydra.core.rewriting
 
 ## Annotate an application term with the span running from the start of its function to the end of its argument, when both have spans; otherwise leave it unannotated
 term annotateApplicationSpan =
-  λfunction,argument,application.optionals.match
+  λfunction, argument, application.optionals.match
       (termSpan function)
       application
       (λfs.optionals.match
@@ -31,22 +32,30 @@ term annotateApplicationSpan =
 
 ## Wrap a term in a layer whose only annotation is the reserved span key. This is surface trivia, like comments: it is exempt from the round-trip contract and is removed by stripSpans.
 term annotateSpan =
-  λspan,`term`.Term{
+  λspan, `term`.Term{
       annotated = AnnotatedTerm{
         body = `term`,
         annotation = wrapAnnotationMap
             (maps.singleton keySourceSpan (spanToTerm span))}}
+
+## Format a parse failure as 'line:col: message' (1-based line/column), given the full input text, the codepoint offset of the failure, and the raw error message
+term formatParseFailure =
+  λtext, offset, message.
+    let pos := offsetToPosition text offset in
+    let line1 := add (SourcePosition[line] pos) 1:int32 in
+    let col1 := add (SourcePosition[column] pos) 1:int32 in
+    strings.concat [printInt32 line1, ":", printInt32 col1, ": ", message]
 
 ## Reserved annotation key for source spans recorded by the textual parser
 term keySourceSpan = Name{"sourceSpan"}
 
 ## Convert a codepoint offset within a text into a zero-based line and a zero-based column counted in UTF-16 code units (the Language Server Protocol's convention). Lines end at LF, CR, or CR LF; an offset beyond the end of the text is clamped to the end.
 term offsetToPosition =
-  λtext,offset.
+  λtext, offset.
     let all := strings.toList text in
     let cps := lists.take offset all in
     let nexts := lists.concat2 (lists.drop 1:int32 all) [0:int32] in
-    let step := λacc,cn.
+    let step := λacc, cn.
         let c := first cn in
         let next := second cn in
         let line := first acc in
@@ -63,11 +72,11 @@ term offsetToPosition =
 term peelSpans = λ`term`.optionals.match (spanLayer `term`) `term` (λlayer.peelSpans (second layer))
 
 ## Resolve a subterm path (as carried by type-checking errors, computed on the span-free term) against a span-annotated term, returning the span of the node it reaches. If the node itself has no span, the span of its nearest enclosing node that has one is returned; if the path cannot be followed, the span of the last node reached.
-term spanAtPath = λpath,`term`.spanAtSteps (SubtermPath[] path) `term`
+term spanAtPath = λpath, `term`.spanAtSteps (SubtermPath[] path) `term`
 
 ## Resolve a list of subterm steps against a span-annotated term; see spanAtPath
 term spanAtSteps =
-  λsteps,`term`.
+  λsteps, `term`.
     let outer := termSpan `term`
     in optionals.match
       (lists.uncons steps)
@@ -81,24 +90,26 @@ term spanAtSteps =
 term spanFromTerm =
   λ`term`.
     let int32Of := λt.cases(Term){
-          literal=λl.cases(Literal){
-                integer=λi.cases(IntegerValue){`int32`=λn.given(n), `_`=none}
+          literal = λl.cases(Literal){
+                integer = λi.cases(IntegerValue){
+                      `int32` = λn.given(n),
+                      `_` = none}
                       i,
-                `_`=none}
+                `_` = none}
                 l,
-          `_`=none}
+          `_` = none}
           t
     in cases(Term){
-      pair=λp.optionals.bind
+      pair = λp.optionals.bind
             (int32Of (first p))
             (λs.optionals.map (λe.SourceSpan{start = s, end = e}) (int32Of (second p))),
-      `_`=none}
+      `_` = none}
       `term`
 
 ## If a term is a span-only annotation layer (see annotateSpan), return its span and the term it wraps
 term spanLayer =
   λ`term`.cases(Term){
-      annotated=λat.
+      annotated = λat.
           let anns := getAnnotationMap (AnnotatedTerm[annotation] at)
           in ifElse
             (equal (maps.size anns) 1:int32)
@@ -106,7 +117,7 @@ term spanLayer =
               (maps.lookup keySourceSpan anns)
               (λv.optionals.map (λsp.(sp, AnnotatedTerm[body] at)) (spanFromTerm v)))
             none,
-      `_`=none}
+      `_` = none}
       `term`
 
 ## Encode a span as an annotation value: a pair of int32 literals (start, end)
@@ -118,80 +129,90 @@ term spanToTerm =
 ## Remove every span-only annotation layer from a term, including those inside user annotation payloads. Applied to a freshly parsed term, this yields exactly the term that parsing without spans produces.
 term stripSpans =
   λ`term`.rewriteTerm
-      (λrecurse,t.optionals.match
+      (λrecurse, t.optionals.match
           (spanLayer t)
           (cases(Term){
-            annotated=λat.Term{
+            annotated = λat.Term{
                   annotated = AnnotatedTerm{
                     body = stripSpans (AnnotatedTerm[body] at),
                     annotation = stripSpans
                         (AnnotatedTerm[annotation] at)}},
-            `_`=recurse t}
+            `_` = recurse t}
             t)
           (λlayer.stripSpans (second layer)))
       `term`
 
 ## Follow a single subterm step from a (span-free) term to the immediate subterm it names, if the term has that shape. Map-entry and set-element steps depend on a term ordering and are not resolved.
 term subtermAtStep =
-  λstep,`term`.
-    let fieldTerm := λfname,fields.optionals.map
+  λstep, `term`.
+    let fieldTerm := λfname, fields.optionals.map
           (λf.Field[`term`] f)
           (lists.find (λf.equal (Field[name] f) fname) fields)
     in cases(SubtermStep){
-      annotatedAnnotation=λ`_`.cases(Term){
-            annotated=λa.given(AnnotatedTerm[annotation] a),
-            `_`=none}
+      annotatedAnnotation = λ`_`.cases(Term){
+            annotated = λa.given(AnnotatedTerm[annotation] a),
+            `_` = none}
             `term`,
-      annotatedBody=λ`_`.cases(Term){annotated=λa.given(AnnotatedTerm[body] a), `_`=none}
+      annotatedBody = λ`_`.cases(Term){annotated = λa.given(AnnotatedTerm[body] a), `_` = none}
             `term`,
-      applicationArgument=λ`_`.cases(Term){
-            application=λa.given(Application[argument] a),
-            `_`=none}
+      applicationArgument = λ`_`.cases(Term){
+            application = λa.given(Application[argument] a),
+            `_` = none}
             `term`,
-      applicationFunction=λ`_`.cases(Term){
-            application=λa.given(Application[function] a),
-            `_`=none}
+      applicationFunction = λ`_`.cases(Term){
+            application = λa.given(Application[function] a),
+            `_` = none}
             `term`,
-      casesCase=λcname.cases(Term){
-            `cases`=λcs.optionals.map
+      casesCase = λcname.cases(Term){
+            `cases` = λcs.optionals.map
                   (λa.CaseAlternative[handler] a)
                   (lists.find
                     (λa.equal (CaseAlternative[name] a) cname)
                     (CaseStatement[`cases`] cs)),
-            `_`=none}
+            `_` = none}
             `term`,
-      casesDefault=λ`_`.cases(Term){`cases`=λcs.CaseStatement[default] cs, `_`=none}
+      casesDefault = λ`_`.cases(Term){`cases` = λcs.CaseStatement[default] cs, `_` = none}
             `term`,
-      eitherLeft=λ`_`.cases(Term){`either`=λe.`either` (λl.given(l)) (λr.none) e, `_`=none}
+      eitherLeft = λ`_`.cases(Term){
+            `either` = λe.`either` (λl.given(l)) (λr.none) e,
+            `_` = none}
             `term`,
-      eitherRight=λ`_`.cases(Term){`either`=λe.`either` (λl.none) (λr.given(r)) e, `_`=none}
+      eitherRight = λ`_`.cases(Term){
+            `either` = λe.`either` (λl.none) (λr.given(r)) e,
+            `_` = none}
             `term`,
-      injectField=λfname.cases(Term){`inject`=λi.fieldTerm fname [Injection[field] i], `_`=none}
+      injectField = λfname.cases(Term){
+            `inject` = λi.fieldTerm fname [Injection[field] i],
+            `_` = none}
             `term`,
-      lambdaBody=λ`_`.cases(Term){lambda=λl.given(Lambda[body] l), `_`=none} `term`,
-      letBinding=λbname.cases(Term){
-            `let`=λlt.optionals.map
+      lambdaBody = λ`_`.cases(Term){lambda = λl.given(Lambda[body] l), `_` = none}
+            `term`,
+      letBinding = λbname.cases(Term){
+            `let` = λlt.optionals.map
                   (λb.Binding[`term`] b)
                   (lists.find
                     (λb.equal (Binding[name] b) bname)
                     (Let[bindings] lt)),
-            `_`=none}
+            `_` = none}
             `term`,
-      letBody=λ`_`.cases(Term){`let`=λlt.given(Let[body] lt), `_`=none} `term`,
-      listElement=λi.cases(Term){`list`=λels.lists.at i els, `_`=none} `term`,
-      optionalGiven=λ`_`.cases(Term){`optional`=λm.m, `_`=none} `term`,
-      pairFirst=λ`_`.cases(Term){pair=λp.given(first p), `_`=none} `term`,
-      pairSecond=λ`_`.cases(Term){pair=λp.given(second p), `_`=none} `term`,
-      recordField=λfname.cases(Term){`record`=λr.fieldTerm fname (Record[fields] r), `_`=none}
+      letBody = λ`_`.cases(Term){`let` = λlt.given(Let[body] lt), `_` = none} `term`,
+      listElement = λi.cases(Term){`list` = λels.lists.at i els, `_` = none} `term`,
+      optionalGiven = λ`_`.cases(Term){`optional` = λm.m, `_` = none} `term`,
+      pairFirst = λ`_`.cases(Term){pair = λp.given(first p), `_` = none} `term`,
+      pairSecond = λ`_`.cases(Term){pair = λp.given(second p), `_` = none} `term`,
+      recordField = λfname.cases(Term){
+            `record` = λr.fieldTerm fname (Record[fields] r),
+            `_` = none}
             `term`,
-      typeApplicationBody=λ`_`.cases(Term){
-            typeApplication=λta.given(TypeApplicationTerm[body] ta),
-            `_`=none}
+      typeApplicationBody = λ`_`.cases(Term){
+            typeApplication = λta.given(TypeApplicationTerm[body] ta),
+            `_` = none}
             `term`,
-      typeLambdaBody=λ`_`.cases(Term){typeLambda=λtl.given(TypeLambda[body] tl), `_`=none}
+      typeLambdaBody = λ`_`.cases(Term){typeLambda = λtl.given(TypeLambda[body] tl), `_` = none}
             `term`,
-      wrapBody=λ`_`.cases(Term){`wrap`=λw.given(WrappedTerm[body] w), `_`=none} `term`,
-      `_`=none}
+      wrapBody = λ`_`.cases(Term){`wrap` = λw.given(WrappedTerm[body] w), `_` = none}
+            `term`,
+      `_` = none}
       step
 
 ## The source span recorded on a term by the parser, if the term's outermost layer is a span annotation
