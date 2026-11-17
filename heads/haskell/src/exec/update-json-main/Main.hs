@@ -28,7 +28,7 @@ import Hydra.Generation (writeModulesJsonPackageSplit, writeDerivedJsonPackageSp
 -- free of the newly-promoted, not-yet-published hydra.build.packagingProfile import
 -- on the cold-seed path (#560/#607 class). update-json-main is its sole consumer.
 import Hydra.PackagingGeneration (validatePackagesStructural)
-import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap, groupByPackageIn)
+import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap, namespaceToPackageMaybeIn, groupByPackageIn)
 import Hydra.TextualSources (substituteTextualSources)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules, kernelModules, haskellModules, jsonModules, otherModules,
@@ -203,7 +203,7 @@ main = do
 
   -- #837: modules a package declares in package.json "textualSources" are sourced from their .hydra
   -- files instead of the compiled DSL (a listed module that is missing or fails to parse is fatal).
-  baseUniverse <- substituteTextualSources "../../packages" baseUniverseDsl
+  baseUniverse <- substituteTextualSources (namespaceToPackageMaybeIn (buildRoutingMap extRoutingInput)) "../../packages" baseUniverseDsl
 
   -- Synthesize all encode/decode modules in-memory from their source type modules
   -- and add them to the universe so that other modules' inference can resolve

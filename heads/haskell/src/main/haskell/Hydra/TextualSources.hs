@@ -35,7 +35,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Text as T
 import qualified Data.Vector as V
-import System.Directory (doesFileExist, listDirectory)
+import System.Directory (doesDirectoryExist, doesFileExist, listDirectory)
 import System.FilePath ((</>))
 import System.IO (hPutStrLn, stderr)
 
@@ -123,9 +123,12 @@ loadTextualModule universe unionNames file = do
 
 -- | Replace, in the given universe, every module that a package declares as textually sourced with the
 -- module parsed from its .hydra file (packages/<pkg>/src/main/hydra/<module path>.hydra). 'packagesRoot'
--- is the directory holding the package directories.
-substituteTextualSources :: FilePath -> [Module] -> IO [Module]
-substituteTextualSources packagesRoot universeMods = do
+-- is the directory holding the package directories, and 'owner' maps a module to the package that owns it
+-- (its routing-map entry): a package's selection is restricted to the modules it owns, a package may not
+-- list a module it does not own, and a .hydra file in a package's tree for a module the package does not own is
+-- an error (it would otherwise substitute another package's module).
+substituteTextualSources :: (ModuleName -> Maybe String) -> FilePath -> [Module] -> IO [Module]
+substituteTextualSources owner packagesRoot universeMods = do
   pkgs <- L.sort <$> listDirectory packagesRoot
   let universe = universeNamesOf universeMods
       unionNames = unionTypeNamesOf universeMods
@@ -140,6 +143,9 @@ substituteTextualSources packagesRoot universeMods = do
       excludes <- readTextualExcludes (packagesRoot </> pkg)
       mods <- loadPackage universe unionNames inUniverse pkg flag excludes
       if flag == TextualNone then return mods else do
+        strays <- strayFiles pkg
+        when' (not (null strays)) $ fail $ packagesRoot </> pkg </> "package.json: textualSources is declared, but "
+          ++ "these .hydra files are for modules the package does not own: " ++ L.intercalate ", " strays
         when' (null mods) $ fail $ packagesRoot </> pkg </> "package.json: textualSources is declared but no module was"
           ++ " substituted (is " ++ packagesRoot ++ " the right packages root?)"
         let nExcluded = length [ns | ns <- M.keys inUniverse, any (`L.isPrefixOf` unModuleName ns) excludes]
@@ -147,22 +153,43 @@ substituteTextualSources packagesRoot universeMods = do
           ++ show nExcluded ++ " excluded) under " ++ packagesRoot
         return mods
     when' c a = if c then a else return ()
+    ownedBy pkg ns = owner ns == Just pkg
+    -- .hydra files under the package's tree whose module the package does not own (owned by another package or
+    -- by none: both would be modules that this package's textualSources must never substitute)
+    strayFiles pkg = do
+      let root = packagesRoot </> pkg </> "src/main/hydra"
+      files <- hydraFilesUnder root
+      return [ f | f <- files
+                 , owner (ModuleName (L.map slashToDot (dropExt (drop (length root + 1) f)))) /= Just pkg ]
+    slashToDot c = if c == '/' then '.' else c
+    dropExt f = if ".hydra" `L.isSuffixOf` f then take (length f - length ".hydra") f else f
+    hydraFilesUnder dir = do
+      isDir <- doesDirectoryExist dir
+      if not isDir then return [] else do
+        entries <- L.sort <$> listDirectory dir
+        fmap concat $ mapM (\e -> do
+          let path = dir </> e
+          sub <- doesDirectoryExist path
+          if sub then hydraFilesUnder path else return [path | ".hydra" `L.isSuffixOf` e]) entries
     loadPackage universe unionNames inUniverse pkg flag excludes = do
       let excluded ns = any (`L.isPrefixOf` unModuleName ns) excludes
       case flag of
         TextualNone -> return []
         TextualMain -> do
-          let mainOnly = [ns | ns <- M.keys inUniverse, not ("hydra.core.test." `L.isPrefixOf` unModuleName ns), not (excluded ns)]
+          let mainOnly = [ns | ns <- M.keys inUniverse, ownedBy pkg ns, not ("hydra.core.test." `L.isPrefixOf` unModuleName ns), not (excluded ns)]
           present <- filterM' (doesFileExist . hydraFile pkg) mainOnly
           mapM (loadTextualModule universe unionNames . hydraFile pkg) present
         TextualAll -> do
-          present <- filterM' (doesFileExist . hydraFile pkg) [ns | ns <- M.keys inUniverse, not (excluded ns)]
+          present <- filterM' (doesFileExist . hydraFile pkg) [ns | ns <- M.keys inUniverse, ownedBy pkg ns, not (excluded ns)]
           mapM (loadTextualModule universe unionNames . hydraFile pkg) present
         TextualOnly nss -> mapM (loadListed universe unionNames inUniverse pkg) nss
     loadListed universe unionNames inUniverse pkg ns = do
       let file = hydraFile pkg ns
       if not (M.member ns inUniverse)
         then fail $ packagesRoot </> pkg </> "package.json: textualSources lists " ++ unModuleName ns ++ ", which is not in the universe"
+        else if not (ownedBy pkg ns)
+        then fail $ packagesRoot </> pkg </> "package.json: textualSources lists " ++ unModuleName ns ++ ", which is owned by "
+          ++ maybe "no package" id (owner ns)
         else do
           exists <- doesFileExist file
           if exists then loadTextualModule universe unionNames file

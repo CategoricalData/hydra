@@ -10,7 +10,7 @@
 module Main where
 
 import Hydra.Generation (writeTestModulesJson)
-import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap)
+import Hydra.PackageRouting (defaultDistJsonRoot, buildRoutingMap, namespaceToPackageMaybeIn)
 import Hydra.Sources.All (mainModules)
 import Hydra.Sources.Ext (extRoutingInput, hydraBuildModules, hydraBuildTestModules, hydraPgModules, hydraPgTestModules)
 import Hydra.Sources.Test.All (testModules)
@@ -36,7 +36,7 @@ main = do
 
   -- #837: modules a package declares in package.json "textualSources" (kernel main AND test modules) are
   -- sourced from their .hydra files; the substitution keeps order, so split the list back afterwards.
-  substituted <- substituteTextualSources "../../packages" (allMainModulesDsl ++ allTestModulesDsl)
+  substituted <- substituteTextualSources (namespaceToPackageMaybeIn (buildRoutingMap extRoutingInput)) "../../packages" (allMainModulesDsl ++ allTestModulesDsl)
   let (allMainModules, allTestModules) = splitAt (length allMainModulesDsl) substituted
 
   putStrLn "=== Generate Hydra test modules JSON ==="
