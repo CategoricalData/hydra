@@ -7,8 +7,10 @@
 -- (validation, inference, routing, JSON writing) is unchanged, so a correctly flipped module yields
 -- byte-identical JSON (see the verify-hydra-sources guard).
 --
--- Failures are fatal: a listed module with no .hydra file, or a .hydra file that does not parse, stops
--- the sync; there is no fallback to the DSL copy.
+-- Failures are fatal: a listed module with no .hydra file, a .hydra file that does not parse, or a package
+-- that declares textualSources but ends up substituting no module, stops the sync; there is no fallback to
+-- the DSL copy. Each package with textual sources logs a line, because byte-identical output otherwise makes
+-- a silent fall-back to the DSL undetectable.
 module Hydra.TextualSources (
   TextualSources(..),
   readTextualSources,
@@ -35,6 +37,7 @@ import qualified Data.Text as T
 import qualified Data.Vector as V
 import System.Directory (doesFileExist, listDirectory)
 import System.FilePath ((</>))
+import System.IO (hPutStrLn, stderr)
 
 -- | Which of a package's modules are sourced from .hydra files.
 data TextualSources
@@ -127,14 +130,24 @@ substituteTextualSources packagesRoot universeMods = do
   let universe = universeNamesOf universeMods
       unionNames = unionTypeNamesOf universeMods
       inUniverse = M.fromList [(moduleName m, m) | m <- universeMods]
-  loaded <- fmap concat $ mapM (loadPackage universe unionNames inUniverse) pkgs
+  loaded <- fmap concat $ mapM (loadPackageLogged universe unionNames inUniverse) pkgs
   let replacements = M.fromList [(moduleName m, m) | m <- loaded]
   return [M.findWithDefault m (moduleName m) replacements | m <- universeMods]
   where
     hydraFile pkg ns = packagesRoot </> pkg </> "src/main/hydra" </> CodeGeneration.moduleNameToPath ns ++ ".hydra"
-    loadPackage universe unionNames inUniverse pkg = do
+    loadPackageLogged universe unionNames inUniverse pkg = do
       flag <- readTextualSources (packagesRoot </> pkg)
       excludes <- readTextualExcludes (packagesRoot </> pkg)
+      mods <- loadPackage universe unionNames inUniverse pkg flag excludes
+      if flag == TextualNone then return mods else do
+        when' (null mods) $ fail $ packagesRoot </> pkg </> "package.json: textualSources is declared but no module was"
+          ++ " substituted (is " ++ packagesRoot ++ " the right packages root?)"
+        let nExcluded = length [ns | ns <- M.keys inUniverse, any (`L.isPrefixOf` unModuleName ns) excludes]
+        hPutStrLn stderr $ "textual sources: " ++ pkg ++ ": " ++ show (length mods) ++ " modules from .hydra ("
+          ++ show nExcluded ++ " excluded) under " ++ packagesRoot
+        return mods
+    when' c a = if c then a else return ()
+    loadPackage universe unionNames inUniverse pkg flag excludes = do
       let excluded ns = any (`L.isPrefixOf` unModuleName ns) excludes
       case flag of
         TextualNone -> return []
