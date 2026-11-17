@@ -115,16 +115,8 @@ term checkConflictingVariantNames =
                             let constructorName := strings.concat2
                                 (capitalize localTypeName)
                                 (capitalize localFieldName) in
-                            let qualifiedConstructorName := strings.concat2
-                                (strings.concat2 (ModuleName[] ns) ".")
-                                constructorName in
                             ifElse
-                              (and
-                                (sets.member constructorName defNames)
-                                (not
-                                  (sets.member
-                                    qualifiedConstructorName
-                                    conflictingVariantNameExemptions)))
+                              (sets.member constructorName defNames)
                               given(InvalidModuleError{
                                 conflictingVariantName = ConflictingVariantNameError{
                                   moduleName = ns,
@@ -429,15 +421,6 @@ term checkUndeclaredDependencies =
           findingForRef
           (sets.toList (referencedNames def)) in
     lists.concat (lists.map findingsForDef (Module[definitions] mod))
-
-## TEMPORARY: module-qualified constructor names exempted from checkConflictingVariantNames pending a Desk naming decision (#711/#837)
-term conflictingVariantNameExemptions =
-  sets.fromList
-    [
-      "hydra.core.regex.QuantifierRange",
-      "hydra.ext.azure.dtld.SchemaComplex",
-      "hydra.ext.azure.dtld.SchemaPrimitive",
-      "hydra.rust.syntax.TypePath"]
 
 ## Extract the name from a definition
 term definitionName =

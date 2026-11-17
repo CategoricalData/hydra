@@ -121,7 +121,7 @@ term quantifier =
                               (λ`_`.match
                                   mm
                                   (parsers.pure Quantifier{atLeast = n})
-                                  (λm.parsers.pure Quantifier{range = QuantifierRange{min = n, max = m}})))))))])
+                                  (λm.parsers.pure Quantifier{range = Range{min = n, max = m}})))))))])
     (parsers.pure Quantifier{one})
 
 ## Parse a complete regex (an alternation). The empty pattern parses to a single empty sequence.

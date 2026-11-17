@@ -487,9 +487,9 @@ encodeType = def "encodeType" $
           right (rustApply1 @@ string "Box"
             @@ (inject R._Type R._Type_dynTrait $ list [
               inject R._TypeParamBound R._TypeParamBound_trait $
-                record R._TypePath [
-                  R._TypePath_global>>: boolean False,
-                  R._TypePath_segments>>: list [
+                record R._PathType [
+                  R._PathType_global>>: boolean False,
+                  R._PathType_segments>>: list [
                     record R._PathSegment [
                       R._PathSegment_name>>: string "Fn",
                       R._PathSegment_arguments>>:
@@ -689,9 +689,9 @@ rustApply1 = def "rustApply1" $
   doc "Apply a type constructor to one type argument (e.g., Vec<T>)" $
   lambda "name" $ lambda "arg" $
     inject R._Type R._Type_path $
-      record R._TypePath [
-        R._TypePath_global>>: boolean False,
-        R._TypePath_segments>>: list [
+      record R._PathType [
+        R._PathType_global>>: boolean False,
+        R._PathType_segments>>: list [
           record R._PathSegment [
             R._PathSegment_name>>: var "name",
             R._PathSegment_arguments>>:
@@ -706,9 +706,9 @@ rustApply2 = def "rustApply2" $
   doc "Apply a type constructor to two type arguments (e.g., BTreeMap<K, V>)" $
   lambda "name" $ lambda "arg1" $ lambda "arg2" $
     inject R._Type R._Type_path $
-      record R._TypePath [
-        R._TypePath_global>>: boolean False,
-        R._TypePath_segments>>: list [
+      record R._PathType [
+        R._PathType_global>>: boolean False,
+        R._PathType_segments>>: list [
           record R._PathSegment [
             R._PathSegment_name>>: var "name",
             R._PathSegment_arguments>>:
@@ -800,9 +800,9 @@ rustPath = def "rustPath" $
   doc "Construct a simple Rust path type (e.g., \"String\" -> String)" $
   lambda "name" $
     inject R._Type R._Type_path $
-      record R._TypePath [
-        R._TypePath_global>>: boolean False,
-        R._TypePath_segments>>: list [
+      record R._PathType [
+        R._PathType_global>>: boolean False,
+        R._PathType_segments>>: list [
           record R._PathSegment [
             R._PathSegment_name>>: var "name",
             R._PathSegment_arguments>>: inject R._GenericArguments R._GenericArguments_none unit]]]
@@ -813,9 +813,9 @@ rustPathSegmented = def "rustPathSegmented" $
   doc "Construct a Rust path type with multiple segments (e.g., [\"num\", \"BigInt\"] -> num::BigInt)" $
   lambda "segs" $
     inject R._Type R._Type_path $
-      record R._TypePath [
-        R._TypePath_global>>: boolean False,
-        R._TypePath_segments>>:
+      record R._PathType [
+        R._PathType_global>>: boolean False,
+        R._PathType_segments>>:
           Lists.map (lambda "s" $
             record R._PathSegment [
               R._PathSegment_name>>: var "s",

@@ -1388,12 +1388,12 @@ typeParamBoundToExpr = define "typeParamBoundToExpr" $
       R._TypeParamBound_lifetime>>: lambda "lt" $
         Serialization.cst @@ (Strings.concat2 (string "'") (project R._Lifetime R._Lifetime_name @@ var "lt"))]
 
-typePathToExpr :: TypedTermDefinition (R.TypePath -> Expr)
+typePathToExpr :: TypedTermDefinition (R.PathType -> Expr)
 typePathToExpr = define "typePathToExpr" $
   doc "Serialize a type path" $
   lambda "tp" $ lets [
-    "global">: project R._TypePath R._TypePath_global @@ var "tp",
-    "segs">: project R._TypePath R._TypePath_segments @@ var "tp",
+    "global">: project R._PathType R._PathType_global @@ var "tp",
+    "segs">: project R._PathType R._PathType_segments @@ var "tp",
     "prefix">: Logic.ifElse (var "global") (string "::") (string ""),
     "segStrs">: Lists.map (lambda "s" $ Serialization.printExpr @@ (pathSegmentToExpr @@ var "s")) (var "segs")] $
     Serialization.cst @@ (Strings.concat2 (var "prefix") (Strings.join (string "::") (var "segStrs")))

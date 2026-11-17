@@ -121,12 +121,12 @@ _Quantifier_atLeast = Name "atLeast"
 _Quantifier_range :: Name
 _Quantifier_range = Name "range"
 
-_QuantifierRange :: Name
-_QuantifierRange = Name "hydra.core.regex.QuantifierRange"
-_QuantifierRange_min :: Name
-_QuantifierRange_min = Name "min"
-_QuantifierRange_max :: Name
-_QuantifierRange_max = Name "max"
+_RegexRange :: Name
+_RegexRange = Name "hydra.core.regex.Range"
+_RegexRange_min :: Name
+_RegexRange_min = Name "min"
+_RegexRange_max :: Name
+_RegexRange_max = Name "max"
 
 module_ :: Module
 module_ = Module {
@@ -269,9 +269,9 @@ quantifier = define "quantifier" $
                     Optionals.match (var "mm")
                       (Parsers.pure @@ inject _Quantifier _Quantifier_atLeast (var "n"))
                       ("m" ~> Parsers.pure @@ inject _Quantifier _Quantifier_range
-                        (record _QuantifierRange [
-                          _QuantifierRange_min>>: var "n",
-                          _QuantifierRange_max>>: var "m"]))))))))
+                        (record _RegexRange [
+                          _RegexRange_min>>: var "n",
+                          _RegexRange_max>>: var "m"]))))))))
 
 -- | Parse an atom: a group, class, ., anchor, or literal.
 atom :: TypedTermDefinition (Parser Term)

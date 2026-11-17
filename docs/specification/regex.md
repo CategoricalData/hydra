@@ -165,8 +165,8 @@ Alternation  = [RegexSequence]                  -- non-empty; joined by |
 RegexSequence = [Quantified]                    -- possibly empty (matches empty string)
 Quantified   = { atom: Atom, quantifier: Quantifier }
 Quantifier    = one | zeroOrOne | zeroOrMore | oneOrMore
-              | exactly Int | atLeast Int | range QuantifierRange    -- {n} {n,} {n,m}
-QuantifierRange = { min: Int, max: Int }
+              | exactly Int | atLeast Int | range Range    -- {n} {n,} {n,m}
+Range = { min: Int, max: Int }
 Atom          = literal CodePoint | any | anchorStart | anchorEnd
               | group Alternation | class CharacterClass
 CharacterClass  = { negated: Bool, items: [ClassItem] }          -- items non-empty
@@ -184,7 +184,7 @@ so the AST only ever holds valid scalar values. Each host printer is responsible
 correctly in its target encoding (a literal char, a surrogate pair on UTF-16 hosts, `\u{...}`, etc.) — the
 AST carries the abstract code point only.
 
-> Note: `QuantifierRange` and `CharacterRange` are **named** record types, not inline records nested
+> Note: `Range` and `CharacterRange` are **named** record types, not inline records nested
 > in the union variants. Hydra's coders cannot name an anonymous record nested inside a union variant
 > (the Haskell coder emits an unbound `placeholder` type variable), so every record used as a variant
 > payload must be a top-level definition — the same convention `hydra.core.query` follows with its `Range`

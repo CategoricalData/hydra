@@ -82,7 +82,6 @@ module_ = Module {
       toDefinition checkNestedModuleNames,
       toDefinition checkPackageNameConvention,
       toDefinition checkUndeclaredDependencies,
-      toDefinition conflictingVariantNameExemptions,
       toDefinition definitionName,
       toDefinition enabledPackaging,
       toDefinition kernelDefaultPackagingProfile,
@@ -198,36 +197,6 @@ checkConflictingModuleNames = define "checkConflictingModuleNames" $
     (Packaging.packageModules $ var "pkg") $
   Pairs.second (var "result")
 
--- | TEMPORARY exemption set for 'checkConflictingVariantNames', keyed by the
--- MODULE-QUALIFIED generated constructor name ('<module>.<constructorName>',
--- matching how every conflict is scoped -- within one module, per the check's
--- own contract). A bare, unqualified constructor name would risk silently
--- exempting an unrelated future clash of the same name in a different
--- module; qualifying by module keeps each entry pinned to the exact
--- conflict it was added for. Each entry is a latent, pre-existing conflict
--- that only the '.hydra' parse path exposes -- the DSL path silently
--- skipped every documented union until the annotation-stripping fix above
--- (#837's full-dist scan found these four):
---   * "hydra.core.regex.QuantifierRange": Quantifier's 'range' variant vs.
---     the unrelated QuantifierRange type, same module.
---   * "hydra.ext.azure.dtld.SchemaPrimitive": Schema's 'primitive' variant
---     vs. the unrelated SchemaPrimitive type, same module.
---   * "hydra.ext.azure.dtld.SchemaComplex": Schema's 'complex' variant vs.
---     the unrelated SchemaComplex type, same module.
---   * "hydra.rust.syntax.TypePath": Type's 'path' variant vs. the unrelated
---     TypePath type, same module.
--- The real fix for each is a naming decision -- rename the variant or the
--- conflicting type -- which is Josh's call, tracked on the Decision Desk.
--- Remove each entry once its rename lands.
-conflictingVariantNameExemptions :: TypedTermDefinition (S.Set String)
-conflictingVariantNameExemptions = define "conflictingVariantNameExemptions" $
-  doc "TEMPORARY: module-qualified constructor names exempted from checkConflictingVariantNames pending a Desk naming decision (#711/#837)" $
-  Sets.fromList $ list [
-    string "hydra.core.regex.QuantifierRange",
-    string "hydra.ext.azure.dtld.SchemaComplex",
-    string "hydra.ext.azure.dtld.SchemaPrimitive",
-    string "hydra.rust.syntax.TypePath"]
-
 -- | Check for union variant names that conflict with type definition names.
 -- For each union type, the capitalized type local name concatenated with
 -- the capitalized variant field name must not collide with any other type
@@ -240,11 +209,8 @@ conflictingVariantNameExemptions = define "conflictingVariantNameExemptions" $
 -- so without stripping, every documented union in a module silently skips
 -- this check, masking real conflicts that only the '.hydra' parse path
 -- (where the description IS in EntityMetadata, leaving a bare union body)
--- would otherwise expose (#711/#837). A small, explicitly temporary
--- exemption set ('conflictingVariantNameExemptions') excludes known,
--- pre-existing conflicts pending a naming decision, so fixing this blind
--- spot does not turn the fleet red on a latent violation the rule itself
--- cannot resolve.
+-- would otherwise expose (#711/#837); the four conflicts it exposed were resolved by renaming
+-- the unrelated types, so there are no exemptions.
 checkConflictingVariantNames :: TypedTermDefinition (Module -> Maybe InvalidModuleError)
 checkConflictingVariantNames = define "checkConflictingVariantNames" $
   doc "Check for union variant names that, when mapped to constructor names, conflict with other type definitions" $
@@ -277,12 +243,8 @@ checkConflictingVariantNames = define "checkConflictingVariantNames" $
                         "constructorName" <~ Strings.concat2
                           (Formatting.capitalize @@ var "localTypeName")
                           (Formatting.capitalize @@ var "localFieldName") $
-                        "qualifiedConstructorName" <~ Strings.concat2
-                          (Strings.concat2 (Packaging.unModuleName $ var "ns") (string "."))
-                          (var "constructorName") $
-                        Logic.ifElse (Logic.and
+                        Logic.ifElse
                             (Sets.member (var "constructorName") (var "defNames" :: TypedTerm (S.Set String)))
-                            (Logic.not $ Sets.member (var "qualifiedConstructorName") (asTerm conflictingVariantNameExemptions)))
                           (just $ ErrorPackaging.invalidModuleErrorConflictingVariantName $
                             ErrorPackaging.conflictingVariantNameError
                               (var "ns")

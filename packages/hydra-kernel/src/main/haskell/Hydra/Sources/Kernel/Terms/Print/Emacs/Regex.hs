@@ -70,12 +70,12 @@ _CharacterClass_negated = Name "negated"
 _CharacterClass_items :: Name
 _CharacterClass_items = Name "items"
 
-_QuantifierRange :: Name
-_QuantifierRange = Name "hydra.core.regex.QuantifierRange"
-_QuantifierRange_min :: Name
-_QuantifierRange_min = Name "min"
-_QuantifierRange_max :: Name
-_QuantifierRange_max = Name "max"
+_RegexRange :: Name
+_RegexRange = Name "hydra.core.regex.Range"
+_RegexRange_min :: Name
+_RegexRange_min = Name "min"
+_RegexRange_max :: Name
+_RegexRange_max = Name "max"
 
 _Quantified :: Name
 _Quantified = Name "hydra.core.regex.Quantified"
@@ -295,9 +295,9 @@ quantifier = define "quantifier" $
         string "\\{", Literals.printInt32 (var "n"), string ",\\}"],
       _Quantifier_range>>: "r" ~> Strings.concat $ list [
         string "\\{",
-        Literals.printInt32 (project _QuantifierRange _QuantifierRange_min @@ var "r"),
+        Literals.printInt32 (project _RegexRange _RegexRange_min @@ var "r"),
         string ",",
-        Literals.printInt32 (project _QuantifierRange _QuantifierRange_max @@ var "r"),
+        Literals.printInt32 (project _RegexRange _RegexRange_max @@ var "r"),
         string "\\}"]]
 
 quantified :: TypedTermDefinition (Term -> String)

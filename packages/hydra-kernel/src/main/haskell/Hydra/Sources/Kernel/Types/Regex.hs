@@ -35,7 +35,7 @@ module_ = Module {
       classItem,
       quantified,
       quantifier,
-      quantifierRange,
+      range,
       regex,
       sequence']
 
@@ -141,10 +141,10 @@ quantifier = define "Quantifier" $
       T.int32,
     "range">:
       doc "The {n,m} quantifier; matches between n and m (inclusive) occurrences."
-      quantifierRange]
+      range]
 
-quantifierRange :: TypeDefinition
-quantifierRange = define "QuantifierRange" $
+range :: TypeDefinition
+range = define "Range" $
   doc "The bounds of a {n,m} quantifier: between min and max (inclusive) occurrences." $
   T.record [
     "min">:

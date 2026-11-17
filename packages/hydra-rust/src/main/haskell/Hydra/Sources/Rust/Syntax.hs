@@ -93,6 +93,7 @@ module_ = Module {
       modDef,
       parenthesizedArgs,
       pathSegment,
+      pathType,
       pattern,
       rangeExpr,
       rangePattern,
@@ -121,7 +122,6 @@ module_ = Module {
       typeAscriptionExpr,
       typeBinding,
       typeParamBound,
-      typePath,
       unaryExpr,
       unaryOp,
       useDeclaration,
@@ -737,7 +737,7 @@ implBlock = define "ImplBlock" $
       T.optional $ rust "WhereClause",
     "trait">:
       doc "The trait being implemented, if any" $
-      T.optional $ rust "TypePath",
+      T.optional $ rust "PathType",
     "negative">:
       doc "Whether this is a negative impl" $
       T.boolean,
@@ -1080,6 +1080,17 @@ pathSegment = define "PathSegment" $
     "arguments">:
       doc "Generic arguments, if any" $
       rust "GenericArguments"]
+
+pathType :: TypeDefinition
+pathType = define "PathType" $
+  doc "A path-based type, possibly with generic arguments" $
+  T.record [
+    "global">:
+      doc "Whether the path is absolute (starts with ::)" $
+      T.boolean,
+    "segments">:
+      doc "The segments of the path" $
+      T.list $ rust "PathSegment"]
 
 pattern :: TypeDefinition
 pattern = define "Pattern" $
@@ -1542,21 +1553,10 @@ typeParamBound = define "TypeParamBound" $
   T.union [
     "trait">:
       doc "A trait bound" $
-      rust "TypePath",
+      rust "PathType",
     "lifetime">:
       doc "A lifetime bound" $
       rust "Lifetime"]
-
-typePath :: TypeDefinition
-typePath = define "TypePath" $
-  doc "A path-based type, possibly with generic arguments" $
-  T.record [
-    "global">:
-      doc "Whether the path is absolute (starts with ::)" $
-      T.boolean,
-    "segments">:
-      doc "The segments of the path" $
-      T.list $ rust "PathSegment"]
 
 type_ :: TypeDefinition
 type_ = define "Type" $
@@ -1564,7 +1564,7 @@ type_ = define "Type" $
   T.union [
     "path">:
       doc "A path type, possibly with generic arguments" $
-      rust "TypePath",
+      rust "PathType",
     "reference">:
       doc "A reference type" $
       rust "ReferenceType",

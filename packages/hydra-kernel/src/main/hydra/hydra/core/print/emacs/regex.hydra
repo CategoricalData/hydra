@@ -77,7 +77,7 @@ term quantifier =
       exactly = λn.strings.concat ["\\{", printInt32 n, "\\}"],
       atLeast = λn.strings.concat ["\\{", printInt32 n, ",\\}"],
       range = λr.strings.concat
-            ["\\{", printInt32 (QuantifierRange[min] r), ",", printInt32 (QuantifierRange[max] r), "\\}"]}
+            ["\\{", printInt32 (Range[min] r), ",", printInt32 (Range[max] r), "\\}"]}
       q
 
 ## Render a sequence of quantified atoms by concatenation.

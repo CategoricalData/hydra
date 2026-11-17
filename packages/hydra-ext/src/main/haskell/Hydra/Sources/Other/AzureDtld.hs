@@ -35,6 +35,7 @@ module_ = Module {
       command,
       commandPayload,
       commandType,
+      complexSchema,
       component,
       dtmi,
       enumValue,
@@ -45,17 +46,16 @@ module_ = Module {
       iri,
       mapKey,
       mapValue,
+      primitiveSchema,
       property_,
       relationship,
       schema,
       schemaArray,
-      schemaComplex,
       schemaEnum,
       schemaInterface,
       schemaInterfaceType,
       schemaMap,
       schemaObject,
-      schemaPrimitive,
       telemetry,
       unit_]
 
@@ -105,6 +105,19 @@ commandType = define "CommandType" $
 
 commentField :: FieldType
 commentField = "comment">: doc "A comment for model authors" $ T.optional nonemptyString512
+
+complexSchema :: TypeDefinition
+complexSchema = define "ComplexSchema" $
+  doc ("Complex schemas are designed for supporting complex data types made up of primitive data types. " ++
+       "Currently the following complex schemas are provided: Array, Enum, Map, and Object. " ++
+       "A complex schema can be specified directly as the value in a schema statement or " ++
+       "described in the interface schemas set and referenced in the schema statement.") $
+  T.union [
+    -- Note: interface schemas are currently special, and are not included in this union
+    "array">: dtld "SchemaArray",
+    "enum">: dtld "SchemaEnum",
+    "map">: dtld "SchemaMap",
+    "object">: dtld "SchemaObject"]
 
 component :: TypeDefinition
 component = define "Component" $
@@ -261,6 +274,23 @@ nonemptyString512 = boundedString (Just 1) (Just 512)
 nonemptyString64 :: Type
 nonemptyString64 = boundedString (Just 1) (Just 64)
 
+primitiveSchema :: TypeDefinition
+primitiveSchema = define "PrimitiveSchema" $
+  doc (
+    "A full set of primitive data types are provided and can be specified directly as the value " ++
+    "in a schema statement in a digital twin interface.") $
+  T.union [
+    "boolean">: doc "A boolean value" T.unit,
+    "date">: doc "A full-date as defined in section 5.6 of RFC 3339" T.unit,
+    "dateTime">: doc "A date-time as defined in RFC 3339" T.unit,
+    "double">: doc "An IEEE 8-byte floating point" T.unit,
+    "duration">: doc "A duration in ISO 8601 format" T.unit,
+    "float">: doc "An IEEE 4-byte floating point" T.unit,
+    "integer">: doc "A signed 4-byte integer" T.unit,
+    "long">: doc "A signed 8-byte integer" T.unit,
+    "string">: doc "A UTF8 string" T.unit,
+    "time">: doc "A full-time as defined in section 5.6 of RFC 3339" T.unit]
+
 property_ :: TypeDefinition
 property_ = define "Property" $
   doc (
@@ -320,8 +350,8 @@ schema = define "Schema" $
     "in the forms of Arrays, Enums, Maps, and Objects. Schemas described through digital twin's schema " ++
     "definition language are compatible with popular serialization formats, including JSON, Avro, and Protobuf.") $
   T.union [
-    "primitive">: dtld "SchemaPrimitive",
-    "complex">: dtld "SchemaComplex"]
+    "primitive">: dtld "PrimitiveSchema",
+    "complex">: dtld "ComplexSchema"]
 
 schemaField :: String -> FieldType
 schemaField cat = "schema">: doc ("The data type of the " ++ cat) $ dtld "Schema"
@@ -343,19 +373,6 @@ schemaArray = define "SchemaArray" $
     commentField,
     descriptionField,
     displayNameField]
-
-schemaComplex :: TypeDefinition
-schemaComplex = define "SchemaComplex" $
-  doc ("Complex schemas are designed for supporting complex data types made up of primitive data types. " ++
-       "Currently the following complex schemas are provided: Array, Enum, Map, and Object. " ++
-       "A complex schema can be specified directly as the value in a schema statement or " ++
-       "described in the interface schemas set and referenced in the schema statement.") $
-  T.union [
-    -- Note: interface schemas are currently special, and are not included in this union
-    "array">: dtld "SchemaArray",
-    "enum">: dtld "SchemaEnum",
-    "map">: dtld "SchemaMap",
-    "object">: dtld "SchemaObject"]
 
 schemaEnum :: TypeDefinition
 schemaEnum = define "SchemaEnum" $
@@ -431,23 +448,6 @@ schemaObject = define "SchemaObject" $
     commentField,
     descriptionField,
     displayNameField]
-
-schemaPrimitive :: TypeDefinition
-schemaPrimitive = define "SchemaPrimitive" $
-  doc (
-    "A full set of primitive data types are provided and can be specified directly as the value " ++
-    "in a schema statement in a digital twin interface.") $
-  T.union [
-    "boolean">: doc "A boolean value" T.unit,
-    "date">: doc "A full-date as defined in section 5.6 of RFC 3339" T.unit,
-    "dateTime">: doc "A date-time as defined in RFC 3339" T.unit,
-    "double">: doc "An IEEE 8-byte floating point" T.unit,
-    "duration">: doc "A duration in ISO 8601 format" T.unit,
-    "float">: doc "An IEEE 4-byte floating point" T.unit,
-    "integer">: doc "A signed 4-byte integer" T.unit,
-    "long">: doc "A signed 8-byte integer" T.unit,
-    "string">: doc "A UTF8 string" T.unit,
-    "time">: doc "A full-time as defined in section 5.6 of RFC 3339" T.unit]
 
 string128 :: Type
 string128 = boundedString Nothing (Just 128)
