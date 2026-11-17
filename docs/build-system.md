@@ -309,6 +309,9 @@ Every package with textual sources logs a line such as
 `textual sources: hydra-kernel: 106 modules from .hydra (21 excluded) under ../../packages`,
 and a package that declares textual sources but substitutes no module fails the sync.
 Parse failures and a listed module without a `.hydra` file are fatal; there is no fallback to the DSL.
+A package's selection is restricted to the modules it owns (its routing-map entry), a `textualSources` list
+may not name a module the package does not own, and any `.hydra` file in the package's tree for a module it does
+not own is an error, so a stray file cannot substitute another package's module.
 The `.hydra` files are part of the Phase 1 input digest (`hydraSource:<module>` keys),
 so editing one regenerates its module.
 
