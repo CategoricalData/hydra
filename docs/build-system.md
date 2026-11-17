@@ -269,6 +269,32 @@ fails on any byte difference from the committed `dist/json` (main and test modul
 Re-print a `.hydra` file from the DSL when only the DSL side was edited.
 `hydra.core.lib.*` is edited in the DSL only.
 
+### Adding a new kernel type or definition
+
+The parser resolves the names in a `.hydra` file against the universe of the **compiled DSL modules**
+(`universeNamesOf` over the DSL universe, before substitution), and the Phase 1 executables are themselves compiled
+from the DSL sources and the generated `dist/haskell/hydra-kernel`.
+So a new definition must exist in the DSL as well as in the `.hydra` file, and the usual two-pass rule still applies
+to anything that *uses* the new definition's generated Haskell:
+
+1. Add the type to the DSL module (`.../Hydra/Sources/Kernel/Types/<Module>.hs`) **and** to the matching `.hydra` file
+   (`packages/hydra-kernel/src/main/hydra/hydra/core/.../<module>.hydra`), in the printer's form
+   and in alphabetical order, so that the two agree.
+   Do not yet add terms that use the new type's generated accessors (`Hydra.Dsl.<Module>`), encoders or decoders.
+2. Pass 1: `bin/sync.sh --hosts haskell --targets haskell` (Haskell is needed here because the DSL changed).
+   Phase 1 substitutes the `.hydra` module for the DSL one and regenerates `dist/json` and `dist/haskell`,
+   which now contain the new type and its generated DSL, encode and decode modules.
+3. Run `bin/verify-hydra-sources.sh` to confirm that the `.hydra` and DSL paths agree byte for byte.
+4. Pass 2: add the terms (DSL and `.hydra`) that use the new type, then sync again.
+   A new term definition in a module that `Hydra.Kernel` re-exports may also need a `hiding` entry on that second pass.
+
+If the new type is referenced from *another* `.hydra` file in the same change, the DSL module must declare it first,
+or the parse fails with an unresolved bare name.
+No separate bootstrap of the parser is needed unless the change is to the parser, printer or loader modules themselves;
+those are `.hydra`-sourced too, so break the loop with a regeneration from the DSL
+(remove the `textualSources` field from `packages/hydra-kernel/package.json` for that one sync;
+an empty list would trip the zero-substitution failure), then rebuild, then restore it.
+
 ## Phases of `bin/sync.sh`
 
 A full `bin/sync.sh` run executes five phases. Each phase has its own cache; phases run
