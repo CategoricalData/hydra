@@ -956,59 +956,17 @@
 #                                            ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                          ^^ source.hydra
 #                                                            ^^ source.hydra keyword.control.hydra
->                            let qualifiedConstructorName := strings.concat2
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                            ^^^ source.hydra keyword.control.hydra
-#                               ^ source.hydra
-#                                ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                        ^ source.hydra
-#                                                         ^^ source.hydra keyword.operator.assignment.hydra
-#                                                           ^ source.hydra
-#                                                            ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                                (strings.concat2 (ModuleName[] ns) ".")
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                 ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                                ^^ source.hydra
-#                                                  ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                            ^^^ source.hydra
-#                                                               ^^ source.hydra variable.other.hydra
-#                                                                 ^^ source.hydra
-#                                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#                                                                    ^ source.hydra string.quoted.double.hydra
-#                                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                      ^^ source.hydra
->                                constructorName in
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                               ^ source.hydra
-#                                                ^^ source.hydra keyword.control.hydra
 >                            ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                            ^^^^^^ source.hydra variable.other.hydra
->                              (and
+>                              (sets.member constructorName defNames)
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                               ^^^ source.hydra variable.other.hydra
->                                (sets.member constructorName defNames)
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                 ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                                            ^ source.hydra
-#                                             ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                            ^ source.hydra
-#                                                             ^^^^^^^^ source.hydra variable.other.hydra
-#                                                                     ^^ source.hydra
->                                (not
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                 ^^^ source.hydra variable.other.hydra
->                                  (sets.member
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                   ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->                                    qualifiedConstructorName
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                    ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
->                                    conflictingVariantNameExemptions)))
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                    ^^^^ source.hydra
+#                               ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                          ^ source.hydra
+#                                           ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                          ^ source.hydra
+#                                                           ^^^^^^^^ source.hydra variable.other.hydra
+#                                                                   ^^ source.hydra
 >                              given(InvalidModuleError{
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                              ^^^^^ source.hydra keyword.control.hydra
@@ -3379,45 +3337,6 @@
 #                                                              ^^ source.hydra
 #                                                                ^^^ source.hydra variable.other.hydra
 #                                                                   ^^^ source.hydra
->
->## TEMPORARY: module-qualified constructor names exempted from checkConflictingVariantNames pending a Desk naming decision (#711/#837)
-#^^ source.hydra comment.block.documentation.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->term conflictingVariantNameExemptions =
-#^^^^ source.hydra keyword.other.definition.hydra
-#    ^ source.hydra
-#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                                     ^ source.hydra
-#                                      ^ source.hydra keyword.operator.equals.hydra
->  sets.fromList
-#^^ source.hydra
-#  ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->    [
-#^^^^^^ source.hydra
->      "hydra.core.regex.QuantifierRange",
-#^^^^^^ source.hydra
-#      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                        ^^ source.hydra
->      "hydra.ext.azure.dtld.SchemaComplex",
-#^^^^^^ source.hydra
-#      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                          ^^ source.hydra
->      "hydra.ext.azure.dtld.SchemaPrimitive",
-#^^^^^^ source.hydra
-#      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                            ^^ source.hydra
->      "hydra.rust.syntax.TypePath"]
-#^^^^^^ source.hydra
-#      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
-#       ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                  ^^ source.hydra
 >
 >## Extract the name from a definition
 #^^ source.hydra comment.block.documentation.hydra

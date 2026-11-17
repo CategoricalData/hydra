@@ -348,26 +348,26 @@
 #^^ source.hydra
 #  ^^ source.hydra comment.block.documentation.hydra
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->  range: QuantifierRange}
+>  range: Range}
 #^^ source.hydra
 #  ^^^^^ source.hydra variable.other.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                        ^^ source.hydra
+#         ^^^^^ source.hydra variable.other.hydra
+#              ^^ source.hydra
 >
 >## The bounds of a {n,m} quantifier: between min and max (inclusive) occurrences.
 #^^ source.hydra comment.block.documentation.hydra
 #  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->type QuantifierRange = record{
+>type Range = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
-#     ^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
-#                    ^ source.hydra
-#                     ^ source.hydra keyword.operator.equals.hydra
-#                      ^ source.hydra
-#                       ^^^^^^ source.hydra support.type.hydra
-#                             ^^ source.hydra
+#     ^^^^^ source.hydra entity.name.type.hydra
+#          ^ source.hydra
+#           ^ source.hydra keyword.operator.equals.hydra
+#            ^ source.hydra
+#             ^^^^^^ source.hydra support.type.hydra
+#                   ^^ source.hydra
 >
 >  ## The minimum number of occurrences (inclusive).
 #^^ source.hydra

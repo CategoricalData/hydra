@@ -1015,7 +1015,7 @@
 #                                                                    ^ source.hydra
 #                                                                     ^ source.hydra variable.other.hydra
 #                                                                      ^^^ source.hydra
->                                  (λm.parsers.pure Quantifier{range = QuantifierRange{min = n, max = m}})))))))])
+>                                  (λm.parsers.pure Quantifier{range = Range{min = n, max = m}})))))))])
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                   ^ source.hydra keyword.operator.lambda.hydra
 #                                    ^ source.hydra variable.parameter.hydra
@@ -1028,20 +1028,20 @@
 #                                                                   ^ source.hydra
 #                                                                    ^ source.hydra keyword.operator.equals.hydra
 #                                                                     ^ source.hydra
-#                                                                      ^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                                     ^ source.hydra
-#                                                                                      ^^^ source.hydra variable.other.hydra
-#                                                                                         ^ source.hydra
-#                                                                                          ^ source.hydra keyword.operator.equals.hydra
-#                                                                                           ^ source.hydra
-#                                                                                            ^ source.hydra variable.other.hydra
-#                                                                                             ^^ source.hydra
-#                                                                                               ^^^ source.hydra variable.other.hydra
-#                                                                                                  ^ source.hydra
-#                                                                                                   ^ source.hydra keyword.operator.equals.hydra
-#                                                                                                    ^ source.hydra
-#                                                                                                     ^ source.hydra variable.other.hydra
-#                                                                                                      ^^^^^^^^^^^^ source.hydra
+#                                                                      ^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                                           ^ source.hydra
+#                                                                            ^^^ source.hydra variable.other.hydra
+#                                                                               ^ source.hydra
+#                                                                                ^ source.hydra keyword.operator.equals.hydra
+#                                                                                 ^ source.hydra
+#                                                                                  ^ source.hydra variable.other.hydra
+#                                                                                   ^^ source.hydra
+#                                                                                     ^^^ source.hydra variable.other.hydra
+#                                                                                        ^ source.hydra
+#                                                                                         ^ source.hydra keyword.operator.equals.hydra
+#                                                                                          ^ source.hydra
+#                                                                                           ^ source.hydra variable.other.hydra
+#                                                                                            ^^^^^^^^^^^^ source.hydra
 >    (parsers.pure Quantifier{one})
 #^^^^^ source.hydra
 #     ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra

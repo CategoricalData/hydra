@@ -83,10 +83,10 @@ type Quantifier = union{
   atLeast: int32,
 
   ## The {n,m} quantifier; matches between n and m (inclusive) occurrences.
-  range: QuantifierRange}
+  range: Range}
 
 ## The bounds of a {n,m} quantifier: between min and max (inclusive) occurrences.
-type QuantifierRange = record{
+type Range = record{
 
   ## The minimum number of occurrences (inclusive).
   min: int32,
