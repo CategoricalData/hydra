@@ -39,6 +39,7 @@ term allTests =
       multiLineDocCommentGroup,
       nominalSugarGroup,
       parseModulesGroup,
+      primitiveProvisionGroup,
       sourceSpanGroup,
       sourcePositionGroup,
       termDocCommentGroup,
@@ -1939,6 +1940,108 @@ term moduleAliasGroup =
                                     constraints = maps.empty}}}]}))]}},
         description = none,
         tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "a bare variable inside an annotation map payload resolves through the universe (#711/#837)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λmod2.strings.concat
+                      [
+                        ModuleName[] (Module[name] mod2),
+                        "\n",
+                        strings.join
+                          "\n"
+                          (lists.map
+                            (λd.cases(Definition){
+                                `type` = λtd.strings.concat
+                                      [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
+                                `term` = λtd.strings.concat
+                                      [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
+                                `primitive` = λpd.Name[] (PrimitiveDefinition[name] pd)}
+                                d)
+                            (Module[definitions] mod2))])
+                  (parseModuleWith
+                    (maps.fromList
+                      [
+                        (ModuleName{"test.annPayloadDep"}, sets.fromList [Name{"test.annPayloadDep.Thing"}]),
+                        (ModuleName{"test.annPayloadUser"}, sets.fromList [Name{"test.annPayloadUser.impl"}])])
+                    sets.empty
+                    (moduleDefinitionWith
+                      (maps.fromList
+                        [
+                          (ModuleName{"test.annPayloadDep"}, sets.fromList [Name{"test.annPayloadDep.Thing"}]),
+                          (ModuleName{"test.annPayloadUser"}, sets.fromList [Name{"test.annPayloadUser.impl"}])])
+                      Module{
+                        name = ModuleName{"test.annPayloadUser"},
+                        metadata = none,
+                        dependencies = [ModuleDependency{`module` = ModuleName{"test.annPayloadDep"}, package = none}],
+                        definitions = [
+                          Definition{
+                            `term` = TermDefinition{
+                              name = Name{"test.annPayloadUser.impl"},
+                              metadata = none,
+                              signature = none,
+                              body = Term{
+                                annotated = AnnotatedTerm{
+                                  body = Term{
+                                    variable = Name{"test.annPayloadDep.Thing"}},
+                                  annotation = Term{
+                                    `map` = maps.fromList
+                                        [(Term{variable = Name{"variable"}}, Term{variable = Name{"test.annPayloadDep.Thing"}})]}}}}}]})),
+            expected = λ`_`.strings.concat
+                  [
+                    ModuleName[]
+                      (Module[name]
+                        Module{
+                          name = ModuleName{"test.annPayloadUser"},
+                          metadata = none,
+                          dependencies = [ModuleDependency{`module` = ModuleName{"test.annPayloadDep"}, package = none}],
+                          definitions = [
+                            Definition{
+                              `term` = TermDefinition{
+                                name = Name{"test.annPayloadUser.impl"},
+                                metadata = none,
+                                signature = none,
+                                body = Term{
+                                  annotated = AnnotatedTerm{
+                                    body = Term{
+                                      variable = Name{"test.annPayloadDep.Thing"}},
+                                    annotation = Term{
+                                      `map` = maps.fromList
+                                          [(Term{variable = Name{"variable"}}, Term{variable = Name{"test.annPayloadDep.Thing"}})]}}}}}]}),
+                    "\n",
+                    strings.join
+                      "\n"
+                      (lists.map
+                        (λd.cases(Definition){
+                            `type` = λtd.strings.concat
+                                  [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
+                            `term` = λtd.strings.concat
+                                  [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
+                            `primitive` = λpd.Name[] (PrimitiveDefinition[name] pd)}
+                            d)
+                        (Module[definitions]
+                          Module{
+                            name = ModuleName{"test.annPayloadUser"},
+                            metadata = none,
+                            dependencies = [ModuleDependency{`module` = ModuleName{"test.annPayloadDep"}, package = none}],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"test.annPayloadUser.impl"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{
+                                    annotated = AnnotatedTerm{
+                                      body = Term{
+                                        variable = Name{"test.annPayloadDep.Thing"}},
+                                      annotation = Term{
+                                        `map` = maps.fromList
+                                            [(Term{variable = Name{"variable"}}, Term{variable = Name{"test.annPayloadDep.Thing"}})]}}}}}]}))]}},
+        description = none,
+        tags = [],
         provisions = []}]}
 
 ## Print/parse/round-trip cases for multi-line '##' doc-comment descriptions (#711)
@@ -2924,6 +3027,43 @@ term parseModulesGroup =
                     [Module{name = ModuleName{"test.dep"}, metadata = none, dependencies = [], definitions = []}]
                     [("a.hydra", "module test.dep\n\nterm x = 1\n")]),
             expected = λ`_`."a.hydra: duplicate module name across inputs (or clashing with a dependency module): test.dep"}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+## Primitive '@requirement'/'@recommendation' provision-name qualification (#711/#837)
+term primitiveProvisionGroup =
+  TestGroup{
+    name = "primitive provision qualification",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "a primitive's @requirement provision name qualifies as '<module>.<primitive>.<name>' (#711/#837)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λm.
+                    let defs := Module[definitions] m in
+                    let metas := givens
+                        (lists.map
+                          (λd.cases(Definition){
+                              `primitive` = λpd.PrimitiveDefinition[metadata] pd}
+                              d)
+                          defs) in
+                    match
+                      (lists.head metas)
+                      ""
+                      (λem.
+                        let provs := EntityMetadata[provisions] em
+                        in match
+                          (lists.head provs)
+                          ""
+                          (λp.Name[] (Provision[name] p))))
+                  (parseModule
+                    "module test.prov\n\n## A test primitive.\n##\n## @requirement appliesThing: the thing is applied\nprimitive apply : int32 → int32"),
+            expected = λ`_`."test.prov.apply.appliesThing"}},
         description = none,
         tags = [],
         provisions = []}]}

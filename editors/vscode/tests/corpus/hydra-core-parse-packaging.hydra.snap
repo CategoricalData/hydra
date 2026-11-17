@@ -6933,14 +6933,23 @@
 #                                                                   ^ source.hydra
 #                                                                    ^^^^^ source.hydra variable.other.hydra
 #                                                                         ^^ source.hydra
->                                    metadata = mmeta,
+>                                    metadata = requalifyProvisionNamesForPrimitive
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                    ^^^^^^^^ source.hydra variable.other.hydra
 #                                            ^ source.hydra
 #                                             ^ source.hydra keyword.operator.equals.hydra
 #                                              ^ source.hydra
-#                                               ^^^^^ source.hydra variable.other.hydra
-#                                                    ^^ source.hydra
+#                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+>                                        modName
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                        ^^^^^^^ source.hydra variable.other.hydra
+>                                        local
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                        ^^^^^ source.hydra variable.other.hydra
+>                                        mmeta,
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                        ^^^^^ source.hydra variable.other.hydra
+#                                             ^^ source.hydra
 >                                    signature = sig,
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                    ^^^^^^^^^ source.hydra variable.other.hydra
@@ -7600,6 +7609,210 @@
 #                     ^^ source.hydra
 #                       ^^^^ source.hydra variable.other.hydra
 #                           ^^^^ source.hydra
+>
+>## Requalify a primitive's provision names to '<module>.<primitive>.<name>' (#711/#837)
+#^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>term requalifyProvisionNamesForPrimitive =
+#^^^^ source.hydra keyword.other.definition.hydra
+#    ^ source.hydra
+#     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
+#                                        ^ source.hydra
+#                                         ^ source.hydra keyword.operator.equals.hydra
+>  λmodName, local, mmeta.optionals.map
+#^^ source.hydra
+#  ^ source.hydra keyword.operator.lambda.hydra
+#   ^^^^^^^ source.hydra variable.parameter.hydra
+#          ^ source.hydra punctuation.separator.binder.hydra
+#           ^ source.hydra
+#            ^^^^^ source.hydra variable.parameter.hydra
+#                 ^ source.hydra punctuation.separator.binder.hydra
+#                  ^ source.hydra
+#                   ^^^^^ source.hydra variable.parameter.hydra
+#                        ^ source.hydra punctuation.separator.binder.hydra
+#                         ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+>      (λem.
+#^^^^^^^ source.hydra
+#       ^ source.hydra keyword.operator.lambda.hydra
+#        ^^ source.hydra variable.parameter.hydra
+#          ^ source.hydra punctuation.separator.binder.hydra
+>        let oldProvisions := EntityMetadata[provisions] em in
+#^^^^^^^^ source.hydra
+#        ^^^ source.hydra keyword.control.hydra
+#           ^ source.hydra
+#            ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                         ^ source.hydra
+#                          ^^ source.hydra keyword.operator.assignment.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                           ^ source.hydra
+#                                            ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                      ^^ source.hydra
+#                                                        ^^ source.hydra variable.other.hydra
+#                                                          ^ source.hydra
+#                                                           ^^ source.hydra keyword.control.hydra
+>        let requalify := λp.
+#^^^^^^^^ source.hydra
+#        ^^^ source.hydra keyword.control.hydra
+#           ^ source.hydra
+#            ^^^^^^^^^ source.hydra variable.other.hydra
+#                     ^ source.hydra
+#                      ^^ source.hydra keyword.operator.assignment.hydra
+#                        ^ source.hydra
+#                         ^ source.hydra keyword.operator.lambda.hydra
+#                          ^ source.hydra variable.parameter.hydra
+#                           ^ source.hydra punctuation.separator.binder.hydra
+>            let oldName := localNameOf (Provision[name] p) in
+#^^^^^^^^^^^^ source.hydra
+#            ^^^ source.hydra keyword.control.hydra
+#               ^ source.hydra
+#                ^^^^^^^ source.hydra variable.other.hydra
+#                       ^ source.hydra
+#                        ^^ source.hydra keyword.operator.assignment.hydra
+#                          ^ source.hydra
+#                           ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                      ^^ source.hydra
+#                                        ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                 ^ source.hydra
+#                                                  ^^^^ source.hydra variable.other.hydra
+#                                                      ^^ source.hydra
+#                                                        ^ source.hydra variable.other.hydra
+#                                                         ^^ source.hydra
+#                                                           ^^ source.hydra keyword.control.hydra
+>            let newName := Name{strings.concat
+#^^^^^^^^^^^^ source.hydra
+#            ^^^ source.hydra keyword.control.hydra
+#               ^ source.hydra
+#                ^^^^^^^ source.hydra variable.other.hydra
+#                       ^ source.hydra
+#                        ^^ source.hydra keyword.operator.assignment.hydra
+#                          ^ source.hydra
+#                           ^^^^ source.hydra entity.name.type.nominal.hydra
+#                               ^ source.hydra
+#                                ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+>              [ModuleName[] modName, ".", local, ".", oldName]} in
+#^^^^^^^^^^^^^^^ source.hydra
+#               ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                         ^^^ source.hydra
+#                            ^^^^^^^ source.hydra variable.other.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                      ^ source.hydra string.quoted.double.hydra
+#                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                        ^^ source.hydra
+#                                          ^^^^^ source.hydra variable.other.hydra
+#                                               ^^ source.hydra
+#                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
+#                                                  ^ source.hydra string.quoted.double.hydra
+#                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                    ^^ source.hydra
+#                                                      ^^^^^^^ source.hydra variable.other.hydra
+#                                                             ^^^ source.hydra
+#                                                                ^^ source.hydra keyword.control.hydra
+>            Provision{
+#^^^^^^^^^^^^ source.hydra
+#            ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                     ^^ source.hydra
+>              name = newName,
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.equals.hydra
+#                    ^ source.hydra
+#                     ^^^^^^^ source.hydra variable.other.hydra
+#                            ^^ source.hydra
+>              kind = Provision[kind] p,
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.equals.hydra
+#                    ^ source.hydra
+#                     ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                              ^ source.hydra
+#                               ^^^^ source.hydra variable.other.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra variable.other.hydra
+#                                      ^^ source.hydra
+>              statement = Provision[statement] p} in
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^^^^^^ source.hydra variable.other.hydra
+#                       ^ source.hydra
+#                        ^ source.hydra keyword.operator.equals.hydra
+#                         ^ source.hydra
+#                          ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^^^^^ source.hydra variable.other.hydra
+#                                             ^^ source.hydra
+#                                               ^ source.hydra variable.other.hydra
+#                                                ^^ source.hydra
+#                                                  ^^ source.hydra keyword.control.hydra
+>        EntityMetadata{
+#^^^^^^^^ source.hydra
+#        ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                      ^^ source.hydra
+>          description = EntityMetadata[description] em,
+#^^^^^^^^^^ source.hydra
+#          ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra keyword.operator.equals.hydra
+#                       ^ source.hydra
+#                        ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                  ^^ source.hydra
+#                                                    ^^ source.hydra variable.other.hydra
+#                                                      ^^ source.hydra
+>          comments = EntityMetadata[comments] em,
+#^^^^^^^^^^ source.hydra
+#          ^^^^^^^^ source.hydra variable.other.hydra
+#                  ^ source.hydra
+#                   ^ source.hydra keyword.operator.equals.hydra
+#                    ^ source.hydra
+#                     ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^^^^ source.hydra variable.other.hydra
+#                                            ^^ source.hydra
+#                                              ^^ source.hydra variable.other.hydra
+#                                                ^^ source.hydra
+>          seeAlso = EntityMetadata[seeAlso] em,
+#^^^^^^^^^^ source.hydra
+#          ^^^^^^^ source.hydra variable.other.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.equals.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^^ source.hydra variable.other.hydra
+#                                          ^^ source.hydra
+#                                            ^^ source.hydra variable.other.hydra
+#                                              ^^ source.hydra
+>          lifecycle = EntityMetadata[lifecycle] em,
+#^^^^^^^^^^ source.hydra
+#          ^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra keyword.operator.equals.hydra
+#                     ^ source.hydra
+#                      ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^^^^ source.hydra variable.other.hydra
+#                                              ^^ source.hydra
+#                                                ^^ source.hydra variable.other.hydra
+#                                                  ^^ source.hydra
+>          provisions = lists.map requalify oldProvisions})
+#^^^^^^^^^^ source.hydra
+#          ^^^^^^^^^^ source.hydra variable.other.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra keyword.operator.equals.hydra
+#                      ^ source.hydra
+#                       ^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                ^ source.hydra
+#                                 ^^^^^^^^^ source.hydra variable.other.hydra
+#                                          ^ source.hydra
+#                                           ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                        ^^^ source.hydra
+>      mmeta
+#^^^^^^ source.hydra
+#      ^^^^^ source.hydra variable.other.hydra
 >
 >## Resolve a single bare name reference against the printer's universe: own-definitions first (qualified with modName), then the unique owning import, hard error on zero or multiple owners (#5/#711/#837)
 #^^ source.hydra comment.block.documentation.hydra
@@ -10462,7 +10675,7 @@
 #         ^ source.hydra
 #          ^^^^ source.hydra variable.other.hydra
 #              ^^^ source.hydra
->      annotated = λat.eithers.map
+>      annotated = λat.
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra variable.other.hydra
 #               ^ source.hydra
@@ -10471,54 +10684,192 @@
 #                  ^ source.hydra keyword.operator.lambda.hydra
 #                   ^^ source.hydra variable.parameter.hydra
 #                     ^ source.hydra punctuation.separator.binder.hydra
-#                      ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
->            (λb.Type{
-#^^^^^^^^^^^^^ source.hydra
-#             ^ source.hydra keyword.operator.lambda.hydra
-#              ^ source.hydra variable.parameter.hydra
-#               ^ source.hydra punctuation.separator.binder.hydra
-#                ^^^^ source.hydra entity.name.type.nominal.hydra
-#                    ^^ source.hydra
->                annotated = AnnotatedType{
-#^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^^ source.hydra variable.other.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra keyword.operator.equals.hydra
-#                           ^ source.hydra
-#                            ^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                         ^^ source.hydra
->                  body = b,
-#^^^^^^^^^^^^^^^^^^ source.hydra
-#                  ^^^^ source.hydra variable.other.hydra
+>          let ann := AnnotatedType[annotation] at in
+#^^^^^^^^^^ source.hydra
+#          ^^^ source.hydra keyword.control.hydra
+#             ^ source.hydra
+#              ^^^ source.hydra variable.other.hydra
+#                 ^ source.hydra
+#                  ^^ source.hydra keyword.operator.assignment.hydra
+#                    ^ source.hydra
+#                     ^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                             ^^ source.hydra
+#                                               ^^ source.hydra variable.other.hydra
+#                                                 ^ source.hydra
+#                                                  ^^ source.hydra keyword.control.hydra
+>          let resolveV := resolveNameRefsInTermWith
+#^^^^^^^^^^ source.hydra
+#          ^^^ source.hydra keyword.control.hydra
+#             ^ source.hydra
+#              ^^^^^^^^ source.hydra variable.other.hydra
 #                      ^ source.hydra
-#                       ^ source.hydra keyword.operator.equals.hydra
+#                       ^^ source.hydra keyword.operator.assignment.hydra
+#                         ^ source.hydra
+#                          ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+>              modName
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^^^^ source.hydra variable.other.hydra
+>              ownNames
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^^^^^ source.hydra variable.other.hydra
+>              universe
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^^^^^ source.hydra variable.other.hydra
+>              sets.empty in
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                        ^ source.hydra
-#                         ^ source.hydra variable.other.hydra
-#                          ^^ source.hydra
->                  annotation = AnnotatedType[annotation] at}})
-#^^^^^^^^^^^^^^^^^^ source.hydra
-#                  ^^^^^^^^^^ source.hydra variable.other.hydra
-#                            ^ source.hydra
-#                             ^ source.hydra keyword.operator.equals.hydra
-#                              ^ source.hydra
-#                               ^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                            ^ source.hydra
-#                                             ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                       ^^ source.hydra
-#                                                         ^^ source.hydra variable.other.hydra
-#                                                           ^^^^ source.hydra
->            (recurse bound (AnnotatedType[body] at)),
-#^^^^^^^^^^^^^ source.hydra
-#             ^^^^^^^ source.hydra variable.other.hydra
+#                         ^^ source.hydra keyword.control.hydra
+>          let forAnn := λp.eithers.map
+#^^^^^^^^^^ source.hydra
+#          ^^^ source.hydra keyword.control.hydra
+#             ^ source.hydra
+#              ^^^^^^ source.hydra variable.other.hydra
+#                    ^ source.hydra
+#                     ^^ source.hydra keyword.operator.assignment.hydra
+#                       ^ source.hydra
+#                        ^ source.hydra keyword.operator.lambda.hydra
+#                         ^ source.hydra variable.parameter.hydra
+#                          ^ source.hydra punctuation.separator.binder.hydra
+#                           ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+>                (λv.(first p, v))
+#^^^^^^^^^^^^^^^^^ source.hydra
+#                 ^ source.hydra keyword.operator.lambda.hydra
+#                  ^ source.hydra variable.parameter.hydra
+#                   ^ source.hydra punctuation.separator.binder.hydra
 #                    ^ source.hydra
 #                     ^^^^^ source.hydra variable.other.hydra
-#                          ^^ source.hydra
-#                            ^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                         ^ source.hydra
-#                                          ^^^^ source.hydra variable.other.hydra
-#                                              ^^ source.hydra
-#                                                ^^ source.hydra variable.other.hydra
-#                                                  ^^^^ source.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra variable.other.hydra
+#                            ^^ source.hydra
+#                              ^ source.hydra variable.other.hydra
+#                               ^^^ source.hydra
+>                (resolveV (second p)) in
+#^^^^^^^^^^^^^^^^^ source.hydra
+#                 ^^^^^^^^ source.hydra variable.other.hydra
+#                         ^^ source.hydra
+#                           ^^^^^^ source.hydra variable.other.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^^^ source.hydra
+#                                      ^^ source.hydra keyword.control.hydra
+>          eithers.bind
+#^^^^^^^^^^ source.hydra
+#          ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+>            (cases(Term){
+#^^^^^^^^^^^^^ source.hydra
+#             ^^^^^ source.hydra keyword.control.hydra
+#                  ^ source.hydra
+#                   ^^^^ source.hydra variable.other.hydra
+#                       ^^^ source.hydra
+>              `map` = λm.eithers.map
+#^^^^^^^^^^^^^^ source.hydra
+#              ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#               ^^^ source.hydra variable.other.escaped.hydra
+#                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                   ^ source.hydra
+#                    ^ source.hydra keyword.operator.equals.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra keyword.operator.lambda.hydra
+#                       ^ source.hydra variable.parameter.hydra
+#                        ^ source.hydra punctuation.separator.binder.hydra
+#                         ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+>                    (λrpairs.Term{
+#^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                     ^ source.hydra keyword.operator.lambda.hydra
+#                      ^^^^^^ source.hydra variable.parameter.hydra
+#                            ^ source.hydra punctuation.separator.binder.hydra
+#                             ^^^^ source.hydra entity.name.type.nominal.hydra
+#                                 ^^ source.hydra
+>                        `map` = maps.fromList rpairs})
+#^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                         ^^^ source.hydra variable.other.escaped.hydra
+#                            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                             ^ source.hydra
+#                              ^ source.hydra keyword.operator.equals.hydra
+#                               ^ source.hydra
+#                                ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                             ^ source.hydra
+#                                              ^^^^^^ source.hydra variable.other.hydra
+#                                                    ^^^ source.hydra
+>                    (eithers.mapList forAnn (maps.toList m)),
+#^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                     ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^ source.hydra variable.other.hydra
+#                                           ^^ source.hydra
+#                                             ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+#                                                        ^ source.hydra
+#                                                         ^ source.hydra variable.other.hydra
+#                                                          ^^^^ source.hydra
+>              `_` = right(ann)}
+#^^^^^^^^^^^^^^ source.hydra
+#              ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#               ^ source.hydra variable.other.escaped.hydra
+#                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                 ^ source.hydra
+#                  ^ source.hydra keyword.operator.equals.hydra
+#                   ^ source.hydra
+#                    ^^^^^ source.hydra keyword.control.hydra
+#                         ^ source.hydra
+#                          ^^^ source.hydra variable.other.hydra
+#                             ^^^ source.hydra
+>              ann)
+#^^^^^^^^^^^^^^ source.hydra
+#              ^^^ source.hydra variable.other.hydra
+#                 ^^ source.hydra
+>            (λrann.eithers.map
+#^^^^^^^^^^^^^ source.hydra
+#             ^ source.hydra keyword.operator.lambda.hydra
+#              ^^^^ source.hydra variable.parameter.hydra
+#                  ^ source.hydra punctuation.separator.binder.hydra
+#                   ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
+>                (λb.Type{
+#^^^^^^^^^^^^^^^^^ source.hydra
+#                 ^ source.hydra keyword.operator.lambda.hydra
+#                  ^ source.hydra variable.parameter.hydra
+#                   ^ source.hydra punctuation.separator.binder.hydra
+#                    ^^^^ source.hydra entity.name.type.nominal.hydra
+#                        ^^ source.hydra
+>                    annotated = AnnotatedType{
+#^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                    ^^^^^^^^^ source.hydra variable.other.hydra
+#                             ^ source.hydra
+#                              ^ source.hydra keyword.operator.equals.hydra
+#                               ^ source.hydra
+#                                ^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                             ^^ source.hydra
+>                      body = b,
+#^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                      ^^^^ source.hydra variable.other.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.equals.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra variable.other.hydra
+#                              ^^ source.hydra
+>                      annotation = rann}})
+#^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                      ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra keyword.operator.equals.hydra
+#                                  ^ source.hydra
+#                                   ^^^^ source.hydra variable.other.hydra
+#                                       ^^^^ source.hydra
+>                (recurse bound (AnnotatedType[body] at))),
+#^^^^^^^^^^^^^^^^^ source.hydra
+#                 ^^^^^^^ source.hydra variable.other.hydra
+#                        ^ source.hydra
+#                         ^^^^^ source.hydra variable.other.hydra
+#                              ^^ source.hydra
+#                                ^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                             ^ source.hydra
+#                                              ^^^^ source.hydra variable.other.hydra
+#                                                  ^^ source.hydra
+#                                                    ^^ source.hydra variable.other.hydra
+#                                                      ^^^^^ source.hydra
 >      application = λapp.eithers.bind
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^ source.hydra variable.other.hydra

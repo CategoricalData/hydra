@@ -812,7 +812,10 @@ term primitiveDefinitionParser =
                               (λmimpl.Definition{
                                   `primitive` = PrimitiveDefinition{
                                     name = qualifyLocalName modName local,
-                                    metadata = mmeta,
+                                    metadata = requalifyProvisionNamesForPrimitive
+                                        modName
+                                        local
+                                        mmeta,
                                     signature = sig,
                                     isPure = isPure,
                                     isTotal = isTotal,
@@ -894,6 +897,27 @@ term reattachTypeDescriptionToBody =
                   provisions = restProvisions})
                 none in
             (newMmeta, newT)))
+
+## Requalify a primitive's provision names to '<module>.<primitive>.<name>' (#711/#837)
+term requalifyProvisionNamesForPrimitive =
+  λmodName, local, mmeta.optionals.map
+      (λem.
+        let oldProvisions := EntityMetadata[provisions] em in
+        let requalify := λp.
+            let oldName := localNameOf (Provision[name] p) in
+            let newName := Name{strings.concat
+              [ModuleName[] modName, ".", local, ".", oldName]} in
+            Provision{
+              name = newName,
+              kind = Provision[kind] p,
+              statement = Provision[statement] p} in
+        EntityMetadata{
+          description = EntityMetadata[description] em,
+          comments = EntityMetadata[comments] em,
+          seeAlso = EntityMetadata[seeAlso] em,
+          lifecycle = EntityMetadata[lifecycle] em,
+          provisions = lists.map requalify oldProvisions})
+      mmeta
 
 ## Resolve a single bare name reference against the printer's universe: own-definitions first (qualified with modName), then the unique owning import, hard error on zero or multiple owners (#5/#711/#837)
 term resolveNameRefWith =
@@ -1231,12 +1255,30 @@ term resolveNameRefsInTypeWith =
               `type` = t})
           (recurse boundHere (FieldType[`type`] field)) in
     cases(Type){
-      annotated = λat.eithers.map
-            (λb.Type{
-                annotated = AnnotatedType{
-                  body = b,
-                  annotation = AnnotatedType[annotation] at}})
-            (recurse bound (AnnotatedType[body] at)),
+      annotated = λat.
+          let ann := AnnotatedType[annotation] at in
+          let resolveV := resolveNameRefsInTermWith
+              modName
+              ownNames
+              universe
+              sets.empty in
+          let forAnn := λp.eithers.map
+                (λv.(first p, v))
+                (resolveV (second p)) in
+          eithers.bind
+            (cases(Term){
+              `map` = λm.eithers.map
+                    (λrpairs.Term{
+                        `map` = maps.fromList rpairs})
+                    (eithers.mapList forAnn (maps.toList m)),
+              `_` = right(ann)}
+              ann)
+            (λrann.eithers.map
+                (λb.Type{
+                    annotated = AnnotatedType{
+                      body = b,
+                      annotation = rann}})
+                (recurse bound (AnnotatedType[body] at))),
       application = λapp.eithers.bind
             (recurse bound (ApplicationType[function] app))
             (λf.eithers.map
