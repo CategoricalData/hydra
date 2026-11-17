@@ -60,6 +60,7 @@ module_ = Module {
       Phantoms.toDefinition multiLineDocCommentGroup,
       Phantoms.toDefinition nominalSugarGroup,
       Phantoms.toDefinition parseModulesGroup,
+      Phantoms.toDefinition primitiveProvisionGroup,
       Phantoms.toDefinition sourcePositionGroup,
       Phantoms.toDefinition sourceSpanGroup,
       Phantoms.toDefinition termDocCommentGroup,
@@ -75,8 +76,8 @@ allTests = define "allTests" $
   where
     subgroups = [annotationRoundtripGroup, corpusRoundtripGroup, doSugarGroup, forallMultiBinderGroup,
                  lambdaMultiBinderGroup, lazyParameterRoundtripGroup, mapSetLiteralGroup, moduleAliasGroup,
-                 multiLineDocCommentGroup, nominalSugarGroup, parseModulesGroup, sourceSpanGroup,
-                 sourcePositionGroup, termDocCommentGroup, unqualifiedNamesGroup]
+                 multiLineDocCommentGroup, nominalSugarGroup, parseModulesGroup, primitiveProvisionGroup,
+                 sourceSpanGroup, sourcePositionGroup, termDocCommentGroup, unqualifiedNamesGroup]
 
 -- | Print a term signature, then parse the printed text back, and show the round-tripped
 -- signature. Compares against the original signature's own printed form, so the test both
@@ -202,6 +203,45 @@ mapSetLiteralGroup = define "mapSetLiteralGroup" $
       "{}",
 
     termRoundtripTest "empty set round-trips to a set, not a map" (Core.termSet (Sets.empty :: TypedTerm (S.Set Term)))])
+
+-- | Parse a module and render either the error string or the FIRST primitive definition's
+-- requirement/recommendation provision name found (the empty string if it has none) --
+-- for 'primitiveProvisionQualificationTest' (#711/#837).
+firstProvisionNameText :: String -> TypedTerm String
+firstProvisionNameText src = Eithers.either
+  (Phantoms.lambda "e" $ Phantoms.var "e")
+  (Phantoms.lambda "m" $
+    "defs" <~ Packaging.moduleDefinitions (Phantoms.var "m") $
+    "metas" <~ Optionals.givens (Lists.map ("d" ~> match _Definition (Phantoms.var "d") Nothing [
+        _Definition_primitive>>: "pd" ~> Packaging.primitiveDefinitionMetadata (Phantoms.var "pd")]) (Phantoms.var "defs" :: TypedTerm [Definition])) $
+    Optionals.match (Lists.head (var "metas" :: TypedTerm [EntityMetadata])) (Phantoms.string "") ("em" ~>
+      "provs" <~ Packaging.entityMetadataProvisions (var "em") $
+      Optionals.match (Lists.head (var "provs" :: TypedTerm [Provision])) (Phantoms.string "") ("p" ~>
+        Core.unName $ Packaging.provisionName (var "p"))))
+  (ParsePackaging.parseModule @@ (Phantoms.string src))
+
+-- | A primitive's '@requirement' provision name must qualify as '<module>.<primitive>.<name>'
+-- (matching dist/json's convention -- e.g.
+-- 'hydra.core.lib.effects.apply.appliesEffectfulFunctionToEffectfulArgument'), not the generic
+-- '<module>.<name>' 'parseProvisionLine' alone can produce without knowing which primitive the
+-- doc comment belongs to (#711/#837).
+primitiveProvisionQualificationTest :: TypedTerm TestCaseWithMetadata
+primitiveProvisionQualificationTest = universalCase
+  "a primitive's @requirement provision name qualifies as '<module>.<primitive>.<name>' (#711/#837)"
+  (firstProvisionNameText (L.intercalate "\n" [
+    "module test.prov",
+    "",
+    "## A test primitive.",
+    "##",
+    "## @requirement appliesThing: the thing is applied",
+    "primitive apply : int32 \8594 int32"]))
+  (Phantoms.string "test.prov.apply.appliesThing")
+
+primitiveProvisionGroup :: TypedTermDefinition TestGroup
+primitiveProvisionGroup = define "primitiveProvisionGroup" $
+  doc "Primitive '@requirement'/'@recommendation' provision-name qualification (#711/#837)" $
+  Testing.testGroup (string "primitive provision qualification") nothing (list ([] :: [TypedTerm TestGroup])) (list [
+    primitiveProvisionQualificationTest])
 
 -- | Fixture: 'forall a. a' -- a single-binder forall, unaffected by the multi-binder collapsing
 -- (#711); the printer still emits exactly one binder before '.'.
@@ -672,6 +712,48 @@ moduleCollisionRoundtripTest = universalCase "collision module round-trips to an
   (roundtripFingerprint collisionModule)
   (moduleFingerprint collisionModule)
 
+-- | A module whose sole term BODY is a bare reference to another module's declared name
+-- (ensuring the printer actually emits the import line -- it only prints an import for a
+-- dependency it detects as referenced, and the printer does not look inside annotation
+-- payloads either, same blind spot as the parser before this fix), ALSO annotated with a map
+-- payload containing its OWN SEPARATE bare reference to the same name ('{variable = Thing}',
+-- mirroring the real 'hydra.core.bootstrap' scenario -- '{variable: Type}' referencing
+-- 'hydra.core.model.Type') -- for 'annotationPayloadBareRefRoundtripTest' (#711/#837:
+-- variables inside annotation MAP PAYLOADS were never resolved, only variables in ordinary
+-- term positions).
+annotationPayloadBareRefModule :: TypedTerm Module
+annotationPayloadBareRefModule = testModule2 "test.annPayloadUser" ["test.annPayloadDep"]
+  (Core.termAnnotated $ Core.annotatedTerm (varT "test.annPayloadDep.Thing")
+    (Core.termMap $ Maps.fromList $ Phantoms.list [
+      Phantoms.pair (Core.termVariable $ nm "variable") (varT "test.annPayloadDep.Thing")]))
+
+-- | A module with the given name, bare dependency names, and ONE term definition ('impl') whose
+-- body is the given term -- for 'annotationPayloadBareRefRoundtripTest', which needs a term
+-- definition (not a type), unlike 'testModule'. The definition name is FULLY QUALIFIED under
+-- 'modName' (matching 'testModule'/'termsOnlyModule's convention), since 'moduleFingerprint'
+-- prints a term definition's raw (unprocessed) name, and a parsed module's term definition names
+-- are always fully qualified by 'qualifyLocalName' -- a bare name here would make the expected
+-- and actual fingerprints disagree on qualification alone, independent of what the test is
+-- actually checking.
+testModule2 :: String -> [String] -> TypedTerm Term -> TypedTerm Module
+testModule2 modName deps body = Packaging.module_
+  (Packaging.moduleName2 $ Phantoms.string modName)
+  nothing
+  (Phantoms.list [Packaging.moduleDependency (Packaging.moduleName2 $ Phantoms.string d) nothing | d <- deps])
+  (Phantoms.list [Packaging.definitionTerm (termDefOf (modName L.++ ".impl") body)])
+
+-- | A bare variable reference INSIDE an annotation map payload must resolve through the
+-- universe exactly like an ordinary term-position reference (#711/#837): 'Thing' (declared only
+-- in 'test.annPayloadDep') must come back fully qualified as 'test.annPayloadDep.Thing' after a
+-- print -> parse round trip, not stay bare (which 'resolveNameRefsInTermWith''s '_Term_annotated'
+-- case previously never even visited -- it recursed into the annotated BODY only, leaving the
+-- annotation PAYLOAD -- itself a Term -- untouched).
+annotationPayloadBareRefRoundtripTest :: TypedTerm TestCaseWithMetadata
+annotationPayloadBareRefRoundtripTest = moduleWithUniverseRoundtripTest
+  "a bare variable inside an annotation map payload resolves through the universe (#711/#837)"
+  annotationPayloadBareRefModule
+  [universeEntry "test.annPayloadDep" ["Thing"], universeEntry "test.annPayloadUser" ["impl"]]
+
 moduleAliasGroup :: TypedTermDefinition TestGroup
 moduleAliasGroup = define "moduleAliasGroup" $
   doc "Import aliasing: every cross-module dependency is aliased, and module->print->parse round-trips to an identical module (#711, #804, #805)" $
@@ -680,7 +762,8 @@ moduleAliasGroup = define "moduleAliasGroup" $
     moduleCollisionPrintTest,
     moduleAliasPathTest,
     moduleAliasRoundtripTest,
-    moduleCollisionRoundtripTest])
+    moduleCollisionRoundtripTest,
+    annotationPayloadBareRefRoundtripTest])
 
 -- | A universe entry: (module name, its full set of declared names). The universe map's values
 -- are FULLY QUALIFIED 'Name's ('module.local', matching 'Names.qname's own construction and

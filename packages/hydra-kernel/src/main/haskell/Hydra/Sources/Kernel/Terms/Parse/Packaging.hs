@@ -128,6 +128,7 @@ module_ = Module {
      toDefinition qualifyLocalName,
      toDefinition reattachTermDescriptionToBody,
      toDefinition reattachTypeDescriptionToBody,
+     toDefinition requalifyProvisionNamesForPrimitive,
      toDefinition resolveNameRefWith,
      toDefinition resolveNameRefsInDefinitionWith,
      toDefinition resolveNameRefsInTermSignatureWith,
@@ -667,9 +668,26 @@ resolveNameRefsInTypeWith = define "resolveNameRefsInTypeWith" $
   "forField" <~ ("boundHere" ~> "field" ~>
     Eithers.map ("t" ~> Core.fieldTypeWithType (var "field") (var "t")) (var "recurse" @@ var "boundHere" @@ (Core.fieldTypeType $ var "field"))) $
   match _Type (var "typ") Nothing [
-    _Type_annotated>>: "at" ~> Eithers.map
-      ("b" ~> Core.typeAnnotated $ Core.annotatedType (var "b") (Core.annotatedTypeAnnotation $ var "at"))
-      (var "recurse" @@ var "bound" @@ (Core.annotatedTypeBody $ var "at")),
+    -- Same shape as 'resolveNameRefsInTermWith''s '_Term_annotated' case (#711/#837): the
+    -- annotation payload is itself a Term, normally a map literal whose keys are fixed
+    -- annotation keys and whose values may be term references needing resolution. Matching
+    -- the annotation term directly (not projecting through 'getAnnotationMap'/
+    -- 'wrapAnnotationMap') preserves its exact original shape, needed for byte-identity.
+    -- Values are resolved via the TERM-level resolver (the payload's own type, 'Term', differs
+    -- from the type being annotated), with an empty bound set (no term-level bound variables
+    -- are in scope at a TYPE-annotation boundary).
+    _Type_annotated>>: "at" ~>
+      "ann" <~ Core.annotatedTypeAnnotation (var "at") $
+      "resolveV" <~ (resolveNameRefsInTermWith @@ var "modName" @@ var "ownNames" @@ var "universe" @@ (Sets.empty :: TypedTerm (S.Set String))) $
+      "forAnn" <~ ("p" ~> Eithers.map ("v" ~> pair (Pairs.first $ var "p") (var "v")) (var "resolveV" @@ (Pairs.second $ var "p"))) $
+      "rann" <<~ match _Term (var "ann")
+        (Just $ right $ var "ann") [
+        _Term_map>>: "m" ~> Eithers.map
+          ("rpairs" ~> Core.termMap (Maps.fromList $ var "rpairs"))
+          (Eithers.mapList (var "forAnn") (Maps.toList (var "m" :: TypedTerm (M.Map Term Term))))] $
+      Eithers.map
+        ("b" ~> Core.typeAnnotated $ Core.annotatedType (var "b") (var "rann"))
+        (var "recurse" @@ var "bound" @@ (Core.annotatedTypeBody $ var "at")),
     _Type_application>>: "app" ~> Eithers.bind (var "recurse" @@ var "bound" @@ (Core.applicationTypeFunction $ var "app"))
       ("f" ~> Eithers.map ("a" ~> Core.typeApplication $ Core.applicationType (var "f") (var "a")) (var "recurse" @@ var "bound" @@ (Core.applicationTypeArgument $ var "app"))),
     _Type_effect>>: "t" ~> Eithers.map (reify Core.typeEffect) (var "recurse" @@ var "bound" @@ var "t"),
@@ -1352,8 +1370,34 @@ termDefinitionParser = define "termDefinitionParser" $
     ascribedSignature =
       P.bind @@ (keyword @@ string ":") @@ (constant $ asTerm ParseCore.termSignature)
 
+-- | Requalify a primitive's doc-comment '@requirement'/'@recommendation' provision names from
+-- 'parseProvisionLine's generic '<module>.<name>' (all it can produce without knowing which
+-- primitive the doc comment belongs to -- 'docCommentBlock' runs before the primitive's own
+-- name is even parsed) to the convention the DSL's 'PrimitiveDefinition' construction actually
+-- uses: '<module>.<primitive>.<name>' (#711/#837 -- dist/json's
+-- hydra.core.lib.effects.apply.appliesEffectfulFunctionToEffectfulArgument vs. the parser's
+-- (pre-fix) hydra.core.lib.effects.appliesEffectfulFunctionToEffectfulArgument, missing the
+-- '.apply' segment). A no-op when there is no metadata or no provisions.
+requalifyProvisionNamesForPrimitive :: TypedTermDefinition (ModuleName -> String -> Maybe EntityMetadata -> Maybe EntityMetadata)
+requalifyProvisionNamesForPrimitive = define "requalifyProvisionNamesForPrimitive" $
+  doc "Requalify a primitive's provision names to '<module>.<primitive>.<name>' (#711/#837)" $
+  "modName" ~> "local" ~> "mmeta" ~>
+  Optionals.map ("em" ~>
+    "oldProvisions" <~ Packaging.entityMetadataProvisions (var "em") $
+    "requalify" <~ ("p" ~>
+      "oldName" <~ Names.localNameOf @@ (Packaging.provisionName $ var "p") $
+      "newName" <~ Core.name (Strings.concat (list [
+        Packaging.unModuleName (var "modName"), string ".", var "local", string ".", var "oldName"])) $
+      Packaging.provision (var "newName") (Packaging.provisionKind $ var "p") (Packaging.provisionStatement $ var "p")) $
+    Packaging.entityMetadata
+      (Packaging.entityMetadataDescription $ var "em")
+      (Packaging.entityMetadataComments $ var "em")
+      (Packaging.entityMetadataSeeAlso $ var "em")
+      (Packaging.entityMetadataLifecycle $ var "em")
+      (Lists.map (var "requalify") (var "oldProvisions" :: TypedTerm [Provision])))
+    (var "mmeta")
+
 -- | Parse a primitive definition: '[impure] [partial] primitive name : termSignature [= term]'.
--- No doc-comment parsing -- metadata is always Nothing.
 primitiveDefinitionParser :: TypedTermDefinition (ModuleName -> Parser Definition)
 primitiveDefinitionParser = define "primitiveDefinitionParser" $
   doc "Parse a primitive definition: ['##' doc comment] '[impure] [partial] primitive name : termSignature [= term]'" $
@@ -1367,7 +1411,8 @@ primitiveDefinitionParser = define "primitiveDefinitionParser" $
           P.bind @@ (keyword @@ string ":") @@ (constant $
             P.bind @@ (asTerm ParseCore.termSignature) @@ ("sig" ~>
               P.map @@ ("mimpl" ~> Packaging.definitionPrimitive
-                  (Packaging.primitiveDefinition (qualifyLocalName @@ var "modName" @@ var "local") (var "mmeta")
+                  (Packaging.primitiveDefinition (qualifyLocalName @@ var "modName" @@ var "local")
+                    (requalifyProvisionNamesForPrimitive @@ var "modName" @@ var "local" @@ var "mmeta")
                     (var "sig") (var "isPure") (var "isTotal") (var "mimpl"))) @@
                 (P.optional @@ defaultImpl)))))))
   where
