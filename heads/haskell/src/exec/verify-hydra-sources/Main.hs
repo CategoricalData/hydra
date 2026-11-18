@@ -22,6 +22,7 @@ import Hydra.Sources.Ext (
   hydraPgModules, hydraRdfModules, hydraRustModules, hydraWasmModules,
   hydraBuildModules, hydraExtPackageModules, allEncodingModules)
 import qualified Hydra.Sources.Demos.GenPG.Transform as GenPGTransform
+import qualified Hydra.Sources.Test.All as TestAll
 import Hydra.TextualSources (unionTypeNamesOf, universeNamesOf)
 import qualified Hydra.Core.Codegen as CodeGeneration
 import qualified Hydra.Core.Parse.Packaging as ParsePackaging
@@ -61,7 +62,7 @@ fullDslUniverse = concat
   [ mainModules, dslSourceModules, hydraCoqModules, hydraGoModules, hydraJvmModules, hydraJavaModules
   , hydraTypeScriptModules, hydraPythonModules, hydraScalaModules, hydraLispModules, hydraPgModules
   , hydraRdfModules, hydraRustModules, hydraWasmModules, hydraBuildModules, hydraExtPackageModules
-  , [GenPGTransform.module_] ]
+  , [GenPGTransform.module_], TestAll.testModules ]
 
 dedupByName :: [Module] -> [Module]
 dedupByName = go S.empty
