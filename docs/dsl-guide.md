@@ -784,6 +784,17 @@ module_ = Module {
         lambda "x" (Math.add (var "x") (int32 1))]
 ```
 
+### Provisions and parameter names
+
+Kernel primitive definitions (`Hydra/Sources/Kernel/Lib/*.hs`) carry more than a signature.
+`availableSince "0.15"` records the release that introduced a definition.
+`withProvisions [requirement "name" "text", recommendation "name" "text"]` attaches named provisions (#725),
+normative statements that tests cite by name; see [Provisions](specification/index.md#provisions).
+`sigWithParams [("p", "description"), ...]` names each parameter of a primitive and describes it,
+and `markLazyParams [1, 2]` marks lazily evaluated parameter positions.
+These helpers live in `Hydra.Core.Overlay.Haskell.Dsl.Phantoms`;
+[adding-primitives.md](recipes/adding-primitives.md#how-the-registry-works) shows them in a complete example.
+
 ### Registration-completeness checking
 
 A recurring authoring mistake: you write a new definition as a top-level binding, but forget to add it
@@ -879,7 +890,7 @@ The entire Hydra kernel is defined using the meta DSLs.
 
 **Note**: `>>:` is overloaded. In `Base` it produces a tuple (for record definitions); in `Phantoms`
 it produces a `Field` (for `cases`/`match` branches). When `Phantoms` is imported qualified, the
-unqualified `>>:` resolves to the `Base` version. See [Troubleshooting](#error-produces-a-tuple-instead-of-a-field).
+unqualified `>>:` resolves to the `Base` version. See [Troubleshooting](#error--produces-a-tuple-instead-of-a-field).
 
 ### Precedence
 

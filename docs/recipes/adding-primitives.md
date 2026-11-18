@@ -32,6 +32,25 @@ both the `.hydra` file (`packages/hydra-kernel/src/main/hydra/hydra/core/lib/<su
 named-parameter form `primitive name (param: type, ...) : resultType` and `@param`/`@return` doc lines) and the DSL file
 below, in the same commit;
 `heads/haskell/bin/print-hydra-sources.sh <module>` regenerates the `.hydra` text from the DSL.
+For example, `ifElse` appears in `lib/logic.hydra` as:
+
+```
+## Compute a conditional expression.
+##
+## ifElse(p, t, f) returns t if p is true, or f if p is false.
+##
+## @availableSince 0.15
+## @requirement selectsBranchByCondition: ifElse(p, t, f) returns t when p is true and f when p is false.
+##
+## @param p: the boolean condition
+## @param t: the value returned when p is true
+## @param f: the value returned when p is false
+primitive ifElse ∀x.(p: boolean, t: lazy x, f: lazy x) : x
+```
+
+The `@param`/`@return` lines and the `@requirement` provisions are described in
+[syntax.md §6.2](../specification/syntax.md), and the DSL helpers in the registry section below
+(see also [dsl-guide.md](../dsl-guide.md#provisions-and-parameter-names)).
 The kernel's `Hydra/Sources/Kernel/Lib/<sub>.hs` files **are** the primitive registry:
 they enumerate every primitive in each `hydra.core.lib.<sub>` module name with its full
 metadata. Host registrations look up that metadata by name and pair it with their
@@ -166,7 +185,7 @@ module_ = Module {
             moduleDependencies = Bootstrap.unqualifiedDep <$> kernelTypesModuleNames,
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Primitives in the hydra.core.lib.logic module.")}
   where
-    definitions = [and, ifElse, not_, or_]
+    definitions = [and, ifElse, not_, or_]  -- and/or elided below
 
 define :: String -> String -> TermSignature -> [String] -> PrimitiveDefinition
 define = primitiveInModule module_
@@ -174,17 +193,42 @@ define = primitiveInModule module_
 defineWithDefault :: String -> String -> TermSignature -> [String] -> TypedTerm a -> PrimitiveDefinition
 defineWithDefault = primitiveWithDefaultInModule module_
 
-and :: PrimitiveDefinition
-and = defineWithDefault "and" "Compute the logical AND of two boolean values."
-  (sig $ TypeScheme [] (Types.boolean Types.~> Types.boolean Types.~> Types.boolean) M.empty)
-  ["and(p, q) returns true iff both p and q are true. ..."]
-  ("a" ~> "b" ~> Logic.ifElse (var "a") (var "b" :: TypedTerm Bool) false)
-
+-- ifElse is lazy in its then/else branches (positions 1, 2): only the
+-- selected branch is evaluated. The condition (position 0) is strict.
 ifElse :: PrimitiveDefinition
-ifElse = define "ifElse" "Compute a conditional expression."
-  ifElseSig
-  ["ifElse(p, t, f) returns t if p is true, or f if p is false. ..."]
+ifElse = availableSince "0.15" $ withProvisions [
+  requirement "selectsBranchByCondition"
+    "ifElse(p, t, f) returns t when p is true and f when p is false, ..."]
+  $ define "ifElse" "Compute a conditional expression."
+  (markLazyParams [1, 2] $ sigWithParams [("p", "the boolean condition"),
+                                          ("t", "the value returned when p is true"),
+                                          ("f", "the value returned when p is false")] $ TypeScheme [Name "x"]
+    (Types.boolean Types.~> Types.var "x" Types.~> Types.var "x" Types.~> Types.var "x")
+    mempty)
+  ["ifElse(p, t, f) returns t if p is true, or f if p is false. ...",
+   "Total. Corresponds to Haskell's if/then/else."]
+
+not_ :: PrimitiveDefinition
+not_ = availableSince "0.15" $ withProvisions [
+  requirement "negatesBoolean"
+    "not(p) returns false when p is true and true when p is false."]
+  $ defineWithDefault "not" "Compute the logical NOT of a boolean value."
+  (sigWithParams [("p", "the boolean value to negate")] $ TypeScheme [] (Types.boolean Types.~> Types.boolean) mempty)
+  ["not(p) returns false if p is true, or true if p is false.",
+   "Total. Corresponds to Haskell's not :: Bool -> Bool."]
+  ("a" ~> Logic.ifElse (var "a") false true)
 ```
+
+The wrappers around `define` carry the primitive's metadata:
+
+- **`availableSince "<version>"`** records the release in which the primitive appeared (`@availableSince`).
+- **`withProvisions [requirement ..., recommendation ...]`** attaches named provisions (#725): normative requirements
+  and recommendations that tests reference by name (`@requirement`, `@recommendation`).
+  See [Provisions](../specification/index.md#provisions).
+- **`sigWithParams [(name, description), ...]`** names each parameter and gives it a description
+  (the `@param` lines in the `.hydra` text); one pair per parameter, in order.
+- **`markLazyParams [positions]`** marks the zero-based parameter positions that are evaluated lazily
+  (`lazy` in the `.hydra` text).
 
 Each primitive is a top-level `PrimitiveDefinition` value produced by one of two module-local helpers:
 
@@ -208,7 +252,7 @@ and host bindings.
 
 #### Writing the `comments` field
 
-Conventions established across the 18 `hydra.core.lib.*` module names (#319):
+Conventions established across the 21 `hydra.core.lib.*` module names (#319):
 
 - **Pick an authoritative source.** IEEE 754-2019 for floating-point operations
   (§5 for arithmetic + rounding, §9.2 for trig / exp / log); Unicode (general
