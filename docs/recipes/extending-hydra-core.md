@@ -481,7 +481,7 @@ Follow the same pattern: use library elimination functions for Haskell built-in 
 
 ### Step 6: Register Library Functions
 
-**File:** `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs` (#473)
+**File:** `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Libraries.hs` (#473)
 
 If using library functions, ensure they're registered:
 
@@ -758,7 +758,9 @@ After verifying that the build succeeds, add thorough test coverage for both typ
 
 #### 12.1: Type Checking Tests
 
-**File:** `heads/haskell/src/test/haskell/Hydra/CheckingSpec.hs`
+**Files:** `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/Checking/*.hs`, plus the matching
+`.hydra` files under `packages/hydra-kernel/src/main/hydra/hydra/core/test/checking/`
+(regenerate those with `heads/haskell/bin/print-hydra-sources.sh`; the checks run via `TestSuiteSpec.hs`).
 
 Add test cases in the "Type checking" describe block. Use helper functions for cleaner syntax:
 
@@ -817,7 +819,8 @@ expectTermWithType "nested eithers"
 
 #### 12.2: Type Inference Tests
 
-**File:** `heads/haskell/src/test/haskell/Hydra/InferenceSpec.hs`
+**Files:** `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/Inference/*.hs`, plus the matching
+`.hydra` files under `packages/hydra-kernel/src/main/hydra/hydra/core/test/inference/`.
 
 Add inference test cases following the same patterns.
 Inference tests verify that types are correctly inferred without explicit type annotations.
@@ -954,7 +957,7 @@ ulimit -n 4096; stack test
 - [ ] `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/Phantoms.hs` - Add DSL constructors
       if missing (#473)
 - [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Extract/Core.hs` - Add extraction logic
-- [ ] `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/Libraries.hs` - Register library functions (#473)
+- [ ] `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Libraries.hs` - Register library functions (#473)
 
 ### Generated Files (Bootstrap Patches)
 
@@ -1010,14 +1013,14 @@ ulimit -n 4096; stack test
 
 ### Test Files (Always Modified)
 
-- [ ] `heads/haskell/src/test/haskell/Hydra/CheckingSpec.hs`
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/Checking/*.hs` (and the `.hydra` twin)
   - [ ] Add basic value tests (polymorphic cases)
   - [ ] Add lambda/function tests
   - [ ] Add concrete context tests (tuples, lists, records)
   - [ ] Add nested/complex type tests
   - [ ] Use `tyapps` helper for clean syntax
 
-- [ ] `heads/haskell/src/test/haskell/Hydra/InferenceSpec.hs`
+- [ ] `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/Inference/*.hs` (and the `.hydra` twin)
   - [ ] Add corresponding inference tests
 
 ### Build and Test Checkpoints
@@ -1040,7 +1043,7 @@ See commit history for the complete implementation of Either type support, which
 - Checking: Added `typeOfEither` requiring exactly 2 type arguments
 - Rewriting: Used `Eithers.either_` for elimination
 - Bootstrap patches: Manually updated Inference.hs and Coder.hs
-- Tests: Added comprehensive test coverage (CheckingSpec.hs, InferenceSpec.hs)
+- Tests: Added comprehensive test coverage (the checking and inference test modules)
 - Result: Clean code generation, successful build, all 2278+ tests passing
 
 ---
@@ -1259,6 +1262,8 @@ one mid-build is much harder than finding it up front.
    Together with the corresponding `.hydra` file under `packages/hydra-kernel/src/main/hydra/`, which is what Phase 1
    actually reads, this is the source of truth and should change first. Until the DSL copies are deleted, edit both
    and keep them equal (see [Textual sources](../build-system.md#textual-hydra-sources)).
+   Regenerate the `.hydra` text from the DSL with `heads/haskell/bin/print-hydra-sources.sh <module-name>`
+   rather than hand-editing it.
 
 2. **Generated accessors and field-name constants.** Per-record helpers in
    `dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/<Module>.hs`:
