@@ -1,6 +1,6 @@
 # Tail-call optimization in Hydra
 
-> **Audience:** Hydra contributors working on the Python or Java coders, or
+> **Audience:** Hydra contributors working on the Python, Java, Scala, or TypeScript coders (#709), or
 > interested in how Hydra avoids stack overflow in generated code.
 
 ## Overview
@@ -9,7 +9,7 @@ Hydra is a typed, functional meta-programming language whose core data model
 is defined in `hydra.core.model.Term` — a System-F-based term algebra with
 lambdas, applications, let-bindings, case statements, and primitive
 references. The Hydra compiler generates code for multiple target
-languages including Haskell, Python, and Java.
+languages including Haskell, Python, Java, Scala, and TypeScript.
 
 Because Hydra's core language is purely functional and relies heavily on
 recursion, the generated code must cope with the fact that most target
@@ -17,8 +17,8 @@ languages (Python, Java, JavaScript, …) do *not* guarantee tail-call
 optimization at the runtime level. Unbounded recursive calls in generated
 code would exhaust the call stack.
 
-Hydra solves this at *code-generation time*: the Python and Java coders
-detect self-tail-recursive functions in the Hydra term graph and emit
+Hydra solves this at *code-generation time*: the Python, Java, Scala, and TypeScript
+coders detect self-tail-recursive functions in the Hydra term graph and emit
 iterative `while` loops in the target language, replacing tail calls with
 parameter reassignment and `continue`.
 
@@ -58,8 +58,8 @@ type. TCO is a *code-generation concern*, not a language-level construct.
 Detection lives in the kernel `Analysis` module
 (`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Analysis.hs`),
 exposed as `hydra.core.analysis.isSelfTailRecursive` and
-`hydra.core.analysis.isTailRecursiveInTailPosition`. Both the Python and Java
-coders call into the kernel function rather than duplicating the algorithm.
+`hydra.core.analysis.isTailRecursiveInTailPosition`. Every coder that performs TCO calls into the kernel
+analysis rather than duplicating the algorithm.
 
 ### Algorithm
 
@@ -94,6 +94,19 @@ position. The analysis handles:
   tail position is the `let` body.
 - **Default.** Any other term variant: `funcName` must not appear free
   (i.e., the term is a non-recursive base case).
+
+## Translingual lowering: `TcoLoopPlan`
+
+The Scala and TypeScript coders do not walk the term themselves.
+Instead they call `hydra.core.analysis.lowerSelfTailRecursion`, which returns a `hydra.core.coders.TcoLoopPlan`
+(or nothing when the body is not self-tail-recursive).
+A `TcoLoopPlan` holds the loop's parameter names and a `TcoStep` tree whose nodes are
+`continue` (reassign the parameters and repeat), `return` (exit with a value),
+`cases` (branch on a union elimination), and `let_` (bindings recomputed on every iteration).
+Each coder then maps the plan onto its native iteration construct:
+the Scala coder emits a local `@tailrec` def (so that `scalac` verifies the loop),
+and the TypeScript coder emits a native loop.
+The Python and Java coders walk the term directly, as described below.
 
 ## Transformation: recursion to iteration
 
