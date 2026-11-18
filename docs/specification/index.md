@@ -140,11 +140,11 @@ round-trippable printing, totalized partiality, and functorial-last parameter or
 ## 5. Versioning and citation
 
 - There is exactly ONE copy of the specification, at `docs/specification/` on the
-  main branch. The specification is versioned by Git tags — release tag `v<X.Y.Z>`
+  main branch. The specification is versioned by Git tags — release tag `<X.Y.Z>`
   fixes the specification as of that release — and versioned copies are never
   stored in the source tree.
 - Cite a page at a version as
-  `https://github.com/CategoricalData/hydra/blob/v<X.Y.Z>/docs/specification/<page>.md`.
+  `https://github.com/CategoricalData/hydra/blob/<X.Y.Z>/docs/specification/<page>.md`.
 - Every specification page carries a status header:
   hand-written chapters begin `**Status: <Draft|Canonical|Deprecated>** · …`;
   generated pages derive their header from the module's own documentation and carry
@@ -163,6 +163,7 @@ Part I — The language:
   catalog is the generated module page (#723).
 - [Textual syntax](syntax.md) — the notation for terms, types, and their dependencies
 - [Constraint classes](classes.md) — the five classes and their semantics
+- [Regular expressions](regex.md) — the regex syntax and its design record
 - [Ordering and equality](ordering-and-equality.md) — the canonical total order and
   structural equality of values
 
@@ -170,6 +171,7 @@ Part II — The type system:
 
 - Type inference and elaboration *(planned; consumes the rule enumeration of #377)*
 - [Validation](validation.md) — conformance, the representation-generic framework, and the rule catalog
+- [Compatibility](compatibility.md) — the compatibility policy *(Draft; applies from 1.0)*
 
 Part III — The library:
 
@@ -177,7 +179,7 @@ Part III — The library:
 - Supporting kernel types, as needed by the primitive specifications:
   [files](types/files.md), [system](types/system.md), [time](types/time.md), [util](types/util.md)
 - The kernel module reference *(generated pages; drafting)*
-- The lexicon (`lexicon.txt`) — the compact kernel signature listing
+- The lexicon ([hydra-lexicon.txt](../hydra-lexicon.txt)) — the compact kernel signature listing
 
 Part IV — Interchange:
 

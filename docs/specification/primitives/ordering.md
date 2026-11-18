@@ -1,10 +1,8 @@
-<!-- NOTE: this page will be automatically generated from the primitive definitions in
-     packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/*.hs (generator not yet
-     built). Hand-authored draft under #417; the specifications here are the normative TARGET
-     and may deliberately diverge from the currently-frozen definitions.
+<!-- NOTE: this page is hand-written. The other module pages in this directory are generated from the
+     primitive definitions in packages/hydra-kernel/src/main/hydra/hydra/core/lib/*.hydra.
      Conventions (notation, laziness, badges, floating point) are defined in index.md. -->
 
-# hydra.lib.ordering
+# hydra.core.lib.ordering
 
 Ordering of values.
 Every type admitted by the `ordering` constraint has a total order, defined per type constructor
@@ -16,7 +14,7 @@ in [ordering-and-equality.md](../ordering-and-equality.md).
      it is the normative anchor the per-host comparator fixes implement against. -->
 For floating-point values the order is the extended total order of
 [Floating-point values](index.md#floating-point-values), under which `compare x y` is
-`equalTo` exactly when `hydra.lib.equality.equal x y` is `true`.
+`equalTo` exactly when `hydra.core.lib.equality.equal x y` is `true`.
 
 #### compare — **Draft**
 
@@ -26,13 +24,13 @@ Usage: `compare x y`
 
 Compare two values of an ordered type.
 Returns `lessThan` if `x` precedes `y`, `greaterThan` if `y` precedes `x`, and `equalTo`
-otherwise (the values of [Comparison](../types/util.md#comparison)), under the total order
+otherwise (the values of [Comparison](../types/util.md#hydracoreutilcomparison)), under the total order
 defined for the type `t` in [ordering-and-equality.md](../ordering-and-equality.md).
-`compare x y` is `equalTo` exactly when `hydra.lib.equality.equal x y` is `true`.
+`compare x y` is `equalTo` exactly when `hydra.core.lib.equality.equal x y` is `true`.
 Defined for all pairs of values of any type admitted by the `ordering` constraint,
 including all floating-point values.
 
-Since: 0.17.6 (moved from `hydra.lib.equality.compare`)
+Since: 0.17.6 (moved from `hydra.core.lib.equality.compare`)
 
 #### gt — **Draft**
 
@@ -43,7 +41,7 @@ Usage: `gt x y`
 Check whether `x` strictly follows `y` in the type's total order:
 `gt x y` is `true` exactly when `compare x y` is `greaterThan`.
 
-Since: 0.17.6 (moved from `hydra.lib.equality.gt`)
+Since: 0.17.6 (moved from `hydra.core.lib.equality.gt`)
 
 #### gte — **Draft**
 
@@ -54,7 +52,7 @@ Usage: `gte x y`
 Check whether `x` follows or equals `y` in the type's total order:
 `gte x y` is `true` exactly when `compare x y` is not `lessThan`.
 
-Since: 0.17.6 (moved from `hydra.lib.equality.gte`)
+Since: 0.17.6 (moved from `hydra.core.lib.equality.gte`)
 
 #### lt — **Draft**
 
@@ -65,7 +63,7 @@ Usage: `lt x y`
 Check whether `x` strictly precedes `y` in the type's total order:
 `lt x y` is `true` exactly when `compare x y` is `lessThan`.
 
-Since: 0.17.6 (moved from `hydra.lib.equality.lt`)
+Since: 0.17.6 (moved from `hydra.core.lib.equality.lt`)
 
 #### lte — **Draft**
 
@@ -76,7 +74,7 @@ Usage: `lte x y`
 Check whether `x` precedes or equals `y` in the type's total order:
 `lte x y` is `true` exactly when `compare x y` is not `greaterThan`.
 
-Since: 0.17.6 (moved from `hydra.lib.equality.lte`)
+Since: 0.17.6 (moved from `hydra.core.lib.equality.lte`)
 
 #### max — **Draft**
 
@@ -87,7 +85,7 @@ Usage: `max x y`
 Return the greater of two values in the type's total order; returns `y` when
 `compare x y` is `equalTo`.
 
-Since: 0.17.6 (moved from `hydra.lib.equality.max`)
+Since: 0.17.6 (moved from `hydra.core.lib.equality.max`)
 
 #### min — **Draft**
 
@@ -98,4 +96,4 @@ Usage: `min x y`
 Return the lesser of two values in the type's total order; returns `y` when
 `compare x y` is `equalTo`.
 
-Since: 0.17.6 (moved from `hydra.lib.equality.min`)
+Since: 0.17.6 (moved from `hydra.core.lib.equality.min`)

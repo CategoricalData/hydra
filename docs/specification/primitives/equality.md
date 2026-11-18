@@ -1,10 +1,8 @@
-<!-- NOTE: this page will be automatically generated from the primitive definitions in
-     packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/*.hs (generator not yet
-     built). Hand-authored draft under #417; the specifications here are the normative TARGET
-     and may deliberately diverge from the currently-frozen definitions.
+<!-- NOTE: this page is hand-written. The other module pages in this directory are generated from the
+     primitive definitions in packages/hydra-kernel/src/main/hydra/hydra/core/lib/*.hydra.
      Conventions (notation, laziness, badges, floating point) are defined in index.md. -->
 
-# hydra.lib.equality
+# hydra.core.lib.equality
 
 Equality of values.
 Equality is structural: two values are equal exactly when they are the same value of the same
@@ -36,31 +34,12 @@ Since: 0.15
 Usage: `notEqual x y`
 
 Check whether two values are unequal.
-`notEqual x y` is `hydra.lib.logic.not (equal x y)`; this defining equation is the
+`notEqual x y` is `hydra.core.lib.logic.not (equal x y)`; this defining equation is the
 specification, and the default implementation.
 
 Since: 0.17.6
 
-#### identity — **Deprecated**
+#### Moved primitives
 
-`∀t. t → t`
-
-Deprecated since: 0.18. Use: `hydra.lib.functions.identity`.
-
-#### compare — **Deprecated**
-
-`∀t. (ordering t) ⇒ t → t → Comparison`
-
-Deprecated since: 0.18. Use: `hydra.lib.ordering.compare`.
-
-#### gt, gte, lt, lte — **Deprecated**
-
-`∀t. (ordering t) ⇒ t → t → boolean`
-
-Deprecated since: 0.18. Use: `hydra.lib.ordering.gt`, `gte`, `lt`, `lte`.
-
-#### max, min — **Deprecated**
-
-`∀t. (ordering t) ⇒ t → t → t`
-
-Deprecated since: 0.18. Use: `hydra.lib.ordering.max`, `min`.
+`compare`, `gt`, `gte`, `lt`, `lte`, `max`, and `min` moved to [`hydra.core.lib.ordering`](ordering.md) in 0.17.6;
+`identity` moved to `hydra.core.lib.functions`.

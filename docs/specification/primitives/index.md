@@ -1,16 +1,11 @@
 <!-- [PENDING #579]: spec-standard version/status header, per index.md §4 format (not yet defined). -->
-<!-- NOTE: this file will be automatically generated from the primitive definitions in
-     packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Lib/*.hs by a generator script
-     (sibling of bin/regenerate-lexicon.sh; not yet built).
-     This draft is hand-authored under #417 to fix the format the generator must produce.
-     Until the generator exists, treat content as provisional and the format as the deliverable.
-     The specifications on this page are the normative TARGET: they may (and often deliberately
-     do) diverge from the currently-frozen primitive definitions; the definitions will be
-     rewritten to match this page when #417's implementation phase begins. -->
+<!-- NOTE: this page, equality.md, and ordering.md are hand-written.
+     The other module pages in this directory are generated from the primitive definitions in
+     packages/hydra-kernel/src/main/hydra/hydra/core/lib/*.hydra. -->
 
 # Hydra primitives
 
-This is the complete catalog of Hydra's primitive functions: the `hydra.lib.*` namespace.
+This is the complete catalog of Hydra's primitive functions: the `hydra.core.lib.*` namespace.
 Every primitive is listed here, from every module, regardless of maturity; a primitive's lifecycle
 status is carried by its badge (see [Lifecycle and badges](#lifecycle-and-badges)), never by its
 presence or absence on this page.
@@ -41,12 +36,14 @@ type schemes as `∀t1,t2. (class t1) ⇒ <body>`; function types arrow-joined,
 application as `F @ A`.
 Parentheses are used only where needed for grouping (e.g. a function-typed argument,
 `(t1 → t2) → list<t1> → list<t2>`).
+In the `.hydra` sources, a primitive's signature names its parameters instead,
+`∀t.(x: t, y: t) : boolean` (see [syntax.md §6.1](../syntax.md)); the arrow form here is the equivalent curried type.
 Type variables are named `t`, or `t1`, `t2`, ... when several are needed (`k`/`v` for map keys
 and values).
 Each entry also gives a usage form — the primitive applied to named arguments by juxtaposition,
 `equal x y` — and the prose refers to arguments by those names.
 Within its own module's section a primitive is named bare (`compare`); references to another
-module's primitive are fully qualified (`hydra.lib.equality.equal`).
+module's primitive are fully qualified (`hydra.core.lib.equality.equal`).
 The argument names are part of the specification.
 <!-- [PENDING #579]: syntax.md will carry the grammar this section summarizes; keep unified. -->
 
@@ -129,7 +126,7 @@ form of `concat`; `atan2` is the two-argument arctangent.
 
 Hydra's floating-point value space is the wire format's: IEEE 754 binary32/binary64 values with a
 single NaN (payloads are not distinguished) and with negative zero distinct from positive zero.
-`hydra.lib.equality.equal` on floats is value identity: `equal NaN NaN` is `true`, and
+`hydra.core.lib.equality.equal` on floats is value identity: `equal NaN NaN` is `true`, and
 `equal -0.0 0.0` is `false`.
 The `ordering` constraint on floats denotes the extended total order: NaN compares greater than
 every other value and equal to itself, and `-0.0` compares less than `0.0`; consequently
@@ -167,26 +164,24 @@ One page per module, in this directory:
 
 | Module | Contents |
 |---|---|
-| [hydra.lib.chars](chars.md) | Unicode code-point predicates and case mapping |
-| [hydra.lib.effects](effects.md) | the effect monad: sequencing and traversal (impure) |
-| [hydra.lib.eithers](eithers.md) | the either type: construction, elimination, traversal |
-| [hydra.lib.equality](equality.md) | equality of values |
-| [hydra.lib.files](files.md) | filesystem input/output (impure) |
-| [hydra.lib.functions](functions.md) | function combinators |
-| [hydra.lib.hashing](hashing.md) | cryptographic hashing |
-| [hydra.lib.lists](lists.md) | list construction, transformation, and folding |
-| [hydra.lib.literals](literals.md) | conversion and parse/print for literal values |
-| [hydra.lib.logic](logic.md) | boolean operations and branching |
-| [hydra.lib.maps](maps.md) | ordered maps |
-| [hydra.lib.math](math.md) | arithmetic and numeric functions |
-| [hydra.lib.optionals](optionals.md) | the optional type |
-| [hydra.lib.ordering](ordering.md) | ordering of values |
-| [hydra.lib.pairs](pairs.md) | pairs |
-| [hydra.lib.regex](regex.md) | regular expressions (syntax: [regex.md](../regex.md)) |
-| [hydra.lib.sets](sets.md) | ordered sets |
-| [hydra.lib.strings](strings.md) | strings as sequences of code points |
-| [hydra.lib.system](system.md) | process and environment access (impure) |
-| [hydra.lib.text](text.md) | text encoding |
+| [hydra.core.lib.chars](chars.md) | Unicode code-point predicates and case mapping |
+| [hydra.core.lib.effects](effects.md) | the effect monad: sequencing and traversal (impure) |
+| [hydra.core.lib.eithers](eithers.md) | the either type: construction, elimination, traversal |
+| [hydra.core.lib.equality](equality.md) | equality of values |
+| [hydra.core.lib.files](files.md) | filesystem input/output (impure) |
+| [hydra.core.lib.functions](functions.md) | function combinators |
+| [hydra.core.lib.hashing](hashing.md) | cryptographic hashing |
+| [hydra.core.lib.lists](lists.md) | list construction, transformation, and folding |
+| [hydra.core.lib.literals](literals.md) | conversion and parse/print for literal values |
+| [hydra.core.lib.logic](logic.md) | boolean operations and branching |
+| [hydra.core.lib.maps](maps.md) | ordered maps |
+| [hydra.core.lib.math](math.md) | arithmetic and numeric functions |
+| [hydra.core.lib.optionals](optionals.md) | the optional type |
+| [hydra.core.lib.ordering](ordering.md) | ordering of values |
+| [hydra.core.lib.pairs](pairs.md) | pairs |
+| [hydra.core.lib.regex](regex.md) | regular expressions (syntax: [regex.md](../regex.md)) |
+| [hydra.core.lib.sets](sets.md) | ordered sets |
+| [hydra.core.lib.strings](strings.md) | strings as sequences of code points |
+| [hydra.core.lib.system](system.md) | process and environment access (impure) |
+| [hydra.core.lib.text](text.md) | text encoding |
 
-<!-- FORMAT NOTE: equality.md, ordering.md, and logic.md are written as format exemplars;
-     remaining module pages follow after format review (#417). -->

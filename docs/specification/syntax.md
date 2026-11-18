@@ -2,7 +2,7 @@
 
 **Status: Draft** · Part of the [Hydra specification](https://github.com/CategoricalData/hydra/issues/579) ·
 Specification half of [#497](https://github.com/CategoricalData/hydra/issues/497)
-(the parser and round-trip validation remain in #497, which implements this document)
+(the parser and printer are implemented in the `hydra.core.parse` and `hydra.core.print` modules, under #497)
 
 This document specifies the Hydra textual notation for terms, types, literals, and type schemes:
 the presentation syntax used throughout the specification,
@@ -630,6 +630,9 @@ than to the signature text itself — unlike the five module/definition-level ke
 primitive isAlpha (char: int32) : boolean
 ```
 
+A polymorphic primitive prints its `∀` header directly before the parameter list, e.g.
+`primitive ifElse ∀x.(p: boolean, t: lazy x, f: lazy x) : x`.
+
 Record and union fields (§3) carry only a plain description line (one `## ...` line, directly
 above the field) — the richer `@key` forms above (including `@param`/`@return`) are module- and
 definition-level only.
@@ -649,7 +652,7 @@ omitted just because its dependency happens to be read-safe. The printed text is
 state its own dependencies in full: a build or editor tool loading a `.hydra` file in isolation
 reads the import list to know what else to load, and a reparse must be able to resolve every name
 the file uses without any information beyond the file's own text plus each imported module's
-declared names (#5, #711).
+declared names (#711).
 
 ### 6.4 Alias selection and body-reference bareness (informative)
 
@@ -662,8 +665,8 @@ leave the more heavily referenced side of a collision bare.
 
 Separately, and independently of the import line's own bareness, a BODY reference to a name from
 an aliased import may still print unqualified (e.g. `ifElse` rather than `logic.ifElse`) when doing
-so is provably safe for the round trip (Josh's readability request #5, 2026-11-09: "only use
-namespace prefixes when there are conflicts"). A referenced local name prints bare only when it is
+so is provably safe for the round trip (the readability rule "only use namespace prefixes when there
+are conflicts", #711, #805). A referenced local name prints bare only when it is
 (a) declared by the imported module, (b) not declared by any OTHER import this file also declares
 or by the file's own definitions, and (c) never shadowed by a lambda/let/forall binder anywhere in
 the file — condition (c) is a module-wide, not site-local, check: a binder with the same name
@@ -711,14 +714,14 @@ segment.)
 - A `type` definition's parameters are printed as a leading `forall a, b.` in the body
   (`type Pair = forall a, b. (a, b)`); the `∀` scheme header is accepted on input but is printed
   only when the definition's scheme carries variables, which kernel-authored types do not.
-- **Bare-import and bare-body-reference round-trip (#805, #711, #5 — settled).** An earlier
-  design (2026-10-31, Decision Desk card `711-bare-import-roundtrip`) aliased every cross-module
+- **Bare-import and bare-body-reference round-trip (#805, #711 — settled).** An earlier
+  design (2026-10-31, #711) aliased every cross-module
   import unconditionally, specifically because a single-file parser had no access to a bare
   import's own declared names and so could never re-qualify a bare body reference back to the
   module that declared it — not in the no-collision case (#711) nor the split-bare-vs-aliased
   collision case (#805) that surfaced first. That approach traded away `#803`'s bare-import
-  readability win to close the gap. #5 (2026-11-09, Josh: "only use namespace prefixes when there
-  are conflicts") replaced it with the richer fix the 2026-10-31 note had left for later: give the
+  readability win to close the gap. The readability rule "only use namespace prefixes when there
+  are conflicts" (2026-11-09) replaced it with the richer fix the 2026-10-31 note had left for later: give the
   parser access to each imported module's own declared names. Both the import LINE's own
   bareness/alias choice (§6.4, unconditional per-import, independent of body usage) and a BODY
   reference's bareness (also §6.4, conditional on provable round-trip safety) are now resolved by
@@ -728,7 +731,7 @@ segment.)
   always gets a printed import line), using the universe only to answer "does THIS import declare
   that name." The round trip is therefore exact in both directions: a reparse resolves every bare
   reference the printer judged safe, and a context-free caller (no universe supplied) gets the
-  fully-conservative pre-#5 behavior — every import aliased, nothing printed bare — as the exact
+  fully-conservative pre-fix behavior — every import aliased, nothing printed bare — as the exact
   `Map.empty` degenerate case of the same functions, not a separate code path.
 - **Doc-comment description placement, by definition kind (#711).** In printed `.hydra` files, a
   definition's description is always a leading `##` block; a trailing `@{description=...}` never
