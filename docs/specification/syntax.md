@@ -695,6 +695,10 @@ The kernel module `hydra.core.lib.regex` lives at
 `packages/hydra-kernel/src/main/hydra/hydra/core/lib/regex.hydra`.
 (The first `hydra` is the source root `src/main/hydra`; the second is the namespace's first
 segment.)
+The 21 files under `hydra/core/lib/` are the normative declarations of the kernel's primitives,
+and `hydra.core.lib.*` is sourced textually like every other kernel module.
+To read several such files back into modules, use `hydra.core.parse.packaging.parseModules(depModules, sources)`,
+the multi-file entry point (see [downstream-codegen.md](../recipes/downstream-codegen.md)).
 
 ### Notes
 

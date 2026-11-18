@@ -260,6 +260,10 @@ Once your environment is set up:
 - [DSL guide](dsl-guide.md) — how to write Hydra modules in the Haskell DSL.
 - [Java DSL guide](dsl-guide-java.md) / [Python DSL guide](dsl-guide-python.md) — host-native authoring.
 - [Adding a primitive](recipes/adding-primitives.md) — the smallest end-to-end change.
+- [Textual kernel sources](build-system.md#textual-sources-for-hydra-kernel-837) — the kernel is authored as `.hydra` files
+  with Haskell DSL twins; `heads/haskell/bin/print-hydra-sources.sh` regenerates the text from the DSL, and
+  `bin/verify-hydra-sources.sh` checks the two agree.
+- [Editor support](../editors/vscode/README.md) — VS Code syntax highlighting for `.hydra` files (not yet published).
 - [Code generation recipe](recipes/code-generation.md) — full regenerate workflow.
 - [Build system](build-system.md) — pipeline phases, cache model, what invalidates what.
 - [Recipes index](recipes/index.md) — the full set of task-oriented guides.

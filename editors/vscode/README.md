@@ -96,7 +96,7 @@ Two layers:
   stable unit suite. Each file is itself valid `.hydra` (assertions ride on `#` comment
   lines). Covers forms the kernel corpus does not exercise: suffixed/binary/decimal
   literals, `let … in`, `cases`, nominal sugar (`Name{…}` / `Name[…]`, #809), and the
-  forward-looking #811 operator sugar.
+  #811 operator sugar.
 - **`tests/corpus/*.hydra` + `*.snap`** — snapshot tests run against a flat copy of every
   `.hydra` file found recursively under `packages/hydra-kernel/src/main/hydra/` (each module
   sits at the path spelled by its namespace). `npm run test:corpus:refresh` re-copies the
@@ -111,8 +111,8 @@ the docs site (e.g. via Shiki) and a future GitHub Linguist entry can all reuse
 ## Publishing
 
 Targets both the VS Code Marketplace and [Open VSX](https://open-vsx.org/) (which serves
-VSCodium, Cursor and other editors). The extension version is tied to Hydra's single
-version number. Publisher ID, display name and icon are pending the Hydra branding issue
+VSCodium, Cursor and other editors). The extension has its own version number in
+`package.json` (it is not yet bumped by `bin/bump-version.sh`). Publisher ID, display name and icon are pending the Hydra branding issue
 ([#495](https://github.com/CategoricalData/hydra/issues/495)).
 
 ## License

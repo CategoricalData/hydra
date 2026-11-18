@@ -227,6 +227,19 @@ binding if it's genuinely unused. If the exclusion is deliberate (the binding sh
 type constructor, for example), mark it with an `-- unregistered: <reason>` comment on the line
 directly above its type signature instead of adding it to the list.
 
+### `verify-hydra-sources.sh` reports a difference
+
+**Symptom**: `bin/verify-hydra-sources.sh` (the identity guard for the textual `.hydra` kernel sources, #837) exits
+non-zero and lists modules whose regenerated JSON differs from the checked-in `dist/json`.
+
+**Cause**: A kernel module's `.hydra` file and its Haskell DSL twin under `Hydra/Sources/` were edited separately and
+no longer agree, or `dist/json` is stale relative to the sources.
+
+**Fix**: Make the same change on both sides.
+Run `heads/haskell/bin/print-hydra-sources.sh <module-name>` to regenerate the `.hydra` text from the DSL
+(rather than hand-writing it), then regenerate the JSON with `bin/sync.sh` and re-run the guard.
+See [build-system.md § Textual sources for hydra-kernel](build-system.md#textual-sources-for-hydra-kernel-837).
+
 ## Python issues
 
 ### Naming collisions with reserved words

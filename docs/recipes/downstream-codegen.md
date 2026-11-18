@@ -133,7 +133,7 @@ Minimal Python example:
 ```python
 from hydra.core.parse.packaging import parse_modules
 
-kernel_modules = load_kernel_modules()
+kernel_modules = load_kernel_modules()  # placeholder: no such helper is published for Python yet (see below)
 sources = [(str(p), p.read_text()) for p in my_hydra_files]
 
 result = parse_modules(kernel_modules, sources)

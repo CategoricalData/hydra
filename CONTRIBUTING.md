@@ -12,6 +12,8 @@ Quick links:
 - [Developer recipes](docs/recipes/index.md) — task-oriented guides for changing Hydra.
 - [Build system](docs/build-system.md) — sync phases, generated artifacts, and caches.
 - [Coding style](https://github.com/CategoricalData/hydra/wiki/Coding-style) — required conventions.
+- [Textual kernel sources](docs/build-system.md#textual-sources-for-hydra-kernel-837) — the kernel is authored as `.hydra` files;
+  edit the DSL twin too and run `heads/haskell/bin/print-hydra-sources.sh`.
 - [Troubleshooting](docs/troubleshooting.md) — common build, sync, and test failures.
 - [Governance](GOVERNANCE.md) — how decisions are made and how contributors earn more responsibility.
 - [Code of Conduct](CODE_OF_CONDUCT.md) — expected standards of behavior in all project spaces.
@@ -19,6 +21,7 @@ Quick links:
 Core expectations:
 
 - Do not edit generated files under `dist/` by hand.
+- Edit a kernel module's `.hydra` file and its Haskell DSL twin together (see `bin/verify-hydra-sources.sh`).
 - If generated code is wrong, fix the generator or source DSL.
 - Do not proceed past failing tests; investigate and fix the failure first.
 - Keep changes focused, explain how they were tested, and follow the coding style.
