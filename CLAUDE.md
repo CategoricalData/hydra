@@ -201,7 +201,7 @@ At the beginning of every new session, follow these steps **before doing any oth
     merge from a feature branch, and self-authored fix commits pushed
     without finalizing. The staging loop gates both — a post-pull check and a
     pre-push scan of `origin/main..staging`. See
-    [Handling pulled WIP commits](claude/branch-flow.md#handling-pulled-wip-commits).
+    [Handling pulled WIP commits](../../external/agents/docs/branch-flow.md#handling-pulled-wip-commits).
   - **All commit messages are short (≤120 chars), single-line, no body.**
     No `Co-Authored-By` line. End with `For #<issue>` (or `Resolves #<issue>`
     if this branch closes it). Example:
@@ -279,7 +279,7 @@ is the entire purpose of the staging tier and part of its charter, unlike
 feature-agent pushes or GitHub writes (which stay user-gated). The guardrails are
 intrinsic to the cycle, not a confirmation step: the pre-push `WIP:`-scan, the
 cross-machine claim + read-before-push, and no force-push of a shared branch (see
-[branch-flow.md § Cadence](claude/branch-flow.md#cadence)). Don't
+[branch-flow.md § Cadence](../../external/agents/docs/branch-flow.md#cadence)). Don't
 promote up the chain reflexively; wait for each tier to drain its current batch.
 
 For the full sequence, cadence rules, conflict patterns, and the staging

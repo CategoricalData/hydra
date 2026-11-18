@@ -3,7 +3,6 @@
 This harness doc is now maintained in the **hydra-agents** repository, not in Hydra.
 
 - **Canonical (local checkout):** `../../external/agents/docs/branch-flow.md` (from a worktree; `external/` is the submodule dir, a sibling of `worktrees/`)
-- **Pinned revision:** 4857d95 (see `hydra-agents.json` → `agentsVersion`)
 - **GitHub:** https://github.com/CategoricalData/hydra-agents/blob/main/docs/branch-flow.md
 
 The content is generic agent-fleet-harness guidance shared across projects. Hydra keeps this
