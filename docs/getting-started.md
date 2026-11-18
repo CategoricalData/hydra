@@ -42,8 +42,8 @@ package's jar via the overlay system (see [docs/overlays.md](overlays.md) and th
 
 ```gradle
 dependencies {
-    implementation 'net.fortytwo.hydra.java:hydra-kernel:0.17.3'
-    implementation 'net.fortytwo.hydra.java:hydra-pg:0.17.3'
+    implementation 'net.fortytwo.hydra.java:hydra-kernel:0.18.1'
+    implementation 'net.fortytwo.hydra.java:hydra-pg:0.18.1'
 }
 ```
 
@@ -54,15 +54,19 @@ dependencies {
   <dependency>
     <groupId>net.fortytwo.hydra.java</groupId>
     <artifactId>hydra-kernel</artifactId>
-    <version>0.17.3</version>
+    <version>0.18.1</version>
   </dependency>
   <dependency>
     <groupId>net.fortytwo.hydra.java</groupId>
     <artifactId>hydra-pg</artifactId>
-    <version>0.17.3</version>
+    <version>0.18.1</version>
   </dependency>
 </dependencies>
 ```
+
+The `hydra-kernel` jar bundles the kernel JSON modules as a classpath resource (#786), so Java downstream projects
+can load the kernel without a separate download; see
+[downstream-codegen.md](recipes/downstream-codegen.md).
 
 > Earlier releases (0.13, 0.14) shipped a single rolled-up `hydra-ext` artifact. HydraPop still depends on it
 > at `0.14.1`; that bundle is no longer published in 0.15+. Downstream projects on 0.14 will need to switch to
@@ -198,7 +202,7 @@ Hydra-Haskell is on Hackage as `hydra`. From a stack project:
 ```yaml
 # stack.yaml
 extra-deps:
-  - hydra-0.17.3
+  - hydra-0.18.1
 ```
 
 ```yaml
@@ -269,7 +273,7 @@ Hydra publishes per-package Maven artifacts for Scala 3 under group `net.fortytw
 (artifact ids carry sbt's `_3` cross-version suffix). In an sbt project:
 
 ```scala
-libraryDependencies += "net.fortytwo.hydra.scala" %% "hydra-kernel" % "0.17.3"
+libraryDependencies += "net.fortytwo.hydra.scala" %% "hydra-kernel" % "0.18.1"
 ```
 
 The kernel modules have the same `hydra.*` shape as on the other hosts (`hydra.core.model`,

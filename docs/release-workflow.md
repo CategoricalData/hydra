@@ -257,17 +257,17 @@ the following files:
 
 | File | Format |
 |------|--------|
-| `hydra.json` | `"currentVersion": "0.15.0"` |
-| `heads/haskell/package.yaml` | `version: 0.15.0` |
-| `demos/bootstrapping/resources/haskell/package.yaml` | `version: 0.15.0` |
-| `heads/java/build.gradle` | `version = '0.15.0'` |
-| `demos/bootstrapping/resources/java/build.gradle` | `version = '0.15.0'` |
-| `packages/hydra-scala/build.sbt` | `version := "0.15.0"` |
-| `demos/bootstrapping/resources/scala/build.sbt` | `version := "0.15.0"` |
-| `heads/python/pyproject.toml` | `version = "0.15.0"` |
-| `demos/bootstrapping/resources/python/pyproject.toml` | `version = "0.15.0"` |
-| `heads/typescript/package.json` | `"version": "0.15.0"` |
-| `demos/bootstrapping/resources/typescript/package.json` | `"version": "0.15.0"` |
+| `hydra.json` | `"currentVersion": "0.18.1"` |
+| `heads/haskell/package.yaml` | `version: 0.18.1` |
+| `demos/bootstrapping/resources/haskell/package.yaml` | `version: 0.18.1` |
+| `heads/java/build.gradle` | `version = '0.18.1'` |
+| `demos/bootstrapping/resources/java/build.gradle` | `version = '0.18.1'` |
+| `packages/hydra-scala/build.sbt` | `version := "0.18.1"` |
+| `demos/bootstrapping/resources/scala/build.sbt` | `version := "0.18.1"` |
+| `heads/python/pyproject.toml` | `version = "0.18.1"` |
+| `demos/bootstrapping/resources/python/pyproject.toml` | `version = "0.18.1"` |
+| `heads/typescript/package.json` | `"version": "0.18.1"` |
+| `demos/bootstrapping/resources/typescript/package.json` | `"version": "0.18.1"` |
 
 The `./bin/prepare-release.sh` script checks that all version strings match.
 
@@ -1028,7 +1028,7 @@ dependency they care about; transitive resolution pulls the rest:
 
 ```gradle
 dependencies {
-    implementation 'net.fortytwo.hydra.java:hydra-pg:0.17.0'   // pulls hydra-rdf and hydra-kernel
+    implementation 'net.fortytwo.hydra.java:hydra-pg:0.18.1'   // pulls hydra-rdf and hydra-kernel
 }
 ```
 
@@ -1110,11 +1110,11 @@ The following are Scala-specific release steps:
 
 A Scala consumer adds e.g.:
 ```scala
-libraryDependencies += "net.fortytwo.hydra.scala" % "hydra-kernel_3" % "0.17.0"
+libraryDependencies += "net.fortytwo.hydra.scala" % "hydra-kernel_3" % "0.18.1"
 ```
 or, using sbt's `%%` operator (which appends `_3` automatically):
 ```scala
-libraryDependencies += "net.fortytwo.hydra.scala" %% "hydra-kernel" % "0.17.0"
+libraryDependencies += "net.fortytwo.hydra.scala" %% "hydra-kernel" % "0.18.1"
 ```
 
 ## Python releases
