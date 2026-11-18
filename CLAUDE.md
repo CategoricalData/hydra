@@ -18,8 +18,8 @@ All nine pass the hydra-kernel test suite as targets; Haskell, Java, Python, Sca
 JVM/native Lisp dialects also self-host (Emacs Lisp is still maturing as a host — see README
 implementation status).
 
-The `hydra-kernel` modules are sourced from textual `.hydra` files (`packages/hydra-kernel/src/main/hydra/`) in Phase 1,
-**except `hydra.core.lib.*`**, which is still authored in the Haskell DSL. Until the Haskell DSL copies of the
+The `hydra-kernel` modules are sourced from textual `.hydra` files (`packages/hydra-kernel/src/main/hydra/`) in Phase 1
+(the whole kernel, including `hydra.core.lib.*`). Until the Haskell DSL copies of the
 `.hydra`-sourced modules are deleted, edit **both** and keep them equal
 (`bin/verify-hydra-sources.sh` checks byte-identity).
 See [Textual sources](docs/build-system.md#textual-hydra-sources).

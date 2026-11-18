@@ -139,8 +139,8 @@ A complete sync of the matrix walks these in five phases (see
 ### Textual sources for hydra-kernel (#837)
 
 The diagram above is the general case; `hydra-kernel` is a documented exception. As of batch 27
-(`f4def0b25f`), every `hydra-kernel` module **except `hydra.core.lib.*`** (the primitive
-libraries) is sourced from `.hydra` text under `packages/hydra-kernel/src/main/hydra/**/*.hydra`,
+(`f4def0b25f`), every `hydra-kernel` module (the whole kernel, including the `hydra.core.lib.*`
+primitive libraries since the named-parameter signature syntax landed) is sourced from `.hydra` text under `packages/hydra-kernel/src/main/hydra/**/*.hydra`,
 not from its Haskell DSL module under `Hydra/Sources/`:
 
 ```
@@ -152,8 +152,7 @@ packages/hydra-kernel/src/main/hydra/**/*.hydra  →  dist/json/hydra-kernel/src
 A package opts into this via its `package.json`'s `"textualSources"` field (`"all"`, `"main"`
 — like `"all"` but excluding `hydra.core.test.*` — or an explicit module-name list) and an
 optional `"textualSourcesExclude"` list of name prefixes that stay DSL-sourced regardless
-(`hydra-kernel`'s is `["hydra.core.lib."]`, since the primitive-parameter format of the textual
-syntax is still undecided). `Hydra.TextualSources.substituteTextualSources` (in
+(`hydra-kernel` has none: it is `"all"`). `Hydra.TextualSources.substituteTextualSources` (in
 `heads/haskell/src/main/haskell/`) reads these fields and replaces the DSL-compiled module with
 the one parsed from its `.hydra` file before inference/routing/JSON-writing run — those
 downstream steps are unaware of the swap, so a correctly flipped module yields byte-identical
@@ -163,8 +162,9 @@ JSON to what the DSL alone would have produced.
 module must be made in its `.hydra` file AND in the matching Haskell DSL source under
 `Hydra/Sources/` (still present until the DSL copies are eventually deleted — see
 [extending-hydra-core.md](recipes/extending-hydra-core.md)), in the SAME commit. The two must
-stay byte-identical.** `hydra.core.lib.*` (primitives) is the one part of the kernel that stays
-Haskell-sourced for now and is exempt from this rule.
+stay byte-identical.** The rule covers `hydra.core.lib.*` (primitives) too: primitive signatures are written
+in the textual syntax with named parameters (`primitive isAlpha (char: int32) : boolean`, with `@param` and
+`@return` doc lines).
 
 Two tools enforce and support the dual-edit rule, one per direction:
 
@@ -301,10 +301,10 @@ The scope is a property of the package, in its `package.json`:
 - `"textualSources"`: `"all"` (every module that has a `.hydra` file), `"main"` (like `"all"` but excluding
   `hydra.core.test.*`), or an explicit list of module names.
 - `"textualSourcesExclude"`: module-name prefixes that stay DSL-sourced.
-  `hydra-kernel` is `"all"` with `["hydra.core.lib."]` excluded, because the textual format for primitive parameter
-  names and descriptions is not yet decided.
+  `hydra-kernel` has no exclusions (it was `["hydra.core.lib."]` until primitive parameter names and descriptions
+  gained a textual form).
 
-So the kernel is `.hydra`-sourced except `hydra.core.lib.*`.
+So the whole kernel, including `hydra.core.lib.*`, is `.hydra`-sourced.
 Every package with textual sources logs a line such as
 `textual sources: hydra-kernel: 106 modules from .hydra (21 excluded) under ../../packages`,
 and a package that declares textual sources but substitutes no module fails the sync.
@@ -321,7 +321,7 @@ still consume them), so a change to such a module must be made in both places, a
 `bin/verify-hydra-sources.sh` checks this: it regenerates `dist/json` from the `.hydra` files into a scratch root and
 fails on any byte difference from the committed `dist/json` (main and test modules).
 Re-print a `.hydra` file from the DSL when only the DSL side was edited.
-`hydra.core.lib.*` is edited in the DSL only.
+`hydra.core.lib.*` follows the same rule.
 
 ### Adding a new kernel type or definition
 

@@ -27,9 +27,11 @@ Each primitive has two faces:
    (Haskell, Java, Python, Scala, Lisp), paired with the universal metadata into a
    `Primitive` record at host-side registration time.
 
-The `hydra.core.lib.*` modules are the one part of the kernel still authored in the Haskell DSL rather than in `.hydra`
-text (the textual format for primitive parameter names and descriptions is not yet decided; they are excluded via
-`textualSourcesExclude`), so adding a primitive means editing only the DSL file below.
+The `hydra.core.lib.*` modules are `.hydra`-sourced like the rest of the kernel, so adding a primitive means editing
+both the `.hydra` file (`packages/hydra-kernel/src/main/hydra/hydra/core/lib/<sub>.hydra`, with the signature in the
+named-parameter form `primitive name (param: type, ...) : resultType` and `@param`/`@return` doc lines) and the DSL file
+below, in the same commit;
+`heads/haskell/bin/print-hydra-sources.sh <module>` regenerates the `.hydra` text from the DSL.
 The kernel's `Hydra/Sources/Kernel/Lib/<sub>.hs` files **are** the primitive registry:
 they enumerate every primitive in each `hydra.core.lib.<sub>` module name with its full
 metadata. Host registrations look up that metadata by name and pair it with their
