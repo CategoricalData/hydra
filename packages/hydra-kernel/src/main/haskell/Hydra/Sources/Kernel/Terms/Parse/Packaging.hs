@@ -97,6 +97,7 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Parsers for hydra.core.packaging types")}
   where
    definitions = [
+     toDefinition attachPrimitiveSignatureDocs,
      toDefinition correctCrossModuleInjectionsInDefinition,
      toDefinition correctCrossModuleInjectionsInTerm,
      toDefinition correctInjectionsInDefinition,
@@ -123,7 +124,10 @@ module_ = Module {
      toDefinition parseModule,
      toDefinition parseModuleWith,
      toDefinition parseModules,
+     toDefinition parseParamLine,
+     toDefinition parseReturnLine,
      toDefinition primitiveDefinitionParser,
+     toDefinition primitiveDocLines,
      toDefinition primitiveModifiers,
      toDefinition qualifyLocalName,
      toDefinition reattachTermDescriptionToBody,
@@ -264,6 +268,77 @@ parseVersionLine = "tag" ~> "ln" ~>
   Logic.ifElse (Equality.equal (Optionals.withDefault (string "") (Lists.head $ var "parts")) (var "tag"))
     (just $ Packaging.version (Strings.join (string " ") (Lists.drop (int32 1) $ var "parts")))
     nothing
+
+-- | Parse a single '@param <name>: <description>' key line into a (name, description) pair,
+-- the inverse of 'primitiveSignatureDocLines''s '@param' line format (#837 card 87). Returns
+-- 'Nothing' if the line isn't tagged '@param'. These are primitive-signature-specific key lines,
+-- not part of the general 'EntityMetadata' doc-comment vocabulary ('docCommentLinesToMetadata'
+-- silently drops any key line matching none of seeAlso/availableSince/deprecatedSince/
+-- requirement/recommendation) -- '@param'/'@return' fall into that gap by design, since they
+-- attach to the SIGNATURE, not the metadata, and are picked up separately by
+-- 'primitiveDocLines'/'attachPrimitiveSignatureDocs' below.
+parseParamLine :: TypedTermDefinition (String -> Maybe (Name, String))
+parseParamLine = define "parseParamLine" $
+  doc "Parse a single '@param <name>: <description>' key line into a (name, description) pair (#837)" $
+  "ln" ~>
+  "parts" <~ Strings.splitOn (string " ") (var "ln") $
+  "tag" <~ Optionals.withDefault (string "") (Lists.head (var "parts" :: TypedTerm [String])) $
+  Logic.ifElse (Equality.equal (var "tag") (string "@param"))
+    ("afterTag" <~ Strings.join (string " ") (Lists.drop (int32 1) (var "parts" :: TypedTerm [String])) $
+     "nameAndDesc" <~ Strings.splitOn (string ": ") (var "afterTag") $
+     "pname" <~ Optionals.withDefault (string "") (Lists.head (var "nameAndDesc" :: TypedTerm [String])) $
+     "pdesc" <~ Strings.join (string ": ") (Lists.drop (int32 1) (var "nameAndDesc" :: TypedTerm [String])) $
+     just $ pair (Core.name $ var "pname") (var "pdesc"))
+    nothing
+
+-- | Parse a single '@return <description>' key line into its description, the inverse of
+-- 'primitiveSignatureDocLines''s '@return' line format (#837 card 87). Returns 'Nothing' if the
+-- line isn't tagged '@return'.
+parseReturnLine :: TypedTermDefinition (String -> Maybe String)
+parseReturnLine = define "parseReturnLine" $
+  doc "Parse a single '@return <description>' key line into its description (#837)" $
+  "ln" ~>
+  "parts" <~ Strings.splitOn (string " ") (var "ln") $
+  Logic.ifElse (Equality.equal (Optionals.withDefault (string "") (Lists.head $ var "parts")) (string "@return"))
+    (just $ Strings.join (string " ") (Lists.drop (int32 1) $ var "parts"))
+    nothing
+
+-- | Extract every '@param'/'@return' key line's payload from a doc-comment block's raw captured
+-- lines (per 'docCommentLines'), as (paramName -> description) and an optional return
+-- description. Mirrors 'docCommentLinesToMetadata''s own 'keyLines' extraction (via
+-- 'docCommentSections'/'isDocKeyLine'), run independently since '@param'/'@return' are not part
+-- of 'EntityMetadata' (#837 card 87).
+primitiveDocLines :: TypedTermDefinition ([String] -> (M.Map Name String, Maybe String))
+primitiveDocLines = define "primitiveDocLines" $
+  doc "Extract '@param'/'@return' key lines from a doc-comment block's raw lines (#837)" $
+  "lns" ~>
+  "sections" <~ (docCommentSections @@ var "lns") $
+  "isKeySection" <~ ("sec" ~> Optionals.match (Lists.head (var "sec" :: TypedTerm [String])) false (isDocKeyLine)) $
+  "keyLines" <~ Lists.concat (Lists.filter (var "isKeySection") (var "sections" :: TypedTerm [[String]])) $
+  "paramPairs" <~ Optionals.givens (Lists.map (asTerm parseParamLine) (var "keyLines" :: TypedTerm [String])) $
+  "returnLines" <~ Optionals.givens (Lists.map (asTerm parseReturnLine) (var "keyLines" :: TypedTerm [String])) $
+  pair (Maps.fromList (var "paramPairs" :: TypedTerm [(Name, String)])) (Lists.head (var "returnLines" :: TypedTerm [String]))
+
+-- | Attach '@param'/'@return' descriptions (per 'primitiveDocLines') onto an already-parsed
+-- 'TermSignature''s parameters/result, by NAME for parameters (matching 'Parameter.name') and
+-- unconditionally for the single result (#837 card 87). A parameter or the result with no
+-- matching doc line keeps its existing (none) description -- this function is purely additive,
+-- never clearing an existing description.
+attachPrimitiveSignatureDocs :: TypedTermDefinition ((M.Map Name String, Maybe String) -> TermSignature -> TermSignature)
+attachPrimitiveSignatureDocs = define "attachPrimitiveSignatureDocs" $
+  doc "Attach '@param'/'@return' descriptions onto an already-parsed TermSignature's parameters/result (#837)" $
+  "docs" ~> "sig" ~>
+  "paramDescs" <~ Pairs.first (var "docs" :: TypedTerm (M.Map Name String, Maybe String)) $
+  "returnDesc" <~ Pairs.second (var "docs") $
+  "attachParam" <~ ("p" ~> Typing.parameter
+      (Typing.parameterName $ var "p")
+      (Maps.lookup (Typing.parameterName $ var "p") (var "paramDescs" :: TypedTerm (M.Map Name String)))
+      (Typing.parameterType $ var "p")
+      (Typing.parameterIsLazy $ var "p")) $
+  "newParams" <~ Lists.map (var "attachParam") (Typing.termSignatureParameters $ var "sig") $
+  "oldResult" <~ Typing.termSignatureResult (var "sig") $
+  "newResult" <~ Typing.result (var "returnDesc") (Typing.resultType $ var "oldResult") $
+  Typing.termSignature (Typing.termSignatureTypeParameters $ var "sig") (var "newParams") (var "newResult")
 
 -- | Build an 'EntityMetadata' from a doc-comment block's already-captured lines (per
 -- 'docCommentLines') and the enclosing module's name (needed only to qualify '@requirement'/
@@ -1397,24 +1472,36 @@ requalifyProvisionNamesForPrimitive = define "requalifyProvisionNamesForPrimitiv
       (Lists.map (var "requalify") (var "oldProvisions" :: TypedTerm [Provision])))
     (var "mmeta")
 
--- | Parse a primitive definition: '[impure] [partial] primitive name : termSignature [= term]'.
+-- | Parse a primitive definition: '[impure] [partial] primitive name (param: type, ...) : resultType [= term]'
+-- (#837 card 87, option A). Unlike term/type definitions, a primitive's doc comment is parsed
+-- here directly (via 'docCommentLines', not the shared 'docCommentBlock') so that '@param'/
+-- '@return' key lines -- which 'docCommentLinesToMetadata' silently drops, since they describe
+-- the SIGNATURE rather than the definition's metadata -- can be extracted separately
+-- ('primitiveDocLines') and attached onto the parsed signature's parameters/result by name
+-- ('attachPrimitiveSignatureDocs'), while every OTHER doc-comment line (description, comments,
+-- seeAlso, lifecycle, provisions) still becomes ordinary 'EntityMetadata' via
+-- 'docCommentLinesToMetadata', exactly as before.
 primitiveDefinitionParser :: TypedTermDefinition (ModuleName -> Parser Definition)
 primitiveDefinitionParser = define "primitiveDefinitionParser" $
-  doc "Parse a primitive definition: ['##' doc comment] '[impure] [partial] primitive name : termSignature [= term]'" $
+  doc "Parse a primitive definition: ['##' doc comment, incl. '@param'/'@return'] '[impure] [partial] primitive name (param: type, ...) : resultType [= term]'" $
   "modName" ~>
-  P.bind @@ (docCommentBlock @@ var "modName") @@ ("mmeta" ~>
+  P.bind @@ (asTerm docCommentLines) @@ ("lns" ~>
+    "mmeta" <~ Logic.ifElse (Lists.isEmpty (var "lns" :: TypedTerm [String]))
+      nothing
+      (just $ docCommentLinesToMetadata @@ var "modName" @@ var "lns") $
+    "sigDocs" <~ primitiveDocLines @@ var "lns" $
     P.bind @@ primitiveModifiers @@ ("mods" ~>
       "isPure" <~ Pairs.first (var "mods") $
       "isTotal" <~ Pairs.second (var "mods") $
       P.bind @@ (keyword @@ string "primitive") @@ (constant $
         P.bind @@ identifier @@ ("local" ~>
-          P.bind @@ (keyword @@ string ":") @@ (constant $
-            P.bind @@ (asTerm ParseCore.termSignature) @@ ("sig" ~>
-              P.map @@ ("mimpl" ~> Packaging.definitionPrimitive
-                  (Packaging.primitiveDefinition (qualifyLocalName @@ var "modName" @@ var "local")
-                    (requalifyProvisionNamesForPrimitive @@ var "modName" @@ var "local" @@ var "mmeta")
-                    (var "sig") (var "isPure") (var "isTotal") (var "mimpl"))) @@
-                (P.optional @@ defaultImpl)))))))
+          P.bind @@ (asTerm ParseCore.primitiveSignature) @@ ("sig0" ~>
+            "sig" <~ attachPrimitiveSignatureDocs @@ var "sigDocs" @@ var "sig0" $
+            P.map @@ ("mimpl" ~> Packaging.definitionPrimitive
+                (Packaging.primitiveDefinition (qualifyLocalName @@ var "modName" @@ var "local")
+                  (requalifyProvisionNamesForPrimitive @@ var "modName" @@ var "local" @@ var "mmeta")
+                  (var "sig") (var "isPure") (var "isTotal") (var "mimpl"))) @@
+              (P.optional @@ defaultImpl))))))
   where
     defaultImpl = P.bind @@ (keyword @@ string "=") @@ (constant $ token @@ (P.map @@ Positions.stripSpans @@ (asTerm ParseCore.term)))
 

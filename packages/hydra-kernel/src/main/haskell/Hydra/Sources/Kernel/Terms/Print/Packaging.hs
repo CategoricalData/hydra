@@ -94,6 +94,7 @@ module_ = Module {
      toDefinition moduleDefinitionWith,
      toDefinition moduleNameString,
      toDefinition primitiveDefinitionDoc,
+     toDefinition primitiveSignatureDocLines,
      toDefinition termDefinition,
      toDefinition typeDefinition,
      toDefinition withDefinitionDoc]
@@ -567,6 +568,27 @@ termDefinition = define "termDefinition" $
 -- hydra.core.graph.Primitive record, also in scope via the broad Hydra.Kernel import). The DSL
 -- term name registered below ("primitiveDefinition") is unaffected -- only the Haskell-level
 -- identifier changed.
+-- | Print the given signature's parameter/result descriptions as '@param'/'@return' doc-comment
+-- lines (#837 card 87) -- option A: the signature itself carries only NAMES and TYPES
+-- (primitiveSignatureAliased), while any human-readable descriptions move into the leading '##'
+-- doc-comment block, one '@param <name>: <description>' line per DESCRIBED parameter (an
+-- undescribed parameter contributes no line) and at most one '@return <description>' line (only
+-- when the result itself has a description). Returns one string per line, no '##' prefix (the
+-- caller joins/prefixes); empty when nothing has a description.
+primitiveSignatureDocLines :: TypedTermDefinition (TermSignature -> [String])
+primitiveSignatureDocLines = define "primitiveSignatureDocLines" $
+  doc "Render a primitive signature's parameter/result descriptions as '@param'/'@return' lines, sans '##' prefix (#837)" $
+  "sig" ~>
+  "paramLines" <~ Optionals.givens (Lists.map
+    ("p" ~> Optionals.map
+      ("d" ~> Strings.concat $ list [string "@param ", Core.unName (Typing.parameterName $ var "p"), string ": ", var "d"])
+      (Typing.parameterDescription $ var "p"))
+    (Typing.termSignatureParameters $ var "sig")) $
+  "returnLine" <~ Optionals.map
+    ("d" ~> Strings.concat $ list [string "@return ", var "d"])
+    (Typing.resultDescription $ Typing.termSignatureResult $ var "sig") $
+  Lists.concat2 (var "paramLines") (Optionals.toList $ var "returnLine")
+
 primitiveDefinitionDoc :: TypedTermDefinition (M.Map ModuleName String -> PrimitiveDefinition -> String)
 primitiveDefinitionDoc = define "primitiveDefinition" $
   doc "Show a primitive definition as a string, shortening nominal references via the given import-alias map (#803)" $
@@ -578,14 +600,31 @@ primitiveDefinitionDoc = define "primitiveDefinition" $
   "partialStr" <~ Logic.ifElse (Packaging.primitiveDefinitionIsTotal $ var "pd")
     (string "")
     (string "partial ") $
-  "sigStr" <~ (PrintCore.termSignatureAliased @@ var "aliases" @@ (Packaging.primitiveDefinitionSignature $ var "pd")) $
+  "sig" <~ Packaging.primitiveDefinitionSignature (var "pd") $
+  "sigStr" <~ (PrintCore.primitiveSignatureAliased @@ var "aliases" @@ var "sig") $
   "implStr" <~ Optionals.match (Packaging.primitiveDefinitionDefaultImplementation $ var "pd")
     (string "")
     ("impl" ~> Strings.concat $ list [string " = ", PrintCore.termAliased @@ var "aliases" @@ var "impl"]) $
-  withDefinitionDoc @@ (Packaging.primitiveDefinitionMetadata $ var "pd") @@
-    (Strings.concat $ list [
+  "declStr" <~ Strings.concat (list [
       var "impureStr", var "partialStr",
-      string "primitive ", var "localName", string " : ", var "sigStr", var "implStr"])
+      string "primitive ", var "localName", string " ", var "sigStr", var "implStr"]) $
+  "baseDoc" <~ Optionals.match (Packaging.primitiveDefinitionMetadata $ var "pd")
+    (string "")
+    ("meta" ~> entityMetadataDoc @@ var "meta") $
+  "sigDocLines" <~ Lists.map (asTerm ("l" ~> Strings.concat2 (string "## ") (var "l"))) (primitiveSignatureDocLines @@ var "sig") $
+  "sigDoc" <~ Strings.join (string "\n") (var "sigDocLines" :: TypedTerm [String]) $
+  -- The '@param'/'@return' block joins the metadata-derived doc block as one more '##'-separated
+  -- section (entityMetadataDoc's own join convention), placed LAST -- after description/comments/
+  -- seeAlso/lifecycle/provisions -- so a reader sees prose first, then the mechanical parameter
+  -- breakdown.
+  "fullDoc" <~ Logic.ifElse (Strings.isEmpty $ var "sigDoc")
+    (var "baseDoc")
+    (Logic.ifElse (Strings.isEmpty $ var "baseDoc")
+      (var "sigDoc")
+      (Strings.concat $ list [var "baseDoc", string "\n##\n", var "sigDoc"])) $
+  Logic.ifElse (Strings.isEmpty $ var "fullDoc")
+    (var "declStr")
+    (Strings.concat $ list [var "fullDoc", string "\n", var "declStr"])
 
 -- | Show a definition (type, term, or primitive) by dispatching to the matching printer, threading
 -- the import-alias map (#803) into the body/signature printers.

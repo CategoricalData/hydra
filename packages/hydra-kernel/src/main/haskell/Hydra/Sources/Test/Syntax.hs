@@ -61,6 +61,7 @@ module_ = Module {
       Phantoms.toDefinition nominalSugarGroup,
       Phantoms.toDefinition parseModulesGroup,
       Phantoms.toDefinition primitiveProvisionGroup,
+      Phantoms.toDefinition primitiveSignatureSyntaxGroup,
       Phantoms.toDefinition sourcePositionGroup,
       Phantoms.toDefinition sourceSpanGroup,
       Phantoms.toDefinition termDocCommentGroup,
@@ -77,7 +78,8 @@ allTests = define "allTests" $
     subgroups = [annotationRoundtripGroup, corpusRoundtripGroup, doSugarGroup, forallMultiBinderGroup,
                  lambdaMultiBinderGroup, lazyParameterRoundtripGroup, mapSetLiteralGroup, moduleAliasGroup,
                  multiLineDocCommentGroup, nominalSugarGroup, parseModulesGroup, primitiveProvisionGroup,
-                 sourceSpanGroup, sourcePositionGroup, termDocCommentGroup, unqualifiedNamesGroup]
+                 primitiveSignatureSyntaxGroup, sourceSpanGroup, sourcePositionGroup, termDocCommentGroup,
+                 unqualifiedNamesGroup]
 
 -- | Print a term signature, then parse the printed text back, and show the round-tripped
 -- signature. Compares against the original signature's own printed form, so the test both
@@ -234,7 +236,7 @@ primitiveProvisionQualificationTest = universalCase
     "## A test primitive.",
     "##",
     "## @requirement appliesThing: the thing is applied",
-    "primitive apply : int32 \8594 int32"]))
+    "primitive apply (arg: int32) : int32"]))
   (Phantoms.string "test.prov.apply.appliesThing")
 
 primitiveProvisionGroup :: TypedTermDefinition TestGroup
@@ -242,6 +244,88 @@ primitiveProvisionGroup = define "primitiveProvisionGroup" $
   doc "Primitive '@requirement'/'@recommendation' provision-name qualification (#711/#837)" $
   Testing.testGroup (string "primitive provision qualification") nothing (list ([] :: [TypedTerm TestGroup])) (list [
     primitiveProvisionQualificationTest])
+
+-- | Parse the given text as a module and render either the error string or the module re-printed
+-- -- a text -> module -> text round trip, for 'primitiveSignatureSyntaxTest' and similar whole-
+-- definition syntax tests (#837 card 87). Unlike 'moduleRoundtripTest' (which starts from an
+-- in-memory 'Module' value), this starts from HAND-WRITTEN TEXT, so it also exercises the
+-- printer's own choices (spacing, layout) against the exact text a human would write -- the
+-- strictest round-trip bar for a new piece of concrete syntax.
+textRoundtripText :: String -> TypedTerm String
+textRoundtripText src = Eithers.either
+  (Phantoms.lambda "e" $ Phantoms.var "e")
+  (Phantoms.lambda "m" $ PrintPackaging.module' @@ Phantoms.var "m")
+  (ParsePackaging.parseModule @@ (Phantoms.string src))
+
+-- | Card 87 (option A, #837): a primitive's signature NAMES its parameters directly
+-- ('(name: type, ...) : resultType'), and parameter/result descriptions move into the leading
+-- '##' doc comment as '@param <name>: <description>' / '@return <description>' lines -- Josh's
+-- own example (2026-11-17), verbatim. Full TEXT round trip (not a fingerprint), the strictest bar:
+-- confirms the printer reproduces exactly this hand-written layout, not just an equivalent one.
+-- | The printer inserts 'import ... as ...' lines for every module whose names are referenced
+-- (here, hydra.core.model/packaging/typing for int32/boolean/the signature machinery), even when
+-- the hand-written source omits them -- so round-trip EXPECTATIONS must include them, though the
+-- hand-written INPUT need not (#837 card 87).
+primitiveSignatureSyntaxTest :: TypedTerm TestCaseWithMetadata
+primitiveSignatureSyntaxTest = universalCase
+  "a primitive's named-parameter signature with '@param'/'@return' doc lines round-trips (#837 card 87)"
+  (textRoundtripText (L.intercalate "\n" [
+    "module test.alpha",
+    "",
+    "## Test whether a character is alphabetic.",
+    "## @param char: the character to test, as a Unicode code point",
+    "## @return true if the character is alphabetic",
+    "primitive isAlpha (char: int32) : boolean"]))
+  (Phantoms.string (L.intercalate "\n" [
+    "module test.alpha",
+    "",
+    "import hydra.core.model as model",
+    "import hydra.core.packaging as packaging",
+    "import hydra.core.typing as typing",
+    "",
+    "## Test whether a character is alphabetic.",
+    "## @param char: the character to test, as a Unicode code point",
+    "## @return true if the character is alphabetic",
+    "primitive isAlpha (char: int32) : boolean"]))
+
+-- | Card 87: a primitive with multiple named parameters, no doc comment at all -- confirms the
+-- signature syntax alone (no '@param'/'@return' lines) round-trips, and that multiple parameters
+-- are comma-separated correctly.
+primitiveMultiParamSignatureTest :: TypedTerm TestCaseWithMetadata
+primitiveMultiParamSignatureTest = universalCase
+  "a primitive's multi-parameter named signature round-trips with no doc comment (#837 card 87)"
+  (textRoundtripText "module test.multi\n\nprimitive add (x: int32, y: int32) : int32")
+  (Phantoms.string (L.intercalate "\n" [
+    "module test.multi",
+    "",
+    "import hydra.core.model as model",
+    "import hydra.core.packaging as packaging",
+    "import hydra.core.typing as typing",
+    "",
+    "primitive add (x: int32, y: int32) : int32"]))
+
+-- | Card 87: a primitive with zero parameters -- confirms the empty parameter list prints as '()'
+-- (not, say, a bare ':'), round-tripping correctly.
+primitiveNoParamSignatureTest :: TypedTerm TestCaseWithMetadata
+primitiveNoParamSignatureTest = universalCase
+  "a primitive's zero-parameter named signature round-trips (#837 card 87)"
+  (textRoundtripText "module test.noparam\n\nprimitive currentTime () : int32")
+  (Phantoms.string (L.intercalate "\n" [
+    "module test.noparam",
+    "",
+    "import hydra.core.model as model",
+    "import hydra.core.packaging as packaging",
+    "import hydra.core.typing as typing",
+    "",
+    "primitive currentTime () : int32"]))
+
+primitiveSignatureSyntaxGroup :: TypedTermDefinition TestGroup
+primitiveSignatureSyntaxGroup = define "primitiveSignatureSyntaxGroup" $
+  doc "Primitive named-parameter signature syntax: '(name: type, ...) : resultType' plus '@param'/'@return' doc lines (#837 card 87)" $
+  Testing.testGroup (string "primitive signature syntax") nothing (list ([] :: [TypedTerm TestGroup])) (list [
+    primitiveSignatureSyntaxTest,
+    primitiveMultiParamSignatureTest,
+    primitiveNoParamSignatureTest])
 
 -- | Fixture: 'forall a. a' -- a single-binder forall, unaffected by the multi-binder collapsing
 -- (#711); the printer still emits exactly one binder before '.'.

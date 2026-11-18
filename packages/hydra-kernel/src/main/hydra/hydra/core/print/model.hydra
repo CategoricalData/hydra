@@ -615,6 +615,37 @@ term peelTermDescriptionAnnotation =
       `_` = (none, t)}
       t
 
+## Show a primitive's signature as a string: a named parameter list and result type, shortening nominal references via the given alias map (#837)
+term primitiveSignatureAliased =
+  λaliases, sig.
+    let typeParams := TermSignature[typeParameters] sig in
+    let params := TermSignature[parameters] sig in
+    let result := TermSignature[result] sig in
+    let varNames := lists.map (λtp.printBinderName (TypeParameter[name] tp)) typeParams in
+    let constraintClassName := λc.cases(TypeClassConstraint){simple = λn.Name[] n} c in
+    let toConstraintPairsForParam := λtp.
+        let v := TypeParameter[name] tp
+        in lists.map
+          (λc.strings.concat [constraintClassName c, " ", Name[] v])
+          (lists.sortBy constraintClassName (TypeParameter[constraints] tp)) in
+    let tc := lists.concat (lists.map toConstraintPairsForParam typeParams) in
+    let paramStr := λp.
+        let tyStr := typeAtPrec aliases 2:int32 (Parameter[`type`] p) in
+        let lazyStr := ifElse (Parameter[isLazy] p) "lazy " "" in
+        strings.concat [Name[] (Parameter[name] p), ": ", lazyStr, tyStr] in
+    let paramStrs := lists.map paramStr params in
+    let resultStr := typeAtPrec aliases 2:int32 (Result[`type`] result) in
+    let headerStr := ifElse
+        (lists.isEmpty varNames)
+        ""
+        (strings.concat
+          [
+            "∀",
+            strings.join ", " varNames,
+            ".",
+            ifElse (lists.isEmpty tc) "" (strings.concat ["(", strings.join ", " tc, ") ⇒ "])]) in
+    strings.concat [headerStr, "(", strings.join ", " paramStrs, ") : ", resultStr]
+
 ## Render a name in backticked form, escaping its content per #2.4.
 term printBacktickedName =
   λs.strings.concat ["`", strings.concat (lists.map escapeBacktickChar (strings.toList s)), "`"]

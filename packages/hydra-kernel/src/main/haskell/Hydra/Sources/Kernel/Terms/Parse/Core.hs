@@ -128,6 +128,7 @@ module_ = Module {
      toDefinition parseTypeScheme,
      toDefinition postfixTerm,
      toDefinition postfixType,
+     toDefinition primitiveSignature,
      toDefinition projectTerm,
      toDefinition rawName,
      toDefinition recordTerm,
@@ -1539,6 +1540,55 @@ termSignature = define "termSignature" $
     -- toConstraintsEntry/Maps.fromList pattern exactly, including its pre-existing limitation:
     -- multiple (class, var) pairs sharing a variable are not merged, since Maps.fromList keeps
     -- only the last entry per key -- out of scope for #800, which concerns 'lazy' only.
+    toTypeParamConstraintsEntry = "p" ~> pair (Pairs.second (var "p"))
+      (list [Core.typeClassConstraintSimple (Pairs.first (var "p"))])
+
+-- | Parse a primitive's signature: '[∀vars.[constraints⇒]] (name1: [lazy] type1, ...) : resultType'
+-- (#837 card 87, option A) -- a NAMED, parenthesized parameter list and an explicit result type,
+-- rather than termSignature's bare arrow chain (which can only synthesize positional arg0/arg1
+-- names). The header (type variables/constraints) parsing is identical to termSignature's; only
+-- the value-parameter/result grammar differs. Parameter and result descriptions are NOT parsed
+-- here -- they come from the definition's '##' doc-comment '@param'/'@return' lines instead
+-- (attachPrimitiveSignatureDocs in Parse/Packaging.hs fills them in afterward, by name/position).
+primitiveSignature :: TypedTermDefinition (Parser TermSignature)
+primitiveSignature = define "primitiveSignature" $
+  doc "Parse a primitive signature: ['∀' vars '.' [constraints '⇒']] '(' [name ':' ['lazy'] type (',' ...)] ')' ':' resultType (#837)" $
+  P.alt
+    @@ (P.bind @@ (lexeme @@ (P.char @@ int32 8704)) @@ (constant $    -- '∀'
+          P.bind @@ (P.sepBy @@ (asTerm binderName) @@ (lexeme @@ (P.char @@ int32 44))) @@ ("vars" ~>    -- ','
+            P.bind @@ (lexeme @@ (P.char @@ int32 46)) @@ (constant $    -- '.'
+              P.bind @@ (P.optional @@ (P.try @@ constraintsBlock)) @@ ("mcs" ~>
+                sigFromVarsAndConstraints @@ var "vars" @@ var "mcs")))))
+    @@ (sigFromVarsAndConstraints @@ (list ([] :: [TypedTerm Name])) @@ Phantoms.nothing)
+  where
+    sigFromVarsAndConstraints = "vars" ~> "mcs" ~>
+      "typeParams" <~ Lists.map
+        ("v" ~> Typing.typeParameter (var "v")
+          (Optionals.withDefault (list ([] :: [TypedTerm TypeClassConstraint]))
+            (Maps.lookup (var "v" :: TypedTerm Name)
+              (Maps.fromList (Lists.map (asTerm toTypeParamConstraintsEntry) (Optionals.withDefault (list ([] :: [TypedTerm (Name, Name)])) (var "mcs")))))))
+        (var "vars") $
+      P.bind @@ (termKeyword @@ string "(") @@ (constant $
+        P.bind @@ (P.sepBy @@ (asTerm namedParameter) @@ (termKeyword @@ string ",")) @@ ("params" ~>
+          P.bind @@ (termKeyword @@ string ")") @@ (constant $
+            P.bind @@ (termKeyword @@ string ":") @@ (constant $
+              P.map @@ ("resultType" ~>
+                  "result" <~ Typing.result Phantoms.nothing (var "resultType") $
+                  Typing.termSignature (var "typeParams") (var "params") (var "result")) @@
+                (asTerm topType)))))
+    -- A single 'name: [lazy] type' entry inside the parenthesized parameter list.
+    namedParameter =
+      P.bind @@ (asTerm binderName) @@ ("pname" ~>
+        P.bind @@ (termKeyword @@ string ":") @@ (constant $
+          P.map @@ ("lt" ~> Typing.parameter (var "pname") Phantoms.nothing
+              (Pairs.second (var "lt" :: TypedTerm (Bool, Type))) (Pairs.first (var "lt"))) @@
+            (asTerm lazyTypeApplicationLevel)))
+    constraintsBlock =
+      P.bind @@ (termKeyword @@ string "(") @@ (constant $
+        P.bind @@ (P.sepBy1 @@ (asTerm constraint) @@ (termKeyword @@ string ",")) @@ ("cs" ~>
+          P.bind @@ (termKeyword @@ string ")") @@ (constant $
+            P.bind @@ (lexeme @@ (P.char @@ int32 8658)) @@ (constant $    -- '⇒'
+              P.pure @@ var "cs"))))
     toTypeParamConstraintsEntry = "p" ~> pair (Pairs.second (var "p"))
       (list [Core.typeClassConstraintSimple (Pairs.first (var "p"))])
 

@@ -756,6 +756,139 @@ term postfixType =
         (λanns.lists.foldl (λt, ann.Type{annotated = AnnotatedType{body = t, annotation = ann}}) t0 anns)
         (parsers.many annot))
 
+## Parse a primitive signature: ['∀' vars '.' [constraints '⇒']] '(' [name ':' ['lazy'] type (',' ...)] ')' ':' resultType (#837)
+term primitiveSignature =
+  parsers.alt
+    (parsers.bind
+      (lexeme (parsers.char 8704:int32))
+      (λ`_`.parsers.bind
+          (parsers.sepBy binderName (lexeme (parsers.char 44:int32)))
+          (λvars.parsers.bind
+              (lexeme (parsers.char 46:int32))
+              (λ`_`.parsers.bind
+                  (parsers.optional
+                    (parsers.try
+                      (parsers.bind
+                        (termKeyword "(")
+                        (λ`_`.parsers.bind
+                            (parsers.sepBy1 constraint (termKeyword ","))
+                            (λcs.parsers.bind
+                                (termKeyword ")")
+                                (λ`_`.parsers.bind (lexeme (parsers.char 8658:int32)) (λ`_`.parsers.pure cs)))))))
+                  (λmcs.(λvars, mcs.
+                      let typeParams := lists.map
+                          (λv.TypeParameter{
+                              name = v,
+                              constraints = withDefault
+                                  []
+                                  (maps.lookup
+                                    v
+                                    (maps.fromList
+                                      (lists.map
+                                        (λp.(second p, [TypeClassConstraint{simple = first p}]))
+                                        (withDefault [] mcs))))})
+                          vars
+                      in parsers.bind
+                        (termKeyword "(")
+                        (λ`_`.parsers.bind
+                            (parsers.sepBy
+                              (parsers.bind
+                                binderName
+                                (λpname.parsers.bind
+                                    (termKeyword ":")
+                                    (λ`_`.parsers.map
+                                        (λlt.Parameter{
+                                            name = pname,
+                                            description = none,
+                                            `type` = second lt,
+                                            isLazy = first lt})
+                                        (parsers.bind
+                                          (parsers.optional (typeKeyword "lazy"))
+                                          (λmlazy.parsers.map
+                                              (λt.(isGiven mlazy, t))
+                                              (parsers.bind
+                                                postfixType
+                                                (λt0.parsers.map
+                                                    (λrest.lists.foldl
+                                                        (λf, a.Type{
+                                                            application = ApplicationType{
+                                                              function = f,
+                                                              argument = a}})
+                                                        t0
+                                                        rest)
+                                                    (parsers.many postfixType))))))))
+                              (termKeyword ","))
+                            (λparams.parsers.bind
+                                (termKeyword ")")
+                                (λ`_`.parsers.bind
+                                    (termKeyword ":")
+                                    (λ`_`.parsers.map
+                                        (λresultType.
+                                          let result := Result{
+                                            description = none,
+                                            `type` = resultType}
+                                          in TermSignature{
+                                            typeParameters = typeParams,
+                                            parameters = params,
+                                            result = result})
+                                        topType)))))
+                      vars
+                      mcs)))))
+    ((λvars, mcs.
+      let typeParams := lists.map
+          (λv.TypeParameter{
+              name = v,
+              constraints = withDefault
+                  []
+                  (maps.lookup
+                    v
+                    (maps.fromList
+                      (lists.map
+                        (λp.(second p, [TypeClassConstraint{simple = first p}]))
+                        (withDefault [] mcs))))})
+          vars
+      in parsers.bind
+        (termKeyword "(")
+        (λ`_`.parsers.bind
+            (parsers.sepBy
+              (parsers.bind
+                binderName
+                (λpname.parsers.bind
+                    (termKeyword ":")
+                    (λ`_`.parsers.map
+                        (λlt.Parameter{
+                            name = pname,
+                            description = none,
+                            `type` = second lt,
+                            isLazy = first lt})
+                        (parsers.bind
+                          (parsers.optional (typeKeyword "lazy"))
+                          (λmlazy.parsers.map
+                              (λt.(isGiven mlazy, t))
+                              (parsers.bind
+                                postfixType
+                                (λt0.parsers.map
+                                    (λrest.lists.foldl
+                                        (λf, a.Type{application = ApplicationType{function = f, argument = a}})
+                                        t0
+                                        rest)
+                                    (parsers.many postfixType))))))))
+              (termKeyword ","))
+            (λparams.parsers.bind
+                (termKeyword ")")
+                (λ`_`.parsers.bind
+                    (termKeyword ":")
+                    (λ`_`.parsers.map
+                        (λresultType.
+                          let result := Result{description = none, `type` = resultType}
+                          in TermSignature{
+                            typeParameters = typeParams,
+                            parameters = params,
+                            result = result})
+                        topType)))))
+      []
+      none)
+
 ## Parse a project term: 'project' '(' name ')' '{' name '}'
 term projectTerm =
   parsers.bind

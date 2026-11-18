@@ -112,6 +112,7 @@ module_ = Module {
      toDefinition pair_,
      toDefinition peelDescriptionAnnotation,
      toDefinition peelTermDescriptionAnnotation,
+     toDefinition primitiveSignatureAliased,
      toDefinition printBacktickedName,
      toDefinition printBinderName,
      toDefinition printName,
@@ -1504,6 +1505,57 @@ typeSchemeAliased = define "typeSchemeAliased" $
           Strings.join (string ", ") (var "tc"),
           string ") ⇒ "]),
       var "bodyStr"])
+
+-- | Show a primitive's signature as a string: a NAMED, parenthesized parameter list followed by
+-- ': resultType' -- '(name1: type1, name2: type2, ...) : resultType' -- rather than termSignature's
+-- bare arrow chain (#837 card 87). Parameter/result DESCRIPTIONS are not printed here; the caller
+-- (primitiveDefinitionDoc) emits them as '@param'/'@return' lines in the definition's leading
+-- '##' doc-comment block instead, since descriptions are prose that belongs in a comment, not
+-- in the signature itself. The '∀vars.[constraints⇒]' header is still printed exactly as
+-- termSignatureAliased does, omitted entirely for a monomorphic primitive.
+primitiveSignatureAliased :: TypedTermDefinition (M.Map ModuleName String -> TermSignature -> String)
+primitiveSignatureAliased = define "primitiveSignatureAliased" $
+  doc "Show a primitive's signature as a string: a named parameter list and result type, shortening nominal references via the given alias map (#837)" $
+  "aliases" ~> "sig" ~>
+  "typeParams" <~ Typing.termSignatureTypeParameters (var "sig") $
+  "params" <~ Typing.termSignatureParameters (var "sig") $
+  "result" <~ Typing.termSignatureResult (var "sig") $
+  "varNames" <~ Lists.map ("tp" ~> printBinderName @@ (Typing.typeParameterName $ var "tp")) (var "typeParams") $
+  "constraintClassName" <~ ("c" ~>
+    cases _TypeClassConstraint Nothing [
+      _TypeClassConstraint_simple>>: "n" ~> Core.unName (var "n")] @@ (var "c")) $
+  "toConstraintPairsForParam" <~ ("tp" ~> "v" <~ Typing.typeParameterName (var "tp") $
+    Lists.map ("c" ~> Strings.concat $ list [
+      var "constraintClassName" @@ var "c", string " ", Core.unName (var "v")]) $
+    Lists.sortBy (var "constraintClassName") (Typing.typeParameterConstraints $ var "tp")) $
+  "tc" <~ Lists.concat (Lists.map (var "toConstraintPairsForParam") (var "typeParams")) $
+  "paramStr" <~ ("p" ~>
+    "tyStr" <~ typeAtPrec @@ var "aliases" @@ int32 precApp @@ (Typing.parameterType $ var "p") $
+    "lazyStr" <~ Logic.ifElse (Typing.parameterIsLazy $ var "p")
+      (string "lazy ")
+      (string "") $
+    Strings.concat $ list [
+      Core.unName (Typing.parameterName $ var "p"), string ": ", var "lazyStr", var "tyStr"]) $
+  "paramStrs" <~ Lists.map (var "paramStr") (var "params") $
+  "resultStr" <~ typeAtPrec @@ var "aliases" @@ int32 precApp @@ (Typing.resultType $ var "result") $
+  "headerStr" <~ Logic.ifElse (Lists.isEmpty $ var "varNames")
+    (string "")
+    (Strings.concat $ list [
+      string "∀",
+      Strings.join (string ", ") (var "varNames"),
+      string ".",
+      Logic.ifElse (Lists.isEmpty $ var "tc")
+        (string "")
+        (Strings.concat $ list [
+          string "(",
+          Strings.join (string ", ") (var "tc"),
+          string ") ⇒ "])]) $
+  Strings.concat $ list [
+    var "headerStr",
+    string "(",
+    Strings.join (string ", ") (var "paramStrs"),
+    string ") : ",
+    var "resultStr"]
 
 -- | Show a term signature as a string: like typeScheme's '∀vars.[constraints⇒]' header, but the
 -- arrow chain is printed from the signature's own parameters/result rather than from a bare

@@ -51,6 +51,7 @@
                         {"variable": "hydra.core.test.syntax.nominalSugarGroup"},
                         {"variable": "hydra.core.test.syntax.parseModulesGroup"},
                         {"variable": "hydra.core.test.syntax.primitiveProvisionGroup"},
+                        {"variable": "hydra.core.test.syntax.primitiveSignatureSyntaxGroup"},
                         {"variable": "hydra.core.test.syntax.sourceSpanGroup"},
                         {"variable": "hydra.core.test.syntax.sourcePositionGroup"},
                         {"variable": "hydra.core.test.syntax.termDocCommentGroup"},
@@ -14982,7 +14983,7 @@
                                                           "function": {"variable": "hydra.core.parse.packaging.parseModule"},
                                                           "argument": {
                                                             "literal": {
-                                                              "string": "module test.prov\n\n## A test primitive.\n##\n## @requirement appliesThing: the thing is applied\nprimitive apply : int32 → int32"}}}}}}}}},
+                                                              "string": "module test.prov\n\n## A test primitive.\n##\n## @requirement appliesThing: the thing is applied\nprimitive apply (arg: int32) : int32"}}}}}}}}},
                                             {
                                               "name": "expected",
                                               "term": {"lambda": {"parameter": "_", "domain": "unit", "body": {"literal": {"string": "test.prov.apply.appliesThing"}}}}}]}}}}}},
@@ -14996,6 +14997,221 @@
                 {
                   "key": {"variable": "description"},
                   "value": {"literal": {"string": "Primitive '@requirement'/'@recommendation' provision-name qualification (#711/#837)"}}}]}}}}},
+    {
+      "term": {
+        "name": "hydra.core.test.syntax.primitiveSignatureSyntaxGroup",
+        "signature": {"typeParameters": [], "parameters": [], "result": {"type": {"variable": "hydra.core.testing.TestGroup"}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "record": {
+                "typeName": "hydra.core.testing.TestGroup",
+                "fields": [
+                  {"name": "name", "term": {"literal": {"string": "primitive signature syntax"}}},
+                  {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                  {
+                    "name": "subgroups",
+                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.TestGroup"}}}},
+                  {
+                    "name": "cases",
+                    "term": {
+                      "list": [
+                        {
+                          "record": {
+                            "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                            "fields": [
+                              {
+                                "name": "name",
+                                "term": {
+                                  "literal": {"string": "a primitive's named-parameter signature with '@param'/'@return' doc lines round-trips (#837 card 87)"}}},
+                              {
+                                "name": "case",
+                                "term": {
+                                  "inject": {
+                                    "typeName": "hydra.core.testing.TestCase",
+                                    "field": {
+                                      "name": "universal",
+                                      "term": {
+                                        "record": {
+                                          "typeName": "hydra.core.testing.UniversalTestCase",
+                                          "fields": [
+                                            {
+                                              "name": "actual",
+                                              "term": {
+                                                "lambda": {
+                                                  "parameter": "_",
+                                                  "domain": "unit",
+                                                  "body": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "application": {
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {
+                                                                    "typeApplication": {
+                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.eithers.either"}, "type": {"literal": "string"}}},
+                                                                      "type": {"variable": "hydra.core.packaging.Module"}}},
+                                                                  "type": {"literal": "string"}}},
+                                                              "argument": {"lambda": {"parameter": "e", "domain": {"literal": "string"}, "body": {"variable": "e"}}}}},
+                                                          "argument": {
+                                                            "lambda": {
+                                                              "parameter": "m",
+                                                              "domain": {"variable": "hydra.core.packaging.Module"},
+                                                              "body": {
+                                                                "application": {"function": {"variable": "hydra.core.print.packaging.moduleDefinition"}, "argument": {"variable": "m"}}}}}}},
+                                                      "argument": {
+                                                        "application": {
+                                                          "function": {"variable": "hydra.core.parse.packaging.parseModule"},
+                                                          "argument": {
+                                                            "literal": {
+                                                              "string": "module test.alpha\n\n## Test whether a character is alphabetic.\n## @param char: the character to test, as a Unicode code point\n## @return true if the character is alphabetic\nprimitive isAlpha (char: int32) : boolean"}}}}}}}}},
+                                            {
+                                              "name": "expected",
+                                              "term": {
+                                                "lambda": {
+                                                  "parameter": "_",
+                                                  "domain": "unit",
+                                                  "body": {
+                                                    "literal": {
+                                                      "string": "module test.alpha\n\nimport hydra.core.model as model\nimport hydra.core.packaging as packaging\nimport hydra.core.typing as typing\n\n## Test whether a character is alphabetic.\n## @param char: the character to test, as a Unicode code point\n## @return true if the character is alphabetic\nprimitive isAlpha (char: int32) : boolean"}}}}}]}}}}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                              {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                              {
+                                "name": "provisions",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                            "fields": [
+                              {
+                                "name": "name",
+                                "term": {"literal": {"string": "a primitive's multi-parameter named signature round-trips with no doc comment (#837 card 87)"}}},
+                              {
+                                "name": "case",
+                                "term": {
+                                  "inject": {
+                                    "typeName": "hydra.core.testing.TestCase",
+                                    "field": {
+                                      "name": "universal",
+                                      "term": {
+                                        "record": {
+                                          "typeName": "hydra.core.testing.UniversalTestCase",
+                                          "fields": [
+                                            {
+                                              "name": "actual",
+                                              "term": {
+                                                "lambda": {
+                                                  "parameter": "_",
+                                                  "domain": "unit",
+                                                  "body": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "application": {
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {
+                                                                    "typeApplication": {
+                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.eithers.either"}, "type": {"literal": "string"}}},
+                                                                      "type": {"variable": "hydra.core.packaging.Module"}}},
+                                                                  "type": {"literal": "string"}}},
+                                                              "argument": {"lambda": {"parameter": "e", "domain": {"literal": "string"}, "body": {"variable": "e"}}}}},
+                                                          "argument": {
+                                                            "lambda": {
+                                                              "parameter": "m",
+                                                              "domain": {"variable": "hydra.core.packaging.Module"},
+                                                              "body": {
+                                                                "application": {"function": {"variable": "hydra.core.print.packaging.moduleDefinition"}, "argument": {"variable": "m"}}}}}}},
+                                                      "argument": {
+                                                        "application": {
+                                                          "function": {"variable": "hydra.core.parse.packaging.parseModule"},
+                                                          "argument": {"literal": {"string": "module test.multi\n\nprimitive add (x: int32, y: int32) : int32"}}}}}}}}},
+                                            {
+                                              "name": "expected",
+                                              "term": {
+                                                "lambda": {
+                                                  "parameter": "_",
+                                                  "domain": "unit",
+                                                  "body": {
+                                                    "literal": {
+                                                      "string": "module test.multi\n\nimport hydra.core.model as model\nimport hydra.core.packaging as packaging\nimport hydra.core.typing as typing\n\nprimitive add (x: int32, y: int32) : int32"}}}}}]}}}}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                              {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                              {
+                                "name": "provisions",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}},
+                        {
+                          "record": {
+                            "typeName": "hydra.core.testing.TestCaseWithMetadata",
+                            "fields": [
+                              {
+                                "name": "name",
+                                "term": {"literal": {"string": "a primitive's zero-parameter named signature round-trips (#837 card 87)"}}},
+                              {
+                                "name": "case",
+                                "term": {
+                                  "inject": {
+                                    "typeName": "hydra.core.testing.TestCase",
+                                    "field": {
+                                      "name": "universal",
+                                      "term": {
+                                        "record": {
+                                          "typeName": "hydra.core.testing.UniversalTestCase",
+                                          "fields": [
+                                            {
+                                              "name": "actual",
+                                              "term": {
+                                                "lambda": {
+                                                  "parameter": "_",
+                                                  "domain": "unit",
+                                                  "body": {
+                                                    "application": {
+                                                      "function": {
+                                                        "application": {
+                                                          "function": {
+                                                            "application": {
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {
+                                                                    "typeApplication": {
+                                                                      "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.eithers.either"}, "type": {"literal": "string"}}},
+                                                                      "type": {"variable": "hydra.core.packaging.Module"}}},
+                                                                  "type": {"literal": "string"}}},
+                                                              "argument": {"lambda": {"parameter": "e", "domain": {"literal": "string"}, "body": {"variable": "e"}}}}},
+                                                          "argument": {
+                                                            "lambda": {
+                                                              "parameter": "m",
+                                                              "domain": {"variable": "hydra.core.packaging.Module"},
+                                                              "body": {
+                                                                "application": {"function": {"variable": "hydra.core.print.packaging.moduleDefinition"}, "argument": {"variable": "m"}}}}}}},
+                                                      "argument": {
+                                                        "application": {
+                                                          "function": {"variable": "hydra.core.parse.packaging.parseModule"},
+                                                          "argument": {"literal": {"string": "module test.noparam\n\nprimitive currentTime () : int32"}}}}}}}}},
+                                            {
+                                              "name": "expected",
+                                              "term": {
+                                                "lambda": {
+                                                  "parameter": "_",
+                                                  "domain": "unit",
+                                                  "body": {
+                                                    "literal": {
+                                                      "string": "module test.noparam\n\nimport hydra.core.model as model\nimport hydra.core.packaging as packaging\nimport hydra.core.typing as typing\n\nprimitive currentTime () : int32"}}}}}]}}}}}},
+                              {"name": "description", "term": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}},
+                              {"name": "tags", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.testing.Tag"}}}},
+                              {
+                                "name": "provisions",
+                                "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.model.Name"}}}}]}}]}}]}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {
+                    "literal": {
+                      "string": "Primitive named-parameter signature syntax: '(name: type, ...) : resultType' plus '@param'/'@return' doc lines (#837 card 87)"}}}]}}}}},
     {
       "term": {
         "name": "hydra.core.test.syntax.sourcePositionGroup",
