@@ -427,7 +427,9 @@ Notes:
   and is not yet produced by any printer.
 - `termSignature`'s header (`∀` ... `⇒`) is identical to `typeScheme`'s; only the body differs,
   since a `TermSignature`'s parameters (unlike a bare `type`'s function-arrow chain) can each
-  carry a laziness flag. Example: `primitive ifElse : ∀t. boolean → lazy t → lazy t → t`.
+  carry a laziness flag. Example: `term ifElse : ∀t. boolean → lazy t → lazy t → t = ...`.
+  A `primitive` definition uses its own named-parameter notation instead (`primitiveSig`, §6.1),
+  not this bare arrow-chain form (#837 card 87).
 - **Nominal sugar (#809).** A type name written immediately before `{...}` or `[...]` (no
   intervening whitespace) is abbreviated nominal construction/elimination, dropping the
   `record(…)`/`inject(…)`/`wrap(…)`/`project(…)`/`unwrap(…)` keyword wrapper. The keyword forms
@@ -579,11 +581,19 @@ importPackage ::= 'from' name                     -- disambiguates when the same
 definition    ::= typeDef | termDef | primitiveDef
 typeDef       ::= defDoc? 'type' localName '=' typeScheme
 termDef       ::= defDoc? 'term' localName [':' termSignature] '=' term
-primitiveDef  ::= defDoc? ['impure'] ['partial'] 'primitive' localName ':' termSignature
+primitiveDef  ::= defDoc? ['impure'] ['partial'] 'primitive' localName primitiveSig
                   ['=' term]                      -- optional default implementation
 
 localName     ::= segment | '`' nameChars '`'     -- unqualified; qualified under
                                                   -- moduleName when read
+
+-- A primitive's own signature notation (#837 card 87) -- distinct from termSignature (§3):
+-- parameters are NAMED directly in the signature rather than left as a bare arrow chain, and
+-- parameter/result descriptions move into defDoc as '@param'/'@return' lines (§6.2) instead of
+-- living in the signature itself.
+primitiveSig  ::= ['∀' binderName (',' binderName)* '.' [schemeConstraints '⇒']]
+                  '(' [primitiveParam (',' primitiveParam)*] ')' ':' type
+primitiveParam ::= name ':' [lazy] type
 ```
 
 ### 6.2 Doc comments
@@ -606,8 +616,23 @@ that order. A `@seeAlso` line's payload is one of `type <Name>`, `term <name>`,
 `type-expr <text>`, naming the kind of thing referenced. Order among the `@key` lines themselves
 is not semantically significant, but the printer's fixed order keeps output deterministic.
 
+A `primitive` definition's `defDoc` additionally admits two more `@key` lines, appearing after the
+five above: `@param <name>: <description>` (one per named parameter, in signature order; 439
+occurrences across the kernel) and `@return <description>` (11 occurrences) (#837 card 87). Each
+attaches its description to the matching `primitiveParam`/result in `primitiveSig` (§6.1) rather
+than to the signature text itself — unlike the five module/definition-level keys above, `@param`/
+`@return` are primitive-only. For example:
+
+```
+## Test whether a character is alphabetic.
+## @param char: the character to test, as a Unicode code point
+## @return true if the character is alphabetic
+primitive isAlpha (char: int32) : boolean
+```
+
 Record and union fields (§3) carry only a plain description line (one `## ...` line, directly
-above the field) — the richer `@key` forms above are module- and definition-level only.
+above the field) — the richer `@key` forms above (including `@param`/`@return`) are module- and
+definition-level only.
 
 ### 6.3 Import aliasing
 
@@ -675,9 +700,11 @@ segment.)
   definition's trailing type or term cannot swallow the next definition's keyword as an argument.
 - `impure`/`partial` default to absent, meaning pure and total respectively; both prefix keywords
   are printed only when `false`, and `impure` precedes `partial` when both are present.
-- A `term`/`primitive` definition's `: termSignature` ascription is the term-signature notation
-  of §3 (`∀` header, `lazy` parameters), not a plain `type`; a `type` definition's own `=`
-  right-hand side is always a `typeScheme`, never a `termSignature`.
+- A `term` definition's `: termSignature` ascription is the term-signature notation of §3
+  (`∀` header, `lazy` parameters), not a plain `type`; a `type` definition's own `=` right-hand
+  side is always a `typeScheme`, never a `termSignature`. A `primitive` definition uses its own
+  distinct `primitiveSig` notation instead (§6.1) — named parameters plus `: resultType`, with
+  parameter/result descriptions in `defDoc` rather than the signature (#837 card 87).
 - The printer emits a `term` definition's `: termSignature` only when the definition carries one
   and relies on inference otherwise; none of the kernel's own `.hydra` term definitions do, so
   every printed `term name = ...` in the corpus omits the ascription.
