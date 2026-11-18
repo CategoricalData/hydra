@@ -24,6 +24,7 @@ for extending Hydra, implementing new features, and working with Hydra's archite
 
 - **[Creating a new Hydra implementation](new-implementation.md)** - Step-by-step guide for implementing Hydra in a new language
 - **[Synchronizing Hydra-Python](syncing-python.md)** - How to regenerate Python artifacts from Hydra-Haskell sources
+- **[Tail-call optimization](../tco-implementation.md)** - How the Python, Java, Scala, and TypeScript coders turn self-tail-recursion into loops
 - **[Exporting modules to JSON](json-kernel.md)** - How to export and verify Hydra modules (kernel, main, test) as JSON for cross-language access
 
 ### Refactoring

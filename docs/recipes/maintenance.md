@@ -57,7 +57,7 @@ they were committed before the ignore rule was added and need `git rm --cached`:
 
 - `debug_*.py`, `debug_*.hs`, `debug_*.clj` — scratch debugging scripts
 - `*-plan.md` — branch plan files (used by LLM sessions)
-- `docs/work/` — working documents and issue analysis
+- `docs/work/` — working documents and issue analysis (a gitignored scratch directory that may not exist in a fresh checkout)
 - `analysis/` — benchmark analysis notebooks
 - `.claude/` — LLM session memory
 - `__pycache__/`, `*.pyc` — Python bytecache
