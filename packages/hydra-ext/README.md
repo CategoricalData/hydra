@@ -15,7 +15,7 @@ Coders, syntax models, and language metadata for:
 
 - **Schema languages and IDLs** — Avro, Protobuf, GraphQL, Pegasus/PDL,
   JSON Schema, YAML, SQL (ANSI), Datalog, Kusto KQL.
-- **Generation targets** — C++, C# (Csharp), Rust.
+- **Generation targets** — C++, C# (Csharp).
 - **Domain models** — Workflow, Atlas, Azure DTDL, GeoJSON, IANA Relations,
   OSV (Open Source Vulnerability), STAC Items, Parquet/Delta Parquet.
 
@@ -103,7 +103,7 @@ YAML coder's `Term` ↔ `Hydra.Core.Yaml.Model.Node` mapping (golden `Node` outp
 — there is no YAML *text* serde in this repo yet, so YAML coverage stops at the `Node` AST level.
 
 **Coverage status** (#699): Avro, Protobuf, GraphQL, and YAML have golden-output and/or
-round-trip tests. The remaining coders (SQL, Parquet, Delta, Kusto, Pegasus/PDL, C++, C#, Rust,
+round-trip tests. The remaining coders (SQL, Parquet, Delta, Kusto, Pegasus/PDL, C++, C#,
 and the "Other" domain modules) have no tests yet; see #816.
 
 ## See also

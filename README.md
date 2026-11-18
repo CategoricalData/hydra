@@ -126,7 +126,7 @@ self-hosting, runtime completeness, authoring, and published artifacts — see
 
 | Head | Status | Description |
 |---|---|---|
-| [Haskell](packages/hydra-haskell/README.md) | Complete | Complete implementation and a build host: the kernel DSLs are authored in Haskell and Hydra code-generates itself from them, so Haskell both self-hosts and drives the build. Published to Hackage. |
+| [Haskell](packages/hydra-haskell/README.md) | Complete | Complete implementation and a build host: the kernel is authored as textual `.hydra` sources (with Haskell DSL twins kept in lock-step) and Hydra code-generates itself from them, so Haskell both self-hosts and drives the build. Published to Hackage. |
 | [Java](packages/hydra-java/README.md) | Complete | Complete implementation and a build host: self-hosts and its native coder generates Hydra into the JVM. Published to Maven Central. |
 | [Scala](packages/hydra-scala/README.md) | Complete | Complete implementation and a build host: self-hosts on the JVM and its native coder participates in the build. Published to Maven Central. |
 | [Python](packages/hydra-python/README.md) | Complete | Complete implementation: self-hosts and passes the hydra-kernel test suite. Published to PyPI and conda-forge. |
@@ -136,7 +136,7 @@ self-hosting, runtime completeness, authoring, and published artifacts — see
 | [Scheme](packages/hydra-lisp/hydra-scheme/README.md) | Complete | Complete implementation: self-hosts and passes the hydra-kernel test suite. Shares the Lisp-family coder. |
 | [Emacs Lisp](packages/hydra-lisp/hydra-emacs-lisp/README.md) | Complete | Passes the hydra-kernel test suite as a target; still maturing as a self-hosting host. Shares the Lisp-family coder. |
 | [Go](packages/hydra-go/README.md) | In progress | A "head bud": kernel code generation works, but the hand-written Go runtime is still stubbed out and Go does not yet host the test suite. |
-| [Rust](packages/hydra-ext/src/main/haskell/Hydra/Sources/Rust) | In progress | Generation target; the coder lives in `hydra-ext` and has not yet been split into its own head package. |
+| [Rust](packages/hydra-rust/README.md) | In progress | Generation target only; the coder lives in the `hydra-rust` package. |
 | [C++](packages/hydra-ext/src/main/haskell/Hydra/Sources/Cpp) | In progress | Generation target; the coder lives in `hydra-ext` and has not yet been split into its own head package. |
 | [Coq](packages/hydra-coq/README.md) | In progress | Generation-only target: Hydra emits Coq, but there is no Coq-side runtime. |
 | [WebAssembly](packages/hydra-wasm/README.md) | In progress | Generation-only target: an experimental WebAssembly coder with no host-side runtime yet. |
@@ -151,7 +151,10 @@ kernel.
 | Package | Purpose |
 |---|---|
 | [hydra-kernel](packages/hydra-kernel/README.md) | Core types, terms, type inference, validation, primitives, and the coder framework. Every other package depends on this. |
-| [hydra-ext](packages/hydra-ext/README.md) | Extension coders: Avro, Protobuf, GraphQL, Pegasus/PDL, JSON Schema, YAML, SQL, C++, Rust, Csharp, plus domain models. |
+| [hydra-ext](packages/hydra-ext/README.md) | Extension coders: Avro, Protobuf, GraphQL, Pegasus/PDL, JSON Schema, YAML, SQL, C++, Csharp, plus domain models. |
+| [hydra-build](packages/hydra-build/README.md) | Hydra's own build system as translingual modules: routing, manifests, assembly plans, lib-pass partitioning. |
+| [hydra-jvm](packages/hydra-jvm/README.md) | JVM utilities shared by the Java and Scala coders. |
+| [hydra-rust](packages/hydra-rust/README.md) | Rust coder (generation target only). |
 | [hydra-pg](packages/hydra-pg/README.md) | Property-graph model and coders (GraphSON, Cypher, GQL, TinkerPop, Graphviz, RDF mappings); the PG validator; a Neo4j model with client-side validation and a property-graph mapping. |
 | [hydra-rdf](packages/hydra-rdf/README.md) | RDF 1.1, SHACL, OWL 2, ShEx, and XML Schema syntax models; N-Triples serialization. |
 | [hydra-bench](packages/hydra-bench/README.md) | Synthetic inference benchmark workloads. Opt-in: not part of default sync. |
@@ -205,6 +208,7 @@ or [open a GitHub issue](https://github.com/CategoricalData/hydra/issues).
 - **[Coding style](https://github.com/CategoricalData/hydra/wiki/Coding-style)** — guiding principles, ordering conventions, common mistakes.
 - **[Developer recipes](docs/recipes/index.md)** — step-by-step guides for adding primitives, extending core types, refactoring, and similar tasks.
 - **[Build system](docs/build-system.md)** — pipeline phases, caching layers, and what triggers regeneration.
+- **Editor support (not yet published)** — [`editors/vscode`](editors/vscode/README.md) provides syntax highlighting for `.hydra` files.
 
 ### Talks, demos, and community
 
