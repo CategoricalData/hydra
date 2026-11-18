@@ -4,8 +4,5 @@
   "description": "Hydra programming language kernel",
   "sourceLanguage": "haskell",
   "dependencies": [],
-  "textualSources": "all",
-  "textualSourcesExclude": [
-    "hydra.core.lib."
-  ]
+  "textualSources": "all"
 }
