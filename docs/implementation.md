@@ -39,8 +39,10 @@ organization rather than abstract foundations.
 Hydra is a **strongly-typed functional programming language that executes in multiple language environments**.
 By design, developers can write Hydra source code in any of the supported host languages
 (Haskell, Java, Python, Scala, Lisp) and cross-compile it to any other supported language.
-[Hydra-Haskell](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell) serves as the source of truth
-for the **Hydra kernel** (the core type system and transformation infrastructure), but Hydra programs themselves
+The **Hydra kernel** (the core type system and transformation infrastructure) lives in
+[`packages/hydra-kernel`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel),
+authored as textual `.hydra` sources with Haskell DSL twins kept in lock-step.
+Hydra programs themselves
 can be written and executed in Java, Python, Scala, Lisp, or any other supported implementation.
 
 The implementation follows a layered architecture:
@@ -49,8 +51,9 @@ The implementation follows a layered architecture:
 ┌──────────────────────────────────────────────────────────────┐
 │                   Hydra Kernel (Source of Truth)             │
 │  Type system: Term, Type, Module, Graph, primitives, etc.    │
-│  Location: packages/hydra-kernel/src/main/haskell/Hydra/Sources/│
-│  Written using: Haskell DSLs                                 │
+│  Location: packages/hydra-kernel/src/main/hydra/ (.hydra)    │
+│  Twin: .../src/main/haskell/Hydra/Sources/ (Haskell DSLs)    │
+│  Written using: Hydra textual syntax (mirrored by the DSLs)  │
 └────────────────────────┬─────────────────────────────────────┘
                          │ Defines
                          ▼
@@ -326,6 +329,10 @@ Error model
 ## DSL system
 
 Hydra uses **embedded domain-specific languages (eDSLs) in Haskell** to define its entire kernel.
+The kernel is also authored as textual `.hydra` files, and the DSL modules are kept in lock-step with them
+(the dual-edit rule; see [build-system.md](build-system.md#textual-hydra-sources)).
+The `hydra.core.parse.packaging.parseModules` function reads such `.hydra` text back into modules
+(see [downstream-codegen.md](recipes/downstream-codegen.md)).
 The DSL system provides multiple levels of abstraction for different use cases.
 
 ### DSL module locations

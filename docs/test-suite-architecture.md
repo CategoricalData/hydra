@@ -609,6 +609,11 @@ To add a new test module:
 
 1. **Create the test module** in `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Test/YourTest.hs`
 
+   Test modules are `.hydra`-sourced too: after writing the `.hs` module, run
+   `heads/haskell/bin/print-hydra-sources.sh hydra.core.test.yourTest` to regenerate its
+   `packages/hydra-kernel/src/main/hydra/hydra/core/test/yourTest.hydra`, and commit both together
+   (see [extending-tests.md](recipes/extending-tests.md)).
+
 2. **Define the module structure**:
    ```haskell
    module_ :: Module

@@ -14,6 +14,11 @@ and code-generated into each target language.
 This recipe covers that workflow, plus a special section on migrating existing Haskell-specific tests to the common
 suite.
 
+Test modules are `.hydra`-sourced like the rest of the kernel (`"textualSources": "all"`; #837).
+Add the test to the `.hs` module, then run `heads/haskell/bin/print-hydra-sources.sh <module-name>` to regenerate
+the matching file under `packages/hydra-kernel/src/main/hydra/hydra/core/test/`, and commit both in the same commit.
+`bin/verify-hydra-sources.sh` checks that the two copies agree.
+
 For more context on Hydra's testing strategy, see [Testing in Hydra](https://github.com/CategoricalData/hydra/wiki/Testing).
 
 ## Prerequisites

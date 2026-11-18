@@ -17,9 +17,22 @@ between typed lambda calculus and labeled hypergraphs. See the main Hydra
 
 ## What lives here
 
-`packages/hydra-kernel/` is the **DSL source of truth** for the kernel. There is no
-generated output in this package — only the hand-written DSL modules that describe
+`packages/hydra-kernel/` is the **source of truth** for the kernel. There is no
+generated output in this package — only the hand-written sources that describe
 what the kernel *is*. Generated kernels for each host language live in `dist/<lang>/hydra-kernel/`.
+
+### Textual sources
+
+The kernel is authored as textual `.hydra` files under
+[`src/main/hydra/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-kernel/src/main/hydra):
+one file per module, with the path derived from the module name
+(`hydra/core/lib/lists.hydra` holds `hydra.core.lib.lists`).
+All modules are sourced this way, including the primitive library `hydra.core.lib.*` and the test modules
+(`"textualSources": "all"` in `package.json`; #837).
+The Haskell DSL modules under `src/main/haskell/Hydra/Sources/` are a second copy that must be kept
+byte-identical to the text (the dual-edit rule, checked by `bin/verify-hydra-sources.sh`).
+Regenerate the text side from the DSL with `heads/haskell/bin/print-hydra-sources.sh`.
+See [build-system.md](https://github.com/CategoricalData/hydra/blob/main/docs/build-system.md#textual-hydra-sources).
 
 ### Type modules
 
@@ -54,9 +67,9 @@ defines the algorithms:
   schemes, and Hydra-specific extensions for nominal terms.
 - **`Checking.hs`** — type checking; runs after inference and validates results.
 - **`Reduction.hs`** — beta/eta reduction, including tail-call detection used by
-  the Python and Java coders (see [TCO implementation](https://github.com/CategoricalData/hydra/blob/main/docs/tco-implementation.md)).
+  the Python, Java, Scala, and TypeScript coders (see [TCO implementation](https://github.com/CategoricalData/hydra/blob/main/docs/tco-implementation.md)).
 - **`Rewriting.hs`** — free-variable analysis, substitution, term traversal.
-- **`Analysis.hs`** — `isSelfTailRecursive` and related shared analyses.
+- **`Analysis.hs`** — `isSelfTailRecursive`, `lowerSelfTailRecursion` and related shared analyses.
 - **`Validate/`** — module-level validation rules (`hydra.core.validate.*`).
 - **`Sorting.hs`**, **`Topology.hs`** — Tarjan SCC over module/term dependency
   graphs.
@@ -94,12 +107,13 @@ re-declaring it.
 
 ## Code organization
 
-The kernel package contains DSL sources only. Generated kernels and runtime helpers
+The kernel package contains kernel sources only (`.hydra` text plus the equivalent Haskell DSL). Generated kernels and runtime helpers
 live in adjacent directories:
 
 | Where | What |
 |-------|------|
-| `packages/hydra-kernel/src/main/haskell/Hydra/Sources/`            | Kernel DSL sources (this package) |
+| `packages/hydra-kernel/src/main/hydra/`                            | Kernel textual `.hydra` sources (this package) |
+| `packages/hydra-kernel/src/main/haskell/Hydra/Sources/`            | Kernel Haskell DSL sources, the byte-identical twin (this package) |
 | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Dsl/` | Hand-written Haskell DSL helpers used to write the sources |
 | `overlay/haskell/hydra-kernel/src/main/haskell/Hydra/Core/Overlay/Haskell/Lib/` | Hand-written Haskell primitive implementations (overlaid onto the kernel dist) |
 | `dist/haskell/hydra-kernel/`                                       | Generated Haskell kernel (`Hydra/Core/Model.hs`, `Hydra/Core/Graph.hs`, etc.) |
@@ -115,8 +129,8 @@ For the broader `packages/heads/dist` pattern, see the
 
 ## How the kernel is regenerated
 
-The kernel is generated from these DSL sources via `bin/sync.sh`. After editing a
-file under `Hydra/Sources/Kernel/`, run:
+The kernel is generated from these sources via `bin/sync.sh`. After editing a
+`.hydra` file and its DSL twin under `Hydra/Sources/Kernel/`, run:
 
 ```bash
 heads/haskell/bin/sync-haskell.sh   # regenerate Haskell kernel, run stack test
