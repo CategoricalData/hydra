@@ -15,6 +15,117 @@ they are documented here for completeness.
 
 ---
 
+## [0.18.1] - unreleased
+
+Textual-sources release: the whole `hydra-kernel` is now authored as textual `.hydra` files, including the
+primitive library `hydra.core.lib.*`, and the textual syntax gains the sugar, parsers, and tooling needed to carry it.
+Also lands translingual tail-call optimization for the Scala and TypeScript coders, named provisions and
+primitive parameter names, the property-graph encoding of term graphs, and a large body of host-specific bootstrap
+and CI fixes.
+
+### Breaking changes
+
+- **Type renames** ([#837](https://github.com/CategoricalData/hydra/issues/837)): four types whose variant names clashed with other kernel types are renamed.
+  Any code, JSON, or `.hydra` text that names them must be updated.
+  - `hydra.core.regex.QuantifierRange` is now `hydra.core.regex.Range`.
+  - `hydra.ext.azure.dtld.SchemaPrimitive` is now `PrimitiveSchema`, and `SchemaComplex` is now `ComplexSchema`.
+  - `hydra.rust.syntax.TypePath` is now `PathType`.
+- **New primitive signature syntax in `.hydra`** ([#837](https://github.com/CategoricalData/hydra/issues/837)): a `primitive` definition names its parameters,
+  `primitive ifElse ∀x.(p: boolean, t: lazy x, f: lazy x) : x`, instead of the old arrow chain
+  (`primitive ifElse : ∀t. boolean → lazy t → lazy t → t`).
+  Parameter and result descriptions move into `@param` and `@return` doc lines.
+  The arrow-chain form is for `term` signatures only.
+- **Raw `case` keyword is now `cases`** ([#810](https://github.com/CategoricalData/hydra/issues/810)): the textual-syntax case statement keyword matches `Term.cases`.
+- **`hydra.core.json.bootstrap` is now `hydra.core.bootstrap`** ([#791](https://github.com/CategoricalData/hydra/issues/791)).
+- **`and` and `or` are lazy in their second operand** ([#802](https://github.com/CategoricalData/hydra/issues/802)): both are marked lazy, mirroring `ifElse`, and the
+  Java and Python hosts add thunk-accepting overloads.
+
+### Highlights
+
+- **The whole kernel is `.hydra`-sourced** ([#837](https://github.com/CategoricalData/hydra/issues/837), [#711](https://github.com/CategoricalData/hydra/issues/711), [#710](https://github.com/CategoricalData/hydra/issues/710), [#497](https://github.com/CategoricalData/hydra/issues/497)):
+  every `hydra-kernel` module, including all `hydra.core.lib.*` primitive modules and the test modules, is sourced from
+  `packages/hydra-kernel/src/main/hydra/**/*.hydra`; Phase 1 reads that text instead of the Haskell DSL.
+  The Haskell DSL modules remain as a twin that must stay byte-identical (the dual-edit rule).
+  `bin/verify-hydra-sources.sh` is the identity guard (it is not run by CI),
+  and `heads/haskell/bin/print-hydra-sources.sh` regenerates the text from the DSL.
+  A package may textually source only modules it owns.
+- **Named primitive parameters** ([#837](https://github.com/CategoricalData/hydra/issues/837)): all 292 primitives print with named parameters and `@param`/`@return`
+  descriptions, carried through the kernel metadata.
+- **`parseModules`** ([#842](https://github.com/CategoricalData/hydra/issues/842)): `hydra.core.parse.packaging.parseModules` reads `.hydra` text into modules and is the
+  supported entry point for downstream code generation from textual sources
+  (see `docs/recipes/downstream-codegen.md`).
+- **Kernel JSON on the classpath** ([#786](https://github.com/CategoricalData/hydra/issues/786)): the published `hydra-kernel` jar bundles the kernel's JSON modules, so
+  Java downstream projects no longer need a source checkout to load the kernel.
+- **Tail-call optimization on more hosts** ([#709](https://github.com/CategoricalData/hydra/issues/709)): shared `TcoLoopPlan`/`TcoStep` kernel types and a
+  `lowerSelfTailRecursion` pass, consumed by the new Scala (`@tailrec`) and TypeScript lowerings.
+- **Named provisions** ([#725](https://github.com/CategoricalData/hydra/issues/725)): primitives and tests carry named requirements and recommendations,
+  spec prose is ported into module and primitive metadata, and the generated spec pages render comments and lifecycle.
+- **Term graphs as property graphs** ([#738](https://github.com/CategoricalData/hydra/issues/738)): `hydra.pg.subtermGraph` encodes a term graph as a property graph,
+  with specification pages (`docs/specification/pg/subterm-graph.md`).
+- **VS Code extension** ([#806](https://github.com/CategoricalData/hydra/issues/806)): `editors/vscode` provides a TextMate grammar, snippets, and Unicode input for
+  `.hydra` files, with a snapshot corpus generated from the kernel sources.
+  It is not yet published.
+
+### New features
+
+- **Textual syntax sugar** ([#809](https://github.com/CategoricalData/hydra/issues/809), [#811](https://github.com/CategoricalData/hydra/issues/811)): nominal construction and elimination sugar
+  (`record`/`inject`/`wrap {...}`, `project`/`unwrap [...]`), applied `case` sugar, and monadic `do` blocks
+  (`do either`, `do list`, `do optional`, `do effect`).
+- **Source spans** ([#815](https://github.com/CategoricalData/hydra/issues/815)): the parsers track source offsets and record term spans through the new
+  `hydra.core.positions` module; spans are round-trip-exempt surface trivia.
+- **Parsers and printers** ([#710](https://github.com/CategoricalData/hydra/issues/710), [#497](https://github.com/CategoricalData/hydra/issues/497)): `hydra.core.parse.core` (term, type, and type scheme parser),
+  parse/print for packaging, doc-comment parsing into `EntityMetadata`, and `line:col` parse errors.
+- **Spec generator** ([#723](https://github.com/CategoricalData/hydra/issues/723)): the `hydra.RegenerateSpec` driver and `bin/regenerate-spec.sh` now exist,
+  and the module-reference pages under `docs/specification/` are generated by them.
+  The module reference is still partial (only the primitives and four kernel type modules are covered).
+- **Build system in Hydra** ([#788](https://github.com/CategoricalData/hydra/issues/788)): the lib-pass partition (`isLibModule`, `partitionLibModules`) moves into the
+  translingual `hydra.build.modules`, consumed by the Java, Scala, and Haskell drivers.
+- **Bootstrap matrix** ([#769](https://github.com/CategoricalData/hydra/issues/769)): `docs/bootstrap-matrix.md` persists the N×N cross-host generation matrix.
+- **Build slot tooling** ([#730](https://github.com/CategoricalData/hydra/issues/730), [#814](https://github.com/CategoricalData/hydra/issues/814)): `with-stack-slot.sh` gains a second lane, priorities, pinning, and a memory guard,
+  and scripts that run bare `stack` re-exec under it.
+- **CI** ([#821](https://github.com/CategoricalData/hydra/issues/821), [#700](https://github.com/CategoricalData/hydra/issues/700)): an inference-cost guard (time and peak memory) and a dedicated haskell-tests job.
+
+### Bug fixes
+
+- [#799](https://github.com/CategoricalData/hydra/issues/799): shadow-renaming of variables was decoupled across three layers (`unshadowVariables`,
+  `analyzeFunctionTermWithGather`, the Java coder's `dedupBindings`).
+- [#803](https://github.com/CategoricalData/hydra/issues/803), [#804](https://github.com/CategoricalData/hydra/issues/804), [#805](https://github.com/CategoricalData/hydra/issues/805): printed import aliases and bare names now round-trip.
+- [#798](https://github.com/CategoricalData/hydra/issues/798): a `Term.variable` encodes and decodes as `{"@var": "name"}` at any JSON position.
+- [#817](https://github.com/CategoricalData/hydra/issues/817): `printFloat32`/`printFloat64` for subnormals in the Common Lisp, Emacs Lisp, and Clojure hosts.
+- [#779](https://github.com/CategoricalData/hydra/issues/779): the Python coder no longer breaks on nested module names.
+- [#752](https://github.com/CategoricalData/hydra/issues/752): `PropertyType.required` was hardcoded to true.
+- [#751](https://github.com/CategoricalData/hydra/issues/751), [#838](https://github.com/CategoricalData/hydra/issues/838): the SHACL serializer emits blank nodes for anonymous shape references, RDF lists for
+  `sh:in`/`sh:and`/`sh:or`/`sh:xone`, and qualified value shapes with their counts.
+- [#755](https://github.com/CategoricalData/hydra/issues/755): effects fixes (Type.effect encoder arms, Python `map_list`, Emacs Lisp loading).
+- [#812](https://github.com/CategoricalData/hydra/issues/812): the Clojure/Scheme `testEnv` redirect applies to generated test trees only.
+- [#768](https://github.com/CategoricalData/hydra/issues/768): the cold-seed driver step fails fast when its local fallback cannot succeed.
+- [#825](https://github.com/CategoricalData/hydra/issues/825): `dist/haskell/hydra-kernel` is reseeded when stale relative to `dist/json`.
+- [#826](https://github.com/CategoricalData/hydra/issues/826): Lisp coders reference nullary effect primitives by call.
+- [#827](https://github.com/CategoricalData/hydra/issues/827): overlay variant-order tables are checked against `model.json`.
+- [#772](https://github.com/CategoricalData/hydra/issues/772), [#756](https://github.com/CategoricalData/hydra/issues/756): several silent failures in the sync scripts and vitest/Scala drivers now fail loudly.
+
+### Improvements
+
+- Python DSL phantom types are threaded through combinator signatures ([#731](https://github.com/CategoricalData/hydra/issues/731), [#732](https://github.com/CategoricalData/hydra/issues/732), [#818](https://github.com/CategoricalData/hydra/issues/818)).
+- Hackage and PyPI batch publish sets are derived from the package registry ([#573](https://github.com/CategoricalData/hydra/issues/573), [#577](https://github.com/CategoricalData/hydra/issues/577)).
+- Pre-existing namespace leftovers from the 0.18.0 rename are cleaned up in Lisp, Scala, TypeScript, and Java bootstrap
+  drivers ([#767](https://github.com/CategoricalData/hydra/issues/767), [#729](https://github.com/CategoricalData/hydra/issues/729)).
+
+### Documentation
+
+- `docs/specification/syntax.md` gains the module-level grammar, doc comments, import aliasing, file layout,
+  `@param`/`@return`, and the named-parameter primitive signature.
+- The kernel README, `docs/implementation.md`, `docs/build-system.md`, and the test and primitive recipes describe the
+  `.hydra` sources and the dual-edit rule.
+- The hand-written primitive spec pages use the `hydra.core.lib.*` namespace.
+
+### Known issues
+
+- The generated spec pages under `docs/specification/` do not yet render primitive parameter names or
+  `@param`/`@return` descriptions ([#723](https://github.com/CategoricalData/hydra/issues/723)).
+
+---
+
 ## [0.18.0] - 2026-09-29
 
 Module-naming systematization release: every kernel and package module moves onto a uniform
