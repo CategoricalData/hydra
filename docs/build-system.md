@@ -138,9 +138,9 @@ A complete sync of the matrix walks these in five phases (see
 
 ### Textual sources for hydra-kernel (#837)
 
-The diagram above is the general case; `hydra-kernel` is a documented exception. As of batch 27
-(`f4def0b25f`), every `hydra-kernel` module (the whole kernel, including the `hydra.core.lib.*`
-primitive libraries since the named-parameter signature syntax landed) is sourced from `.hydra` text under `packages/hydra-kernel/src/main/hydra/**/*.hydra`,
+The diagram above is the general case; `hydra-kernel` is a documented exception. As of 0.18.1,
+every `hydra-kernel` module (the whole kernel, including the `hydra.core.lib.*` primitive libraries)
+is sourced from `.hydra` text under `packages/hydra-kernel/src/main/hydra/**/*.hydra`,
 not from its Haskell DSL module under `Hydra/Sources/`:
 
 ```
@@ -158,7 +158,7 @@ the one parsed from its `.hydra` file before inference/routing/JSON-writing run 
 downstream steps are unaware of the swap, so a correctly flipped module yields byte-identical
 JSON to what the DSL alone would have produced.
 
-**The dual-edit rule, effective from batch 27 (#837): any change to a textually-sourced kernel
+**The dual-edit rule (#837): any change to a textually-sourced kernel
 module must be made in its `.hydra` file AND in the matching Haskell DSL source under
 `Hydra/Sources/` (still present until the DSL copies are eventually deleted — see
 [extending-hydra-core.md](recipes/extending-hydra-core.md)), in the SAME commit. The two must
@@ -169,8 +169,8 @@ in the textual syntax with named parameters (`primitive isAlpha (char: int32) : 
 Two tools enforce and support the dual-edit rule, one per direction:
 
 - **`bin/verify-hydra-sources.sh`** — the identity GUARD (parse `.hydra` → infer → compare
-  against the checked-in `dist/json`). Run by CI; catches drift between the two sides after the
-  fact.
+  against the checked-in `dist/json`). Not run by CI; run it manually (or via the land process) before
+  landing a change. It catches drift between the two sides after the fact.
 - **`heads/haskell/bin/print-hydra-sources.sh [module-name...]`** — the PRINT tool: regenerates
   a `.hydra` file from its DSL source, so you never have to hand-write the text side of the
   dual edit. Prints every textually-sourced module by default (respecting the same
@@ -201,6 +201,12 @@ short-circuits in seconds.
 
 Day-to-day, you invoke a Layer 3 script. The lower layers are useful when debugging or
 iterating on a single package.
+
+The module-list logic that the generation drivers share (which modules are kernel modules, and which are primitive
+library modules to be redirected in the lib pass) lives in the translingual `hydra.build.modules` module of the
+[hydra-build](../packages/hydra-build/README.md) package, not in each driver (#788).
+Its `partitionLibModules`, `isLibModule`, and `filterKernelModules` functions are consumed by the Java and Scala
+`Bootstrap` drivers and the Haskell `bootstrap-from-json` driver.
 
 Each layer boundary is **fail-loud**: it either succeeds with a verified-consistent artifact
 or aborts with an error naming the layer and the mismatch — no step exits 0 on a swallowed
@@ -306,7 +312,7 @@ The scope is a property of the package, in its `package.json`:
 
 So the whole kernel, including `hydra.core.lib.*`, is `.hydra`-sourced.
 Every package with textual sources logs a line such as
-`textual sources: hydra-kernel: 106 modules from .hydra (21 excluded) under ../../packages`,
+`textual sources: hydra-kernel: <N> modules from .hydra (0 excluded) under ../../packages`,
 and a package that declares textual sources but substitutes no module fails the sync.
 Parse failures and a listed module without a `.hydra` file are fatal; there is no fallback to the DSL.
 A package's selection is restricted to the modules it owns (its routing-map entry), a `textualSources` list
@@ -889,7 +895,7 @@ sbt build (no published-host probe yet — Scala always runs in `--local-host` m
   `hydra.json`), then the default published-host path picks it up. See
   [hostOverrides](#consuming-published-hosts).
 
-**The output is identical.** The published host (currently 0.17.1) and a freshly-built local host produce
+**The output is identical.** The published host (the `hostVersion` in `hydra.json`) and a freshly-built local host produce
 byte-for-byte identical `dist/json/hydra-{java,python}` from the same DSL sources — this is the
 forward-compatibility contract (#369) that makes consuming a *previous* release's host safe.
 See [Self-bootstrapping and forward-compatibility](https://github.com/CategoricalData/hydra/wiki/Packaging#self-bootstrapping-and-forward-compatibility)
@@ -1047,7 +1053,7 @@ Haskell host, published or local, has been built yet in this environment. Someth
 `dist/haskell/hydra-kernel` before *any* Haskell process can run at all.
 
 **Retired approach (#376, deleted by #703):** a standalone `ColdSeedMain.hs` executable
-(`heads/haskell/json-driver/`) compiled against the *published* `hydra-kernel` package from Hackage, using
+(`heads/haskell/json-driver/`, since deleted) compiled against the *published* `hydra-kernel` package from Hackage, using
 that published host's compiled types to decode `dist/json` and emit `dist/haskell`. This worked as long as
 the published kernel's compiled Haskell types matched the shape the JSON decoder expected — but a kernel
 **shape** change (e.g. #683's `TypeScheme.constraints` becoming a bare map instead of `Maybe`-wrapped) is
@@ -1181,7 +1187,7 @@ only `{java, python}` coverage as its minimum bar, not the full triad (a run tha
 covers Haskell still satisfies it, since `{java,python}` is a subset).
 
 Haskell stays opt-in — pass it explicitly (`--hosts haskell,...` / `--targets
-haskell,...`, or `bin/sync-haskell.sh`) for a change that specifically concerns
+haskell,...`, or `heads/haskell/bin/sync-haskell.sh`) for a change that specifically concerns
 Haskell-authoring source (`packages/*/src/main/haskell/`, `heads/haskell/`). CI's own
 "Haskell tests" job keeps running on every push regardless of this policy — it's
 centralized and doesn't multiply per developer, unlike a local sync/test/bootstrap
