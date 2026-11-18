@@ -15,7 +15,9 @@ import hydra.core.typing
 ## Total, vacuously: there is no well-typed argument on which absurd could be called. Corresponds to Haskell's Data.Void.absurd :: Void -> a.
 ##
 ## @availableSince 0.17.6
-primitive absurd : ∀t1.void → t1
+##
+## @param v: a value of the void type; unreachable in any well-typed program
+primitive absurd ∀t1.(v: void) : t1
 
 ## Compose two functions.
 ##
@@ -25,7 +27,11 @@ primitive absurd : ∀t1.void → t1
 ## Total. Corresponds to Haskell's (.) :: (b -> c) -> (a -> b) -> a -> c.
 ##
 ## @availableSince 0.17.6
-primitive compose : ∀t1, t2, t3.(t2 → t3) → (t1 → t2) → t1 → t3 = λg, f, x.g (f x)
+##
+## @param g: the outer function, applied to the result of f
+## @param f: the inner function, applied to x first
+## @param x: the argument to which f is applied
+primitive compose ∀t1, t2, t3.(g: (t2 → t3), f: (t1 → t2), x: t1) : t3 = λg, f, x.g (f x)
 
 ## Return the first argument, ignoring the second.
 ##
@@ -35,7 +41,10 @@ primitive compose : ∀t1, t2, t3.(t2 → t3) → (t1 → t2) → t1 → t3 = λ
 ##
 ## @availableSince 0.17.6
 ## @requirement returnsFirstArgumentIgnoringSecond: const returns its first argument unchanged and ignores its second argument entirely, regardless of the second argument's type or value.
-primitive const : ∀t1, t2.t1 → t2 → t1 = λx, y.x
+##
+## @param x: the value to return
+## @param y: the ignored second argument
+primitive const ∀t1, t2.(x: t1, y: t2) : t1 = λx, y.x
 
 ## Swap the argument order of a binary function.
 ##
@@ -44,7 +53,11 @@ primitive const : ∀t1, t2.t1 → t2 → t1 = λx, y.x
 ##
 ## @availableSince 0.17.6
 ## @requirement swapsArgumentOrder: flip(f, x, y) applies f with its two arguments in reversed order, i.e. flip(f, x, y) = f(y, x).
-primitive flip : ∀t1, t2, t3.(t1 → t2 → t3) → t2 → t1 → t3 = λf, x, y.f y x
+##
+## @param f: the binary function whose argument order is swapped
+## @param x: the argument passed as f's second argument
+## @param y: the argument passed as f's first argument
+primitive flip ∀t1, t2, t3.(f: (t1 → t2 → t3), x: t2, y: t1) : t3 = λf, x, y.f y x
 
 ## Return the argument unchanged.
 ##
@@ -55,4 +68,6 @@ primitive flip : ∀t1, t2, t3.(t1 → t2 → t3) → t2 → t1 → t3 = λf, x,
 ##
 ## @availableSince 0.17.6
 ## @requirement returnsArgumentUnchanged: identity returns its argument completely unchanged, for any value.
-primitive identity : ∀t1.t1 → t1 = λx.x
+##
+## @param x: the value to return unchanged
+primitive identity ∀t1.(x: t1) : t1 = λx.x

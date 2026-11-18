@@ -22,7 +22,10 @@ import hydra.core.typing
 ## @requirement collectionContentsCompared: equal compares collection (map/set) values structurally, not by a proxy such as a stringified representation -- two non-empty collections with different contents are never reported equal, including when a decimal value is nested inside a collection rather than appearing at the top level.
 ## @requirement decimalScaleSensitive: equal treats two decimals of equal numeric value but different scale as unequal -- decimal equality is exact (value and scale), not numeric-value equality.
 ## @requirement ieee754ExtendedFloatSemantics: equal on float64/float32 follows IEEE 754 extended totalOrder semantics rather than native host ==: NaN is equal to itself, and -0.0 is unequal to +0.0; ordinary finite values compare by numeric value.
-primitive equal : ∀x.(equality x) ⇒ x → x → boolean
+##
+## @param x: the first value to compare
+## @param y: the second value to compare
+primitive equal ∀x.(equality x) ⇒ (x: x, y: x) : boolean
 
 ## Check whether two values are unequal.
 ##
@@ -33,4 +36,7 @@ primitive equal : ∀x.(equality x) ⇒ x → x → boolean
 ## @availableSince 0.17.6
 ## @requirement negatesEqual: notEqual(x, y) = not(equal(x, y)) for scalar values of any type -- integers, strings, and floats.
 ## @requirement negatesEqualOnCollections: notEqual on collection values (lists, sets, maps) is likewise the negation of equal: order-sensitivity for lists and order-independence for sets/maps carry through unchanged.
-primitive notEqual : ∀x.(equality x) ⇒ x → x → boolean = λx, y.not (equal x y)
+##
+## @param x: the first value to compare
+## @param y: the second value to compare
+primitive notEqual ∀x.(equality x) ⇒ (x: x, y: x) : boolean = λx, y.not (equal x y)

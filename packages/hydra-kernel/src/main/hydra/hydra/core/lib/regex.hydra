@@ -18,7 +18,10 @@ import hydra.core.typing
 ## @availableSince 0.15
 ## @requirement returnsLeftmostLongestMatch: find returns the leftmost-longest substring matching the pattern, wrapped, when the pattern matches anywhere in the string, including alternation where the longer branch wins and greedy quantifiers that pick the longest run.
 ## @requirement noneWhenNoMatch: find returns none when the pattern does not match anywhere in the string, including on the empty string, and when the pattern is ill-formed under the Hydra regex grammar (treated the same as a well-formed pattern with no match, never a host-specific parse error).
-primitive find : string → string → optional<string>
+##
+## @param pat: the regex pattern to search for
+## @param s: the string to search within
+primitive find (pat: string, s: string) : optional<string>
 
 ## Find all non-overlapping regex matches within a string.
 ##
@@ -29,7 +32,10 @@ primitive find : string → string → optional<string>
 ## @availableSince 0.15
 ## @requirement returnsAllNonOverlappingMatchesInOrder: findAll returns every leftmost-longest, non-overlapping match of the pattern in the string, in the order they appear.
 ## @requirement emptyListWhenNoMatch: findAll returns the empty list when the pattern does not match anywhere, including when the pattern is ill-formed under the Hydra regex grammar (treated the same as a well-formed pattern with no matches).
-primitive findAll : string → string → list<string>
+##
+## @param pat: the regex pattern to search for
+## @param s: the string to search within
+primitive findAll (pat: string, s: string) : list<string>
 
 ## Test whether a regex matches an entire string.
 ##
@@ -42,7 +48,10 @@ primitive findAll : string → string → list<string>
 ## @requirement testsMinimalCoreGrammar: matches correctly evaluates every construct in the minimal-core regex grammar: literals, character classes (including negation and ranges), the wildcard (matching any character including newline), quantifiers (?, *, +, {n}, {n,}, {n,m}), alternation (leftmost-longest preference, not leftmost-first), and non-capturing grouping (including nested and quantified groups).
 ## @requirement treatsEscapedMetacharactersAsLiterals: matches treats a backslash-escaped metacharacter as the literal character, both at top level and inside a character class, and treats an unescaped dash as a literal at top level (never forming a range outside a class) while forming a range only inside a class.
 ## @requirement falseWhenNoMatchOrIllFormed: matches returns false when the pattern does not match the whole string, including when the pattern is ill-formed under the Hydra regex grammar (treated the same as a well-formed pattern with no match, never a host-specific parse error) and for constructs outside the minimal core (such as the {,m} quantifier form).
-primitive matches : string → string → boolean
+##
+## @param pat: the regex pattern to test
+## @param s: the string to test against
+primitive matches (pat: string, s: string) : boolean
 
 ## Replace the first regex match in a string with a replacement string.
 ##
@@ -54,7 +63,11 @@ primitive matches : string → string → boolean
 ## @availableSince 0.15
 ## @requirement replacesLeftmostLongestMatch: replace replaces the first (leftmost-longest) match of the pattern with the replacement string, including an anchored match at the start of the string.
 ## @requirement unchangedWhenNoMatch: replace returns the string unchanged when the pattern does not match anywhere, including when the pattern is ill-formed under the Hydra regex grammar (treated the same as a well-formed pattern with no match).
-primitive replace : string → string → string → string
+##
+## @param pat: the regex pattern to match
+## @param repl: the replacement string
+## @param s: the string to operate on
+primitive replace (pat: string, repl: string, s: string) : string
 
 ## Replace all non-overlapping regex matches in a string with a replacement string.
 ##
@@ -66,7 +79,11 @@ primitive replace : string → string → string → string
 ## @availableSince 0.15
 ## @requirement replacesEveryNonOverlappingMatch: replaceAll replaces every leftmost-longest, non-overlapping match of the pattern with the replacement string, including when the replacement string is empty.
 ## @requirement unchangedWhenNoMatch: replaceAll returns the string unchanged when the pattern does not match anywhere, including when the pattern is ill-formed under the Hydra regex grammar (treated the same as a well-formed pattern with no match).
-primitive replaceAll : string → string → string → string
+##
+## @param pat: the regex pattern to match
+## @param repl: the replacement string
+## @param s: the string to operate on
+primitive replaceAll (pat: string, repl: string, s: string) : string
 
 ## Split a string by occurrences of a regex pattern.
 ##
@@ -78,4 +95,7 @@ primitive replaceAll : string → string → string → string
 ## @availableSince 0.15
 ## @requirement splitsOnEveryNonOverlappingMatch: split returns the substrings of the string obtained by splitting on every leftmost-longest, non-overlapping match of the pattern, including splitting on a fixed delimiter, on a character class, and splitting into a trailing empty substring when the pattern matches at the end of the string.
 ## @requirement singleElementListWhenNoMatchOrIllFormed: split returns the single-element list containing the original string unchanged when the pattern does not match anywhere, including when the pattern is ill-formed under the Hydra regex grammar (treated the same as a well-formed pattern with no match).
-primitive split : string → string → list<string>
+##
+## @param pat: the regex pattern to split on
+## @param s: the string to split
+primitive split (pat: string, s: string) : list<string>

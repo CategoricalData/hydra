@@ -14,7 +14,11 @@ import hydra.core.typing
 ##
 ## @availableSince 0.15
 ## @requirement mapsBothElementsIndependently: bimap applies the first function to the pair's first element and the second function to the pair's second element, producing a new pair of the two results, for any element and function types.
-primitive bimap : ∀a, b, c, d.(a → c) → (b → d) → (a, b) → (c, d) = λf, g, p.(f (first p), g (second p))
+##
+## @param f: the function applied to the first element
+## @param g: the function applied to the second element
+## @param p: the pair to map over
+primitive bimap ∀a, b, c, d.(f: (a → c), g: (b → d), p: (a, b)) : (c, d) = λf, g, p.(f (first p), g (second p))
 
 ## Get the first element of a pair.
 ##
@@ -23,7 +27,9 @@ primitive bimap : ∀a, b, c, d.(a → c) → (b → d) → (a, b) → (c, d) = 
 ##
 ## @availableSince 0.15
 ## @requirement returnsFirstComponent: first returns the first component of the pair unchanged, for any element type and value.
-primitive first : ∀a, b.(a, b) → a
+##
+## @param p: the pair whose first element is returned
+primitive first ∀a, b.(p: (a, b)) : a
 
 ## Construct a pair from two values.
 ##
@@ -33,7 +39,10 @@ primitive first : ∀a, b.(a, b) → a
 ##
 ## @availableSince 0.17.6
 ## @requirement constructsFromTwoValues: pair x y constructs the pair (x, y), preserving both components exactly as given, for any value.
-primitive pair : ∀a, b.a → b → (a, b)
+##
+## @param x: the first element
+## @param y: the second element
+primitive pair ∀a, b.(x: a, y: b) : (a, b)
 
 ## Get the second element of a pair.
 ##
@@ -42,4 +51,6 @@ primitive pair : ∀a, b.a → b → (a, b)
 ##
 ## @availableSince 0.15
 ## @requirement returnsSecondComponent: second returns the second component of the pair unchanged, for any element type and value.
-primitive second : ∀a, b.(a, b) → b
+##
+## @param p: the pair whose second element is returned
+primitive second ∀a, b.(p: (a, b)) : b

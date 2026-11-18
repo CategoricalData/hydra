@@ -18,7 +18,10 @@ import hydra.core.typing
 ##
 ## @availableSince 0.15
 ## @requirement appliesFunctionWhenBothGiven: apply returns given of the function applied to the value when both the function and the argument are given, and none when either side is none.
-primitive apply : ∀x, y.optional<x → y> → optional<x> → optional<y> = λmf, mx.bind mf (λf.`map` (λx.f x) mx)
+##
+## @param mf: the optional function
+## @param mx: the optional argument
+primitive apply ∀x, y.(mf: optional<x → y>, mx: optional<x>) : optional<y> = λmf, mx.bind mf (λf.`map` (λx.f x) mx)
 
 ## Monadic bind for optionals.
 ##
@@ -28,7 +31,10 @@ primitive apply : ∀x, y.optional<x → y> → optional<x> → optional<y> = λ
 ##
 ## @availableSince 0.15
 ## @requirement chainsOnGivenPropagatesNone: bind applies the continuation to the contained value when the optional is given, returning the continuation's own result; when the optional is none, bind returns none without invoking the continuation.
-primitive bind : ∀x, y.optional<x> → (x → optional<y>) → optional<y> = λm, f.match m none f
+##
+## @param m: the optional value to bind
+## @param f: the continuation to apply to the contained value
+primitive bind ∀x, y.(m: optional<x>, f: (x → optional<y>)) : optional<y> = λm, f.match m none f
 
 ## Kleisli composition for optionals.
 ##
@@ -38,7 +44,11 @@ primitive bind : ∀x, y.optional<x> → (x → optional<y>) → optional<y> = �
 ##
 ## @availableSince 0.15
 ## @requirement kleisliComposesShortCircuitingOnNone: compose(f, g, x) applies f to x, then g to the result of f, short-circuiting to none as soon as either stage yields none.
-primitive compose : ∀x, y, z.(x → optional<y>) → (y → optional<z>) → x → optional<z> = λf, g, x.bind (f x) g
+##
+## @param f: the first Kleisli arrow
+## @param g: the second Kleisli arrow
+## @param x: the value to apply the composition to
+primitive compose ∀x, y, z.(f: (x → optional<y>), g: (y → optional<z>), x: x) : optional<z> = λf, g, x.bind (f x) g
 
 ## Left-fold over a list with an optional-returning function, short-circuiting on none.
 ##
@@ -47,7 +57,11 @@ primitive compose : ∀x, y, z.(x → optional<y>) → (y → optional<z>) → x
 ## Total. Corresponds to a short-circuiting foldM specialised to Maybe.
 ##
 ## @availableSince 0.17.6
-primitive foldList : ∀x, y.(x → y → optional<x>) → x → list<y> → optional<x> = λf, acc, xs.lists.foldl (λm, y.bind m (λx.f x y)) (`given` acc) xs
+##
+## @param f: the optional-returning step function
+## @param acc: the initial accumulator
+## @param xs: the list to fold over
+primitive foldList ∀x, y.(f: (x → y → optional<x>), acc: x, xs: list<y>) : optional<x> = λf, acc, xs.lists.foldl (λm, y.bind m (λx.f x y)) (`given` acc) xs
 
 ## Wrap a value in given.
 ##
@@ -57,7 +71,9 @@ primitive foldList : ∀x, y.(x → y → optional<x>) → x → list<y> → opt
 ##
 ## @availableSince 0.17.6
 ## @requirement wrapsValueAsPresent: given wraps a value as the present variant of an optional, for any value type including integers and strings.
-primitive given : ∀x.x → optional<x>
+##
+## @param x: the value to wrap in given
+primitive given ∀x.(x: x) : optional<x>
 
 ## Concatenate optionals, keeping only the present values.
 ##
@@ -67,7 +83,9 @@ primitive given : ∀x.x → optional<x>
 ##
 ## @availableSince 0.17.6
 ## @requirement keepsPresentValuesPreservingOrder: givens returns the list of contained values from every given element of the input list, in original order, discarding none elements; an all-none or empty input list yields the empty list.
-primitive givens : ∀x.list<optional<x>> → list<x> = λxs.lists.foldr (λm, acc.match m acc (λv.lists.cons v acc)) [] xs
+##
+## @param xs: the list of optionals to concatenate
+primitive givens ∀x.(xs: list<optional<x>>) : list<x> = λxs.lists.foldr (λm, acc.match m acc (λv.lists.cons v acc)) [] xs
 
 ## Test whether an optional is present (given).
 ##
@@ -76,7 +94,9 @@ primitive givens : ∀x.list<optional<x>> → list<x> = λxs.lists.foldr (λm, a
 ##
 ## @availableSince 0.15
 ## @requirement testsPresentVariant: isGiven returns true exactly when the optional is the given variant, and false for none.
-primitive isGiven : ∀x.optional<x> → boolean = λm.match m false (λ`_`.true)
+##
+## @param m: the optional to test
+primitive isGiven ∀x.(m: optional<x>) : boolean = λm.match m false (λ`_`.true)
 
 ## Test whether an optional is absent (none).
 ##
@@ -85,7 +105,9 @@ primitive isGiven : ∀x.optional<x> → boolean = λm.match m false (λ`_`.true
 ##
 ## @availableSince 0.15
 ## @requirement testsAbsentVariant: isNone returns true exactly when the optional is the none variant, and false for given.
-primitive isNone : ∀x.optional<x> → boolean = λm.match m true (λ`_`.false)
+##
+## @param m: the optional to test
+primitive isNone ∀x.(m: optional<x>) : boolean = λm.match m true (λ`_`.false)
 
 ## Map a function over an optional.
 ##
@@ -95,7 +117,10 @@ primitive isNone : ∀x.optional<x> → boolean = λm.match m true (λ`_`.false)
 ##
 ## @availableSince 0.15
 ## @requirement mapsGivenLeavesNoneUnchanged: map applies the given function to the contained value when the optional is given, and leaves none completely unchanged.
-primitive map : ∀x, y.(x → y) → optional<x> → optional<y> = λf, m.match m none (λx.given(f x))
+##
+## @param f: the function to apply to the contained value
+## @param m: the optional to map over
+primitive map ∀x, y.(f: (x → y), m: optional<x>) : optional<y> = λf, m.match m none (λx.given(f x))
 
 ## Traverse a list in the optional monad.
 ##
@@ -103,7 +128,10 @@ primitive map : ∀x, y.(x → y) → optional<x> → optional<y> = λf, m.match
 ## Total. Corresponds to Haskell's traverse :: (a -> Maybe b) -> [a] -> Maybe [b].
 ##
 ## @availableSince 0.17.6
-primitive mapList : ∀x, y.(x → optional<y>) → list<x> → optional<list<y>> = λf, xs.lists.foldr (λx, acc.bind (f x) (λy.`map` (λys.lists.cons y ys) acc)) (`given` []) xs
+##
+## @param f: the optional-returning function to apply to each element
+## @param xs: the list to traverse
+primitive mapList ∀x, y.(f: (x → optional<y>), xs: list<x>) : optional<list<y>> = λf, xs.lists.foldr (λx, acc.bind (f x) (λy.`map` (λys.lists.cons y ys) acc)) (`given` []) xs
 
 ## Map a partial function over a list, keeping only the present results.
 ##
@@ -113,7 +141,10 @@ primitive mapList : ∀x, y.(x → optional<y>) → list<x> → optional<list<y>
 ##
 ## @deprecatedSince 0.18
 ## @requirement filtersAndTransformsKeepingGiven: mapOptional applies the given partial (optional-returning) function to each element of the input list and returns the list of contained values from every given result, in original order, discarding elements for which the function returned none; an input that yields no given results, or an empty input list, produces the empty list.
-primitive mapOptional : ∀x, y.(x → optional<y>) → list<x> → list<y> = λf, xs.givens (lists.map f xs)
+##
+## @param f: the partial function to apply to each element
+## @param xs: the list to map over
+primitive mapOptional ∀x, y.(f: (x → optional<y>), xs: list<x>) : list<y> = λf, xs.givens (lists.map f xs)
 
 ## Traverse a set in the optional monad.
 ##
@@ -122,7 +153,10 @@ primitive mapOptional : ∀x, y.(x → optional<y>) → list<x> → list<y> = λ
 ## Total. Corresponds to a traverse-style operation specialised to Set in the Maybe monad.
 ##
 ## @availableSince 0.17.6
-primitive mapSet : ∀x, y.(ordering x, ordering y) ⇒ (x → optional<y>) → set<x> → optional<set<y>> = λf, s.`map`
+##
+## @param f: the optional-returning function to apply to each element
+## @param s: the set to traverse
+primitive mapSet ∀x, y.(ordering x, ordering y) ⇒ (f: (x → optional<y>), s: set<x>) : optional<set<y>> = λf, s.`map`
     (λys.sets.fromList ys)
     (lists.foldr (λx, acc.bind (f x) (λy.`map` (λys.lists.cons y ys) acc)) (`given` []) (sets.toList s))
 
@@ -134,7 +168,11 @@ primitive mapSet : ∀x, y.(ordering x, ordering y) ⇒ (x → optional<y>) → 
 ##
 ## @availableSince 0.15
 ## @requirement eliminatesByVariant: match returns the result of applying the given function to the contained value when the optional is given, and returns the default value unevaluated-until-needed when the optional is none.
-primitive match : ∀x, y.optional<x> → lazy y → (x → y) → y
+##
+## @param m: the optional value to eliminate
+## @param def: the value to return when the optional is none
+## @param f: the function to apply to the contained value when the optional is given
+primitive match ∀x, y.(m: optional<x>, def: lazy y, f: (x → y)) : y
 
 ## Convert an optional to a list: given x maps to [x], none to [].
 ##
@@ -143,7 +181,9 @@ primitive match : ∀x, y.optional<x> → lazy y → (x → y) → y
 ##
 ## @availableSince 0.15
 ## @requirement convertsGivenToSingletonNoneToEmpty: toList converts a given value to a one-element list containing it, and none to the empty list.
-primitive toList : ∀x.optional<x> → list<x> = λm.match m [] (λx.[x])
+##
+## @param m: the optional to convert
+primitive toList ∀x.(m: optional<x>) : list<x> = λm.match m [] (λx.[x])
 
 ## Return the value contained in an optional, falling back to a default if absent.
 ##
@@ -153,4 +193,7 @@ primitive toList : ∀x.optional<x> → list<x> = λm.match m [] (λx.[x])
 ##
 ## @availableSince 0.17.6
 ## @requirement returnsContainedValueOrDefault: withDefault returns the contained value when the optional is given, and the supplied default when the optional is none.
-primitive withDefault : ∀x.lazy x → optional<x> → x = λdef, m.match m def (λx.x)
+##
+## @param def: the default value to return when the optional is none
+## @param m: the optional to unwrap
+primitive withDefault ∀x.(def: lazy x, m: optional<x>) : x = λdef, m.match m def (λx.x)

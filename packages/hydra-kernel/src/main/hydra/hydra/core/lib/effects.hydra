@@ -17,7 +17,10 @@ import hydra.core.typing
 ##
 ## @availableSince 0.17
 ## @requirement appliesEffectfulFunctionToEffectfulArgument: apply interprets the function-producing effect and the argument-producing effect, then applies the resulting function to the resulting argument.
-impure primitive apply : ∀x, y.effect<x → y> → effect<x> → effect<y>
+##
+## @param ef: the effect producing the function to apply
+## @param ex: the effect producing the argument
+impure primitive apply ∀x, y.(ef: effect<x → y>, ex: effect<x>) : effect<y>
 
 ## Sequence two effectful computations.
 ##
@@ -27,7 +30,10 @@ impure primitive apply : ∀x, y.effect<x → y> → effect<x> → effect<y>
 ## @availableSince 0.17
 ## @requirement threadsResultIntoNextEffect: bind passes the result of the first effect to the given function to obtain the next effect, whose result is the overall result.
 ## @requirement performsEffectsInOrderExactlyOnce: bind performs the first effect to completion, exactly once, before performing the second effect, also exactly once -- observable via real host side effects (not merely by return value), ruling out a host that reorders, double-runs, skips, or eagerly runs either effect.
-impure primitive bind : ∀x, y.effect<x> → (x → effect<y>) → effect<y>
+##
+## @param e: the effect to interpret first
+## @param f: the function producing the next effect from e's result
+impure primitive bind ∀x, y.(e: effect<x>, f: (x → effect<y>)) : effect<y>
 
 ## Kleisli composition for effects.
 ##
@@ -35,7 +41,11 @@ impure primitive bind : ∀x, y.effect<x> → (x → effect<y>) → effect<y>
 ##
 ## @availableSince 0.17
 ## @requirement sequencesTwoKleisliArrows: compose(f, g, x) runs f on x to obtain the first effect, then runs g on that effect's result to obtain the second effect, equivalent to bind(f(x), g).
-impure primitive compose : ∀x, y, z.(x → effect<y>) → (y → effect<z>) → x → effect<z>
+##
+## @param f: the first effect-returning function
+## @param g: the second effect-returning function
+## @param x: the input to the composed computation
+impure primitive compose ∀x, y, z.(f: (x → effect<y>), g: (y → effect<z>), x: x) : effect<z>
 
 ## Left-fold over a list with an effect-returning function.
 ##
@@ -45,7 +55,11 @@ impure primitive compose : ∀x, y, z.(x → effect<y>) → (y → effect<z>) �
 ## @availableSince 0.17.6
 ## @requirement sequencesEffectReturningStepOverList: foldList sequences an effect-returning step function over the list's elements, threading the accumulator through, and the overall result is the final accumulator.
 ## @requirement performsElementEffectsLeftToRightExactlyOnce: foldList performs the element effects left-to-right in list order, each exactly once -- observable via real host side effects, ruling out a host that reorders, double-runs, or skips an element's effect.
-impure primitive foldList : ∀x, y.(x → y → effect<x>) → x → list<y> → effect<x>
+##
+## @param f: the effect-returning combining function
+## @param acc0: the initial accumulator value
+## @param xs: the list to fold over
+impure primitive foldList ∀x, y.(f: (x → y → effect<x>), acc0: x, xs: list<y>) : effect<x>
 
 ## Map a pure function over the result of an effect.
 ##
@@ -54,7 +68,10 @@ impure primitive foldList : ∀x, y.(x → y → effect<x>) → x → list<y> �
 ##
 ## @availableSince 0.17
 ## @requirement appliesPureFunctionToEffectResult: map interprets the given effect and applies the pure function to its result; equivalent to bind(e, \x -> pure(f x)).
-impure primitive map : ∀x, y.(x → y) → effect<x> → effect<y>
+##
+## @param f: the pure function to apply to the effect's result
+## @param e: the effect to interpret
+impure primitive map ∀x, y.(f: (x → y), e: effect<x>) : effect<y>
 
 ## Map an effect-returning function over a list.
 ##
@@ -63,7 +80,10 @@ impure primitive map : ∀x, y.(x → y) → effect<x> → effect<y>
 ## @availableSince 0.17
 ## @requirement appliesEffectReturningFunctionAndCollectsResults: mapList applies the effect-returning function to each element and collects the per-element results into a list of the same length, in order.
 ## @requirement performsElementEffectsLeftToRightExactlyOnce: mapList performs the element effects left-to-right in list order, each exactly once -- observable via real host side effects, ruling out a host that reorders, double-runs, or skips an element's effect.
-impure primitive mapList : ∀x, y.(x → effect<y>) → list<x> → effect<list<y>>
+##
+## @param f: the effect-returning function to apply to each element
+## @param xs: the list to map over
+impure primitive mapList ∀x, y.(f: (x → effect<y>), xs: list<x>) : effect<list<y>>
 
 ## Map an effect-returning function over an optional.
 ##
@@ -72,7 +92,10 @@ impure primitive mapList : ∀x, y.(x → effect<y>) → list<x> → effect<list
 ## @availableSince 0.17
 ## @requirement appliesFunctionWhenPresentPassesThroughNoneWhenAbsent: mapOptional over a present value applies the effect-returning function and wraps the result in given; mapOptional over none yields none, with the function not applied.
 ## @requirement performsExactlyZeroOrOneEffect: mapOptional over none performs zero effects; mapOptional over a present value performs exactly one effect -- observable via a real host side effect, distinguishing "the function was never invoked" from "the function was invoked and its effect ran".
-impure primitive mapOptional : ∀x, y.(x → effect<y>) → optional<x> → effect<optional<y>>
+##
+## @param f: the effect-returning function to apply to the contained value
+## @param m: the optional to map over
+impure primitive mapOptional ∀x, y.(f: (x → effect<y>), m: optional<x>) : effect<optional<y>>
 
 ## Lift a pure value into an effect.
 ##
@@ -80,4 +103,6 @@ impure primitive mapOptional : ∀x, y.(x → effect<y>) → optional<x> → eff
 ##
 ## @availableSince 0.17
 ## @requirement liftsValueWithoutHostInteraction: pure(x) succeeds with exactly x, without requiring any host interaction.
-impure primitive pure : ∀x.x → effect<x>
+##
+## @param x: the pure value to lift into an effect
+impure primitive pure ∀x.(x: x) : effect<x>

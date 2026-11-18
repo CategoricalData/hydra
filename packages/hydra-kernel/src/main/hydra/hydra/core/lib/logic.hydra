@@ -13,7 +13,10 @@ import hydra.core.typing
 ##
 ## @availableSince 0.15
 ## @requirement trueOnlyWhenBothTrue: and(p, q) returns true exactly when both p and q are true; any false operand makes the result false.
-primitive and : boolean → lazy boolean → boolean = λa, b.ifElse a b false
+##
+## @param p: the first boolean operand
+## @param q: the second boolean operand
+primitive and (p: boolean, q: lazy boolean) : boolean = λa, b.ifElse a b false
 
 ## Compute a conditional expression.
 ##
@@ -23,7 +26,11 @@ primitive and : boolean → lazy boolean → boolean = λa, b.ifElse a b false
 ##
 ## @availableSince 0.15
 ## @requirement selectsBranchByCondition: ifElse(p, t, f) returns t when p is true and f when p is false, for any value type of t/f including booleans, integers, and strings -- the then/else branches may be of any (matching) type.
-primitive ifElse : ∀x.boolean → lazy x → lazy x → x
+##
+## @param p: the boolean condition
+## @param t: the value returned when p is true
+## @param f: the value returned when p is false
+primitive ifElse ∀x.(p: boolean, t: lazy x, f: lazy x) : x
 
 ## Compute the logical NOT of a boolean value.
 ##
@@ -32,7 +39,9 @@ primitive ifElse : ∀x.boolean → lazy x → lazy x → x
 ##
 ## @availableSince 0.15
 ## @requirement negatesBoolean: not(p) returns false when p is true and true when p is false.
-primitive not : boolean → boolean = λa.ifElse a false true
+##
+## @param p: the boolean value to negate
+primitive not (p: boolean) : boolean = λa.ifElse a false true
 
 ## Compute the logical OR of two boolean values.
 ##
@@ -42,4 +51,7 @@ primitive not : boolean → boolean = λa.ifElse a false true
 ##
 ## @availableSince 0.15
 ## @requirement trueWhenEitherTrue: or(p, q) returns true when at least one of p and q is true; it returns false only when both are false.
-primitive or : boolean → lazy boolean → boolean = λa, b.ifElse a true b
+##
+## @param p: the first boolean operand
+## @param q: the second boolean operand
+primitive or (p: boolean, q: lazy boolean) : boolean = λa, b.ifElse a true b
