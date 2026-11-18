@@ -33,7 +33,7 @@ The published-host version each host depends on is resolved from `hydra.json`:
 `python`, `haskell`, …), else the global `hostVersion`
 (`bin/lib/hydra-packages.py host-version <pkg>` bridges package → host internally).
 
-To pin a single host back without affecting the others, add a `hostOverrides` entry by hand:
+To pin a single host back without affecting the others, add a `hostOverrides` entry by hand (the version numbers below are example values):
 
 ```jsonc
 // hydra.json

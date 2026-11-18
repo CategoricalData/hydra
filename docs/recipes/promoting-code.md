@@ -1119,7 +1119,7 @@ The original `Hydra.Staging.Lib.Names` contained hand-written constants like:
 ```haskell
 -- Staging code (raw Haskell)
 _hydra_lib_lists :: ModuleName
-_hydra_lib_lists = ModuleName "hydra.lib.lists"
+_hydra_lib_lists = ModuleName "hydra.core.lib.lists"
 
 _lists_map :: Name
 _lists_map = qname _hydra_lib_lists "map"
@@ -1134,14 +1134,14 @@ defineNs name nsStr = define name $
   wrap _ModuleName $ string nsStr
 
 lists :: TypedTermDefinition ModuleName
-lists = defineNs "lists" "hydra.lib.lists"
+lists = defineNs "lists" "hydra.core.lib.lists"
 
 -- Name constants
 defineName :: String -> String -> String -> TypedTermDefinition Name
 defineName name nsStr localName = define name $
   wrap _Name $ string (nsStr <> "." <> localName)
 
-listsMap = defineName "listsMap" "hydra.lib.lists" "map"
+listsMap = defineName "listsMap" "hydra.core.lib.lists" "map"
 ```
 
 This generates simple data constructors in all target languages:
@@ -1149,10 +1149,10 @@ This generates simple data constructors in all target languages:
 ```haskell
 -- Generated output (dist/haskell/hydra-kernel/src/main/haskell/)
 lists :: Packaging.ModuleName
-lists = (Packaging.ModuleName "hydra.lib.lists")
+lists = (Packaging.ModuleName "hydra.core.lib.lists")
 
 listsMap :: Core.Name
-listsMap = (Core.Name "hydra.lib.lists.map")
+listsMap = (Core.Name "hydra.core.lib.lists.map")
 ```
 
 ### Key principle: Haskell-level vs DSL-level computation
@@ -1169,7 +1169,7 @@ defineName name nsBinding localName = define name $
 -- RIGHT: pre-computes the string at the Haskell level
 defineName name nsStr localName = define name $
   wrap _Name $ string (nsStr <> "." <> localName)
--- Output: listsMap = (Core.Name "hydra.lib.lists.map")  -- simple data
+-- Output: listsMap = (Core.Name "hydra.core.lib.lists.map")  -- simple data
 ```
 
 The `<>` operator performs string concatenation at Haskell compile time, so the DSL only sees the final string literal.
