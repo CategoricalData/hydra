@@ -58,24 +58,32 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive decodeUtf8 : binary → either<string, string>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param bytes: the byte sequence to decode as UTF-8
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive decodeUtf8 (bytes: binary) : either<string, string>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                    ^ source.hydra
-#                     ^ source.hydra punctuation.separator.type.hydra
-#                      ^ source.hydra
-#                       ^^^^^^ source.hydra support.type.hydra
-#                             ^ source.hydra
-#                              ^ source.hydra keyword.operator.arrow.hydra
-#                               ^ source.hydra
-#                                ^^^^^^ source.hydra support.type.hydra
-#                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                    ^^ source.hydra
+#                      ^^^^^ source.hydra variable.other.hydra
+#                           ^ source.hydra punctuation.separator.type.hydra
+#                            ^ source.hydra
+#                             ^^^^^^ source.hydra support.type.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra punctuation.separator.type.hydra
+#                                      ^ source.hydra
 #                                       ^^^^^^ source.hydra support.type.hydra
-#                                             ^ source.hydra punctuation.separator.type.hydra
-#                                              ^ source.hydra
-#                                               ^^^^^^ source.hydra support.type.hydra
-#                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                             ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                              ^^^^^^ source.hydra support.type.hydra
+#                                                    ^ source.hydra punctuation.separator.type.hydra
+#                                                     ^ source.hydra
+#                                                      ^^^^^^ source.hydra support.type.hydra
+#                                                            ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Encode text as a sequence of UTF-8 bytes.
 #^^ source.hydra comment.block.documentation.hydra
@@ -100,15 +108,23 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive encodeUtf8 : string → binary
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param text: the text to encode as UTF-8
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive encodeUtf8 (text: string) : binary
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                    ^ source.hydra
-#                     ^ source.hydra punctuation.separator.type.hydra
-#                      ^ source.hydra
-#                       ^^^^^^ source.hydra support.type.hydra
-#                             ^ source.hydra
-#                              ^ source.hydra keyword.operator.arrow.hydra
-#                               ^ source.hydra
-#                                ^^^^^^ source.hydra support.type.hydra
+#                    ^^ source.hydra
+#                      ^^^^ source.hydra variable.other.hydra
+#                          ^ source.hydra punctuation.separator.type.hydra
+#                           ^ source.hydra
+#                            ^^^^^^ source.hydra support.type.hydra
+#                                  ^^ source.hydra
+#                                    ^ source.hydra punctuation.separator.type.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^ source.hydra support.type.hydra

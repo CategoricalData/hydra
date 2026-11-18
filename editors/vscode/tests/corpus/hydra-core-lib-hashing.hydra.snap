@@ -50,18 +50,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive sha256 : binary → binary
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param bytes: the sequence of bytes to hash
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive sha256 (bytes: binary) : binary
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^ source.hydra entity.name.function.hydra
-#                ^ source.hydra
-#                 ^ source.hydra punctuation.separator.type.hydra
-#                  ^ source.hydra
-#                   ^^^^^^ source.hydra support.type.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra keyword.operator.arrow.hydra
-#                           ^ source.hydra
-#                            ^^^^^^ source.hydra support.type.hydra
+#                ^^ source.hydra
+#                  ^^^^^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^^^^^^ source.hydra support.type.hydra
+#                               ^^ source.hydra
+#                                 ^ source.hydra punctuation.separator.type.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^ source.hydra support.type.hydra
 >
 >## Compute the SHA-256 digest of a sequence of bytes as a lowercase hex string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -94,15 +102,23 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive sha256Hex : binary → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param bytes: the sequence of bytes to hash
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive sha256Hex (bytes: binary) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^ source.hydra entity.name.function.hydra
-#                   ^ source.hydra
-#                    ^ source.hydra punctuation.separator.type.hydra
-#                     ^ source.hydra
-#                      ^^^^^^ source.hydra support.type.hydra
-#                            ^ source.hydra
-#                             ^ source.hydra keyword.operator.arrow.hydra
-#                              ^ source.hydra
-#                               ^^^^^^ source.hydra support.type.hydra
+#                   ^^ source.hydra
+#                     ^^^^^ source.hydra variable.other.hydra
+#                          ^ source.hydra punctuation.separator.type.hydra
+#                           ^ source.hydra
+#                            ^^^^^^ source.hydra support.type.hydra
+#                                  ^^ source.hydra
+#                                    ^ source.hydra punctuation.separator.type.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^ source.hydra support.type.hydra

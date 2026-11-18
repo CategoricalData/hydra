@@ -40,6 +40,7 @@ term allTests =
       nominalSugarGroup,
       parseModulesGroup,
       primitiveProvisionGroup,
+      primitiveSignatureSyntaxGroup,
       sourceSpanGroup,
       sourcePositionGroup,
       termDocCommentGroup,
@@ -3062,8 +3063,55 @@ term primitiveProvisionGroup =
                           ""
                           (λp.Name[] (Provision[name] p))))
                   (parseModule
-                    "module test.prov\n\n## A test primitive.\n##\n## @requirement appliesThing: the thing is applied\nprimitive apply : int32 → int32"),
+                    "module test.prov\n\n## A test primitive.\n##\n## @requirement appliesThing: the thing is applied\nprimitive apply (arg: int32) : int32"),
             expected = λ`_`."test.prov.apply.appliesThing"}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+## Primitive named-parameter signature syntax: '(name: type, ...) : resultType' plus '@param'/'@return' doc lines (#837 card 87)
+term primitiveSignatureSyntaxGroup =
+  TestGroup{
+    name = "primitive signature syntax",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "a primitive's named-parameter signature with '@param'/'@return' doc lines round-trips (#837 card 87)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λm.moduleDefinition m)
+                  (parseModule
+                    "module test.alpha\n\n## Test whether a character is alphabetic.\n## @param char: the character to test, as a Unicode code point\n## @return true if the character is alphabetic\nprimitive isAlpha (char: int32) : boolean"),
+            expected = λ`_`."module test.alpha\n\nimport hydra.core.model as model\nimport hydra.core.packaging as packaging\nimport hydra.core.typing as typing\n\n## Test whether a character is alphabetic.\n## @param char: the character to test, as a Unicode code point\n## @return true if the character is alphabetic\nprimitive isAlpha (char: int32) : boolean"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "a primitive's multi-parameter named signature round-trips with no doc comment (#837 card 87)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λm.moduleDefinition m)
+                  (parseModule
+                    "module test.multi\n\nprimitive add (x: int32, y: int32) : int32"),
+            expected = λ`_`."module test.multi\n\nimport hydra.core.model as model\nimport hydra.core.packaging as packaging\nimport hydra.core.typing as typing\n\nprimitive add (x: int32, y: int32) : int32"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "a primitive's zero-parameter named signature round-trips (#837 card 87)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λm.moduleDefinition m)
+                  (parseModule
+                    "module test.noparam\n\nprimitive currentTime () : int32"),
+            expected = λ`_`."module test.noparam\n\nimport hydra.core.model as model\nimport hydra.core.packaging as packaging\nimport hydra.core.typing as typing\n\nprimitive currentTime () : int32"}},
         description = none,
         tags = [],
         provisions = []}]}

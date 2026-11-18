@@ -18,7 +18,9 @@ import hydra.core.typing
 ## Total. Corresponds to Haskell's Data.Char.isAlpha :: Char -> Bool.
 ##
 ## @availableSince 0.17.6
-primitive isAlpha : int32 → boolean
+##
+## @param char: the character to test, as a Unicode code point
+primitive isAlpha (char: int32) : boolean
 
 ## Check whether a character is alphanumeric.
 ##
@@ -30,7 +32,9 @@ primitive isAlpha : int32 → boolean
 ## @availableSince 0.15
 ## @requirement classifiesAlphanumeric: isAlphaNum returns true for a code point that is a Unicode letter or digit.
 ## @requirement classifiesNonAlphanumeric: isAlphaNum returns false for a code point that is neither a Unicode letter nor a digit, such as whitespace or punctuation.
-primitive isAlphaNum : int32 → boolean
+##
+## @param char: the character to test, as a Unicode code point
+primitive isAlphaNum (char: int32) : boolean
 
 ## Check whether a character is an ASCII decimal digit.
 ##
@@ -39,7 +43,9 @@ primitive isAlphaNum : int32 → boolean
 ## Total. Corresponds to Haskell's Data.Char.isDigit :: Char -> Bool.
 ##
 ## @availableSince 0.17.6
-primitive isDigit : int32 → boolean
+##
+## @param char: the character to test, as a Unicode code point
+primitive isDigit (char: int32) : boolean
 
 ## Check whether a character is lowercase.
 ##
@@ -51,7 +57,9 @@ primitive isDigit : int32 → boolean
 ## @availableSince 0.15
 ## @requirement classifiesLowercase: isLower returns true for a code point that is a Unicode lowercase letter.
 ## @requirement classifiesNonLowercase: isLower returns false for a code point that is not a Unicode lowercase letter, including uppercase letters and digits.
-primitive isLower : int32 → boolean
+##
+## @param char: the character to test, as a Unicode code point
+primitive isLower (char: int32) : boolean
 
 ## Check whether a character is a whitespace character.
 ##
@@ -62,7 +70,9 @@ primitive isLower : int32 → boolean
 ## @availableSince 0.15
 ## @requirement classifiesWhitespace: isSpace returns true for a code point that is a Unicode whitespace character, including the space, tab, and newline characters.
 ## @requirement classifiesNonWhitespace: isSpace returns false for a code point that is not a Unicode whitespace character, such as a letter.
-primitive isSpace : int32 → boolean
+##
+## @param char: the character to test, as a Unicode code point
+primitive isSpace (char: int32) : boolean
 
 ## Check whether a character is uppercase.
 ##
@@ -74,7 +84,9 @@ primitive isSpace : int32 → boolean
 ## @availableSince 0.15
 ## @requirement classifiesUppercase: isUpper returns true for a code point that is a Unicode uppercase letter.
 ## @requirement classifiesNonUppercase: isUpper returns false for a code point that is not a Unicode uppercase letter, including lowercase letters and digits.
-primitive isUpper : int32 → boolean
+##
+## @param char: the character to test, as a Unicode code point
+primitive isUpper (char: int32) : boolean
 
 ## Convert a character to lowercase.
 ##
@@ -86,7 +98,9 @@ primitive isUpper : int32 → boolean
 ## @availableSince 0.15
 ## @requirement mapsToLowercaseOrUnchanged: toLower returns the lowercase mapping of an uppercase code point, and returns a code point with no lowercase mapping (e.g. a digit, or an already-lowercase letter) unchanged.
 ## @requirement usesSimpleNotFullMapping: toLower uses the simple (one-to-one) Unicode case mapping, not full case folding: a code point whose full lowercase mapping would expand to multiple code points instead maps to its single-code-point simple mapping.
-primitive toLower : int32 → int32
+##
+## @param char: the character to convert, as a Unicode code point
+primitive toLower (char: int32) : int32
 
 ## Convert a character to uppercase.
 ##
@@ -98,4 +112,6 @@ primitive toLower : int32 → int32
 ## @availableSince 0.15
 ## @requirement mapsToUppercaseOrUnchanged: toUpper returns the uppercase mapping of a lowercase code point, and returns a code point with no uppercase mapping (e.g. a digit, or an already-uppercase letter) unchanged.
 ## @requirement usesSimpleNotFullMapping: toUpper uses the simple (one-to-one) Unicode case mapping, not full case folding: a code point with no single-code-point uppercase mapping (e.g. sharp s, n preceded by apostrophe) is returned unchanged rather than expanded to a multi-code-point full mapping, and a code point whose simple mapping is itself a different single code point maps to that code point.
-primitive toUpper : int32 → int32
+##
+## @param char: the character to convert, as a Unicode code point
+primitive toUpper (char: int32) : int32

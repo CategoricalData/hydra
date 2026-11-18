@@ -27,6 +27,24 @@ import hydra.core.strip
 import hydra.core.typing
 import hydra.core.util
 
+## Attach '@param'/'@return' descriptions onto an already-parsed TermSignature's parameters/result (#837)
+term attachPrimitiveSignatureDocs =
+  λdocs, sig.
+    let paramDescs := first docs in
+    let returnDesc := second docs in
+    let attachParam := λp.Parameter{
+          name = Parameter[name] p,
+          description = maps.lookup (Parameter[name] p) paramDescs,
+          `type` = Parameter[`type`] p,
+          isLazy = Parameter[isLazy] p} in
+    let newParams := lists.map attachParam (TermSignature[parameters] sig) in
+    let oldResult := TermSignature[result] sig in
+    let newResult := Result{description = returnDesc, `type` = Result[`type`] oldResult} in
+    TermSignature{
+      typeParameters = TermSignature[typeParameters] sig,
+      parameters = newParams,
+      result = newResult}
+
 ## Apply the cross-module record->injection correction to a definition's term bodies (#5/#837)
 term correctCrossModuleInjectionsInDefinition =
   λunionNames, def.
@@ -791,11 +809,174 @@ term parseModules =
             sources)
           (λerr.left(err)))
 
-## Parse a primitive definition: ['##' doc comment] '[impure] [partial] primitive name : termSignature [= term]'
+## Parse a single '@param <name>: <description>' key line into a (name, description) pair (#837)
+term parseParamLine =
+  λln.
+    let parts := strings.splitOn " " ln in
+    let tag := optionals.withDefault "" (lists.head parts) in
+    ifElse
+      (equal tag "@param")
+      (let afterTag := strings.join " " (lists.drop 1:int32 parts) in
+      let nameAndDesc := strings.splitOn ": " afterTag in
+      let pname := optionals.withDefault "" (lists.head nameAndDesc) in
+      let pdesc := strings.join ": " (lists.drop 1:int32 nameAndDesc) in
+      given((wrap(Name){pname}, pdesc)))
+      none
+
+## Parse a single '@return <description>' key line into its description (#837)
+term parseReturnLine =
+  λln.
+    let parts := strings.splitOn " " ln
+    in ifElse
+      (equal (optionals.withDefault "" (lists.head parts)) "@return")
+      given(strings.join " " (lists.drop 1:int32 parts))
+      none
+
+## Parse a primitive definition: ['##' doc comment, incl. '@param'/'@return'] '[impure] [partial] primitive name (param: type, ...) : resultType [= term]'
 term primitiveDefinitionParser =
   λmodName.parsers.bind
-      (docCommentBlock modName)
-      (λmmeta.parsers.bind
+      (parsers.many
+        (parsers.bind
+          (parsers.char 35:int32)
+          (λ`_`.parsers.bind
+              (parsers.char 35:int32)
+              (λ`_`.parsers.bind
+                  (parsers.optional (parsers.char 32:int32))
+                  (λ`_`.parsers.bind
+                      (parsers.map
+                        (λcs.strings.fromList cs)
+                        (parsers.many (parsers.satisfy (λc.not (equal c 10:int32)))))
+                      (λs.parsers.bind
+                          (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
+                          (λ`_`.parsers.pure s)))))))
+      (λlns.
+        let mmeta := ifElse
+            (lists.isEmpty lns)
+            none
+            given((λmodName, lns.
+              let sections := (λlns.
+                  let step := λacc, ln.ifElse
+                        (strings.isEmpty ln)
+                        (lists.concat2 acc [[]])
+                        (let i := sub (lists.length acc) 1:int32 in
+                        let cur := optionals.withDefault
+                            []
+                            (lists.head (lists.drop i acc)) in
+                        lists.concat2
+                          (lists.take i acc)
+                          [lists.concat2 cur [ln]])
+                  in lists.filter
+                    (λsec.not (lists.isEmpty sec))
+                    (lists.foldl step [[]] lns))
+                  lns in
+              let isKeySection := λsec.optionals.match
+                    (lists.head sec)
+                    false
+                    (λs.optionals.match
+                        (strings.charAt 0:int32 s)
+                        false
+                        (λc.equal c 64:int32)) in
+              let keyLines := lists.concat (lists.filter isKeySection sections) in
+              let nonKeySections := lists.filter
+                  (λsec.not (isKeySection sec))
+                  sections in
+              let mdesc := optionals.map
+                  (λsec.strings.join "\n" sec)
+                  (lists.head nonKeySections) in
+              let comments := optionals.withDefault
+                  []
+                  (lists.head (lists.drop 1:int32 nonKeySections)) in
+              let seeAlso := optionals.givens
+                  (lists.map
+                    (λln.
+                      let parts := strings.splitOn " " ln
+                      in ifElse
+                        (equal
+                          (optionals.withDefault "" (lists.head parts))
+                          "@seeAlso")
+                        (parseDocAnnotation
+                          (strings.join " " (lists.drop 1:int32 parts)))
+                        none)
+                    keyLines) in
+              let avail := optionals.givens
+                  (lists.map
+                    ((λtag, ln.
+                      let parts := strings.splitOn " " ln
+                      in ifElse
+                        (equal
+                          (optionals.withDefault "" (lists.head parts))
+                          tag)
+                        given(Version{strings.join
+                          " "
+                          (lists.drop 1:int32 parts)})
+                        none)
+                      "@availableSince")
+                    keyLines) in
+              let depr := optionals.givens
+                  (lists.map
+                    ((λtag, ln.
+                      let parts := strings.splitOn " " ln
+                      in ifElse
+                        (equal
+                          (optionals.withDefault "" (lists.head parts))
+                          tag)
+                        given(Version{strings.join
+                          " "
+                          (lists.drop 1:int32 parts)})
+                        none)
+                      "@deprecatedSince")
+                    keyLines) in
+              let provisions := optionals.givens
+                  (lists.map
+                    ((λmodName, ln.
+                      let tag := optionals.withDefault
+                          ""
+                          (lists.head (strings.splitOn " " ln)) in
+                      let afterTag := strings.join
+                          " "
+                          (lists.drop
+                            1:int32
+                            (strings.splitOn " " ln)) in
+                      let nameAndStmt := strings.splitOn ": " afterTag in
+                      let localName := optionals.withDefault
+                          ""
+                          (lists.head nameAndStmt) in
+                      let stmt := strings.join
+                          ": "
+                          (lists.drop 1:int32 nameAndStmt) in
+                      ifElse
+                        (equal tag "@requirement")
+                        given(Provision{
+                          name = qualifyLocalName modName localName,
+                          kind = ProvisionKind{
+                            requirement},
+                          statement = stmt})
+                        (ifElse
+                          (equal tag "@recommendation")
+                          given(Provision{
+                            name = qualifyLocalName modName localName,
+                            kind = ProvisionKind{
+                              recommendation},
+                            statement = stmt})
+                          none))
+                      modName)
+                    keyLines) in
+              let mlifecycle := ifElse
+                  (and (lists.isEmpty avail) (lists.isEmpty depr))
+                  none
+                  given(LifecycleInfo{
+                    availableSince = lists.head avail,
+                    deprecatedSince = lists.head depr}) in
+              EntityMetadata{
+                description = mdesc,
+                comments = comments,
+                seeAlso = seeAlso,
+                lifecycle = mlifecycle,
+                provisions = provisions})
+              modName
+              lns) in
+        let sigDocs := primitiveDocLines lns in
+        parsers.bind
           primitiveModifiers
           (λmods.
             let isPure := first mods in
@@ -805,23 +986,44 @@ term primitiveDefinitionParser =
               (λ`_`.parsers.bind
                   identifier
                   (λlocal.parsers.bind
-                      (keyword ":")
-                      (λ`_`.parsers.bind
-                          core.termSignature
-                          (λsig.parsers.map
-                              (λmimpl.Definition{
-                                  `primitive` = PrimitiveDefinition{
-                                    name = qualifyLocalName modName local,
-                                    metadata = requalifyProvisionNamesForPrimitive
-                                        modName
-                                        local
-                                        mmeta,
-                                    signature = sig,
-                                    isPure = isPure,
-                                    isTotal = isTotal,
-                                    defaultImplementation = mimpl}})
-                              (parsers.optional
-                                (parsers.bind (keyword "=") (λ`_`.token (parsers.map stripSpans core.term))))))))))
+                      core.primitiveSignature
+                      (λsig0.
+                        let sig := attachPrimitiveSignatureDocs sigDocs sig0
+                        in parsers.map
+                          (λmimpl.Definition{
+                              `primitive` = PrimitiveDefinition{
+                                name = qualifyLocalName modName local,
+                                metadata = requalifyProvisionNamesForPrimitive
+                                    modName
+                                    local
+                                    mmeta,
+                                signature = sig,
+                                isPure = isPure,
+                                isTotal = isTotal,
+                                defaultImplementation = mimpl}})
+                          (parsers.optional
+                            (parsers.bind (keyword "=") (λ`_`.token (parsers.map stripSpans core.term)))))))))
+
+## Extract '@param'/'@return' key lines from a doc-comment block's raw lines (#837)
+term primitiveDocLines =
+  λlns.
+    let sections := (λlns.
+        let step := λacc, ln.ifElse
+              (strings.isEmpty ln)
+              (lists.concat2 acc [[]])
+              (let i := sub (lists.length acc) 1:int32 in
+              let cur := optionals.withDefault [] (lists.head (lists.drop i acc)) in
+              lists.concat2 (lists.take i acc) [lists.concat2 cur [ln]])
+        in lists.filter (λsec.not (lists.isEmpty sec)) (lists.foldl step [[]] lns))
+        lns in
+    let isKeySection := λsec.optionals.match
+          (lists.head sec)
+          false
+          (λs.optionals.match (strings.charAt 0:int32 s) false (λc.equal c 64:int32)) in
+    let keyLines := lists.concat (lists.filter isKeySection sections) in
+    let paramPairs := optionals.givens (lists.map parseParamLine keyLines) in
+    let returnLines := optionals.givens (lists.map parseReturnLine keyLines) in
+    (maps.fromList paramPairs, lists.head returnLines)
 
 ## Parse the optional 'impure'/'partial' primitive-definition modifier keywords
 term primitiveModifiers =

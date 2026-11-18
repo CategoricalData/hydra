@@ -67,3 +67,16 @@ term resv = `let`
 
 term c = cases (Color) {red = 1:int32, _ = 0:int32}
 #        ^^^^^ keyword.control.hydra
+
+# Doc-comment directives, incl. @param/@return from the named-primitive-parameter
+# signatures (#837, batch 30). Anchored to '## ' line-start so @-words in prose/strings
+# do NOT get the directive scope.
+## @param p: the first operand
+#  ^^^^^^ keyword.other.documentation.directive.hydra
+## @return the result
+#  ^^^^^^^ keyword.other.documentation.directive.hydra
+primitive demo (p: boolean, q: lazy boolean) : boolean
+#^^^^^^^^ keyword.other.definition.hydra
+#         ^^^^ entity.name.function.hydra
+#                  ^^^^^^^ support.type.hydra
+#                              ^^^^ keyword.control.hydra

@@ -92,8 +92,8 @@
           "end": "$",
           "patterns": [
             {
-              "comment": "@key metadata lines inside a doc comment (§6.2): @seeAlso @availableSince @deprecatedSince @requirement @recommendation.",
-              "match": "@(seeAlso|availableSince|deprecatedSince|requirement|recommendation)\\b",
+              "comment": "@key metadata lines inside a doc comment (§6.2): @seeAlso @availableSince @deprecatedSince @requirement @recommendation, plus @param/@return for the named-primitive-parameter signatures introduced with the whole-kernel .hydra switch (#837, batch 30). Anchored with a '(?<=## )' lookbehind so the directive is only recognized at the start of a doc-comment line ('## @key …'), NOT for an incidental '@word' buried in prose or a string (e.g. '{@type …}' JavaDoc-style inline markup, or an email address). NOTE: syntax.md §6.2 does not yet document @param/@return — flagged to staging as a spec gap to close under #837.",
+              "match": "(?<=## )@(seeAlso|availableSince|deprecatedSince|requirement|recommendation|param|return)\\b",
               "name": "keyword.other.documentation.directive.hydra"
             }
           ]

@@ -61,25 +61,39 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive find : string → string → optional<string>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param pat: the regex pattern to search for
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to search within
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive find (pat: string, s: string) : optional<string>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra entity.name.function.hydra
-#              ^ source.hydra
-#               ^ source.hydra punctuation.separator.type.hydra
-#                ^ source.hydra
-#                 ^^^^^^ source.hydra support.type.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra keyword.operator.arrow.hydra
-#                         ^ source.hydra
-#                          ^^^^^^ source.hydra support.type.hydra
-#                                ^ source.hydra
-#                                 ^ source.hydra keyword.operator.arrow.hydra
-#                                  ^ source.hydra
-#                                   ^^^^^^^^ source.hydra support.type.hydra
-#                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                            ^^^^^^ source.hydra support.type.hydra
-#                                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
+#              ^^ source.hydra
+#                ^^^ source.hydra variable.other.hydra
+#                   ^ source.hydra punctuation.separator.type.hydra
+#                    ^ source.hydra
+#                     ^^^^^^ source.hydra support.type.hydra
+#                           ^^ source.hydra
+#                             ^ source.hydra variable.other.hydra
+#                              ^ source.hydra punctuation.separator.type.hydra
+#                               ^ source.hydra
+#                                ^^^^^^ source.hydra support.type.hydra
+#                                      ^^ source.hydra
+#                                        ^ source.hydra punctuation.separator.type.hydra
+#                                         ^ source.hydra
+#                                          ^^^^^^^^ source.hydra support.type.hydra
+#                                                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                   ^^^^^^ source.hydra support.type.hydra
+#                                                         ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Find all non-overlapping regex matches within a string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -112,25 +126,39 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive findAll : string → string → list<string>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param pat: the regex pattern to search for
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to search within
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive findAll (pat: string, s: string) : list<string>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^ source.hydra entity.name.function.hydra
-#                 ^ source.hydra
-#                  ^ source.hydra punctuation.separator.type.hydra
-#                   ^ source.hydra
-#                    ^^^^^^ source.hydra support.type.hydra
-#                          ^ source.hydra
-#                           ^ source.hydra keyword.operator.arrow.hydra
-#                            ^ source.hydra
-#                             ^^^^^^ source.hydra support.type.hydra
-#                                   ^ source.hydra
-#                                    ^ source.hydra keyword.operator.arrow.hydra
-#                                     ^ source.hydra
-#                                      ^^^^ source.hydra support.type.hydra
-#                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                           ^^^^^^ source.hydra support.type.hydra
-#                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                 ^^ source.hydra
+#                   ^^^ source.hydra variable.other.hydra
+#                      ^ source.hydra punctuation.separator.type.hydra
+#                       ^ source.hydra
+#                        ^^^^^^ source.hydra support.type.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra variable.other.hydra
+#                                 ^ source.hydra punctuation.separator.type.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^ source.hydra support.type.hydra
+#                                         ^^ source.hydra
+#                                           ^ source.hydra punctuation.separator.type.hydra
+#                                            ^ source.hydra
+#                                             ^^^^ source.hydra support.type.hydra
+#                                                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                  ^^^^^^ source.hydra support.type.hydra
+#                                                        ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Test whether a regex matches an entire string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -173,22 +201,36 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive matches : string → string → boolean
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param pat: the regex pattern to test
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to test against
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive matches (pat: string, s: string) : boolean
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^ source.hydra entity.name.function.hydra
-#                 ^ source.hydra
-#                  ^ source.hydra punctuation.separator.type.hydra
-#                   ^ source.hydra
-#                    ^^^^^^ source.hydra support.type.hydra
-#                          ^ source.hydra
-#                           ^ source.hydra keyword.operator.arrow.hydra
-#                            ^ source.hydra
-#                             ^^^^^^ source.hydra support.type.hydra
-#                                   ^ source.hydra
-#                                    ^ source.hydra keyword.operator.arrow.hydra
-#                                     ^ source.hydra
-#                                      ^^^^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+#                   ^^^ source.hydra variable.other.hydra
+#                      ^ source.hydra punctuation.separator.type.hydra
+#                       ^ source.hydra
+#                        ^^^^^^ source.hydra support.type.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra variable.other.hydra
+#                                 ^ source.hydra punctuation.separator.type.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^ source.hydra support.type.hydra
+#                                         ^^ source.hydra
+#                                           ^ source.hydra punctuation.separator.type.hydra
+#                                            ^ source.hydra
+#                                             ^^^^^^^ source.hydra support.type.hydra
 >
 >## Replace the first regex match in a string with a replacement string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -224,26 +266,46 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive replace : string → string → string → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param pat: the regex pattern to match
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param repl: the replacement string
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to operate on
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive replace (pat: string, repl: string, s: string) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^ source.hydra entity.name.function.hydra
-#                 ^ source.hydra
-#                  ^ source.hydra punctuation.separator.type.hydra
-#                   ^ source.hydra
-#                    ^^^^^^ source.hydra support.type.hydra
-#                          ^ source.hydra
-#                           ^ source.hydra keyword.operator.arrow.hydra
-#                            ^ source.hydra
-#                             ^^^^^^ source.hydra support.type.hydra
-#                                   ^ source.hydra
-#                                    ^ source.hydra keyword.operator.arrow.hydra
+#                 ^^ source.hydra
+#                   ^^^ source.hydra variable.other.hydra
+#                      ^ source.hydra punctuation.separator.type.hydra
+#                       ^ source.hydra
+#                        ^^^^^^ source.hydra support.type.hydra
+#                              ^^ source.hydra
+#                                ^^^^ source.hydra variable.other.hydra
+#                                    ^ source.hydra punctuation.separator.type.hydra
 #                                     ^ source.hydra
 #                                      ^^^^^^ source.hydra support.type.hydra
-#                                            ^ source.hydra
-#                                             ^ source.hydra keyword.operator.arrow.hydra
-#                                              ^ source.hydra
-#                                               ^^^^^^ source.hydra support.type.hydra
+#                                            ^^ source.hydra
+#                                              ^ source.hydra variable.other.hydra
+#                                               ^ source.hydra punctuation.separator.type.hydra
+#                                                ^ source.hydra
+#                                                 ^^^^^^ source.hydra support.type.hydra
+#                                                       ^^ source.hydra
+#                                                         ^ source.hydra punctuation.separator.type.hydra
+#                                                          ^ source.hydra
+#                                                           ^^^^^^ source.hydra support.type.hydra
 >
 >## Replace all non-overlapping regex matches in a string with a replacement string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -279,26 +341,46 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive replaceAll : string → string → string → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param pat: the regex pattern to match
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param repl: the replacement string
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to operate on
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive replaceAll (pat: string, repl: string, s: string) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                    ^ source.hydra
-#                     ^ source.hydra punctuation.separator.type.hydra
-#                      ^ source.hydra
-#                       ^^^^^^ source.hydra support.type.hydra
-#                             ^ source.hydra
-#                              ^ source.hydra keyword.operator.arrow.hydra
-#                               ^ source.hydra
-#                                ^^^^^^ source.hydra support.type.hydra
-#                                      ^ source.hydra
-#                                       ^ source.hydra keyword.operator.arrow.hydra
+#                    ^^ source.hydra
+#                      ^^^ source.hydra variable.other.hydra
+#                         ^ source.hydra punctuation.separator.type.hydra
+#                          ^ source.hydra
+#                           ^^^^^^ source.hydra support.type.hydra
+#                                 ^^ source.hydra
+#                                   ^^^^ source.hydra variable.other.hydra
+#                                       ^ source.hydra punctuation.separator.type.hydra
 #                                        ^ source.hydra
 #                                         ^^^^^^ source.hydra support.type.hydra
-#                                               ^ source.hydra
-#                                                ^ source.hydra keyword.operator.arrow.hydra
-#                                                 ^ source.hydra
-#                                                  ^^^^^^ source.hydra support.type.hydra
+#                                               ^^ source.hydra
+#                                                 ^ source.hydra variable.other.hydra
+#                                                  ^ source.hydra punctuation.separator.type.hydra
+#                                                   ^ source.hydra
+#                                                    ^^^^^^ source.hydra support.type.hydra
+#                                                          ^^ source.hydra
+#                                                            ^ source.hydra punctuation.separator.type.hydra
+#                                                             ^ source.hydra
+#                                                              ^^^^^^ source.hydra support.type.hydra
 >
 >## Split a string by occurrences of a regex pattern.
 #^^ source.hydra comment.block.documentation.hydra
@@ -334,22 +416,36 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive split : string → string → list<string>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param pat: the regex pattern to split on
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to split
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive split (pat: string, s: string) : list<string>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^ source.hydra entity.name.function.hydra
-#               ^ source.hydra
-#                ^ source.hydra punctuation.separator.type.hydra
-#                 ^ source.hydra
-#                  ^^^^^^ source.hydra support.type.hydra
-#                        ^ source.hydra
-#                         ^ source.hydra keyword.operator.arrow.hydra
-#                          ^ source.hydra
-#                           ^^^^^^ source.hydra support.type.hydra
-#                                 ^ source.hydra
-#                                  ^ source.hydra keyword.operator.arrow.hydra
-#                                   ^ source.hydra
-#                                    ^^^^ source.hydra support.type.hydra
-#                                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                         ^^^^^^ source.hydra support.type.hydra
-#                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
+#               ^^ source.hydra
+#                 ^^^ source.hydra variable.other.hydra
+#                    ^ source.hydra punctuation.separator.type.hydra
+#                     ^ source.hydra
+#                      ^^^^^^ source.hydra support.type.hydra
+#                            ^^ source.hydra
+#                              ^ source.hydra variable.other.hydra
+#                               ^ source.hydra punctuation.separator.type.hydra
+#                                ^ source.hydra
+#                                 ^^^^^^ source.hydra support.type.hydra
+#                                       ^^ source.hydra
+#                                         ^ source.hydra punctuation.separator.type.hydra
+#                                          ^ source.hydra
+#                                           ^^^^ source.hydra support.type.hydra
+#                                               ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                ^^^^^^ source.hydra support.type.hydra
+#                                                      ^ source.hydra punctuation.definition.typeargs.end.hydra

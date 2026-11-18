@@ -15,7 +15,10 @@ import hydra.core.typing
 ##
 ## @availableSince 0.17
 ## @requirement preservesExistingContentsAndAppends: appendFile adds the given bytes to the end of a file's existing contents, preserving what was already there, rather than replacing it as writeFile does.
-impure primitive appendFile : FilePath → binary → effect<either<FileError, unit>>
+##
+## @param path: the path of the file to append to
+## @param contents: the raw bytes to append
+impure primitive appendFile (path: FilePath, contents: binary) : effect<either<FileError, unit>>
 
 ## Copy a file, or a directory tree, to a destination path.
 ##
@@ -26,7 +29,11 @@ impure primitive appendFile : FilePath → binary → effect<either<FileError, u
 ## @requirement copiesSingleFile: copy with recursive=false duplicates a single file's contents at the destination path.
 ## @requirement copiesDirectoryTreeWhenRecursive: copy with recursive=true duplicates an entire directory tree, including nested files, at the destination path, succeeding even when the destination directory already exists.
 ## @requirement errorsOnNonRecursiveDirectory: copy with recursive=false on a directory source yields an error, rather than silently copying only the directory entry or a subset of its contents.
-impure primitive copy : boolean → FilePath → FilePath → effect<either<FileError, unit>>
+##
+## @param recursive: whether to copy a directory tree rather than a single file
+## @param source: the path to copy from
+## @param destination: the path to copy to
+impure primitive copy (recursive: boolean, source: FilePath, destination: FilePath) : effect<either<FileError, unit>>
 
 ## Create a directory.
 ##
@@ -35,7 +42,10 @@ impure primitive copy : boolean → FilePath → FilePath → effect<either<File
 ##
 ## @availableSince 0.17
 ## @requirement createsDirectoryThatThenExists: createDirectory creates a directory at the given path such that a subsequent exists check on that path reports true.
-impure primitive createDirectory : boolean → FilePath → effect<either<FileError, unit>>
+##
+## @param recursive: whether to create missing parent directories as well
+## @param path: the path of the directory to create
+impure primitive createDirectory (recursive: boolean, path: FilePath) : effect<either<FileError, unit>>
 
 ## Create a symbolic link.
 ##
@@ -46,7 +56,10 @@ impure primitive createDirectory : boolean → FilePath → effect<either<FileEr
 ## @requirement allowsDanglingTargets: createSymlink succeeds even when the target does not exist, creating a dangling link; the dangling link is itself reported as present by exists (observed via status, not treated as absent), and still reports fileType link under status(followLinks=false), but is reported as notFound when followed via status(followLinks=true).
 ## @requirement preservesTargetVerbatim: createSymlink stores the target path exactly as given, including a relative path, with no resolution or canonicalization; readSymlink returns that exact stored target.
 ## @requirement errorsOnExistingLinkPath: createSymlink fails (there is no force/replace flag) when the link path already exists, whether that existing entry is a regular file or another symbolic link (including a dangling one).
-impure primitive createSymlink : FilePath → FilePath → effect<either<FileError, unit>>
+##
+## @param target: the path that the new symbolic link will point to
+## @param link: the path of the symbolic link to create
+impure primitive createSymlink (target: FilePath, link: FilePath) : effect<either<FileError, unit>>
 
 ## Test whether a path exists.
 ##
@@ -55,7 +68,9 @@ impure primitive createSymlink : FilePath → FilePath → effect<either<FileErr
 ## @availableSince 0.17
 ## @requirement falseForMissingPath: exists returns right(false) for a missing path, without erroring on absence.
 ## @requirement trueAfterCreation: exists returns right(true) for a path immediately after a file or directory has been created there.
-impure primitive exists : FilePath → effect<either<FileError, boolean>>
+##
+## @param path: the path to test for existence
+impure primitive exists (path: FilePath) : effect<either<FileError, boolean>>
 
 ## List the immediate entries of a directory.
 ##
@@ -63,7 +78,9 @@ impure primitive exists : FilePath → effect<either<FileError, boolean>>
 ##
 ## @availableSince 0.17
 ## @requirement listsImmediateEntries: listDirectory returns exactly the immediate entries of the directory, one entry per file actually present, excluding the special "." and ".." entries.
-impure primitive listDirectory : FilePath → effect<either<FileError, list<FilePath>>>
+##
+## @param path: the path of the directory to list
+impure primitive listDirectory (path: FilePath) : effect<either<FileError, list<FilePath>>>
 
 ## Read the complete contents of a file as raw bytes.
 ##
@@ -71,7 +88,9 @@ impure primitive listDirectory : FilePath → effect<either<FileError, list<File
 ##
 ## @availableSince 0.17
 ## @requirement roundTripsWithWriteFile: readFile returns exactly the bytes most recently written to a file via writeFile (and any subsequent appendFile calls), byte-exactly, with no character decoding or translation.
-impure primitive readFile : FilePath → effect<either<FileError, binary>>
+##
+## @param path: the path of the file to read
+impure primitive readFile (path: FilePath) : effect<either<FileError, binary>>
 
 ## Read the target of a symbolic link.
 ##
@@ -80,7 +99,9 @@ impure primitive readFile : FilePath → effect<either<FileError, binary>>
 ## @availableSince 0.17.6
 ## @requirement returnsStoredTargetVerbatim: readSymlink returns the target exactly as stored by createSymlink, with no chain resolution or canonicalization, including a relative target returned relative.
 ## @requirement errorsOnNonLinkOrMissingPath: readSymlink yields left(invalidPath) when the path exists but is not a symbolic link, and left(notFound) when the path does not exist at all -- two distinct error conditions, neither of which is confused with a successful read.
-impure primitive readSymlink : FilePath → effect<either<FileError, FilePath>>
+##
+## @param path: the path of the symbolic link to read
+impure primitive readSymlink (path: FilePath) : effect<either<FileError, FilePath>>
 
 ## Remove a directory.
 ##
@@ -91,7 +112,10 @@ impure primitive readSymlink : FilePath → effect<either<FileError, FilePath>>
 ## @requirement removesEmptyDirectoryWhenNonRecursive: removeDirectory with recursive=false removes an empty directory, so that it no longer exists.
 ## @requirement errorsOnNonEmptyDirectoryWhenNonRecursive: removeDirectory with recursive=false on a non-empty directory yields an error, rather than silently removing it or its contents.
 ## @requirement removesPopulatedDirectoryWhenRecursive: removeDirectory with recursive=true removes a directory and its entire contents, so that the directory no longer exists.
-impure primitive removeDirectory : boolean → FilePath → effect<either<FileError, unit>>
+##
+## @param recursive: whether to remove the directory's contents as well
+## @param path: the path of the directory to remove
+impure primitive removeDirectory (recursive: boolean, path: FilePath) : effect<either<FileError, unit>>
 
 ## Remove a file.
 ##
@@ -99,7 +123,9 @@ impure primitive removeDirectory : boolean → FilePath → effect<either<FileEr
 ##
 ## @availableSince 0.17
 ## @requirement deletesFileSoItNoLongerExists: removeFile deletes the file at the given path, so that a subsequent exists check reports false.
-impure primitive removeFile : FilePath → effect<either<FileError, unit>>
+##
+## @param path: the path of the file to remove
+impure primitive removeFile (path: FilePath) : effect<either<FileError, unit>>
 
 ## Rename or move a file or directory.
 ##
@@ -107,7 +133,10 @@ impure primitive removeFile : FilePath → effect<either<FileError, unit>>
 ##
 ## @availableSince 0.17
 ## @requirement movesToNewPathPreservingContents: rename moves a file (or directory) from source to destination, such that the original contents are readable at the destination path afterward.
-impure primitive rename : FilePath → FilePath → effect<either<FileError, unit>>
+##
+## @param source: the path to rename from
+## @param destination: the path to rename to
+impure primitive rename (source: FilePath, destination: FilePath) : effect<either<FileError, unit>>
 
 ## Retrieve metadata about a file or directory.
 ##
@@ -117,7 +146,10 @@ impure primitive rename : FilePath → FilePath → effect<either<FileError, uni
 ## @requirement reportsCorrectTypeAndSizeForRegularFileAndDirectory: status reports the correct fileType and size for a regular file (size equal to its byte count) and reports directory as the fileType for a directory.
 ## @requirement followLinksControlsLinkResolution: status(followLinks=false) reports the metadata of a symbolic link itself (fileType link), while status(followLinks=true) on the same path reports the metadata of the link's target (its true fileType, not link) when the target exists -- the only way to observe fileType link is followLinks=false.
 ## @requirement notFoundOnMissingOrDanglingTarget: status yields left(notFound) for a path that does not exist, and also for a dangling symbolic link when followed via followLinks=true (even though the dangling link itself is not an error under followLinks=false).
-impure primitive status : boolean → FilePath → effect<either<FileError, FileStatus>>
+##
+## @param followLinks: whether to resolve symbolic links (true reproduces the previous, follow, behavior; false inspects the entry itself)
+## @param path: the path to retrieve metadata for
+impure primitive status (followLinks: boolean, path: FilePath) : effect<either<FileError, FileStatus>>
 
 ## Write raw bytes as the complete contents of a file.
 ##
@@ -125,4 +157,7 @@ impure primitive status : boolean → FilePath → effect<either<FileError, File
 ##
 ## @availableSince 0.17
 ## @requirement replacesCompleteFileContents: writeFile replaces the complete contents of the file at the given path with the given bytes, creating the file if it does not already exist.
-impure primitive writeFile : FilePath → binary → effect<either<FileError, unit>>
+##
+## @param path: the path of the file to write
+## @param contents: the raw bytes to write as the file's contents
+impure primitive writeFile (path: FilePath, contents: binary) : effect<either<FileError, unit>>

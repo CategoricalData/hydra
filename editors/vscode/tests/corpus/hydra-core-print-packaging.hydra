@@ -7,7 +7,7 @@ import hydra.core.lib.lists as lists
 import hydra.core.lib.logic
 import hydra.core.lib.maps as maps
 import hydra.core.lib.math
-import hydra.core.lib.optionals
+import hydra.core.lib.optionals as optionals
 import hydra.core.lib.ordering
 import hydra.core.lib.pairs
 import hydra.core.lib.sets as sets
@@ -17,6 +17,7 @@ import hydra.core.names
 import hydra.core.packaging
 import hydra.core.print.model
 import hydra.core.serialization
+import hydra.core.typing
 
 ## Build a candidate alias from the last n dotted segments of a module's full name
 term aliasFromSuffix =
@@ -36,20 +37,20 @@ term docCommentLinesOf = λs.lists.map (λln.strings.concat2 "## " ln) (strings.
 ## Show an EntityMetadata as a block of '##' doc-comment lines
 term entityMetadataDoc =
   λem.
-    let descLine := match (EntityMetadata[description] em) [] (λd.docCommentLinesOf d) in
+    let descLine := optionals.match (EntityMetadata[description] em) [] (λd.docCommentLinesOf d) in
     let commentBlocks := lists.concat (lists.map docCommentLinesOf (EntityMetadata[comments] em)) in
     let seeAlsoLines := lists.map
         (λref.strings.concat ["## @seeAlso ", entityReferenceDoc ref])
         (EntityMetadata[seeAlso] em) in
-    let lifecycleLines := match
+    let lifecycleLines := optionals.match
         (EntityMetadata[lifecycle] em)
         []
         (λlc.
-          let avail := match
+          let avail := optionals.match
               (LifecycleInfo[availableSince] lc)
               []
               (λv.[strings.concat2 "## @availableSince " (Version[] v)]) in
-          let depr := match
+          let depr := optionals.match
               (LifecycleInfo[deprecatedSince] lc)
               []
               (λv.[strings.concat2 "## @deprecatedSince " (Version[] v)]) in
@@ -84,8 +85,8 @@ term entityReferenceDoc =
 term growAliasesStep =
   λsegsMap, state, `_ign`.
     let nss := maps.keys segsMap in
-    let segsFor := λnm.withDefault [] (maps.lookup nm segsMap) in
-    let takenFor := λnm.withDefault 1:int32 (maps.lookup nm state) in
+    let segsFor := λnm.optionals.withDefault [] (maps.lookup nm segsMap) in
+    let takenFor := λnm.optionals.withDefault 1:int32 (maps.lookup nm state) in
     let entries := lists.map
         (λnm.
           let segs := segsFor nm, n := takenFor nm, segCount := lists.length segs, aliasStr := aliasFromSuffix segs n
@@ -96,7 +97,9 @@ term growAliasesStep =
     let aliasCounts := lists.foldl
         (λm, e.maps.insert
             (aliasKey e)
-            (add 1:int32 (withDefault 0:int32 (maps.lookup (aliasKey e) m)))
+            (add
+              1:int32
+              (optionals.withDefault 0:int32 (maps.lookup (aliasKey e) m)))
             m)
         maps.empty
         entries in
@@ -106,7 +109,7 @@ term growAliasesStep =
           let segCount := segCountOf e in
           maps.insert
             k
-            (match
+            (optionals.match
               (maps.lookup k m)
               segCount
               (λprev.ifElse (lt segCount prev) segCount prev))
@@ -117,12 +120,14 @@ term growAliasesStep =
         (λm, e.
           let k := aliasKey e in
           let segCount := segCountOf e in
-          let minSegs := withDefault segCount (maps.lookup k aliasMinSegs) in
+          let minSegs := optionals.withDefault
+              segCount
+              (maps.lookup k aliasMinSegs) in
           ifElse
             (equal segCount minSegs)
             (maps.insert
               k
-              (add 1:int32 (withDefault 0:int32 (maps.lookup k m)))
+              (add 1:int32 (optionals.withDefault 0:int32 (maps.lookup k m)))
               m)
             m)
         maps.empty
@@ -134,9 +139,9 @@ term growAliasesStep =
           let n := first (second e) in
           let segCount := segCountOf e in
           let aliasStr := aliasKey e in
-          let count := withDefault 0:int32 (maps.lookup aliasStr aliasCounts) in
-          let minSegs := withDefault segCount (maps.lookup aliasStr aliasMinSegs) in
-          let minSegsCount := withDefault 0:int32 (maps.lookup aliasStr aliasMinSegsCount) in
+          let count := optionals.withDefault 0:int32 (maps.lookup aliasStr aliasCounts) in
+          let minSegs := optionals.withDefault segCount (maps.lookup aliasStr aliasMinSegs) in
+          let minSegsCount := optionals.withDefault 0:int32 (maps.lookup aliasStr aliasMinSegsCount) in
           let canGrow := and
               (gt count 1:int32)
               (and (gt segCount n) (or (gt segCount minSegs) (gt minSegsCount 1:int32))) in
@@ -148,11 +153,11 @@ term importDecl =
   λaliases, d.
     let depMod := ModuleDependency[`module`] d in
     let modNameStr := moduleNameString depMod in
-    let aliasSuffix := match
+    let aliasSuffix := optionals.match
         (maps.lookup depMod aliases)
         ""
         (λalias.ifElse (strings.isEmpty alias) "" (strings.concat [" as ", alias])) in
-    let pkgSuffix := match
+    let pkgSuffix := optionals.match
         (ModuleDependency[package] d)
         ""
         (λpkg.strings.concat [" from ", PackageName[] pkg]) in
@@ -185,16 +190,16 @@ term moduleAliasesWith =
             (lists.map
               (λother.sets.map
                   localNameOf
-                  (withDefault sets.empty (maps.lookup other universe)))
+                  (optionals.withDefault sets.empty (maps.lookup other universe)))
               (lists.filter (λnm.not (equal nm d)) declaredImportNames))) in
     let allBinderLocalNames := sets.map localNameOf (allBinderNamesInDefinitions defs) in
-    let isSafeBare := λd.match
+    let isSafeBare := λd.optionals.match
           (maps.lookup d universe)
           false
           (λdeclaredNames.
             let declaredLocalNames := sets.map localNameOf declaredNames in
             let referencedLocalNames := maps.keys
-                (withDefault
+                (optionals.withDefault
                   maps.empty
                   (maps.lookup d namesByMod)) in
             let otherLocalNames := otherLocalNamesExcluding d in
@@ -218,7 +223,11 @@ term moduleAliasesWith =
     let bareAliases := maps.fromList (lists.map (λnm.(nm, "")) bareList) in
     let aliasedAliases := maps.fromList
         (lists.map
-          (λnm.(nm, aliasFromSuffix (withDefault [] (maps.lookup nm segsMap)) (withDefault 1:int32 (maps.lookup nm finalState))))
+          (λnm.(
+              nm,
+              aliasFromSuffix
+                (optionals.withDefault [] (maps.lookup nm segsMap))
+                (optionals.withDefault 1:int32 (maps.lookup nm finalState))))
           aliasedList) in
     let otherAliases := maps.union bareAliases aliasedAliases in
     maps.insert ownNs "" otherAliases
@@ -259,20 +268,41 @@ term primitiveDefinition =
     let localName := localNameOf (PrimitiveDefinition[name] pd) in
     let impureStr := ifElse (PrimitiveDefinition[isPure] pd) "" "impure " in
     let partialStr := ifElse (PrimitiveDefinition[isTotal] pd) "" "partial " in
-    let sigStr := termSignatureAliased aliases (PrimitiveDefinition[signature] pd) in
-    let implStr := match
+    let sig := PrimitiveDefinition[signature] pd in
+    let sigStr := primitiveSignatureAliased aliases sig in
+    let implStr := optionals.match
         (PrimitiveDefinition[defaultImplementation] pd)
         ""
         (λimpl.strings.concat [" = ", termAliased aliases impl]) in
-    withDefinitionDoc
-      (PrimitiveDefinition[metadata] pd)
-      (strings.concat [impureStr, partialStr, "primitive ", localName, " : ", sigStr, implStr])
+    let declStr := strings.concat [impureStr, partialStr, "primitive ", localName, " ", sigStr, implStr] in
+    let baseDoc := optionals.match (PrimitiveDefinition[metadata] pd) "" (λmeta.entityMetadataDoc meta) in
+    let sigDocLines := lists.map (λl.strings.concat2 "## " l) (primitiveSignatureDocLines sig) in
+    let sigDoc := strings.join "\n" sigDocLines in
+    let fullDoc := ifElse
+        (strings.isEmpty sigDoc)
+        baseDoc
+        (ifElse (strings.isEmpty baseDoc) sigDoc (strings.concat [baseDoc, "\n##\n", sigDoc])) in
+    ifElse (strings.isEmpty fullDoc) declStr (strings.concat [fullDoc, "\n", declStr])
+
+## Render a primitive signature's parameter/result descriptions as '@param'/'@return' lines, sans '##' prefix (#837)
+term primitiveSignatureDocLines =
+  λsig.
+    let paramLines := optionals.givens
+        (lists.map
+          (λp.optionals.map
+              (λd.strings.concat ["@param ", Name[] (Parameter[name] p), ": ", d])
+              (Parameter[description] p))
+          (TermSignature[parameters] sig)) in
+    let returnLine := optionals.map
+        (λd.strings.concat ["@return ", d])
+        (Result[description] (TermSignature[result] sig)) in
+    lists.concat2 paramLines (optionals.toList returnLine)
 
 ## Show a term definition as a string, shortening nominal references via the given import-alias map (#803)
 term termDefinition =
   λaliases, td.
     let localName := localNameOf (TermDefinition[name] td) in
-    let sigStr := match
+    let sigStr := optionals.match
         (TermDefinition[signature] td)
         " "
         (λsig.strings.concat [" : ", termSignatureAliased aliases sig, " "]) in
@@ -287,7 +317,7 @@ term termDefinition =
         (strings.concat [headStr, " ", printExpr inlineBodyExpr])
         (let blockBodyExpr := termExprAtPrecBudget maxLineWidth aliases 0:int32 body
         in strings.concat [headStr, "\n", customIndent doubleSpace (printExpr blockBodyExpr)]) in
-    let withDescDoc := match
+    let withDescDoc := optionals.match
         mdesc
         declStr
         (λd.strings.concat [strings.join "\n" (docCommentLinesOf d), "\n", declStr]) in
@@ -307,7 +337,7 @@ term typeDefinition =
       constraints = TypeScheme[constraints] scheme} in
     let typeStr := typeSchemeAliased aliases unwrappedScheme in
     let declStr := strings.concat ["type ", localName, " = ", typeStr] in
-    let withDescDoc := match
+    let withDescDoc := optionals.match
         mdesc
         declStr
         (λd.strings.concat [strings.join "\n" (docCommentLinesOf d), "\n", declStr]) in
@@ -315,7 +345,7 @@ term typeDefinition =
 
 ## Prepend a definition's '##' doc-comment block to its printed declaration, if present
 term withDefinitionDoc =
-  λmmeta, declStr.match
+  λmmeta, declStr.optionals.match
       mmeta
       declStr
       (λmeta.

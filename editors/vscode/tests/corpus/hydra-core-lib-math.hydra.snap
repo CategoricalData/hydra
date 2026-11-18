@@ -68,28 +68,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive abs : ∀x.(numeric x) ⇒ x → x
+>primitive abs ∀x.(numeric x) ⇒ (arg0: x) : x
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^ source.hydra entity.name.function.hydra
 #             ^ source.hydra
-#              ^ source.hydra punctuation.separator.type.hydra
-#               ^ source.hydra
-#                ^ source.hydra keyword.operator.forall-scheme.hydra
-#                 ^ source.hydra variable.parameter.hydra
-#                  ^ source.hydra punctuation.separator.binder.hydra
-#                   ^ source.hydra
-#                    ^^^^^^^ source.hydra variable.other.hydra
-#                           ^ source.hydra
-#                            ^ source.hydra variable.other.hydra
-#                             ^^ source.hydra
-#                               ^ source.hydra keyword.operator.constraint-arrow.hydra
-#                                ^ source.hydra
-#                                 ^ source.hydra variable.other.hydra
-#                                  ^ source.hydra
-#                                   ^ source.hydra keyword.operator.arrow.hydra
-#                                    ^ source.hydra
-#                                     ^ source.hydra variable.other.hydra
+#              ^ source.hydra keyword.operator.forall-scheme.hydra
+#               ^ source.hydra variable.parameter.hydra
+#                ^ source.hydra punctuation.separator.binder.hydra
+#                 ^ source.hydra
+#                  ^^^^^^^ source.hydra variable.other.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra variable.other.hydra
+#                           ^^ source.hydra
+#                             ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                              ^^ source.hydra
+#                                ^^^^ source.hydra variable.other.hydra
+#                                    ^ source.hydra punctuation.separator.type.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra variable.other.hydra
+#                                       ^^ source.hydra
+#                                         ^ source.hydra punctuation.separator.type.hydra
+#                                          ^ source.hydra
+#                                           ^ source.hydra variable.other.hydra
 >
 >## The arc cosine of a floating-point number.
 #^^ source.hydra comment.block.documentation.hydra
@@ -122,18 +123,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive acos : float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the cosine value whose arc cosine is computed
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive acos (x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra entity.name.function.hydra
-#              ^ source.hydra
-#               ^ source.hydra punctuation.separator.type.hydra
-#                ^ source.hydra
-#                 ^^^^^^^ source.hydra support.type.hydra
-#                        ^ source.hydra
-#                         ^ source.hydra keyword.operator.arrow.hydra
-#                          ^ source.hydra
-#                           ^^^^^^^ source.hydra support.type.hydra
+#              ^^ source.hydra
+#                ^ source.hydra variable.other.hydra
+#                 ^ source.hydra punctuation.separator.type.hydra
+#                  ^ source.hydra
+#                   ^^^^^^^ source.hydra support.type.hydra
+#                          ^^ source.hydra
+#                            ^ source.hydra punctuation.separator.type.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^ source.hydra support.type.hydra
 >
 >## The hyperbolic arc cosine of a floating-point number.
 #^^ source.hydra comment.block.documentation.hydra
@@ -166,18 +175,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive acosh : float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the value whose inverse hyperbolic cosine is computed
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive acosh (x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^ source.hydra entity.name.function.hydra
-#               ^ source.hydra
-#                ^ source.hydra punctuation.separator.type.hydra
-#                 ^ source.hydra
-#                  ^^^^^^^ source.hydra support.type.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra keyword.operator.arrow.hydra
-#                           ^ source.hydra
-#                            ^^^^^^^ source.hydra support.type.hydra
+#               ^^ source.hydra
+#                 ^ source.hydra variable.other.hydra
+#                  ^ source.hydra punctuation.separator.type.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^ source.hydra support.type.hydra
+#                           ^^ source.hydra
+#                             ^ source.hydra punctuation.separator.type.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^ source.hydra support.type.hydra
 >
 >## Numeric addition.
 #^^ source.hydra comment.block.documentation.hydra
@@ -213,32 +230,34 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive add : ∀x.(numeric x) ⇒ x → x → x
+>primitive add ∀x.(numeric x) ⇒ (arg0: x, arg1: x) : x
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^ source.hydra entity.name.function.hydra
 #             ^ source.hydra
-#              ^ source.hydra punctuation.separator.type.hydra
-#               ^ source.hydra
-#                ^ source.hydra keyword.operator.forall-scheme.hydra
-#                 ^ source.hydra variable.parameter.hydra
-#                  ^ source.hydra punctuation.separator.binder.hydra
-#                   ^ source.hydra
-#                    ^^^^^^^ source.hydra variable.other.hydra
-#                           ^ source.hydra
-#                            ^ source.hydra variable.other.hydra
-#                             ^^ source.hydra
-#                               ^ source.hydra keyword.operator.constraint-arrow.hydra
-#                                ^ source.hydra
-#                                 ^ source.hydra variable.other.hydra
-#                                  ^ source.hydra
-#                                   ^ source.hydra keyword.operator.arrow.hydra
-#                                    ^ source.hydra
-#                                     ^ source.hydra variable.other.hydra
-#                                      ^ source.hydra
-#                                       ^ source.hydra keyword.operator.arrow.hydra
-#                                        ^ source.hydra
-#                                         ^ source.hydra variable.other.hydra
+#              ^ source.hydra keyword.operator.forall-scheme.hydra
+#               ^ source.hydra variable.parameter.hydra
+#                ^ source.hydra punctuation.separator.binder.hydra
+#                 ^ source.hydra
+#                  ^^^^^^^ source.hydra variable.other.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra variable.other.hydra
+#                           ^^ source.hydra
+#                             ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                              ^^ source.hydra
+#                                ^^^^ source.hydra variable.other.hydra
+#                                    ^ source.hydra punctuation.separator.type.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra variable.other.hydra
+#                                       ^^ source.hydra
+#                                         ^^^^ source.hydra variable.other.hydra
+#                                             ^ source.hydra punctuation.separator.type.hydra
+#                                              ^ source.hydra
+#                                               ^ source.hydra variable.other.hydra
+#                                                ^^ source.hydra
+#                                                  ^ source.hydra punctuation.separator.type.hydra
+#                                                   ^ source.hydra
+#                                                    ^ source.hydra variable.other.hydra
 >
 >## Floating-point addition.
 #^^ source.hydra comment.block.documentation.hydra
@@ -269,22 +288,36 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive addFloat64 : float64 → float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the first addend
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param y: the second addend
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive addFloat64 (x: float64, y: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                    ^ source.hydra
-#                     ^ source.hydra punctuation.separator.type.hydra
-#                      ^ source.hydra
-#                       ^^^^^^^ source.hydra support.type.hydra
-#                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.arrow.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^ source.hydra support.type.hydra
-#                                        ^ source.hydra
-#                                         ^ source.hydra keyword.operator.arrow.hydra
-#                                          ^ source.hydra
-#                                           ^^^^^^^ source.hydra support.type.hydra
+#                    ^^ source.hydra
+#                      ^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^^^^^^^ source.hydra support.type.hydra
+#                                ^^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^ source.hydra punctuation.separator.type.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^^ source.hydra support.type.hydra
+#                                            ^^ source.hydra
+#                                              ^ source.hydra punctuation.separator.type.hydra
+#                                               ^ source.hydra
+#                                                ^^^^^^^ source.hydra support.type.hydra
 >
 >## The arc sine of a floating-point number.
 #^^ source.hydra comment.block.documentation.hydra
@@ -317,18 +350,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive asin : float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the sine value whose arc sine is computed
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive asin (x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra entity.name.function.hydra
-#              ^ source.hydra
-#               ^ source.hydra punctuation.separator.type.hydra
-#                ^ source.hydra
-#                 ^^^^^^^ source.hydra support.type.hydra
-#                        ^ source.hydra
-#                         ^ source.hydra keyword.operator.arrow.hydra
-#                          ^ source.hydra
-#                           ^^^^^^^ source.hydra support.type.hydra
+#              ^^ source.hydra
+#                ^ source.hydra variable.other.hydra
+#                 ^ source.hydra punctuation.separator.type.hydra
+#                  ^ source.hydra
+#                   ^^^^^^^ source.hydra support.type.hydra
+#                          ^^ source.hydra
+#                            ^ source.hydra punctuation.separator.type.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^ source.hydra support.type.hydra
 >
 >## The hyperbolic arc sine of a floating-point number.
 #^^ source.hydra comment.block.documentation.hydra
@@ -358,18 +399,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive asinh : float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the value whose inverse hyperbolic sine is computed
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive asinh (x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^ source.hydra entity.name.function.hydra
-#               ^ source.hydra
-#                ^ source.hydra punctuation.separator.type.hydra
-#                 ^ source.hydra
-#                  ^^^^^^^ source.hydra support.type.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra keyword.operator.arrow.hydra
-#                           ^ source.hydra
-#                            ^^^^^^^ source.hydra support.type.hydra
+#               ^^ source.hydra
+#                 ^ source.hydra variable.other.hydra
+#                  ^ source.hydra punctuation.separator.type.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^ source.hydra support.type.hydra
+#                           ^^ source.hydra
+#                             ^ source.hydra punctuation.separator.type.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^ source.hydra support.type.hydra
 >
 >## The arc tangent of a floating-point number.
 #^^ source.hydra comment.block.documentation.hydra
@@ -399,18 +448,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive atan : float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the tangent value whose arc tangent is computed
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive atan (x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra entity.name.function.hydra
-#              ^ source.hydra
-#               ^ source.hydra punctuation.separator.type.hydra
-#                ^ source.hydra
-#                 ^^^^^^^ source.hydra support.type.hydra
-#                        ^ source.hydra
-#                         ^ source.hydra keyword.operator.arrow.hydra
-#                          ^ source.hydra
-#                           ^^^^^^^ source.hydra support.type.hydra
+#              ^^ source.hydra
+#                ^ source.hydra variable.other.hydra
+#                 ^ source.hydra punctuation.separator.type.hydra
+#                  ^ source.hydra
+#                   ^^^^^^^ source.hydra support.type.hydra
+#                          ^^ source.hydra
+#                            ^ source.hydra punctuation.separator.type.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^ source.hydra support.type.hydra
 >
 >## The two-argument arc tangent (atan2).
 #^^ source.hydra comment.block.documentation.hydra
@@ -443,22 +500,36 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive atan2 : float64 → float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param y: the ordinate (y-coordinate)
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param x: the abscissa (x-coordinate)
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive atan2 (y: float64, x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^ source.hydra entity.name.function.hydra
-#               ^ source.hydra
-#                ^ source.hydra punctuation.separator.type.hydra
-#                 ^ source.hydra
-#                  ^^^^^^^ source.hydra support.type.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra keyword.operator.arrow.hydra
-#                           ^ source.hydra
-#                            ^^^^^^^ source.hydra support.type.hydra
-#                                   ^ source.hydra
-#                                    ^ source.hydra keyword.operator.arrow.hydra
-#                                     ^ source.hydra
-#                                      ^^^^^^^ source.hydra support.type.hydra
+#               ^^ source.hydra
+#                 ^ source.hydra variable.other.hydra
+#                  ^ source.hydra punctuation.separator.type.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^ source.hydra support.type.hydra
+#                           ^^ source.hydra
+#                             ^ source.hydra variable.other.hydra
+#                              ^ source.hydra punctuation.separator.type.hydra
+#                               ^ source.hydra
+#                                ^^^^^^^ source.hydra support.type.hydra
+#                                       ^^ source.hydra
+#                                         ^ source.hydra punctuation.separator.type.hydra
+#                                          ^ source.hydra
+#                                           ^^^^^^^ source.hydra support.type.hydra
 >
 >## The hyperbolic arc tangent of a floating-point number.
 #^^ source.hydra comment.block.documentation.hydra
@@ -488,18 +559,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive atanh : float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the value whose inverse hyperbolic tangent is computed
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive atanh (x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^ source.hydra entity.name.function.hydra
-#               ^ source.hydra
-#                ^ source.hydra punctuation.separator.type.hydra
-#                 ^ source.hydra
-#                  ^^^^^^^ source.hydra support.type.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra keyword.operator.arrow.hydra
-#                           ^ source.hydra
-#                            ^^^^^^^ source.hydra support.type.hydra
+#               ^^ source.hydra
+#                 ^ source.hydra variable.other.hydra
+#                  ^ source.hydra punctuation.separator.type.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^ source.hydra support.type.hydra
+#                           ^^ source.hydra
+#                             ^ source.hydra punctuation.separator.type.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^ source.hydra support.type.hydra
 >
 >## The smallest integer greater than or equal to the argument, as a float.
 #^^ source.hydra comment.block.documentation.hydra
@@ -532,18 +611,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive ceiling : float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the value to round up toward positive infinity
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive ceiling (x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^ source.hydra entity.name.function.hydra
-#                 ^ source.hydra
-#                  ^ source.hydra punctuation.separator.type.hydra
-#                   ^ source.hydra
-#                    ^^^^^^^ source.hydra support.type.hydra
-#                           ^ source.hydra
-#                            ^ source.hydra keyword.operator.arrow.hydra
-#                             ^ source.hydra
-#                              ^^^^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+#                   ^ source.hydra variable.other.hydra
+#                    ^ source.hydra punctuation.separator.type.hydra
+#                     ^ source.hydra
+#                      ^^^^^^^ source.hydra support.type.hydra
+#                             ^^ source.hydra
+#                               ^ source.hydra punctuation.separator.type.hydra
+#                                ^ source.hydra
+#                                 ^^^^^^^ source.hydra support.type.hydra
 >
 >## The cosine of a floating-point number.
 #^^ source.hydra comment.block.documentation.hydra
@@ -573,18 +660,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive cos : float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the angle in radians
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive cos (x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^ source.hydra entity.name.function.hydra
-#             ^ source.hydra
-#              ^ source.hydra punctuation.separator.type.hydra
-#               ^ source.hydra
-#                ^^^^^^^ source.hydra support.type.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra keyword.operator.arrow.hydra
-#                         ^ source.hydra
-#                          ^^^^^^^ source.hydra support.type.hydra
+#             ^^ source.hydra
+#               ^ source.hydra variable.other.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^^^^^^^ source.hydra support.type.hydra
+#                         ^^ source.hydra
+#                           ^ source.hydra punctuation.separator.type.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^ source.hydra support.type.hydra
 >
 >## The hyperbolic cosine of a floating-point number.
 #^^ source.hydra comment.block.documentation.hydra
@@ -614,18 +709,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive cosh : float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the value whose hyperbolic cosine is computed
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive cosh (x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra entity.name.function.hydra
-#              ^ source.hydra
-#               ^ source.hydra punctuation.separator.type.hydra
-#                ^ source.hydra
-#                 ^^^^^^^ source.hydra support.type.hydra
-#                        ^ source.hydra
-#                         ^ source.hydra keyword.operator.arrow.hydra
-#                          ^ source.hydra
-#                           ^^^^^^^ source.hydra support.type.hydra
+#              ^^ source.hydra
+#                ^ source.hydra variable.other.hydra
+#                 ^ source.hydra punctuation.separator.type.hydra
+#                  ^ source.hydra
+#                   ^^^^^^^ source.hydra support.type.hydra
+#                          ^^ source.hydra
+#                            ^ source.hydra punctuation.separator.type.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^ source.hydra support.type.hydra
 >
 >## Integral division, or Nothing if dividing by zero.
 #^^ source.hydra comment.block.documentation.hydra
@@ -667,35 +770,49 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive div : ∀x.(integral x) ⇒ x → x → optional<x>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the dividend
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param y: the divisor
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive div ∀x.(integral x) ⇒ (x: x, y: x) : optional<x>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^ source.hydra entity.name.function.hydra
 #             ^ source.hydra
-#              ^ source.hydra punctuation.separator.type.hydra
-#               ^ source.hydra
-#                ^ source.hydra keyword.operator.forall-scheme.hydra
-#                 ^ source.hydra variable.parameter.hydra
-#                  ^ source.hydra punctuation.separator.binder.hydra
-#                   ^ source.hydra
-#                    ^^^^^^^^ source.hydra variable.other.hydra
-#                            ^ source.hydra
-#                             ^ source.hydra variable.other.hydra
-#                              ^^ source.hydra
-#                                ^ source.hydra keyword.operator.constraint-arrow.hydra
-#                                 ^ source.hydra
-#                                  ^ source.hydra variable.other.hydra
+#              ^ source.hydra keyword.operator.forall-scheme.hydra
+#               ^ source.hydra variable.parameter.hydra
+#                ^ source.hydra punctuation.separator.binder.hydra
+#                 ^ source.hydra
+#                  ^^^^^^^^ source.hydra variable.other.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra variable.other.hydra
+#                            ^^ source.hydra
+#                              ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                               ^^ source.hydra
+#                                 ^ source.hydra variable.other.hydra
+#                                  ^ source.hydra punctuation.separator.type.hydra
 #                                   ^ source.hydra
-#                                    ^ source.hydra keyword.operator.arrow.hydra
-#                                     ^ source.hydra
-#                                      ^ source.hydra variable.other.hydra
-#                                       ^ source.hydra
-#                                        ^ source.hydra keyword.operator.arrow.hydra
+#                                    ^ source.hydra variable.other.hydra
+#                                     ^^ source.hydra
+#                                       ^ source.hydra variable.other.hydra
+#                                        ^ source.hydra punctuation.separator.type.hydra
 #                                         ^ source.hydra
-#                                          ^^^^^^^^ source.hydra support.type.hydra
-#                                                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                   ^ source.hydra entity.name.type.hydra
-#                                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                          ^ source.hydra variable.other.hydra
+#                                           ^^ source.hydra
+#                                             ^ source.hydra punctuation.separator.type.hydra
+#                                              ^ source.hydra
+#                                               ^^^^^^^^ source.hydra support.type.hydra
+#                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                        ^ source.hydra entity.name.type.hydra
+#                                                         ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Floating-point division.
 #^^ source.hydra comment.block.documentation.hydra
@@ -734,32 +851,34 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive divide : ∀x.(fractional x) ⇒ x → x → x
+>primitive divide ∀x.(fractional x) ⇒ (arg0: x, arg1: x) : x
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^ source.hydra entity.name.function.hydra
 #                ^ source.hydra
-#                 ^ source.hydra punctuation.separator.type.hydra
-#                  ^ source.hydra
-#                   ^ source.hydra keyword.operator.forall-scheme.hydra
-#                    ^ source.hydra variable.parameter.hydra
-#                     ^ source.hydra punctuation.separator.binder.hydra
-#                      ^ source.hydra
-#                       ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                 ^ source.hydra
-#                                  ^ source.hydra variable.other.hydra
-#                                   ^^ source.hydra
-#                                     ^ source.hydra keyword.operator.constraint-arrow.hydra
-#                                      ^ source.hydra
-#                                       ^ source.hydra variable.other.hydra
-#                                        ^ source.hydra
-#                                         ^ source.hydra keyword.operator.arrow.hydra
-#                                          ^ source.hydra
-#                                           ^ source.hydra variable.other.hydra
-#                                            ^ source.hydra
-#                                             ^ source.hydra keyword.operator.arrow.hydra
-#                                              ^ source.hydra
-#                                               ^ source.hydra variable.other.hydra
+#                 ^ source.hydra keyword.operator.forall-scheme.hydra
+#                  ^ source.hydra variable.parameter.hydra
+#                   ^ source.hydra punctuation.separator.binder.hydra
+#                    ^ source.hydra
+#                     ^^^^^^^^^^ source.hydra variable.other.hydra
+#                               ^ source.hydra
+#                                ^ source.hydra variable.other.hydra
+#                                 ^^ source.hydra
+#                                   ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                    ^^ source.hydra
+#                                      ^^^^ source.hydra variable.other.hydra
+#                                          ^ source.hydra punctuation.separator.type.hydra
+#                                           ^ source.hydra
+#                                            ^ source.hydra variable.other.hydra
+#                                             ^^ source.hydra
+#                                               ^^^^ source.hydra variable.other.hydra
+#                                                   ^ source.hydra punctuation.separator.type.hydra
+#                                                    ^ source.hydra
+#                                                     ^ source.hydra variable.other.hydra
+#                                                      ^^ source.hydra
+#                                                        ^ source.hydra punctuation.separator.type.hydra
+#                                                         ^ source.hydra
+#                                                          ^ source.hydra variable.other.hydra
 >
 >## Euler's constant (the base of the natural logarithm).
 #^^ source.hydra comment.block.documentation.hydra
@@ -784,14 +903,14 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive e : float64
+>primitive e () : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^ source.hydra entity.name.function.hydra
-#           ^ source.hydra
-#            ^ source.hydra punctuation.separator.type.hydra
-#             ^ source.hydra
-#              ^^^^^^^ source.hydra support.type.hydra
+#           ^^^^ source.hydra
+#               ^ source.hydra punctuation.separator.type.hydra
+#                ^ source.hydra
+#                 ^^^^^^^ source.hydra support.type.hydra
 >
 >## Test whether a value is even.
 #^^ source.hydra comment.block.documentation.hydra
@@ -822,28 +941,36 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive even : ∀x.(integral x) ⇒ x → boolean
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the value to test for evenness
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive even ∀x.(integral x) ⇒ (x: x) : boolean
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra entity.name.function.hydra
 #              ^ source.hydra
-#               ^ source.hydra punctuation.separator.type.hydra
-#                ^ source.hydra
-#                 ^ source.hydra keyword.operator.forall-scheme.hydra
-#                  ^ source.hydra variable.parameter.hydra
-#                   ^ source.hydra punctuation.separator.binder.hydra
-#                    ^ source.hydra
-#                     ^^^^^^^^ source.hydra variable.other.hydra
-#                             ^ source.hydra
-#                              ^ source.hydra variable.other.hydra
-#                               ^^ source.hydra
-#                                 ^ source.hydra keyword.operator.constraint-arrow.hydra
-#                                  ^ source.hydra
-#                                   ^ source.hydra variable.other.hydra
+#               ^ source.hydra keyword.operator.forall-scheme.hydra
+#                ^ source.hydra variable.parameter.hydra
+#                 ^ source.hydra punctuation.separator.binder.hydra
+#                  ^ source.hydra
+#                   ^^^^^^^^ source.hydra variable.other.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra variable.other.hydra
+#                             ^^ source.hydra
+#                               ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                ^^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^ source.hydra punctuation.separator.type.hydra
 #                                    ^ source.hydra
-#                                     ^ source.hydra keyword.operator.arrow.hydra
-#                                      ^ source.hydra
-#                                       ^^^^^^^ source.hydra support.type.hydra
+#                                     ^ source.hydra variable.other.hydra
+#                                      ^^ source.hydra
+#                                        ^ source.hydra punctuation.separator.type.hydra
+#                                         ^ source.hydra
+#                                          ^^^^^^^ source.hydra support.type.hydra
 >
 >## The exponential function.
 #^^ source.hydra comment.block.documentation.hydra
@@ -873,18 +1000,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive exp : float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the exponent
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive exp (x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^ source.hydra entity.name.function.hydra
-#             ^ source.hydra
-#              ^ source.hydra punctuation.separator.type.hydra
-#               ^ source.hydra
-#                ^^^^^^^ source.hydra support.type.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra keyword.operator.arrow.hydra
-#                         ^ source.hydra
-#                          ^^^^^^^ source.hydra support.type.hydra
+#             ^^ source.hydra
+#               ^ source.hydra variable.other.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^^^^^^^ source.hydra support.type.hydra
+#                         ^^ source.hydra
+#                           ^ source.hydra punctuation.separator.type.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^ source.hydra support.type.hydra
 >
 >## The largest integer less than or equal to the argument, as a float.
 #^^ source.hydra comment.block.documentation.hydra
@@ -917,18 +1052,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive floor : float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the value to round down toward negative infinity
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive floor (x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^ source.hydra entity.name.function.hydra
-#               ^ source.hydra
-#                ^ source.hydra punctuation.separator.type.hydra
-#                 ^ source.hydra
-#                  ^^^^^^^ source.hydra support.type.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra keyword.operator.arrow.hydra
-#                           ^ source.hydra
-#                            ^^^^^^^ source.hydra support.type.hydra
+#               ^^ source.hydra
+#                 ^ source.hydra variable.other.hydra
+#                  ^ source.hydra punctuation.separator.type.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^ source.hydra support.type.hydra
+#                           ^^ source.hydra
+#                             ^ source.hydra punctuation.separator.type.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^ source.hydra support.type.hydra
 >
 >## The natural logarithm.
 #^^ source.hydra comment.block.documentation.hydra
@@ -958,18 +1101,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive log : float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the value whose natural logarithm is computed
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive log (x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^ source.hydra entity.name.function.hydra
-#             ^ source.hydra
-#              ^ source.hydra punctuation.separator.type.hydra
-#               ^ source.hydra
-#                ^^^^^^^ source.hydra support.type.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra keyword.operator.arrow.hydra
-#                         ^ source.hydra
-#                          ^^^^^^^ source.hydra support.type.hydra
+#             ^^ source.hydra
+#               ^ source.hydra variable.other.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^^^^^^^ source.hydra support.type.hydra
+#                         ^^ source.hydra
+#                           ^ source.hydra punctuation.separator.type.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^ source.hydra support.type.hydra
 >
 >## Logarithm of the second argument in the base of the first.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1002,22 +1153,36 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive logBase : float64 → float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param b: the logarithm base
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param x: the value whose logarithm is computed
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive logBase (b: float64, x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^ source.hydra entity.name.function.hydra
-#                 ^ source.hydra
-#                  ^ source.hydra punctuation.separator.type.hydra
-#                   ^ source.hydra
-#                    ^^^^^^^ source.hydra support.type.hydra
-#                           ^ source.hydra
-#                            ^ source.hydra keyword.operator.arrow.hydra
-#                             ^ source.hydra
-#                              ^^^^^^^ source.hydra support.type.hydra
-#                                     ^ source.hydra
-#                                      ^ source.hydra keyword.operator.arrow.hydra
-#                                       ^ source.hydra
-#                                        ^^^^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+#                   ^ source.hydra variable.other.hydra
+#                    ^ source.hydra punctuation.separator.type.hydra
+#                     ^ source.hydra
+#                      ^^^^^^^ source.hydra support.type.hydra
+#                             ^^ source.hydra
+#                               ^ source.hydra variable.other.hydra
+#                                ^ source.hydra punctuation.separator.type.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^^^ source.hydra support.type.hydra
+#                                         ^^ source.hydra
+#                                           ^ source.hydra punctuation.separator.type.hydra
+#                                            ^ source.hydra
+#                                             ^^^^^^^ source.hydra support.type.hydra
 >
 >## Integral modulus, or Nothing if dividing by zero.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1056,35 +1221,49 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive mod : ∀x.(integral x) ⇒ x → x → optional<x>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the dividend
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param y: the divisor
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive mod ∀x.(integral x) ⇒ (x: x, y: x) : optional<x>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^ source.hydra entity.name.function.hydra
 #             ^ source.hydra
-#              ^ source.hydra punctuation.separator.type.hydra
-#               ^ source.hydra
-#                ^ source.hydra keyword.operator.forall-scheme.hydra
-#                 ^ source.hydra variable.parameter.hydra
-#                  ^ source.hydra punctuation.separator.binder.hydra
-#                   ^ source.hydra
-#                    ^^^^^^^^ source.hydra variable.other.hydra
-#                            ^ source.hydra
-#                             ^ source.hydra variable.other.hydra
-#                              ^^ source.hydra
-#                                ^ source.hydra keyword.operator.constraint-arrow.hydra
-#                                 ^ source.hydra
-#                                  ^ source.hydra variable.other.hydra
+#              ^ source.hydra keyword.operator.forall-scheme.hydra
+#               ^ source.hydra variable.parameter.hydra
+#                ^ source.hydra punctuation.separator.binder.hydra
+#                 ^ source.hydra
+#                  ^^^^^^^^ source.hydra variable.other.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra variable.other.hydra
+#                            ^^ source.hydra
+#                              ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                               ^^ source.hydra
+#                                 ^ source.hydra variable.other.hydra
+#                                  ^ source.hydra punctuation.separator.type.hydra
 #                                   ^ source.hydra
-#                                    ^ source.hydra keyword.operator.arrow.hydra
-#                                     ^ source.hydra
-#                                      ^ source.hydra variable.other.hydra
-#                                       ^ source.hydra
-#                                        ^ source.hydra keyword.operator.arrow.hydra
+#                                    ^ source.hydra variable.other.hydra
+#                                     ^^ source.hydra
+#                                       ^ source.hydra variable.other.hydra
+#                                        ^ source.hydra punctuation.separator.type.hydra
 #                                         ^ source.hydra
-#                                          ^^^^^^^^ source.hydra support.type.hydra
-#                                                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                   ^ source.hydra entity.name.type.hydra
-#                                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                          ^ source.hydra variable.other.hydra
+#                                           ^^ source.hydra
+#                                             ^ source.hydra punctuation.separator.type.hydra
+#                                              ^ source.hydra
+#                                               ^^^^^^^^ source.hydra support.type.hydra
+#                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                        ^ source.hydra entity.name.type.hydra
+#                                                         ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Numeric multiplication.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1120,32 +1299,34 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive mul : ∀x.(numeric x) ⇒ x → x → x
+>primitive mul ∀x.(numeric x) ⇒ (arg0: x, arg1: x) : x
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^ source.hydra entity.name.function.hydra
 #             ^ source.hydra
-#              ^ source.hydra punctuation.separator.type.hydra
-#               ^ source.hydra
-#                ^ source.hydra keyword.operator.forall-scheme.hydra
-#                 ^ source.hydra variable.parameter.hydra
-#                  ^ source.hydra punctuation.separator.binder.hydra
-#                   ^ source.hydra
-#                    ^^^^^^^ source.hydra variable.other.hydra
-#                           ^ source.hydra
-#                            ^ source.hydra variable.other.hydra
-#                             ^^ source.hydra
-#                               ^ source.hydra keyword.operator.constraint-arrow.hydra
-#                                ^ source.hydra
-#                                 ^ source.hydra variable.other.hydra
-#                                  ^ source.hydra
-#                                   ^ source.hydra keyword.operator.arrow.hydra
-#                                    ^ source.hydra
-#                                     ^ source.hydra variable.other.hydra
-#                                      ^ source.hydra
-#                                       ^ source.hydra keyword.operator.arrow.hydra
-#                                        ^ source.hydra
-#                                         ^ source.hydra variable.other.hydra
+#              ^ source.hydra keyword.operator.forall-scheme.hydra
+#               ^ source.hydra variable.parameter.hydra
+#                ^ source.hydra punctuation.separator.binder.hydra
+#                 ^ source.hydra
+#                  ^^^^^^^ source.hydra variable.other.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra variable.other.hydra
+#                           ^^ source.hydra
+#                             ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                              ^^ source.hydra
+#                                ^^^^ source.hydra variable.other.hydra
+#                                    ^ source.hydra punctuation.separator.type.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra variable.other.hydra
+#                                       ^^ source.hydra
+#                                         ^^^^ source.hydra variable.other.hydra
+#                                             ^ source.hydra punctuation.separator.type.hydra
+#                                              ^ source.hydra
+#                                               ^ source.hydra variable.other.hydra
+#                                                ^^ source.hydra
+#                                                  ^ source.hydra punctuation.separator.type.hydra
+#                                                   ^ source.hydra
+#                                                    ^ source.hydra variable.other.hydra
 >
 >## Floating-point multiplication.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1176,22 +1357,36 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive mulFloat64 : float64 → float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the first factor
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param y: the second factor
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive mulFloat64 (x: float64, y: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                    ^ source.hydra
-#                     ^ source.hydra punctuation.separator.type.hydra
-#                      ^ source.hydra
-#                       ^^^^^^^ source.hydra support.type.hydra
-#                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.arrow.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^ source.hydra support.type.hydra
-#                                        ^ source.hydra
-#                                         ^ source.hydra keyword.operator.arrow.hydra
-#                                          ^ source.hydra
-#                                           ^^^^^^^ source.hydra support.type.hydra
+#                    ^^ source.hydra
+#                      ^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^^^^^^^ source.hydra support.type.hydra
+#                                ^^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^ source.hydra punctuation.separator.type.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^^ source.hydra support.type.hydra
+#                                            ^^ source.hydra
+#                                              ^ source.hydra punctuation.separator.type.hydra
+#                                               ^ source.hydra
+#                                                ^^^^^^^ source.hydra support.type.hydra
 >
 >## Numeric negation.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1227,28 +1422,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive negate : ∀x.(numeric x) ⇒ x → x
+>primitive negate ∀x.(numeric x) ⇒ (arg0: x) : x
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^ source.hydra entity.name.function.hydra
 #                ^ source.hydra
-#                 ^ source.hydra punctuation.separator.type.hydra
-#                  ^ source.hydra
-#                   ^ source.hydra keyword.operator.forall-scheme.hydra
-#                    ^ source.hydra variable.parameter.hydra
-#                     ^ source.hydra punctuation.separator.binder.hydra
-#                      ^ source.hydra
-#                       ^^^^^^^ source.hydra variable.other.hydra
-#                              ^ source.hydra
-#                               ^ source.hydra variable.other.hydra
-#                                ^^ source.hydra
-#                                  ^ source.hydra keyword.operator.constraint-arrow.hydra
-#                                   ^ source.hydra
-#                                    ^ source.hydra variable.other.hydra
-#                                     ^ source.hydra
-#                                      ^ source.hydra keyword.operator.arrow.hydra
-#                                       ^ source.hydra
-#                                        ^ source.hydra variable.other.hydra
+#                 ^ source.hydra keyword.operator.forall-scheme.hydra
+#                  ^ source.hydra variable.parameter.hydra
+#                   ^ source.hydra punctuation.separator.binder.hydra
+#                    ^ source.hydra
+#                     ^^^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra variable.other.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                 ^^ source.hydra
+#                                   ^^^^ source.hydra variable.other.hydra
+#                                       ^ source.hydra punctuation.separator.type.hydra
+#                                        ^ source.hydra
+#                                         ^ source.hydra variable.other.hydra
+#                                          ^^ source.hydra
+#                                            ^ source.hydra punctuation.separator.type.hydra
+#                                             ^ source.hydra
+#                                              ^ source.hydra variable.other.hydra
 >
 >## Negate a floating-point number.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1276,18 +1472,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive negateFloat64 : float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the value to negate
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive negateFloat64 (x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra punctuation.separator.type.hydra
-#                         ^ source.hydra
-#                          ^^^^^^^ source.hydra support.type.hydra
-#                                 ^ source.hydra
-#                                  ^ source.hydra keyword.operator.arrow.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^^ source.hydra support.type.hydra
+#                       ^^ source.hydra
+#                         ^ source.hydra variable.other.hydra
+#                          ^ source.hydra punctuation.separator.type.hydra
+#                           ^ source.hydra
+#                            ^^^^^^^ source.hydra support.type.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra punctuation.separator.type.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^^ source.hydra support.type.hydra
 >
 >## Test whether a value is odd.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1315,40 +1519,48 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive odd : ∀x.(integral x) ⇒ x → boolean = λx.not (even x)
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the value to test for oddness
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive odd ∀x.(integral x) ⇒ (x: x) : boolean = λx.not (even x)
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^ source.hydra entity.name.function.hydra
 #             ^ source.hydra
-#              ^ source.hydra punctuation.separator.type.hydra
-#               ^ source.hydra
-#                ^ source.hydra keyword.operator.forall-scheme.hydra
-#                 ^ source.hydra variable.parameter.hydra
-#                  ^ source.hydra punctuation.separator.binder.hydra
-#                   ^ source.hydra
-#                    ^^^^^^^^ source.hydra variable.other.hydra
-#                            ^ source.hydra
-#                             ^ source.hydra variable.other.hydra
-#                              ^^ source.hydra
-#                                ^ source.hydra keyword.operator.constraint-arrow.hydra
-#                                 ^ source.hydra
-#                                  ^ source.hydra variable.other.hydra
+#              ^ source.hydra keyword.operator.forall-scheme.hydra
+#               ^ source.hydra variable.parameter.hydra
+#                ^ source.hydra punctuation.separator.binder.hydra
+#                 ^ source.hydra
+#                  ^^^^^^^^ source.hydra variable.other.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra variable.other.hydra
+#                            ^^ source.hydra
+#                              ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                               ^^ source.hydra
+#                                 ^ source.hydra variable.other.hydra
+#                                  ^ source.hydra punctuation.separator.type.hydra
 #                                   ^ source.hydra
-#                                    ^ source.hydra keyword.operator.arrow.hydra
-#                                     ^ source.hydra
-#                                      ^^^^^^^ source.hydra support.type.hydra
-#                                             ^ source.hydra
-#                                              ^ source.hydra keyword.operator.equals.hydra
-#                                               ^ source.hydra
-#                                                ^ source.hydra keyword.operator.lambda.hydra
-#                                                 ^ source.hydra variable.parameter.hydra
-#                                                  ^ source.hydra punctuation.separator.binder.hydra
-#                                                   ^^^ source.hydra variable.other.hydra
-#                                                      ^^ source.hydra
-#                                                        ^^^^ source.hydra variable.other.hydra
-#                                                            ^ source.hydra
-#                                                             ^ source.hydra variable.other.hydra
-#                                                              ^^ source.hydra
+#                                    ^ source.hydra variable.other.hydra
+#                                     ^^ source.hydra
+#                                       ^ source.hydra punctuation.separator.type.hydra
+#                                        ^ source.hydra
+#                                         ^^^^^^^ source.hydra support.type.hydra
+#                                                ^ source.hydra
+#                                                 ^ source.hydra keyword.operator.equals.hydra
+#                                                  ^ source.hydra
+#                                                   ^ source.hydra keyword.operator.lambda.hydra
+#                                                    ^ source.hydra variable.parameter.hydra
+#                                                     ^ source.hydra punctuation.separator.binder.hydra
+#                                                      ^^^ source.hydra variable.other.hydra
+#                                                         ^^ source.hydra
+#                                                           ^^^^ source.hydra variable.other.hydra
+#                                                               ^ source.hydra
+#                                                                ^ source.hydra variable.other.hydra
+#                                                                 ^^ source.hydra
 >
 >## The mathematical constant pi.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1373,14 +1585,14 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive pi : float64
+>primitive pi () : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^ source.hydra entity.name.function.hydra
-#            ^ source.hydra
-#             ^ source.hydra punctuation.separator.type.hydra
-#              ^ source.hydra
-#               ^^^^^^^ source.hydra support.type.hydra
+#            ^^^^ source.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^^^^^^^ source.hydra support.type.hydra
 >
 >## Raise the first argument to the power of the second.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1413,22 +1625,36 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive pow : float64 → float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the base
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param y: the exponent
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive pow (x: float64, y: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^ source.hydra entity.name.function.hydra
-#             ^ source.hydra
-#              ^ source.hydra punctuation.separator.type.hydra
-#               ^ source.hydra
-#                ^^^^^^^ source.hydra support.type.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra keyword.operator.arrow.hydra
-#                         ^ source.hydra
-#                          ^^^^^^^ source.hydra support.type.hydra
-#                                 ^ source.hydra
-#                                  ^ source.hydra keyword.operator.arrow.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^^ source.hydra support.type.hydra
+#             ^^ source.hydra
+#               ^ source.hydra variable.other.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^^^^^^^ source.hydra support.type.hydra
+#                         ^^ source.hydra
+#                           ^ source.hydra variable.other.hydra
+#                            ^ source.hydra punctuation.separator.type.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^ source.hydra support.type.hydra
+#                                     ^^ source.hydra
+#                                       ^ source.hydra punctuation.separator.type.hydra
+#                                        ^ source.hydra
+#                                         ^^^^^^^ source.hydra support.type.hydra
 >
 >## Construct the half-open integer range from the first argument up to (but excluding) the second.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1458,25 +1684,39 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive range : int32 → int32 → list<int32>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param a: the inclusive lower bound of the range
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param b: the exclusive upper bound of the range
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive range (a: int32, b: int32) : list<int32>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^ source.hydra entity.name.function.hydra
-#               ^ source.hydra
-#                ^ source.hydra punctuation.separator.type.hydra
-#                 ^ source.hydra
-#                  ^^^^^ source.hydra support.type.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra keyword.operator.arrow.hydra
-#                         ^ source.hydra
-#                          ^^^^^ source.hydra support.type.hydra
-#                               ^ source.hydra
-#                                ^ source.hydra keyword.operator.arrow.hydra
-#                                 ^ source.hydra
-#                                  ^^^^ source.hydra support.type.hydra
-#                                      ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                       ^^^^^ source.hydra support.type.hydra
-#                                            ^ source.hydra punctuation.definition.typeargs.end.hydra
+#               ^^ source.hydra
+#                 ^ source.hydra variable.other.hydra
+#                  ^ source.hydra punctuation.separator.type.hydra
+#                   ^ source.hydra
+#                    ^^^^^ source.hydra support.type.hydra
+#                         ^^ source.hydra
+#                           ^ source.hydra variable.other.hydra
+#                            ^ source.hydra punctuation.separator.type.hydra
+#                             ^ source.hydra
+#                              ^^^^^ source.hydra support.type.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra punctuation.separator.type.hydra
+#                                      ^ source.hydra
+#                                       ^^^^ source.hydra support.type.hydra
+#                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                            ^^^^^ source.hydra support.type.hydra
+#                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Integral remainder, or Nothing if dividing by zero.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1518,35 +1758,49 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive rem : ∀x.(integral x) ⇒ x → x → optional<x>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the dividend
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param y: the divisor
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive rem ∀x.(integral x) ⇒ (x: x, y: x) : optional<x>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^ source.hydra entity.name.function.hydra
 #             ^ source.hydra
-#              ^ source.hydra punctuation.separator.type.hydra
-#               ^ source.hydra
-#                ^ source.hydra keyword.operator.forall-scheme.hydra
-#                 ^ source.hydra variable.parameter.hydra
-#                  ^ source.hydra punctuation.separator.binder.hydra
-#                   ^ source.hydra
-#                    ^^^^^^^^ source.hydra variable.other.hydra
-#                            ^ source.hydra
-#                             ^ source.hydra variable.other.hydra
-#                              ^^ source.hydra
-#                                ^ source.hydra keyword.operator.constraint-arrow.hydra
-#                                 ^ source.hydra
-#                                  ^ source.hydra variable.other.hydra
+#              ^ source.hydra keyword.operator.forall-scheme.hydra
+#               ^ source.hydra variable.parameter.hydra
+#                ^ source.hydra punctuation.separator.binder.hydra
+#                 ^ source.hydra
+#                  ^^^^^^^^ source.hydra variable.other.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra variable.other.hydra
+#                            ^^ source.hydra
+#                              ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                               ^^ source.hydra
+#                                 ^ source.hydra variable.other.hydra
+#                                  ^ source.hydra punctuation.separator.type.hydra
 #                                   ^ source.hydra
-#                                    ^ source.hydra keyword.operator.arrow.hydra
-#                                     ^ source.hydra
-#                                      ^ source.hydra variable.other.hydra
-#                                       ^ source.hydra
-#                                        ^ source.hydra keyword.operator.arrow.hydra
+#                                    ^ source.hydra variable.other.hydra
+#                                     ^^ source.hydra
+#                                       ^ source.hydra variable.other.hydra
+#                                        ^ source.hydra punctuation.separator.type.hydra
 #                                         ^ source.hydra
-#                                          ^^^^^^^^ source.hydra support.type.hydra
-#                                                  ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                                   ^ source.hydra entity.name.type.hydra
-#                                                    ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                          ^ source.hydra variable.other.hydra
+#                                           ^^ source.hydra
+#                                             ^ source.hydra punctuation.separator.type.hydra
+#                                              ^ source.hydra
+#                                               ^^^^^^^^ source.hydra support.type.hydra
+#                                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                        ^ source.hydra entity.name.type.hydra
+#                                                         ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Round a floating-point number to the nearest integer-valued float.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1579,18 +1833,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive round : float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the value to round to the nearest integer
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive round (x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^ source.hydra entity.name.function.hydra
-#               ^ source.hydra
-#                ^ source.hydra punctuation.separator.type.hydra
-#                 ^ source.hydra
-#                  ^^^^^^^ source.hydra support.type.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra keyword.operator.arrow.hydra
-#                           ^ source.hydra
-#                            ^^^^^^^ source.hydra support.type.hydra
+#               ^^ source.hydra
+#                 ^ source.hydra variable.other.hydra
+#                  ^ source.hydra punctuation.separator.type.hydra
+#                   ^ source.hydra
+#                    ^^^^^^^ source.hydra support.type.hydra
+#                           ^^ source.hydra
+#                             ^ source.hydra punctuation.separator.type.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^ source.hydra support.type.hydra
 >
 >## Round a float32 to the given number of decimal places.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1623,22 +1885,36 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive roundFloat32 : int32 → float32 → float32
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param n: the number of decimal places to round to
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param x: the float32 value to round
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive roundFloat32 (n: int32, x: float32) : float32
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                      ^ source.hydra
-#                       ^ source.hydra punctuation.separator.type.hydra
-#                        ^ source.hydra
-#                         ^^^^^ source.hydra support.type.hydra
-#                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.arrow.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^ source.hydra support.type.hydra
-#                                        ^ source.hydra
-#                                         ^ source.hydra keyword.operator.arrow.hydra
-#                                          ^ source.hydra
-#                                           ^^^^^^^ source.hydra support.type.hydra
+#                      ^^ source.hydra
+#                        ^ source.hydra variable.other.hydra
+#                         ^ source.hydra punctuation.separator.type.hydra
+#                          ^ source.hydra
+#                           ^^^^^ source.hydra support.type.hydra
+#                                ^^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^ source.hydra punctuation.separator.type.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^^ source.hydra support.type.hydra
+#                                            ^^ source.hydra
+#                                              ^ source.hydra punctuation.separator.type.hydra
+#                                               ^ source.hydra
+#                                                ^^^^^^^ source.hydra support.type.hydra
 >
 >## Round a float64 to the given number of decimal places.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1671,22 +1947,36 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive roundFloat64 : int32 → float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param n: the number of decimal places to round to
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param x: the float64 value to round
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive roundFloat64 (n: int32, x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                      ^ source.hydra
-#                       ^ source.hydra punctuation.separator.type.hydra
-#                        ^ source.hydra
-#                         ^^^^^ source.hydra support.type.hydra
-#                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.arrow.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^ source.hydra support.type.hydra
-#                                        ^ source.hydra
-#                                         ^ source.hydra keyword.operator.arrow.hydra
-#                                          ^ source.hydra
-#                                           ^^^^^^^ source.hydra support.type.hydra
+#                      ^^ source.hydra
+#                        ^ source.hydra variable.other.hydra
+#                         ^ source.hydra punctuation.separator.type.hydra
+#                          ^ source.hydra
+#                           ^^^^^ source.hydra support.type.hydra
+#                                ^^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^ source.hydra punctuation.separator.type.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^^ source.hydra support.type.hydra
+#                                            ^^ source.hydra
+#                                              ^ source.hydra punctuation.separator.type.hydra
+#                                               ^ source.hydra
+#                                                ^^^^^^^ source.hydra support.type.hydra
 >
 >## Numeric sign.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1722,28 +2012,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive signum : ∀x.(numeric x) ⇒ x → x
+>primitive signum ∀x.(numeric x) ⇒ (arg0: x) : x
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^ source.hydra entity.name.function.hydra
 #                ^ source.hydra
-#                 ^ source.hydra punctuation.separator.type.hydra
-#                  ^ source.hydra
-#                   ^ source.hydra keyword.operator.forall-scheme.hydra
-#                    ^ source.hydra variable.parameter.hydra
-#                     ^ source.hydra punctuation.separator.binder.hydra
-#                      ^ source.hydra
-#                       ^^^^^^^ source.hydra variable.other.hydra
-#                              ^ source.hydra
-#                               ^ source.hydra variable.other.hydra
-#                                ^^ source.hydra
-#                                  ^ source.hydra keyword.operator.constraint-arrow.hydra
-#                                   ^ source.hydra
-#                                    ^ source.hydra variable.other.hydra
-#                                     ^ source.hydra
-#                                      ^ source.hydra keyword.operator.arrow.hydra
-#                                       ^ source.hydra
-#                                        ^ source.hydra variable.other.hydra
+#                 ^ source.hydra keyword.operator.forall-scheme.hydra
+#                  ^ source.hydra variable.parameter.hydra
+#                   ^ source.hydra punctuation.separator.binder.hydra
+#                    ^ source.hydra
+#                     ^^^^^^^ source.hydra variable.other.hydra
+#                            ^ source.hydra
+#                             ^ source.hydra variable.other.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                                 ^^ source.hydra
+#                                   ^^^^ source.hydra variable.other.hydra
+#                                       ^ source.hydra punctuation.separator.type.hydra
+#                                        ^ source.hydra
+#                                         ^ source.hydra variable.other.hydra
+#                                          ^^ source.hydra
+#                                            ^ source.hydra punctuation.separator.type.hydra
+#                                             ^ source.hydra
+#                                              ^ source.hydra variable.other.hydra
 >
 >## The sine of a floating-point number.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1773,18 +2064,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive sin : float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the angle in radians
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive sin (x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^ source.hydra entity.name.function.hydra
-#             ^ source.hydra
-#              ^ source.hydra punctuation.separator.type.hydra
-#               ^ source.hydra
-#                ^^^^^^^ source.hydra support.type.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra keyword.operator.arrow.hydra
-#                         ^ source.hydra
-#                          ^^^^^^^ source.hydra support.type.hydra
+#             ^^ source.hydra
+#               ^ source.hydra variable.other.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^^^^^^^ source.hydra support.type.hydra
+#                         ^^ source.hydra
+#                           ^ source.hydra punctuation.separator.type.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^ source.hydra support.type.hydra
 >
 >## The hyperbolic sine of a floating-point number.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1814,18 +2113,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive sinh : float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the value whose hyperbolic sine is computed
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive sinh (x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra entity.name.function.hydra
-#              ^ source.hydra
-#               ^ source.hydra punctuation.separator.type.hydra
-#                ^ source.hydra
-#                 ^^^^^^^ source.hydra support.type.hydra
-#                        ^ source.hydra
-#                         ^ source.hydra keyword.operator.arrow.hydra
-#                          ^ source.hydra
-#                           ^^^^^^^ source.hydra support.type.hydra
+#              ^^ source.hydra
+#                ^ source.hydra variable.other.hydra
+#                 ^ source.hydra punctuation.separator.type.hydra
+#                  ^ source.hydra
+#                   ^^^^^^^ source.hydra support.type.hydra
+#                          ^^ source.hydra
+#                            ^ source.hydra punctuation.separator.type.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^ source.hydra support.type.hydra
 >
 >## The non-negative square root of a floating-point number.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1858,18 +2165,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive sqrt : float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the value whose square root is computed
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive sqrt (x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra entity.name.function.hydra
-#              ^ source.hydra
-#               ^ source.hydra punctuation.separator.type.hydra
-#                ^ source.hydra
-#                 ^^^^^^^ source.hydra support.type.hydra
-#                        ^ source.hydra
-#                         ^ source.hydra keyword.operator.arrow.hydra
-#                          ^ source.hydra
-#                           ^^^^^^^ source.hydra support.type.hydra
+#              ^^ source.hydra
+#                ^ source.hydra variable.other.hydra
+#                 ^ source.hydra punctuation.separator.type.hydra
+#                  ^ source.hydra
+#                   ^^^^^^^ source.hydra support.type.hydra
+#                          ^^ source.hydra
+#                            ^ source.hydra punctuation.separator.type.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^ source.hydra support.type.hydra
 >
 >## Numeric subtraction.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1905,32 +2220,34 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive sub : ∀x.(numeric x) ⇒ x → x → x
+>primitive sub ∀x.(numeric x) ⇒ (arg0: x, arg1: x) : x
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^ source.hydra entity.name.function.hydra
 #             ^ source.hydra
-#              ^ source.hydra punctuation.separator.type.hydra
-#               ^ source.hydra
-#                ^ source.hydra keyword.operator.forall-scheme.hydra
-#                 ^ source.hydra variable.parameter.hydra
-#                  ^ source.hydra punctuation.separator.binder.hydra
-#                   ^ source.hydra
-#                    ^^^^^^^ source.hydra variable.other.hydra
-#                           ^ source.hydra
-#                            ^ source.hydra variable.other.hydra
-#                             ^^ source.hydra
-#                               ^ source.hydra keyword.operator.constraint-arrow.hydra
-#                                ^ source.hydra
-#                                 ^ source.hydra variable.other.hydra
-#                                  ^ source.hydra
-#                                   ^ source.hydra keyword.operator.arrow.hydra
-#                                    ^ source.hydra
-#                                     ^ source.hydra variable.other.hydra
-#                                      ^ source.hydra
-#                                       ^ source.hydra keyword.operator.arrow.hydra
-#                                        ^ source.hydra
-#                                         ^ source.hydra variable.other.hydra
+#              ^ source.hydra keyword.operator.forall-scheme.hydra
+#               ^ source.hydra variable.parameter.hydra
+#                ^ source.hydra punctuation.separator.binder.hydra
+#                 ^ source.hydra
+#                  ^^^^^^^ source.hydra variable.other.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra variable.other.hydra
+#                           ^^ source.hydra
+#                             ^ source.hydra keyword.operator.constraint-arrow.hydra
+#                              ^^ source.hydra
+#                                ^^^^ source.hydra variable.other.hydra
+#                                    ^ source.hydra punctuation.separator.type.hydra
+#                                     ^ source.hydra
+#                                      ^ source.hydra variable.other.hydra
+#                                       ^^ source.hydra
+#                                         ^^^^ source.hydra variable.other.hydra
+#                                             ^ source.hydra punctuation.separator.type.hydra
+#                                              ^ source.hydra
+#                                               ^ source.hydra variable.other.hydra
+#                                                ^^ source.hydra
+#                                                  ^ source.hydra punctuation.separator.type.hydra
+#                                                   ^ source.hydra
+#                                                    ^ source.hydra variable.other.hydra
 >
 >## Floating-point subtraction.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1961,22 +2278,36 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive subFloat64 : float64 → float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the minuend
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param y: the subtrahend
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive subFloat64 (x: float64, y: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                    ^ source.hydra
-#                     ^ source.hydra punctuation.separator.type.hydra
-#                      ^ source.hydra
-#                       ^^^^^^^ source.hydra support.type.hydra
-#                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.arrow.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^ source.hydra support.type.hydra
-#                                        ^ source.hydra
-#                                         ^ source.hydra keyword.operator.arrow.hydra
-#                                          ^ source.hydra
-#                                           ^^^^^^^ source.hydra support.type.hydra
+#                    ^^ source.hydra
+#                      ^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^^^^^^^ source.hydra support.type.hydra
+#                                ^^ source.hydra
+#                                  ^ source.hydra variable.other.hydra
+#                                   ^ source.hydra punctuation.separator.type.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^^ source.hydra support.type.hydra
+#                                            ^^ source.hydra
+#                                              ^ source.hydra punctuation.separator.type.hydra
+#                                               ^ source.hydra
+#                                                ^^^^^^^ source.hydra support.type.hydra
 >
 >## The tangent of a floating-point number.
 #^^ source.hydra comment.block.documentation.hydra
@@ -2006,18 +2337,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive tan : float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the angle in radians
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive tan (x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^ source.hydra entity.name.function.hydra
-#             ^ source.hydra
-#              ^ source.hydra punctuation.separator.type.hydra
-#               ^ source.hydra
-#                ^^^^^^^ source.hydra support.type.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra keyword.operator.arrow.hydra
-#                         ^ source.hydra
-#                          ^^^^^^^ source.hydra support.type.hydra
+#             ^^ source.hydra
+#               ^ source.hydra variable.other.hydra
+#                ^ source.hydra punctuation.separator.type.hydra
+#                 ^ source.hydra
+#                  ^^^^^^^ source.hydra support.type.hydra
+#                         ^^ source.hydra
+#                           ^ source.hydra punctuation.separator.type.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^ source.hydra support.type.hydra
 >
 >## The hyperbolic tangent of a floating-point number.
 #^^ source.hydra comment.block.documentation.hydra
@@ -2047,18 +2386,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive tanh : float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the value whose hyperbolic tangent is computed
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive tanh (x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra entity.name.function.hydra
-#              ^ source.hydra
-#               ^ source.hydra punctuation.separator.type.hydra
-#                ^ source.hydra
-#                 ^^^^^^^ source.hydra support.type.hydra
-#                        ^ source.hydra
-#                         ^ source.hydra keyword.operator.arrow.hydra
-#                          ^ source.hydra
-#                           ^^^^^^^ source.hydra support.type.hydra
+#              ^^ source.hydra
+#                ^ source.hydra variable.other.hydra
+#                 ^ source.hydra punctuation.separator.type.hydra
+#                  ^ source.hydra
+#                   ^^^^^^^ source.hydra support.type.hydra
+#                          ^^ source.hydra
+#                            ^ source.hydra punctuation.separator.type.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^ source.hydra support.type.hydra
 >
 >## Truncate a floating-point number toward zero, as a float.
 #^^ source.hydra comment.block.documentation.hydra
@@ -2091,15 +2438,23 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive truncate : float64 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the value to truncate toward zero
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive truncate (x: float64) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^ source.hydra entity.name.function.hydra
-#                  ^ source.hydra
-#                   ^ source.hydra punctuation.separator.type.hydra
-#                    ^ source.hydra
-#                     ^^^^^^^ source.hydra support.type.hydra
-#                            ^ source.hydra
-#                             ^ source.hydra keyword.operator.arrow.hydra
-#                              ^ source.hydra
-#                               ^^^^^^^ source.hydra support.type.hydra
+#                  ^^ source.hydra
+#                    ^ source.hydra variable.other.hydra
+#                     ^ source.hydra punctuation.separator.type.hydra
+#                      ^ source.hydra
+#                       ^^^^^^^ source.hydra support.type.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra punctuation.separator.type.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^^^ source.hydra support.type.hydra

@@ -15,7 +15,9 @@ import hydra.core.typing
 ##
 ## @availableSince 0.17
 ## @requirement matchesKnownAnswerVectors: sha256 returns the correct 32-byte SHA-256 digest for known-answer input vectors, including the empty byte sequence.
-primitive sha256 : binary → binary
+##
+## @param bytes: the sequence of bytes to hash
+primitive sha256 (bytes: binary) : binary
 
 ## Compute the SHA-256 digest of a sequence of bytes as a lowercase hex string.
 ##
@@ -26,4 +28,6 @@ primitive sha256 : binary → binary
 ## @availableSince 0.17
 ## @requirement matchesKnownAnswerVectors: sha256Hex returns the correct 64-character lowercase hexadecimal SHA-256 digest for known-answer input vectors, including the empty byte sequence and a multi-block input.
 ## @requirement handlesPaddingBoundariesCorrectly: sha256Hex returns the correct digest at every SHA-256 message-padding boundary length (55 bytes, the largest message whose padding still fits one 64-byte block; 56 bytes, which forces a second block; and 63 and 64 bytes, straddling the block size), guarding against a padding-logic regression that would only surface at these specific lengths.
-primitive sha256Hex : binary → string
+##
+## @param bytes: the sequence of bytes to hash
+primitive sha256Hex (bytes: binary) : string

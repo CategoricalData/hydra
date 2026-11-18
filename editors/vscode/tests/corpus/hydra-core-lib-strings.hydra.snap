@@ -58,25 +58,39 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive charAt : int32 → string → optional<int32>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param i: the index of the character to retrieve
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to index into
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive charAt (i: int32, s: string) : optional<int32>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^ source.hydra entity.name.function.hydra
-#                ^ source.hydra
-#                 ^ source.hydra punctuation.separator.type.hydra
-#                  ^ source.hydra
-#                   ^^^^^ source.hydra support.type.hydra
-#                        ^ source.hydra
-#                         ^ source.hydra keyword.operator.arrow.hydra
-#                          ^ source.hydra
-#                           ^^^^^^ source.hydra support.type.hydra
-#                                 ^ source.hydra
-#                                  ^ source.hydra keyword.operator.arrow.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^^^ source.hydra support.type.hydra
-#                                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                             ^^^^^ source.hydra support.type.hydra
-#                                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                ^^ source.hydra
+#                  ^ source.hydra variable.other.hydra
+#                   ^ source.hydra punctuation.separator.type.hydra
+#                    ^ source.hydra
+#                     ^^^^^ source.hydra support.type.hydra
+#                          ^^ source.hydra
+#                            ^ source.hydra variable.other.hydra
+#                             ^ source.hydra punctuation.separator.type.hydra
+#                              ^ source.hydra
+#                               ^^^^^^ source.hydra support.type.hydra
+#                                     ^^ source.hydra
+#                                       ^ source.hydra punctuation.separator.type.hydra
+#                                        ^ source.hydra
+#                                         ^^^^^^^^ source.hydra support.type.hydra
+#                                                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                  ^^^^^ source.hydra support.type.hydra
+#                                                       ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Concatenate a list of strings into a single string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -109,21 +123,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive concat : list<string> → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param xs: the list of strings to concatenate
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive concat (xs: list<string>) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^ source.hydra entity.name.function.hydra
-#                ^ source.hydra
-#                 ^ source.hydra punctuation.separator.type.hydra
-#                  ^ source.hydra
-#                   ^^^^ source.hydra support.type.hydra
-#                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                        ^^^^^^ source.hydra support.type.hydra
-#                              ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                               ^ source.hydra
-#                                ^ source.hydra keyword.operator.arrow.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra support.type.hydra
+#                ^^ source.hydra
+#                  ^^ source.hydra variable.other.hydra
+#                    ^ source.hydra punctuation.separator.type.hydra
+#                     ^ source.hydra
+#                      ^^^^ source.hydra support.type.hydra
+#                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                           ^^^^^^ source.hydra support.type.hydra
+#                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                  ^^ source.hydra
+#                                    ^ source.hydra punctuation.separator.type.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^ source.hydra support.type.hydra
 >
 >## Concatenate two strings.
 #^^ source.hydra comment.block.documentation.hydra
@@ -156,22 +178,36 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive concat2 : string → string → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the first string
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param t: the second string
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive concat2 (s: string, t: string) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^ source.hydra entity.name.function.hydra
-#                 ^ source.hydra
-#                  ^ source.hydra punctuation.separator.type.hydra
-#                   ^ source.hydra
-#                    ^^^^^^ source.hydra support.type.hydra
-#                          ^ source.hydra
-#                           ^ source.hydra keyword.operator.arrow.hydra
-#                            ^ source.hydra
-#                             ^^^^^^ source.hydra support.type.hydra
-#                                   ^ source.hydra
-#                                    ^ source.hydra keyword.operator.arrow.hydra
-#                                     ^ source.hydra
-#                                      ^^^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+#                   ^ source.hydra variable.other.hydra
+#                    ^ source.hydra punctuation.separator.type.hydra
+#                     ^ source.hydra
+#                      ^^^^^^ source.hydra support.type.hydra
+#                            ^^ source.hydra
+#                              ^ source.hydra variable.other.hydra
+#                               ^ source.hydra punctuation.separator.type.hydra
+#                                ^ source.hydra
+#                                 ^^^^^^ source.hydra support.type.hydra
+#                                       ^^ source.hydra
+#                                         ^ source.hydra punctuation.separator.type.hydra
+#                                          ^ source.hydra
+#                                           ^^^^^^ source.hydra support.type.hydra
 >
 >## Convert a list of Unicode code points to a string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -204,21 +240,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive fromList : list<int32> → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param cs: the list of Unicode code points to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive fromList (cs: list<int32>) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^ source.hydra entity.name.function.hydra
-#                  ^ source.hydra
-#                   ^ source.hydra punctuation.separator.type.hydra
-#                    ^ source.hydra
-#                     ^^^^ source.hydra support.type.hydra
-#                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                          ^^^^^ source.hydra support.type.hydra
-#                               ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                ^ source.hydra
-#                                 ^ source.hydra keyword.operator.arrow.hydra
-#                                  ^ source.hydra
-#                                   ^^^^^^ source.hydra support.type.hydra
+#                  ^^ source.hydra
+#                    ^^ source.hydra variable.other.hydra
+#                      ^ source.hydra punctuation.separator.type.hydra
+#                       ^ source.hydra
+#                        ^^^^ source.hydra support.type.hydra
+#                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                             ^^^^^ source.hydra support.type.hydra
+#                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra punctuation.separator.type.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^ source.hydra support.type.hydra
 >
 >## Check whether a string is empty.
 #^^ source.hydra comment.block.documentation.hydra
@@ -243,18 +287,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive isEmpty : string → boolean
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to test for emptiness
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive isEmpty (s: string) : boolean
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^ source.hydra entity.name.function.hydra
-#                 ^ source.hydra
-#                  ^ source.hydra punctuation.separator.type.hydra
-#                   ^ source.hydra
-#                    ^^^^^^ source.hydra support.type.hydra
-#                          ^ source.hydra
-#                           ^ source.hydra keyword.operator.arrow.hydra
-#                            ^ source.hydra
-#                             ^^^^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+#                   ^ source.hydra variable.other.hydra
+#                    ^ source.hydra punctuation.separator.type.hydra
+#                     ^ source.hydra
+#                      ^^^^^^ source.hydra support.type.hydra
+#                            ^^ source.hydra
+#                              ^ source.hydra punctuation.separator.type.hydra
+#                               ^ source.hydra
+#                                ^^^^^^^ source.hydra support.type.hydra
 >
 >## Join a list of strings with a separator between each element.
 #^^ source.hydra comment.block.documentation.hydra
@@ -287,25 +339,39 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive join : string → list<string> → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param sep: the separator to insert between elements
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param xs: the list of strings to join
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive join (sep: string, xs: list<string>) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra entity.name.function.hydra
-#              ^ source.hydra
-#               ^ source.hydra punctuation.separator.type.hydra
-#                ^ source.hydra
-#                 ^^^^^^ source.hydra support.type.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra keyword.operator.arrow.hydra
-#                         ^ source.hydra
-#                          ^^^^ source.hydra support.type.hydra
-#                              ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                               ^^^^^^ source.hydra support.type.hydra
-#                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
-#                                      ^ source.hydra
-#                                       ^ source.hydra keyword.operator.arrow.hydra
-#                                        ^ source.hydra
-#                                         ^^^^^^ source.hydra support.type.hydra
+#              ^^ source.hydra
+#                ^^^ source.hydra variable.other.hydra
+#                   ^ source.hydra punctuation.separator.type.hydra
+#                    ^ source.hydra
+#                     ^^^^^^ source.hydra support.type.hydra
+#                           ^^ source.hydra
+#                             ^^ source.hydra variable.other.hydra
+#                               ^ source.hydra punctuation.separator.type.hydra
+#                                ^ source.hydra
+#                                 ^^^^ source.hydra support.type.hydra
+#                                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                      ^^^^^^ source.hydra support.type.hydra
+#                                            ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                                             ^^ source.hydra
+#                                               ^ source.hydra punctuation.separator.type.hydra
+#                                                ^ source.hydra
+#                                                 ^^^^^^ source.hydra support.type.hydra
 >
 >## Return the length of a string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -333,18 +399,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive length : string → int32
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to measure
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive length (s: string) : int32
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^ source.hydra entity.name.function.hydra
-#                ^ source.hydra
-#                 ^ source.hydra punctuation.separator.type.hydra
-#                  ^ source.hydra
-#                   ^^^^^^ source.hydra support.type.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra keyword.operator.arrow.hydra
-#                           ^ source.hydra
-#                            ^^^^^ source.hydra support.type.hydra
+#                ^^ source.hydra
+#                  ^ source.hydra variable.other.hydra
+#                   ^ source.hydra punctuation.separator.type.hydra
+#                    ^ source.hydra
+#                     ^^^^^^ source.hydra support.type.hydra
+#                           ^^ source.hydra
+#                             ^ source.hydra punctuation.separator.type.hydra
+#                              ^ source.hydra
+#                               ^^^^^ source.hydra support.type.hydra
 >
 >## Split a string on a delimiter string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -382,25 +456,39 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive splitOn : string → string → list<string>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param sep: the delimiter to split on
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to split
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive splitOn (sep: string, s: string) : list<string>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^ source.hydra entity.name.function.hydra
-#                 ^ source.hydra
-#                  ^ source.hydra punctuation.separator.type.hydra
-#                   ^ source.hydra
-#                    ^^^^^^ source.hydra support.type.hydra
-#                          ^ source.hydra
-#                           ^ source.hydra keyword.operator.arrow.hydra
-#                            ^ source.hydra
-#                             ^^^^^^ source.hydra support.type.hydra
-#                                   ^ source.hydra
-#                                    ^ source.hydra keyword.operator.arrow.hydra
-#                                     ^ source.hydra
-#                                      ^^^^ source.hydra support.type.hydra
-#                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                           ^^^^^^ source.hydra support.type.hydra
-#                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                 ^^ source.hydra
+#                   ^^^ source.hydra variable.other.hydra
+#                      ^ source.hydra punctuation.separator.type.hydra
+#                       ^ source.hydra
+#                        ^^^^^^ source.hydra support.type.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra variable.other.hydra
+#                                 ^ source.hydra punctuation.separator.type.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^ source.hydra support.type.hydra
+#                                         ^^ source.hydra
+#                                           ^ source.hydra punctuation.separator.type.hydra
+#                                            ^ source.hydra
+#                                             ^^^^ source.hydra support.type.hydra
+#                                                 ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                                  ^^^^^^ source.hydra support.type.hydra
+#                                                        ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Convert a string to a list of Unicode code points.
 #^^ source.hydra comment.block.documentation.hydra
@@ -430,21 +518,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive toList : string → list<int32>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive toList (s: string) : list<int32>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^ source.hydra entity.name.function.hydra
-#                ^ source.hydra
-#                 ^ source.hydra punctuation.separator.type.hydra
-#                  ^ source.hydra
-#                   ^^^^^^ source.hydra support.type.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra keyword.operator.arrow.hydra
-#                           ^ source.hydra
-#                            ^^^^ source.hydra support.type.hydra
-#                                ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                 ^^^^^ source.hydra support.type.hydra
-#                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                ^^ source.hydra
+#                  ^ source.hydra variable.other.hydra
+#                   ^ source.hydra punctuation.separator.type.hydra
+#                    ^ source.hydra
+#                     ^^^^^^ source.hydra support.type.hydra
+#                           ^^ source.hydra
+#                             ^ source.hydra punctuation.separator.type.hydra
+#                              ^ source.hydra
+#                               ^^^^ source.hydra support.type.hydra
+#                                   ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                    ^^^^^ source.hydra support.type.hydra
+#                                         ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Convert a string to lowercase.
 #^^ source.hydra comment.block.documentation.hydra
@@ -480,18 +576,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive toLower : string → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to convert to lowercase
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive toLower (s: string) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^ source.hydra entity.name.function.hydra
-#                 ^ source.hydra
-#                  ^ source.hydra punctuation.separator.type.hydra
-#                   ^ source.hydra
-#                    ^^^^^^ source.hydra support.type.hydra
-#                          ^ source.hydra
-#                           ^ source.hydra keyword.operator.arrow.hydra
-#                            ^ source.hydra
-#                             ^^^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+#                   ^ source.hydra variable.other.hydra
+#                    ^ source.hydra punctuation.separator.type.hydra
+#                     ^ source.hydra
+#                      ^^^^^^ source.hydra support.type.hydra
+#                            ^^ source.hydra
+#                              ^ source.hydra punctuation.separator.type.hydra
+#                               ^ source.hydra
+#                                ^^^^^^ source.hydra support.type.hydra
 >
 >## Convert a string to uppercase.
 #^^ source.hydra comment.block.documentation.hydra
@@ -527,15 +631,23 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive toUpper : string → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to convert to uppercase
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive toUpper (s: string) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^ source.hydra entity.name.function.hydra
-#                 ^ source.hydra
-#                  ^ source.hydra punctuation.separator.type.hydra
-#                   ^ source.hydra
-#                    ^^^^^^ source.hydra support.type.hydra
-#                          ^ source.hydra
-#                           ^ source.hydra keyword.operator.arrow.hydra
-#                            ^ source.hydra
-#                             ^^^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+#                   ^ source.hydra variable.other.hydra
+#                    ^ source.hydra punctuation.separator.type.hydra
+#                     ^ source.hydra
+#                      ^^^^^^ source.hydra support.type.hydra
+#                            ^^ source.hydra
+#                              ^ source.hydra punctuation.separator.type.hydra
+#                               ^ source.hydra
+#                                ^^^^^^ source.hydra support.type.hydra

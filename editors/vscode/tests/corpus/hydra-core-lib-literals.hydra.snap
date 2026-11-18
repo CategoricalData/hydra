@@ -56,18 +56,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive base64ToBinary : string → binary
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the base64 string to decode
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive base64ToBinary (s: string) : binary
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                        ^ source.hydra
-#                         ^ source.hydra punctuation.separator.type.hydra
-#                          ^ source.hydra
-#                           ^^^^^^ source.hydra support.type.hydra
-#                                 ^ source.hydra
-#                                  ^ source.hydra keyword.operator.arrow.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^ source.hydra support.type.hydra
+#                        ^^ source.hydra
+#                          ^ source.hydra variable.other.hydra
+#                           ^ source.hydra punctuation.separator.type.hydra
+#                            ^ source.hydra
+#                             ^^^^^^ source.hydra support.type.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra punctuation.separator.type.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^ source.hydra support.type.hydra
 >
 >## Convert a bigint to a decimal.
 #^^ source.hydra comment.block.documentation.hydra
@@ -92,18 +100,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive bigintToDecimal : bigint → decimal
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the bigint to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive bigintToDecimal (x: bigint) : decimal
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra punctuation.separator.type.hydra
-#                           ^ source.hydra
-#                            ^^^^^^ source.hydra support.type.hydra
-#                                  ^ source.hydra
-#                                   ^ source.hydra keyword.operator.arrow.hydra
-#                                    ^ source.hydra
-#                                     ^^^^^^^ source.hydra support.type.hydra
+#                         ^^ source.hydra
+#                           ^ source.hydra variable.other.hydra
+#                            ^ source.hydra punctuation.separator.type.hydra
+#                             ^ source.hydra
+#                              ^^^^^^ source.hydra support.type.hydra
+#                                    ^^ source.hydra
+#                                      ^ source.hydra punctuation.separator.type.hydra
+#                                       ^ source.hydra
+#                                        ^^^^^^^ source.hydra support.type.hydra
 >
 >## Convert a bigint to an int16 (truncating).
 #^^ source.hydra comment.block.documentation.hydra
@@ -133,18 +149,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive bigintToInt16 : bigint → int16
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the bigint to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive bigintToInt16 (x: bigint) : int16
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra punctuation.separator.type.hydra
-#                         ^ source.hydra
-#                          ^^^^^^ source.hydra support.type.hydra
-#                                ^ source.hydra
-#                                 ^ source.hydra keyword.operator.arrow.hydra
-#                                  ^ source.hydra
-#                                   ^^^^^ source.hydra support.type.hydra
+#                       ^^ source.hydra
+#                         ^ source.hydra variable.other.hydra
+#                          ^ source.hydra punctuation.separator.type.hydra
+#                           ^ source.hydra
+#                            ^^^^^^ source.hydra support.type.hydra
+#                                  ^^ source.hydra
+#                                    ^ source.hydra punctuation.separator.type.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^ source.hydra support.type.hydra
 >
 >## Convert a bigint to an int32 (truncating).
 #^^ source.hydra comment.block.documentation.hydra
@@ -174,18 +198,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive bigintToInt32 : bigint → int32
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the bigint to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive bigintToInt32 (x: bigint) : int32
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra punctuation.separator.type.hydra
-#                         ^ source.hydra
-#                          ^^^^^^ source.hydra support.type.hydra
-#                                ^ source.hydra
-#                                 ^ source.hydra keyword.operator.arrow.hydra
-#                                  ^ source.hydra
-#                                   ^^^^^ source.hydra support.type.hydra
+#                       ^^ source.hydra
+#                         ^ source.hydra variable.other.hydra
+#                          ^ source.hydra punctuation.separator.type.hydra
+#                           ^ source.hydra
+#                            ^^^^^^ source.hydra support.type.hydra
+#                                  ^^ source.hydra
+#                                    ^ source.hydra punctuation.separator.type.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^ source.hydra support.type.hydra
 >
 >## Convert a bigint to an int64 (truncating).
 #^^ source.hydra comment.block.documentation.hydra
@@ -210,18 +242,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive bigintToInt64 : bigint → int64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the bigint to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive bigintToInt64 (x: bigint) : int64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra punctuation.separator.type.hydra
-#                         ^ source.hydra
-#                          ^^^^^^ source.hydra support.type.hydra
-#                                ^ source.hydra
-#                                 ^ source.hydra keyword.operator.arrow.hydra
-#                                  ^ source.hydra
-#                                   ^^^^^ source.hydra support.type.hydra
+#                       ^^ source.hydra
+#                         ^ source.hydra variable.other.hydra
+#                          ^ source.hydra punctuation.separator.type.hydra
+#                           ^ source.hydra
+#                            ^^^^^^ source.hydra support.type.hydra
+#                                  ^^ source.hydra
+#                                    ^ source.hydra punctuation.separator.type.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^ source.hydra support.type.hydra
 >
 >## Convert a bigint to an int8 (truncating).
 #^^ source.hydra comment.block.documentation.hydra
@@ -251,18 +291,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive bigintToInt8 : bigint → int8
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the bigint to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive bigintToInt8 (x: bigint) : int8
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                      ^ source.hydra
-#                       ^ source.hydra punctuation.separator.type.hydra
-#                        ^ source.hydra
-#                         ^^^^^^ source.hydra support.type.hydra
-#                               ^ source.hydra
-#                                ^ source.hydra keyword.operator.arrow.hydra
-#                                 ^ source.hydra
-#                                  ^^^^ source.hydra support.type.hydra
+#                      ^^ source.hydra
+#                        ^ source.hydra variable.other.hydra
+#                         ^ source.hydra punctuation.separator.type.hydra
+#                          ^ source.hydra
+#                           ^^^^^^ source.hydra support.type.hydra
+#                                 ^^ source.hydra
+#                                   ^ source.hydra punctuation.separator.type.hydra
+#                                    ^ source.hydra
+#                                     ^^^^ source.hydra support.type.hydra
 >
 >## Convert a bigint to a uint16 (truncating).
 #^^ source.hydra comment.block.documentation.hydra
@@ -287,18 +335,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive bigintToUint16 : bigint → uint16
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the bigint to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive bigintToUint16 (x: bigint) : uint16
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                        ^ source.hydra
-#                         ^ source.hydra punctuation.separator.type.hydra
-#                          ^ source.hydra
-#                           ^^^^^^ source.hydra support.type.hydra
-#                                 ^ source.hydra
-#                                  ^ source.hydra keyword.operator.arrow.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^ source.hydra support.type.hydra
+#                        ^^ source.hydra
+#                          ^ source.hydra variable.other.hydra
+#                           ^ source.hydra punctuation.separator.type.hydra
+#                            ^ source.hydra
+#                             ^^^^^^ source.hydra support.type.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra punctuation.separator.type.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^ source.hydra support.type.hydra
 >
 >## Convert a bigint to a uint32 (truncating).
 #^^ source.hydra comment.block.documentation.hydra
@@ -323,18 +379,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive bigintToUint32 : bigint → uint32
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the bigint to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive bigintToUint32 (x: bigint) : uint32
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                        ^ source.hydra
-#                         ^ source.hydra punctuation.separator.type.hydra
-#                          ^ source.hydra
-#                           ^^^^^^ source.hydra support.type.hydra
-#                                 ^ source.hydra
-#                                  ^ source.hydra keyword.operator.arrow.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^ source.hydra support.type.hydra
+#                        ^^ source.hydra
+#                          ^ source.hydra variable.other.hydra
+#                           ^ source.hydra punctuation.separator.type.hydra
+#                            ^ source.hydra
+#                             ^^^^^^ source.hydra support.type.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra punctuation.separator.type.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^ source.hydra support.type.hydra
 >
 >## Convert a bigint to a uint64 (truncating).
 #^^ source.hydra comment.block.documentation.hydra
@@ -359,18 +423,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive bigintToUint64 : bigint → uint64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the bigint to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive bigintToUint64 (x: bigint) : uint64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                        ^ source.hydra
-#                         ^ source.hydra punctuation.separator.type.hydra
-#                          ^ source.hydra
-#                           ^^^^^^ source.hydra support.type.hydra
-#                                 ^ source.hydra
-#                                  ^ source.hydra keyword.operator.arrow.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^ source.hydra support.type.hydra
+#                        ^^ source.hydra
+#                          ^ source.hydra variable.other.hydra
+#                           ^ source.hydra punctuation.separator.type.hydra
+#                            ^ source.hydra
+#                             ^^^^^^ source.hydra support.type.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra punctuation.separator.type.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^ source.hydra support.type.hydra
 >
 >## Convert a bigint to a uint8 (truncating).
 #^^ source.hydra comment.block.documentation.hydra
@@ -395,18 +467,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive bigintToUint8 : bigint → uint8
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the bigint to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive bigintToUint8 (x: bigint) : uint8
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra punctuation.separator.type.hydra
-#                         ^ source.hydra
-#                          ^^^^^^ source.hydra support.type.hydra
-#                                ^ source.hydra
-#                                 ^ source.hydra keyword.operator.arrow.hydra
-#                                  ^ source.hydra
-#                                   ^^^^^ source.hydra support.type.hydra
+#                       ^^ source.hydra
+#                         ^ source.hydra variable.other.hydra
+#                          ^ source.hydra punctuation.separator.type.hydra
+#                           ^ source.hydra
+#                            ^^^^^^ source.hydra support.type.hydra
+#                                  ^^ source.hydra
+#                                    ^ source.hydra punctuation.separator.type.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^ source.hydra support.type.hydra
 >
 >## Encode binary data as a base64 ASCII string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -434,18 +514,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive binaryToBase64 : binary → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param b: the binary data to encode
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive binaryToBase64 (b: binary) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                        ^ source.hydra
-#                         ^ source.hydra punctuation.separator.type.hydra
-#                          ^ source.hydra
-#                           ^^^^^^ source.hydra support.type.hydra
-#                                 ^ source.hydra
-#                                  ^ source.hydra keyword.operator.arrow.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^ source.hydra support.type.hydra
+#                        ^^ source.hydra
+#                          ^ source.hydra variable.other.hydra
+#                           ^ source.hydra punctuation.separator.type.hydra
+#                            ^ source.hydra
+#                             ^^^^^^ source.hydra support.type.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra punctuation.separator.type.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^ source.hydra support.type.hydra
 >
 >## Convert binary data to a list of byte values.
 #^^ source.hydra comment.block.documentation.hydra
@@ -473,21 +561,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive binaryToBytes : binary → list<int32>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param b: the binary data to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive binaryToBytes (b: binary) : list<int32>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra punctuation.separator.type.hydra
-#                         ^ source.hydra
-#                          ^^^^^^ source.hydra support.type.hydra
-#                                ^ source.hydra
-#                                 ^ source.hydra keyword.operator.arrow.hydra
-#                                  ^ source.hydra
-#                                   ^^^^ source.hydra support.type.hydra
-#                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                        ^^^^^ source.hydra support.type.hydra
-#                                             ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                       ^^ source.hydra
+#                         ^ source.hydra variable.other.hydra
+#                          ^ source.hydra punctuation.separator.type.hydra
+#                           ^ source.hydra
+#                            ^^^^^^ source.hydra support.type.hydra
+#                                  ^^ source.hydra
+#                                    ^ source.hydra punctuation.separator.type.hydra
+#                                     ^ source.hydra
+#                                      ^^^^ source.hydra support.type.hydra
+#                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                           ^^^^^ source.hydra support.type.hydra
+#                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Convert a decimal to a bigint (truncating).
 #^^ source.hydra comment.block.documentation.hydra
@@ -517,18 +613,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive decimalToBigint : decimal → bigint
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the decimal to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive decimalToBigint (x: decimal) : bigint
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra punctuation.separator.type.hydra
-#                           ^ source.hydra
-#                            ^^^^^^^ source.hydra support.type.hydra
-#                                   ^ source.hydra
-#                                    ^ source.hydra keyword.operator.arrow.hydra
-#                                     ^ source.hydra
-#                                      ^^^^^^ source.hydra support.type.hydra
+#                         ^^ source.hydra
+#                           ^ source.hydra variable.other.hydra
+#                            ^ source.hydra punctuation.separator.type.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^ source.hydra support.type.hydra
+#                                     ^^ source.hydra
+#                                       ^ source.hydra punctuation.separator.type.hydra
+#                                        ^ source.hydra
+#                                         ^^^^^^ source.hydra support.type.hydra
 >
 >## Convert a decimal to a float32.
 #^^ source.hydra comment.block.documentation.hydra
@@ -553,18 +657,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive decimalToFloat32 : decimal → float32
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the decimal to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive decimalToFloat32 (x: decimal) : float32
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                          ^ source.hydra
-#                           ^ source.hydra punctuation.separator.type.hydra
-#                            ^ source.hydra
-#                             ^^^^^^^ source.hydra support.type.hydra
-#                                    ^ source.hydra
-#                                     ^ source.hydra keyword.operator.arrow.hydra
-#                                      ^ source.hydra
-#                                       ^^^^^^^ source.hydra support.type.hydra
+#                          ^^ source.hydra
+#                            ^ source.hydra variable.other.hydra
+#                             ^ source.hydra punctuation.separator.type.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^ source.hydra support.type.hydra
+#                                      ^^ source.hydra
+#                                        ^ source.hydra punctuation.separator.type.hydra
+#                                         ^ source.hydra
+#                                          ^^^^^^^ source.hydra support.type.hydra
 >
 >## Convert a decimal to a float64.
 #^^ source.hydra comment.block.documentation.hydra
@@ -589,18 +701,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive decimalToFloat64 : decimal → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the decimal to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive decimalToFloat64 (x: decimal) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                          ^ source.hydra
-#                           ^ source.hydra punctuation.separator.type.hydra
-#                            ^ source.hydra
-#                             ^^^^^^^ source.hydra support.type.hydra
-#                                    ^ source.hydra
-#                                     ^ source.hydra keyword.operator.arrow.hydra
-#                                      ^ source.hydra
-#                                       ^^^^^^^ source.hydra support.type.hydra
+#                          ^^ source.hydra
+#                            ^ source.hydra variable.other.hydra
+#                             ^ source.hydra punctuation.separator.type.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^ source.hydra support.type.hydra
+#                                      ^^ source.hydra
+#                                        ^ source.hydra punctuation.separator.type.hydra
+#                                         ^ source.hydra
+#                                          ^^^^^^^ source.hydra support.type.hydra
 >
 >## Convert a float32 to a decimal.
 #^^ source.hydra comment.block.documentation.hydra
@@ -625,18 +745,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive float32ToDecimal : float32 → decimal
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the float32 to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive float32ToDecimal (x: float32) : decimal
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                          ^ source.hydra
-#                           ^ source.hydra punctuation.separator.type.hydra
-#                            ^ source.hydra
-#                             ^^^^^^^ source.hydra support.type.hydra
-#                                    ^ source.hydra
-#                                     ^ source.hydra keyword.operator.arrow.hydra
-#                                      ^ source.hydra
-#                                       ^^^^^^^ source.hydra support.type.hydra
+#                          ^^ source.hydra
+#                            ^ source.hydra variable.other.hydra
+#                             ^ source.hydra punctuation.separator.type.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^ source.hydra support.type.hydra
+#                                      ^^ source.hydra
+#                                        ^ source.hydra punctuation.separator.type.hydra
+#                                         ^ source.hydra
+#                                          ^^^^^^^ source.hydra support.type.hydra
 >
 >## Convert a float32 to a float64.
 #^^ source.hydra comment.block.documentation.hydra
@@ -661,18 +789,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive float32ToFloat64 : float32 → float64
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the float32 to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive float32ToFloat64 (x: float32) : float64
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                          ^ source.hydra
-#                           ^ source.hydra punctuation.separator.type.hydra
-#                            ^ source.hydra
-#                             ^^^^^^^ source.hydra support.type.hydra
-#                                    ^ source.hydra
-#                                     ^ source.hydra keyword.operator.arrow.hydra
-#                                      ^ source.hydra
-#                                       ^^^^^^^ source.hydra support.type.hydra
+#                          ^^ source.hydra
+#                            ^ source.hydra variable.other.hydra
+#                             ^ source.hydra punctuation.separator.type.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^ source.hydra support.type.hydra
+#                                      ^^ source.hydra
+#                                        ^ source.hydra punctuation.separator.type.hydra
+#                                         ^ source.hydra
+#                                          ^^^^^^^ source.hydra support.type.hydra
 >
 >## Convert a float64 to a decimal.
 #^^ source.hydra comment.block.documentation.hydra
@@ -697,18 +833,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive float64ToDecimal : float64 → decimal
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the float64 to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive float64ToDecimal (x: float64) : decimal
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                          ^ source.hydra
-#                           ^ source.hydra punctuation.separator.type.hydra
-#                            ^ source.hydra
-#                             ^^^^^^^ source.hydra support.type.hydra
-#                                    ^ source.hydra
-#                                     ^ source.hydra keyword.operator.arrow.hydra
-#                                      ^ source.hydra
-#                                       ^^^^^^^ source.hydra support.type.hydra
+#                          ^^ source.hydra
+#                            ^ source.hydra variable.other.hydra
+#                             ^ source.hydra punctuation.separator.type.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^ source.hydra support.type.hydra
+#                                      ^^ source.hydra
+#                                        ^ source.hydra punctuation.separator.type.hydra
+#                                         ^ source.hydra
+#                                          ^^^^^^^ source.hydra support.type.hydra
 >
 >## Convert a float64 to a float32 (lossy).
 #^^ source.hydra comment.block.documentation.hydra
@@ -733,18 +877,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive float64ToFloat32 : float64 → float32
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the float64 to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive float64ToFloat32 (x: float64) : float32
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                          ^ source.hydra
-#                           ^ source.hydra punctuation.separator.type.hydra
-#                            ^ source.hydra
-#                             ^^^^^^^ source.hydra support.type.hydra
-#                                    ^ source.hydra
-#                                     ^ source.hydra keyword.operator.arrow.hydra
-#                                      ^ source.hydra
-#                                       ^^^^^^^ source.hydra support.type.hydra
+#                          ^^ source.hydra
+#                            ^ source.hydra variable.other.hydra
+#                             ^ source.hydra punctuation.separator.type.hydra
+#                              ^ source.hydra
+#                               ^^^^^^^ source.hydra support.type.hydra
+#                                      ^^ source.hydra
+#                                        ^ source.hydra punctuation.separator.type.hydra
+#                                         ^ source.hydra
+#                                          ^^^^^^^ source.hydra support.type.hydra
 >
 >## Convert an int16 to a bigint.
 #^^ source.hydra comment.block.documentation.hydra
@@ -769,18 +921,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive int16ToBigint : int16 → bigint
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the int16 to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive int16ToBigint (x: int16) : bigint
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra punctuation.separator.type.hydra
-#                         ^ source.hydra
-#                          ^^^^^ source.hydra support.type.hydra
-#                               ^ source.hydra
-#                                ^ source.hydra keyword.operator.arrow.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra support.type.hydra
+#                       ^^ source.hydra
+#                         ^ source.hydra variable.other.hydra
+#                          ^ source.hydra punctuation.separator.type.hydra
+#                           ^ source.hydra
+#                            ^^^^^ source.hydra support.type.hydra
+#                                 ^^ source.hydra
+#                                   ^ source.hydra punctuation.separator.type.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^ source.hydra support.type.hydra
 >
 >## Convert an int32 to a bigint.
 #^^ source.hydra comment.block.documentation.hydra
@@ -805,18 +965,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive int32ToBigint : int32 → bigint
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the int32 to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive int32ToBigint (x: int32) : bigint
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra punctuation.separator.type.hydra
-#                         ^ source.hydra
-#                          ^^^^^ source.hydra support.type.hydra
-#                               ^ source.hydra
-#                                ^ source.hydra keyword.operator.arrow.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra support.type.hydra
+#                       ^^ source.hydra
+#                         ^ source.hydra variable.other.hydra
+#                          ^ source.hydra punctuation.separator.type.hydra
+#                           ^ source.hydra
+#                            ^^^^^ source.hydra support.type.hydra
+#                                 ^^ source.hydra
+#                                   ^ source.hydra punctuation.separator.type.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^ source.hydra support.type.hydra
 >
 >## Convert an int64 to a bigint.
 #^^ source.hydra comment.block.documentation.hydra
@@ -841,18 +1009,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive int64ToBigint : int64 → bigint
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the int64 to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive int64ToBigint (x: int64) : bigint
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra punctuation.separator.type.hydra
-#                         ^ source.hydra
-#                          ^^^^^ source.hydra support.type.hydra
-#                               ^ source.hydra
-#                                ^ source.hydra keyword.operator.arrow.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra support.type.hydra
+#                       ^^ source.hydra
+#                         ^ source.hydra variable.other.hydra
+#                          ^ source.hydra punctuation.separator.type.hydra
+#                           ^ source.hydra
+#                            ^^^^^ source.hydra support.type.hydra
+#                                 ^^ source.hydra
+#                                   ^ source.hydra punctuation.separator.type.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^ source.hydra support.type.hydra
 >
 >## Convert an int8 to a bigint.
 #^^ source.hydra comment.block.documentation.hydra
@@ -877,18 +1053,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive int8ToBigint : int8 → bigint
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the int8 to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive int8ToBigint (x: int8) : bigint
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                      ^ source.hydra
-#                       ^ source.hydra punctuation.separator.type.hydra
-#                        ^ source.hydra
-#                         ^^^^ source.hydra support.type.hydra
-#                             ^ source.hydra
-#                              ^ source.hydra keyword.operator.arrow.hydra
-#                               ^ source.hydra
-#                                ^^^^^^ source.hydra support.type.hydra
+#                      ^^ source.hydra
+#                        ^ source.hydra variable.other.hydra
+#                         ^ source.hydra punctuation.separator.type.hydra
+#                          ^ source.hydra
+#                           ^^^^ source.hydra support.type.hydra
+#                               ^^ source.hydra
+#                                 ^ source.hydra punctuation.separator.type.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^ source.hydra support.type.hydra
 >
 >## Parse a string as a bigint.
 #^^ source.hydra comment.block.documentation.hydra
@@ -924,21 +1108,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive parseBigint : string → optional<bigint>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to parse
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive parseBigint (s: string) : optional<bigint>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                     ^ source.hydra
-#                      ^ source.hydra punctuation.separator.type.hydra
-#                       ^ source.hydra
-#                        ^^^^^^ source.hydra support.type.hydra
-#                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.arrow.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^ source.hydra support.type.hydra
-#                                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                          ^^^^^^ source.hydra support.type.hydra
-#                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                     ^^ source.hydra
+#                       ^ source.hydra variable.other.hydra
+#                        ^ source.hydra punctuation.separator.type.hydra
+#                         ^ source.hydra
+#                          ^^^^^^ source.hydra support.type.hydra
+#                                ^^ source.hydra
+#                                  ^ source.hydra punctuation.separator.type.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^^^^ source.hydra support.type.hydra
+#                                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                             ^^^^^^ source.hydra support.type.hydra
+#                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Parse a string as a boolean.
 #^^ source.hydra comment.block.documentation.hydra
@@ -971,21 +1163,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive parseBoolean : string → optional<boolean>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to parse
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive parseBoolean (s: string) : optional<boolean>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                      ^ source.hydra
-#                       ^ source.hydra punctuation.separator.type.hydra
-#                        ^ source.hydra
-#                         ^^^^^^ source.hydra support.type.hydra
-#                               ^ source.hydra
-#                                ^ source.hydra keyword.operator.arrow.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^^^ source.hydra support.type.hydra
-#                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                           ^^^^^^^ source.hydra support.type.hydra
-#                                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                      ^^ source.hydra
+#                        ^ source.hydra variable.other.hydra
+#                         ^ source.hydra punctuation.separator.type.hydra
+#                          ^ source.hydra
+#                           ^^^^^^ source.hydra support.type.hydra
+#                                 ^^ source.hydra
+#                                   ^ source.hydra punctuation.separator.type.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^^^ source.hydra support.type.hydra
+#                                             ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                              ^^^^^^^ source.hydra support.type.hydra
+#                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Parse a string as a decimal.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1021,21 +1221,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive parseDecimal : string → optional<decimal>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to parse
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive parseDecimal (s: string) : optional<decimal>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                      ^ source.hydra
-#                       ^ source.hydra punctuation.separator.type.hydra
-#                        ^ source.hydra
-#                         ^^^^^^ source.hydra support.type.hydra
-#                               ^ source.hydra
-#                                ^ source.hydra keyword.operator.arrow.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^^^ source.hydra support.type.hydra
-#                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                           ^^^^^^^ source.hydra support.type.hydra
-#                                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                      ^^ source.hydra
+#                        ^ source.hydra variable.other.hydra
+#                         ^ source.hydra punctuation.separator.type.hydra
+#                          ^ source.hydra
+#                           ^^^^^^ source.hydra support.type.hydra
+#                                 ^^ source.hydra
+#                                   ^ source.hydra punctuation.separator.type.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^^^ source.hydra support.type.hydra
+#                                             ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                              ^^^^^^^ source.hydra support.type.hydra
+#                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Parse a string as a float32.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1071,21 +1279,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive parseFloat32 : string → optional<float32>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to parse
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive parseFloat32 (s: string) : optional<float32>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                      ^ source.hydra
-#                       ^ source.hydra punctuation.separator.type.hydra
-#                        ^ source.hydra
-#                         ^^^^^^ source.hydra support.type.hydra
-#                               ^ source.hydra
-#                                ^ source.hydra keyword.operator.arrow.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^^^ source.hydra support.type.hydra
-#                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                           ^^^^^^^ source.hydra support.type.hydra
-#                                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                      ^^ source.hydra
+#                        ^ source.hydra variable.other.hydra
+#                         ^ source.hydra punctuation.separator.type.hydra
+#                          ^ source.hydra
+#                           ^^^^^^ source.hydra support.type.hydra
+#                                 ^^ source.hydra
+#                                   ^ source.hydra punctuation.separator.type.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^^^ source.hydra support.type.hydra
+#                                             ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                              ^^^^^^^ source.hydra support.type.hydra
+#                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Parse a string as a float64.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1121,21 +1337,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive parseFloat64 : string → optional<float64>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to parse
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive parseFloat64 (s: string) : optional<float64>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                      ^ source.hydra
-#                       ^ source.hydra punctuation.separator.type.hydra
-#                        ^ source.hydra
-#                         ^^^^^^ source.hydra support.type.hydra
-#                               ^ source.hydra
-#                                ^ source.hydra keyword.operator.arrow.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^^^ source.hydra support.type.hydra
-#                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                           ^^^^^^^ source.hydra support.type.hydra
-#                                                  ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                      ^^ source.hydra
+#                        ^ source.hydra variable.other.hydra
+#                         ^ source.hydra punctuation.separator.type.hydra
+#                          ^ source.hydra
+#                           ^^^^^^ source.hydra support.type.hydra
+#                                 ^^ source.hydra
+#                                   ^ source.hydra punctuation.separator.type.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^^^ source.hydra support.type.hydra
+#                                             ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                              ^^^^^^^ source.hydra support.type.hydra
+#                                                     ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Parse a string as an int16.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1168,21 +1392,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive parseInt16 : string → optional<int16>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to parse
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive parseInt16 (s: string) : optional<int16>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                    ^ source.hydra
-#                     ^ source.hydra punctuation.separator.type.hydra
-#                      ^ source.hydra
-#                       ^^^^^^ source.hydra support.type.hydra
-#                             ^ source.hydra
-#                              ^ source.hydra keyword.operator.arrow.hydra
-#                               ^ source.hydra
-#                                ^^^^^^^^ source.hydra support.type.hydra
-#                                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                         ^^^^^ source.hydra support.type.hydra
-#                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                    ^^ source.hydra
+#                      ^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^^^^^^ source.hydra support.type.hydra
+#                               ^^ source.hydra
+#                                 ^ source.hydra punctuation.separator.type.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^^^ source.hydra support.type.hydra
+#                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                            ^^^^^ source.hydra support.type.hydra
+#                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Parse a string as an int32.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1215,21 +1447,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive parseInt32 : string → optional<int32>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to parse
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive parseInt32 (s: string) : optional<int32>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                    ^ source.hydra
-#                     ^ source.hydra punctuation.separator.type.hydra
-#                      ^ source.hydra
-#                       ^^^^^^ source.hydra support.type.hydra
-#                             ^ source.hydra
-#                              ^ source.hydra keyword.operator.arrow.hydra
-#                               ^ source.hydra
-#                                ^^^^^^^^ source.hydra support.type.hydra
-#                                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                         ^^^^^ source.hydra support.type.hydra
-#                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                    ^^ source.hydra
+#                      ^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^^^^^^ source.hydra support.type.hydra
+#                               ^^ source.hydra
+#                                 ^ source.hydra punctuation.separator.type.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^^^ source.hydra support.type.hydra
+#                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                            ^^^^^ source.hydra support.type.hydra
+#                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Parse a string as an int64.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1262,21 +1502,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive parseInt64 : string → optional<int64>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to parse
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive parseInt64 (s: string) : optional<int64>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                    ^ source.hydra
-#                     ^ source.hydra punctuation.separator.type.hydra
-#                      ^ source.hydra
-#                       ^^^^^^ source.hydra support.type.hydra
-#                             ^ source.hydra
-#                              ^ source.hydra keyword.operator.arrow.hydra
-#                               ^ source.hydra
-#                                ^^^^^^^^ source.hydra support.type.hydra
-#                                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                         ^^^^^ source.hydra support.type.hydra
-#                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                    ^^ source.hydra
+#                      ^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^^^^^^ source.hydra support.type.hydra
+#                               ^^ source.hydra
+#                                 ^ source.hydra punctuation.separator.type.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^^^ source.hydra support.type.hydra
+#                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                            ^^^^^ source.hydra support.type.hydra
+#                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Parse a string as an int8.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1309,21 +1557,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive parseInt8 : string → optional<int8>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to parse
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive parseInt8 (s: string) : optional<int8>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^ source.hydra entity.name.function.hydra
-#                   ^ source.hydra
-#                    ^ source.hydra punctuation.separator.type.hydra
-#                     ^ source.hydra
-#                      ^^^^^^ source.hydra support.type.hydra
-#                            ^ source.hydra
-#                             ^ source.hydra keyword.operator.arrow.hydra
-#                              ^ source.hydra
-#                               ^^^^^^^^ source.hydra support.type.hydra
-#                                       ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                        ^^^^ source.hydra support.type.hydra
-#                                            ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                   ^^ source.hydra
+#                     ^ source.hydra variable.other.hydra
+#                      ^ source.hydra punctuation.separator.type.hydra
+#                       ^ source.hydra
+#                        ^^^^^^ source.hydra support.type.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra punctuation.separator.type.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^^^^ source.hydra support.type.hydra
+#                                          ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                           ^^^^ source.hydra support.type.hydra
+#                                               ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Parse a string-literal token to a plain string (Just) or Nothing on parse failure.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1356,21 +1612,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive parseString : string → optional<string>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string-literal token to parse
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive parseString (s: string) : optional<string>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                     ^ source.hydra
-#                      ^ source.hydra punctuation.separator.type.hydra
-#                       ^ source.hydra
-#                        ^^^^^^ source.hydra support.type.hydra
-#                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.arrow.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^ source.hydra support.type.hydra
-#                                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                          ^^^^^^ source.hydra support.type.hydra
-#                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                     ^^ source.hydra
+#                       ^ source.hydra variable.other.hydra
+#                        ^ source.hydra punctuation.separator.type.hydra
+#                         ^ source.hydra
+#                          ^^^^^^ source.hydra support.type.hydra
+#                                ^^ source.hydra
+#                                  ^ source.hydra punctuation.separator.type.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^^^^ source.hydra support.type.hydra
+#                                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                             ^^^^^^ source.hydra support.type.hydra
+#                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Parse a string as a uint16.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1403,21 +1667,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive parseUint16 : string → optional<uint16>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to parse
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive parseUint16 (s: string) : optional<uint16>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                     ^ source.hydra
-#                      ^ source.hydra punctuation.separator.type.hydra
-#                       ^ source.hydra
-#                        ^^^^^^ source.hydra support.type.hydra
-#                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.arrow.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^ source.hydra support.type.hydra
-#                                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                          ^^^^^^ source.hydra support.type.hydra
-#                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                     ^^ source.hydra
+#                       ^ source.hydra variable.other.hydra
+#                        ^ source.hydra punctuation.separator.type.hydra
+#                         ^ source.hydra
+#                          ^^^^^^ source.hydra support.type.hydra
+#                                ^^ source.hydra
+#                                  ^ source.hydra punctuation.separator.type.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^^^^ source.hydra support.type.hydra
+#                                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                             ^^^^^^ source.hydra support.type.hydra
+#                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Parse a string as a uint32.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1455,21 +1727,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive parseUint32 : string → optional<uint32>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to parse
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive parseUint32 (s: string) : optional<uint32>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                     ^ source.hydra
-#                      ^ source.hydra punctuation.separator.type.hydra
-#                       ^ source.hydra
-#                        ^^^^^^ source.hydra support.type.hydra
-#                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.arrow.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^ source.hydra support.type.hydra
-#                                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                          ^^^^^^ source.hydra support.type.hydra
-#                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                     ^^ source.hydra
+#                       ^ source.hydra variable.other.hydra
+#                        ^ source.hydra punctuation.separator.type.hydra
+#                         ^ source.hydra
+#                          ^^^^^^ source.hydra support.type.hydra
+#                                ^^ source.hydra
+#                                  ^ source.hydra punctuation.separator.type.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^^^^ source.hydra support.type.hydra
+#                                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                             ^^^^^^ source.hydra support.type.hydra
+#                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Parse a string as a uint64.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1507,21 +1787,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive parseUint64 : string → optional<uint64>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to parse
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive parseUint64 (s: string) : optional<uint64>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                     ^ source.hydra
-#                      ^ source.hydra punctuation.separator.type.hydra
-#                       ^ source.hydra
-#                        ^^^^^^ source.hydra support.type.hydra
-#                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.arrow.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^ source.hydra support.type.hydra
-#                                         ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                          ^^^^^^ source.hydra support.type.hydra
-#                                                ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                     ^^ source.hydra
+#                       ^ source.hydra variable.other.hydra
+#                        ^ source.hydra punctuation.separator.type.hydra
+#                         ^ source.hydra
+#                          ^^^^^^ source.hydra support.type.hydra
+#                                ^^ source.hydra
+#                                  ^ source.hydra punctuation.separator.type.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^^^^ source.hydra support.type.hydra
+#                                            ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                             ^^^^^^ source.hydra support.type.hydra
+#                                                   ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Parse a string as a uint8.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1554,21 +1842,29 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive parseUint8 : string → optional<uint8>
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to parse
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive parseUint8 (s: string) : optional<uint8>
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                    ^ source.hydra
-#                     ^ source.hydra punctuation.separator.type.hydra
-#                      ^ source.hydra
-#                       ^^^^^^ source.hydra support.type.hydra
-#                             ^ source.hydra
-#                              ^ source.hydra keyword.operator.arrow.hydra
-#                               ^ source.hydra
-#                                ^^^^^^^^ source.hydra support.type.hydra
-#                                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
-#                                         ^^^^^ source.hydra support.type.hydra
-#                                              ^ source.hydra punctuation.definition.typeargs.end.hydra
+#                    ^^ source.hydra
+#                      ^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^^^^^^ source.hydra support.type.hydra
+#                               ^^ source.hydra
+#                                 ^ source.hydra punctuation.separator.type.hydra
+#                                  ^ source.hydra
+#                                   ^^^^^^^^ source.hydra support.type.hydra
+#                                           ^ source.hydra punctuation.definition.typeargs.begin.hydra
+#                                            ^^^^^ source.hydra support.type.hydra
+#                                                 ^ source.hydra punctuation.definition.typeargs.end.hydra
 >
 >## Render a bigint as a string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1596,18 +1892,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive printBigint : bigint → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the bigint to render
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive printBigint (x: bigint) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                     ^ source.hydra
-#                      ^ source.hydra punctuation.separator.type.hydra
-#                       ^ source.hydra
-#                        ^^^^^^ source.hydra support.type.hydra
-#                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.arrow.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^ source.hydra support.type.hydra
+#                     ^^ source.hydra
+#                       ^ source.hydra variable.other.hydra
+#                        ^ source.hydra punctuation.separator.type.hydra
+#                         ^ source.hydra
+#                          ^^^^^^ source.hydra support.type.hydra
+#                                ^^ source.hydra
+#                                  ^ source.hydra punctuation.separator.type.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^^ source.hydra support.type.hydra
 >
 >## Render a boolean as a string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1635,18 +1939,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive printBoolean : boolean → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param b: the boolean to render
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive printBoolean (b: boolean) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                      ^ source.hydra
-#                       ^ source.hydra punctuation.separator.type.hydra
-#                        ^ source.hydra
-#                         ^^^^^^^ source.hydra support.type.hydra
-#                                ^ source.hydra
-#                                 ^ source.hydra keyword.operator.arrow.hydra
-#                                  ^ source.hydra
-#                                   ^^^^^^ source.hydra support.type.hydra
+#                      ^^ source.hydra
+#                        ^ source.hydra variable.other.hydra
+#                         ^ source.hydra punctuation.separator.type.hydra
+#                          ^ source.hydra
+#                           ^^^^^^^ source.hydra support.type.hydra
+#                                  ^^ source.hydra
+#                                    ^ source.hydra punctuation.separator.type.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^ source.hydra support.type.hydra
 >
 >## Render a decimal as a string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1674,18 +1986,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive printDecimal : decimal → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the decimal to render
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive printDecimal (x: decimal) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                      ^ source.hydra
-#                       ^ source.hydra punctuation.separator.type.hydra
-#                        ^ source.hydra
-#                         ^^^^^^^ source.hydra support.type.hydra
-#                                ^ source.hydra
-#                                 ^ source.hydra keyword.operator.arrow.hydra
-#                                  ^ source.hydra
-#                                   ^^^^^^ source.hydra support.type.hydra
+#                      ^^ source.hydra
+#                        ^ source.hydra variable.other.hydra
+#                         ^ source.hydra punctuation.separator.type.hydra
+#                          ^ source.hydra
+#                           ^^^^^^^ source.hydra support.type.hydra
+#                                  ^^ source.hydra
+#                                    ^ source.hydra punctuation.separator.type.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^ source.hydra support.type.hydra
 >
 >## Render a float32 as a string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1713,18 +2033,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive printFloat32 : float32 → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the float32 to render
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive printFloat32 (x: float32) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                      ^ source.hydra
-#                       ^ source.hydra punctuation.separator.type.hydra
-#                        ^ source.hydra
-#                         ^^^^^^^ source.hydra support.type.hydra
-#                                ^ source.hydra
-#                                 ^ source.hydra keyword.operator.arrow.hydra
-#                                  ^ source.hydra
-#                                   ^^^^^^ source.hydra support.type.hydra
+#                      ^^ source.hydra
+#                        ^ source.hydra variable.other.hydra
+#                         ^ source.hydra punctuation.separator.type.hydra
+#                          ^ source.hydra
+#                           ^^^^^^^ source.hydra support.type.hydra
+#                                  ^^ source.hydra
+#                                    ^ source.hydra punctuation.separator.type.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^ source.hydra support.type.hydra
 >
 >## Render a float64 as a string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1752,18 +2080,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive printFloat64 : float64 → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the float64 to render
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive printFloat64 (x: float64) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                      ^ source.hydra
-#                       ^ source.hydra punctuation.separator.type.hydra
-#                        ^ source.hydra
-#                         ^^^^^^^ source.hydra support.type.hydra
-#                                ^ source.hydra
-#                                 ^ source.hydra keyword.operator.arrow.hydra
-#                                  ^ source.hydra
-#                                   ^^^^^^ source.hydra support.type.hydra
+#                      ^^ source.hydra
+#                        ^ source.hydra variable.other.hydra
+#                         ^ source.hydra punctuation.separator.type.hydra
+#                          ^ source.hydra
+#                           ^^^^^^^ source.hydra support.type.hydra
+#                                  ^^ source.hydra
+#                                    ^ source.hydra punctuation.separator.type.hydra
+#                                     ^ source.hydra
+#                                      ^^^^^^ source.hydra support.type.hydra
 >
 >## Render an int16 as a string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1791,18 +2127,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive printInt16 : int16 → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the int16 to render
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive printInt16 (x: int16) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                    ^ source.hydra
-#                     ^ source.hydra punctuation.separator.type.hydra
-#                      ^ source.hydra
-#                       ^^^^^ source.hydra support.type.hydra
-#                            ^ source.hydra
-#                             ^ source.hydra keyword.operator.arrow.hydra
-#                              ^ source.hydra
-#                               ^^^^^^ source.hydra support.type.hydra
+#                    ^^ source.hydra
+#                      ^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^^^^^ source.hydra support.type.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra punctuation.separator.type.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^^ source.hydra support.type.hydra
 >
 >## Render an int32 as a string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1830,18 +2174,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive printInt32 : int32 → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the int32 to render
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive printInt32 (x: int32) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                    ^ source.hydra
-#                     ^ source.hydra punctuation.separator.type.hydra
-#                      ^ source.hydra
-#                       ^^^^^ source.hydra support.type.hydra
-#                            ^ source.hydra
-#                             ^ source.hydra keyword.operator.arrow.hydra
-#                              ^ source.hydra
-#                               ^^^^^^ source.hydra support.type.hydra
+#                    ^^ source.hydra
+#                      ^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^^^^^ source.hydra support.type.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra punctuation.separator.type.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^^ source.hydra support.type.hydra
 >
 >## Render an int64 as a string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1869,18 +2221,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive printInt64 : int64 → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the int64 to render
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive printInt64 (x: int64) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                    ^ source.hydra
-#                     ^ source.hydra punctuation.separator.type.hydra
-#                      ^ source.hydra
-#                       ^^^^^ source.hydra support.type.hydra
-#                            ^ source.hydra
-#                             ^ source.hydra keyword.operator.arrow.hydra
-#                              ^ source.hydra
-#                               ^^^^^^ source.hydra support.type.hydra
+#                    ^^ source.hydra
+#                      ^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^^^^^ source.hydra support.type.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra punctuation.separator.type.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^^ source.hydra support.type.hydra
 >
 >## Render an int8 as a string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1908,18 +2268,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive printInt8 : int8 → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the int8 to render
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive printInt8 (x: int8) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^ source.hydra entity.name.function.hydra
-#                   ^ source.hydra
-#                    ^ source.hydra punctuation.separator.type.hydra
-#                     ^ source.hydra
-#                      ^^^^ source.hydra support.type.hydra
-#                          ^ source.hydra
-#                           ^ source.hydra keyword.operator.arrow.hydra
-#                            ^ source.hydra
-#                             ^^^^^^ source.hydra support.type.hydra
+#                   ^^ source.hydra
+#                     ^ source.hydra variable.other.hydra
+#                      ^ source.hydra punctuation.separator.type.hydra
+#                       ^ source.hydra
+#                        ^^^^ source.hydra support.type.hydra
+#                            ^^ source.hydra
+#                              ^ source.hydra punctuation.separator.type.hydra
+#                               ^ source.hydra
+#                                ^^^^^^ source.hydra support.type.hydra
 >
 >## Render a string as a string-literal token (escaped and quoted).
 #^^ source.hydra comment.block.documentation.hydra
@@ -1957,18 +2325,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive printString : string → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param s: the string to render
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive printString (s: string) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                     ^ source.hydra
-#                      ^ source.hydra punctuation.separator.type.hydra
-#                       ^ source.hydra
-#                        ^^^^^^ source.hydra support.type.hydra
-#                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.arrow.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^ source.hydra support.type.hydra
+#                     ^^ source.hydra
+#                       ^ source.hydra variable.other.hydra
+#                        ^ source.hydra punctuation.separator.type.hydra
+#                         ^ source.hydra
+#                          ^^^^^^ source.hydra support.type.hydra
+#                                ^^ source.hydra
+#                                  ^ source.hydra punctuation.separator.type.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^^ source.hydra support.type.hydra
 >
 >## Render a uint16 as a string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1996,18 +2372,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive printUint16 : uint16 → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the uint16 to render
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive printUint16 (x: uint16) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                     ^ source.hydra
-#                      ^ source.hydra punctuation.separator.type.hydra
-#                       ^ source.hydra
-#                        ^^^^^^ source.hydra support.type.hydra
-#                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.arrow.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^ source.hydra support.type.hydra
+#                     ^^ source.hydra
+#                       ^ source.hydra variable.other.hydra
+#                        ^ source.hydra punctuation.separator.type.hydra
+#                         ^ source.hydra
+#                          ^^^^^^ source.hydra support.type.hydra
+#                                ^^ source.hydra
+#                                  ^ source.hydra punctuation.separator.type.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^^ source.hydra support.type.hydra
 >
 >## Render a uint32 as a string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -2035,18 +2419,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive printUint32 : uint32 → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the uint32 to render
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive printUint32 (x: uint32) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                     ^ source.hydra
-#                      ^ source.hydra punctuation.separator.type.hydra
-#                       ^ source.hydra
-#                        ^^^^^^ source.hydra support.type.hydra
-#                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.arrow.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^ source.hydra support.type.hydra
+#                     ^^ source.hydra
+#                       ^ source.hydra variable.other.hydra
+#                        ^ source.hydra punctuation.separator.type.hydra
+#                         ^ source.hydra
+#                          ^^^^^^ source.hydra support.type.hydra
+#                                ^^ source.hydra
+#                                  ^ source.hydra punctuation.separator.type.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^^ source.hydra support.type.hydra
 >
 >## Render a uint64 as a string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -2074,18 +2466,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive printUint64 : uint64 → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the uint64 to render
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive printUint64 (x: uint64) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                     ^ source.hydra
-#                      ^ source.hydra punctuation.separator.type.hydra
-#                       ^ source.hydra
-#                        ^^^^^^ source.hydra support.type.hydra
-#                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.arrow.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^ source.hydra support.type.hydra
+#                     ^^ source.hydra
+#                       ^ source.hydra variable.other.hydra
+#                        ^ source.hydra punctuation.separator.type.hydra
+#                         ^ source.hydra
+#                          ^^^^^^ source.hydra support.type.hydra
+#                                ^^ source.hydra
+#                                  ^ source.hydra punctuation.separator.type.hydra
+#                                   ^ source.hydra
+#                                    ^^^^^^ source.hydra support.type.hydra
 >
 >## Render a uint8 as a string.
 #^^ source.hydra comment.block.documentation.hydra
@@ -2113,18 +2513,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive printUint8 : uint8 → string
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the uint8 to render
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive printUint8 (x: uint8) : string
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                    ^ source.hydra
-#                     ^ source.hydra punctuation.separator.type.hydra
-#                      ^ source.hydra
-#                       ^^^^^ source.hydra support.type.hydra
-#                            ^ source.hydra
-#                             ^ source.hydra keyword.operator.arrow.hydra
-#                              ^ source.hydra
-#                               ^^^^^^ source.hydra support.type.hydra
+#                    ^^ source.hydra
+#                      ^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^^^^^ source.hydra support.type.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra punctuation.separator.type.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^^ source.hydra support.type.hydra
 >
 >## Convert a uint16 to a bigint.
 #^^ source.hydra comment.block.documentation.hydra
@@ -2149,18 +2557,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive uint16ToBigint : uint16 → bigint
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the uint16 to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive uint16ToBigint (x: uint16) : bigint
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                        ^ source.hydra
-#                         ^ source.hydra punctuation.separator.type.hydra
-#                          ^ source.hydra
-#                           ^^^^^^ source.hydra support.type.hydra
-#                                 ^ source.hydra
-#                                  ^ source.hydra keyword.operator.arrow.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^ source.hydra support.type.hydra
+#                        ^^ source.hydra
+#                          ^ source.hydra variable.other.hydra
+#                           ^ source.hydra punctuation.separator.type.hydra
+#                            ^ source.hydra
+#                             ^^^^^^ source.hydra support.type.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra punctuation.separator.type.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^ source.hydra support.type.hydra
 >
 >## Convert a uint32 to a bigint.
 #^^ source.hydra comment.block.documentation.hydra
@@ -2185,18 +2601,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive uint32ToBigint : uint32 → bigint
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the uint32 to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive uint32ToBigint (x: uint32) : bigint
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                        ^ source.hydra
-#                         ^ source.hydra punctuation.separator.type.hydra
-#                          ^ source.hydra
-#                           ^^^^^^ source.hydra support.type.hydra
-#                                 ^ source.hydra
-#                                  ^ source.hydra keyword.operator.arrow.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^ source.hydra support.type.hydra
+#                        ^^ source.hydra
+#                          ^ source.hydra variable.other.hydra
+#                           ^ source.hydra punctuation.separator.type.hydra
+#                            ^ source.hydra
+#                             ^^^^^^ source.hydra support.type.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra punctuation.separator.type.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^ source.hydra support.type.hydra
 >
 >## Convert a uint64 to a bigint.
 #^^ source.hydra comment.block.documentation.hydra
@@ -2221,18 +2645,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive uint64ToBigint : uint64 → bigint
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the uint64 to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive uint64ToBigint (x: uint64) : bigint
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                        ^ source.hydra
-#                         ^ source.hydra punctuation.separator.type.hydra
-#                          ^ source.hydra
-#                           ^^^^^^ source.hydra support.type.hydra
-#                                 ^ source.hydra
-#                                  ^ source.hydra keyword.operator.arrow.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^ source.hydra support.type.hydra
+#                        ^^ source.hydra
+#                          ^ source.hydra variable.other.hydra
+#                           ^ source.hydra punctuation.separator.type.hydra
+#                            ^ source.hydra
+#                             ^^^^^^ source.hydra support.type.hydra
+#                                   ^^ source.hydra
+#                                     ^ source.hydra punctuation.separator.type.hydra
+#                                      ^ source.hydra
+#                                       ^^^^^^ source.hydra support.type.hydra
 >
 >## Convert a uint8 to a bigint.
 #^^ source.hydra comment.block.documentation.hydra
@@ -2257,15 +2689,23 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive uint8ToBigint : uint8 → bigint
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param x: the uint8 to convert
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive uint8ToBigint (x: uint8) : bigint
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                       ^ source.hydra
-#                        ^ source.hydra punctuation.separator.type.hydra
-#                         ^ source.hydra
-#                          ^^^^^ source.hydra support.type.hydra
-#                               ^ source.hydra
-#                                ^ source.hydra keyword.operator.arrow.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^ source.hydra support.type.hydra
+#                       ^^ source.hydra
+#                         ^ source.hydra variable.other.hydra
+#                          ^ source.hydra punctuation.separator.type.hydra
+#                           ^ source.hydra
+#                            ^^^^^ source.hydra support.type.hydra
+#                                 ^^ source.hydra
+#                                   ^ source.hydra punctuation.separator.type.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^ source.hydra support.type.hydra

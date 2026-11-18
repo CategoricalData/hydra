@@ -57,18 +57,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #                  ^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive isAlpha : int32 → boolean
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param char: the character to test, as a Unicode code point
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive isAlpha (char: int32) : boolean
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^ source.hydra entity.name.function.hydra
-#                 ^ source.hydra
-#                  ^ source.hydra punctuation.separator.type.hydra
-#                   ^ source.hydra
-#                    ^^^^^ source.hydra support.type.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra keyword.operator.arrow.hydra
-#                           ^ source.hydra
-#                            ^^^^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+#                   ^^^^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^^^^^ source.hydra support.type.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra punctuation.separator.type.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^^^ source.hydra support.type.hydra
 >
 >## Check whether a character is alphanumeric.
 #^^ source.hydra comment.block.documentation.hydra
@@ -104,18 +112,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive isAlphaNum : int32 → boolean
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param char: the character to test, as a Unicode code point
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive isAlphaNum (char: int32) : boolean
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
-#                    ^ source.hydra
-#                     ^ source.hydra punctuation.separator.type.hydra
-#                      ^ source.hydra
-#                       ^^^^^ source.hydra support.type.hydra
-#                            ^ source.hydra
-#                             ^ source.hydra keyword.operator.arrow.hydra
-#                              ^ source.hydra
-#                               ^^^^^^^ source.hydra support.type.hydra
+#                    ^^ source.hydra
+#                      ^^^^ source.hydra variable.other.hydra
+#                          ^ source.hydra punctuation.separator.type.hydra
+#                           ^ source.hydra
+#                            ^^^^^ source.hydra support.type.hydra
+#                                 ^^ source.hydra
+#                                   ^ source.hydra punctuation.separator.type.hydra
+#                                    ^ source.hydra
+#                                     ^^^^^^^ source.hydra support.type.hydra
 >
 >## Check whether a character is an ASCII decimal digit.
 #^^ source.hydra comment.block.documentation.hydra
@@ -138,18 +154,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #                  ^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive isDigit : int32 → boolean
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param char: the character to test, as a Unicode code point
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive isDigit (char: int32) : boolean
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^ source.hydra entity.name.function.hydra
-#                 ^ source.hydra
-#                  ^ source.hydra punctuation.separator.type.hydra
-#                   ^ source.hydra
-#                    ^^^^^ source.hydra support.type.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra keyword.operator.arrow.hydra
-#                           ^ source.hydra
-#                            ^^^^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+#                   ^^^^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^^^^^ source.hydra support.type.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra punctuation.separator.type.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^^^ source.hydra support.type.hydra
 >
 >## Check whether a character is lowercase.
 #^^ source.hydra comment.block.documentation.hydra
@@ -185,18 +209,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive isLower : int32 → boolean
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param char: the character to test, as a Unicode code point
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive isLower (char: int32) : boolean
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^ source.hydra entity.name.function.hydra
-#                 ^ source.hydra
-#                  ^ source.hydra punctuation.separator.type.hydra
-#                   ^ source.hydra
-#                    ^^^^^ source.hydra support.type.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra keyword.operator.arrow.hydra
-#                           ^ source.hydra
-#                            ^^^^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+#                   ^^^^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^^^^^ source.hydra support.type.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra punctuation.separator.type.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^^^ source.hydra support.type.hydra
 >
 >## Check whether a character is a whitespace character.
 #^^ source.hydra comment.block.documentation.hydra
@@ -229,18 +261,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive isSpace : int32 → boolean
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param char: the character to test, as a Unicode code point
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive isSpace (char: int32) : boolean
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^ source.hydra entity.name.function.hydra
-#                 ^ source.hydra
-#                  ^ source.hydra punctuation.separator.type.hydra
-#                   ^ source.hydra
-#                    ^^^^^ source.hydra support.type.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra keyword.operator.arrow.hydra
-#                           ^ source.hydra
-#                            ^^^^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+#                   ^^^^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^^^^^ source.hydra support.type.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra punctuation.separator.type.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^^^ source.hydra support.type.hydra
 >
 >## Check whether a character is uppercase.
 #^^ source.hydra comment.block.documentation.hydra
@@ -276,18 +316,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive isUpper : int32 → boolean
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param char: the character to test, as a Unicode code point
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive isUpper (char: int32) : boolean
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^ source.hydra entity.name.function.hydra
-#                 ^ source.hydra
-#                  ^ source.hydra punctuation.separator.type.hydra
-#                   ^ source.hydra
-#                    ^^^^^ source.hydra support.type.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra keyword.operator.arrow.hydra
-#                           ^ source.hydra
-#                            ^^^^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+#                   ^^^^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^^^^^ source.hydra support.type.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra punctuation.separator.type.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^^^ source.hydra support.type.hydra
 >
 >## Convert a character to lowercase.
 #^^ source.hydra comment.block.documentation.hydra
@@ -323,18 +371,26 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive toLower : int32 → int32
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param char: the character to convert, as a Unicode code point
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive toLower (char: int32) : int32
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^ source.hydra entity.name.function.hydra
-#                 ^ source.hydra
-#                  ^ source.hydra punctuation.separator.type.hydra
-#                   ^ source.hydra
-#                    ^^^^^ source.hydra support.type.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra keyword.operator.arrow.hydra
-#                           ^ source.hydra
-#                            ^^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+#                   ^^^^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^^^^^ source.hydra support.type.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra punctuation.separator.type.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^ source.hydra support.type.hydra
 >
 >## Convert a character to uppercase.
 #^^ source.hydra comment.block.documentation.hydra
@@ -370,15 +426,23 @@
 #  ^ source.hydra comment.block.documentation.hydra
 #   ^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
 #               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
->primitive toUpper : int32 → int32
+>##
+#^^ source.hydra comment.block.documentation.hydra
+>## @param char: the character to convert, as a Unicode code point
+#^^ source.hydra comment.block.documentation.hydra
+#  ^ source.hydra comment.block.documentation.hydra
+#   ^^^^^^ source.hydra comment.block.documentation.hydra keyword.other.documentation.directive.hydra
+#         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+>primitive toUpper (char: int32) : int32
 #^^^^^^^^^ source.hydra keyword.other.definition.hydra
 #         ^ source.hydra
 #          ^^^^^^^ source.hydra entity.name.function.hydra
-#                 ^ source.hydra
-#                  ^ source.hydra punctuation.separator.type.hydra
-#                   ^ source.hydra
-#                    ^^^^^ source.hydra support.type.hydra
-#                         ^ source.hydra
-#                          ^ source.hydra keyword.operator.arrow.hydra
-#                           ^ source.hydra
-#                            ^^^^^ source.hydra support.type.hydra
+#                 ^^ source.hydra
+#                   ^^^^ source.hydra variable.other.hydra
+#                       ^ source.hydra punctuation.separator.type.hydra
+#                        ^ source.hydra
+#                         ^^^^^ source.hydra support.type.hydra
+#                              ^^ source.hydra
+#                                ^ source.hydra punctuation.separator.type.hydra
+#                                 ^ source.hydra
+#                                  ^^^^^ source.hydra support.type.hydra
