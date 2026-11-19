@@ -119,6 +119,7 @@ and CI fixes.
 - [#812](https://github.com/CategoricalData/hydra/issues/812): the Clojure/Scheme `testEnv` redirect applies to generated test trees only.
 - [#768](https://github.com/CategoricalData/hydra/issues/768): the cold-seed driver step fails fast when its local fallback cannot succeed.
 - [#825](https://github.com/CategoricalData/hydra/issues/825): `dist/haskell/hydra-kernel` is reseeded when stale relative to `dist/json`.
+- [#839](https://github.com/CategoricalData/hydra/issues/839): the assemble freshness gate refreshes a stale input digest after a rebase instead of failing, and never rewrites a current one.
 - [#826](https://github.com/CategoricalData/hydra/issues/826): Lisp coders reference nullary effect primitives by call.
 - [#827](https://github.com/CategoricalData/hydra/issues/827): overlay variant-order tables are checked against `model.json`.
 - [#772](https://github.com/CategoricalData/hydra/issues/772), [#756](https://github.com/CategoricalData/hydra/issues/756): several silent failures in the sync scripts and vitest/Scala drivers now fail loudly.
@@ -133,6 +134,10 @@ and CI fixes.
   ([#773](https://github.com/CategoricalData/hydra/issues/773)); the bootstrap demo holds the build slot only for its own `stack` calls ([#797](https://github.com/CategoricalData/hydra/issues/797)).
 - `bin/sync.sh` prints per-phase timing ([#824](https://github.com/CategoricalData/hydra/issues/824)), and the CI Haskell job is split to stay within the runner time limit.
 - `with-stack-slot.sh` fails fast on low disk before a build ([#789](https://github.com/CategoricalData/hydra/issues/789)).
+- `bin/verify-hydra-sources.sh --dsl` runs the dual-edit guard in reverse, regenerating from the Haskell DSL twins and
+  comparing with the committed JSON ([#837](https://github.com/CategoricalData/hydra/issues/837)).
+- `docs/hydra-lexicon.txt` prints primitives with named parameters, matching the generated spec pages
+  ([#723](https://github.com/CategoricalData/hydra/issues/723)).
 
 ### Documentation
 
