@@ -2,15 +2,19 @@
 
 # hydra.core.lib.functions
 
-<!-- Note: this is an automatically generated file. Do not edit. -->
-
 Function combinators: the identity/compose/const/flip basis. These primitives manipulate functions themselves, independently of any particular data type.
 
-## hydra.core.lib.functions.absurd
+## absurd
 
 Eliminate a value of the uninhabited void type, producing any type.
 
-`∀t1.void → t1`
+`∀t1.absurd(v: void) → t1`
+
+**Parameters**
+
+- `v` (`void`): a value of the void type; unreachable in any well-typed program
+
+**Returns** `t1`
 
 *Since: 0.17.6.*
 
@@ -22,11 +26,19 @@ The eliminator dual to the (nonexistent) introducer for void.
 
 Total, vacuously: there is no well-typed argument on which absurd could be called. Corresponds to Haskell's Data.Void.absurd :: Void -> a.
 
-## hydra.core.lib.functions.compose
+## compose
 
 Compose two functions.
 
-`∀t1,t2,t3.(t2 → t3) → (t1 → t2) → t1 → t3`
+`∀t1, t2, t3.compose(g: t2 → t3, f: t1 → t2, x: t1) → t3`
+
+**Parameters**
+
+- `g` (`t2 → t3`): the outer function, applied to the result of f
+- `f` (`t1 → t2`): the inner function, applied to x first
+- `x` (`t1`): the argument to which f is applied
+
+**Returns** `t3`
 
 *Since: 0.17.6.*
 
@@ -38,11 +50,18 @@ This is ordinary function composition, distinct from the Kleisli compose primiti
 
 Total. Corresponds to Haskell's (.) :: (b -> c) -> (a -> b) -> a -> c.
 
-## hydra.core.lib.functions.const
+## const
 
 Return the first argument, ignoring the second.
 
-`∀t1,t2.t1 → t2 → t1`
+`∀t1, t2.const(x: t1, y: t2) → t1`
+
+**Parameters**
+
+- `x` (`t1`): the value to return
+- `y` (`t2`): the ignored second argument
+
+**Returns** `t1`
 
 *Since: 0.17.6.*
 
@@ -52,13 +71,21 @@ Partially applied, const(x) is the constant function which returns x on every in
 
 Total. Corresponds to Haskell's const :: a -> b -> a.
 
-**[HYDRA-CORE-LIB-FUNCTIONS-CONST-RETURNS-FIRST-ARGUMENT-IGNORING-SECOND] (requirement) **const returns its first argument unchanged and ignores its second argument entirely, regardless of the second argument's type or value.
+**[HYDRA-CORE-LIB-FUNCTIONS-CONST-RETURNS-FIRST-ARGUMENT-IGNORING-SECOND] (requirement)** const returns its first argument unchanged and ignores its second argument entirely, regardless of the second argument's type or value.
 
-## hydra.core.lib.functions.flip
+## flip
 
 Swap the argument order of a binary function.
 
-`∀t1,t2,t3.(t1 → t2 → t3) → t2 → t1 → t3`
+`∀t1, t2, t3.flip(f: t1 → t2 → t3, x: t2, y: t1) → t3`
+
+**Parameters**
+
+- `f` (`t1 → t2 → t3`): the binary function whose argument order is swapped
+- `x` (`t2`): the argument passed as f's second argument
+- `y` (`t1`): the argument passed as f's first argument
+
+**Returns** `t3`
 
 *Since: 0.17.6.*
 
@@ -66,13 +93,19 @@ flip(f, x, y) = f(y, x); this defining equation is the specification.
 
 Total. Corresponds to Haskell's flip :: (a -> b -> c) -> b -> a -> c.
 
-**[HYDRA-CORE-LIB-FUNCTIONS-FLIP-SWAPS-ARGUMENT-ORDER] (requirement) **flip(f, x, y) applies f with its two arguments in reversed order, i.e. flip(f, x, y) = f(y, x).
+**[HYDRA-CORE-LIB-FUNCTIONS-FLIP-SWAPS-ARGUMENT-ORDER] (requirement)** flip(f, x, y) applies f with its two arguments in reversed order, i.e. flip(f, x, y) = f(y, x).
 
-## hydra.core.lib.functions.identity
+## identity
 
 Return the argument unchanged.
 
-`∀t1.t1 → t1`
+`∀t1.identity(x: t1) → t1`
+
+**Parameters**
+
+- `x` (`t1`): the value to return unchanged
+
+**Returns** `t1`
 
 *Since: 0.17.6.*
 
@@ -84,4 +117,4 @@ Total. Corresponds to Haskell's id :: a -> a.
 
 Moved from hydra.lib.equality.identity.
 
-**[HYDRA-CORE-LIB-FUNCTIONS-IDENTITY-RETURNS-ARGUMENT-UNCHANGED] (requirement) **identity returns its argument completely unchanged, for any value.
+**[HYDRA-CORE-LIB-FUNCTIONS-IDENTITY-RETURNS-ARGUMENT-UNCHANGED] (requirement)** identity returns its argument completely unchanged, for any value.

@@ -2,8 +2,6 @@
 
 # hydra.core.lib.chars
 
-<!-- Note: this is an automatically generated file. Do not edit. -->
-
 Characters are represented as Unicode code points carried in an int32. Each primitive interprets its argument as a code point; arguments outside the valid range [0, 0x10FFFF] yield an implementation-defined result (typically false for the predicates).
 
 All classification predicates in this module are total functions: every int32 argument maps to a defined Boolean result, with no partiality or exceptions.
@@ -12,11 +10,17 @@ Character classification follows the Unicode general categories, matching the be
 
 Case mapping (toLower/toUpper) is the simple (one-to-one) single-code-point Unicode case mapping, not full case folding.
 
-## hydra.core.lib.chars.isAlpha
+## isAlpha
 
 Check whether a character is alphabetic.
 
-`∀.int32 → boolean`
+`isAlpha(char: int32) → boolean`
+
+**Parameters**
+
+- `char` (`int32`): the character to test, as a Unicode code point
+
+**Returns** `boolean`
 
 *Since: 0.17.6.*
 
@@ -28,11 +32,17 @@ Alphabetic is broader than cased: letters in scripts without a case distinction 
 
 Total. Corresponds to Haskell's Data.Char.isAlpha :: Char -> Bool.
 
-## hydra.core.lib.chars.isAlphaNum
+## isAlphaNum
 
 Check whether a character is alphanumeric.
 
-`∀.int32 → boolean`
+`isAlphaNum(char: int32) → boolean`
+
+**Parameters**
+
+- `char` (`int32`): the character to test, as a Unicode code point
+
+**Returns** `boolean`
 
 *Since: 0.15.*
 
@@ -44,15 +54,21 @@ The classification is based on Unicode general categories (any of L*, Nd, Nl, No
 
 Total. Corresponds to Haskell's Data.Char.isAlphaNum :: Char -> Bool.
 
-**[HYDRA-CORE-LIB-CHARS-IS-ALPHA-NUM-CLASSIFIES-ALPHANUMERIC] (requirement) **isAlphaNum returns true for a code point that is a Unicode letter or digit.
+**[HYDRA-CORE-LIB-CHARS-IS-ALPHA-NUM-CLASSIFIES-ALPHANUMERIC] (requirement)** isAlphaNum returns true for a code point that is a Unicode letter or digit.
 
-**[HYDRA-CORE-LIB-CHARS-IS-ALPHA-NUM-CLASSIFIES-NON-ALPHANUMERIC] (requirement) **isAlphaNum returns false for a code point that is neither a Unicode letter nor a digit, such as whitespace or punctuation.
+**[HYDRA-CORE-LIB-CHARS-IS-ALPHA-NUM-CLASSIFIES-NON-ALPHANUMERIC] (requirement)** isAlphaNum returns false for a code point that is neither a Unicode letter nor a digit, such as whitespace or punctuation.
 
-## hydra.core.lib.chars.isDigit
+## isDigit
 
 Check whether a character is an ASCII decimal digit.
 
-`∀.int32 → boolean`
+`isDigit(char: int32) → boolean`
+
+**Parameters**
+
+- `char` (`int32`): the character to test, as a Unicode code point
+
+**Returns** `boolean`
 
 *Since: 0.17.6.*
 
@@ -62,11 +78,17 @@ Unlike the other predicates in this module, this one is deliberately ASCII-only:
 
 Total. Corresponds to Haskell's Data.Char.isDigit :: Char -> Bool.
 
-## hydra.core.lib.chars.isLower
+## isLower
 
 Check whether a character is lowercase.
 
-`∀.int32 → boolean`
+`isLower(char: int32) → boolean`
+
+**Parameters**
+
+- `char` (`int32`): the character to test, as a Unicode code point
+
+**Returns** `boolean`
 
 *Since: 0.15.*
 
@@ -78,15 +100,21 @@ Note that not every letter is classified as uppercase or lowercase (e.g. titleca
 
 Total. Corresponds to Haskell's Data.Char.isLower :: Char -> Bool.
 
-**[HYDRA-CORE-LIB-CHARS-IS-LOWER-CLASSIFIES-LOWERCASE] (requirement) **isLower returns true for a code point that is a Unicode lowercase letter.
+**[HYDRA-CORE-LIB-CHARS-IS-LOWER-CLASSIFIES-LOWERCASE] (requirement)** isLower returns true for a code point that is a Unicode lowercase letter.
 
-**[HYDRA-CORE-LIB-CHARS-IS-LOWER-CLASSIFIES-NON-LOWERCASE] (requirement) **isLower returns false for a code point that is not a Unicode lowercase letter, including uppercase letters and digits.
+**[HYDRA-CORE-LIB-CHARS-IS-LOWER-CLASSIFIES-NON-LOWERCASE] (requirement)** isLower returns false for a code point that is not a Unicode lowercase letter, including uppercase letters and digits.
 
-## hydra.core.lib.chars.isSpace
+## isSpace
 
 Check whether a character is a whitespace character.
 
-`∀.int32 → boolean`
+`isSpace(char: int32) → boolean`
+
+**Parameters**
+
+- `char` (`int32`): the character to test, as a Unicode code point
+
+**Returns** `boolean`
 
 *Since: 0.15.*
 
@@ -96,15 +124,21 @@ The whitespace set follows Haskell's Data.Char.isSpace, which recognises U+0020 
 
 Total. Corresponds to Haskell's Data.Char.isSpace :: Char -> Bool.
 
-**[HYDRA-CORE-LIB-CHARS-IS-SPACE-CLASSIFIES-WHITESPACE] (requirement) **isSpace returns true for a code point that is a Unicode whitespace character, including the space, tab, and newline characters.
+**[HYDRA-CORE-LIB-CHARS-IS-SPACE-CLASSIFIES-WHITESPACE] (requirement)** isSpace returns true for a code point that is a Unicode whitespace character, including the space, tab, and newline characters.
 
-**[HYDRA-CORE-LIB-CHARS-IS-SPACE-CLASSIFIES-NON-WHITESPACE] (requirement) **isSpace returns false for a code point that is not a Unicode whitespace character, such as a letter.
+**[HYDRA-CORE-LIB-CHARS-IS-SPACE-CLASSIFIES-NON-WHITESPACE] (requirement)** isSpace returns false for a code point that is not a Unicode whitespace character, such as a letter.
 
-## hydra.core.lib.chars.isUpper
+## isUpper
 
 Check whether a character is uppercase.
 
-`∀.int32 → boolean`
+`isUpper(char: int32) → boolean`
+
+**Parameters**
+
+- `char` (`int32`): the character to test, as a Unicode code point
+
+**Returns** `boolean`
 
 *Since: 0.15.*
 
@@ -116,15 +150,21 @@ Note that titlecase letters (Lt) are not classified as uppercase by this predica
 
 Total. Corresponds to Haskell's Data.Char.isUpper :: Char -> Bool.
 
-**[HYDRA-CORE-LIB-CHARS-IS-UPPER-CLASSIFIES-UPPERCASE] (requirement) **isUpper returns true for a code point that is a Unicode uppercase letter.
+**[HYDRA-CORE-LIB-CHARS-IS-UPPER-CLASSIFIES-UPPERCASE] (requirement)** isUpper returns true for a code point that is a Unicode uppercase letter.
 
-**[HYDRA-CORE-LIB-CHARS-IS-UPPER-CLASSIFIES-NON-UPPERCASE] (requirement) **isUpper returns false for a code point that is not a Unicode uppercase letter, including lowercase letters and digits.
+**[HYDRA-CORE-LIB-CHARS-IS-UPPER-CLASSIFIES-NON-UPPERCASE] (requirement)** isUpper returns false for a code point that is not a Unicode uppercase letter, including lowercase letters and digits.
 
-## hydra.core.lib.chars.toLower
+## toLower
 
 Convert a character to lowercase.
 
-`∀.int32 → int32`
+`toLower(char: int32) → int32`
+
+**Parameters**
+
+- `char` (`int32`): the character to convert, as a Unicode code point
+
+**Returns** `int32`
 
 *Since: 0.15.*
 
@@ -136,15 +176,21 @@ The argument is interpreted as a Unicode code point.
 
 Total. Corresponds to Haskell's Data.Char.toLower :: Char -> Char.
 
-**[HYDRA-CORE-LIB-CHARS-TO-LOWER-MAPS-TO-LOWERCASE-OR-UNCHANGED] (requirement) **toLower returns the lowercase mapping of an uppercase code point, and returns a code point with no lowercase mapping (e.g. a digit, or an already-lowercase letter) unchanged.
+**[HYDRA-CORE-LIB-CHARS-TO-LOWER-MAPS-TO-LOWERCASE-OR-UNCHANGED] (requirement)** toLower returns the lowercase mapping of an uppercase code point, and returns a code point with no lowercase mapping (e.g. a digit, or an already-lowercase letter) unchanged.
 
-**[HYDRA-CORE-LIB-CHARS-TO-LOWER-USES-SIMPLE-NOT-FULL-MAPPING] (requirement) **toLower uses the simple (one-to-one) Unicode case mapping, not full case folding: a code point whose full lowercase mapping would expand to multiple code points instead maps to its single-code-point simple mapping.
+**[HYDRA-CORE-LIB-CHARS-TO-LOWER-USES-SIMPLE-NOT-FULL-MAPPING] (requirement)** toLower uses the simple (one-to-one) Unicode case mapping, not full case folding: a code point whose full lowercase mapping would expand to multiple code points instead maps to its single-code-point simple mapping.
 
-## hydra.core.lib.chars.toUpper
+## toUpper
 
 Convert a character to uppercase.
 
-`∀.int32 → int32`
+`toUpper(char: int32) → int32`
+
+**Parameters**
+
+- `char` (`int32`): the character to convert, as a Unicode code point
+
+**Returns** `int32`
 
 *Since: 0.15.*
 
@@ -156,6 +202,6 @@ The argument is interpreted as a Unicode code point.
 
 Total. Corresponds to Haskell's Data.Char.toUpper :: Char -> Char.
 
-**[HYDRA-CORE-LIB-CHARS-TO-UPPER-MAPS-TO-UPPERCASE-OR-UNCHANGED] (requirement) **toUpper returns the uppercase mapping of a lowercase code point, and returns a code point with no uppercase mapping (e.g. a digit, or an already-uppercase letter) unchanged.
+**[HYDRA-CORE-LIB-CHARS-TO-UPPER-MAPS-TO-UPPERCASE-OR-UNCHANGED] (requirement)** toUpper returns the uppercase mapping of a lowercase code point, and returns a code point with no uppercase mapping (e.g. a digit, or an already-uppercase letter) unchanged.
 
-**[HYDRA-CORE-LIB-CHARS-TO-UPPER-USES-SIMPLE-NOT-FULL-MAPPING] (requirement) **toUpper uses the simple (one-to-one) Unicode case mapping, not full case folding: a code point with no single-code-point uppercase mapping (e.g. sharp s, n preceded by apostrophe) is returned unchanged rather than expanded to a multi-code-point full mapping, and a code point whose simple mapping is itself a different single code point maps to that code point.
+**[HYDRA-CORE-LIB-CHARS-TO-UPPER-USES-SIMPLE-NOT-FULL-MAPPING] (requirement)** toUpper uses the simple (one-to-one) Unicode case mapping, not full case folding: a code point with no single-code-point uppercase mapping (e.g. sharp s, n preceded by apostrophe) is returned unchanged rather than expanded to a multi-code-point full mapping, and a code point whose simple mapping is itself a different single code point maps to that code point.

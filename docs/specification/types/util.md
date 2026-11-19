@@ -2,34 +2,70 @@
 
 # hydra.core.util
 
-<!-- Note: this is an automatically generated file. Do not edit. -->
+## CaseConvention
 
-## hydra.core.util.CaseConvention
+A naming convention for symbols, such as camelCase or snake_case
 
-*(undocumented)*
+`union{
+  camel: unit,
+  pascal: unit,
+  lowerSnake: unit,
+  upperSnake: unit,
+  upperDashed: unit}`
 
-`∀.union{camel:unit, pascal:unit, lowerSnake:unit, upperSnake:unit, upperDashed:unit}@{description="A naming convention for symbols, such as camelCase or snake_case"}`
+**Variants**
 
-## hydra.core.util.Comparison
+- `camel` (`unit`)
+- `pascal` (`unit`)
+- `lowerSnake` (`unit`)
+- `upperSnake` (`unit`)
+- `upperDashed` (`unit`)
 
-*(undocumented)*
+## Comparison
 
-`∀.union{lessThan:unit, equalTo:unit, greaterThan:unit}@{description="An equality judgement: less than, equal to, or greater than"}`
+An equality judgement: less than, equal to, or greater than
 
-## hydra.core.util.ModuleNames
+`union{
+  lessThan: unit,
+  equalTo: unit,
+  greaterThan: unit}`
 
-*(undocumented)*
+**Variants**
 
-`∀.(forall n. record{focus:(hydra.core.packaging.ModuleName, n)@{description="The module name in focus, together with its associated value"}, mapping:map<hydra.core.packaging.ModuleName, n>@{description="A mapping of module names to values"}})@{description="A mapping from module names to values of type n, with a focus on one module name"}`
+- `lessThan` (`unit`)
+- `equalTo` (`unit`)
+- `greaterThan` (`unit`)
 
-## hydra.core.util.Precision
+## ModuleNames
 
-*(undocumented)*
+A mapping from module names to values of type n, with a focus on one module name
 
-`∀.union{arbitrary:unit@{description="Arbitrary precision"}, bits:int32@{description="Precision to a specified number of bits"}}@{description="Numeric precision: arbitrary precision, or precision to a specified number of bits"}`
+`forall n. record{
+  focus: (hydra.core.packaging.ModuleName, n),
+  mapping: map<hydra.core.packaging.ModuleName, n>}`
 
-## hydra.core.util.QualifiedName
+## Precision
 
-*(undocumented)*
+Numeric precision: arbitrary precision, or precision to a specified number of bits
 
-`∀.record{moduleName:optional<hydra.core.packaging.ModuleName>@{description="The optional module name"}, local:string@{description="The local name"}}@{description="A qualified name consisting of an optional module name together with a mandatory local name"}`
+`union{
+  arbitrary: unit,
+  bits: int32}`
+
+**Variants**
+
+- `arbitrary` (`unit`): Arbitrary precision
+- `bits` (`int32`): Precision to a specified number of bits
+
+## QualifiedName
+
+A qualified name consisting of an optional module name together with a mandatory local name
+
+`record{
+  moduleName: optional<hydra.core.packaging.ModuleName>,
+  local: string}`
+
+**Fields**
+
+- `moduleName` (`optional<hydra.core.packaging.ModuleName>`): The optional module name
+- `local` (`string`): The local name

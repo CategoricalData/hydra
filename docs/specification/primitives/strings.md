@@ -2,17 +2,22 @@
 
 # hydra.core.lib.strings
 
-<!-- Note: this is an automatically generated file. Do not edit. -->
-
 Strings as sequences of Unicode code points: a Hydra string is a sequence of Unicode code points -- not UTF-16 code units and not grapheme clusters -- and length and index positions count code points.
 
 The general split/join pair (splitOn and join) is the primary line-and-token machinery; the newline-specific lines and unlines were removed as primitives in its favor, their exact semantics preserved as the non-primitive term helpers hydra.formatting.lines and hydra.formatting.unlines.
 
-## hydra.core.lib.strings.charAt
+## charAt
 
 Get the Unicode code point of the character at a specific index, returning Nothing if out of bounds.
 
-`∀.int32 → string → optional<int32>`
+`charAt(i: int32, s: string) → optional<int32>`
+
+**Parameters**
+
+- `i` (`int32`): the index of the character to retrieve
+- `s` (`string`): the string to index into
+
+**Returns** `optional<int32>`
 
 *Since: 0.17.6.*
 
@@ -22,15 +27,21 @@ Total.
 
 Renamed from hydra.lib.strings.maybeCharAt.
 
-**[HYDRA-CORE-LIB-STRINGS-CHAR-AT-RETURNS-CODE-POINT-AT-INDEX] (requirement) **charAt returns the Unicode code point at the given zero-based index, wrapped, indexing by code point (not UTF-16 code unit), so an index after an astral (non-BMP) character is unaffected by that character's surrogate-pair width in UTF-16-based representations.
+**[HYDRA-CORE-LIB-STRINGS-CHAR-AT-RETURNS-CODE-POINT-AT-INDEX] (requirement)** charAt returns the Unicode code point at the given zero-based index, wrapped, indexing by code point (not UTF-16 code unit), so an index after an astral (non-BMP) character is unaffected by that character's surrogate-pair width in UTF-16-based representations.
 
-**[HYDRA-CORE-LIB-STRINGS-CHAR-AT-NONE-WHEN-OUT-OF-RANGE] (requirement) **charAt returns none when the index is negative, at or beyond the string's code-point length, or when the string is empty.
+**[HYDRA-CORE-LIB-STRINGS-CHAR-AT-NONE-WHEN-OUT-OF-RANGE] (requirement)** charAt returns none when the index is negative, at or beyond the string's code-point length, or when the string is empty.
 
-## hydra.core.lib.strings.concat
+## concat
 
 Concatenate a list of strings into a single string.
 
-`∀.list<string> → string`
+`concat(xs: list<string>) → string`
+
+**Parameters**
+
+- `xs` (`list<string>`): the list of strings to concatenate
+
+**Returns** `string`
 
 *Since: 0.17.6.*
 
@@ -40,15 +51,22 @@ Total. Corresponds to Haskell's concat :: [String] -> String.
 
 Renamed from hydra.lib.strings.cat.
 
-**[HYDRA-CORE-LIB-STRINGS-CONCAT-FLATTENS-PRESERVING-ORDER-AND-CONTENT] (requirement) **concat concatenates every string in the list in order, preserving all content exactly including control characters, null characters, and multi-code-point Unicode sequences (combining characters) without alteration.
+**[HYDRA-CORE-LIB-STRINGS-CONCAT-FLATTENS-PRESERVING-ORDER-AND-CONTENT] (requirement)** concat concatenates every string in the list in order, preserving all content exactly including control characters, null characters, and multi-code-point Unicode sequences (combining characters) without alteration.
 
-**[HYDRA-CORE-LIB-STRINGS-CONCAT-EMPTY-INPUTS] (requirement) **concat of a list containing only empty strings, or of an empty list of strings, is the empty string; empty strings elsewhere in the list contribute nothing to the result.
+**[HYDRA-CORE-LIB-STRINGS-CONCAT-EMPTY-INPUTS] (requirement)** concat of a list containing only empty strings, or of an empty list of strings, is the empty string; empty strings elsewhere in the list contribute nothing to the result.
 
-## hydra.core.lib.strings.concat2
+## concat2
 
 Concatenate two strings.
 
-`∀.string → string → string`
+`concat2(s: string, t: string) → string`
+
+**Parameters**
+
+- `s` (`string`): the first string
+- `t` (`string`): the second string
+
+**Returns** `string`
 
 *Since: 0.17.6.*
 
@@ -58,15 +76,21 @@ Total. Corresponds to Haskell's (++) :: String -> String -> String.
 
 Renamed from hydra.lib.strings.cat2.
 
-**[HYDRA-CORE-LIB-STRINGS-CONCAT2-APPENDS-PRESERVING-CONTENT] (requirement) **concat2 appends its second string argument to its first, preserving all content exactly including Unicode, control, and null characters.
+**[HYDRA-CORE-LIB-STRINGS-CONCAT2-APPENDS-PRESERVING-CONTENT] (requirement)** concat2 appends its second string argument to its first, preserving all content exactly including Unicode, control, and null characters.
 
-**[HYDRA-CORE-LIB-STRINGS-CONCAT2-IDENTITY-ON-EMPTY] (requirement) **concat2 with either or both arguments empty returns the other argument unchanged (the empty string is the identity element).
+**[HYDRA-CORE-LIB-STRINGS-CONCAT2-IDENTITY-ON-EMPTY] (requirement)** concat2 with either or both arguments empty returns the other argument unchanged (the empty string is the identity element).
 
-## hydra.core.lib.strings.fromList
+## fromList
 
 Convert a list of Unicode code points to a string.
 
-`∀.list<int32> → string`
+`fromList(cs: list<int32>) → string`
+
+**Parameters**
+
+- `cs` (`list<int32>`): the list of Unicode code points to convert
+
+**Returns** `string`
 
 *Since: 0.15.*
 
@@ -76,15 +100,21 @@ Code points outside the valid Unicode range [0, 0x10FFFF] yield a host-defined r
 
 Total. The inverse of toList.
 
-**[HYDRA-CORE-LIB-STRINGS-FROM-LIST-BUILDS-STRING-FROM-CODE-POINTS] (requirement) **fromList constructs a string whose characters are exactly the given Unicode code points, in order, including multi-code-point sequences (combining characters), control characters, and null characters.
+**[HYDRA-CORE-LIB-STRINGS-FROM-LIST-BUILDS-STRING-FROM-CODE-POINTS] (requirement)** fromList constructs a string whose characters are exactly the given Unicode code points, in order, including multi-code-point sequences (combining characters), control characters, and null characters.
 
-**[HYDRA-CORE-LIB-STRINGS-FROM-LIST-EMPTY-INPUT] (requirement) **fromList of an empty list of code points is the empty string.
+**[HYDRA-CORE-LIB-STRINGS-FROM-LIST-EMPTY-INPUT] (requirement)** fromList of an empty list of code points is the empty string.
 
-## hydra.core.lib.strings.isEmpty
+## isEmpty
 
 Check whether a string is empty.
 
-`∀.string → boolean`
+`isEmpty(s: string) → boolean`
+
+**Parameters**
+
+- `s` (`string`): the string to test for emptiness
+
+**Returns** `boolean`
 
 *Since: 0.15.*
 
@@ -92,13 +122,20 @@ isEmpty(s) returns true iff s is the empty string.
 
 Total. Corresponds to Haskell's null :: String -> Bool.
 
-**[HYDRA-CORE-LIB-STRINGS-IS-EMPTY-TESTS-ZERO-LENGTH] (requirement) **isEmpty returns true exactly when the string has no code points; any non-empty content — including whitespace, control characters, or a null character — makes it false.
+**[HYDRA-CORE-LIB-STRINGS-IS-EMPTY-TESTS-ZERO-LENGTH] (requirement)** isEmpty returns true exactly when the string has no code points; any non-empty content — including whitespace, control characters, or a null character — makes it false.
 
-## hydra.core.lib.strings.join
+## join
 
 Join a list of strings with a separator between each element.
 
-`∀.string → list<string> → string`
+`join(sep: string, xs: list<string>) → string`
+
+**Parameters**
+
+- `sep` (`string`): the separator to insert between elements
+- `xs` (`list<string>`): the list of strings to join
+
+**Returns** `string`
 
 *Since: 0.17.6.*
 
@@ -108,15 +145,21 @@ Total. Corresponds to Haskell's Data.List.intercalate :: String -> [String] -> S
 
 Renamed from hydra.lib.strings.intercalate.
 
-**[HYDRA-CORE-LIB-STRINGS-JOIN-INSERTS-SEPARATOR-BETWEEN-STRINGS] (requirement) **join concatenates a list of strings with a copy of the separator inserted between each pair of adjacent strings (not before the first or after the last), for separators of any content including empty, multi-character, and Unicode.
+**[HYDRA-CORE-LIB-STRINGS-JOIN-INSERTS-SEPARATOR-BETWEEN-STRINGS] (requirement)** join concatenates a list of strings with a copy of the separator inserted between each pair of adjacent strings (not before the first or after the last), for separators of any content including empty, multi-character, and Unicode.
 
-**[HYDRA-CORE-LIB-STRINGS-JOIN-BOUNDARY-INPUTS] (requirement) **join of an empty list of strings is the empty string, regardless of separator; join of a single-element list returns that element unchanged, regardless of separator.
+**[HYDRA-CORE-LIB-STRINGS-JOIN-BOUNDARY-INPUTS] (requirement)** join of an empty list of strings is the empty string, regardless of separator; join of a single-element list returns that element unchanged, regardless of separator.
 
-## hydra.core.lib.strings.length
+## length
 
 Return the length of a string.
 
-`∀.string → int32`
+`length(s: string) → int32`
+
+**Parameters**
+
+- `s` (`string`): the string to measure
+
+**Returns** `int32`
 
 *Since: 0.15.*
 
@@ -126,13 +169,20 @@ Note: this is the code-point count, not the byte count or the grapheme-cluster c
 
 Total on strings shorter than 2^31-1 code points.
 
-**[HYDRA-CORE-LIB-STRINGS-LENGTH-COUNTS-CODE-POINTS] (requirement) **length returns the number of Unicode code points in the string, not the byte count or grapheme-cluster count — so a multi-byte character counts as one code point and a combining-character sequence counts as multiple.
+**[HYDRA-CORE-LIB-STRINGS-LENGTH-COUNTS-CODE-POINTS] (requirement)** length returns the number of Unicode code points in the string, not the byte count or grapheme-cluster count — so a multi-byte character counts as one code point and a combining-character sequence counts as multiple.
 
-## hydra.core.lib.strings.splitOn
+## splitOn
 
 Split a string on a delimiter string.
 
-`∀.string → string → list<string>`
+`splitOn(sep: string, s: string) → list<string>`
+
+**Parameters**
+
+- `sep` (`string`): the delimiter to split on
+- `s` (`string`): the string to split
+
+**Returns** `list<string>`
 
 *Since: 0.15.*
 
@@ -142,17 +192,23 @@ Behavior when sep is empty is host-defined and should not be relied upon.
 
 Total. Corresponds to Haskell's Data.List.Split.splitOn :: String -> String -> [String].
 
-**[HYDRA-CORE-LIB-STRINGS-SPLIT-ON-SPLITS-ON-EVERY-OCCURRENCE] (requirement) **splitOn splits the string into the list of substrings between every occurrence of a non-empty delimiter, including when occurrences are consecutive, overlapping, at a boundary, or span the whole string — boundary and adjacent delimiters produce empty-string elements in the result.
+**[HYDRA-CORE-LIB-STRINGS-SPLIT-ON-SPLITS-ON-EVERY-OCCURRENCE] (requirement)** splitOn splits the string into the list of substrings between every occurrence of a non-empty delimiter, including when occurrences are consecutive, overlapping, at a boundary, or span the whole string — boundary and adjacent delimiters produce empty-string elements in the result.
 
-**[HYDRA-CORE-LIB-STRINGS-SPLIT-ON-NO-SPLIT-WHEN-ABSENT] (requirement) **splitOn returns the single-element list containing the original string when the delimiter does not occur in it.
+**[HYDRA-CORE-LIB-STRINGS-SPLIT-ON-NO-SPLIT-WHEN-ABSENT] (requirement)** splitOn returns the single-element list containing the original string when the delimiter does not occur in it.
 
-**[HYDRA-CORE-LIB-STRINGS-SPLIT-ON-EMPTY-STRING-OPERANDS] (requirement) **splitOn on an empty string (with a non-empty separator) returns the single-element list containing the empty string; splitOn with an empty separator splits between every code point, including around an astral (non-BMP) character without breaking its surrogate-pair encoding apart.
+**[HYDRA-CORE-LIB-STRINGS-SPLIT-ON-EMPTY-STRING-OPERANDS] (requirement)** splitOn on an empty string (with a non-empty separator) returns the single-element list containing the empty string; splitOn with an empty separator splits between every code point, including around an astral (non-BMP) character without breaking its surrogate-pair encoding apart.
 
-## hydra.core.lib.strings.toList
+## toList
 
 Convert a string to a list of Unicode code points.
 
-`∀.string → list<int32>`
+`toList(s: string) → list<int32>`
+
+**Parameters**
+
+- `s` (`string`): the string to convert
+
+**Returns** `list<int32>`
 
 *Since: 0.15.*
 
@@ -160,15 +216,21 @@ toList(s) returns the list of Unicode code points making up s, in order. Each co
 
 Total. The inverse of fromList.
 
-**[HYDRA-CORE-LIB-STRINGS-TO-LIST-DECOMPOSES-INTO-CODE-POINTS] (requirement) **toList returns the list of Unicode code points making up the string, in order, as the exact inverse of fromList, including for multi-code-point sequences and control/null characters.
+**[HYDRA-CORE-LIB-STRINGS-TO-LIST-DECOMPOSES-INTO-CODE-POINTS] (requirement)** toList returns the list of Unicode code points making up the string, in order, as the exact inverse of fromList, including for multi-code-point sequences and control/null characters.
 
-**[HYDRA-CORE-LIB-STRINGS-TO-LIST-EMPTY-INPUT] (requirement) **toList of the empty string is the empty list.
+**[HYDRA-CORE-LIB-STRINGS-TO-LIST-EMPTY-INPUT] (requirement)** toList of the empty string is the empty list.
 
-## hydra.core.lib.strings.toLower
+## toLower
 
 Convert a string to lowercase.
 
-`∀.string → string`
+`toLower(s: string) → string`
+
+**Parameters**
+
+- `s` (`string`): the string to convert to lowercase
+
+**Returns** `string`
 
 *Since: 0.15.*
 
@@ -180,15 +242,21 @@ For text intended for human-readable display in locales with non-trivial case ma
 
 Total.
 
-**[HYDRA-CORE-LIB-STRINGS-TO-LOWER-APPLIES-SIMPLE-LOWERCASE-MAPPING] (requirement) **toLower replaces each character with its Unicode simple (one-to-one) lowercase mapping, leaving a character with no lowercase mapping unchanged — including letters, accented Unicode characters, non-letter characters (numbers, punctuation, control characters), and the empty string.
+**[HYDRA-CORE-LIB-STRINGS-TO-LOWER-APPLIES-SIMPLE-LOWERCASE-MAPPING] (requirement)** toLower replaces each character with its Unicode simple (one-to-one) lowercase mapping, leaving a character with no lowercase mapping unchanged — including letters, accented Unicode characters, non-letter characters (numbers, punctuation, control characters), and the empty string.
 
-**[HYDRA-CORE-LIB-STRINGS-TO-LOWER-NO-FULL-CASE-FOLDING-EXPANSION] (requirement) **toLower does not perform full Unicode case folding: a character whose full lowercase mapping would expand to multiple code points (e.g. U+0130) is still mapped to its simple, single-code-point lowercase form, not the multi-code-point expansion.
+**[HYDRA-CORE-LIB-STRINGS-TO-LOWER-NO-FULL-CASE-FOLDING-EXPANSION] (requirement)** toLower does not perform full Unicode case folding: a character whose full lowercase mapping would expand to multiple code points (e.g. U+0130) is still mapped to its simple, single-code-point lowercase form, not the multi-code-point expansion.
 
-## hydra.core.lib.strings.toUpper
+## toUpper
 
 Convert a string to uppercase.
 
-`∀.string → string`
+`toUpper(s: string) → string`
+
+**Parameters**
+
+- `s` (`string`): the string to convert to uppercase
+
+**Returns** `string`
 
 *Since: 0.15.*
 
@@ -200,6 +268,6 @@ For text intended for human-readable display in locales with non-trivial case ma
 
 Total.
 
-**[HYDRA-CORE-LIB-STRINGS-TO-UPPER-APPLIES-SIMPLE-UPPERCASE-MAPPING] (requirement) **toUpper replaces each character with its Unicode simple (one-to-one) uppercase mapping, leaving a character with no uppercase mapping unchanged — including letters, accented Unicode characters, non-letter characters, and the empty string.
+**[HYDRA-CORE-LIB-STRINGS-TO-UPPER-APPLIES-SIMPLE-UPPERCASE-MAPPING] (requirement)** toUpper replaces each character with its Unicode simple (one-to-one) uppercase mapping, leaving a character with no uppercase mapping unchanged — including letters, accented Unicode characters, non-letter characters, and the empty string.
 
-**[HYDRA-CORE-LIB-STRINGS-TO-UPPER-NO-FULL-CASE-FOLDING-EXPANSION] (requirement) **toUpper does not perform full Unicode case folding: a character whose full uppercase mapping would expand to multiple code points, or whose simple mapping targets a single precomposed code point rather than a decomposed sequence, is mapped only to its simple, single-code-point uppercase form.
+**[HYDRA-CORE-LIB-STRINGS-TO-UPPER-NO-FULL-CASE-FOLDING-EXPANSION] (requirement)** toUpper does not perform full Unicode case folding: a character whose full uppercase mapping would expand to multiple code points, or whose simple mapping targets a single precomposed code point rather than a decomposed sequence, is mapped only to its simple, single-code-point uppercase form.
