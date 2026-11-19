@@ -10,8 +10,8 @@
 # Usage:
 #   bin/print-hydra-sources.sh                      -- every module declared textually sourced
 #                                                        (every package.json's "textualSources"
-#                                                        field, honoring "textualSourcesExclude" --
-#                                                        currently hydra.core.lib.* stays DSL-only)
+#                                                        field, honoring "textualSourcesExclude"; since
+#                                                        0.18.1 no kernel module is excluded)
 #   bin/print-hydra-sources.sh <ns1> <ns2> ...      -- only the named modules, each of which must
 #                                                        already be in the textual-sources scope
 # Exits non-zero if any selected module fails to round-trip, or a named module is out of scope.
