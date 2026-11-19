@@ -446,7 +446,7 @@
 #                                                                 ^ source.hydra string.quoted.double.hydra
 #                                                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                                                   ^^^^^^^^^^^ source.hydra
->                expected = λ`_`."# hydra.testInput.doc\n\n<!-- Note: this is an automatically generated file. Do not edit. -->\n\n## hydra.testInput.doc.identity\n\nThe identity function\n\n`∀a.a → a`"}},
+>                expected = λ`_`."# hydra.testInput.doc\n\n## identity\n\nThe identity function\n\n`∀a.identity(arg0: a) → a`\n\n**Parameters**\n\n- `arg0` (`a`)\n\n**Returns** `a`"}},
 #^^^^^^^^^^^^^^^^ source.hydra
 #                ^^^^^^^^ source.hydra variable.other.hydra
 #                        ^ source.hydra
@@ -461,18 +461,24 @@
 #                                 ^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                      ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
 #                                                        ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                          ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                     ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                       ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                         ^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                              ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                            ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
 #                                                                                                                              ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                 ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                   ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                                          ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                                            ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                                              ^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                                                                                         ^^^^ source.hydra
+#                                                                                                                                ^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                                              ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                  ^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                                                                ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                                  ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                                    ^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                                                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                                                                                                                                    ^^^^ source.hydra
 >            description = none,
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^^^^^^ source.hydra variable.other.hydra
@@ -968,7 +974,7 @@
 #                                                                 ^ source.hydra string.quoted.double.hydra
 #                                                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                                                   ^^^^^^^^^^^ source.hydra
->                expected = λ`_`."# hydra.testInput.doc\n\n<!-- Note: this is an automatically generated file. Do not edit. -->\n\n## hydra.testInput.doc.identity\n\nThe identity function\n\n`∀a.a → a`\n\n## hydra.testInput.doc.identity2\n\n*(undocumented)*\n\n`∀a.a → a`"}},
+>                expected = λ`_`."# hydra.testInput.doc\n\n## identity\n\nThe identity function\n\n`∀a.identity(arg0: a) → a`\n\n**Parameters**\n\n- `arg0` (`a`)\n\n**Returns** `a`\n\n## identity2\n\n*(undocumented)*\n\n`∀a.identity2(arg0: a) → a`\n\n**Parameters**\n\n- `arg0` (`a`)\n\n**Returns** `a`"}},
 #^^^^^^^^^^^^^^^^ source.hydra
 #                ^^^^^^^^ source.hydra variable.other.hydra
 #                        ^ source.hydra
@@ -983,27 +989,42 @@
 #                                 ^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                      ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
 #                                                        ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                          ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                     ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                       ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                         ^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                              ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                            ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
 #                                                                                                                              ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                 ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                   ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                     ^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                                          ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                                            ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                                              ^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                                                        ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                                                          ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                                                                                            ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                                                                                              ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                                                                                                ^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                                                                                                                ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                                                                                                                  ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                                                                                                                    ^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                                                                                                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                                                                                                                                                               ^^^^ source.hydra
+#                                                                                                                                ^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                                              ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                  ^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                                                                ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                                  ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                                    ^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                                                                                   ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                                                     ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                                                       ^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                                                                                                   ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                                                                     ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                                                                       ^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                                                                                                                       ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                                                                                         ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                                                                                                                                                      ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                                                                                                                        ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                                                                                                                          ^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                                                                                                                                                                        ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                                                                                                                                          ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                                                                                                                                            ^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                                                                                                                                                                                          ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                                                                                                                                                            ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                                                                                                                                                              ^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                                                                                                                                                                                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                                                                                                                                                                                                                                                              ^^^^ source.hydra
 >            description = none,
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^^^^^^ source.hydra variable.other.hydra
@@ -1282,7 +1303,7 @@
 #                                                       ^ source.hydra
 #                                                        ^^^^ source.hydra keyword.control.hydra
 #                                                            ^^^^^^^ source.hydra
->                expected = λ`_`."# hydra.testInput.prim\n\n<!-- Note: this is an automatically generated file. Do not edit. -->\n\n## hydra.testInput.prim.example\n\nA trivial constant primitive\n\n`string`\n\n**[HYDRA-TEST-INPUT-PRIM-EXAMPLE-CONSTANT-VALUE] (requirement) **This primitive always returns the same string value."}},
+>                expected = λ`_`."# hydra.testInput.prim\n\n## example\n\nA trivial constant primitive\n\n`example : string`\n\n**[HYDRA-TEST-INPUT-PRIM-EXAMPLE-CONSTANT-VALUE] (requirement)** This primitive always returns the same string value."}},
 #^^^^^^^^^^^^^^^^ source.hydra
 #                ^^^^^^^^ source.hydra variable.other.hydra
 #                        ^ source.hydra
@@ -1297,21 +1318,18 @@
 #                                 ^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                       ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
 #                                                         ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                               ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                 ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                  ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                    ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                                                  ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                                                    ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                                                      ^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                                                              ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                                                                ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                                                                                                                                                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                                                                                                                                                                                                                        ^^^^ source.hydra
+#                                                           ^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                     ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                       ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                     ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                       ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                         ^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                           ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                             ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                                                                                                                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                                                                                                                                                                                                     ^^^^ source.hydra
 >            description = none,
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^^^^^^ source.hydra variable.other.hydra
@@ -1527,7 +1545,7 @@
 #                                               ^ source.hydra
 #                                                ^^^^^ source.hydra variable.other.hydra
 #                                                     ^^^^^^^^ source.hydra
->                expected = λ`_`."# hydra.testInput.typ\n\n<!-- Note: this is an automatically generated file. Do not edit. -->\n\n## hydra.testInput.typ.Example\n\nA type alias for string\n\n`string`"}},
+>                expected = λ`_`."# hydra.testInput.typ\n\n## Example\n\nA type alias for string\n\n`string`"}},
 #^^^^^^^^^^^^^^^^ source.hydra
 #                ^^^^^^^^ source.hydra variable.other.hydra
 #                        ^ source.hydra
@@ -1542,18 +1560,15 @@
 #                                 ^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                      ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
 #                                                        ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                              ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                  ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                                           ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                                             ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                                               ^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                                                                                        ^^^^ source.hydra
+#                                                          ^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                    ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                      ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                        ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                               ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                 ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                   ^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                                                            ^^^^ source.hydra
 >            description = none,
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^^^^^^ source.hydra variable.other.hydra
@@ -1832,7 +1847,7 @@
 #                                                                 ^ source.hydra string.quoted.double.hydra
 #                                                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                                                   ^^^^^^^^^^^ source.hydra
->                expected = λ`_`."# hydra.testInput.undoc\n\n<!-- Note: this is an automatically generated file. Do not edit. -->\n\n## hydra.testInput.undoc.identity\n\n*(undocumented)*\n\n`∀a.a → a`"}},
+>                expected = λ`_`."# hydra.testInput.undoc\n\n## identity\n\n*(undocumented)*\n\n`∀a.identity(arg0: a) → a`\n\n**Parameters**\n\n- `arg0` (`a`)\n\n**Returns** `a`"}},
 #^^^^^^^^^^^^^^^^ source.hydra
 #                ^^^^^^^^ source.hydra variable.other.hydra
 #                        ^ source.hydra
@@ -1847,18 +1862,24 @@
 #                                 ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                        ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
 #                                                          ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                  ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                     ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                       ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                         ^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                                         ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                                           ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
-#                                                                                                                                                                                             ^^^^^^^^^^ source.hydra string.quoted.double.hydra
-#                                                                                                                                                                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                                                                                                                                                        ^^^^ source.hydra
+#                                                            ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                       ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                         ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                           ^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                           ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                             ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                         ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                           ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                             ^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                                           ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                             ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                               ^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                                                             ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                               ^^ source.hydra string.quoted.double.hydra constant.character.escape.hydra
+#                                                                                                                                                                 ^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
+#                                                                                                                                                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
+#                                                                                                                                                                                 ^^^^ source.hydra
 >            description = none,
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^^^^^^ source.hydra variable.other.hydra
