@@ -201,15 +201,13 @@ escapeControlCharsInJson = define "escapeControlCharsInJson" $
 -- | Decode a single module from a JSON value.
 -- Given a bootstrap graph, universe modules, and a JSON value, decodes it to a Packaging.
 -- This is the pure core of the JSON module loading pipeline.
--- | Format a primitive for the lexicon: "  name : typeScheme"
+-- | Format a primitive for the lexicon: "  name(param: type, ...) → result" (named signature, as on the spec pages)
 formatPrimitive :: TypedTermDefinition (Primitive -> String)
 formatPrimitive = define "formatPrimitive" $
   doc "Format a primitive for the lexicon" $
   "prim" ~>
   "name" <~ Core.unName (Packaging.primitiveDefinitionName $ Graph.primitiveDefinition $ var "prim") $
-  "typ" <~ (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition $ var "prim")) $
-  "typeStr" <~ PrintCore.typeScheme @@ var "typ" $
-  (string "  ") ++ var "name" ++ (string " : ") ++ var "typeStr"
+  (string "  ") ++ namedSignature (var "name") (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition $ var "prim")
 
 -- | Format a type binding for the lexicon: "  name = type"
 -- | Format a term binding for the lexicon: "  name : typeScheme"
@@ -223,7 +221,7 @@ formatTermBinding = define "formatTermBinding" $
     ("scheme" ~> PrintCore.typeScheme @@ var "scheme") $
   (string "  ") ++ var "name" ++ (string " : ") ++ var "typeStr"
 
--- | Format a primitive for the lexicon: "  name : typeScheme"
+-- | Format a primitive for the lexicon: "  name(param: type, ...) → result" (named signature, as on the spec pages)
 generateSourceFiles
   :: TypedTermDefinition ((Module -> [Definition] -> InferenceContext -> Graph -> Prelude.Either Error (M.Map String String))
     -> Language

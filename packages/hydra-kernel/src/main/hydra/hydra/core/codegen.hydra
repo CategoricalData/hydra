@@ -91,10 +91,37 @@ term escapeControlCharsInJson =
 ## Format a primitive for the lexicon
 term formatPrimitive =
   λprim.
-    let name := Name[] (PrimitiveDefinition[name] (Primitive[definition] prim)) in
-    let typ := termSignatureToTypeScheme (PrimitiveDefinition[signature] (Primitive[definition] prim)) in
-    let typeStr := typeScheme typ in
-    strings.concat2 (strings.concat2 (strings.concat2 "  " name) " : ") typeStr
+    let name := Name[] (PrimitiveDefinition[name] (Primitive[definition] prim))
+    in strings.concat2
+      "  "
+      (let typeParams := TermSignature[typeParameters] (PrimitiveDefinition[signature] (Primitive[definition] prim)) in
+      let params := TermSignature[parameters] (PrimitiveDefinition[signature] (Primitive[definition] prim)) in
+      let varNames := lists.map (λtp.printBinderName (TypeParameter[name] tp)) typeParams in
+      let constraintClassName := λc.cases(TypeClassConstraint){simple = λn.Name[] n} c in
+      let constraintsOf := λtp.
+          let v := TypeParameter[name] tp
+          in lists.map
+            (λc.strings.concat [constraintClassName c, " ", Name[] v])
+            (lists.sortBy constraintClassName (TypeParameter[constraints] tp)) in
+      let tc := lists.concat (lists.map constraintsOf typeParams) in
+      let header := ifElse
+          (lists.isEmpty varNames)
+          ""
+          (strings.concat
+            [
+              "∀",
+              strings.join ", " varNames,
+              ".",
+              ifElse (lists.isEmpty tc) "" (strings.concat ["(", strings.join ", " tc, ") ⇒ "])]) in
+      let paramStr := λp.strings.concat
+            [Name[] (Parameter[name] p), ": ", ifElse (Parameter[isLazy] p) "lazy " "", `type` (Parameter[`type`] p)] in
+      let resultStr := `type`
+          (Result[`type`]
+            (TermSignature[result] (PrimitiveDefinition[signature] (Primitive[definition] prim)))) in
+      ifElse
+        (lists.isEmpty params)
+        (strings.concat [header, name, " : ", resultStr])
+        (strings.concat [header, name, "(", strings.join ", " (lists.map paramStr params), ") → ", resultStr]))
 
 ## Format a term binding for the lexicon
 term formatTermBinding =
