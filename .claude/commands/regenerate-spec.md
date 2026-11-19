@@ -9,10 +9,6 @@ allowed-tools:
 
 # Regenerate the module-reference spec pages
 
-> **Not yet runnable: the `hydra.RegenerateSpec` driver is pending under #723.**
-> `bin/regenerate-spec.sh` invokes that Java class, which has not been committed yet,
-> so this command will fail until #723 lands.
-
 ## When to run
 
 User-invoked. Typical triggers:

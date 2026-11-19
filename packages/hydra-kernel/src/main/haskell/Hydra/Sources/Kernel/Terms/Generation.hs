@@ -286,6 +286,114 @@ generateLexicon = define "generateLexicon" $
     ++ (string "\nTypes:\n") ++ (Formatting.unlines @@ var "typeLines")
     ++ (string "\nTerms:\n") ++ (Formatting.unlines @@ var "termLines")
 
+-- | The description annotation of a type, if any. Type definitions in the kernel carry their
+-- description both in EntityMetadata and (for types authored with a doc comment) as an annotation
+-- on the body, as do record/union fields; the generator hoists the latter into prose (G4).
+typeDescriptionOf :: TypedTerm Type -> TypedTerm (Maybe String)
+typeDescriptionOf t =
+  Optionals.bind (Maps.lookup (asTerm Constants.keyDescription) (Annotations.typeAnnotationInternal @@ t))
+    ("dt" ~> match _Term (var "dt") (Just nothing) [
+      _Term_literal>>: "lit" ~> match _Literal (var "lit") (Just nothing) [
+        _Literal_string>>: "ds" ~> just (var "ds")]])
+
+-- | Inline/Block shorthands for the generator's own markdown terms.
+mdText, mdCode, mdStrong :: TypedTerm String -> TypedTerm Term
+mdText s = inject PrintMarkdown._Inline PrintMarkdown._Inline_text s
+mdCode s = inject PrintMarkdown._Inline PrintMarkdown._Inline_code s
+mdStrong s = inject PrintMarkdown._Inline PrintMarkdown._Inline_strong (list [mdText s])
+
+mdParagraph :: TypedTerm [Term] -> TypedTerm Term
+mdParagraph content = inject PrintMarkdown._Block PrintMarkdown._Block_paragraph (docParagraph content)
+
+-- | A bulleted list block whose items are single paragraphs.
+mdBullets :: TypedTerm [[Term]] -> TypedTerm Term
+mdBullets items = inject PrintMarkdown._Block PrintMarkdown._Block_list (record PrintMarkdown._List [
+  PrintMarkdown._List_ordered>>: boolean False,
+  PrintMarkdown._List_items>>: Lists.map ("c" ~> wrap PrintMarkdown._ListItem (list [mdParagraph (var "c")])) items])
+
+-- | One list item's inline content: `name` (`type`)[: description].
+mdNamedItem :: TypedTerm String -> TypedTerm String -> TypedTerm (Maybe String) -> TypedTerm [Term]
+mdNamedItem name typ mdesc =
+  Lists.concat2
+    (list [mdCode name, mdText (string " ("), mdCode typ, mdText (string ")")])
+    (Optionals.toList (Optionals.map ("d" ~> mdText (string ": " ++ var "d")) mdesc))
+
+-- | Render a term signature with parameter names, e.g. `∀a, b.map(f: a → b, xs: list<a>) → list<b>`:
+-- the quantifier/constraint header is printed exactly as 'PrintCore.termSignature' prints it, the
+-- parameters as `name: type` (with a 'lazy ' marker, #800), and a monomorphic signature has no
+-- '∀.' header at all (G1).
+namedSignature :: TypedTerm String -> TypedTerm TermSignature -> TypedTerm String
+namedSignature lname sig =
+  "typeParams" <~ Typing.termSignatureTypeParameters sig $
+  "params" <~ Typing.termSignatureParameters sig $
+  "varNames" <~ Lists.map ("tp" ~> PrintCore.printBinderName @@ (Typing.typeParameterName $ var "tp")) (var "typeParams") $
+  "constraintClassName" <~ ("c" ~>
+    cases _TypeClassConstraint Nothing [
+      _TypeClassConstraint_simple>>: "n" ~> Core.unName (var "n")] @@ (var "c")) $
+  "constraintsOf" <~ ("tp" ~> "v" <~ Typing.typeParameterName (var "tp") $
+    Lists.map ("c" ~> Strings.concat $ list [
+      var "constraintClassName" @@ var "c", string " ", Core.unName (var "v")]) $
+    Lists.sortBy (var "constraintClassName") (Typing.typeParameterConstraints $ var "tp")) $
+  "tc" <~ Lists.concat (Lists.map (var "constraintsOf") (var "typeParams")) $
+  "header" <~ Logic.ifElse (Lists.isEmpty $ var "varNames")
+    (string "")
+    (Strings.concat $ list [
+      string "∀",
+      Strings.join (string ", ") (var "varNames"),
+      string ".",
+      Logic.ifElse (Lists.isEmpty $ var "tc")
+        (string "")
+        (Strings.concat $ list [string "(", Strings.join (string ", ") (var "tc"), string ") ⇒ "])]) $
+  "paramStr" <~ ("p" ~>
+    Strings.concat $ list [
+      Core.unName (Typing.parameterName $ var "p"),
+      string ": ",
+      Logic.ifElse (Typing.parameterIsLazy $ var "p") (string "lazy ") (string ""),
+      PrintCore.type_ @@ (Typing.parameterType $ var "p")]) $
+  "resultStr" <~ (PrintCore.type_ @@ (Typing.resultType $ Typing.termSignatureResult sig)) $
+  Logic.ifElse (Lists.isEmpty $ var "params")
+    (Strings.concat $ list [var "header", lname, string " : ", var "resultStr"])
+    (Strings.concat $ list [
+      var "header", lname, string "(",
+      Strings.join (string ", ") (Lists.map (var "paramStr") (var "params")),
+      string ") → ", var "resultStr"])
+
+-- | The "Parameters" list and "Returns" line for a term signature (G1): one bullet per parameter
+-- (`name` (`type`): description) and a Returns paragraph carrying the result type and description.
+-- The Parameters block is omitted when there are no parameters.
+parameterBlocks :: TypedTerm TermSignature -> TypedTerm [Term]
+parameterBlocks sig =
+  "params" <~ Typing.termSignatureParameters sig $
+  "result" <~ Typing.termSignatureResult sig $
+  "returns" <~ mdParagraph (Lists.concat2
+    (list [mdStrong (string "Returns"), mdText (string " "), mdCode (PrintCore.type_ @@ (Typing.resultType $ var "result"))])
+    (Optionals.toList (Optionals.map ("d" ~> mdText (string ": " ++ var "d")) (Typing.resultDescription $ var "result")))) $
+  Logic.ifElse (Lists.isEmpty $ var "params")
+    (Logic.ifElse (Optionals.isGiven $ Typing.resultDescription $ var "result")
+      (list [var "returns"])
+      (list ([] :: [TypedTerm Term])))
+    (list [
+      mdParagraph (list [mdStrong (string "Parameters")]),
+      mdBullets (Lists.map ("p" ~> mdNamedItem
+        (Core.unName (Typing.parameterName $ var "p"))
+        (PrintCore.type_ @@ (Typing.parameterType $ var "p"))
+        (Typing.parameterDescription $ var "p")) (var "params")),
+      var "returns"])
+
+-- | The "Fields" (record) or "Variants" (union) list for a type body, one bullet per field with its
+-- type and hoisted description (G4). Empty for any other kind of type.
+fieldBlocks :: TypedTerm Type -> TypedTerm [Term]
+fieldBlocks body =
+  "fieldList" <~ ("label" ~> "fields" ~> list [
+    mdParagraph (list [mdStrong (var "label")]),
+    mdBullets (Lists.map ("ft" ~> mdNamedItem
+      (Core.unName (Core.fieldTypeName $ var "ft"))
+      (PrintCore.type_ @@ (Strip.deannotateTypeRecursive @@ (Core.fieldTypeType $ var "ft")))
+      (typeDescriptionOf (Core.fieldTypeType $ var "ft"))) (var "fields"))]) $
+  match _Type (Strip.deannotateType @@ body) (Just $ list ([] :: [TypedTerm Term])) [
+    _Type_record>>: "fts" ~> var "fieldList" @@ string "Fields" @@ var "fts",
+    _Type_union>>: "fts" ~> var "fieldList" @@ string "Variants" @@ var "fts"]
+
 -- | Render a single Definition (primitive, term, or type) as a hydra.core.markdown Section: an H2
 -- heading (the definition's local name), a doc-string paragraph (or an undocumented-marker
 -- placeholder), a signature paragraph (inline code span), and one paragraph per provision (#725,
@@ -295,43 +403,49 @@ generateLexicon = define "generateLexicon" $
 definitionToSection :: TypedTerm Definition -> TypedTerm Term
 definitionToSection d = match _Definition d Nothing [
   _Definition_primitive>>: "pd" ~>
-    "name" <~ Core.unName (Packaging.primitiveDefinitionName $ var "pd") $
     "mdoc" <~ Optionals.bind (Packaging.primitiveDefinitionMetadata $ var "pd")
       ("em" ~> Packaging.entityMetadataDescription (var "em")) $
-    "sig" <~ PrintCore.typeScheme @@ (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ var "pd")) $
+    "psig" <~ Packaging.primitiveDefinitionSignature (var "pd") $
+    "sig" <~ namedSignature (Names.localNameOf @@ Packaging.primitiveDefinitionName (var "pd")) (var "psig") $
     "provisions" <~ Optionals.withDefault (list ([] :: [TypedTerm Provision]))
       (Optionals.map ("em" ~> Packaging.entityMetadataProvisions (var "em")) (Packaging.primitiveDefinitionMetadata $ var "pd")) $
     "comments" <~ Optionals.withDefault (list ([] :: [TypedTerm String]))
       (Optionals.map ("em" ~> Packaging.entityMetadataComments (var "em")) (Packaging.primitiveDefinitionMetadata $ var "pd")) $
     "mlifecycle" <~ Optionals.bind (Packaging.primitiveDefinitionMetadata $ var "pd")
       ("em" ~> Packaging.entityMetadataLifecycle (var "em")) $
-    definitionSection (var "name") (var "mdoc") (var "sig") (var "provisions") (var "comments") (var "mlifecycle"),
+    definitionSection (Names.localNameOf @@ Packaging.primitiveDefinitionName (var "pd")) (var "mdoc") (var "sig")
+      (parameterBlocks (var "psig")) (var "provisions") (var "comments") (var "mlifecycle"),
   _Definition_term>>: "td" ~>
-    "name" <~ Core.unName (Packaging.termDefinitionName $ var "td") $
     "mdoc" <~ Optionals.bind (Packaging.termDefinitionMetadata $ var "td")
       ("em" ~> Packaging.entityMetadataDescription (var "em")) $
-    "sig" <~ optCases (Optionals.map (asTerm Scoping.termSignatureToTypeScheme) $ Packaging.termDefinitionSignature $ var "td")
+    "msig" <~ Packaging.termDefinitionSignature (var "td") $
+    "sig" <~ optCases (var "msig")
       (string "?")
-      ("ts" ~> PrintCore.typeScheme @@ var "ts") $
+      ("ts" ~> namedSignature (Names.localNameOf @@ Packaging.termDefinitionName (var "td")) (var "ts")) $
+    "extra" <~ optCases (var "msig") (list ([] :: [TypedTerm Term])) ("ts" ~> parameterBlocks (var "ts")) $
     "provisions" <~ Optionals.withDefault (list ([] :: [TypedTerm Provision]))
       (Optionals.map ("em" ~> Packaging.entityMetadataProvisions (var "em")) (Packaging.termDefinitionMetadata $ var "td")) $
     "comments" <~ Optionals.withDefault (list ([] :: [TypedTerm String]))
       (Optionals.map ("em" ~> Packaging.entityMetadataComments (var "em")) (Packaging.termDefinitionMetadata $ var "td")) $
     "mlifecycle" <~ Optionals.bind (Packaging.termDefinitionMetadata $ var "td")
       ("em" ~> Packaging.entityMetadataLifecycle (var "em")) $
-    definitionSection (var "name") (var "mdoc") (var "sig") (var "provisions") (var "comments") (var "mlifecycle"),
+    definitionSection (Names.localNameOf @@ Packaging.termDefinitionName (var "td")) (var "mdoc") (var "sig")
+      (var "extra") (var "provisions") (var "comments") (var "mlifecycle"),
   _Definition_type>>: "tyd" ~>
-    "name" <~ Core.unName (Packaging.typeDefinitionName $ var "tyd") $
-    "mdoc" <~ Optionals.bind (Packaging.typeDefinitionMetadata $ var "tyd")
-      ("em" ~> Packaging.entityMetadataDescription (var "em")) $
-    "sig" <~ PrintCore.typeScheme @@ (Packaging.typeDefinitionBody $ var "tyd") $
+    "tbody" <~ Packaging.typeDefinitionBody (var "tyd") $
+    "mdoc" <~ Optionals.match (Optionals.bind (Packaging.typeDefinitionMetadata $ var "tyd")
+        ("em" ~> Packaging.entityMetadataDescription (var "em")))
+      (typeDescriptionOf (Core.typeSchemeBody $ var "tbody"))
+      ("d" ~> just (var "d")) $
+    "sig" <~ PrintCore.typeScheme @@ (Strip.deannotateTypeSchemeRecursive @@ var "tbody") $
     "provisions" <~ Optionals.withDefault (list ([] :: [TypedTerm Provision]))
       (Optionals.map ("em" ~> Packaging.entityMetadataProvisions (var "em")) (Packaging.typeDefinitionMetadata $ var "tyd")) $
     "comments" <~ Optionals.withDefault (list ([] :: [TypedTerm String]))
       (Optionals.map ("em" ~> Packaging.entityMetadataComments (var "em")) (Packaging.typeDefinitionMetadata $ var "tyd")) $
     "mlifecycle" <~ Optionals.bind (Packaging.typeDefinitionMetadata $ var "tyd")
       ("em" ~> Packaging.entityMetadataLifecycle (var "em")) $
-    definitionSection (var "name") (var "mdoc") (var "sig") (var "provisions") (var "comments") (var "mlifecycle")]
+    definitionSection (Names.localNameOf @@ Packaging.typeDefinitionName (var "tyd")) (var "mdoc") (var "sig")
+      (fieldBlocks (Core.typeSchemeBody $ var "tbody")) (var "provisions") (var "comments") (var "mlifecycle")]
 
 -- | Build a hydra.core.markdown Paragraph term from a list of Inline content, with no explicit anchor
 -- (anchors are for elements needing direct linkability -- see provisionParagraph below, which
@@ -370,8 +484,8 @@ provisionParagraph p =
     PrintMarkdown._Paragraph_content>>: list [
       inject PrintMarkdown._Inline PrintMarkdown._Inline_strong (list [
         inject PrintMarkdown._Inline PrintMarkdown._Inline_text
-          (string "[" ++ var "upperDashed" ++ string "] (" ++ var "kindStr" ++ string ") ")]),
-      inject PrintMarkdown._Inline PrintMarkdown._Inline_text (var "pstatement")],
+          (string "[" ++ var "upperDashed" ++ string "] (" ++ var "kindStr" ++ string ")")]),
+      inject PrintMarkdown._Inline PrintMarkdown._Inline_text (string " " ++ var "pstatement")],
     PrintMarkdown._Paragraph_anchor>>: just (var "upperDashed")]
 
 -- | Render a LifecycleInfo as a single italicized paragraph, e.g. "*Since: 0.18.*" or
@@ -402,8 +516,8 @@ lifecycleParagraph lc =
 -- lifecycleParagraph. Ordering: doc string, signature, lifecycle (if any), comments (if any),
 -- provisions (if any) -- lifecycle before comments so a "Since/Deprecated" fact reads immediately
 -- after the signature, the same position hand-authored pages use.
-definitionSection :: TypedTerm String -> TypedTerm (Maybe String) -> TypedTerm String -> TypedTerm [Provision] -> TypedTerm [String] -> TypedTerm (Maybe LifecycleInfo) -> TypedTerm Term
-definitionSection name mdoc sig provisions comments mlifecycle =
+definitionSection :: TypedTerm String -> TypedTerm (Maybe String) -> TypedTerm String -> TypedTerm [Term] -> TypedTerm [Provision] -> TypedTerm [String] -> TypedTerm (Maybe LifecycleInfo) -> TypedTerm Term
+definitionSection name mdoc sig extra provisions comments mlifecycle =
   record PrintMarkdown._Section [
     PrintMarkdown._Section_heading>>: record PrintMarkdown._Heading [
       PrintMarkdown._Heading_level>>: int32 2,
@@ -416,25 +530,17 @@ definitionSection name mdoc sig provisions comments mlifecycle =
             inject PrintMarkdown._Inline PrintMarkdown._Inline_text (Optionals.withDefault (string "*(undocumented)*") mdoc)])),
           inject PrintMarkdown._Block PrintMarkdown._Block_paragraph (docParagraph (list [
             inject PrintMarkdown._Inline PrintMarkdown._Inline_code sig]))],
+        extra,
         Lists.map ("lc" ~> inject PrintMarkdown._Block PrintMarkdown._Block_paragraph (lifecycleParagraph (var "lc"))) (Optionals.toList mlifecycle),
         Lists.map ("c" ~> inject PrintMarkdown._Block PrintMarkdown._Block_paragraph (docParagraph (list [
           inject PrintMarkdown._Inline PrintMarkdown._Inline_text (var "c")]))) comments,
         Lists.map ("p" ~> inject PrintMarkdown._Block PrintMarkdown._Block_paragraph (provisionParagraph (var "p"))) provisions]),
     PrintMarkdown._Section_anchor>>: nothing]
 
--- | The generated-file notice banner, prepended to every generated module page as a raw HTML
--- comment block -- resolves the previously-open "generated-file notice wording" question now
--- that hydra.core.markdown has a Block.raw passthrough variant (#579's addition) to carry it. Text
--- matches CLAUDE.md's documented convention for generated source files verbatim, since no
--- distinct wording has been specified for generated prose pages.
-generatedFileNoticeBlock :: TypedTerm Term
-generatedFileNoticeBlock = inject PrintMarkdown._Block PrintMarkdown._Block_raw
-  (string "<!-- Note: this is an automatically generated file. Do not edit. -->")
-
 -- | Render a module's own EntityMetadata.comments (module-level introductory prose ported from a
 -- hand-authored specification page, #725) as one paragraph per comment, in order -- the same
 -- one-paragraph-per-logical-observation convention 'definitionSection' uses for a definition's own
--- comments. Placed between the generated-file notice and the per-definition sections.
+-- comments. Placed before the per-definition sections.
 moduleIntroBlocks :: TypedTerm (Maybe EntityMetadata) -> TypedTerm [Term]
 moduleIntroBlocks mmeta =
   "comments" <~ Optionals.withDefault (list ([] :: [TypedTerm String]))
@@ -445,7 +551,9 @@ moduleIntroBlocks mmeta =
 -- | Generate a hydra.core.markdown Document describing a module's definitions: an optional
 -- module-level introduction (the module's own EntityMetadata.comments, #725 -- see
 -- moduleIntroBlocks), then one Section per definition (name, doc string, signature, lifecycle,
--- comments, provisions -- see definitionToSection), prepended with a generated-file notice banner.
+-- comments, provisions -- see definitionToSection). The generated-file notice is NOT part of the
+-- Document: the printer emits the H1 title first, but hand-authored pages put the notice before it,
+-- so the driver (hydra.RegenerateSpec) prepends it once per page, outside the Markdown AST (G2).
 generateModuleDoc :: TypedTermDefinition (Module -> Term)
 generateModuleDoc = define "generateModuleDoc" $
   doc "Generate a hydra.core.markdown Document describing a module's definitions" $
@@ -454,9 +562,8 @@ generateModuleDoc = define "generateModuleDoc" $
   "introBlocks" <~ moduleIntroBlocks (Packaging.moduleMetadata $ var "mod") $
   record PrintMarkdown._Document [
     PrintMarkdown._Document_title>>: Packaging.unModuleName (Packaging.moduleName $ var "mod"),
-    PrintMarkdown._Document_content>>: Lists.cons generatedFileNoticeBlock
-      (Lists.concat2 (var "introBlocks")
-        (Lists.map ("s" ~> inject PrintMarkdown._Block PrintMarkdown._Block_section (var "s")) (var "sections")))]
+    PrintMarkdown._Document_content>>: Lists.concat2 (var "introBlocks")
+      (Lists.map ("s" ~> inject PrintMarkdown._Block PrintMarkdown._Block_section (var "s")) (var "sections"))]
 
 -- | Convert a Module to a JSON string.
 -- Encodes the Module as a Term, converts to JSON, then serializes to a string.

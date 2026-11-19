@@ -303,10 +303,12 @@ generateModuleDocCase = universalCase
     -- "(forall a. (a → a))", mixing ASCII (scheme header) and Unicode (body arrow).
     expected = Phantoms.string $
       "# hydra.testInput.doc\n\n" ++
-      "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n" ++
-      "## hydra.testInput.doc.identity\n\n" ++
+      "## identity\n\n" ++
       "The identity function\n\n" ++
-      "`∀a.a → a`"
+      "`∀a.identity(arg0: a) → a`\n\n" ++
+      "**Parameters**\n\n" ++
+      "- `arg0` (`a`)\n\n" ++
+      "**Returns** `a`"
 
 -- | Property: an undocumented definition (metadata = nothing) renders the
 -- "*(undocumented)*" placeholder paragraph rather than failing, per #723's
@@ -341,10 +343,12 @@ undocumentedCase = universalCase
     actual = PrintMarkdown.document # (Generation.generateModuleDoc # undocumentedModule)
     expected = Phantoms.string $
       "# hydra.testInput.undoc\n\n" ++
-      "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n" ++
-      "## hydra.testInput.undoc.identity\n\n" ++
+      "## identity\n\n" ++
       "*(undocumented)*\n\n" ++
-      "`∀a.a → a`"
+      "`∀a.identity(arg0: a) → a`\n\n" ++
+      "**Parameters**\n\n" ++
+      "- `arg0` (`a`)\n\n" ++
+      "**Returns** `a`"
 
 -- | Property: a PrimitiveDefinition's signature always renders (never falls back to "?",
 -- unlike TermDefinition, since a primitive's signature is "always explicit, never inferred"
@@ -401,16 +405,15 @@ primitiveDocCase = universalCase
     expected
   where
     actual = PrintMarkdown.document # (Generation.generateModuleDoc # primitiveExampleModule)
-    -- provisionParagraph bolds ONLY the "[NAME] (kind) " lead-in (a separate Inline.strong),
+    -- provisionParagraph bolds ONLY the "[NAME] (kind)" lead-in (the separating space is outside the bold, G3) (a separate Inline.strong),
     -- not the statement -- the statement is a sibling plain Inline.text, concatenated with no
     -- separator (see Print/Markdown.hs's `inlines` -- Strings.concat with no join string).
     expected = Phantoms.string $
       "# hydra.testInput.prim\n\n" ++
-      "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n" ++
-      "## hydra.testInput.prim.example\n\n" ++
+      "## example\n\n" ++
       "A trivial constant primitive\n\n" ++
-      "`string`\n\n" ++
-      "**[HYDRA-TEST-INPUT-PRIM-EXAMPLE-CONSTANT-VALUE] (requirement) **" ++
+      "`example : string`\n\n" ++
+      "**[HYDRA-TEST-INPUT-PRIM-EXAMPLE-CONSTANT-VALUE] (requirement)** " ++
       "This primitive always returns the same string value."
 
 -- | Property: a TypeDefinition's body renders directly (no Optional-signature fallback,
@@ -449,8 +452,7 @@ typeDocCase = universalCase
     actual = PrintMarkdown.document # (Generation.generateModuleDoc # typeExampleModule)
     expected = Phantoms.string $
       "# hydra.testInput.typ\n\n" ++
-      "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n" ++
-      "## hydra.testInput.typ.Example\n\n" ++
+      "## Example\n\n" ++
       "A type alias for string\n\n" ++
       "`string`"
 
@@ -490,13 +492,18 @@ multiDefinitionCase = universalCase
     actual = PrintMarkdown.document # (Generation.generateModuleDoc # multiDefinitionModule)
     expected = Phantoms.string $
       "# hydra.testInput.doc\n\n" ++
-      "<!-- Note: this is an automatically generated file. Do not edit. -->\n\n" ++
-      "## hydra.testInput.doc.identity\n\n" ++
+      "## identity\n\n" ++
       "The identity function\n\n" ++
-      "`∀a.a → a`\n\n" ++
-      "## hydra.testInput.doc.identity2\n\n" ++
+      "`∀a.identity(arg0: a) → a`\n\n" ++
+      "**Parameters**\n\n" ++
+      "- `arg0` (`a`)\n\n" ++
+      "**Returns** `a`\n\n" ++
+      "## identity2\n\n" ++
       "*(undocumented)*\n\n" ++
-      "`∀a.a → a`"
+      "`∀a.identity2(arg0: a) → a`\n\n" ++
+      "**Parameters**\n\n" ++
+      "- `arg0` (`a`)\n\n" ++
+      "**Returns** `a`"
 
 -- | Property: when target = universe, `inferModulesGiven` is equivalent to
 -- `inferModules`.

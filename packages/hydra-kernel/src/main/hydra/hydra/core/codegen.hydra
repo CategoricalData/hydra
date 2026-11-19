@@ -37,6 +37,7 @@ import hydra.core.packaging
 import hydra.core.print.model
 import hydra.core.scoping
 import hydra.core.strip
+import hydra.core.typing
 
 ## Build a schema map (Name -> Type) from a graph's schema types
 term buildSchemaMap = λg.maps.map (λts.deannotateType (TypeScheme[body] ts)) (Graph[schemaTypes] g)
@@ -206,13 +207,54 @@ term generateModuleDoc =
     let sections := lists.map
         (λd.cases(Definition){
             `primitive` = λpd.
-                let name := Name[] (PrimitiveDefinition[name] pd) in
                 let mdoc := optionals.bind
                     (PrimitiveDefinition[metadata] pd)
                     (λem.EntityMetadata[description] em) in
-                let sig := typeScheme
-                    (termSignatureToTypeScheme
-                      (PrimitiveDefinition[signature] pd)) in
+                let psig := PrimitiveDefinition[signature] pd in
+                let sig := let typeParams := TermSignature[typeParameters] psig in
+                  let params := TermSignature[parameters] psig in
+                  let varNames := lists.map
+                      (λtp.printBinderName (TypeParameter[name] tp))
+                      typeParams in
+                  let constraintClassName := λc.cases(TypeClassConstraint){
+                        simple = λn.Name[] n}
+                        c in
+                  let constraintsOf := λtp.
+                      let v := TypeParameter[name] tp
+                      in lists.map
+                        (λc.strings.concat
+                            [constraintClassName c, " ", Name[] v])
+                        (lists.sortBy
+                          constraintClassName
+                          (TypeParameter[constraints] tp)) in
+                  let tc := lists.concat
+                      (lists.map constraintsOf typeParams) in
+                  let header := ifElse
+                      (lists.isEmpty varNames)
+                      ""
+                      (strings.concat
+                        [
+                          "∀",
+                          strings.join ", " varNames,
+                          ".",
+                          ifElse (lists.isEmpty tc) "" (strings.concat ["(", strings.join ", " tc, ") ⇒ "])]) in
+                  let paramStr := λp.strings.concat
+                        [Name[] (Parameter[name] p), ": ", ifElse (Parameter[isLazy] p) "lazy " "", `type` (Parameter[`type`] p)] in
+                  let resultStr := `type`
+                      (Result[`type`]
+                        (TermSignature[result] psig)) in
+                  ifElse
+                    (lists.isEmpty params)
+                    (strings.concat
+                      [header, localNameOf (PrimitiveDefinition[name] pd), " : ", resultStr])
+                    (strings.concat
+                      [
+                        header,
+                        localNameOf (PrimitiveDefinition[name] pd),
+                        "(",
+                        strings.join ", " (lists.map paramStr params),
+                        ") → ",
+                        resultStr]) in
                 let provisions := optionals.withDefault
                     []
                     (optionals.map
@@ -229,7 +271,7 @@ term generateModuleDoc =
                 Section{
                   heading = Heading{
                     level = 2:int32,
-                    content = [Inline{text = name}],
+                    content = [Inline{text = localNameOf (PrimitiveDefinition[name] pd)}],
                     anchor = none},
                   content = lists.concat
                       [
@@ -239,6 +281,38 @@ term generateModuleDoc =
                               content = [Inline{text = optionals.withDefault "*(undocumented)*" mdoc}],
                               anchor = none}},
                           Block{paragraph = Paragraph{content = [Inline{code = sig}], anchor = none}}],
+                        let params := TermSignature[parameters] psig in
+                        let result := TermSignature[result] psig in
+                        let returns := Block{
+                          paragraph = Paragraph{
+                            content = lists.concat2
+                                [Inline{strong = [Inline{text = "Returns"}]}, Inline{text = " "}, Inline{code = `type` (Result[`type`] result)}]
+                                (optionals.toList
+                                  (optionals.map
+                                    (λd.Inline{text = strings.concat2 ": " d})
+                                    (Result[description] result))),
+                            anchor = none}} in
+                        ifElse
+                          (lists.isEmpty params)
+                          (ifElse (optionals.isGiven (Result[description] result)) [returns] [])
+                          [
+                            Block{paragraph = Paragraph{content = [Inline{strong = [Inline{text = "Parameters"}]}], anchor = none}},
+                            Block{
+                              `list` = List{
+                                ordered = false,
+                                items = lists.map
+                                    (λc.ListItem{[Block{paragraph = Paragraph{content = c, anchor = none}}]})
+                                    (lists.map
+                                      (λp.lists.concat2
+                                          [
+                                            Inline{code = Name[] (Parameter[name] p)},
+                                            Inline{text = " ("},
+                                            Inline{code = `type` (Parameter[`type`] p)},
+                                            Inline{text = ")"}]
+                                          (optionals.toList
+                                            (optionals.map (λd.Inline{text = strings.concat2 ": " d}) (Parameter[description] p))))
+                                      params)}},
+                            returns],
                         lists.map
                           (λlc.Block{
                               paragraph = let mavail := LifecycleInfo[availableSince] lc in
@@ -267,23 +341,98 @@ term generateModuleDoc =
                                   content = [
                                     Inline{
                                       strong = [
-                                        Inline{
-                                          text = strings.concat2 (strings.concat2 (strings.concat2 (strings.concat2 "[" upperDashed) "] (") kindStr) ") "}]},
-                                    Inline{text = pstatement}],
+                                        Inline{text = strings.concat2 (strings.concat2 (strings.concat2 (strings.concat2 "[" upperDashed) "] (") kindStr) ")"}]},
+                                    Inline{text = strings.concat2 " " pstatement}],
                                   anchor = given(upperDashed)}})
                           provisions],
                   anchor = none},
             `term` = λtd.
-                let name := Name[] (TermDefinition[name] td) in
                 let mdoc := optionals.bind
                     (TermDefinition[metadata] td)
                     (λem.EntityMetadata[description] em) in
+                let msig := TermDefinition[signature] td in
                 let sig := optionals.match
-                    (optionals.map
-                      termSignatureToTypeScheme
-                      (TermDefinition[signature] td))
+                    msig
                     "?"
-                    (λts.typeScheme ts) in
+                    (λts.
+                      let typeParams := TermSignature[typeParameters] ts in
+                      let params := TermSignature[parameters] ts in
+                      let varNames := lists.map
+                          (λtp.printBinderName (TypeParameter[name] tp))
+                          typeParams in
+                      let constraintClassName := λc.cases(TypeClassConstraint){
+                            simple = λn.Name[] n}
+                            c in
+                      let constraintsOf := λtp.
+                          let v := TypeParameter[name] tp
+                          in lists.map
+                            (λc.strings.concat
+                                [constraintClassName c, " ", Name[] v])
+                            (lists.sortBy
+                              constraintClassName
+                              (TypeParameter[constraints] tp)) in
+                      let tc := lists.concat
+                          (lists.map constraintsOf typeParams) in
+                      let header := ifElse
+                          (lists.isEmpty varNames)
+                          ""
+                          (strings.concat
+                            [
+                              "∀",
+                              strings.join ", " varNames,
+                              ".",
+                              ifElse (lists.isEmpty tc) "" (strings.concat ["(", strings.join ", " tc, ") ⇒ "])]) in
+                      let paramStr := λp.strings.concat
+                            [Name[] (Parameter[name] p), ": ", ifElse (Parameter[isLazy] p) "lazy " "", `type` (Parameter[`type`] p)] in
+                      let resultStr := `type`
+                          (Result[`type`]
+                            (TermSignature[result] ts)) in
+                      ifElse
+                        (lists.isEmpty params)
+                        (strings.concat
+                          [header, localNameOf (TermDefinition[name] td), " : ", resultStr])
+                        (strings.concat
+                          [header, localNameOf (TermDefinition[name] td), "(", strings.join ", " (lists.map paramStr params), ") → ", resultStr])) in
+                let extra := optionals.match
+                    msig
+                    []
+                    (λts.
+                      let params := TermSignature[parameters] ts in
+                      let result := TermSignature[result] ts in
+                      let returns := Block{
+                        paragraph = Paragraph{
+                          content = lists.concat2
+                              [Inline{strong = [Inline{text = "Returns"}]}, Inline{text = " "}, Inline{code = `type` (Result[`type`] result)}]
+                              (optionals.toList
+                                (optionals.map
+                                  (λd.Inline{
+                                      text = strings.concat2 ": " d})
+                                  (Result[description] result))),
+                          anchor = none}} in
+                      ifElse
+                        (lists.isEmpty params)
+                        (ifElse
+                          (optionals.isGiven (Result[description] result))
+                          [returns]
+                          [])
+                        [
+                          Block{paragraph = Paragraph{content = [Inline{strong = [Inline{text = "Parameters"}]}], anchor = none}},
+                          Block{
+                            `list` = List{
+                              ordered = false,
+                              items = lists.map
+                                  (λc.ListItem{[Block{paragraph = Paragraph{content = c, anchor = none}}]})
+                                  (lists.map
+                                    (λp.lists.concat2
+                                        [
+                                          Inline{code = Name[] (Parameter[name] p)},
+                                          Inline{text = " ("},
+                                          Inline{code = `type` (Parameter[`type`] p)},
+                                          Inline{text = ")"}]
+                                        (optionals.toList
+                                          (optionals.map (λd.Inline{text = strings.concat2 ": " d}) (Parameter[description] p))))
+                                    params)}},
+                          returns]) in
                 let provisions := optionals.withDefault
                     []
                     (optionals.map
@@ -300,7 +449,7 @@ term generateModuleDoc =
                 Section{
                   heading = Heading{
                     level = 2:int32,
-                    content = [Inline{text = name}],
+                    content = [Inline{text = localNameOf (TermDefinition[name] td)}],
                     anchor = none},
                   content = lists.concat
                       [
@@ -310,6 +459,7 @@ term generateModuleDoc =
                               content = [Inline{text = optionals.withDefault "*(undocumented)*" mdoc}],
                               anchor = none}},
                           Block{paragraph = Paragraph{content = [Inline{code = sig}], anchor = none}}],
+                        extra,
                         lists.map
                           (λlc.Block{
                               paragraph = let mavail := LifecycleInfo[availableSince] lc in
@@ -338,18 +488,30 @@ term generateModuleDoc =
                                   content = [
                                     Inline{
                                       strong = [
-                                        Inline{
-                                          text = strings.concat2 (strings.concat2 (strings.concat2 (strings.concat2 "[" upperDashed) "] (") kindStr) ") "}]},
-                                    Inline{text = pstatement}],
+                                        Inline{text = strings.concat2 (strings.concat2 (strings.concat2 (strings.concat2 "[" upperDashed) "] (") kindStr) ")"}]},
+                                    Inline{text = strings.concat2 " " pstatement}],
                                   anchor = given(upperDashed)}})
                           provisions],
                   anchor = none},
             `type` = λtyd.
-                let name := Name[] (TypeDefinition[name] tyd) in
-                let mdoc := optionals.bind
-                    (TypeDefinition[metadata] tyd)
-                    (λem.EntityMetadata[description] em) in
-                let sig := typeScheme (TypeDefinition[body] tyd) in
+                let tbody := TypeDefinition[body] tyd in
+                let mdoc := optionals.match
+                    (optionals.bind
+                      (TypeDefinition[metadata] tyd)
+                      (λem.EntityMetadata[description] em))
+                    (optionals.bind
+                      (maps.lookup
+                        keyDescription
+                        (typeAnnotationInternal (TypeScheme[body] tbody)))
+                      (λdt.cases(Term){
+                          literal = λlit.cases(Literal){
+                                `string` = λds.given(ds),
+                                `_` = none}
+                                lit,
+                          `_` = none}
+                          dt))
+                    (λd.given(d)) in
+                let sig := typeScheme (deannotateTypeSchemeRecursive tbody) in
                 let provisions := optionals.withDefault
                     []
                     (optionals.map
@@ -366,7 +528,7 @@ term generateModuleDoc =
                 Section{
                   heading = Heading{
                     level = 2:int32,
-                    content = [Inline{text = name}],
+                    content = [Inline{text = localNameOf (TypeDefinition[name] tyd)}],
                     anchor = none},
                   content = lists.concat
                       [
@@ -376,6 +538,33 @@ term generateModuleDoc =
                               content = [Inline{text = optionals.withDefault "*(undocumented)*" mdoc}],
                               anchor = none}},
                           Block{paragraph = Paragraph{content = [Inline{code = sig}], anchor = none}}],
+                        let fieldList := λlabel, fields.[
+                              Block{paragraph = Paragraph{content = [Inline{strong = [Inline{text = label}]}], anchor = none}},
+                              Block{
+                                `list` = List{
+                                  ordered = false,
+                                  items = lists.map
+                                      (λc.ListItem{[Block{paragraph = Paragraph{content = c, anchor = none}}]})
+                                      (lists.map
+                                        (λft.lists.concat2
+                                            [
+                                              Inline{code = Name[] (FieldType[name] ft)},
+                                              Inline{text = " ("},
+                                              Inline{code = `type` (deannotateTypeRecursive (FieldType[`type`] ft))},
+                                              Inline{text = ")"}]
+                                            (optionals.toList
+                                              (optionals.map
+                                                (λd.Inline{text = strings.concat2 ": " d})
+                                                (optionals.bind
+                                                  (maps.lookup keyDescription (typeAnnotationInternal (FieldType[`type`] ft)))
+                                                  (λdt.cases(Term){
+                                                      literal = λlit.cases(Literal){`string` = λds.given(ds), `_` = none}
+                                                            lit,
+                                                      `_` = none}
+                                                      dt)))))
+                                        fields)}}]
+                        in cases(Type){`record` = λfts.fieldList "Fields" fts, `union` = λfts.fieldList "Variants" fts, `_` = []}
+                          (deannotateType (TypeScheme[body] tbody)),
                         lists.map
                           (λlc.Block{
                               paragraph = let mavail := LifecycleInfo[availableSince] lc in
@@ -404,9 +593,8 @@ term generateModuleDoc =
                                   content = [
                                     Inline{
                                       strong = [
-                                        Inline{
-                                          text = strings.concat2 (strings.concat2 (strings.concat2 (strings.concat2 "[" upperDashed) "] (") kindStr) ") "}]},
-                                    Inline{text = pstatement}],
+                                        Inline{text = strings.concat2 (strings.concat2 (strings.concat2 (strings.concat2 "[" upperDashed) "] (") kindStr) ")"}]},
+                                    Inline{text = strings.concat2 " " pstatement}],
                                   anchor = given(upperDashed)}})
                           provisions],
                   anchor = none}}
@@ -420,9 +608,7 @@ term generateModuleDoc =
         comments in
     Document{
       title = ModuleName[] (Module[name] mod),
-      content = lists.cons
-          Block{raw = "<!-- Note: this is an automatically generated file. Do not edit. -->"}
-          (lists.concat2 introBlocks (lists.map (λs.Block{section = s}) sections))}
+      content = lists.concat2 introBlocks (lists.map (λs.Block{section = s}) sections)}
 
 ## Pure core of code generation: given a coder, language, infer flag, bootstrap graph, universe, and modules to generate, produce a list of (filePath, content) pairs. Emission flags doExpand/doHoistCaseStatements/doHoistPolymorphicLetBindings are derived from the absence of the matching LanguageFeature in lang.supportedFeatures: a target that lacks partialApplication needs eta expansion (doExpand=true), and so on.
 term generateSourceFiles =
