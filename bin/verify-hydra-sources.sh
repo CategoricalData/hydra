@@ -4,9 +4,12 @@
 # the real dist/json. Passes iff there is no difference.
 #
 # Usage (run under bin/with-stack-slot.sh; needs a built update-json-main):
-#   bin/verify-hydra-sources.sh [--flip] [--heap 10g] [--min-mb 14000]
+#   bin/verify-hydra-sources.sh [--flip | --dsl] [--keep] [--heap 10g] [--min-mb 14000]
 # --flip  temporarily sets "textualSources": "all" in packages/hydra-kernel/package.json for the run (restored on
 #         exit); without it the package.json flag decides.
+# --dsl   the OTHER direction of the dual-edit check: temporarily removes the "textualSources" fields so Phase 1
+#         regenerates from the Haskell DSL modules, and diffs that against the committed dist/json (which came from
+#         the .hydra sources). A difference means the DSL copy has drifted from its .hydra file.
 #
 # Writes ONLY under the scratch root (digests and per-package caches live under the dist root); this script checks
 # that nothing under dist/ or heads/haskell/.stack-work was modified outside it.
@@ -16,10 +19,12 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 HEAP=10g
 MIN_MB=7000
 FLIP=0
+DSL=0
 KEEP=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --flip) FLIP=1 ;;
+    --dsl) DSL=1 ;;
     --keep) KEEP=1 ;;
     --heap) HEAP="$2"; shift ;;
     --min-mb) MIN_MB="$2"; shift ;;
@@ -72,6 +77,18 @@ import json, sys
 p = sys.argv[1]
 d = json.load(open(p))
 d["textualSources"] = "all"
+open(p, "w").write(json.dumps(d, indent=2) + "\n")
+PY
+fi
+
+if [ "$DSL" = 1 ]; then
+  PKG_BACKUP="$SCRATCH/package.json.orig"
+  cp "$PKG_JSON" "$PKG_BACKUP"
+  python3 - "$PKG_JSON" <<'PY'
+import json, sys
+p = sys.argv[1]
+d = json.load(open(p))
+d.pop("textualSources", None); d.pop("textualSourcesExclude", None)
 open(p, "w").write(json.dumps(d, indent=2) + "\n")
 PY
 fi
