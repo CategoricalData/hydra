@@ -321,6 +321,9 @@ still consume them), so a change to such a module must be made in both places, a
 `bin/verify-hydra-sources.sh` checks this: it regenerates `dist/json` from the `.hydra` files into a scratch root and
 fails on any byte difference from the committed `dist/json` (main and test modules).
 Re-print a `.hydra` file from the DSL when only the DSL side was edited.
+`bin/verify-hydra-sources.sh --dsl` is the reverse check: it removes `textualSources` for the run, regenerates
+from the DSL modules into a scratch root and diffs against the committed `dist/json`; a difference means a DSL copy
+has drifted from its `.hydra` file.
 `hydra.core.lib.*` follows the same rule.
 
 ### Adding a new kernel type or definition
