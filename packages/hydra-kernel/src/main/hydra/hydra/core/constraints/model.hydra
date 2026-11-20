@@ -1,0 +1,87 @@
+## A typed vocabulary of value constraints -- data-level restrictions the structural type system cannot express (cardinality, length, range, pattern, membership, boolean combinations, uniqueness, and an arbitrary-predicate escape hatch). Constraints are author-supplied data that travel with a model, declared as freestanding, fully typechecked ConstraintSet values and enforced by hydra.core.validate.model, which emits hydra.core.error.model findings. The normative meaning of each TermConstraint variant is its translation to a boolean predicate term (the #345 Stage-1 refinement reading), shipped with a single reference implementation and conformance fixtures. The first (and, for 1.0, only) inhabited member of the hydra.<pkg>.constraints.model family, paralleling hydra.<pkg>.validate.model and hydra.<pkg>.error.model. See issue #734 (parent #712; #345 Stage 0).
+module hydra.core.constraints.model
+
+import hydra.core.model
+import hydra.core.paths
+import hydra.core.regex
+
+## An inclusive count range with optional lower and upper endpoints. Shared by the cardinality and length constraints, both of which restrict a count (of elements/entries, or of code points). An absent endpoint imposes no bound on that side; both absent restricts nothing.
+type Bounds = record{
+
+  ## The minimum count, inclusive; absent means no lower bound.
+  min: optional<int32>,
+
+  ## The maximum count, inclusive; absent means no upper bound.
+  max: optional<int32>}
+
+## All value constraints declared for one named type: the freestanding, fully typechecked unit of attachment. Unlike an annotation payload (an untyped term decoded by convention), a ConstraintSet is ordinary graph data whose type is checked by the normal inference machinery. The typeName resolves against the graph the same way nominal types resolve during validation; a ConstraintSet naming an unknown type is a finding, not a skip. A constraint set can target only a NAMED type (the same discipline SHACL and relational schemas impose). For a polymorphic target, paths are relative to the body with quantifiers stripped, type variables are opaque leaves (no path descends through a variable), and the constraints apply at every instantiation.
+type ConstraintSet = record{
+
+  ## The name of the type whose instances these constraints restrict.
+  typeName: Name,
+
+  ## The path-located constraints that apply to instances of the named type.
+  constraints: list<PathConstraint>}
+
+## A term constraint located at a position within a type, addressed by a subtype path. The path is declared at the type level and interpreted against instances as a one-to-many map at validation time: listElement/setElement fans out to every element, mapKeys/mapValues to every key/value, optionalElement to the value iff present, unionField f to the injected value iff the instance is variant f, and recordField f / wrapBody select the single corresponding subterm. The empty path selects the instance itself. A non-data step (e.g. functionDomain, forallBody), or a step that cannot apply to the instance's actual shape, is a malformed-constraint finding -- never a silent skip.
+type PathConstraint = record{
+
+  ## The subtype path locating the focus position(s) the constraint restricts.
+  path: SubtypePath,
+
+  ## The constraint tested against each focus value.
+  constraint: TermConstraint}
+
+## One endpoint of a term range: a bounding term together with whether the endpoint is inclusive. The bound is an arbitrary term, not only a literal, so a range over any ordered type is expressible (e.g. a minimum day-of-week over a union whose variant order defines the ordering). Literal ranges are the special case where the bound term is a literal. The bound term must match the focus type and that type must satisfy the ordering class; a mismatch is a validation-time malformed-constraint finding.
+type TermBound = record{
+
+  ## The bounding term.
+  value: Term,
+
+  ## True if the endpoint is inclusive (<= / >=), false if exclusive (< / >).
+  inclusive: boolean}
+
+## A restriction on a focus term. The normative meaning of each variant is its translation to a boolean predicate term; a variant is well-formed at a focus only where that focus type satisfies the variant's class gate (ordering for range; equality for equals/oneOf/uniqueness; only the obvious shape for cardinality/length/pattern), checked with hydra.core.classes.classIsSatisfiedByType. Nine variants are enforced by hydra.core.validate.model in 1.0; uniqueness and predicate are reserved -- defined so that later enforcement does not widen the union (a breaking change for exhaustive matchers), but encountering one when the rule is enabled produces a "reserved constraint not yet enforced" finding, never a silent pass.
+type TermConstraint = union{
+
+  ## The element/entry count of a list, set, or map focus must fall within the bounds. Predicate reading: gte/lte over Lists.length / Sets.size / Maps.size.
+  cardinality: Bounds,
+
+  ## The code-point length of a string focus must fall within the bounds. Predicate reading: gte/lte over Strings.length.
+  length: Bounds,
+
+  ## The focus term must lie within the given range of the focus (ordered) type. Predicate reading: hydra.core.lib.ordering.gte/lte. Requires the ordering class on the focus type.
+  range: TermRange,
+
+  ## A string focus must match the regular expression, as a whole (anchored at both ends). Predicate reading: hydra.core.lib.regex.matches over the printed AST.
+  pattern: Regex,
+
+  ## The focus term must equal the given term. Predicate reading: equality over the focus (equality) type. (sh:hasValue.)
+  equals: Term,
+
+  ## The focus term must equal one of the given terms. Predicate reading: membership by equality. Requires the equality class on the focus type. (sh:in.)
+  oneOf: list<Term>,
+
+  ## Every sub-constraint must hold at the focus. Predicate reading: conjunction. (sh:and.)
+  allOf: list<TermConstraint>,
+
+  ## At least one sub-constraint must hold at the focus. Predicate reading: disjunction. (sh:or.)
+  anyOf: list<TermConstraint>,
+
+  ## The sub-constraint must NOT hold at the focus. Predicate reading: negation. (sh:not.)
+  not: TermConstraint,
+
+  ## RESERVED (not yet enforced in 1.0). The values selected by the given key path must be pairwise distinct. Predicate reading: pairwise-distinctness by equality. Requires the equality class.
+  uniqueness: SubtypePath,
+
+  ## RESERVED (not yet enforced in 1.0). An arbitrary unary predicate: a term of type t -> boolean, applied to the focus and evaluated. The escape hatch; it is already a Stage-1 predicate.
+  predicate: Term}
+
+## A range over an ordered type, with optional lower and upper term bounds, each independently inclusive or exclusive. An absent endpoint imposes no bound on that side.
+type TermRange = record{
+
+  ## The lower bound; absent means unbounded below.
+  min: optional<TermBound>,
+
+  ## The upper bound; absent means unbounded above.
+  max: optional<TermBound>}

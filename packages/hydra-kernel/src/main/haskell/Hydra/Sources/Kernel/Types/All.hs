@@ -7,6 +7,7 @@ import Hydra.Sources.Kernel.AlignDependencies (alignDependencies)
 import qualified Hydra.Sources.Kernel.Types.Paths        as Paths
 import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
 import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
+import qualified Hydra.Sources.Kernel.Types.Constraints.Model as ConstraintsModel
 import qualified Hydra.Sources.Kernel.Types.Core        as Core
 import qualified Hydra.Sources.Kernel.Types.Diff        as Diff
 import qualified Hydra.Sources.Kernel.Types.Docs        as Docs
@@ -42,6 +43,7 @@ kernelTypesModules = fmap alignDependencies [
   Paths.module_,
   Ast.module_,
   Coders.module_,
+  ConstraintsModel.module_,
   Core.module_,
   Diff.module_,
   Docs.module_,
