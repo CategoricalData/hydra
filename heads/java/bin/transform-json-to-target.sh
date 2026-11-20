@@ -199,6 +199,9 @@ local_heads_extras_compile() {
         exit 1
     fi
     # GNU `timeout` is absent on stock macOS; coreutils installs it as `gtimeout`.
+    # --foreground keeps gradlew in the caller's process group: otherwise, under a TTY (e.g. tmux),
+    # the Gradle client is stopped by SIGTTOU/SIGTTIN on terminal access and the timeout's SIGTERM
+    # never lands on the stopped process, so the step hangs forever.
     local timeout_cmd=""
     if command -v timeout >/dev/null 2>&1; then
         timeout_cmd=timeout
@@ -209,11 +212,11 @@ local_heads_extras_compile() {
              "running the local headsExtras compile without a time bound." >&2
     fi
     if [ -n "$timeout_cmd" ]; then
-        set -- "$timeout_cmd" "${HYDRA_LOCAL_COMPILE_TIMEOUT:-30m}" ./gradlew
+        set -- "$timeout_cmd" --foreground "${HYDRA_LOCAL_COMPILE_TIMEOUT:-30m}" ./gradlew
     else
         set -- ./gradlew
     fi
-    if ! "$@" --quiet :hydra-java:compileHeadsExtrasJava >&2; then
+    if ! "$@" --quiet :hydra-java:compileHeadsExtrasJava </dev/null >&2; then
         echo "transform-json-to-target.sh: local headsExtras compile failed or timed out" \
              "(HYDRA_LOCAL_COMPILE_TIMEOUT=${HYDRA_LOCAL_COMPILE_TIMEOUT:-30m}); see #768." >&2
         exit 1
