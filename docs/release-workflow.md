@@ -470,17 +470,20 @@ Run at least:
   and consult [docs/bootstrap-matrix.md](bootstrap-matrix.md) for whether that cell was previously
   green. Do not hold the release on a non-blocking cell, but do file/track any regression it exposes.
 
-  **Known-red as of 0.17.7 (do not be surprised):**
+  **Known-red as of 0.18.1 (do not be surprised):**
 
   | Cell | Status | Detail |
   |------|--------|--------|
-  | `typescript → python` | **RED, known, non-blocking** | Never passed. Failed 2026-07-13 with `ModuleNotFoundError: hydra.test.test_suite` (run `run_2026-07-13_061427_335_typescript_to_python`, `{"status":"fail"}`) and again at 0.17.7 with `TypeError: xs.map is not a function` at `overlay/typescript/lib/lists.ts` (via `encodePythonModule → reorderDefs → partitionDefinitions`), 168+ occurrences, one per module. TypeScript self-hosts (proved by `/test all`) but has never cross-generated. Tracked as [#762](https://github.com/CategoricalData/hydra/issues/762). |
-  | `common-lisp → python` | **Was RED at 0.18.0 (regression); FIXED by [#769](https://github.com/CategoricalData/hydra/issues/769)** | Failed with `HYDRA_PYTHON_CODER_MODULE_TO_PYTHON is unbound`. A genuine regression introduced by a #729 rename commit (`f0a4a24bcb`): `bootstrap.lisp`'s coder-code walk was narrowed from `hydra/` to `hydra/core/`, silently excluding the sibling coder dirs (`hydra/python/`, etc.). #769 restores coder loading via `hydra-load-coders`. |
+  | `typescript → python` | **RED, known, non-blocking** | Never passed. At 0.18.1 (2026-11-20) it fails at test collection with `ModuleNotFoundError: No module named 'hydra.core.test.test_types'` (earlier: `hydra.test.test_suite`, 2026-07-13). |
+
+  At 0.18.1 the other non-triad cells `clojure → python`, `common-lisp → python` (fixed by
+  [#769](https://github.com/CategoricalData/hydra/issues/769)), `scheme → python` and `emacs-lisp → python` all passed,
+  as did the blocking `scala → python`.
 
   For the authoritative per-cell record — status, timings, and the date/commit each cell was last
-  verified against — see [docs/bootstrap-matrix.md](bootstrap-matrix.md). The remaining non-triad
-  dialects were not separately re-verified at 0.18.0; treat a red cell as a suspected regression (check
-  the matrix doc for the last-known-green state) rather than a tolerated gap.
+  verified against — see [docs/bootstrap-matrix.md](bootstrap-matrix.md). All non-triad
+  cells were re-verified at 0.18.1; treat a newly red cell as a suspected regression (check the matrix doc
+  for the last-known-green state) rather than a tolerated gap.
 
 - **Targets:** `haskell → L` for each remaining target, plus `haskell → go` (`go` is a head bud — target
   only, tolerated if it fails; tracked by #289).
