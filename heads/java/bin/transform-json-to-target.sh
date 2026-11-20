@@ -198,7 +198,22 @@ local_heads_extras_compile() {
         echo "transform-json-to-target.sh: cannot cold-seed: the published hydra-java $HYDRA_HOST_VERSION host"              "does not compile this tree's driver sources (typically a repo-wide rename not yet published),"              "and the local fallback needs dist/java/hydra-kernel, which does not exist on a cold checkout."              "Publish a post-change host and bump hostVersion (docs/release-workflow.md, #768)." >&2
         exit 1
     fi
-    if ! timeout "${HYDRA_LOCAL_COMPILE_TIMEOUT:-30m}" ./gradlew --quiet :hydra-java:compileHeadsExtrasJava >&2; then
+    # GNU `timeout` is absent on stock macOS; coreutils installs it as `gtimeout`.
+    local timeout_cmd=""
+    if command -v timeout >/dev/null 2>&1; then
+        timeout_cmd=timeout
+    elif command -v gtimeout >/dev/null 2>&1; then
+        timeout_cmd=gtimeout
+    else
+        echo "transform-json-to-target.sh: neither timeout nor gtimeout found;" \
+             "running the local headsExtras compile without a time bound." >&2
+    fi
+    if [ -n "$timeout_cmd" ]; then
+        set -- "$timeout_cmd" "${HYDRA_LOCAL_COMPILE_TIMEOUT:-30m}" ./gradlew
+    else
+        set -- ./gradlew
+    fi
+    if ! "$@" --quiet :hydra-java:compileHeadsExtrasJava >&2; then
         echo "transform-json-to-target.sh: local headsExtras compile failed or timed out" \
              "(HYDRA_LOCAL_COMPILE_TIMEOUT=${HYDRA_LOCAL_COMPILE_TIMEOUT:-30m}); see #768." >&2
         exit 1
