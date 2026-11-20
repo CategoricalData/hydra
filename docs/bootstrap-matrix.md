@@ -35,9 +35,9 @@ omitted.
 
 | Cell | Status | Detail | Last verified |
 |---|---|---|---|
-| Haskell → Haskell | 🟢 | gen ?f/—<br>test-gen ?f/—<br>run —<br>3427 pass | 2026-09-30 @ `d0cbc9f634` |
-| Haskell → Java | 🟢 | gen ?f/—<br>test-gen ?f/—<br>run —<br>3427 pass | 2026-09-30 @ `d0cbc9f634` |
-| Haskell → Python | 🟢 | gen ?f/—<br>test-gen ?f/—<br>run —<br>3427 pass | 2026-09-30 @ `d0cbc9f634` |
+| Haskell → Haskell | 🟢 | gen 197f/7m1s<br>test-gen 76f/7m1s<br>run 0.5s<br>3672 pass | 2026-11-20 @ `cfc8a6e7a1` |
+| Haskell → Java | 🟢 | gen 531f/4m50s<br>test-gen 76f/4m50s<br>run 8.2s<br>3672 pass | 2026-11-20 @ `cfc8a6e7a1` |
+| Haskell → Python | 🟢 | gen 177f/27.6s<br>test-gen 76f/27.6s<br>run 13.1s<br>3672 pass | 2026-11-20 @ `cfc8a6e7a1` |
 | Haskell → Scheme | 🟢 | gen 173f/9.8s<br>test-gen 73f/9.8s<br>run 5.7s<br>3427 pass | 2026-09-30 @ `d0cbc9f634` |
 | Java → Haskell | 🟢 | gen ?f/—<br>test-gen ?f/—<br>run —<br>3427 pass | 2026-09-30 @ `d0cbc9f634` |
 | Java → Java | 🟢 | gen 3037f/1m4s<br>test-gen 79f/1m4s<br>run 8.5s<br>3672 pass | 2026-11-19 @ `29709ca4ec` |
@@ -58,14 +58,14 @@ omitted.
 | Python → Scheme | 🟢 | gen 286f/2m56s<br>test-gen 81f/3m7s<br>run 5.9s<br>3539 pass | 2026-10-30 @ `673631ab0d` |
 | Python → Emacs Lisp | 🟢 | gen 247f/2m43s<br>test-gen 76f/2m52s<br>run 3m4s<br>3539 pass | 2026-10-30 @ `c2f7cf12e2` |
 | Scala → Java | 🔴 [#788](https://github.com/CategoricalData/hydra/issues/788) | gen ?f/—<br>test-gen ?f/—<br>run —<br>— | 2026-10-03 @ `4476619c74` |
-| Scala → Python | 🟢 | gen ?f/—<br>test-gen ?f/—<br>run —<br>3427 pass | 2026-09-30 @ `d0cbc9f634` |
+| Scala → Python | 🟢 | gen 177f/44.2s<br>test-gen 74f/44.2s<br>run 13.1s<br>3672 pass | 2026-11-20 @ `cfc8a6e7a1` |
 | TypeScript → Java | ⚪ [#820](https://github.com/CategoricalData/hydra/issues/820) | never verified | — |
 | Clojure → Java | 🔴 [#814](https://github.com/CategoricalData/hydra/issues/814) | gen ?f/—<br>test-gen ?f/—<br>run —<br>— | 2026-10-30 @ `18fd25bcbc` |
-| Clojure → Python | 🟢 | gen 176f/2m50s<br>test-gen 74f/3m41s<br>run 11.6s<br>3544 pass | 2026-10-31 @ `923e9c83f1` |
+| Clojure → Python | 🟢 | gen 177f/3m48s<br>test-gen 74f/3m48s<br>run 13.6s<br>3672 pass | 2026-11-20 @ `cfc8a6e7a1` |
 | Common Lisp → Java | 🔴 [#814](https://github.com/CategoricalData/hydra/issues/814) | gen ?f/—<br>test-gen ?f/—<br>run —<br>— | 2026-10-30 @ `18fd25bcbc` |
-| Common Lisp → Python | 🟢 | gen 176f/1m3s<br>test-gen 74f/1m1s<br>run 11.6s<br>3544 pass | 2026-10-31 @ `923e9c83f1` |
-| Scheme → Python | 🟢 | gen 168f/10m38s<br>test-gen 74f/25m50s<br>run 12.1s<br>3544 pass | 2026-10-31 @ `923e9c83f1` |
-| Emacs Lisp → Python | 🟢 | gen 168f/—<br>test-gen 69f/—<br>run 12.1s<br>3544 pass | 2026-10-31 @ `923e9c83f1` |
+| Common Lisp → Python | 🟢 | gen 177f/1m28s<br>test-gen 74f/1m28s<br>run 13.6s<br>3672 pass | 2026-11-20 @ `cfc8a6e7a1` |
+| Scheme → Python | 🟢 | gen 169f/29m21s<br>test-gen 74f/29m21s<br>run 13.4s<br>3672 pass | 2026-11-20 @ `cfc8a6e7a1` |
+| Emacs Lisp → Python | 🟢 | gen 169f/—<br>test-gen 69f/—<br>run 13.2s<br>3672 pass | 2026-11-20 @ `cfc8a6e7a1` |
 
 ---
 
@@ -90,17 +90,17 @@ block below._
       "verifiedDate": "2026-10-30"
     },
     "clojure-to-python": {
-      "mainFiles": 176,
-      "mainGenSeconds": 170.1,
-      "passed": 3544,
-      "rawStatus": "pass",
+      "mainFiles": 177,
+      "mainGenSeconds": 228.5,
+      "passed": 3672,
+      "rawStatus": "diff",
       "skipped": 0,
       "status": "green",
       "testFiles": 74,
-      "testGenSeconds": 221.3,
-      "testRunMs": 11643.4,
-      "verifiedCommit": "923e9c83f1",
-      "verifiedDate": "2026-10-31"
+      "testGenSeconds": 228.5,
+      "testRunMs": 13575.5,
+      "verifiedCommit": "cfc8a6e7a1",
+      "verifiedDate": "2026-11-20"
     },
     "common-lisp-to-java": {
       "mainFiles": null,
@@ -116,69 +116,69 @@ block below._
       "verifiedDate": "2026-10-30"
     },
     "common-lisp-to-python": {
-      "mainFiles": 176,
-      "mainGenSeconds": 62.7,
-      "passed": 3544,
-      "rawStatus": "pass",
+      "mainFiles": 177,
+      "mainGenSeconds": 87.9,
+      "passed": 3672,
+      "rawStatus": "diff",
       "skipped": 0,
       "status": "green",
       "testFiles": 74,
-      "testGenSeconds": 61.0,
-      "testRunMs": 11608.5,
-      "verifiedCommit": "923e9c83f1",
-      "verifiedDate": "2026-10-31"
+      "testGenSeconds": 87.9,
+      "testRunMs": 13585.7,
+      "verifiedCommit": "cfc8a6e7a1",
+      "verifiedDate": "2026-11-20"
     },
     "emacs-lisp-to-python": {
-      "mainFiles": 168,
+      "mainFiles": 169,
       "mainGenSeconds": null,
-      "passed": 3544,
-      "rawStatus": "pass",
+      "passed": 3672,
+      "rawStatus": "diff",
       "skipped": 0,
       "status": "green",
       "testFiles": 69,
       "testGenSeconds": null,
-      "testRunMs": 12061.1,
-      "verifiedCommit": "923e9c83f1",
-      "verifiedDate": "2026-10-31"
+      "testRunMs": 13183.5,
+      "verifiedCommit": "cfc8a6e7a1",
+      "verifiedDate": "2026-11-20"
     },
     "haskell-to-haskell": {
-      "mainFiles": null,
-      "mainGenSeconds": null,
-      "passed": 3427,
-      "rawStatus": "ok",
-      "skipped": null,
+      "mainFiles": 197,
+      "mainGenSeconds": 421.0,
+      "passed": 3672,
+      "rawStatus": "pass",
+      "skipped": 0,
       "status": "green",
-      "testFiles": null,
-      "testGenSeconds": null,
-      "testRunMs": null,
-      "verifiedCommit": "d0cbc9f634",
-      "verifiedDate": "2026-09-30"
+      "testFiles": 76,
+      "testGenSeconds": 421.0,
+      "testRunMs": 480.3140163421631,
+      "verifiedCommit": "cfc8a6e7a1",
+      "verifiedDate": "2026-11-20"
     },
     "haskell-to-java": {
-      "mainFiles": null,
-      "mainGenSeconds": null,
-      "passed": 3427,
-      "rawStatus": "ok",
-      "skipped": null,
+      "mainFiles": 531,
+      "mainGenSeconds": 289.8,
+      "passed": 3672,
+      "rawStatus": "diff",
+      "skipped": 0,
       "status": "green",
-      "testFiles": null,
-      "testGenSeconds": null,
-      "testRunMs": null,
-      "verifiedCommit": "d0cbc9f634",
-      "verifiedDate": "2026-09-30"
+      "testFiles": 76,
+      "testGenSeconds": 289.8,
+      "testRunMs": 8200.9,
+      "verifiedCommit": "cfc8a6e7a1",
+      "verifiedDate": "2026-11-20"
     },
     "haskell-to-python": {
-      "mainFiles": null,
-      "mainGenSeconds": null,
-      "passed": 3427,
-      "rawStatus": "ok",
-      "skipped": null,
+      "mainFiles": 177,
+      "mainGenSeconds": 27.6,
+      "passed": 3672,
+      "rawStatus": "diff",
+      "skipped": 0,
       "status": "green",
-      "testFiles": null,
-      "testGenSeconds": null,
-      "testRunMs": null,
-      "verifiedCommit": "d0cbc9f634",
-      "verifiedDate": "2026-09-30"
+      "testFiles": 76,
+      "testGenSeconds": 27.6,
+      "testRunMs": 13089.5,
+      "verifiedCommit": "cfc8a6e7a1",
+      "verifiedDate": "2026-11-20"
     },
     "haskell-to-scheme": {
       "mainFiles": 173,
@@ -441,30 +441,30 @@ block below._
       "verifiedDate": "2026-10-03"
     },
     "scala-to-python": {
-      "mainFiles": null,
-      "mainGenSeconds": null,
-      "passed": 3427,
-      "rawStatus": "ok",
-      "skipped": null,
-      "status": "green",
-      "testFiles": null,
-      "testGenSeconds": null,
-      "testRunMs": null,
-      "verifiedCommit": "d0cbc9f634",
-      "verifiedDate": "2026-09-30"
-    },
-    "scheme-to-python": {
-      "mainFiles": 168,
-      "mainGenSeconds": 638.2,
-      "passed": 3544,
-      "rawStatus": "pass",
+      "mainFiles": 177,
+      "mainGenSeconds": 44.2,
+      "passed": 3672,
+      "rawStatus": "diff",
       "skipped": 0,
       "status": "green",
       "testFiles": 74,
-      "testGenSeconds": 1549.8,
-      "testRunMs": 12058.2,
-      "verifiedCommit": "923e9c83f1",
-      "verifiedDate": "2026-10-31"
+      "testGenSeconds": 44.2,
+      "testRunMs": 13058.1,
+      "verifiedCommit": "cfc8a6e7a1",
+      "verifiedDate": "2026-11-20"
+    },
+    "scheme-to-python": {
+      "mainFiles": 169,
+      "mainGenSeconds": 1761.1,
+      "passed": 3672,
+      "rawStatus": "diff",
+      "skipped": 0,
+      "status": "green",
+      "testFiles": 74,
+      "testGenSeconds": 1761.1,
+      "testRunMs": 13446.9,
+      "verifiedCommit": "cfc8a6e7a1",
+      "verifiedDate": "2026-11-20"
     }
   },
   "issues": {
