@@ -15,7 +15,7 @@ they are documented here for completeness.
 
 ---
 
-## [0.18.1] - unreleased
+## [0.18.1] - 2026-11-20
 
 Textual-sources release: the whole `hydra-kernel` is now authored as textual `.hydra` files, including the
 primitive library `hydra.core.lib.*`, and the textual syntax gains the sugar, parsers, and tooling needed to carry it.
