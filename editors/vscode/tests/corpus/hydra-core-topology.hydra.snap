@@ -51,7 +51,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  encode: list<a> → list<a>,
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra support.type.hydra
@@ -59,7 +59,7 @@
 #               ^ source.hydra entity.name.type.hydra
 #                ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                 ^ source.hydra
-#                  ^ source.hydra keyword.operator.arrow.hydra
+#                  ^ source.hydra keyword.control.arrow.hydra
 #                   ^ source.hydra
 #                    ^^^^ source.hydra support.type.hydra
 #                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
@@ -73,7 +73,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  decode: list<a> → list<a>}
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra support.type.hydra
@@ -81,7 +81,7 @@
 #               ^ source.hydra entity.name.type.hydra
 #                ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                 ^ source.hydra
-#                  ^ source.hydra keyword.operator.arrow.hydra
+#                  ^ source.hydra keyword.control.arrow.hydra
 #                   ^ source.hydra
 #                    ^^^^ source.hydra support.type.hydra
 #                        ^ source.hydra punctuation.definition.typeargs.begin.hydra
@@ -108,7 +108,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  counter: int32,
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
 #           ^^^^^ source.hydra support.type.hydra
@@ -120,7 +120,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  indices: map<Vertex, int32>,
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
 #           ^^^ source.hydra support.type.hydra
@@ -138,7 +138,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  lowLinks: map<Vertex, int32>,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^ source.hydra support.type.hydra
@@ -156,7 +156,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  stack: list<Vertex>,
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
 #         ^^^^ source.hydra support.type.hydra
@@ -171,7 +171,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  onStack: set<Vertex>,
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
 #           ^^^ source.hydra support.type.hydra
@@ -186,7 +186,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  sccs: list<list<Vertex>>}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
 #        ^^^^ source.hydra support.type.hydra

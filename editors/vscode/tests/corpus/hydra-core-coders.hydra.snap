@@ -67,7 +67,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  isLossy: boolean,
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
 #           ^^^^^^^ source.hydra support.type.hydra
@@ -79,7 +79,7 @@
 #    ^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  source: t1,
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^ source.hydra variable.other.hydra
@@ -91,7 +91,7 @@
 #    ^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  target: t2,
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^ source.hydra variable.other.hydra
@@ -103,10 +103,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  coder: Coder v1 v2 e}
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^^ source.hydra variable.other.hydra
+#         ^^^^^ source.hydra entity.name.type.hydra
 #              ^ source.hydra
 #               ^^ source.hydra variable.other.hydra
 #                 ^ source.hydra
@@ -134,10 +134,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  graph: Graph,
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^^ source.hydra variable.other.hydra
+#         ^^^^^ source.hydra entity.name.type.hydra
 #              ^^ source.hydra
 >
 >  ## The language being encoded or decoded
@@ -146,10 +146,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  language: Language,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^ source.hydra entity.name.type.hydra
 #                    ^^ source.hydra
 >
 >  ## A map of type names to adapters for those types
@@ -158,7 +158,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  adapters: map<Name, Adapter Type Type Term Term Error>}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^ source.hydra support.type.hydra
@@ -216,14 +216,14 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  encode: t1 → Adapter t1 t2 v1 v2 e,
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^ source.hydra variable.other.hydra
 #            ^ source.hydra
-#             ^ source.hydra keyword.operator.arrow.hydra
+#             ^ source.hydra keyword.control.arrow.hydra
 #              ^ source.hydra
-#               ^^^^^^^ source.hydra variable.other.hydra
+#               ^^^^^^^ source.hydra entity.name.type.hydra
 #                      ^ source.hydra
 #                       ^^ source.hydra variable.other.hydra
 #                         ^ source.hydra
@@ -242,14 +242,14 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  decode: t2 → Adapter t2 t1 v2 v1 e}
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^ source.hydra variable.other.hydra
 #            ^ source.hydra
-#             ^ source.hydra keyword.operator.arrow.hydra
+#             ^ source.hydra keyword.control.arrow.hydra
 #              ^ source.hydra
-#               ^^^^^^^ source.hydra variable.other.hydra
+#               ^^^^^^^ source.hydra entity.name.type.hydra
 #                      ^ source.hydra
 #                       ^^ source.hydra variable.other.hydra
 #                         ^ source.hydra
@@ -281,10 +281,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  constant: CaseConvention,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                          ^^ source.hydra
 >
 >  ## Convention for each directory level in the emitted source tree
@@ -293,10 +293,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  directory: CaseConvention,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#             ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                           ^^ source.hydra
 >
 >  ## Convention for enum-variant value names
@@ -305,10 +305,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  enumValue: CaseConvention,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#             ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                           ^^ source.hydra
 >
 >  ## Convention for record field names
@@ -317,10 +317,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  field: CaseConvention,
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#         ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## Convention for the source-file basename
@@ -329,10 +329,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  file: CaseConvention,
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                      ^^ source.hydra
 >
 >  ## Convention for a single segment of a module name
@@ -346,7 +346,7 @@
 #         ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                          ^^ source.hydra
 >
 >  ## Convention for top-level term definitions (functions, module-level values)
@@ -360,7 +360,7 @@
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#          ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^^ source.hydra
 >
 >  ## Convention for locally-bound term names (lambda parameters, let-bindings)
@@ -369,10 +369,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  termVariable: CaseConvention,
 #^^ source.hydra
-#  ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #              ^ source.hydra punctuation.separator.type.hydra
 #               ^ source.hydra
-#                ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                              ^^ source.hydra
 >
 >  ## Convention for type names
@@ -386,7 +386,7 @@
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#          ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^^ source.hydra
 >
 >  ## Convention for type-level variable names
@@ -395,10 +395,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeVariable: CaseConvention}
 #^^ source.hydra
-#  ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #              ^ source.hydra punctuation.separator.type.hydra
 #               ^ source.hydra
-#                ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                              ^^ source.hydra
 >
 >## An encoder and decoder; a pair of partial functions between two types
@@ -431,12 +431,12 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  encode: v1 → either<e, v2>,
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^ source.hydra variable.other.hydra
 #            ^ source.hydra
-#             ^ source.hydra keyword.operator.arrow.hydra
+#             ^ source.hydra keyword.control.arrow.hydra
 #              ^ source.hydra
 #               ^^^^^^ source.hydra support.type.hydra
 #                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
@@ -453,12 +453,12 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  decode: v2 → either<e, v1>}
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^ source.hydra variable.other.hydra
 #            ^ source.hydra
-#             ^ source.hydra keyword.operator.arrow.hydra
+#             ^ source.hydra keyword.control.arrow.hydra
 #              ^ source.hydra
 #               ^^^^^^ source.hydra support.type.hydra
 #                     ^ source.hydra punctuation.definition.typeargs.begin.hydra
@@ -483,14 +483,14 @@
 #                           ^^ source.hydra
 >  encode: unit,
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra support.type.hydra
 #              ^^ source.hydra
 >  decode: unit}
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra support.type.hydra
@@ -515,10 +515,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: LanguageName,
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                    ^^ source.hydra
 >
 >  ## Constraints which characterize the language's type and term grammars
@@ -527,10 +527,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  constraints: LanguageConstraints,
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
-#               ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#               ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                  ^^ source.hydra
 >
 >  ## Target-language or target-runtime capabilities the emitter may assume are available
@@ -539,7 +539,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  supportedFeatures: set<LanguageFeature>,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                   ^ source.hydra punctuation.separator.type.hydra
 #                    ^ source.hydra
 #                     ^^^ source.hydra support.type.hydra
@@ -554,10 +554,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  caseConventions: CaseConventions,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
-#                   ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                  ^^ source.hydra
 >
 >  ## Conventional file extension for emitted source files, without the leading dot (e.g. "scala", "py")
@@ -566,10 +566,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  defaultFileExtension: FileExtension}
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                      ^ source.hydra punctuation.separator.type.hydra
 #                       ^ source.hydra
-#                        ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                        ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                     ^^ source.hydra
 >
 >## A set of constraints on valid type and term expressions, characterizing a language
@@ -591,7 +591,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  literalVariants: set<LiteralVariant>,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
 #                   ^^^ source.hydra support.type.hydra
@@ -606,7 +606,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  floatTypes: set<FloatType>,
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^ source.hydra support.type.hydra
@@ -621,7 +621,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  integerTypes: set<IntegerType>,
 #^^ source.hydra
-#  ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #              ^ source.hydra punctuation.separator.type.hydra
 #               ^ source.hydra
 #                ^^^ source.hydra support.type.hydra
@@ -636,7 +636,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  termVariants: set<TermVariant>,
 #^^ source.hydra
-#  ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #              ^ source.hydra punctuation.separator.type.hydra
 #               ^ source.hydra
 #                ^^^ source.hydra support.type.hydra
@@ -651,7 +651,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeVariants: set<TypeVariant>,
 #^^ source.hydra
-#  ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #              ^ source.hydra punctuation.separator.type.hydra
 #               ^ source.hydra
 #                ^^^ source.hydra support.type.hydra
@@ -666,12 +666,12 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  types: Type → boolean}
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^ source.hydra variable.other.hydra
+#         ^^^^ source.hydra entity.name.type.hydra
 #             ^ source.hydra
-#              ^ source.hydra keyword.operator.arrow.hydra
+#              ^ source.hydra keyword.control.arrow.hydra
 #               ^ source.hydra
 #                ^^^^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
@@ -695,7 +695,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  partialApplication: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra punctuation.separator.type.hydra
 #                     ^ source.hydra
 #                      ^^^^ source.hydra support.type.hydra
@@ -707,7 +707,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  nestedCaseStatements: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                      ^ source.hydra punctuation.separator.type.hydra
 #                       ^ source.hydra
 #                        ^^^^ source.hydra support.type.hydra
@@ -719,7 +719,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  nestedPolymorphicLetBindings: unit}
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                              ^ source.hydra punctuation.separator.type.hydra
 #                               ^ source.hydra
 #                                ^^^^ source.hydra support.type.hydra
@@ -761,7 +761,7 @@
 #                                     ^ source.hydra variable.parameter.hydra
 #                                      ^ source.hydra punctuation.separator.binder.hydra
 #                                       ^ source.hydra
-#                                        ^^^^^^^ source.hydra variable.other.hydra
+#                                        ^^^^^^^ source.hydra entity.name.type.hydra
 #                                               ^ source.hydra
 #                                                ^ source.hydra variable.other.hydra
 #                                                 ^ source.hydra
@@ -792,10 +792,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name,
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >  ## The term to which the variable is bound; recomputed on every loop iteration
@@ -809,7 +809,7 @@
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^ source.hydra variable.other.hydra
+#          ^^^^ source.hydra entity.name.type.hydra
 #              ^^ source.hydra
 >
 >  ## The optional type scheme of the binding, needed to declare its own type parameters
@@ -818,7 +818,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeScheme: optional<TypeScheme>}
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^^^^^ source.hydra support.type.hydra
@@ -846,10 +846,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name,
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >  ## The name bound to the matched variant's payload (from the original handler lambda)
@@ -858,10 +858,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  parameter: Name,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^ source.hydra variable.other.hydra
+#             ^^^^ source.hydra entity.name.type.hydra
 #                 ^^ source.hydra
 >
 >  ## The lowered handler body for the matched variant's payload
@@ -870,10 +870,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  handler: TcoStep}
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
-#           ^^^^^^^ source.hydra variable.other.hydra
+#           ^^^^^^^ source.hydra entity.name.type.hydra
 #                  ^^ source.hydra
 >
 >## A TCO-lowered union elimination, mirroring Core.CaseStatement
@@ -895,10 +895,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeName: Name,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra entity.name.type.hydra
 #                ^^ source.hydra
 >
 >  ## The term being matched against; evaluated exactly once per dispatch
@@ -907,10 +907,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  scrutinee: Term,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^ source.hydra variable.other.hydra
+#             ^^^^ source.hydra entity.name.type.hydra
 #                 ^^ source.hydra
 >
 >  ## An optional default case, used if none of the explicit cases match
@@ -919,7 +919,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  default: optional<TcoStep>,
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
 #           ^^^^^^^^ source.hydra support.type.hydra
@@ -964,7 +964,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  bindings: list<TcoBinding>,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
@@ -979,10 +979,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  body: TcoStep}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^ source.hydra entity.name.type.hydra
 #               ^^ source.hydra
 >
 >## A self-tail-recursive function body, restructured into an explicit loop. Produced by lowerSelfTailRecursion; consumed by per-language coders to emit a native iteration construct.
@@ -1004,7 +1004,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  params: list<Name>,
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra support.type.hydra
@@ -1019,10 +1019,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  body: TcoStep}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^ source.hydra entity.name.type.hydra
 #               ^^ source.hydra
 >
 >## One node of a TCO-lowered function body: a loop continuation, a terminal value, or a branch
@@ -1044,7 +1044,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  continue: list<Term>,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
@@ -1059,10 +1059,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  return: Term,
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^ source.hydra variable.other.hydra
+#          ^^^^ source.hydra entity.name.type.hydra
 #              ^^ source.hydra
 >
 >  ## Branch on a union elimination; mirrors Core.CaseStatement but handlers are TcoStep
@@ -1076,7 +1076,7 @@
 #        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
-#           ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#           ^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                           ^^ source.hydra
 >
 >  ## Bindings that must be recomputed on every iteration, mirroring Core.Let
@@ -1090,7 +1090,7 @@
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^ source.hydra variable.other.hydra
+#          ^^^^^^ source.hydra entity.name.type.hydra
 #                ^^ source.hydra
 >
 >## Specifies either a pre-order or post-order traversal
@@ -1112,7 +1112,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  pre: unit,
 #^^ source.hydra
-#  ^^^ source.hydra variable.other.hydra
+#  ^^^ source.hydra variable.other.member.hydra
 #     ^ source.hydra punctuation.separator.type.hydra
 #      ^ source.hydra
 #       ^^^^ source.hydra support.type.hydra
@@ -1124,7 +1124,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  post: unit}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
 #        ^^^^ source.hydra support.type.hydra
@@ -1140,13 +1140,13 @@
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
-#                   ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                 ^ source.hydra
-#                                  ^ source.hydra keyword.operator.arrow.hydra
+#                                  ^ source.hydra keyword.control.arrow.hydra
 #                                   ^ source.hydra
-#                                    ^^^^ source.hydra variable.other.hydra
+#                                    ^^^^ source.hydra entity.name.type.hydra
 #                                        ^ source.hydra
-#                                         ^ source.hydra keyword.operator.arrow.hydra
+#                                         ^ source.hydra keyword.control.arrow.hydra
 #                                          ^ source.hydra
 #                                           ^^^^^^ source.hydra support.type.hydra
 #                                                 ^ source.hydra punctuation.definition.typeargs.begin.hydra

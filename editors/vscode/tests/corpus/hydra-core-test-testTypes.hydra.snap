@@ -23,7 +23,7 @@
 #      ^^ source.hydra
 >    function = FunctionType{
 #^^^^ source.hydra
-#    ^^^^^^^^ source.hydra variable.other.hydra
+#    ^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
@@ -31,13 +31,13 @@
 #                           ^^ source.hydra
 >      domain = Type{literal = LiteralType{`string`}},
 #^^^^^^ source.hydra
-#      ^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^ source.hydra entity.name.type.nominal.hydra
 #                   ^ source.hydra
-#                    ^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -49,13 +49,13 @@
 #                                                  ^^^^ source.hydra
 >      codomain = Type{literal = LiteralType{`string`}}}}@{firstClassType = true}
 #^^^^^^ source.hydra
-#      ^^^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^^^ source.hydra variable.other.member.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
 #                 ^^^^ source.hydra entity.name.type.nominal.hydra
 #                     ^ source.hydra
-#                      ^^^^^^^ source.hydra variable.other.hydra
+#                      ^^^^^^^ source.hydra variable.other.member.hydra
 #                             ^ source.hydra
 #                              ^ source.hydra keyword.operator.equals.hydra
 #                               ^ source.hydra
@@ -67,7 +67,7 @@
 #                                                    ^^^^ source.hydra
 #                                                        ^ source.hydra keyword.operator.annotation.hydra
 #                                                         ^ source.hydra
-#                                                          ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                          ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                        ^ source.hydra
 #                                                                         ^ source.hydra keyword.operator.equals.hydra
 #                                                                          ^ source.hydra
@@ -86,7 +86,7 @@
 #      ^^ source.hydra
 >    function = FunctionType{
 #^^^^ source.hydra
-#    ^^^^^^^^ source.hydra variable.other.hydra
+#    ^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
@@ -94,13 +94,13 @@
 #                           ^^ source.hydra
 >      domain = Type{literal = LiteralType{`string`}},
 #^^^^^^ source.hydra
-#      ^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^ source.hydra entity.name.type.nominal.hydra
 #                   ^ source.hydra
-#                    ^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -112,7 +112,7 @@
 #                                                  ^^^^ source.hydra
 >      codomain = Type{
 #^^^^^^ source.hydra
-#      ^^^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^^^ source.hydra variable.other.member.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
@@ -120,7 +120,7 @@
 #                     ^^ source.hydra
 >        function = FunctionType{
 #^^^^^^^^ source.hydra
-#        ^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
@@ -128,13 +128,13 @@
 #                               ^^ source.hydra
 >          domain = Type{literal = LiteralType{`string`}},
 #^^^^^^^^^^ source.hydra
-#          ^^^^^^ source.hydra variable.other.hydra
+#          ^^^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
 #                   ^^^^ source.hydra entity.name.type.nominal.hydra
 #                       ^ source.hydra
-#                        ^^^^^^^ source.hydra variable.other.hydra
+#                        ^^^^^^^ source.hydra variable.other.member.hydra
 #                               ^ source.hydra
 #                                ^ source.hydra keyword.operator.equals.hydra
 #                                 ^ source.hydra
@@ -146,7 +146,7 @@
 #                                                      ^^^^ source.hydra
 >          codomain = Type{
 #^^^^^^^^^^ source.hydra
-#          ^^^^^^^^ source.hydra variable.other.hydra
+#          ^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
 #                    ^ source.hydra
@@ -154,7 +154,7 @@
 #                         ^^ source.hydra
 >            literal = LiteralType{
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^ source.hydra variable.other.member.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
@@ -168,7 +168,7 @@
 #                      ^^^^^^ source.hydra
 #                            ^ source.hydra keyword.operator.annotation.hydra
 #                             ^ source.hydra
-#                              ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                              ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                            ^ source.hydra
 #                                             ^ source.hydra keyword.operator.equals.hydra
 #                                              ^ source.hydra
@@ -197,7 +197,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -215,7 +215,7 @@
 #                                             ^ source.hydra
 #                                              ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                  ^ source.hydra
-#                                                   ^^^^^^^ source.hydra variable.other.hydra
+#                                                   ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                          ^ source.hydra
 #                                                           ^ source.hydra keyword.operator.equals.hydra
 #                                                            ^ source.hydra
@@ -229,7 +229,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -247,13 +247,13 @@
 #                                              ^ source.hydra
 #                                               ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                   ^ source.hydra
-#                                                    ^^^^^^^ source.hydra variable.other.hydra
+#                                                    ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                           ^ source.hydra
 #                                                            ^ source.hydra keyword.operator.equals.hydra
 #                                                             ^ source.hydra
 #                                                              ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                                         ^ source.hydra
-#                                                                          ^^^^^^^ source.hydra variable.other.hydra
+#                                                                          ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                 ^ source.hydra
 #                                                                                  ^ source.hydra keyword.operator.equals.hydra
 #                                                                                   ^ source.hydra
@@ -265,7 +265,7 @@
 #                                                                                                      ^^^^^^ source.hydra
 #                                                                                                            ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                                             ^ source.hydra
-#                                                                                                              ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                                              ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                                            ^ source.hydra
 #                                                                                                                             ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                                              ^ source.hydra
@@ -298,7 +298,7 @@
 #      ^^ source.hydra
 >    function = FunctionType{
 #^^^^ source.hydra
-#    ^^^^^^^^ source.hydra variable.other.hydra
+#    ^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
@@ -306,13 +306,13 @@
 #                           ^^ source.hydra
 >      domain = Type{variable = testTypePersonName},
 #^^^^^^ source.hydra
-#      ^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^ source.hydra entity.name.type.nominal.hydra
 #                   ^ source.hydra
-#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
@@ -320,13 +320,13 @@
 #                                                 ^^^ source.hydra
 >      codomain = Type{literal = LiteralType{`string`}}}}@{firstClassType = true}
 #^^^^^^ source.hydra
-#      ^^^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^^^ source.hydra variable.other.member.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
 #                 ^^^^ source.hydra entity.name.type.nominal.hydra
 #                     ^ source.hydra
-#                      ^^^^^^^ source.hydra variable.other.hydra
+#                      ^^^^^^^ source.hydra variable.other.member.hydra
 #                             ^ source.hydra
 #                              ^ source.hydra keyword.operator.equals.hydra
 #                               ^ source.hydra
@@ -338,7 +338,7 @@
 #                                                    ^^^^ source.hydra
 #                                                        ^ source.hydra keyword.operator.annotation.hydra
 #                                                         ^ source.hydra
-#                                                          ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                          ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                        ^ source.hydra
 #                                                                         ^ source.hydra keyword.operator.equals.hydra
 #                                                                          ^ source.hydra
@@ -363,13 +363,13 @@
 #               ^ source.hydra
 #                ^^^^ source.hydra entity.name.type.nominal.hydra
 #                    ^ source.hydra
-#                     ^^^^^^^ source.hydra variable.other.hydra
+#                     ^^^^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
 #                               ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                          ^ source.hydra
-#                                           ^^^^^^^ source.hydra variable.other.hydra
+#                                           ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                  ^ source.hydra
 #                                                   ^ source.hydra keyword.operator.equals.hydra
 #                                                    ^ source.hydra
@@ -381,7 +381,7 @@
 #                                                                        ^^^^ source.hydra
 #                                                                            ^ source.hydra keyword.operator.annotation.hydra
 #                                                                             ^ source.hydra
-#                                                                              ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                              ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                            ^ source.hydra
 #                                                                                             ^ source.hydra keyword.operator.equals.hydra
 #                                                                                              ^ source.hydra
@@ -405,13 +405,13 @@
 #                                    ^ source.hydra
 #                                     ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                         ^ source.hydra
-#                                          ^^^^^^^ source.hydra variable.other.hydra
+#                                          ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                 ^ source.hydra
 #                                                  ^ source.hydra keyword.operator.equals.hydra
 #                                                   ^ source.hydra
 #                                                    ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                               ^ source.hydra
-#                                                                ^^^^^^^ source.hydra variable.other.hydra
+#                                                                ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                       ^ source.hydra
 #                                                                        ^ source.hydra keyword.operator.equals.hydra
 #                                                                         ^ source.hydra
@@ -423,7 +423,7 @@
 #                                                                                            ^^^^ source.hydra
 #                                                                                                ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                                 ^ source.hydra
-#                                                                                                  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                                  ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                                ^ source.hydra
 #                                                                                                                 ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                                  ^ source.hydra
@@ -456,7 +456,7 @@
 #                             ^ source.hydra
 #                              ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                  ^ source.hydra
-#                                   ^^^^^^^ source.hydra variable.other.hydra
+#                                   ^^^^^^^ source.hydra variable.other.member.hydra
 #                                          ^ source.hydra
 #                                           ^ source.hydra keyword.operator.equals.hydra
 #                                            ^ source.hydra
@@ -468,7 +468,7 @@
 #                                                                 ^^^^ source.hydra
 #                                                                     ^ source.hydra keyword.operator.annotation.hydra
 #                                                                      ^ source.hydra
-#                                                                       ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                       ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                     ^ source.hydra
 #                                                                                      ^ source.hydra keyword.operator.equals.hydra
 #                                                                                       ^ source.hydra
@@ -500,7 +500,7 @@
 #                                                        ^ source.hydra
 #                                                         ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                             ^ source.hydra
-#                                                              ^^^^^^^ source.hydra variable.other.hydra
+#                                                              ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                     ^ source.hydra
 #                                                                      ^ source.hydra keyword.operator.equals.hydra
 #                                                                       ^ source.hydra
@@ -512,7 +512,7 @@
 #                                                                                            ^^^^ source.hydra
 #                                                                                                ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                                 ^ source.hydra
-#                                                                                                  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                                  ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                                ^ source.hydra
 #                                                                                                                 ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                                  ^ source.hydra
@@ -536,7 +536,7 @@
 #                                      ^ source.hydra
 #                                       ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                           ^ source.hydra
-#                                            ^^^^^^^ source.hydra variable.other.hydra
+#                                            ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                   ^ source.hydra
 #                                                    ^ source.hydra keyword.operator.equals.hydra
 #                                                     ^ source.hydra
@@ -548,7 +548,7 @@
 #                                                                          ^^^ source.hydra
 #                                                                             ^ source.hydra keyword.operator.annotation.hydra
 #                                                                              ^ source.hydra
-#                                                                               ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                               ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                             ^ source.hydra
 #                                                                                              ^ source.hydra keyword.operator.equals.hydra
 #                                                                                               ^ source.hydra
@@ -577,13 +577,13 @@
 #                   ^^ source.hydra
 >      keys = Type{literal = LiteralType{`string`}},
 #^^^^^^ source.hydra
-#      ^^^^ source.hydra variable.other.hydra
+#      ^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
 #             ^^^^ source.hydra entity.name.type.nominal.hydra
 #                 ^ source.hydra
-#                  ^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^ source.hydra variable.other.member.hydra
 #                         ^ source.hydra
 #                          ^ source.hydra keyword.operator.equals.hydra
 #                           ^ source.hydra
@@ -595,19 +595,19 @@
 #                                                ^^^^ source.hydra
 >      values = Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}@{firstClassType = true}
 #^^^^^^ source.hydra
-#      ^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^ source.hydra entity.name.type.nominal.hydra
 #                   ^ source.hydra
-#                    ^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
 #                              ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                         ^ source.hydra
-#                                          ^^^^^^^ source.hydra variable.other.hydra
+#                                          ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                 ^ source.hydra
 #                                                  ^ source.hydra keyword.operator.equals.hydra
 #                                                   ^ source.hydra
@@ -619,7 +619,7 @@
 #                                                                       ^^^^^ source.hydra
 #                                                                            ^ source.hydra keyword.operator.annotation.hydra
 #                                                                             ^ source.hydra
-#                                                                              ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                              ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                            ^ source.hydra
 #                                                                                             ^ source.hydra keyword.operator.equals.hydra
 #                                                                                              ^ source.hydra
@@ -644,13 +644,13 @@
 #                   ^ source.hydra
 #                    ^^^^ source.hydra entity.name.type.nominal.hydra
 #                        ^ source.hydra
-#                         ^^^^^^^ source.hydra variable.other.hydra
+#                         ^^^^^^^ source.hydra variable.other.member.hydra
 #                                ^ source.hydra
 #                                 ^ source.hydra keyword.operator.equals.hydra
 #                                  ^ source.hydra
 #                                   ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                              ^ source.hydra
-#                                               ^^^^^^^ source.hydra variable.other.hydra
+#                                               ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                      ^ source.hydra
 #                                                       ^ source.hydra keyword.operator.equals.hydra
 #                                                        ^ source.hydra
@@ -662,7 +662,7 @@
 #                                                                            ^^^^ source.hydra
 #                                                                                ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                 ^ source.hydra
-#                                                                                  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                  ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                ^ source.hydra
 #                                                                                                 ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                  ^ source.hydra
@@ -687,13 +687,13 @@
 #                   ^ source.hydra
 #                    ^^^^ source.hydra entity.name.type.nominal.hydra
 #                        ^ source.hydra
-#                         ^^^^^^^ source.hydra variable.other.hydra
+#                         ^^^^^^^ source.hydra variable.other.member.hydra
 #                                ^ source.hydra
 #                                 ^ source.hydra keyword.operator.equals.hydra
 #                                  ^ source.hydra
 #                                   ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                              ^ source.hydra
-#                                               ^^^^^^^ source.hydra variable.other.hydra
+#                                               ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                      ^ source.hydra
 #                                                       ^ source.hydra keyword.operator.equals.hydra
 #                                                        ^ source.hydra
@@ -705,7 +705,7 @@
 #                                                                           ^^^^ source.hydra
 #                                                                               ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                ^ source.hydra
-#                                                                                 ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                 ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                               ^ source.hydra
 #                                                                                                ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                 ^ source.hydra
@@ -729,7 +729,7 @@
 #                                           ^ source.hydra
 #                                            ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                ^ source.hydra
-#                                                 ^^^^^^^ source.hydra variable.other.hydra
+#                                                 ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                        ^ source.hydra
 #                                                         ^ source.hydra keyword.operator.equals.hydra
 #                                                          ^ source.hydra
@@ -741,7 +741,7 @@
 #                                                                               ^^^ source.hydra
 #                                                                                  ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                   ^ source.hydra
-#                                                                                    ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                    ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                  ^ source.hydra
 #                                                                                                   ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                    ^ source.hydra
@@ -765,7 +765,7 @@
 #                                    ^ source.hydra
 #                                     ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                         ^ source.hydra
-#                                          ^^^^^^^ source.hydra variable.other.hydra
+#                                          ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                 ^ source.hydra
 #                                                  ^ source.hydra keyword.operator.equals.hydra
 #                                                   ^ source.hydra
@@ -777,7 +777,7 @@
 #                                                                        ^^^ source.hydra
 #                                                                           ^ source.hydra keyword.operator.annotation.hydra
 #                                                                            ^ source.hydra
-#                                                                             ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                             ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                           ^ source.hydra
 #                                                                                            ^ source.hydra keyword.operator.equals.hydra
 #                                                                                             ^ source.hydra
@@ -820,7 +820,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -838,7 +838,7 @@
 #                                             ^ source.hydra
 #                                              ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                  ^ source.hydra
-#                                                   ^^^^^^^ source.hydra variable.other.hydra
+#                                                   ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                          ^ source.hydra
 #                                                           ^ source.hydra keyword.operator.equals.hydra
 #                                                            ^ source.hydra
@@ -852,7 +852,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -870,13 +870,13 @@
 #                                              ^ source.hydra
 #                                               ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                   ^ source.hydra
-#                                                    ^^^^^^^ source.hydra variable.other.hydra
+#                                                    ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                           ^ source.hydra
 #                                                            ^ source.hydra keyword.operator.equals.hydra
 #                                                             ^ source.hydra
 #                                                              ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                                         ^ source.hydra
-#                                                                          ^^^^^^^ source.hydra variable.other.hydra
+#                                                                          ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                 ^ source.hydra
 #                                                                                  ^ source.hydra keyword.operator.equals.hydra
 #                                                                                   ^ source.hydra
@@ -888,7 +888,7 @@
 #                                                                                                       ^^^^^^ source.hydra
 #                                                                                                             ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                                              ^ source.hydra
-#                                                                                                               ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                                               ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                                             ^ source.hydra
 #                                                                                                                              ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                                               ^ source.hydra
@@ -917,7 +917,7 @@
 #                         ^^ source.hydra
 >      parameter = Name{"a"},
 #^^^^^^ source.hydra
-#      ^^^^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
@@ -929,7 +929,7 @@
 #                          ^^^ source.hydra
 >      body = Type{
 #^^^^^^ source.hydra
-#      ^^^^ source.hydra variable.other.hydra
+#      ^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
@@ -947,7 +947,7 @@
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                   ^ source.hydra
-#                    ^^^^ source.hydra variable.other.hydra
+#                    ^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
@@ -965,7 +965,7 @@
 #                                                 ^ source.hydra
 #                                                  ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                      ^ source.hydra
-#                                                       ^^^^^^^^ source.hydra variable.other.hydra
+#                                                       ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                               ^ source.hydra
 #                                                                ^ source.hydra keyword.operator.equals.hydra
 #                                                                 ^ source.hydra
@@ -981,7 +981,7 @@
 #                   ^^ source.hydra
 >            name = Name{"tail"},
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
@@ -1013,7 +1013,7 @@
 #                               ^^ source.hydra
 >                application = ApplicationType{
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -1021,7 +1021,7 @@
 #                                             ^^ source.hydra
 >                  function = Type{
 #^^^^^^^^^^^^^^^^^^ source.hydra
-#                  ^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
@@ -1029,7 +1029,7 @@
 #                                 ^^ source.hydra
 >                    variable = testTypeBuddyListBName},
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
@@ -1037,13 +1037,13 @@
 #                                                     ^^^ source.hydra
 >                  argument = Type{variable = Name{"a"}}}}}}]}}}@{firstClassType = true}
 #^^^^^^^^^^^^^^^^^^ source.hydra
-#                  ^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
 #                             ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^^^ source.hydra variable.other.hydra
+#                                  ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                          ^ source.hydra
 #                                           ^ source.hydra keyword.operator.equals.hydra
 #                                            ^ source.hydra
@@ -1055,7 +1055,7 @@
 #                                                     ^^^^^^^^^^ source.hydra
 #                                                               ^ source.hydra keyword.operator.annotation.hydra
 #                                                                ^ source.hydra
-#                                                                 ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                 ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                               ^ source.hydra
 #                                                                                ^ source.hydra keyword.operator.equals.hydra
 #                                                                                 ^ source.hydra
@@ -1098,7 +1098,7 @@
 #                         ^^ source.hydra
 >      parameter = Name{"a"},
 #^^^^^^ source.hydra
-#      ^^^^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
@@ -1110,7 +1110,7 @@
 #                          ^^^ source.hydra
 >      body = Type{
 #^^^^^^ source.hydra
-#      ^^^^ source.hydra variable.other.hydra
+#      ^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
@@ -1128,7 +1128,7 @@
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                   ^ source.hydra
-#                    ^^^^ source.hydra variable.other.hydra
+#                    ^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
@@ -1146,7 +1146,7 @@
 #                                                 ^ source.hydra
 #                                                  ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                      ^ source.hydra
-#                                                       ^^^^^^^^ source.hydra variable.other.hydra
+#                                                       ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                               ^ source.hydra
 #                                                                ^ source.hydra keyword.operator.equals.hydra
 #                                                                 ^ source.hydra
@@ -1162,7 +1162,7 @@
 #                   ^^ source.hydra
 >            name = Name{"tail"},
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
@@ -1194,7 +1194,7 @@
 #                               ^^ source.hydra
 >                application = ApplicationType{
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -1202,7 +1202,7 @@
 #                                             ^^ source.hydra
 >                  function = Type{
 #^^^^^^^^^^^^^^^^^^ source.hydra
-#                  ^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
@@ -1210,7 +1210,7 @@
 #                                 ^^ source.hydra
 >                    variable = testTypeBuddyListAName},
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
@@ -1218,13 +1218,13 @@
 #                                                     ^^^ source.hydra
 >                  argument = Type{variable = Name{"a"}}}}}}]}}}@{firstClassType = true}
 #^^^^^^^^^^^^^^^^^^ source.hydra
-#                  ^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
 #                             ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^^^ source.hydra variable.other.hydra
+#                                  ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                          ^ source.hydra
 #                                           ^ source.hydra keyword.operator.equals.hydra
 #                                            ^ source.hydra
@@ -1236,7 +1236,7 @@
 #                                                     ^^^^^^^^^^ source.hydra
 #                                                               ^ source.hydra keyword.operator.annotation.hydra
 #                                                                ^ source.hydra
-#                                                                 ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                 ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                               ^ source.hydra
 #                                                                                ^ source.hydra keyword.operator.equals.hydra
 #                                                                                 ^ source.hydra
@@ -1279,7 +1279,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -1305,7 +1305,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -1331,7 +1331,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -1355,7 +1355,7 @@
 #                                                                ^^^^ source.hydra
 #                                                                    ^ source.hydra keyword.operator.annotation.hydra
 #                                                                     ^ source.hydra
-#                                                                      ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                      ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                    ^ source.hydra
 #                                                                                     ^ source.hydra keyword.operator.equals.hydra
 #                                                                                      ^ source.hydra
@@ -1398,7 +1398,7 @@
 #                         ^^ source.hydra
 >      parameter = Name{"a"},
 #^^^^^^ source.hydra
-#      ^^^^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
@@ -1410,7 +1410,7 @@
 #                          ^^^ source.hydra
 >      body = Type{
 #^^^^^^ source.hydra
-#      ^^^^ source.hydra variable.other.hydra
+#      ^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
@@ -1428,7 +1428,7 @@
 #                             ^^ source.hydra
 >          parameter = Name{"b"},
 #^^^^^^^^^^ source.hydra
-#          ^^^^^^^^^ source.hydra variable.other.hydra
+#          ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
@@ -1440,7 +1440,7 @@
 #                              ^^^ source.hydra
 >          body = Type{
 #^^^^^^^^^^ source.hydra
-#          ^^^^ source.hydra variable.other.hydra
+#          ^^^^ source.hydra variable.other.member.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
@@ -1458,7 +1458,7 @@
 #^^^^^^^^^^^^^^ source.hydra
 #              ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                       ^ source.hydra
-#                        ^^^^ source.hydra variable.other.hydra
+#                        ^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
@@ -1476,7 +1476,7 @@
 #                                                     ^ source.hydra
 #                                                      ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                          ^ source.hydra
-#                                                           ^^^^^^^^ source.hydra variable.other.hydra
+#                                                           ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                   ^ source.hydra
 #                                                                    ^ source.hydra keyword.operator.equals.hydra
 #                                                                     ^ source.hydra
@@ -1490,7 +1490,7 @@
 #^^^^^^^^^^^^^^ source.hydra
 #              ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                       ^ source.hydra
-#                        ^^^^ source.hydra variable.other.hydra
+#                        ^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
@@ -1508,7 +1508,7 @@
 #                                                      ^ source.hydra
 #                                                       ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                           ^ source.hydra
-#                                                            ^^^^^^^^ source.hydra variable.other.hydra
+#                                                            ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                    ^ source.hydra
 #                                                                     ^ source.hydra keyword.operator.equals.hydra
 #                                                                      ^ source.hydra
@@ -1520,7 +1520,7 @@
 #                                                                               ^^^^^^^^^ source.hydra
 #                                                                                        ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                         ^ source.hydra
-#                                                                                          ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                          ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                        ^ source.hydra
 #                                                                                                         ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                          ^ source.hydra
@@ -1563,7 +1563,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -1581,7 +1581,7 @@
 #                                                ^ source.hydra
 #                                                 ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                     ^ source.hydra
-#                                                      ^^^^^^^ source.hydra variable.other.hydra
+#                                                      ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                             ^ source.hydra
 #                                                              ^ source.hydra keyword.operator.equals.hydra
 #                                                               ^ source.hydra
@@ -1595,7 +1595,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -1613,7 +1613,7 @@
 #                                               ^ source.hydra
 #                                                ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                    ^ source.hydra
-#                                                     ^^^^^^^ source.hydra variable.other.hydra
+#                                                     ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                            ^ source.hydra
 #                                                             ^ source.hydra keyword.operator.equals.hydra
 #                                                              ^ source.hydra
@@ -1625,7 +1625,7 @@
 #                                                                                   ^^^^^ source.hydra
 #                                                                                        ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                         ^ source.hydra
-#                                                                                          ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                          ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                        ^ source.hydra
 #                                                                                                         ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                          ^ source.hydra
@@ -1668,7 +1668,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -1686,7 +1686,7 @@
 #                                                ^ source.hydra
 #                                                 ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                     ^ source.hydra
-#                                                      ^^^^^^^^ source.hydra variable.other.hydra
+#                                                      ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                              ^ source.hydra
 #                                                               ^ source.hydra keyword.operator.equals.hydra
 #                                                                ^ source.hydra
@@ -1696,7 +1696,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -1714,7 +1714,7 @@
 #                                             ^ source.hydra
 #                                              ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                  ^ source.hydra
-#                                                   ^^^^^^^^ source.hydra variable.other.hydra
+#                                                   ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                           ^ source.hydra
 #                                                            ^ source.hydra keyword.operator.equals.hydra
 #                                                             ^ source.hydra
@@ -1722,7 +1722,7 @@
 #                                                                                   ^^^^ source.hydra
 #                                                                                       ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                        ^ source.hydra
-#                                                                                         ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                         ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                       ^ source.hydra
 #                                                                                                        ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                         ^ source.hydra
@@ -1765,7 +1765,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -1783,13 +1783,13 @@
 #                                             ^ source.hydra
 #                                              ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                  ^ source.hydra
-#                                                   ^^^^^^^ source.hydra variable.other.hydra
+#                                                   ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                          ^ source.hydra
 #                                                           ^ source.hydra keyword.operator.equals.hydra
 #                                                            ^ source.hydra
 #                                                             ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                                        ^ source.hydra
-#                                                                         ^^^^^^^ source.hydra variable.other.hydra
+#                                                                         ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                ^ source.hydra
 #                                                                                 ^ source.hydra keyword.operator.equals.hydra
 #                                                                                  ^ source.hydra
@@ -1803,7 +1803,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -1829,7 +1829,7 @@
 #                                                               ^ source.hydra
 #                                                                ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                                    ^ source.hydra
-#                                                                     ^^^^^^^^ source.hydra variable.other.hydra
+#                                                                     ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                             ^ source.hydra
 #                                                                              ^ source.hydra keyword.operator.equals.hydra
 #                                                                               ^ source.hydra
@@ -1837,7 +1837,7 @@
 #                                                                                                   ^^^^^ source.hydra
 #                                                                                                        ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                                         ^ source.hydra
-#                                                                                                          ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                                          ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                                        ^ source.hydra
 #                                                                                                                         ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                                          ^ source.hydra
@@ -1880,7 +1880,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -1898,13 +1898,13 @@
 #                                            ^ source.hydra
 #                                             ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                 ^ source.hydra
-#                                                  ^^^^^^^ source.hydra variable.other.hydra
+#                                                  ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                         ^ source.hydra
 #                                                          ^ source.hydra keyword.operator.equals.hydra
 #                                                           ^ source.hydra
 #                                                            ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                                       ^ source.hydra
-#                                                                        ^^^^^ source.hydra variable.other.hydra
+#                                                                        ^^^^^ source.hydra variable.other.member.hydra
 #                                                                             ^ source.hydra
 #                                                                              ^ source.hydra keyword.operator.equals.hydra
 #                                                                               ^ source.hydra
@@ -1918,7 +1918,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -1936,13 +1936,13 @@
 #                                            ^ source.hydra
 #                                             ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                 ^ source.hydra
-#                                                  ^^^^^^^ source.hydra variable.other.hydra
+#                                                  ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                         ^ source.hydra
 #                                                          ^ source.hydra keyword.operator.equals.hydra
 #                                                           ^ source.hydra
 #                                                            ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                                       ^ source.hydra
-#                                                                        ^^^^^ source.hydra variable.other.hydra
+#                                                                        ^^^^^ source.hydra variable.other.member.hydra
 #                                                                             ^ source.hydra
 #                                                                              ^ source.hydra keyword.operator.equals.hydra
 #                                                                               ^ source.hydra
@@ -1954,7 +1954,7 @@
 #                                                                                                   ^^^^^^ source.hydra
 #                                                                                                         ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                                          ^ source.hydra
-#                                                                                                           ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                                           ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                                         ^ source.hydra
 #                                                                                                                          ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                                           ^ source.hydra
@@ -1997,7 +1997,7 @@
 #                         ^^ source.hydra
 >      parameter = Name{"a"},
 #^^^^^^ source.hydra
-#      ^^^^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
@@ -2009,7 +2009,7 @@
 #                          ^^^ source.hydra
 >      body = Type{
 #^^^^^^ source.hydra
-#      ^^^^ source.hydra variable.other.hydra
+#      ^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
@@ -2027,7 +2027,7 @@
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                   ^ source.hydra
-#                    ^^^^ source.hydra variable.other.hydra
+#                    ^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
@@ -2045,7 +2045,7 @@
 #                                                ^ source.hydra
 #                                                 ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                     ^ source.hydra
-#                                                      ^^^^^^^^ source.hydra variable.other.hydra
+#                                                      ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                              ^ source.hydra
 #                                                               ^ source.hydra keyword.operator.equals.hydra
 #                                                                ^ source.hydra
@@ -2059,7 +2059,7 @@
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                   ^ source.hydra
-#                    ^^^^ source.hydra variable.other.hydra
+#                    ^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
@@ -2077,7 +2077,7 @@
 #                                                ^ source.hydra
 #                                                 ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                     ^ source.hydra
-#                                                      ^^^^^^^^ source.hydra variable.other.hydra
+#                                                      ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                              ^ source.hydra
 #                                                               ^ source.hydra keyword.operator.equals.hydra
 #                                                                ^ source.hydra
@@ -2089,7 +2089,7 @@
 #                                                                         ^^^^^^^ source.hydra
 #                                                                                ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                 ^ source.hydra
-#                                                                                  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                  ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                ^ source.hydra
 #                                                                                                 ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                  ^ source.hydra
@@ -2132,7 +2132,7 @@
 #                         ^^ source.hydra
 >      parameter = Name{"a"},
 #^^^^^^ source.hydra
-#      ^^^^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
@@ -2144,7 +2144,7 @@
 #                          ^^^ source.hydra
 >      body = Type{
 #^^^^^^ source.hydra
-#      ^^^^ source.hydra variable.other.hydra
+#      ^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
@@ -2162,7 +2162,7 @@
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                   ^ source.hydra
-#                    ^^^^ source.hydra variable.other.hydra
+#                    ^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
@@ -2180,7 +2180,7 @@
 #                                                 ^ source.hydra
 #                                                  ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                      ^ source.hydra
-#                                                       ^^^^^^^^ source.hydra variable.other.hydra
+#                                                       ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                               ^ source.hydra
 #                                                                ^ source.hydra keyword.operator.equals.hydra
 #                                                                 ^ source.hydra
@@ -2196,7 +2196,7 @@
 #                   ^^ source.hydra
 >            name = Name{"tail"},
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
@@ -2228,7 +2228,7 @@
 #                               ^^ source.hydra
 >                application = ApplicationType{
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -2236,7 +2236,7 @@
 #                                             ^^ source.hydra
 >                  function = Type{
 #^^^^^^^^^^^^^^^^^^ source.hydra
-#                  ^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
@@ -2244,7 +2244,7 @@
 #                                 ^^ source.hydra
 >                    variable = testTypeListName},
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
@@ -2252,13 +2252,13 @@
 #                                               ^^^ source.hydra
 >                  argument = Type{variable = Name{"a"}}}}}}]}}}@{firstClassType = true}
 #^^^^^^^^^^^^^^^^^^ source.hydra
-#                  ^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
 #                             ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^^^ source.hydra variable.other.hydra
+#                                  ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                          ^ source.hydra
 #                                           ^ source.hydra keyword.operator.equals.hydra
 #                                            ^ source.hydra
@@ -2270,7 +2270,7 @@
 #                                                     ^^^^^^^^^^ source.hydra
 #                                                               ^ source.hydra keyword.operator.annotation.hydra
 #                                                                ^ source.hydra
-#                                                                 ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                 ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                               ^ source.hydra
 #                                                                                ^ source.hydra keyword.operator.equals.hydra
 #                                                                                 ^ source.hydra
@@ -2327,7 +2327,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -2345,13 +2345,13 @@
 #                                            ^ source.hydra
 #                                             ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                 ^ source.hydra
-#                                                  ^^^^^^^ source.hydra variable.other.hydra
+#                                                  ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                         ^ source.hydra
 #                                                          ^ source.hydra keyword.operator.equals.hydra
 #                                                           ^ source.hydra
 #                                                            ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                                       ^ source.hydra
-#                                                                        ^^^^^^^ source.hydra variable.other.hydra
+#                                                                        ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                               ^ source.hydra
 #                                                                                ^ source.hydra keyword.operator.equals.hydra
 #                                                                                 ^ source.hydra
@@ -2365,7 +2365,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -2383,13 +2383,13 @@
 #                                              ^ source.hydra
 #                                               ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                   ^ source.hydra
-#                                                    ^^^^^^^ source.hydra variable.other.hydra
+#                                                    ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                           ^ source.hydra
 #                                                            ^ source.hydra keyword.operator.equals.hydra
 #                                                             ^ source.hydra
 #                                                              ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                                         ^ source.hydra
-#                                                                          ^^^^^ source.hydra variable.other.hydra
+#                                                                          ^^^^^ source.hydra variable.other.member.hydra
 #                                                                               ^ source.hydra
 #                                                                                ^ source.hydra keyword.operator.equals.hydra
 #                                                                                 ^ source.hydra
@@ -2401,7 +2401,7 @@
 #                                                                                                     ^^^^^^ source.hydra
 #                                                                                                           ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                                            ^ source.hydra
-#                                                                                                             ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                                             ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                                           ^ source.hydra
 #                                                                                                                            ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                                             ^ source.hydra
@@ -2444,7 +2444,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -2462,7 +2462,7 @@
 #                                                  ^ source.hydra
 #                                                   ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                       ^ source.hydra
-#                                                        ^^^^^^^ source.hydra variable.other.hydra
+#                                                        ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                               ^ source.hydra
 #                                                                ^ source.hydra keyword.operator.equals.hydra
 #                                                                 ^ source.hydra
@@ -2476,7 +2476,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -2494,7 +2494,7 @@
 #                                                 ^ source.hydra
 #                                                  ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                      ^ source.hydra
-#                                                       ^^^^^^^ source.hydra variable.other.hydra
+#                                                       ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                              ^ source.hydra
 #                                                               ^ source.hydra keyword.operator.equals.hydra
 #                                                                ^ source.hydra
@@ -2508,7 +2508,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -2526,13 +2526,13 @@
 #                                            ^ source.hydra
 #                                             ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                 ^ source.hydra
-#                                                  ^^^^^^^ source.hydra variable.other.hydra
+#                                                  ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                         ^ source.hydra
 #                                                          ^ source.hydra keyword.operator.equals.hydra
 #                                                           ^ source.hydra
 #                                                            ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                                       ^ source.hydra
-#                                                                        ^^^^^^^ source.hydra variable.other.hydra
+#                                                                        ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                               ^ source.hydra
 #                                                                                ^ source.hydra keyword.operator.equals.hydra
 #                                                                                 ^ source.hydra
@@ -2544,7 +2544,7 @@
 #                                                                                                     ^^^^^^ source.hydra
 #                                                                                                           ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                                            ^ source.hydra
-#                                                                                                             ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                                             ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                                           ^ source.hydra
 #                                                                                                                            ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                                             ^ source.hydra
@@ -2587,7 +2587,7 @@
 #                         ^^ source.hydra
 >      parameter = Name{"a"},
 #^^^^^^ source.hydra
-#      ^^^^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
@@ -2599,7 +2599,7 @@
 #                          ^^^ source.hydra
 >      body = Type{
 #^^^^^^ source.hydra
-#      ^^^^ source.hydra variable.other.hydra
+#      ^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
@@ -2617,7 +2617,7 @@
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                   ^ source.hydra
-#                    ^^^^ source.hydra variable.other.hydra
+#                    ^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
@@ -2635,7 +2635,7 @@
 #                                                   ^ source.hydra
 #                                                    ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                        ^ source.hydra
-#                                                         ^^^^^^^^ source.hydra variable.other.hydra
+#                                                         ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                 ^ source.hydra
 #                                                                  ^ source.hydra keyword.operator.equals.hydra
 #                                                                   ^ source.hydra
@@ -2645,7 +2645,7 @@
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                   ^ source.hydra
-#                    ^^^^ source.hydra variable.other.hydra
+#                    ^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
@@ -2663,7 +2663,7 @@
 #                                                  ^ source.hydra
 #                                                   ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                       ^ source.hydra
-#                                                        ^^^^^^^^ source.hydra variable.other.hydra
+#                                                        ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                ^ source.hydra
 #                                                                 ^ source.hydra keyword.operator.equals.hydra
 #                                                                  ^ source.hydra
@@ -2675,7 +2675,7 @@
 #                                                                           ^^^^^^^ source.hydra
 #                                                                                  ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                   ^ source.hydra
-#                                                                                    ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                    ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                  ^ source.hydra
 #                                                                                                   ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                    ^ source.hydra
@@ -2718,7 +2718,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -2736,13 +2736,13 @@
 #                                          ^ source.hydra
 #                                           ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                               ^ source.hydra
-#                                                ^^^^^^^ source.hydra variable.other.hydra
+#                                                ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                       ^ source.hydra
 #                                                        ^ source.hydra keyword.operator.equals.hydra
 #                                                         ^ source.hydra
 #                                                          ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                                     ^ source.hydra
-#                                                                      ^^^^^^^ source.hydra variable.other.hydra
+#                                                                      ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                             ^ source.hydra
 #                                                                              ^ source.hydra keyword.operator.equals.hydra
 #                                                                               ^ source.hydra
@@ -2756,7 +2756,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -2774,13 +2774,13 @@
 #                                          ^ source.hydra
 #                                           ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                               ^ source.hydra
-#                                                ^^^^^^^ source.hydra variable.other.hydra
+#                                                ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                       ^ source.hydra
 #                                                        ^ source.hydra keyword.operator.equals.hydra
 #                                                         ^ source.hydra
 #                                                          ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                                     ^ source.hydra
-#                                                                      ^^^^^^^ source.hydra variable.other.hydra
+#                                                                      ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                             ^ source.hydra
 #                                                                              ^ source.hydra keyword.operator.equals.hydra
 #                                                                               ^ source.hydra
@@ -2792,7 +2792,7 @@
 #                                                                                                   ^^^^^^ source.hydra
 #                                                                                                         ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                                          ^ source.hydra
-#                                                                                                           ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                                           ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                                         ^ source.hydra
 #                                                                                                                          ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                                           ^ source.hydra
@@ -2831,7 +2831,7 @@
 #                 ^ source.hydra
 #                  ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                            ^ source.hydra
-#                             ^^^^^^^^^ source.hydra variable.other.hydra
+#                             ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                      ^ source.hydra
 #                                       ^ source.hydra keyword.operator.equals.hydra
 #                                        ^ source.hydra
@@ -2841,7 +2841,7 @@
 #                                               ^ source.hydra string.quoted.double.hydra
 #                                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                                 ^^^ source.hydra
-#                                                    ^^^^ source.hydra variable.other.hydra
+#                                                    ^^^^ source.hydra variable.other.member.hydra
 #                                                        ^ source.hydra
 #                                                         ^ source.hydra keyword.operator.equals.hydra
 #                                                          ^ source.hydra
@@ -2863,7 +2863,7 @@
 #                                                                                      ^ source.hydra
 #                                                                                       ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                                                           ^ source.hydra
-#                                                                                            ^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                            ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                    ^ source.hydra
 #                                                                                                     ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                      ^ source.hydra
@@ -2875,7 +2875,7 @@
 #                                                                                                               ^^^^^^ source.hydra
 #                                                                                                                     ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                                                      ^ source.hydra
-#                                                                                                                       ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                                                       ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                                                     ^ source.hydra
 #                                                                                                                                      ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                                                       ^ source.hydra
@@ -2918,7 +2918,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -2936,13 +2936,13 @@
 #                                            ^ source.hydra
 #                                             ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                 ^ source.hydra
-#                                                  ^^^^^^^ source.hydra variable.other.hydra
+#                                                  ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                         ^ source.hydra
 #                                                          ^ source.hydra keyword.operator.equals.hydra
 #                                                           ^ source.hydra
 #                                                            ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                                       ^ source.hydra
-#                                                                        ^^^^^^^ source.hydra variable.other.hydra
+#                                                                        ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                               ^ source.hydra
 #                                                                                ^ source.hydra keyword.operator.equals.hydra
 #                                                                                 ^ source.hydra
@@ -2956,7 +2956,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -2974,13 +2974,13 @@
 #                                              ^ source.hydra
 #                                               ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                   ^ source.hydra
-#                                                    ^^^^^^^ source.hydra variable.other.hydra
+#                                                    ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                           ^ source.hydra
 #                                                            ^ source.hydra keyword.operator.equals.hydra
 #                                                             ^ source.hydra
 #                                                              ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                                         ^ source.hydra
-#                                                                          ^^^^^ source.hydra variable.other.hydra
+#                                                                          ^^^^^ source.hydra variable.other.member.hydra
 #                                                                               ^ source.hydra
 #                                                                                ^ source.hydra keyword.operator.equals.hydra
 #                                                                                 ^ source.hydra
@@ -2992,7 +2992,7 @@
 #                                                                                                     ^^^^^^ source.hydra
 #                                                                                                           ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                                            ^ source.hydra
-#                                                                                                             ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                                             ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                                           ^ source.hydra
 #                                                                                                                            ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                                             ^ source.hydra
@@ -3030,7 +3030,7 @@
 #                                        ^ source.hydra
 #                                         ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                             ^ source.hydra
-#                                              ^^^^^^^ source.hydra variable.other.hydra
+#                                              ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                     ^ source.hydra
 #                                                      ^ source.hydra keyword.operator.equals.hydra
 #                                                       ^ source.hydra
@@ -3042,7 +3042,7 @@
 #                                                                            ^^^ source.hydra
 #                                                                               ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                ^ source.hydra
-#                                                                                 ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                 ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                               ^ source.hydra
 #                                                                                                ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                 ^ source.hydra
@@ -3085,7 +3085,7 @@
 #                         ^^ source.hydra
 >      parameter = Name{"v"},
 #^^^^^^ source.hydra
-#      ^^^^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
@@ -3097,7 +3097,7 @@
 #                          ^^^ source.hydra
 >      body = Type{
 #^^^^^^ source.hydra
-#      ^^^^ source.hydra variable.other.hydra
+#      ^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
@@ -3115,7 +3115,7 @@
 #                             ^^ source.hydra
 >          parameter = Name{"e"},
 #^^^^^^^^^^ source.hydra
-#          ^^^^^^^^^ source.hydra variable.other.hydra
+#          ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
@@ -3127,7 +3127,7 @@
 #                              ^^^ source.hydra
 >          body = Type{
 #^^^^^^^^^^ source.hydra
-#          ^^^^ source.hydra variable.other.hydra
+#          ^^^^ source.hydra variable.other.member.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
@@ -3145,7 +3145,7 @@
 #                         ^^ source.hydra
 >              application = ApplicationType{
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                         ^ source.hydra
 #                          ^ source.hydra keyword.operator.equals.hydra
 #                           ^ source.hydra
@@ -3153,7 +3153,7 @@
 #                                           ^^ source.hydra
 >                function = Type{
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
@@ -3161,7 +3161,7 @@
 #                               ^^ source.hydra
 >                  application = ApplicationType{
 #^^^^^^^^^^^^^^^^^^ source.hydra
-#                  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                             ^ source.hydra
 #                              ^ source.hydra keyword.operator.equals.hydra
 #                               ^ source.hydra
@@ -3169,7 +3169,7 @@
 #                                               ^^ source.hydra
 >                    function = Type{
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
@@ -3177,7 +3177,7 @@
 #                                   ^^ source.hydra
 >                      application = ApplicationType{
 #^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                      ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                      ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                 ^ source.hydra
 #                                  ^ source.hydra keyword.operator.equals.hydra
 #                                   ^ source.hydra
@@ -3185,7 +3185,7 @@
 #                                                   ^^ source.hydra
 >                        function = Type{
 #^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                        ^^^^^^^^ source.hydra variable.other.hydra
+#                        ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                ^ source.hydra
 #                                 ^ source.hydra keyword.operator.equals.hydra
 #                                  ^ source.hydra
@@ -3193,7 +3193,7 @@
 #                                       ^^ source.hydra
 >                          variable = testTypeTripleName},
 #^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                          ^^^^^^^^ source.hydra variable.other.hydra
+#                          ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                  ^ source.hydra
 #                                   ^ source.hydra keyword.operator.equals.hydra
 #                                    ^ source.hydra
@@ -3201,7 +3201,7 @@
 #                                                       ^^^ source.hydra
 >                        argument = Type{
 #^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                        ^^^^^^^^ source.hydra variable.other.hydra
+#                        ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                ^ source.hydra
 #                                 ^ source.hydra keyword.operator.equals.hydra
 #                                  ^ source.hydra
@@ -3209,7 +3209,7 @@
 #                                       ^^ source.hydra
 >                          variable = Name{"v"}}}},
 #^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                          ^^^^^^^^ source.hydra variable.other.hydra
+#                          ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                  ^ source.hydra
 #                                   ^ source.hydra keyword.operator.equals.hydra
 #                                    ^ source.hydra
@@ -3221,7 +3221,7 @@
 #                                             ^^^^^^ source.hydra
 >                    argument = Type{
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
@@ -3229,7 +3229,7 @@
 #                                   ^^ source.hydra
 >                      variable = Name{"e"}}}},
 #^^^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                      ^^^^^^^^ source.hydra variable.other.hydra
+#                      ^^^^^^^^ source.hydra variable.other.member.hydra
 #                              ^ source.hydra
 #                               ^ source.hydra keyword.operator.equals.hydra
 #                                ^ source.hydra
@@ -3241,7 +3241,7 @@
 #                                         ^^^^^^ source.hydra
 >                argument = Type{
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
@@ -3249,7 +3249,7 @@
 #                               ^^ source.hydra
 >                  variable = Name{"v"}}}}}}}}}@{firstClassType = true}
 #^^^^^^^^^^^^^^^^^^ source.hydra
-#                  ^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
@@ -3261,7 +3261,7 @@
 #                                     ^^^^^^^^^ source.hydra
 #                                              ^ source.hydra keyword.operator.annotation.hydra
 #                                               ^ source.hydra
-#                                                ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                              ^ source.hydra
 #                                                               ^ source.hydra keyword.operator.equals.hydra
 #                                                                ^ source.hydra
@@ -3304,7 +3304,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -3322,13 +3322,13 @@
 #                                                       ^ source.hydra
 #                                                        ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                            ^ source.hydra
-#                                                             ^^^^^^^ source.hydra variable.other.hydra
+#                                                             ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                    ^ source.hydra
 #                                                                     ^ source.hydra keyword.operator.equals.hydra
 #                                                                      ^ source.hydra
 #                                                                       ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                                                  ^ source.hydra
-#                                                                                   ^^^^^^^ source.hydra variable.other.hydra
+#                                                                                   ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                          ^ source.hydra
 #                                                                                           ^ source.hydra keyword.operator.equals.hydra
 #                                                                                            ^ source.hydra
@@ -3342,7 +3342,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -3360,7 +3360,7 @@
 #                                             ^ source.hydra
 #                                              ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                  ^ source.hydra
-#                                                   ^^^^^^^ source.hydra variable.other.hydra
+#                                                   ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                          ^ source.hydra
 #                                                           ^ source.hydra keyword.operator.equals.hydra
 #                                                            ^ source.hydra
@@ -3372,7 +3372,7 @@
 #                                                                                 ^^^^^ source.hydra
 #                                                                                      ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                       ^ source.hydra
-#                                                                                        ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                        ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                      ^ source.hydra
 #                                                                                                       ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                        ^ source.hydra
@@ -3415,7 +3415,7 @@
 #                         ^^ source.hydra
 >      parameter = Name{"a"},
 #^^^^^^ source.hydra
-#      ^^^^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
@@ -3427,7 +3427,7 @@
 #                          ^^^ source.hydra
 >      body = Type{
 #^^^^^^ source.hydra
-#      ^^^^ source.hydra variable.other.hydra
+#      ^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
@@ -3445,7 +3445,7 @@
 #                             ^^ source.hydra
 >          parameter = Name{"b"},
 #^^^^^^^^^^ source.hydra
-#          ^^^^^^^^^ source.hydra variable.other.hydra
+#          ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
@@ -3457,7 +3457,7 @@
 #                              ^^^ source.hydra
 >          body = Type{
 #^^^^^^^^^^ source.hydra
-#          ^^^^ source.hydra variable.other.hydra
+#          ^^^^ source.hydra variable.other.member.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
@@ -3475,7 +3475,7 @@
 #                                 ^^ source.hydra
 >              parameter = Name{"c"},
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra
 #                        ^ source.hydra keyword.operator.equals.hydra
 #                         ^ source.hydra
@@ -3487,7 +3487,7 @@
 #                                  ^^^ source.hydra
 >              body = Type{
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^ source.hydra variable.other.hydra
+#              ^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
 #                    ^ source.hydra
@@ -3505,7 +3505,7 @@
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                           ^ source.hydra
-#                            ^^^^ source.hydra variable.other.hydra
+#                            ^^^^ source.hydra variable.other.member.hydra
 #                                ^ source.hydra
 #                                 ^ source.hydra keyword.operator.equals.hydra
 #                                  ^ source.hydra
@@ -3523,7 +3523,7 @@
 #                                                          ^ source.hydra
 #                                                           ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                               ^ source.hydra
-#                                                                ^^^^^^^^ source.hydra variable.other.hydra
+#                                                                ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                        ^ source.hydra
 #                                                                         ^ source.hydra keyword.operator.equals.hydra
 #                                                                          ^ source.hydra
@@ -3537,7 +3537,7 @@
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                           ^ source.hydra
-#                            ^^^^ source.hydra variable.other.hydra
+#                            ^^^^ source.hydra variable.other.member.hydra
 #                                ^ source.hydra
 #                                 ^ source.hydra keyword.operator.equals.hydra
 #                                  ^ source.hydra
@@ -3555,7 +3555,7 @@
 #                                                           ^ source.hydra
 #                                                            ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                                ^ source.hydra
-#                                                                 ^^^^^^^^ source.hydra variable.other.hydra
+#                                                                 ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                         ^ source.hydra
 #                                                                          ^ source.hydra keyword.operator.equals.hydra
 #                                                                           ^ source.hydra
@@ -3569,7 +3569,7 @@
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                           ^ source.hydra
-#                            ^^^^ source.hydra variable.other.hydra
+#                            ^^^^ source.hydra variable.other.member.hydra
 #                                ^ source.hydra
 #                                 ^ source.hydra keyword.operator.equals.hydra
 #                                  ^ source.hydra
@@ -3587,7 +3587,7 @@
 #                                                          ^ source.hydra
 #                                                           ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                               ^ source.hydra
-#                                                                ^^^^^^^^ source.hydra variable.other.hydra
+#                                                                ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                        ^ source.hydra
 #                                                                         ^ source.hydra keyword.operator.equals.hydra
 #                                                                          ^ source.hydra
@@ -3599,7 +3599,7 @@
 #                                                                                   ^^^^^^^^^^^ source.hydra
 #                                                                                              ^ source.hydra keyword.operator.annotation.hydra
 #                                                                                               ^ source.hydra
-#                                                                                                ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                                ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                                              ^ source.hydra
 #                                                                                                               ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                                ^ source.hydra
@@ -3642,7 +3642,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -3660,7 +3660,7 @@
 #                                             ^ source.hydra
 #                                              ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                  ^ source.hydra
-#                                                   ^^^^^^^ source.hydra variable.other.hydra
+#                                                   ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                          ^ source.hydra
 #                                                           ^ source.hydra keyword.operator.equals.hydra
 #                                                            ^ source.hydra
@@ -3674,7 +3674,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -3692,7 +3692,7 @@
 #                                               ^ source.hydra
 #                                                ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                    ^ source.hydra
-#                                                     ^^^^^^^ source.hydra variable.other.hydra
+#                                                     ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                            ^ source.hydra
 #                                                             ^ source.hydra keyword.operator.equals.hydra
 #                                                              ^ source.hydra
@@ -3706,7 +3706,7 @@
 #^^^^^^ source.hydra
 #      ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -3730,7 +3730,7 @@
 #                                                         ^^^^ source.hydra
 #                                                             ^ source.hydra keyword.operator.annotation.hydra
 #                                                              ^ source.hydra
-#                                                               ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                               ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                             ^ source.hydra
 #                                                                              ^ source.hydra keyword.operator.equals.hydra
 #                                                                               ^ source.hydra
@@ -3773,7 +3773,7 @@
 #                         ^^ source.hydra
 >      parameter = Name{"a"},
 #^^^^^^ source.hydra
-#      ^^^^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
@@ -3785,7 +3785,7 @@
 #                          ^^^ source.hydra
 >      body = Type{
 #^^^^^^ source.hydra
-#      ^^^^ source.hydra variable.other.hydra
+#      ^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
@@ -3803,7 +3803,7 @@
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                   ^ source.hydra
-#                    ^^^^ source.hydra variable.other.hydra
+#                    ^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
@@ -3821,7 +3821,7 @@
 #                                                 ^ source.hydra
 #                                                  ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                      ^ source.hydra
-#                                                       ^^^^^^^ source.hydra variable.other.hydra
+#                                                       ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                              ^ source.hydra
 #                                                               ^ source.hydra keyword.operator.equals.hydra
 #                                                                ^ source.hydra
@@ -3835,7 +3835,7 @@
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                   ^ source.hydra
-#                    ^^^^ source.hydra variable.other.hydra
+#                    ^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
@@ -3853,7 +3853,7 @@
 #                                                  ^ source.hydra
 #                                                   ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                       ^ source.hydra
-#                                                        ^^^^^^^^ source.hydra variable.other.hydra
+#                                                        ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                ^ source.hydra
 #                                                                 ^ source.hydra keyword.operator.equals.hydra
 #                                                                  ^ source.hydra
@@ -3869,7 +3869,7 @@
 #                   ^^ source.hydra
 >            name = Name{"other"},
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
@@ -3891,7 +3891,7 @@
 #                         ^^ source.hydra
 >              application = ApplicationType{
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                         ^ source.hydra
 #                          ^ source.hydra keyword.operator.equals.hydra
 #                           ^ source.hydra
@@ -3899,7 +3899,7 @@
 #                                           ^^ source.hydra
 >                function = Type{
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
@@ -3907,7 +3907,7 @@
 #                               ^^ source.hydra
 >                  variable = testTypeUnionPolymorphicRecursiveName},
 #^^^^^^^^^^^^^^^^^^ source.hydra
-#                  ^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
@@ -3915,13 +3915,13 @@
 #                                                                  ^^^ source.hydra
 >                argument = Type{variable = Name{"a"}}}}}]}}}@{firstClassType = true}
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
 #                           ^^^^ source.hydra entity.name.type.nominal.hydra
 #                               ^ source.hydra
-#                                ^^^^^^^^ source.hydra variable.other.hydra
+#                                ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                        ^ source.hydra
 #                                         ^ source.hydra keyword.operator.equals.hydra
 #                                          ^ source.hydra
@@ -3933,7 +3933,7 @@
 #                                                   ^^^^^^^^^ source.hydra
 #                                                            ^ source.hydra keyword.operator.annotation.hydra
 #                                                             ^ source.hydra
-#                                                              ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                              ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                            ^ source.hydra
 #                                                                             ^ source.hydra keyword.operator.equals.hydra
 #                                                                              ^ source.hydra
@@ -3962,7 +3962,7 @@
 #                         ^^ source.hydra
 >      parameter = Name{"a"},
 #^^^^^^ source.hydra
-#      ^^^^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
@@ -3974,7 +3974,7 @@
 #                          ^^^ source.hydra
 >      body = Type{
 #^^^^^^ source.hydra
-#      ^^^^ source.hydra variable.other.hydra
+#      ^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
@@ -3992,7 +3992,7 @@
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                   ^ source.hydra
-#                    ^^^^ source.hydra variable.other.hydra
+#                    ^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
@@ -4010,7 +4010,7 @@
 #                                                   ^ source.hydra
 #                                                    ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                        ^ source.hydra
-#                                                         ^^^^^^^^ source.hydra variable.other.hydra
+#                                                         ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                 ^ source.hydra
 #                                                                  ^ source.hydra keyword.operator.equals.hydra
 #                                                                   ^ source.hydra
@@ -4026,7 +4026,7 @@
 #                   ^^ source.hydra
 >            name = Name{"multiple"},
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
@@ -4058,7 +4058,7 @@
 #                           ^^ source.hydra
 >                application = ApplicationType{
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -4066,7 +4066,7 @@
 #                                             ^^ source.hydra
 >                  function = Type{
 #^^^^^^^^^^^^^^^^^^ source.hydra
-#                  ^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
@@ -4074,7 +4074,7 @@
 #                                 ^^ source.hydra
 >                    variable = testTypeUnionPolymorphicRecursiveListWrappedName},
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
@@ -4082,13 +4082,13 @@
 #                                                                               ^^^ source.hydra
 >                  argument = Type{variable = Name{"a"}}}}}}]}}}@{firstClassType = true}
 #^^^^^^^^^^^^^^^^^^ source.hydra
-#                  ^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
 #                             ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^^^ source.hydra variable.other.hydra
+#                                  ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                          ^ source.hydra
 #                                           ^ source.hydra keyword.operator.equals.hydra
 #                                            ^ source.hydra
@@ -4100,7 +4100,7 @@
 #                                                     ^^^^^^^^^^ source.hydra
 #                                                               ^ source.hydra keyword.operator.annotation.hydra
 #                                                                ^ source.hydra
-#                                                                 ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                 ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                               ^ source.hydra
 #                                                                                ^ source.hydra keyword.operator.equals.hydra
 #                                                                                 ^ source.hydra
@@ -4152,7 +4152,7 @@
 #                                   ^^^^ source.hydra
 #                                       ^ source.hydra keyword.operator.annotation.hydra
 #                                        ^ source.hydra
-#                                         ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                         ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                       ^ source.hydra
 #                                                        ^ source.hydra keyword.operator.equals.hydra
 #                                                         ^ source.hydra

@@ -25,42 +25,42 @@
 #                                 ^^ source.hydra
 >  equal: unit,
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
 #         ^^^^ source.hydra support.type.hydra
 #             ^^ source.hydra
 >  notEqual: unit,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
 >  lessThan: unit,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
 >  greaterThan: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
 #                   ^^ source.hydra
 >  lessThanOrEqual: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
 #                   ^^^^ source.hydra support.type.hydra
 #                       ^^ source.hydra
 >  greaterThanOrEqual: unit}
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra punctuation.separator.type.hydra
 #                     ^ source.hydra
 #                      ^^^^ source.hydra support.type.hydra
@@ -90,7 +90,7 @@
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^ source.hydra variable.other.hydra
+#          ^^^^ source.hydra entity.name.type.hydra
 #              ^^ source.hydra
 >
 >  ## The field representing the out-projection of the edge. Defaults to 'out'.
@@ -99,7 +99,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  out: optional<Name>,
 #^^ source.hydra
-#  ^^^ source.hydra variable.other.hydra
+#  ^^^ source.hydra variable.other.member.hydra
 #     ^ source.hydra punctuation.separator.type.hydra
 #      ^ source.hydra
 #       ^^^^^^^^ source.hydra support.type.hydra
@@ -144,10 +144,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  graph: Name,
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^ source.hydra variable.other.hydra
+#         ^^^^ source.hydra entity.name.type.hydra
 #             ^^ source.hydra
 >
 >  ## The patterns to match within the subgraph
@@ -156,7 +156,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  patterns: list<Pattern>}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
@@ -189,7 +189,7 @@
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^ source.hydra variable.other.hydra
+#          ^^^^ source.hydra entity.name.type.hydra
 #              ^^ source.hydra
 >
 >  ## A query variable, not to be confused with a variable term
@@ -198,10 +198,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  variable: Variable,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^ source.hydra entity.name.type.hydra
 #                    ^^ source.hydra
 >
 >  ## An anonymous variable which we do not care to join across patterns
@@ -210,7 +210,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  wildcard: unit}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
@@ -235,10 +235,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  step: Step,
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >  ## A path given by a regular expression quantifier applied to another path
@@ -247,10 +247,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  regex: RegexSequence,
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#         ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                      ^^ source.hydra
 >
 >  ## A path given by the inverse of another path
@@ -259,10 +259,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  inverse: Path}
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
-#           ^^^^ source.hydra variable.other.hydra
+#           ^^^^ source.hydra entity.name.type.hydra
 #               ^^ source.hydra
 >
 >## A declared equivalence between two abstract paths in a graph
@@ -289,7 +289,7 @@
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^ source.hydra variable.other.hydra
+#          ^^^^ source.hydra entity.name.type.hydra
 #              ^^ source.hydra
 >
 >  ## The right-hand side of the equation
@@ -303,7 +303,7 @@
 #        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
-#           ^^^^ source.hydra variable.other.hydra
+#           ^^^^ source.hydra entity.name.type.hydra
 #               ^^ source.hydra
 >
 >## A query pattern
@@ -325,10 +325,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  triple: TriplePattern,
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#          ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The negation of another pattern
@@ -337,10 +337,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  negation: Pattern,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^^ source.hydra
 >
 >  ## The conjunction ('and') of several other patterns
@@ -349,7 +349,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  conjunction: list<Pattern>,
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
@@ -364,7 +364,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  disjunction: list<Pattern>,
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
@@ -379,10 +379,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  graph: GraphPattern}
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#         ^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                     ^^ source.hydra
 >
 >## A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns.
@@ -404,10 +404,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  antecedent: Pattern,
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
-#              ^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^ source.hydra entity.name.type.hydra
 #                     ^^ source.hydra
 >
 >  ## The pattern which must also match when the antecedent matches
@@ -416,10 +416,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  consequent: Pattern}
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
-#              ^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^ source.hydra entity.name.type.hydra
 #                     ^^ source.hydra
 >
 >## A SELECT-style graph pattern matching query
@@ -441,7 +441,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  variables: list<Variable>,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
@@ -456,7 +456,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  patterns: list<Pattern>}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
@@ -484,7 +484,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  min: int32,
 #^^ source.hydra
-#  ^^^ source.hydra variable.other.hydra
+#  ^^^ source.hydra variable.other.member.hydra
 #     ^ source.hydra punctuation.separator.type.hydra
 #      ^ source.hydra
 #       ^^^^^ source.hydra support.type.hydra
@@ -496,7 +496,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  max: int32}
 #^^ source.hydra
-#  ^^^ source.hydra variable.other.hydra
+#  ^^^ source.hydra variable.other.member.hydra
 #     ^ source.hydra punctuation.separator.type.hydra
 #      ^ source.hydra
 #       ^^^^^ source.hydra support.type.hydra
@@ -521,7 +521,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  one: unit,
 #^^ source.hydra
-#  ^^^ source.hydra variable.other.hydra
+#  ^^^ source.hydra variable.other.member.hydra
 #     ^ source.hydra punctuation.separator.type.hydra
 #      ^ source.hydra
 #       ^^^^ source.hydra support.type.hydra
@@ -533,7 +533,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  zeroOrOne: unit,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
@@ -545,7 +545,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  zeroOrMore: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
@@ -557,7 +557,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  oneOrMore: unit,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
@@ -569,7 +569,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  exactly: int32,
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
 #           ^^^^^ source.hydra support.type.hydra
@@ -581,7 +581,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  atLeast: int32,
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
 #           ^^^^^ source.hydra support.type.hydra
@@ -593,10 +593,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  range: Range}
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^^ source.hydra variable.other.hydra
+#         ^^^^^ source.hydra entity.name.type.hydra
 #              ^^ source.hydra
 >
 >## A path with a regex quantifier
@@ -618,10 +618,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  path: Path,
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >  ## The quantifier
@@ -630,10 +630,10 @@
 #    ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  quantifier: RegexQuantifier}
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
-#              ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                             ^^ source.hydra
 >
 >## An atomic function as part of a query. When applied to a graph, steps are typed by function types.
@@ -655,10 +655,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  edge: Edge,
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >  ## A projection from a record through one of its fields
@@ -672,7 +672,7 @@
 #          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^^^^^^^ source.hydra variable.other.hydra
+#             ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## A comparison of two terms
@@ -681,10 +681,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  compare: ComparisonConstraint}
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
-#           ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#           ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^^ source.hydra
 >
 >## A subject/predicate/object pattern
@@ -706,10 +706,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  subject: Node,
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
-#           ^^^^ source.hydra variable.other.hydra
+#           ^^^^ source.hydra entity.name.type.hydra
 #               ^^ source.hydra
 >
 >  ## The predicate (property) of the pattern
@@ -718,10 +718,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  predicate: Path,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^ source.hydra variable.other.hydra
+#             ^^^^ source.hydra entity.name.type.hydra
 #                 ^^ source.hydra
 >
 >  ## The object of the pattern
@@ -730,10 +730,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  object: Node}
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^ source.hydra variable.other.hydra
+#          ^^^^ source.hydra entity.name.type.hydra
 #              ^^ source.hydra
 >
 >## A query variable

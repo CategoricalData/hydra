@@ -25,35 +25,35 @@
 #                           ^^ source.hydra
 >  camel: unit,
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
 #         ^^^^ source.hydra support.type.hydra
 #             ^^ source.hydra
 >  pascal: unit,
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^^^ source.hydra support.type.hydra
 #              ^^ source.hydra
 >  lowerSnake: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
 >  upperSnake: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
 #                  ^^ source.hydra
 >  upperDashed: unit}
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
@@ -73,21 +73,21 @@
 #                       ^^ source.hydra
 >  lessThan: unit,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
 #                ^^ source.hydra
 >  equalTo: unit,
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
 #           ^^^^ source.hydra support.type.hydra
 #               ^^ source.hydra
 >  greaterThan: unit}
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
@@ -117,10 +117,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  focus: (ModuleName, n),
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^^ source.hydra
-#          ^^^^^^^^^^ source.hydra variable.other.hydra
+#          ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                    ^^ source.hydra
 #                      ^ source.hydra variable.other.hydra
 #                       ^^^ source.hydra
@@ -131,7 +131,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  mapping: map<ModuleName, n>}
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
 #           ^^^ source.hydra support.type.hydra
@@ -162,7 +162,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  arbitrary: unit,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
@@ -174,7 +174,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  bits: int32}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
 #        ^^^^^ source.hydra support.type.hydra
@@ -199,7 +199,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  moduleName: optional<ModuleName>,
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^^^^^ source.hydra support.type.hydra
@@ -214,7 +214,7 @@
 #    ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  local: string}
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
 #         ^^^^^^ source.hydra support.type.hydra

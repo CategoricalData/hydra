@@ -47,7 +47,7 @@
 #               ^^ source.hydra
 >  both: unit}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
 #        ^^^^ source.hydra support.type.hydra
@@ -72,7 +72,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  indent: optional<string>,
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^^^^^^^ source.hydra support.type.hydra
@@ -87,7 +87,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  newlineBeforeContent: boolean,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                      ^ source.hydra punctuation.separator.type.hydra
 #                       ^ source.hydra
 #                        ^^^^^^^ source.hydra support.type.hydra
@@ -99,7 +99,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  newlineAfterContent: boolean}
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
 #                       ^^^^^^^ source.hydra support.type.hydra
@@ -124,10 +124,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  brackets: Brackets,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^ source.hydra entity.name.type.hydra
 #                    ^^ source.hydra
 >
 >  ## The expression within the brackets
@@ -136,10 +136,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  enclosed: Expr,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra entity.name.type.hydra
 #                ^^ source.hydra
 >
 >  ## The formatting style for the bracketed block
@@ -148,10 +148,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  style: BlockStyle}
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^^^^^^^ source.hydra variable.other.hydra
+#         ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^^ source.hydra
 >
 >## Matching open and close bracket symbols
@@ -173,10 +173,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  open: Symbol,
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^ source.hydra entity.name.type.hydra
 #              ^^ source.hydra
 >
 >  ## The closing bracket symbol
@@ -185,10 +185,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  close: Symbol}
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^^^ source.hydra variable.other.hydra
+#         ^^^^^^ source.hydra entity.name.type.hydra
 #               ^^ source.hydra
 >
 >## An abstract expression
@@ -210,10 +210,10 @@
 #    ^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  const: Symbol,
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^^^ source.hydra variable.other.hydra
+#         ^^^^^^ source.hydra entity.name.type.hydra
 #               ^^ source.hydra
 >
 >  ## An indented expression
@@ -222,10 +222,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  indent: IndentedExpression,
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#          ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                            ^^ source.hydra
 >
 >  ## An operator expression
@@ -234,10 +234,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  op: OpExpr,
 #^^ source.hydra
-#  ^^ source.hydra variable.other.hydra
+#  ^^ source.hydra variable.other.member.hydra
 #    ^ source.hydra punctuation.separator.type.hydra
 #     ^ source.hydra
-#      ^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >  ## A bracketed expression
@@ -246,10 +246,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  brackets: BracketExpr,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## A sequence of expressions joined by a separator, treated as structural layout (not subject to parenthesization)
@@ -258,10 +258,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  seq: SeqExpr}
 #^^ source.hydra
-#  ^^^ source.hydra variable.other.hydra
+#  ^^^ source.hydra variable.other.member.hydra
 #     ^ source.hydra punctuation.separator.type.hydra
 #      ^ source.hydra
-#       ^^^^^^^ source.hydra variable.other.hydra
+#       ^^^^^^^ source.hydra entity.name.type.hydra
 #              ^^ source.hydra
 >
 >## Any of several indentation styles
@@ -283,7 +283,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  allLines: string,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^^^ source.hydra support.type.hydra
@@ -295,7 +295,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  subsequentLines: string}
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
 #                   ^^^^^^ source.hydra support.type.hydra
@@ -320,10 +320,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  style: IndentStyle,
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^^^^^^^^ source.hydra variable.other.hydra
+#         ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                    ^^ source.hydra
 >
 >  ## The expression to be indented
@@ -332,10 +332,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  expr: Expr}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## An operator symbol
@@ -357,10 +357,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  symbol: Symbol,
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^ source.hydra variable.other.hydra
+#          ^^^^^^ source.hydra entity.name.type.hydra
 #                ^^ source.hydra
 >
 >  ## The padding around the operator
@@ -369,10 +369,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  padding: Padding,
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
-#           ^^^^^^^ source.hydra variable.other.hydra
+#           ^^^^^^^ source.hydra entity.name.type.hydra
 #                  ^^ source.hydra
 >
 >  ## The precedence of the operator
@@ -381,10 +381,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  precedence: Precedence,
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
-#              ^^^^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                        ^^ source.hydra
 >
 >  ## The associativity of the operator
@@ -393,10 +393,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  associativity: Associativity}
 #^^ source.hydra
-#  ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra punctuation.separator.type.hydra
 #                ^ source.hydra
-#                 ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                 ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                              ^^ source.hydra
 >
 >## An operator expression
@@ -418,10 +418,10 @@
 #    ^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  op: Op,
 #^^ source.hydra
-#  ^^ source.hydra variable.other.hydra
+#  ^^ source.hydra variable.other.member.hydra
 #    ^ source.hydra punctuation.separator.type.hydra
 #     ^ source.hydra
-#      ^^ source.hydra variable.other.hydra
+#      ^^ source.hydra entity.name.type.hydra
 #        ^^ source.hydra
 >
 >  ## The left-hand side operand
@@ -430,10 +430,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  lhs: Expr,
 #^^ source.hydra
-#  ^^^ source.hydra variable.other.hydra
+#  ^^^ source.hydra variable.other.member.hydra
 #     ^ source.hydra punctuation.separator.type.hydra
 #      ^ source.hydra
-#       ^^^^ source.hydra variable.other.hydra
+#       ^^^^ source.hydra entity.name.type.hydra
 #           ^^ source.hydra
 >
 >  ## The right-hand side operand
@@ -442,10 +442,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  rhs: Expr}
 #^^ source.hydra
-#  ^^^ source.hydra variable.other.hydra
+#  ^^^ source.hydra variable.other.member.hydra
 #     ^ source.hydra punctuation.separator.type.hydra
 #      ^ source.hydra
-#       ^^^^ source.hydra variable.other.hydra
+#       ^^^^ source.hydra entity.name.type.hydra
 #           ^^ source.hydra
 >
 >## Left and right padding for an operator
@@ -472,7 +472,7 @@
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^ source.hydra variable.other.hydra
+#          ^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >  ## Padding to the right of the operator
@@ -486,7 +486,7 @@
 #        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
-#           ^^ source.hydra variable.other.hydra
+#           ^^ source.hydra entity.name.type.hydra
 #             ^^ source.hydra
 >
 >## Operator precedence
@@ -523,10 +523,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  op: Op,
 #^^ source.hydra
-#  ^^ source.hydra variable.other.hydra
+#  ^^ source.hydra variable.other.member.hydra
 #    ^ source.hydra punctuation.separator.type.hydra
 #     ^ source.hydra
-#      ^^ source.hydra variable.other.hydra
+#      ^^ source.hydra entity.name.type.hydra
 #        ^^ source.hydra
 >
 >  ## The expressions to join
@@ -535,7 +535,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  elements: list<Expr>}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
@@ -592,7 +592,7 @@
 #    ^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  space: unit,
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
 #         ^^^^ source.hydra support.type.hydra
@@ -604,7 +604,7 @@
 #    ^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  break: unit,
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
 #         ^^^^ source.hydra support.type.hydra
@@ -616,7 +616,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  breakAndIndent: string,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra punctuation.separator.type.hydra
 #                 ^ source.hydra
 #                  ^^^^^^ source.hydra support.type.hydra
@@ -628,7 +628,7 @@
 #    ^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  doubleBreak: unit}
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra

@@ -42,7 +42,7 @@
 #           ^^ source.hydra
 >    name = "hydra.core.lib.hashing primitives",
 #^^^^ source.hydra
-#    ^^^^ source.hydra variable.other.hydra
+#    ^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra
 #         ^ source.hydra keyword.operator.equals.hydra
 #          ^ source.hydra
@@ -52,7 +52,7 @@
 #                                              ^^ source.hydra
 >    description = none,
 #^^^^ source.hydra
-#    ^^^^^^^^^^^ source.hydra variable.other.hydra
+#    ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
@@ -60,7 +60,7 @@
 #                      ^^ source.hydra
 >    subgroups = [
 #^^^^ source.hydra
-#    ^^^^^^^^^ source.hydra variable.other.hydra
+#    ^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
 #               ^^^ source.hydra
@@ -70,7 +70,7 @@
 #               ^^ source.hydra
 >        name = "matchesKnownAnswerVectors",
 #^^^^^^^^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
@@ -80,7 +80,7 @@
 #                                          ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
-#        ^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
@@ -88,7 +88,7 @@
 #                          ^^ source.hydra
 >        subgroups = [],
 #^^^^^^^^ source.hydra
-#        ^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra
 #                  ^ source.hydra keyword.operator.equals.hydra
 #                   ^^^^^ source.hydra
@@ -106,7 +106,7 @@
 #                              ^^ source.hydra
 >            name = "empty input",
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
@@ -116,7 +116,7 @@
 #                                ^^ source.hydra
 >            case = TestCase{
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
@@ -124,7 +124,7 @@
 #                           ^^ source.hydra
 >              universal = UniversalTestCase{
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra
 #                        ^ source.hydra keyword.operator.equals.hydra
 #                         ^ source.hydra
@@ -132,17 +132,17 @@
 #                                           ^^ source.hydra
 >                actual = λ`_`.(λs.s)
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^ source.hydra variable.other.member.hydra
 #                      ^ source.hydra
 #                       ^ source.hydra keyword.operator.equals.hydra
 #                        ^ source.hydra
-#                         ^ source.hydra keyword.operator.lambda.hydra
+#                         ^ source.hydra storage.type.function.lambda.hydra
 #                          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                           ^ source.hydra variable.other.escaped.hydra
 #                            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                             ^ source.hydra punctuation.separator.binder.hydra
 #                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.lambda.hydra
+#                               ^ source.hydra storage.type.function.lambda.hydra
 #                                ^ source.hydra variable.parameter.hydra
 #                                 ^ source.hydra punctuation.separator.binder.hydra
 #                                  ^ source.hydra variable.other.hydra
@@ -160,17 +160,17 @@
 #                                                            ^^^^^ source.hydra
 >                expected = λ`_`.(λs.s)
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
-#                           ^ source.hydra keyword.operator.lambda.hydra
+#                           ^ source.hydra storage.type.function.lambda.hydra
 #                            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                             ^ source.hydra variable.other.escaped.hydra
 #                              ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                               ^ source.hydra punctuation.separator.binder.hydra
 #                                ^ source.hydra
-#                                 ^ source.hydra keyword.operator.lambda.hydra
+#                                 ^ source.hydra storage.type.function.lambda.hydra
 #                                  ^ source.hydra variable.parameter.hydra
 #                                   ^ source.hydra punctuation.separator.binder.hydra
 #                                    ^ source.hydra variable.other.hydra
@@ -183,7 +183,7 @@
 #                                                                    ^^^^ source.hydra
 >            description = none,
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra
 #                        ^ source.hydra keyword.operator.equals.hydra
 #                         ^ source.hydra
@@ -191,13 +191,13 @@
 #                              ^^ source.hydra
 >            tags = [],
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^^^^^ source.hydra
 >            provisions = [Name{"hydra.core.lib.hashing.sha256.matchesKnownAnswerVectors"}]},
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                      ^ source.hydra
 #                       ^ source.hydra keyword.operator.equals.hydra
 #                        ^^ source.hydra
@@ -213,7 +213,7 @@
 #                              ^^ source.hydra
 >            name = "abc",
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
@@ -223,7 +223,7 @@
 #                        ^^ source.hydra
 >            case = TestCase{
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
@@ -231,7 +231,7 @@
 #                           ^^ source.hydra
 >              universal = UniversalTestCase{
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra
 #                        ^ source.hydra keyword.operator.equals.hydra
 #                         ^ source.hydra
@@ -239,17 +239,17 @@
 #                                           ^^ source.hydra
 >                actual = λ`_`.(λs.s)
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^ source.hydra variable.other.member.hydra
 #                      ^ source.hydra
 #                       ^ source.hydra keyword.operator.equals.hydra
 #                        ^ source.hydra
-#                         ^ source.hydra keyword.operator.lambda.hydra
+#                         ^ source.hydra storage.type.function.lambda.hydra
 #                          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                           ^ source.hydra variable.other.escaped.hydra
 #                            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                             ^ source.hydra punctuation.separator.binder.hydra
 #                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.lambda.hydra
+#                               ^ source.hydra storage.type.function.lambda.hydra
 #                                ^ source.hydra variable.parameter.hydra
 #                                 ^ source.hydra punctuation.separator.binder.hydra
 #                                  ^ source.hydra variable.other.hydra
@@ -269,17 +269,17 @@
 #                                                 ^^^^^ source.hydra
 >                expected = λ`_`.(λs.s)
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
-#                           ^ source.hydra keyword.operator.lambda.hydra
+#                           ^ source.hydra storage.type.function.lambda.hydra
 #                            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                             ^ source.hydra variable.other.escaped.hydra
 #                              ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                               ^ source.hydra punctuation.separator.binder.hydra
 #                                ^ source.hydra
-#                                 ^ source.hydra keyword.operator.lambda.hydra
+#                                 ^ source.hydra storage.type.function.lambda.hydra
 #                                  ^ source.hydra variable.parameter.hydra
 #                                   ^ source.hydra punctuation.separator.binder.hydra
 #                                    ^ source.hydra variable.other.hydra
@@ -292,7 +292,7 @@
 #                                                                    ^^^^ source.hydra
 >            description = none,
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra
 #                        ^ source.hydra keyword.operator.equals.hydra
 #                         ^ source.hydra
@@ -300,13 +300,13 @@
 #                              ^^ source.hydra
 >            tags = [],
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^^^^^ source.hydra
 >            provisions = [Name{"hydra.core.lib.hashing.sha256.matchesKnownAnswerVectors"}]}]},
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                      ^ source.hydra
 #                       ^ source.hydra keyword.operator.equals.hydra
 #                        ^^ source.hydra
@@ -322,7 +322,7 @@
 #               ^^ source.hydra
 >        name = "sha256Hex",
 #^^^^^^^^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
@@ -332,7 +332,7 @@
 #                          ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
-#        ^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
@@ -340,7 +340,7 @@
 #                          ^^ source.hydra
 >        subgroups = [
 #^^^^^^^^ source.hydra
-#        ^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra
 #                  ^ source.hydra keyword.operator.equals.hydra
 #                   ^^^ source.hydra
@@ -350,7 +350,7 @@
 #                   ^^ source.hydra
 >            name = "matchesKnownAnswerVectors",
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
@@ -360,7 +360,7 @@
 #                                              ^^ source.hydra
 >            description = none,
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra
 #                        ^ source.hydra keyword.operator.equals.hydra
 #                         ^ source.hydra
@@ -368,7 +368,7 @@
 #                              ^^ source.hydra
 >            subgroups = [],
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^^^^^ source.hydra
@@ -386,7 +386,7 @@
 #                                  ^^ source.hydra
 >                name = "empty input",
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -396,7 +396,7 @@
 #                                    ^^ source.hydra
 >                case = TestCase{
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -404,7 +404,7 @@
 #                               ^^ source.hydra
 >                  universal = UniversalTestCase{
 #^^^^^^^^^^^^^^^^^^ source.hydra
-#                  ^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -412,17 +412,17 @@
 #                                               ^^ source.hydra
 >                    actual = λ`_`.(λs.s) (sha256Hex (encodeUtf8 "")),
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
-#                             ^ source.hydra keyword.operator.lambda.hydra
+#                             ^ source.hydra storage.type.function.lambda.hydra
 #                              ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                               ^ source.hydra variable.other.escaped.hydra
 #                                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                                 ^ source.hydra punctuation.separator.binder.hydra
 #                                  ^ source.hydra
-#                                   ^ source.hydra keyword.operator.lambda.hydra
+#                                   ^ source.hydra storage.type.function.lambda.hydra
 #                                    ^ source.hydra variable.parameter.hydra
 #                                     ^ source.hydra punctuation.separator.binder.hydra
 #                                      ^ source.hydra variable.other.hydra
@@ -436,17 +436,17 @@
 #                                                                  ^^^^ source.hydra
 >                    expected = λ`_`.(λs.s)
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.lambda.hydra
+#                               ^ source.hydra storage.type.function.lambda.hydra
 #                                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                                 ^ source.hydra variable.other.escaped.hydra
 #                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                                   ^ source.hydra punctuation.separator.binder.hydra
 #                                    ^ source.hydra
-#                                     ^ source.hydra keyword.operator.lambda.hydra
+#                                     ^ source.hydra storage.type.function.lambda.hydra
 #                                      ^ source.hydra variable.parameter.hydra
 #                                       ^ source.hydra punctuation.separator.binder.hydra
 #                                        ^ source.hydra variable.other.hydra
@@ -459,7 +459,7 @@
 #                                                                                            ^^^^ source.hydra
 >                description = none,
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -467,13 +467,13 @@
 #                                  ^^ source.hydra
 >                tags = [],
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^^^^^ source.hydra
 >                provisions = [Name{"hydra.core.lib.hashing.sha256Hex.matchesKnownAnswerVectors"}]},
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^^ source.hydra
@@ -489,7 +489,7 @@
 #                                  ^^ source.hydra
 >                name = "abc",
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -499,7 +499,7 @@
 #                            ^^ source.hydra
 >                case = TestCase{
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -507,7 +507,7 @@
 #                               ^^ source.hydra
 >                  universal = UniversalTestCase{
 #^^^^^^^^^^^^^^^^^^ source.hydra
-#                  ^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -515,17 +515,17 @@
 #                                               ^^ source.hydra
 >                    actual = λ`_`.(λs.s) (sha256Hex (encodeUtf8 "abc")),
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
-#                             ^ source.hydra keyword.operator.lambda.hydra
+#                             ^ source.hydra storage.type.function.lambda.hydra
 #                              ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                               ^ source.hydra variable.other.escaped.hydra
 #                                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                                 ^ source.hydra punctuation.separator.binder.hydra
 #                                  ^ source.hydra
-#                                   ^ source.hydra keyword.operator.lambda.hydra
+#                                   ^ source.hydra storage.type.function.lambda.hydra
 #                                    ^ source.hydra variable.parameter.hydra
 #                                     ^ source.hydra punctuation.separator.binder.hydra
 #                                      ^ source.hydra variable.other.hydra
@@ -540,17 +540,17 @@
 #                                                                     ^^^^ source.hydra
 >                    expected = λ`_`.(λs.s)
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.lambda.hydra
+#                               ^ source.hydra storage.type.function.lambda.hydra
 #                                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                                 ^ source.hydra variable.other.escaped.hydra
 #                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                                   ^ source.hydra punctuation.separator.binder.hydra
 #                                    ^ source.hydra
-#                                     ^ source.hydra keyword.operator.lambda.hydra
+#                                     ^ source.hydra storage.type.function.lambda.hydra
 #                                      ^ source.hydra variable.parameter.hydra
 #                                       ^ source.hydra punctuation.separator.binder.hydra
 #                                        ^ source.hydra variable.other.hydra
@@ -563,7 +563,7 @@
 #                                                                                            ^^^^ source.hydra
 >                description = none,
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -571,13 +571,13 @@
 #                                  ^^ source.hydra
 >                tags = [],
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^^^^^ source.hydra
 >                provisions = [Name{"hydra.core.lib.hashing.sha256Hex.matchesKnownAnswerVectors"}]},
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^^ source.hydra
@@ -593,7 +593,7 @@
 #                                  ^^ source.hydra
 >                name = "multi-block input (spans two SHA-256 blocks)",
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -603,7 +603,7 @@
 #                                                                     ^^ source.hydra
 >                case = TestCase{
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -611,7 +611,7 @@
 #                               ^^ source.hydra
 >                  universal = UniversalTestCase{
 #^^^^^^^^^^^^^^^^^^ source.hydra
-#                  ^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -619,17 +619,17 @@
 #                                               ^^ source.hydra
 >                    actual = λ`_`.(λs.s)
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
-#                             ^ source.hydra keyword.operator.lambda.hydra
+#                             ^ source.hydra storage.type.function.lambda.hydra
 #                              ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                               ^ source.hydra variable.other.escaped.hydra
 #                                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                                 ^ source.hydra punctuation.separator.binder.hydra
 #                                  ^ source.hydra
-#                                   ^ source.hydra keyword.operator.lambda.hydra
+#                                   ^ source.hydra storage.type.function.lambda.hydra
 #                                    ^ source.hydra variable.parameter.hydra
 #                                     ^ source.hydra punctuation.separator.binder.hydra
 #                                      ^ source.hydra variable.other.hydra
@@ -648,17 +648,17 @@
 #                                                                                                                     ^^^^ source.hydra
 >                    expected = λ`_`.(λs.s)
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.lambda.hydra
+#                               ^ source.hydra storage.type.function.lambda.hydra
 #                                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                                 ^ source.hydra variable.other.escaped.hydra
 #                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                                   ^ source.hydra punctuation.separator.binder.hydra
 #                                    ^ source.hydra
-#                                     ^ source.hydra keyword.operator.lambda.hydra
+#                                     ^ source.hydra storage.type.function.lambda.hydra
 #                                      ^ source.hydra variable.parameter.hydra
 #                                       ^ source.hydra punctuation.separator.binder.hydra
 #                                        ^ source.hydra variable.other.hydra
@@ -671,7 +671,7 @@
 #                                                                                            ^^^^ source.hydra
 >                description = none,
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -679,13 +679,13 @@
 #                                  ^^ source.hydra
 >                tags = [],
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^^^^^ source.hydra
 >                provisions = [Name{"hydra.core.lib.hashing.sha256Hex.matchesKnownAnswerVectors"}]}]},
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^^ source.hydra
@@ -701,7 +701,7 @@
 #                   ^^ source.hydra
 >            name = "handlesPaddingBoundariesCorrectly",
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
@@ -711,7 +711,7 @@
 #                                                      ^^ source.hydra
 >            description = none,
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra
 #                        ^ source.hydra keyword.operator.equals.hydra
 #                         ^ source.hydra
@@ -719,7 +719,7 @@
 #                              ^^ source.hydra
 >            subgroups = [],
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^^^^^ source.hydra
@@ -737,7 +737,7 @@
 #                                  ^^ source.hydra
 >                name = "padding boundary: 55 bytes (fills one block)",
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -747,7 +747,7 @@
 #                                                                     ^^ source.hydra
 >                case = TestCase{
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -755,7 +755,7 @@
 #                               ^^ source.hydra
 >                  universal = UniversalTestCase{
 #^^^^^^^^^^^^^^^^^^ source.hydra
-#                  ^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -763,17 +763,17 @@
 #                                               ^^ source.hydra
 >                    actual = λ`_`.(λs.s)
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
-#                             ^ source.hydra keyword.operator.lambda.hydra
+#                             ^ source.hydra storage.type.function.lambda.hydra
 #                              ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                               ^ source.hydra variable.other.escaped.hydra
 #                                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                                 ^ source.hydra punctuation.separator.binder.hydra
 #                                  ^ source.hydra
-#                                   ^ source.hydra keyword.operator.lambda.hydra
+#                                   ^ source.hydra storage.type.function.lambda.hydra
 #                                    ^ source.hydra variable.parameter.hydra
 #                                     ^ source.hydra punctuation.separator.binder.hydra
 #                                      ^ source.hydra variable.other.hydra
@@ -792,17 +792,17 @@
 #                                                                                       ^^^^ source.hydra
 >                    expected = λ`_`.(λs.s)
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.lambda.hydra
+#                               ^ source.hydra storage.type.function.lambda.hydra
 #                                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                                 ^ source.hydra variable.other.escaped.hydra
 #                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                                   ^ source.hydra punctuation.separator.binder.hydra
 #                                    ^ source.hydra
-#                                     ^ source.hydra keyword.operator.lambda.hydra
+#                                     ^ source.hydra storage.type.function.lambda.hydra
 #                                      ^ source.hydra variable.parameter.hydra
 #                                       ^ source.hydra punctuation.separator.binder.hydra
 #                                        ^ source.hydra variable.other.hydra
@@ -815,7 +815,7 @@
 #                                                                                            ^^^^ source.hydra
 >                description = none,
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -823,13 +823,13 @@
 #                                  ^^ source.hydra
 >                tags = [],
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^^^^^ source.hydra
 >                provisions = [Name{"hydra.core.lib.hashing.sha256Hex.handlesPaddingBoundariesCorrectly"}]},
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^^ source.hydra
@@ -845,7 +845,7 @@
 #                                  ^^ source.hydra
 >                name = "padding boundary: 56 bytes (forces a second block)",
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -855,7 +855,7 @@
 #                                                                           ^^ source.hydra
 >                case = TestCase{
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -863,7 +863,7 @@
 #                               ^^ source.hydra
 >                  universal = UniversalTestCase{
 #^^^^^^^^^^^^^^^^^^ source.hydra
-#                  ^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -871,17 +871,17 @@
 #                                               ^^ source.hydra
 >                    actual = λ`_`.(λs.s)
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
-#                             ^ source.hydra keyword.operator.lambda.hydra
+#                             ^ source.hydra storage.type.function.lambda.hydra
 #                              ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                               ^ source.hydra variable.other.escaped.hydra
 #                                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                                 ^ source.hydra punctuation.separator.binder.hydra
 #                                  ^ source.hydra
-#                                   ^ source.hydra keyword.operator.lambda.hydra
+#                                   ^ source.hydra storage.type.function.lambda.hydra
 #                                    ^ source.hydra variable.parameter.hydra
 #                                     ^ source.hydra punctuation.separator.binder.hydra
 #                                      ^ source.hydra variable.other.hydra
@@ -900,17 +900,17 @@
 #                                                                                        ^^^^ source.hydra
 >                    expected = λ`_`.(λs.s)
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.lambda.hydra
+#                               ^ source.hydra storage.type.function.lambda.hydra
 #                                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                                 ^ source.hydra variable.other.escaped.hydra
 #                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                                   ^ source.hydra punctuation.separator.binder.hydra
 #                                    ^ source.hydra
-#                                     ^ source.hydra keyword.operator.lambda.hydra
+#                                     ^ source.hydra storage.type.function.lambda.hydra
 #                                      ^ source.hydra variable.parameter.hydra
 #                                       ^ source.hydra punctuation.separator.binder.hydra
 #                                        ^ source.hydra variable.other.hydra
@@ -923,7 +923,7 @@
 #                                                                                            ^^^^ source.hydra
 >                description = none,
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -931,13 +931,13 @@
 #                                  ^^ source.hydra
 >                tags = [],
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^^^^^ source.hydra
 >                provisions = [Name{"hydra.core.lib.hashing.sha256Hex.handlesPaddingBoundariesCorrectly"}]},
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^^ source.hydra
@@ -953,7 +953,7 @@
 #                                  ^^ source.hydra
 >                name = "padding boundary: 63 bytes (one below block size)",
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -963,7 +963,7 @@
 #                                                                          ^^ source.hydra
 >                case = TestCase{
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -971,7 +971,7 @@
 #                               ^^ source.hydra
 >                  universal = UniversalTestCase{
 #^^^^^^^^^^^^^^^^^^ source.hydra
-#                  ^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -979,17 +979,17 @@
 #                                               ^^ source.hydra
 >                    actual = λ`_`.(λs.s)
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
-#                             ^ source.hydra keyword.operator.lambda.hydra
+#                             ^ source.hydra storage.type.function.lambda.hydra
 #                              ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                               ^ source.hydra variable.other.escaped.hydra
 #                                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                                 ^ source.hydra punctuation.separator.binder.hydra
 #                                  ^ source.hydra
-#                                   ^ source.hydra keyword.operator.lambda.hydra
+#                                   ^ source.hydra storage.type.function.lambda.hydra
 #                                    ^ source.hydra variable.parameter.hydra
 #                                     ^ source.hydra punctuation.separator.binder.hydra
 #                                      ^ source.hydra variable.other.hydra
@@ -1008,17 +1008,17 @@
 #                                                                                               ^^^^ source.hydra
 >                    expected = λ`_`.(λs.s)
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.lambda.hydra
+#                               ^ source.hydra storage.type.function.lambda.hydra
 #                                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                                 ^ source.hydra variable.other.escaped.hydra
 #                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                                   ^ source.hydra punctuation.separator.binder.hydra
 #                                    ^ source.hydra
-#                                     ^ source.hydra keyword.operator.lambda.hydra
+#                                     ^ source.hydra storage.type.function.lambda.hydra
 #                                      ^ source.hydra variable.parameter.hydra
 #                                       ^ source.hydra punctuation.separator.binder.hydra
 #                                        ^ source.hydra variable.other.hydra
@@ -1031,7 +1031,7 @@
 #                                                                                            ^^^^ source.hydra
 >                description = none,
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -1039,13 +1039,13 @@
 #                                  ^^ source.hydra
 >                tags = [],
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^^^^^ source.hydra
 >                provisions = [Name{"hydra.core.lib.hashing.sha256Hex.handlesPaddingBoundariesCorrectly"}]},
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^^ source.hydra
@@ -1061,7 +1061,7 @@
 #                                  ^^ source.hydra
 >                name = "padding boundary: 64 bytes (exactly one block)",
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -1071,7 +1071,7 @@
 #                                                                       ^^ source.hydra
 >                case = TestCase{
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -1079,7 +1079,7 @@
 #                               ^^ source.hydra
 >                  universal = UniversalTestCase{
 #^^^^^^^^^^^^^^^^^^ source.hydra
-#                  ^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -1087,17 +1087,17 @@
 #                                               ^^ source.hydra
 >                    actual = λ`_`.(λs.s)
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
-#                             ^ source.hydra keyword.operator.lambda.hydra
+#                             ^ source.hydra storage.type.function.lambda.hydra
 #                              ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                               ^ source.hydra variable.other.escaped.hydra
 #                                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                                 ^ source.hydra punctuation.separator.binder.hydra
 #                                  ^ source.hydra
-#                                   ^ source.hydra keyword.operator.lambda.hydra
+#                                   ^ source.hydra storage.type.function.lambda.hydra
 #                                    ^ source.hydra variable.parameter.hydra
 #                                     ^ source.hydra punctuation.separator.binder.hydra
 #                                      ^ source.hydra variable.other.hydra
@@ -1116,17 +1116,17 @@
 #                                                                                                ^^^^ source.hydra
 >                    expected = λ`_`.(λs.s)
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
-#                    ^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
-#                               ^ source.hydra keyword.operator.lambda.hydra
+#                               ^ source.hydra storage.type.function.lambda.hydra
 #                                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                                 ^ source.hydra variable.other.escaped.hydra
 #                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                                   ^ source.hydra punctuation.separator.binder.hydra
 #                                    ^ source.hydra
-#                                     ^ source.hydra keyword.operator.lambda.hydra
+#                                     ^ source.hydra storage.type.function.lambda.hydra
 #                                      ^ source.hydra variable.parameter.hydra
 #                                       ^ source.hydra punctuation.separator.binder.hydra
 #                                        ^ source.hydra variable.other.hydra
@@ -1139,7 +1139,7 @@
 #                                                                                            ^^^^ source.hydra
 >                description = none,
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -1147,13 +1147,13 @@
 #                                  ^^ source.hydra
 >                tags = [],
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^^^^^ source.hydra
 >                provisions = [Name{"hydra.core.lib.hashing.sha256Hex.handlesPaddingBoundariesCorrectly"}]}]}],
 #^^^^^^^^^^^^^^^^ source.hydra
-#                ^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^^ source.hydra

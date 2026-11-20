@@ -38,10 +38,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The constant boolean value of the condition
@@ -50,7 +50,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  value: boolean}
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
 #         ^^^^^^^ source.hydra support.type.hydra
@@ -75,10 +75,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The duplicated binding name
@@ -87,10 +87,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## A duplicate field name in a record or union type
@@ -112,10 +112,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The duplicated field name
@@ -124,10 +124,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## A record type with duplicate field names
@@ -149,10 +149,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The duplicated field name
@@ -161,10 +161,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## A union type with duplicate field names
@@ -186,10 +186,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The duplicated field name
@@ -198,10 +198,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## A case statement with no cases and no default (optional)
@@ -223,10 +223,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of the union type being matched
@@ -235,10 +235,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeName: Name}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra entity.name.type.hydra
 #                ^^ source.hydra
 >
 >## A let expression with an empty list of bindings (optional)
@@ -260,10 +260,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >## A record type with no fields; TypeUnit is preferred for the unit-like case (optional)
@@ -285,10 +285,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >## A term annotation with an empty annotation map (optional)
@@ -310,10 +310,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >## A type annotation with an empty annotation map (optional)
@@ -335,10 +335,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >## A record, injection, projection, or case statement with an empty type name (optional)
@@ -360,10 +360,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >## A union type with no alternatives; TypeVoid is preferred (optional)
@@ -385,10 +385,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >## A record term supplying a field that its record type does not declare
@@ -410,10 +410,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of the record type
@@ -422,10 +422,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeName: Name,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra entity.name.type.hydra
 #                ^^ source.hydra
 >
 >  ## The names of the undeclared fields supplied by the record term
@@ -434,7 +434,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  fieldNames: list<Name>}
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
@@ -462,10 +462,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The invalid parameter name
@@ -474,10 +474,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## A lambda parameter name that violates naming conventions (optional)
@@ -499,10 +499,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The invalid parameter name
@@ -511,10 +511,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## A let binding name that violates naming conventions (optional)
@@ -536,10 +536,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The invalid binding name
@@ -548,10 +548,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## An error indicating that a literal value is invalid
@@ -573,10 +573,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeMismatch: LiteralTypeMismatchError}
 #^^ source.hydra
-#  ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #              ^ source.hydra punctuation.separator.type.hydra
 #               ^ source.hydra
-#                ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                        ^^ source.hydra
 >
 >## An error indicating that a term is invalid
@@ -598,10 +598,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  constantCondition: ConstantConditionError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                   ^ source.hydra punctuation.separator.type.hydra
 #                    ^ source.hydra
-#                     ^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                     ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                           ^^ source.hydra
 >
 >  ## A duplicate binding name in a let expression
@@ -610,10 +610,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  duplicateBinding: DuplicateBindingError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra punctuation.separator.type.hydra
 #                   ^ source.hydra
-#                    ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                         ^^ source.hydra
 >
 >  ## A duplicate field name in a record or case statement
@@ -622,10 +622,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  duplicateField: DuplicateFieldError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra punctuation.separator.type.hydra
 #                 ^ source.hydra
-#                  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                     ^^ source.hydra
 >
 >  ## A case statement with no cases and no default (optional)
@@ -634,10 +634,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  emptyCaseStatement: EmptyCaseStatementError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra punctuation.separator.type.hydra
 #                     ^ source.hydra
-#                      ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                      ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                             ^^ source.hydra
 >
 >  ## A let expression with no bindings (optional)
@@ -646,10 +646,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  emptyLetBindings: EmptyLetBindingsError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra punctuation.separator.type.hydra
 #                   ^ source.hydra
-#                    ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                         ^^ source.hydra
 >
 >  ## A term annotation with an empty annotation map (optional)
@@ -658,10 +658,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  emptyTermAnnotation: EmptyTermAnnotationError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
-#                       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                               ^^ source.hydra
 >
 >  ## A term with an empty type name (optional)
@@ -670,10 +670,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  emptyTypeNameInTerm: EmptyTypeNameInTermError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
-#                       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                               ^^ source.hydra
 >
 >  ## A record term supplying a field not declared by its record type
@@ -682,10 +682,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  extraRecordFields: ExtraRecordFieldsError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                   ^ source.hydra punctuation.separator.type.hydra
 #                    ^ source.hydra
-#                     ^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                     ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                           ^^ source.hydra
 >
 >  ## A lambda parameter name violating naming conventions (optional)
@@ -694,10 +694,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  invalidLambdaParameterName: InvalidLambdaParameterNameError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra punctuation.separator.type.hydra
 #                             ^ source.hydra
-#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                             ^^ source.hydra
 >
 >  ## A let binding name violating naming conventions (optional)
@@ -706,10 +706,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  invalidLetBindingName: InvalidLetBindingNameError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
-#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                   ^^ source.hydra
 >
 >  ## A type lambda parameter name violating naming conventions (optional)
@@ -718,10 +718,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  invalidTypeLambdaParameterName: InvalidTypeLambdaParameterNameError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                ^ source.hydra punctuation.separator.type.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                                     ^^ source.hydra
 >
 >  ## A case statement that does not cover every variant of the union it matches
@@ -730,10 +730,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  missingCaseBranches: MissingCaseBranchesError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
-#                       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                               ^^ source.hydra
 >
 >  ## A record term omitting a field declared by its record type
@@ -742,10 +742,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  missingRecordFields: MissingRecordFieldsError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
-#                       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                               ^^ source.hydra
 >
 >  ## Nested term annotations that should be merged (optional)
@@ -754,10 +754,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  nestedTermAnnotation: NestedTermAnnotationError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                      ^ source.hydra punctuation.separator.type.hydra
 #                       ^ source.hydra
-#                        ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                        ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                 ^^ source.hydra
 >
 >  ## A nominal type reference resolving to a type of the wrong kind (e.g. a record term naming a union type)
@@ -766,10 +766,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  nominalTypeKindMismatch: NominalTypeKindMismatchError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                         ^ source.hydra punctuation.separator.type.hydra
 #                          ^ source.hydra
-#                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                       ^^ source.hydra
 >
 >  ## A no-op unwrap-of-wrap round-trip (optional)
@@ -778,10 +778,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  redundantWrapUnwrap: RedundantWrapUnwrapError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
-#                       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                               ^^ source.hydra
 >
 >  ## A variable applied to itself (optional)
@@ -790,10 +790,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  selfApplication: SelfApplicationError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
-#                   ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                       ^^ source.hydra
 >
 >  ## A binding that shadows a variable already in scope (optional)
@@ -802,10 +802,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  termVariableShadowing: TermVariableShadowingError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
-#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                   ^^ source.hydra
 >
 >  ## A type lambda parameter that shadows a type variable in scope (optional)
@@ -814,10 +814,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeVariableShadowingInTypeLambda: TypeVariableShadowingInTypeLambdaError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                   ^ source.hydra punctuation.separator.type.hydra
 #                                    ^ source.hydra
-#                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                                           ^^ source.hydra
 >
 >  ## An injection naming a variant that is not declared by its union type
@@ -826,10 +826,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  undeclaredVariant: UndeclaredVariantError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                   ^ source.hydra punctuation.separator.type.hydra
 #                    ^ source.hydra
-#                     ^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                     ^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                           ^^ source.hydra
 >
 >  ## A variable reference to an unbound term name
@@ -838,10 +838,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  undefinedTermVariable: UndefinedTermVariableError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
-#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                   ^^ source.hydra
 >
 >  ## An unbound type variable in a let binding's type scheme
@@ -850,10 +850,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  undefinedTypeVariableInBindingType: UndefinedTypeVariableInBindingTypeError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                    ^ source.hydra punctuation.separator.type.hydra
 #                                     ^ source.hydra
-#                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                                             ^^ source.hydra
 >
 >  ## An unbound type variable in a lambda domain annotation
@@ -862,10 +862,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  undefinedTypeVariableInLambdaDomain: UndefinedTypeVariableInLambdaDomainError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                     ^ source.hydra punctuation.separator.type.hydra
 #                                      ^ source.hydra
-#                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                                               ^^ source.hydra
 >
 >  ## An unbound type variable in a type application term
@@ -874,10 +874,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  undefinedTypeVariableInTypeApplication: UndefinedTypeVariableInTypeApplicationError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                        ^ source.hydra punctuation.separator.type.hydra
 #                                         ^ source.hydra
-#                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                                                     ^^ source.hydra
 >
 >  ## A case statement alternative naming a field that does not exist in the union it matches
@@ -886,10 +886,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  unknownCaseAlternative: UnknownCaseAlternativeError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra punctuation.separator.type.hydra
 #                         ^ source.hydra
-#                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                     ^^ source.hydra
 >
 >  ## A reference to an unknown primitive function
@@ -898,10 +898,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  unknownPrimitiveName: UnknownPrimitiveNameError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                      ^ source.hydra punctuation.separator.type.hydra
 #                       ^ source.hydra
-#                        ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                        ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                 ^^ source.hydra
 >
 >  ## A projection naming a field that is not declared by its record type
@@ -910,10 +910,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  unknownProjectedField: UnknownProjectedFieldError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
-#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                   ^^ source.hydra
 >
 >  ## An identity lambda applied to an argument (optional)
@@ -922,10 +922,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  unnecessaryIdentityApplication: UnnecessaryIdentityApplicationError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                ^ source.hydra punctuation.separator.type.hydra
 #                                 ^ source.hydra
-#                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                                     ^^ source.hydra
 >
 >  ## A nominal type reference that does not resolve to any declared type in scope
@@ -934,10 +934,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  unresolvedNominalType: UnresolvedNominalTypeError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
-#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                   ^^ source.hydra
 >
 >  ## A term variable whose type is not known
@@ -946,10 +946,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  untypedTermVariable: UntypedTermVariableError}
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
-#                       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                               ^^ source.hydra
 >
 >## An error indicating that a type is invalid
@@ -971,10 +971,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  duplicateRecordTypeFieldNames: DuplicateRecordTypeFieldNamesError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                               ^ source.hydra punctuation.separator.type.hydra
 #                                ^ source.hydra
-#                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                                   ^^ source.hydra
 >
 >  ## A union type with duplicate field names
@@ -983,10 +983,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  duplicateUnionTypeFieldNames: DuplicateUnionTypeFieldNamesError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                              ^ source.hydra punctuation.separator.type.hydra
 #                               ^ source.hydra
-#                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                                 ^^ source.hydra
 >
 >  ## A record type with no fields (optional)
@@ -995,10 +995,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  emptyRecordType: EmptyRecordTypeError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
-#                   ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                       ^^ source.hydra
 >
 >  ## A type annotation with an empty annotation map (optional)
@@ -1007,10 +1007,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  emptyTypeAnnotation: EmptyTypeAnnotationError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
-#                       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                               ^^ source.hydra
 >
 >  ## A union type with no alternatives (optional)
@@ -1019,10 +1019,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  emptyUnionType: EmptyUnionTypeError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra punctuation.separator.type.hydra
 #                 ^ source.hydra
-#                  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                     ^^ source.hydra
 >
 >  ## A forall parameter name violating naming conventions (optional)
@@ -1031,10 +1031,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  invalidForallParameterName: InvalidForallParameterNameError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra punctuation.separator.type.hydra
 #                             ^ source.hydra
-#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                             ^^ source.hydra
 >
 >  ## A type scheme variable name violating naming conventions (optional)
@@ -1043,10 +1043,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  invalidTypeSchemeVariableName: InvalidTypeSchemeVariableNameError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                               ^ source.hydra punctuation.separator.type.hydra
 #                                ^ source.hydra
-#                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                                   ^^ source.hydra
 >
 >  ## Nested type annotations that should be merged (optional)
@@ -1055,10 +1055,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  nestedTypeAnnotation: NestedTypeAnnotationError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                      ^ source.hydra punctuation.separator.type.hydra
 #                       ^ source.hydra
-#                        ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                        ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                 ^^ source.hydra
 >
 >  ## A map with a non-comparable key type
@@ -1067,10 +1067,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  nonComparableMapKeyType: NonComparableMapKeyTypeError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                         ^ source.hydra punctuation.separator.type.hydra
 #                          ^ source.hydra
-#                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                       ^^ source.hydra
 >
 >  ## A set with a non-comparable element type
@@ -1079,10 +1079,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  nonComparableSetElementType: NonComparableSetElementTypeError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                             ^ source.hydra punctuation.separator.type.hydra
 #                              ^ source.hydra
-#                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                               ^^ source.hydra
 >
 >  ## A union type with only one variant (optional)
@@ -1091,10 +1091,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  singleVariantUnion: SingleVariantUnionError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra punctuation.separator.type.hydra
 #                     ^ source.hydra
-#                      ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                      ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                             ^^ source.hydra
 >
 >  ## A forall parameter that shadows a type variable in scope (optional)
@@ -1103,10 +1103,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeVariableShadowingInForall: TypeVariableShadowingInForallError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                               ^ source.hydra punctuation.separator.type.hydra
 #                                ^ source.hydra
-#                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                                   ^^ source.hydra
 >
 >  ## A type variable reference to an unbound name
@@ -1115,10 +1115,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  undefinedTypeVariable: UndefinedTypeVariableError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
-#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                   ^^ source.hydra
 >
 >  ## TypeVoid in a position where no value can be constructed (optional)
@@ -1127,10 +1127,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  voidInNonBottomPosition: VoidInNonBottomPositionError}
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                         ^ source.hydra punctuation.separator.type.hydra
 #                          ^ source.hydra
-#                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                       ^^ source.hydra
 >
 >## A type lambda parameter name that violates naming conventions (optional)
@@ -1152,10 +1152,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The invalid type lambda parameter name
@@ -1164,10 +1164,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## A type scheme variable name that violates type variable naming conventions (optional)
@@ -1189,10 +1189,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The invalid variable name
@@ -1201,10 +1201,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## A mismatch between an expected literal type and the type of an actual literal value
@@ -1226,10 +1226,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  expectedType: LiteralType,
 #^^ source.hydra
-#  ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #              ^ source.hydra punctuation.separator.type.hydra
 #               ^ source.hydra
-#                ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                           ^^ source.hydra
 >
 >  ## The actual literal type, derived from the value
@@ -1238,10 +1238,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  actualType: LiteralType}
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
-#              ^^^^^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                         ^^ source.hydra
 >
 >## A case statement without a default branch that fails to cover every variant of the union it matches
@@ -1263,10 +1263,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of the union type being matched
@@ -1275,10 +1275,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeName: Name,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra entity.name.type.hydra
 #                ^^ source.hydra
 >
 >  ## The names of the uncovered variants
@@ -1287,7 +1287,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  variantNames: list<Name>}
 #^^ source.hydra
-#  ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #              ^ source.hydra punctuation.separator.type.hydra
 #               ^ source.hydra
 #                ^^^^ source.hydra support.type.hydra
@@ -1315,10 +1315,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of the record type
@@ -1327,10 +1327,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeName: Name,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra entity.name.type.hydra
 #                ^^ source.hydra
 >
 >  ## The names of the missing fields
@@ -1339,7 +1339,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  fieldNames: list<Name>}
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
@@ -1367,10 +1367,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >## A type annotation directly wrapping another type annotation; annotations should be merged (optional)
@@ -1392,10 +1392,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >## A nominal type reference in a term (inject, cases, record, project, wrap, or unwrap) resolving to a declared type of the wrong kind, e.g. a record term naming a union type
@@ -1417,10 +1417,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of the referenced type
@@ -1429,10 +1429,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeName: Name,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra entity.name.type.hydra
 #                ^^ source.hydra
 >
 >  ## The type variant required at this site
@@ -1441,10 +1441,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  expectedVariant: TypeVariant,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
-#                   ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                              ^^ source.hydra
 >
 >  ## The type variant that the name actually resolves to
@@ -1453,10 +1453,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  actualVariant: TypeVariant}
 #^^ source.hydra
-#  ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra punctuation.separator.type.hydra
 #                ^ source.hydra
-#                 ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                 ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                            ^^ source.hydra
 >
 >## A map type whose key type is or directly contains a function type, which cannot be compared for equality
@@ -1478,10 +1478,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The non-comparable key type
@@ -1490,10 +1490,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  keyType: Type}
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
-#           ^^^^ source.hydra variable.other.hydra
+#           ^^^^ source.hydra entity.name.type.hydra
 #               ^^ source.hydra
 >
 >## A set type whose element type is or directly contains a function type, which cannot be compared for equality
@@ -1515,10 +1515,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The non-comparable element type
@@ -1527,10 +1527,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  elementType: Type}
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
-#               ^^^^ source.hydra variable.other.hydra
+#               ^^^^ source.hydra entity.name.type.hydra
 #                   ^^ source.hydra
 >
 >## An unwrap elimination applied to a wrap term of the same type, forming a no-op round-trip (optional)
@@ -1552,10 +1552,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The type name of the wrapper
@@ -1564,10 +1564,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeName: Name}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra entity.name.type.hydra
 #                ^^ source.hydra
 >
 >## A variable applied to itself, which is almost always a mistake in Hydra's type system (optional)
@@ -1589,10 +1589,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of the variable applied to itself
@@ -1601,10 +1601,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## A union type with exactly one field; could be a wrapped type or record instead (optional)
@@ -1626,10 +1626,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of the single field
@@ -1638,10 +1638,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  fieldName: Name}
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^ source.hydra variable.other.hydra
+#             ^^^^ source.hydra entity.name.type.hydra
 #                 ^^ source.hydra
 >
 >## A lambda parameter or let binding name that shadows a variable already in scope (optional)
@@ -1663,10 +1663,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of the shadowed variable
@@ -1675,10 +1675,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## A forall type parameter that shadows a type variable already in scope (optional)
@@ -1700,10 +1700,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of the shadowed type variable
@@ -1712,10 +1712,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## A type lambda parameter that shadows a type variable already in scope (optional)
@@ -1737,10 +1737,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of the shadowed type variable
@@ -1749,10 +1749,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## An injection naming a variant that is not declared by its union type
@@ -1774,10 +1774,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of the union type
@@ -1786,10 +1786,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeName: Name,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra entity.name.type.hydra
 #                ^^ source.hydra
 >
 >  ## The undeclared variant name
@@ -1798,10 +1798,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  variantName: Name}
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
-#               ^^^^ source.hydra variable.other.hydra
+#               ^^^^ source.hydra entity.name.type.hydra
 #                   ^^ source.hydra
 >
 >## A reference to a field that does not exist in the given type
@@ -1823,10 +1823,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  fieldName: Name,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^ source.hydra variable.other.hydra
+#             ^^^^ source.hydra entity.name.type.hydra
 #                 ^^ source.hydra
 >
 >  ## The name of the type in which the field was expected
@@ -1835,10 +1835,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeName: Name}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra entity.name.type.hydra
 #                ^^ source.hydra
 >
 >## A variable reference to a term name that is not bound in scope
@@ -1860,10 +1860,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of the undefined variable
@@ -1872,10 +1872,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## A type variable reference to a name that is not bound in scope
@@ -1897,10 +1897,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of the undefined type variable
@@ -1909,10 +1909,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## A type variable in a let binding's type scheme that is not bound by the scheme or enclosing scope
@@ -1934,10 +1934,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of the undefined type variable
@@ -1946,10 +1946,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## A type variable in a lambda domain annotation that is not bound in scope
@@ -1971,10 +1971,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of the undefined type variable
@@ -1983,10 +1983,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## A type variable in a type application term that is not bound in scope
@@ -2008,10 +2008,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of the undefined type variable
@@ -2020,10 +2020,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## An unexpected term variant was encountered
@@ -2045,10 +2045,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  expectedVariant: TermVariant,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
-#                   ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                              ^^ source.hydra
 >
 >  ## The actual term that was encountered
@@ -2057,10 +2057,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  actualTerm: Term}
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
-#              ^^^^ source.hydra variable.other.hydra
+#              ^^^^ source.hydra entity.name.type.hydra
 #                  ^^ source.hydra
 >
 >## An unexpected type variant was encountered
@@ -2082,10 +2082,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  expectedVariant: TypeVariant,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
-#                   ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                              ^^ source.hydra
 >
 >  ## The actual type that was encountered
@@ -2094,10 +2094,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  actualType: Type}
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
-#              ^^^^ source.hydra variable.other.hydra
+#              ^^^^ source.hydra entity.name.type.hydra
 #                  ^^ source.hydra
 >
 >## A case statement alternative naming a field that does not exist in the union it matches
@@ -2119,10 +2119,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of the union type being matched
@@ -2131,10 +2131,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeName: Name,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra entity.name.type.hydra
 #                ^^ source.hydra
 >
 >  ## The unknown alternative name
@@ -2143,10 +2143,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## A primitive function reference to a name not in the known primitive registry
@@ -2168,10 +2168,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The unknown primitive name
@@ -2180,10 +2180,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## A projection naming a field that is not declared by its record type
@@ -2205,10 +2205,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of the record type
@@ -2217,10 +2217,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeName: Name,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra entity.name.type.hydra
 #                ^^ source.hydra
 >
 >  ## The unknown projected field name
@@ -2229,10 +2229,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  fieldName: Name}
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^ source.hydra variable.other.hydra
+#             ^^^^ source.hydra entity.name.type.hydra
 #                 ^^ source.hydra
 >
 >## An application of an identity lambda to an argument, which simplifies to the argument (optional)
@@ -2254,10 +2254,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >## A nominal type reference in a term (inject, cases, record, project, wrap, or unwrap) that does not resolve to any declared type in scope
@@ -2279,10 +2279,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The unresolved type name
@@ -2291,10 +2291,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeName: Name}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra entity.name.type.hydra
 #                ^^ source.hydra
 >
 >## A term variable whose type is not known in the current scope
@@ -2316,10 +2316,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of the untyped variable
@@ -2328,10 +2328,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## TypeVoid appearing in a position where no value can be constructed, such as a record field, list element, map key/value, set element, pair component, or function codomain (optional)
@@ -2353,8 +2353,8 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  location: SubtermPath}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra

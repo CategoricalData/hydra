@@ -68,7 +68,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                        ^^ source.hydra
-#                          ^ source.hydra variable.other.hydra
+#                          ^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra punctuation.separator.type.hydra
 #                            ^ source.hydra
 #                             ^^^^^^ source.hydra support.type.hydra
@@ -112,7 +112,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                         ^^ source.hydra
-#                           ^ source.hydra variable.other.hydra
+#                           ^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra punctuation.separator.type.hydra
 #                             ^ source.hydra
 #                              ^^^^^^ source.hydra support.type.hydra
@@ -161,7 +161,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                       ^^ source.hydra
-#                         ^ source.hydra variable.other.hydra
+#                         ^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra punctuation.separator.type.hydra
 #                           ^ source.hydra
 #                            ^^^^^^ source.hydra support.type.hydra
@@ -210,7 +210,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                       ^^ source.hydra
-#                         ^ source.hydra variable.other.hydra
+#                         ^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra punctuation.separator.type.hydra
 #                           ^ source.hydra
 #                            ^^^^^^ source.hydra support.type.hydra
@@ -254,7 +254,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                       ^^ source.hydra
-#                         ^ source.hydra variable.other.hydra
+#                         ^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra punctuation.separator.type.hydra
 #                           ^ source.hydra
 #                            ^^^^^^ source.hydra support.type.hydra
@@ -303,7 +303,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                      ^^ source.hydra
-#                        ^ source.hydra variable.other.hydra
+#                        ^ source.hydra variable.other.member.hydra
 #                         ^ source.hydra punctuation.separator.type.hydra
 #                          ^ source.hydra
 #                           ^^^^^^ source.hydra support.type.hydra
@@ -347,7 +347,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                        ^^ source.hydra
-#                          ^ source.hydra variable.other.hydra
+#                          ^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra punctuation.separator.type.hydra
 #                            ^ source.hydra
 #                             ^^^^^^ source.hydra support.type.hydra
@@ -391,7 +391,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                        ^^ source.hydra
-#                          ^ source.hydra variable.other.hydra
+#                          ^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra punctuation.separator.type.hydra
 #                            ^ source.hydra
 #                             ^^^^^^ source.hydra support.type.hydra
@@ -435,7 +435,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                        ^^ source.hydra
-#                          ^ source.hydra variable.other.hydra
+#                          ^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra punctuation.separator.type.hydra
 #                            ^ source.hydra
 #                             ^^^^^^ source.hydra support.type.hydra
@@ -479,7 +479,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                       ^^ source.hydra
-#                         ^ source.hydra variable.other.hydra
+#                         ^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra punctuation.separator.type.hydra
 #                           ^ source.hydra
 #                            ^^^^^^ source.hydra support.type.hydra
@@ -526,7 +526,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                        ^^ source.hydra
-#                          ^ source.hydra variable.other.hydra
+#                          ^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra punctuation.separator.type.hydra
 #                            ^ source.hydra
 #                             ^^^^^^ source.hydra support.type.hydra
@@ -573,7 +573,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                       ^^ source.hydra
-#                         ^ source.hydra variable.other.hydra
+#                         ^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra punctuation.separator.type.hydra
 #                           ^ source.hydra
 #                            ^^^^^^ source.hydra support.type.hydra
@@ -625,7 +625,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                         ^^ source.hydra
-#                           ^ source.hydra variable.other.hydra
+#                           ^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra punctuation.separator.type.hydra
 #                             ^ source.hydra
 #                              ^^^^^^^ source.hydra support.type.hydra
@@ -669,7 +669,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                          ^^ source.hydra
-#                            ^ source.hydra variable.other.hydra
+#                            ^ source.hydra variable.other.member.hydra
 #                             ^ source.hydra punctuation.separator.type.hydra
 #                              ^ source.hydra
 #                               ^^^^^^^ source.hydra support.type.hydra
@@ -713,7 +713,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                          ^^ source.hydra
-#                            ^ source.hydra variable.other.hydra
+#                            ^ source.hydra variable.other.member.hydra
 #                             ^ source.hydra punctuation.separator.type.hydra
 #                              ^ source.hydra
 #                               ^^^^^^^ source.hydra support.type.hydra
@@ -757,7 +757,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                          ^^ source.hydra
-#                            ^ source.hydra variable.other.hydra
+#                            ^ source.hydra variable.other.member.hydra
 #                             ^ source.hydra punctuation.separator.type.hydra
 #                              ^ source.hydra
 #                               ^^^^^^^ source.hydra support.type.hydra
@@ -801,7 +801,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                          ^^ source.hydra
-#                            ^ source.hydra variable.other.hydra
+#                            ^ source.hydra variable.other.member.hydra
 #                             ^ source.hydra punctuation.separator.type.hydra
 #                              ^ source.hydra
 #                               ^^^^^^^ source.hydra support.type.hydra
@@ -845,7 +845,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                          ^^ source.hydra
-#                            ^ source.hydra variable.other.hydra
+#                            ^ source.hydra variable.other.member.hydra
 #                             ^ source.hydra punctuation.separator.type.hydra
 #                              ^ source.hydra
 #                               ^^^^^^^ source.hydra support.type.hydra
@@ -889,7 +889,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                          ^^ source.hydra
-#                            ^ source.hydra variable.other.hydra
+#                            ^ source.hydra variable.other.member.hydra
 #                             ^ source.hydra punctuation.separator.type.hydra
 #                              ^ source.hydra
 #                               ^^^^^^^ source.hydra support.type.hydra
@@ -933,7 +933,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                       ^^ source.hydra
-#                         ^ source.hydra variable.other.hydra
+#                         ^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra punctuation.separator.type.hydra
 #                           ^ source.hydra
 #                            ^^^^^ source.hydra support.type.hydra
@@ -977,7 +977,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                       ^^ source.hydra
-#                         ^ source.hydra variable.other.hydra
+#                         ^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra punctuation.separator.type.hydra
 #                           ^ source.hydra
 #                            ^^^^^ source.hydra support.type.hydra
@@ -1021,7 +1021,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                       ^^ source.hydra
-#                         ^ source.hydra variable.other.hydra
+#                         ^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra punctuation.separator.type.hydra
 #                           ^ source.hydra
 #                            ^^^^^ source.hydra support.type.hydra
@@ -1065,7 +1065,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                      ^^ source.hydra
-#                        ^ source.hydra variable.other.hydra
+#                        ^ source.hydra variable.other.member.hydra
 #                         ^ source.hydra punctuation.separator.type.hydra
 #                          ^ source.hydra
 #                           ^^^^ source.hydra support.type.hydra
@@ -1120,7 +1120,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                     ^^ source.hydra
-#                       ^ source.hydra variable.other.hydra
+#                       ^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra punctuation.separator.type.hydra
 #                         ^ source.hydra
 #                          ^^^^^^ source.hydra support.type.hydra
@@ -1175,7 +1175,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                      ^^ source.hydra
-#                        ^ source.hydra variable.other.hydra
+#                        ^ source.hydra variable.other.member.hydra
 #                         ^ source.hydra punctuation.separator.type.hydra
 #                          ^ source.hydra
 #                           ^^^^^^ source.hydra support.type.hydra
@@ -1233,7 +1233,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                      ^^ source.hydra
-#                        ^ source.hydra variable.other.hydra
+#                        ^ source.hydra variable.other.member.hydra
 #                         ^ source.hydra punctuation.separator.type.hydra
 #                          ^ source.hydra
 #                           ^^^^^^ source.hydra support.type.hydra
@@ -1291,7 +1291,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                      ^^ source.hydra
-#                        ^ source.hydra variable.other.hydra
+#                        ^ source.hydra variable.other.member.hydra
 #                         ^ source.hydra punctuation.separator.type.hydra
 #                          ^ source.hydra
 #                           ^^^^^^ source.hydra support.type.hydra
@@ -1349,7 +1349,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                      ^^ source.hydra
-#                        ^ source.hydra variable.other.hydra
+#                        ^ source.hydra variable.other.member.hydra
 #                         ^ source.hydra punctuation.separator.type.hydra
 #                          ^ source.hydra
 #                           ^^^^^^ source.hydra support.type.hydra
@@ -1404,7 +1404,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                    ^^ source.hydra
-#                      ^ source.hydra variable.other.hydra
+#                      ^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
 #                         ^^^^^^ source.hydra support.type.hydra
@@ -1459,7 +1459,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                    ^^ source.hydra
-#                      ^ source.hydra variable.other.hydra
+#                      ^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
 #                         ^^^^^^ source.hydra support.type.hydra
@@ -1514,7 +1514,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                    ^^ source.hydra
-#                      ^ source.hydra variable.other.hydra
+#                      ^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
 #                         ^^^^^^ source.hydra support.type.hydra
@@ -1569,7 +1569,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^ source.hydra entity.name.function.hydra
 #                   ^^ source.hydra
-#                     ^ source.hydra variable.other.hydra
+#                     ^ source.hydra variable.other.member.hydra
 #                      ^ source.hydra punctuation.separator.type.hydra
 #                       ^ source.hydra
 #                        ^^^^^^ source.hydra support.type.hydra
@@ -1624,7 +1624,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                     ^^ source.hydra
-#                       ^ source.hydra variable.other.hydra
+#                       ^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra punctuation.separator.type.hydra
 #                         ^ source.hydra
 #                          ^^^^^^ source.hydra support.type.hydra
@@ -1679,7 +1679,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                     ^^ source.hydra
-#                       ^ source.hydra variable.other.hydra
+#                       ^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra punctuation.separator.type.hydra
 #                         ^ source.hydra
 #                          ^^^^^^ source.hydra support.type.hydra
@@ -1739,7 +1739,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                     ^^ source.hydra
-#                       ^ source.hydra variable.other.hydra
+#                       ^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra punctuation.separator.type.hydra
 #                         ^ source.hydra
 #                          ^^^^^^ source.hydra support.type.hydra
@@ -1799,7 +1799,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                     ^^ source.hydra
-#                       ^ source.hydra variable.other.hydra
+#                       ^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra punctuation.separator.type.hydra
 #                         ^ source.hydra
 #                          ^^^^^^ source.hydra support.type.hydra
@@ -1854,7 +1854,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                    ^^ source.hydra
-#                      ^ source.hydra variable.other.hydra
+#                      ^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
 #                         ^^^^^^ source.hydra support.type.hydra
@@ -1904,7 +1904,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                     ^^ source.hydra
-#                       ^ source.hydra variable.other.hydra
+#                       ^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra punctuation.separator.type.hydra
 #                         ^ source.hydra
 #                          ^^^^^^ source.hydra support.type.hydra
@@ -1951,7 +1951,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                      ^^ source.hydra
-#                        ^ source.hydra variable.other.hydra
+#                        ^ source.hydra variable.other.member.hydra
 #                         ^ source.hydra punctuation.separator.type.hydra
 #                          ^ source.hydra
 #                           ^^^^^^^ source.hydra support.type.hydra
@@ -1998,7 +1998,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                      ^^ source.hydra
-#                        ^ source.hydra variable.other.hydra
+#                        ^ source.hydra variable.other.member.hydra
 #                         ^ source.hydra punctuation.separator.type.hydra
 #                          ^ source.hydra
 #                           ^^^^^^^ source.hydra support.type.hydra
@@ -2045,7 +2045,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                      ^^ source.hydra
-#                        ^ source.hydra variable.other.hydra
+#                        ^ source.hydra variable.other.member.hydra
 #                         ^ source.hydra punctuation.separator.type.hydra
 #                          ^ source.hydra
 #                           ^^^^^^^ source.hydra support.type.hydra
@@ -2092,7 +2092,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                      ^^ source.hydra
-#                        ^ source.hydra variable.other.hydra
+#                        ^ source.hydra variable.other.member.hydra
 #                         ^ source.hydra punctuation.separator.type.hydra
 #                          ^ source.hydra
 #                           ^^^^^^^ source.hydra support.type.hydra
@@ -2139,7 +2139,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                    ^^ source.hydra
-#                      ^ source.hydra variable.other.hydra
+#                      ^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
 #                         ^^^^^ source.hydra support.type.hydra
@@ -2186,7 +2186,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                    ^^ source.hydra
-#                      ^ source.hydra variable.other.hydra
+#                      ^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
 #                         ^^^^^ source.hydra support.type.hydra
@@ -2233,7 +2233,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                    ^^ source.hydra
-#                      ^ source.hydra variable.other.hydra
+#                      ^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
 #                         ^^^^^ source.hydra support.type.hydra
@@ -2280,7 +2280,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^ source.hydra entity.name.function.hydra
 #                   ^^ source.hydra
-#                     ^ source.hydra variable.other.hydra
+#                     ^ source.hydra variable.other.member.hydra
 #                      ^ source.hydra punctuation.separator.type.hydra
 #                       ^ source.hydra
 #                        ^^^^ source.hydra support.type.hydra
@@ -2337,7 +2337,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                     ^^ source.hydra
-#                       ^ source.hydra variable.other.hydra
+#                       ^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra punctuation.separator.type.hydra
 #                         ^ source.hydra
 #                          ^^^^^^ source.hydra support.type.hydra
@@ -2384,7 +2384,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                     ^^ source.hydra
-#                       ^ source.hydra variable.other.hydra
+#                       ^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra punctuation.separator.type.hydra
 #                         ^ source.hydra
 #                          ^^^^^^ source.hydra support.type.hydra
@@ -2431,7 +2431,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                     ^^ source.hydra
-#                       ^ source.hydra variable.other.hydra
+#                       ^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra punctuation.separator.type.hydra
 #                         ^ source.hydra
 #                          ^^^^^^ source.hydra support.type.hydra
@@ -2478,7 +2478,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                     ^^ source.hydra
-#                       ^ source.hydra variable.other.hydra
+#                       ^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra punctuation.separator.type.hydra
 #                         ^ source.hydra
 #                          ^^^^^^ source.hydra support.type.hydra
@@ -2525,7 +2525,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                    ^^ source.hydra
-#                      ^ source.hydra variable.other.hydra
+#                      ^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
 #                         ^^^^^ source.hydra support.type.hydra
@@ -2569,7 +2569,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                        ^^ source.hydra
-#                          ^ source.hydra variable.other.hydra
+#                          ^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra punctuation.separator.type.hydra
 #                            ^ source.hydra
 #                             ^^^^^^ source.hydra support.type.hydra
@@ -2613,7 +2613,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                        ^^ source.hydra
-#                          ^ source.hydra variable.other.hydra
+#                          ^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra punctuation.separator.type.hydra
 #                            ^ source.hydra
 #                             ^^^^^^ source.hydra support.type.hydra
@@ -2657,7 +2657,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                        ^^ source.hydra
-#                          ^ source.hydra variable.other.hydra
+#                          ^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra punctuation.separator.type.hydra
 #                            ^ source.hydra
 #                             ^^^^^^ source.hydra support.type.hydra
@@ -2701,7 +2701,7 @@
 #         ^ source.hydra
 #          ^^^^^^^^^^^^^ source.hydra entity.name.function.hydra
 #                       ^^ source.hydra
-#                         ^ source.hydra variable.other.hydra
+#                         ^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra punctuation.separator.type.hydra
 #                           ^ source.hydra
 #                            ^^^^^ source.hydra support.type.hydra

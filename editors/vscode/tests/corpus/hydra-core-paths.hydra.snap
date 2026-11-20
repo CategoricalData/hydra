@@ -30,10 +30,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  variable: Name,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra entity.name.type.hydra
 #                ^^ source.hydra
 >
 >  ## The id of the node at the binding lambda
@@ -42,10 +42,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  boundByNode: TermNodeId,
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
-#               ^^^^^^^^^^ source.hydra variable.other.hydra
+#               ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                         ^^ source.hydra
 >
 >  ## The type of the variable
@@ -59,7 +59,7 @@
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^ source.hydra variable.other.hydra
+#          ^^^^ source.hydra entity.name.type.hydra
 #              ^^ source.hydra
 >
 >## A reference to a let-bound variable: the node introducing it is the bound term
@@ -81,10 +81,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  variable: Name,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra entity.name.type.hydra
 #                ^^ source.hydra
 >
 >  ## The id of the node at the bound term
@@ -93,10 +93,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  bindingNode: TermNodeId,
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
-#               ^^^^^^^^^^ source.hydra variable.other.hydra
+#               ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                         ^^ source.hydra
 >
 >  ## The type of the variable
@@ -110,7 +110,7 @@
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^ source.hydra variable.other.hydra
+#          ^^^^ source.hydra entity.name.type.hydra
 #              ^^ source.hydra
 >
 >## A reference to a named type of the schema (analogous to a let-bound variable)
@@ -132,10 +132,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## A reference to a primitive function
@@ -157,10 +157,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name,
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >  ## The type of the primitive
@@ -174,7 +174,7 @@
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^ source.hydra variable.other.hydra
+#          ^^^^ source.hydra entity.name.type.hydra
 #              ^^ source.hydra
 >
 >## An outgoing link to an immediate subterm, carried inline as a child node
@@ -196,10 +196,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  step: SubtermStep,
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^^ source.hydra
 >
 >  ## The child node (inline; the structure is a tree)
@@ -208,10 +208,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  child: TermNode}
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^^^^^ source.hydra variable.other.hydra
+#         ^^^^^^^^ source.hydra entity.name.type.hydra
 #                 ^^ source.hydra
 >
 >## A sequence of subterm steps forming a path through a term, root first
@@ -251,7 +251,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  annotatedAnnotation: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
 #                       ^^^^ source.hydra support.type.hydra
@@ -263,7 +263,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  annotatedBody: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra punctuation.separator.type.hydra
 #                ^ source.hydra
 #                 ^^^^ source.hydra support.type.hydra
@@ -275,7 +275,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  applicationArgument: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
 #                       ^^^^ source.hydra support.type.hydra
@@ -287,7 +287,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  applicationFunction: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
 #                       ^^^^ source.hydra support.type.hydra
@@ -299,10 +299,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  casesCase: Name,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^ source.hydra variable.other.hydra
+#             ^^^^ source.hydra entity.name.type.hydra
 #                 ^^ source.hydra
 >
 >  ## Access the default case of a case statement
@@ -311,7 +311,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  casesDefault: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #              ^ source.hydra punctuation.separator.type.hydra
 #               ^ source.hydra
 #                ^^^^ source.hydra support.type.hydra
@@ -323,7 +323,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  eitherLeft: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
@@ -335,7 +335,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  eitherRight: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
@@ -347,10 +347,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  injectField: Name,
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
-#               ^^^^ source.hydra variable.other.hydra
+#               ^^^^ source.hydra entity.name.type.hydra
 #                   ^^ source.hydra
 >
 >  ## Access the body of a lambda term
@@ -359,7 +359,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  lambdaBody: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
@@ -371,10 +371,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  letBinding: Name,
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
-#              ^^^^ source.hydra variable.other.hydra
+#              ^^^^ source.hydra entity.name.type.hydra
 #                  ^^ source.hydra
 >
 >  ## Access the body of a let term
@@ -383,7 +383,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  letBody: unit,
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
 #           ^^^^ source.hydra support.type.hydra
@@ -395,7 +395,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  listElement: int32,
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
 #               ^^^^^ source.hydra support.type.hydra
@@ -407,7 +407,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  mapEntry: int32,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^^ source.hydra support.type.hydra
@@ -419,7 +419,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  optionalGiven: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra punctuation.separator.type.hydra
 #                ^ source.hydra
 #                 ^^^^ source.hydra support.type.hydra
@@ -431,7 +431,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  pairFirst: unit,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
@@ -443,7 +443,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  pairSecond: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
@@ -455,10 +455,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  recordField: Name,
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
-#               ^^^^ source.hydra variable.other.hydra
+#               ^^^^ source.hydra entity.name.type.hydra
 #                   ^^ source.hydra
 >
 >  ## Access an element of a set by index
@@ -467,7 +467,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  setElement: int32,
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^^ source.hydra support.type.hydra
@@ -479,7 +479,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeApplicationBody: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
 #                       ^^^^ source.hydra support.type.hydra
@@ -491,7 +491,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeLambdaBody: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra punctuation.separator.type.hydra
 #                 ^ source.hydra
 #                  ^^^^ source.hydra support.type.hydra
@@ -503,7 +503,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  wrapBody: unit}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
@@ -528,10 +528,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  step: SubtypeStep,
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^^ source.hydra
 >
 >  ## The child node (inline; the structure is a tree)
@@ -540,10 +540,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  child: TypeNode}
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^^^^^ source.hydra variable.other.hydra
+#         ^^^^^^^^ source.hydra entity.name.type.hydra
 #                 ^^ source.hydra
 >
 >## A sequence of subtype steps forming a path through a type, root first
@@ -583,7 +583,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  annotatedBody: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra punctuation.separator.type.hydra
 #                ^ source.hydra
 #                 ^^^^ source.hydra support.type.hydra
@@ -595,7 +595,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  applicationArgument: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
 #                       ^^^^ source.hydra support.type.hydra
@@ -607,7 +607,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  applicationFunction: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
 #                       ^^^^ source.hydra support.type.hydra
@@ -619,7 +619,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  effectValue: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
@@ -631,7 +631,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  eitherLeft: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
@@ -643,7 +643,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  eitherRight: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
@@ -655,7 +655,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  forallBody: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
@@ -667,7 +667,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  functionCodomain: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra punctuation.separator.type.hydra
 #                   ^ source.hydra
 #                    ^^^^ source.hydra support.type.hydra
@@ -679,7 +679,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  functionDomain: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra punctuation.separator.type.hydra
 #                 ^ source.hydra
 #                  ^^^^ source.hydra support.type.hydra
@@ -691,7 +691,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  listElement: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
@@ -703,7 +703,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  mapKeys: unit,
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
 #           ^^^^ source.hydra support.type.hydra
@@ -715,7 +715,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  mapValues: unit,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
@@ -727,7 +727,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  optionalElement: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
 #                   ^^^^ source.hydra support.type.hydra
@@ -739,7 +739,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  pairFirst: unit,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
 #             ^^^^ source.hydra support.type.hydra
@@ -751,7 +751,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  pairSecond: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
@@ -763,10 +763,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  recordField: Name,
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
-#               ^^^^ source.hydra variable.other.hydra
+#               ^^^^ source.hydra entity.name.type.hydra
 #                   ^^ source.hydra
 >
 >  ## Access the element type of a set type
@@ -775,7 +775,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  setElement: unit,
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
 #              ^^^^ source.hydra support.type.hydra
@@ -787,10 +787,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  unionField: Name,
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
-#              ^^^^ source.hydra variable.other.hydra
+#              ^^^^ source.hydra entity.name.type.hydra
 #                  ^^ source.hydra
 >
 >  ## Access the body type of a wrapped type
@@ -799,7 +799,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  wrapBody: unit}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^ source.hydra support.type.hydra
@@ -824,10 +824,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  casesTypeName: Name,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra punctuation.separator.type.hydra
 #                ^ source.hydra
-#                 ^^^^ source.hydra variable.other.hydra
+#                 ^^^^ source.hydra entity.name.type.hydra
 #                     ^^ source.hydra
 >
 >  ## The name of the union type of an injection
@@ -836,10 +836,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  injectTypeName: Name,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra punctuation.separator.type.hydra
 #                 ^ source.hydra
-#                  ^^^^ source.hydra variable.other.hydra
+#                  ^^^^ source.hydra entity.name.type.hydra
 #                      ^^ source.hydra
 >
 >  ## The (given) domain type of a lambda
@@ -848,10 +848,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  lambdaDomainGiven: Type,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                   ^ source.hydra punctuation.separator.type.hydra
 #                    ^ source.hydra
-#                     ^^^^ source.hydra variable.other.hydra
+#                     ^^^^ source.hydra entity.name.type.hydra
 #                         ^^ source.hydra
 >
 >  ## The parameter name of a lambda
@@ -860,10 +860,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  lambdaParameter: Name,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
-#                   ^^^^ source.hydra variable.other.hydra
+#                   ^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of a let binding together with its (given) type scheme
@@ -872,12 +872,12 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  letBindingTypeSchemeGiven: (Name, TypeScheme),
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra punctuation.separator.type.hydra
 #                            ^^ source.hydra
-#                              ^^^^ source.hydra variable.other.hydra
+#                              ^^^^ source.hydra entity.name.type.hydra
 #                                  ^^ source.hydra
-#                                    ^^^^^^^^^^ source.hydra variable.other.hydra
+#                                    ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                              ^^^ source.hydra
 >
 >  ## The literal value of a literal term (a leaf)
@@ -886,10 +886,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  literal: Literal,
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
-#           ^^^^^^^ source.hydra variable.other.hydra
+#           ^^^^^^^ source.hydra entity.name.type.hydra
 #                  ^^ source.hydra
 >
 >  ## The name of the field projected by a projection
@@ -898,10 +898,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  projectFieldName: Name,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra punctuation.separator.type.hydra
 #                   ^ source.hydra
-#                    ^^^^ source.hydra variable.other.hydra
+#                    ^^^^ source.hydra entity.name.type.hydra
 #                        ^^ source.hydra
 >
 >  ## The name of the record type of a projection
@@ -910,10 +910,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  projectTypeName: Name,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
-#                   ^^^^ source.hydra variable.other.hydra
+#                   ^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The name of the record type of a record term
@@ -922,10 +922,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  recordTypeName: Name,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra punctuation.separator.type.hydra
 #                 ^ source.hydra
-#                  ^^^^ source.hydra variable.other.hydra
+#                  ^^^^ source.hydra entity.name.type.hydra
 #                      ^^ source.hydra
 >
 >  ## The type argument of a type application term
@@ -934,10 +934,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeApplicationType: Type,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
-#                       ^^^^ source.hydra variable.other.hydra
+#                       ^^^^ source.hydra entity.name.type.hydra
 #                           ^^ source.hydra
 >
 >  ## The type-variable parameter of a type lambda term
@@ -946,10 +946,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  typeLambdaParameter: Name,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
-#                       ^^^^ source.hydra variable.other.hydra
+#                       ^^^^ source.hydra entity.name.type.hydra
 #                           ^^ source.hydra
 >
 >  ## The name of the wrapper type eliminated by an unwrap
@@ -958,10 +958,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  unwrapTypeName: Name,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra punctuation.separator.type.hydra
 #                 ^ source.hydra
-#                  ^^^^ source.hydra variable.other.hydra
+#                  ^^^^ source.hydra entity.name.type.hydra
 #                      ^^ source.hydra
 >
 >  ## The name of the wrapper type of a wrapped term
@@ -970,10 +970,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  wrapTypeName: Name}
 #^^ source.hydra
-#  ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #              ^ source.hydra punctuation.separator.type.hydra
 #               ^ source.hydra
-#                ^^^^ source.hydra variable.other.hydra
+#                ^^^^ source.hydra entity.name.type.hydra
 #                    ^^ source.hydra
 >
 >## A typed graph as a term graph: one root node per binding of the graph
@@ -995,7 +995,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  roots: map<Name, TermNode>}
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
 #         ^^^ source.hydra support.type.hydra
@@ -1026,10 +1026,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  attribute: TermAttributeLink,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#             ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                              ^^ source.hydra
 >
 >  ## A variable or primitive occurrence
@@ -1038,10 +1038,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  reference: TermReferenceLink,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#             ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                              ^^ source.hydra
 >
 >  ## An immediate subterm, carried inline
@@ -1050,10 +1050,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  subterm: SubtermLink}
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
-#           ^^^^^^^^^^^ source.hydra variable.other.hydra
+#           ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                      ^^ source.hydra
 >
 >## A node in a term graph: a subterm as written, its type, and its outgoing links
@@ -1080,7 +1080,7 @@
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^ source.hydra variable.other.hydra
+#          ^^^^ source.hydra entity.name.type.hydra
 #              ^^ source.hydra
 >
 >  ## The subterm's type (a binding's forall type at roots), via hydra.core.checking
@@ -1094,7 +1094,7 @@
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^ source.hydra variable.other.hydra
+#          ^^^^ source.hydra entity.name.type.hydra
 #              ^^ source.hydra
 >
 >  ## The outgoing links of the node
@@ -1103,7 +1103,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  links: list<TermLink>}
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
 #         ^^^^ source.hydra support.type.hydra
@@ -1131,10 +1131,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  root: Name,
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >  ## The subterm path from the root
@@ -1143,10 +1143,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  path: SubtermPath}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^^ source.hydra
 >
 >## The target of a variable or primitive occurrence
@@ -1168,10 +1168,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  lambda: LambdaVariableReference,
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#          ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                 ^^ source.hydra
 >
 >  ## A reference to a let-bound variable
@@ -1185,7 +1185,7 @@
 #      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#         ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                             ^^ source.hydra
 >
 >  ## A reference to a primitive function
@@ -1199,7 +1199,7 @@
 #            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
-#               ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#               ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                 ^^ source.hydra
 >
 >## An outgoing link to a variable or primitive occurrence
@@ -1221,10 +1221,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  step: SubtermStep,
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^^ source.hydra
 >
 >  ## The referenced binding, lambda parameter, or primitive
@@ -1233,10 +1233,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  target: TermReference}
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#          ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >## A non-type constituent of this node's type, with its value
@@ -1258,10 +1258,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  annotatedAnnotation: Term,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
-#                       ^^^^ source.hydra variable.other.hydra
+#                       ^^^^ source.hydra entity.name.type.hydra
 #                           ^^ source.hydra
 >
 >  ## The type-variable parameter of a universally quantified type
@@ -1270,10 +1270,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  forallParameter: Name,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
-#                   ^^^^ source.hydra variable.other.hydra
+#                   ^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >  ## The literal type of a literal type (a leaf)
@@ -1282,10 +1282,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  literal: LiteralType}
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
-#           ^^^^^^^^^^^ source.hydra variable.other.hydra
+#           ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                      ^^ source.hydra
 >
 >## A schema as a type graph: one root node per named type
@@ -1307,7 +1307,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  roots: map<Name, TypeNode>}
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
 #         ^^^ source.hydra support.type.hydra
@@ -1338,10 +1338,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  attribute: TypeAttributeLink,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#             ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                              ^^ source.hydra
 >
 >  ## A named-type or type-variable occurrence
@@ -1350,10 +1350,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  reference: TypeReferenceLink,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#             ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                              ^^ source.hydra
 >
 >  ## An immediate subtype, carried inline
@@ -1362,10 +1362,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  subtype: SubtypeLink}
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
-#           ^^^^^^^^^^^ source.hydra variable.other.hydra
+#           ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                      ^^ source.hydra
 >
 >## A node in a type graph: a subtype as written and its outgoing links
@@ -1392,7 +1392,7 @@
 #       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^ source.hydra variable.other.hydra
+#          ^^^^ source.hydra entity.name.type.hydra
 #              ^^ source.hydra
 >
 >  ## The outgoing links of the node
@@ -1401,7 +1401,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  links: list<TypeLink>}
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
 #         ^^^^ source.hydra support.type.hydra
@@ -1429,10 +1429,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  root: Name,
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >  ## The subtype path from the root
@@ -1441,10 +1441,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  path: SubtypePath}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^^ source.hydra
 >
 >## The target of a named-type or type-variable occurrence
@@ -1466,10 +1466,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  nominal: NominalTypeReference,
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
-#           ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#           ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^^ source.hydra
 >
 >  ## A reference to a forall-bound type variable
@@ -1478,10 +1478,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  variable: TypeVariableReference}
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                 ^^ source.hydra
 >
 >## An outgoing link to a named-type or type-variable occurrence
@@ -1503,10 +1503,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  step: SubtypeStep,
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^^ source.hydra
 >
 >  ## The referenced named type or type variable
@@ -1515,10 +1515,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  target: TypeReference}
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
-#          ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#          ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                       ^^ source.hydra
 >
 >## A reference to a forall-bound type variable: the node introducing it is the binder
@@ -1540,10 +1540,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  variable: Name,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra entity.name.type.hydra
 #                ^^ source.hydra
 >
 >  ## The id of the node at the binding forall
@@ -1552,8 +1552,8 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  boundByNode: TypeNodeId}
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
-#               ^^^^^^^^^^ source.hydra variable.other.hydra
+#               ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                         ^^ source.hydra

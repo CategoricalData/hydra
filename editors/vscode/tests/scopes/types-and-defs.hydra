@@ -16,7 +16,7 @@ import hydra.core.lists as lists from hydra-core
 type MyList = ∀t.list<t>
 #^^^ keyword.other.definition.hydra
 #    ^^^^^^ entity.name.type.hydra
-#             ^ keyword.operator.forall-scheme.hydra
+#             ^ keyword.control.forall.hydra
 #              ^ variable.parameter.hydra
 #                ^^^^ support.type.hydra
 
@@ -30,7 +30,7 @@ type U = union{a: unit, b: string}
 #        ^^^^^ support.type.hydra
 
 type Pair2 = ∀.map<string, int32>
-#            ^ keyword.operator.forall-scheme.hydra
+#            ^ keyword.control.forall.hydra
 #              ^^^ support.type.hydra
 #                  ^^^^^^ support.type.hydra
 
@@ -50,7 +50,7 @@ type Nested = ∀.optional<list<hydra.core.model.Term>>
 # A function type inside type-arg brackets: arrow stays an arrow, names are types.
 type EffFn = ∀x,y.effect<x → y>
 #                        ^ entity.name.type.hydra
-#                          ^ keyword.operator.arrow.hydra
+#                          ^ keyword.control.arrow.hydra
 #                            ^ entity.name.type.hydra
 
 impure partial primitive risky : ∀.unit → effect<unit>
@@ -60,7 +60,7 @@ impure partial primitive risky : ∀.unit → effect<unit>
 #                        ^^^^^ entity.name.function.hydra
 
 term constr = x ⇒ y
-#               ^ keyword.operator.constraint-arrow.hydra
+#               ^ keyword.control.constraint-arrow.hydra
 
 term resv = `let`
 #           ^ variable.other.escaped.hydra punctuation.definition.name.begin.hydra

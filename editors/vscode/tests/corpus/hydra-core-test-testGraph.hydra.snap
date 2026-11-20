@@ -90,7 +90,7 @@
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                     ^ source.hydra
-#                      ^^^^ source.hydra variable.other.hydra
+#                      ^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
@@ -108,7 +108,7 @@
 #                                                          ^ source.hydra
 #                                                           ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                               ^ source.hydra
-#                                                                ^^^^^^^ source.hydra variable.other.hydra
+#                                                                ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                       ^ source.hydra
 #                                                                        ^ source.hydra keyword.operator.equals.hydra
 #                                                                         ^ source.hydra
@@ -122,7 +122,7 @@
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                     ^ source.hydra
-#                      ^^^^ source.hydra variable.other.hydra
+#                      ^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
@@ -140,7 +140,7 @@
 #                                                       ^ source.hydra
 #                                                        ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                            ^ source.hydra
-#                                                             ^^^^^^^^ source.hydra variable.other.hydra
+#                                                             ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                     ^ source.hydra
 #                                                                      ^ source.hydra keyword.operator.equals.hydra
 #                                                                       ^ source.hydra
@@ -154,7 +154,7 @@
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                     ^ source.hydra
-#                      ^^^^ source.hydra variable.other.hydra
+#                      ^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
@@ -172,7 +172,7 @@
 #                                                    ^ source.hydra
 #                                                     ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                         ^ source.hydra
-#                                                          ^^^^^^^ source.hydra variable.other.hydra
+#                                                          ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                 ^ source.hydra
 #                                                                  ^ source.hydra keyword.operator.equals.hydra
 #                                                                   ^ source.hydra
@@ -186,7 +186,7 @@
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                     ^ source.hydra
-#                      ^^^^ source.hydra variable.other.hydra
+#                      ^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
@@ -204,7 +204,7 @@
 #                                                               ^ source.hydra
 #                                                                ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                                    ^ source.hydra
-#                                                                     ^^^^^^^^ source.hydra variable.other.hydra
+#                                                                     ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                             ^ source.hydra
 #                                                                              ^ source.hydra keyword.operator.equals.hydra
 #                                                                               ^ source.hydra
@@ -232,7 +232,7 @@
 #                                                      ^ source.hydra
 #                                                       ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                           ^ source.hydra
-#                                                            ^^^^^^^ source.hydra variable.other.hydra
+#                                                            ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                   ^ source.hydra
 #                                                                    ^ source.hydra keyword.operator.equals.hydra
 #                                                                     ^ source.hydra

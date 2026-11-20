@@ -82,13 +82,13 @@
 #                        ^ source.hydra keyword.operator.equals.hydra
 >  λpairs.lists.foldl
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^^^^^ source.hydra variable.parameter.hydra
 #        ^ source.hydra punctuation.separator.binder.hydra
 #         ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >      (λmp, p.
 #^^^^^^^ source.hydra
-#       ^ source.hydra keyword.operator.lambda.hydra
+#       ^ source.hydra storage.type.function.lambda.hydra
 #        ^^ source.hydra variable.parameter.hydra
 #          ^ source.hydra punctuation.separator.binder.hydra
 #           ^ source.hydra
@@ -171,7 +171,7 @@
 #                           ^ source.hydra keyword.operator.equals.hydra
 >  λedges0.
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^^^^^^ source.hydra variable.parameter.hydra
 #         ^ source.hydra punctuation.separator.binder.hydra
 >    let sortedEdges := lists.sortBy first edges0 in
@@ -226,7 +226,7 @@
 #         ^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >          (λvkNeighbors.
 #^^^^^^^^^^^ source.hydra
-#           ^ source.hydra keyword.operator.lambda.hydra
+#           ^ source.hydra storage.type.function.lambda.hydra
 #            ^^^^^^^^^^^ source.hydra variable.parameter.hydra
 #                       ^ source.hydra punctuation.separator.binder.hydra
 >            let v := first vkNeighbors in
@@ -293,7 +293,7 @@
 #         ^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >          (λvkNeighbors.
 #^^^^^^^^^^^ source.hydra
-#           ^ source.hydra keyword.operator.lambda.hydra
+#           ^ source.hydra storage.type.function.lambda.hydra
 #            ^^^^^^^^^^^ source.hydra variable.parameter.hydra
 #                       ^ source.hydra punctuation.separator.binder.hydra
 >            let v := first vkNeighbors in
@@ -360,7 +360,7 @@
 #         ^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >          (λvkNeighbors.
 #^^^^^^^^^^^ source.hydra
-#           ^ source.hydra keyword.operator.lambda.hydra
+#           ^ source.hydra storage.type.function.lambda.hydra
 #            ^^^^^^^^^^^ source.hydra variable.parameter.hydra
 #                       ^ source.hydra punctuation.separator.binder.hydra
 >            let v := first vkNeighbors in
@@ -408,7 +408,7 @@
 #              ^^ source.hydra
 #                ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                                     ^^ source.hydra
-#                                       ^ source.hydra keyword.operator.lambda.hydra
+#                                       ^ source.hydra storage.type.function.lambda.hydra
 #                                        ^ source.hydra variable.parameter.hydra
 #                                         ^ source.hydra punctuation.separator.binder.hydra
 #                                          ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
@@ -432,7 +432,7 @@
 #                   ^ source.hydra
 #                    ^^ source.hydra keyword.operator.assignment.hydra
 #                      ^ source.hydra
-#                       ^ source.hydra keyword.operator.lambda.hydra
+#                       ^ source.hydra storage.type.function.lambda.hydra
 #                        ^ source.hydra variable.parameter.hydra
 #                         ^ source.hydra punctuation.separator.binder.hydra
 #                          ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
@@ -460,7 +460,7 @@
 #                               ^ source.hydra keyword.operator.equals.hydra
 >  λsourceOrd, targetOrd.
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^^^^^^^^^ source.hydra variable.parameter.hydra
 #            ^ source.hydra punctuation.separator.binder.hydra
 #             ^ source.hydra
@@ -474,7 +474,7 @@
 #                             ^ source.hydra
 #                              ^^ source.hydra keyword.operator.assignment.hydra
 #                                ^ source.hydra
-#                                 ^ source.hydra keyword.operator.lambda.hydra
+#                                 ^ source.hydra storage.type.function.lambda.hydra
 #                                  ^^^ source.hydra variable.parameter.hydra
 #                                     ^ source.hydra punctuation.separator.binder.hydra
 >        let mp := maps.fromList (lists.zip sourceOrd els)
@@ -501,7 +501,7 @@
 #                           ^^ source.hydra
 #                             ^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                                      ^^ source.hydra
-#                                        ^ source.hydra keyword.operator.lambda.hydra
+#                                        ^ source.hydra storage.type.function.lambda.hydra
 #                                         ^ source.hydra variable.parameter.hydra
 #                                          ^ source.hydra punctuation.separator.binder.hydra
 #                                           ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
@@ -521,7 +521,7 @@
 #                             ^ source.hydra
 #                              ^^ source.hydra keyword.operator.assignment.hydra
 #                                ^ source.hydra
-#                                 ^ source.hydra keyword.operator.lambda.hydra
+#                                 ^ source.hydra storage.type.function.lambda.hydra
 #                                  ^^^ source.hydra variable.parameter.hydra
 #                                     ^ source.hydra punctuation.separator.binder.hydra
 >        let mp := maps.fromList (lists.zip targetOrd els)
@@ -548,7 +548,7 @@
 #                           ^^ source.hydra
 #                             ^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                                      ^^ source.hydra
-#                                        ^ source.hydra keyword.operator.lambda.hydra
+#                                        ^ source.hydra storage.type.function.lambda.hydra
 #                                         ^ source.hydra variable.parameter.hydra
 #                                          ^ source.hydra punctuation.separator.binder.hydra
 #                                           ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
@@ -564,13 +564,13 @@
 #^^^^ source.hydra
 #    ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                       ^ source.hydra
-#                        ^^^^^^ source.hydra variable.other.hydra
+#                        ^^^^^^ source.hydra variable.other.member.hydra
 #                              ^ source.hydra
 #                               ^ source.hydra keyword.operator.equals.hydra
 #                                ^ source.hydra
 #                                 ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                      ^^ source.hydra
-#                                                        ^^^^^^ source.hydra variable.other.hydra
+#                                                        ^^^^^^ source.hydra variable.other.member.hydra
 #                                                              ^ source.hydra
 #                                                               ^ source.hydra keyword.operator.equals.hydra
 #                                                                ^ source.hydra
@@ -588,7 +588,7 @@
 #                        ^ source.hydra keyword.operator.equals.hydra
 >  λadj, root.
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^^^ source.hydra variable.parameter.hydra
 #      ^ source.hydra punctuation.separator.binder.hydra
 #       ^ source.hydra
@@ -602,7 +602,7 @@
 #             ^ source.hydra
 #              ^^ source.hydra keyword.operator.assignment.hydra
 #                ^ source.hydra
-#                 ^ source.hydra keyword.operator.lambda.hydra
+#                 ^ source.hydra storage.type.function.lambda.hydra
 #                  ^^^^^^^ source.hydra variable.parameter.hydra
 #                         ^ source.hydra punctuation.separator.binder.hydra
 #                          ^ source.hydra
@@ -641,7 +641,7 @@
 #^^^^^^^^^^^ source.hydra
 #           ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                      ^^ source.hydra
-#                        ^ source.hydra keyword.operator.lambda.hydra
+#                        ^ source.hydra storage.type.function.lambda.hydra
 #                         ^ source.hydra variable.parameter.hydra
 #                          ^ source.hydra punctuation.separator.binder.hydra
 #                           ^ source.hydra
@@ -690,7 +690,7 @@
 #             ^^ source.hydra
 >    counter = 0:int32,
 #^^^^ source.hydra
-#    ^^^^^^^ source.hydra variable.other.hydra
+#    ^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra
 #            ^ source.hydra keyword.operator.equals.hydra
 #             ^ source.hydra
@@ -700,7 +700,7 @@
 #                     ^^ source.hydra
 >    indices = maps.empty,
 #^^^^ source.hydra
-#    ^^^^^^^ source.hydra variable.other.hydra
+#    ^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra
 #            ^ source.hydra keyword.operator.equals.hydra
 #             ^ source.hydra
@@ -708,7 +708,7 @@
 #                        ^^ source.hydra
 >    lowLinks = maps.empty,
 #^^^^ source.hydra
-#    ^^^^^^^^ source.hydra variable.other.hydra
+#    ^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
@@ -716,13 +716,13 @@
 #                         ^^ source.hydra
 >    stack = [],
 #^^^^ source.hydra
-#    ^^^^^ source.hydra variable.other.hydra
+#    ^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra
 #          ^ source.hydra keyword.operator.equals.hydra
 #           ^^^^^ source.hydra
 >    onStack = sets.empty,
 #^^^^ source.hydra
-#    ^^^^^^^ source.hydra variable.other.hydra
+#    ^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra
 #            ^ source.hydra keyword.operator.equals.hydra
 #             ^ source.hydra
@@ -730,7 +730,7 @@
 #                        ^^ source.hydra
 >    sccs = []}
 #^^^^ source.hydra
-#    ^^^^ source.hydra variable.other.hydra
+#    ^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra
 #         ^ source.hydra keyword.operator.equals.hydra
 #          ^^^^^ source.hydra
@@ -746,7 +746,7 @@
 #                   ^ source.hydra keyword.operator.equals.hydra
 >  λv, st0.
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
 #     ^ source.hydra
@@ -760,7 +760,7 @@
 #          ^ source.hydra
 #           ^^ source.hydra keyword.operator.assignment.hydra
 #             ^ source.hydra
-#              ^ source.hydra keyword.operator.lambda.hydra
+#              ^ source.hydra storage.type.function.lambda.hydra
 #               ^^^ source.hydra variable.parameter.hydra
 #                  ^ source.hydra punctuation.separator.binder.hydra
 #                   ^ source.hydra
@@ -772,9 +772,10 @@
 #           ^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                       ^^ source.hydra
 #                         ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                    ^ source.hydra
-#                                     ^^^^^ source.hydra variable.other.hydra
-#                                          ^^ source.hydra
+#                                    ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                     ^^^^^ source.hydra variable.other.member.hydra
+#                                          ^ source.hydra punctuation.definition.projection.end.hydra
+#                                           ^ source.hydra
 #                                            ^^ source.hydra variable.other.hydra
 #                                              ^^^ source.hydra
 >          (lists.reverse acc, st)
@@ -787,7 +788,7 @@
 #                                ^^ source.hydra
 >          (λuc.
 #^^^^^^^^^^^ source.hydra
-#           ^ source.hydra keyword.operator.lambda.hydra
+#           ^ source.hydra storage.type.function.lambda.hydra
 #            ^^ source.hydra variable.parameter.hydra
 #              ^ source.hydra punctuation.separator.binder.hydra
 >            let x := first uc in
@@ -828,43 +829,46 @@
 #                                    ^^ source.hydra
 >              counter = TarjanState[counter] st,
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
 #                        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                   ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                    ^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.projection.end.hydra
+#                                            ^ source.hydra
 #                                             ^^ source.hydra variable.other.hydra
 #                                               ^^ source.hydra
 >              indices = TarjanState[indices] st,
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
 #                        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                   ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                    ^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.projection.end.hydra
+#                                            ^ source.hydra
 #                                             ^^ source.hydra variable.other.hydra
 #                                               ^^ source.hydra
 >              lowLinks = TarjanState[lowLinks] st,
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^^ source.hydra variable.other.member.hydra
 #                      ^ source.hydra
 #                       ^ source.hydra keyword.operator.equals.hydra
 #                        ^ source.hydra
 #                         ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                    ^ source.hydra
-#                                     ^^^^^^^^ source.hydra variable.other.hydra
-#                                             ^^ source.hydra
+#                                    ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                     ^^^^^^^^ source.hydra variable.other.member.hydra
+#                                             ^ source.hydra punctuation.definition.projection.end.hydra
+#                                              ^ source.hydra
 #                                               ^^ source.hydra variable.other.hydra
 #                                                 ^^ source.hydra
 >              stack = xs,
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^ source.hydra variable.other.hydra
+#              ^^^^^ source.hydra variable.other.member.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
@@ -872,26 +876,28 @@
 #                        ^^ source.hydra
 >              onStack = TarjanState[onStack] st,
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
 #                        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                   ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                    ^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.projection.end.hydra
+#                                            ^ source.hydra
 #                                             ^^ source.hydra variable.other.hydra
 #                                               ^^ source.hydra
 >              sccs = TarjanState[sccs] st} in
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^ source.hydra variable.other.hydra
+#              ^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
 #                    ^ source.hydra
 #                     ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^ source.hydra variable.other.hydra
-#                                     ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                 ^^^^ source.hydra variable.other.member.hydra
+#                                     ^ source.hydra punctuation.definition.projection.end.hydra
+#                                      ^ source.hydra
 #                                       ^^ source.hydra variable.other.hydra
 #                                         ^^ source.hydra
 #                                           ^^ source.hydra keyword.control.hydra
@@ -907,55 +913,59 @@
 #                                     ^^ source.hydra
 >              counter = TarjanState[counter] newSt,
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
 #                        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                   ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                    ^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.projection.end.hydra
+#                                            ^ source.hydra
 #                                             ^^^^^ source.hydra variable.other.hydra
 #                                                  ^^ source.hydra
 >              indices = TarjanState[indices] newSt,
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
 #                        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                   ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                    ^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.projection.end.hydra
+#                                            ^ source.hydra
 #                                             ^^^^^ source.hydra variable.other.hydra
 #                                                  ^^ source.hydra
 >              lowLinks = TarjanState[lowLinks] newSt,
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^^ source.hydra variable.other.member.hydra
 #                      ^ source.hydra
 #                       ^ source.hydra keyword.operator.equals.hydra
 #                        ^ source.hydra
 #                         ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                    ^ source.hydra
-#                                     ^^^^^^^^ source.hydra variable.other.hydra
-#                                             ^^ source.hydra
+#                                    ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                     ^^^^^^^^ source.hydra variable.other.member.hydra
+#                                             ^ source.hydra punctuation.definition.projection.end.hydra
+#                                              ^ source.hydra
 #                                               ^^^^^ source.hydra variable.other.hydra
 #                                                    ^^ source.hydra
 >              stack = TarjanState[stack] newSt,
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^ source.hydra variable.other.hydra
+#              ^^^^^ source.hydra variable.other.member.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^ source.hydra variable.other.hydra
-#                                       ^^ source.hydra
+#                                 ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                  ^^^^^ source.hydra variable.other.member.hydra
+#                                       ^ source.hydra punctuation.definition.projection.end.hydra
+#                                        ^ source.hydra
 #                                         ^^^^^ source.hydra variable.other.hydra
 #                                              ^^ source.hydra
 >              onStack = sets.delete x (TarjanState[onStack] st),
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
@@ -964,21 +974,23 @@
 #                                    ^ source.hydra variable.other.hydra
 #                                     ^^ source.hydra
 #                                       ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                  ^ source.hydra
-#                                                   ^^^^^^^ source.hydra variable.other.hydra
-#                                                          ^^ source.hydra
+#                                                  ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                   ^^^^^^^ source.hydra variable.other.member.hydra
+#                                                          ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                           ^ source.hydra
 #                                                            ^^ source.hydra variable.other.hydra
 #                                                              ^^^ source.hydra
 >              sccs = TarjanState[sccs] newSt} in
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^ source.hydra variable.other.hydra
+#              ^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
 #                    ^ source.hydra
 #                     ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^ source.hydra variable.other.hydra
-#                                     ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                 ^^^^ source.hydra variable.other.member.hydra
+#                                     ^ source.hydra punctuation.definition.projection.end.hydra
+#                                      ^ source.hydra
 #                                       ^^^^^ source.hydra variable.other.hydra
 #                                            ^^ source.hydra
 #                                              ^^ source.hydra keyword.control.hydra
@@ -1044,7 +1056,7 @@
 #                   ^ source.hydra keyword.operator.equals.hydra
 >  λedges, nodeTags.
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^^^^^ source.hydra variable.parameter.hydra
 #        ^ source.hydra punctuation.separator.binder.hydra
 #         ^ source.hydra
@@ -1116,7 +1128,7 @@
 #                      ^ source.hydra
 #                       ^^ source.hydra keyword.operator.assignment.hydra
 #                         ^ source.hydra
-#                          ^ source.hydra keyword.operator.lambda.hydra
+#                          ^ source.hydra storage.type.function.lambda.hydra
 #                           ^^^^ source.hydra variable.parameter.hydra
 #                               ^ source.hydra punctuation.separator.binder.hydra
 >        let reachable := findReachableNodes
@@ -1130,7 +1142,7 @@
 #                         ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 >            (λn.sets.fromList
 #^^^^^^^^^^^^^ source.hydra
-#             ^ source.hydra keyword.operator.lambda.hydra
+#             ^ source.hydra storage.type.function.lambda.hydra
 #              ^ source.hydra variable.parameter.hydra
 #               ^ source.hydra punctuation.separator.binder.hydra
 #                ^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
@@ -1159,7 +1171,7 @@
 #           ^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >            (λn.optionals.match (maps.lookup n tagMap) sets.empty identity)
 #^^^^^^^^^^^^^ source.hydra
-#             ^ source.hydra keyword.operator.lambda.hydra
+#             ^ source.hydra storage.type.function.lambda.hydra
 #              ^ source.hydra variable.parameter.hydra
 #               ^ source.hydra punctuation.separator.binder.hydra
 #                ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
@@ -1185,7 +1197,7 @@
 #^^^^ source.hydra
 #    ^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #             ^^ source.hydra
-#               ^ source.hydra keyword.operator.lambda.hydra
+#               ^ source.hydra storage.type.function.lambda.hydra
 #                ^ source.hydra variable.parameter.hydra
 #                 ^ source.hydra punctuation.separator.binder.hydra
 #                  ^ source.hydra
@@ -1208,7 +1220,7 @@
 #                   ^ source.hydra keyword.operator.equals.hydra
 >  λgraph, v, st.
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^^^^^ source.hydra variable.parameter.hydra
 #        ^ source.hydra punctuation.separator.binder.hydra
 #         ^ source.hydra
@@ -1226,9 +1238,10 @@
 #          ^^ source.hydra keyword.operator.assignment.hydra
 #            ^ source.hydra
 #             ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                        ^ source.hydra
-#                         ^^^^^^^ source.hydra variable.other.hydra
-#                                ^^ source.hydra
+#                        ^ source.hydra punctuation.definition.projection.begin.hydra
+#                         ^^^^^^^ source.hydra variable.other.member.hydra
+#                                ^ source.hydra punctuation.definition.projection.end.hydra
+#                                 ^ source.hydra
 #                                  ^^ source.hydra variable.other.hydra
 #                                    ^ source.hydra
 #                                     ^^ source.hydra keyword.control.hydra
@@ -1244,7 +1257,7 @@
 #                            ^^ source.hydra
 >      counter = add i 1:int32,
 #^^^^^^ source.hydra
-#      ^^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
 #               ^ source.hydra
@@ -1258,7 +1271,7 @@
 #                             ^^ source.hydra
 >      indices = maps.insert v i (TarjanState[indices] st),
 #^^^^^^ source.hydra
-#      ^^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
 #               ^ source.hydra
@@ -1269,14 +1282,15 @@
 #                              ^ source.hydra variable.other.hydra
 #                               ^^ source.hydra
 #                                 ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                            ^ source.hydra
-#                                             ^^^^^^^ source.hydra variable.other.hydra
-#                                                    ^^ source.hydra
+#                                            ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                             ^^^^^^^ source.hydra variable.other.member.hydra
+#                                                    ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                     ^ source.hydra
 #                                                      ^^ source.hydra variable.other.hydra
 #                                                        ^^^ source.hydra
 >      lowLinks = maps.insert v i (TarjanState[lowLinks] st),
 #^^^^^^ source.hydra
-#      ^^^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^^^ source.hydra variable.other.member.hydra
 #              ^ source.hydra
 #               ^ source.hydra keyword.operator.equals.hydra
 #                ^ source.hydra
@@ -1287,14 +1301,15 @@
 #                               ^ source.hydra variable.other.hydra
 #                                ^^ source.hydra
 #                                  ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                             ^ source.hydra
-#                                              ^^^^^^^^ source.hydra variable.other.hydra
-#                                                      ^^ source.hydra
+#                                             ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                              ^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                      ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                       ^ source.hydra
 #                                                        ^^ source.hydra variable.other.hydra
 #                                                          ^^^ source.hydra
 >      stack = lists.cons v (TarjanState[stack] st),
 #^^^^^^ source.hydra
-#      ^^^^^ source.hydra variable.other.hydra
+#      ^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra
 #            ^ source.hydra keyword.operator.equals.hydra
 #             ^ source.hydra
@@ -1303,14 +1318,15 @@
 #                         ^ source.hydra variable.other.hydra
 #                          ^^ source.hydra
 #                            ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^ source.hydra
-#                                        ^^^^^ source.hydra variable.other.hydra
-#                                             ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                        ^^^^^ source.hydra variable.other.member.hydra
+#                                             ^ source.hydra punctuation.definition.projection.end.hydra
+#                                              ^ source.hydra
 #                                               ^^ source.hydra variable.other.hydra
 #                                                 ^^^ source.hydra
 >      onStack = sets.insert v (TarjanState[onStack] st),
 #^^^^^^ source.hydra
-#      ^^^^^^^ source.hydra variable.other.hydra
+#      ^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
 #               ^ source.hydra
@@ -1319,21 +1335,23 @@
 #                            ^ source.hydra variable.other.hydra
 #                             ^^ source.hydra
 #                               ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                          ^ source.hydra
-#                                           ^^^^^^^ source.hydra variable.other.hydra
-#                                                  ^^ source.hydra
+#                                          ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                           ^^^^^^^ source.hydra variable.other.member.hydra
+#                                                  ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                   ^ source.hydra
 #                                                    ^^ source.hydra variable.other.hydra
 #                                                      ^^^ source.hydra
 >      sccs = TarjanState[sccs] st} in
 #^^^^^^ source.hydra
-#      ^^^^ source.hydra variable.other.hydra
+#      ^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra
 #           ^ source.hydra keyword.operator.equals.hydra
 #            ^ source.hydra
 #             ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                        ^ source.hydra
-#                         ^^^^ source.hydra variable.other.hydra
-#                             ^^ source.hydra
+#                        ^ source.hydra punctuation.definition.projection.begin.hydra
+#                         ^^^^ source.hydra variable.other.member.hydra
+#                             ^ source.hydra punctuation.definition.projection.end.hydra
+#                              ^ source.hydra
 #                               ^^ source.hydra variable.other.hydra
 #                                 ^^ source.hydra
 #                                   ^^ source.hydra keyword.control.hydra
@@ -1360,7 +1378,7 @@
 #                       ^ source.hydra
 #                        ^^ source.hydra keyword.operator.assignment.hydra
 #                          ^ source.hydra
-#                           ^ source.hydra keyword.operator.lambda.hydra
+#                           ^ source.hydra storage.type.function.lambda.hydra
 #                            ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                             ^^^ source.hydra variable.other.escaped.hydra
 #                                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
@@ -1376,7 +1394,7 @@
 #                   ^ source.hydra
 #                    ^^ source.hydra keyword.operator.assignment.hydra
 #                      ^ source.hydra
-#                       ^ source.hydra keyword.operator.lambda.hydra
+#                       ^ source.hydra storage.type.function.lambda.hydra
 #                        ^ source.hydra variable.parameter.hydra
 #                         ^ source.hydra punctuation.separator.binder.hydra
 >            let lowV1 := maps.findWithDefault
@@ -1397,9 +1415,10 @@
 >                (TarjanState[lowLinks] s) in
 #^^^^^^^^^^^^^^^^^ source.hydra
 #                 ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                            ^ source.hydra
-#                             ^^^^^^^^ source.hydra variable.other.hydra
-#                                     ^^ source.hydra
+#                            ^ source.hydra punctuation.definition.projection.begin.hydra
+#                             ^^^^^^^^ source.hydra variable.other.member.hydra
+#                                     ^ source.hydra punctuation.definition.projection.end.hydra
+#                                      ^ source.hydra
 #                                       ^ source.hydra variable.other.hydra
 #                                        ^^ source.hydra
 #                                          ^^ source.hydra keyword.control.hydra
@@ -1423,9 +1442,10 @@
 >                (TarjanState[indices] s) in
 #^^^^^^^^^^^^^^^^^ source.hydra
 #                 ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                            ^ source.hydra
-#                             ^^^^^^^ source.hydra variable.other.hydra
-#                                    ^^ source.hydra
+#                            ^ source.hydra punctuation.definition.projection.begin.hydra
+#                             ^^^^^^^ source.hydra variable.other.member.hydra
+#                                    ^ source.hydra punctuation.definition.projection.end.hydra
+#                                     ^ source.hydra
 #                                      ^ source.hydra variable.other.hydra
 #                                       ^^ source.hydra
 #                                         ^^ source.hydra keyword.control.hydra
@@ -1435,31 +1455,33 @@
 #                       ^^ source.hydra
 >              counter = TarjanState[counter] s,
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
 #                        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                   ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                    ^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.projection.end.hydra
+#                                            ^ source.hydra
 #                                             ^ source.hydra variable.other.hydra
 #                                              ^^ source.hydra
 >              indices = TarjanState[indices] s,
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
 #                        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                   ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                    ^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.projection.end.hydra
+#                                            ^ source.hydra
 #                                             ^ source.hydra variable.other.hydra
 #                                              ^^ source.hydra
 >              lowLinks = maps.insert
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^^ source.hydra variable.other.member.hydra
 #                      ^ source.hydra
 #                       ^ source.hydra keyword.operator.equals.hydra
 #                        ^ source.hydra
@@ -1480,45 +1502,49 @@
 >                  (TarjanState[lowLinks] s),
 #^^^^^^^^^^^^^^^^^^^ source.hydra
 #                   ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                              ^ source.hydra
-#                               ^^^^^^^^ source.hydra variable.other.hydra
-#                                       ^^ source.hydra
+#                              ^ source.hydra punctuation.definition.projection.begin.hydra
+#                               ^^^^^^^^ source.hydra variable.other.member.hydra
+#                                       ^ source.hydra punctuation.definition.projection.end.hydra
+#                                        ^ source.hydra
 #                                         ^ source.hydra variable.other.hydra
 #                                          ^^^ source.hydra
 >              stack = TarjanState[stack] s,
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^ source.hydra variable.other.hydra
+#              ^^^^^ source.hydra variable.other.member.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^ source.hydra variable.other.hydra
-#                                       ^^ source.hydra
+#                                 ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                  ^^^^^ source.hydra variable.other.member.hydra
+#                                       ^ source.hydra punctuation.definition.projection.end.hydra
+#                                        ^ source.hydra
 #                                         ^ source.hydra variable.other.hydra
 #                                          ^^ source.hydra
 >              onStack = TarjanState[onStack] s,
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
 #                        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                   ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                    ^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.projection.end.hydra
+#                                            ^ source.hydra
 #                                             ^ source.hydra variable.other.hydra
 #                                              ^^ source.hydra
 >              sccs = TarjanState[sccs] s}
 #^^^^^^^^^^^^^^ source.hydra
-#              ^^^^ source.hydra variable.other.hydra
+#              ^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
 #                    ^ source.hydra
 #                     ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^ source.hydra variable.other.hydra
-#                                     ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                 ^^^^ source.hydra variable.other.member.hydra
+#                                     ^ source.hydra punctuation.definition.projection.end.hydra
+#                                      ^ source.hydra
 #                                       ^ source.hydra variable.other.hydra
 #                                        ^^ source.hydra
 >        in ifElse
@@ -1535,9 +1561,10 @@
 #                            ^ source.hydra variable.other.hydra
 #                             ^^ source.hydra
 #                               ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                          ^ source.hydra
-#                                           ^^^^^^^ source.hydra variable.other.hydra
-#                                                  ^^ source.hydra
+#                                          ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                           ^^^^^^^ source.hydra variable.other.member.hydra
+#                                                  ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                   ^ source.hydra
 #                                                    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                                                     ^^^ source.hydra variable.other.escaped.hydra
 #                                                        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
@@ -1579,9 +1606,10 @@
 >              (TarjanState[lowLinks] stAfter) in
 #^^^^^^^^^^^^^^^ source.hydra
 #               ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^ source.hydra
-#                           ^^^^^^^^ source.hydra variable.other.hydra
-#                                   ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.projection.begin.hydra
+#                           ^^^^^^^^ source.hydra variable.other.member.hydra
+#                                   ^ source.hydra punctuation.definition.projection.end.hydra
+#                                    ^ source.hydra
 #                                     ^^^^^^^ source.hydra variable.other.hydra
 #                                            ^^ source.hydra
 #                                              ^^ source.hydra keyword.control.hydra
@@ -1605,9 +1633,10 @@
 >              (TarjanState[lowLinks] stAfter) in
 #^^^^^^^^^^^^^^^ source.hydra
 #               ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^ source.hydra
-#                           ^^^^^^^^ source.hydra variable.other.hydra
-#                                   ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.projection.begin.hydra
+#                           ^^^^^^^^ source.hydra variable.other.member.hydra
+#                                   ^ source.hydra punctuation.definition.projection.end.hydra
+#                                    ^ source.hydra
 #                                     ^^^^^^^ source.hydra variable.other.hydra
 #                                            ^^ source.hydra
 #                                              ^^ source.hydra keyword.control.hydra
@@ -1617,31 +1646,33 @@
 #                     ^^ source.hydra
 >            counter = TarjanState[counter] stAfter,
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^ source.hydra variable.other.member.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^^ source.hydra variable.other.hydra
-#                                         ^^ source.hydra
+#                                 ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                  ^^^^^^^ source.hydra variable.other.member.hydra
+#                                         ^ source.hydra punctuation.definition.projection.end.hydra
+#                                          ^ source.hydra
 #                                           ^^^^^^^ source.hydra variable.other.hydra
 #                                                  ^^ source.hydra
 >            indices = TarjanState[indices] stAfter,
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^ source.hydra variable.other.member.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^^ source.hydra variable.other.hydra
-#                                         ^^ source.hydra
+#                                 ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                  ^^^^^^^ source.hydra variable.other.member.hydra
+#                                         ^ source.hydra punctuation.definition.projection.end.hydra
+#                                          ^ source.hydra
 #                                           ^^^^^^^ source.hydra variable.other.hydra
 #                                                  ^^ source.hydra
 >            lowLinks = maps.insert
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^ source.hydra variable.other.member.hydra
 #                    ^ source.hydra
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
@@ -1662,45 +1693,49 @@
 >                (TarjanState[lowLinks] stAfter),
 #^^^^^^^^^^^^^^^^^ source.hydra
 #                 ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                            ^ source.hydra
-#                             ^^^^^^^^ source.hydra variable.other.hydra
-#                                     ^^ source.hydra
+#                            ^ source.hydra punctuation.definition.projection.begin.hydra
+#                             ^^^^^^^^ source.hydra variable.other.member.hydra
+#                                     ^ source.hydra punctuation.definition.projection.end.hydra
+#                                      ^ source.hydra
 #                                       ^^^^^^^ source.hydra variable.other.hydra
 #                                              ^^^ source.hydra
 >            stack = TarjanState[stack] stAfter,
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^^ source.hydra variable.other.hydra
+#            ^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra
 #                  ^ source.hydra keyword.operator.equals.hydra
 #                   ^ source.hydra
 #                    ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                               ^ source.hydra
-#                                ^^^^^ source.hydra variable.other.hydra
-#                                     ^^ source.hydra
+#                               ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                ^^^^^ source.hydra variable.other.member.hydra
+#                                     ^ source.hydra punctuation.definition.projection.end.hydra
+#                                      ^ source.hydra
 #                                       ^^^^^^^ source.hydra variable.other.hydra
 #                                              ^^ source.hydra
 >            onStack = TarjanState[onStack] stAfter,
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^ source.hydra variable.other.member.hydra
 #                   ^ source.hydra
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^^ source.hydra variable.other.hydra
-#                                         ^^ source.hydra
+#                                 ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                  ^^^^^^^ source.hydra variable.other.member.hydra
+#                                         ^ source.hydra punctuation.definition.projection.end.hydra
+#                                          ^ source.hydra
 #                                           ^^^^^^^ source.hydra variable.other.hydra
 #                                                  ^^ source.hydra
 >            sccs = TarjanState[sccs] stAfter})
 #^^^^^^^^^^^^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
 #                   ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                              ^ source.hydra
-#                               ^^^^ source.hydra variable.other.hydra
-#                                   ^^ source.hydra
+#                              ^ source.hydra punctuation.definition.projection.begin.hydra
+#                               ^^^^ source.hydra variable.other.member.hydra
+#                                   ^ source.hydra punctuation.definition.projection.end.hydra
+#                                    ^ source.hydra
 #                                     ^^^^^^^ source.hydra variable.other.hydra
 #                                            ^^^ source.hydra
 >          (ifElse (sets.member w (TarjanState[onStack] `st_`)) (lowLink `st_`) `st_`) in
@@ -1712,9 +1747,10 @@
 #                               ^ source.hydra variable.other.hydra
 #                                ^^ source.hydra
 #                                  ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                             ^ source.hydra
-#                                              ^^^^^^^ source.hydra variable.other.hydra
-#                                                     ^^ source.hydra
+#                                             ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                              ^^^^^^^ source.hydra variable.other.member.hydra
+#                                                     ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                      ^ source.hydra
 #                                                       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                                                        ^^^ source.hydra variable.other.escaped.hydra
 #                                                           ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
@@ -1764,9 +1800,10 @@
 #                                                 ^ source.hydra variable.other.hydra
 #                                                  ^^ source.hydra
 #                                                    ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                               ^ source.hydra
-#                                                                ^^^^^^^^ source.hydra variable.other.hydra
-#                                                                        ^^ source.hydra
+#                                                               ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                                ^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                                        ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                                         ^ source.hydra
 #                                                                          ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                                                          ^^ source.hydra
 #                                                                                            ^^ source.hydra keyword.control.hydra
@@ -1787,9 +1824,10 @@
 #                                                 ^ source.hydra variable.other.hydra
 #                                                  ^^ source.hydra
 #                                                    ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                               ^ source.hydra
-#                                                                ^^^^^^^ source.hydra variable.other.hydra
-#                                                                       ^^ source.hydra
+#                                                               ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                                ^^^^^^^ source.hydra variable.other.member.hydra
+#                                                                       ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                                        ^ source.hydra
 #                                                                         ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                                                         ^^ source.hydra
 #                                                                                           ^^ source.hydra keyword.control.hydra
@@ -1855,67 +1893,72 @@
 #                 ^^ source.hydra
 >        counter = TarjanState[counter] stPopped,
 #^^^^^^^^ source.hydra
-#        ^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
 #                  ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                             ^ source.hydra
-#                              ^^^^^^^ source.hydra variable.other.hydra
-#                                     ^^ source.hydra
+#                             ^ source.hydra punctuation.definition.projection.begin.hydra
+#                              ^^^^^^^ source.hydra variable.other.member.hydra
+#                                     ^ source.hydra punctuation.definition.projection.end.hydra
+#                                      ^ source.hydra
 #                                       ^^^^^^^^ source.hydra variable.other.hydra
 #                                               ^^ source.hydra
 >        indices = TarjanState[indices] stPopped,
 #^^^^^^^^ source.hydra
-#        ^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
 #                  ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                             ^ source.hydra
-#                              ^^^^^^^ source.hydra variable.other.hydra
-#                                     ^^ source.hydra
+#                             ^ source.hydra punctuation.definition.projection.begin.hydra
+#                              ^^^^^^^ source.hydra variable.other.member.hydra
+#                                     ^ source.hydra punctuation.definition.projection.end.hydra
+#                                      ^ source.hydra
 #                                       ^^^^^^^^ source.hydra variable.other.hydra
 #                                               ^^ source.hydra
 >        lowLinks = TarjanState[lowLinks] stPopped,
 #^^^^^^^^ source.hydra
-#        ^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra
 #                 ^ source.hydra keyword.operator.equals.hydra
 #                  ^ source.hydra
 #                   ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                              ^ source.hydra
-#                               ^^^^^^^^ source.hydra variable.other.hydra
-#                                       ^^ source.hydra
+#                              ^ source.hydra punctuation.definition.projection.begin.hydra
+#                               ^^^^^^^^ source.hydra variable.other.member.hydra
+#                                       ^ source.hydra punctuation.definition.projection.end.hydra
+#                                        ^ source.hydra
 #                                         ^^^^^^^^ source.hydra variable.other.hydra
 #                                                 ^^ source.hydra
 >        stack = TarjanState[stack] stPopped,
 #^^^^^^^^ source.hydra
-#        ^^^^^ source.hydra variable.other.hydra
+#        ^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
 #               ^ source.hydra
 #                ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                           ^ source.hydra
-#                            ^^^^^ source.hydra variable.other.hydra
-#                                 ^^ source.hydra
+#                           ^ source.hydra punctuation.definition.projection.begin.hydra
+#                            ^^^^^ source.hydra variable.other.member.hydra
+#                                 ^ source.hydra punctuation.definition.projection.end.hydra
+#                                  ^ source.hydra
 #                                   ^^^^^^^^ source.hydra variable.other.hydra
 #                                           ^^ source.hydra
 >        onStack = TarjanState[onStack] stPopped,
 #^^^^^^^^ source.hydra
-#        ^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
 #                  ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                             ^ source.hydra
-#                              ^^^^^^^ source.hydra variable.other.hydra
-#                                     ^^ source.hydra
+#                             ^ source.hydra punctuation.definition.projection.begin.hydra
+#                              ^^^^^^^ source.hydra variable.other.member.hydra
+#                                     ^ source.hydra punctuation.definition.projection.end.hydra
+#                                      ^ source.hydra
 #                                       ^^^^^^^^ source.hydra variable.other.hydra
 #                                               ^^ source.hydra
 >        sccs = lists.cons comp (TarjanState[sccs] stPopped)})
 #^^^^^^^^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
@@ -1924,9 +1967,10 @@
 #                          ^^^^ source.hydra variable.other.hydra
 #                              ^^ source.hydra
 #                                ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                           ^ source.hydra
-#                                            ^^^^ source.hydra variable.other.hydra
-#                                                ^^ source.hydra
+#                                           ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                            ^^^^ source.hydra variable.other.member.hydra
+#                                                ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                 ^ source.hydra
 #                                                  ^^^^^^^^ source.hydra variable.other.hydra
 #                                                          ^^^^ source.hydra
 >      stAfterNeighbors
@@ -1944,7 +1988,7 @@
 #                                 ^ source.hydra keyword.operator.equals.hydra
 >  λgraph.
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^^^^^ source.hydra variable.parameter.hydra
 #        ^ source.hydra punctuation.separator.binder.hydra
 >    let verts := maps.keys graph in
@@ -1971,7 +2015,7 @@
 #                      ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >        (λst, v.ifElse (maps.member v (TarjanState[indices] st)) st (strongConnect graph v st))
 #^^^^^^^^^ source.hydra
-#         ^ source.hydra keyword.operator.lambda.hydra
+#         ^ source.hydra storage.type.function.lambda.hydra
 #          ^^ source.hydra variable.parameter.hydra
 #            ^ source.hydra punctuation.separator.binder.hydra
 #             ^ source.hydra
@@ -1984,9 +2028,10 @@
 #                                    ^ source.hydra variable.other.hydra
 #                                     ^^ source.hydra
 #                                       ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                  ^ source.hydra
-#                                                   ^^^^^^^ source.hydra variable.other.hydra
-#                                                          ^^ source.hydra
+#                                                  ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                   ^^^^^^^ source.hydra variable.other.member.hydra
+#                                                          ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                           ^ source.hydra
 #                                                            ^^ source.hydra variable.other.hydra
 #                                                              ^^^ source.hydra
 #                                                                 ^^ source.hydra variable.other.hydra
@@ -2016,9 +2061,10 @@
 #                             ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                                       ^^ source.hydra
 #                                         ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                    ^ source.hydra
-#                                                     ^^^^ source.hydra variable.other.hydra
-#                                                         ^^ source.hydra
+#                                                    ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                     ^^^^ source.hydra variable.other.member.hydra
+#                                                         ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                          ^ source.hydra
 #                                                           ^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                                     ^^^ source.hydra
 >
@@ -2033,7 +2079,7 @@
 #                     ^ source.hydra keyword.operator.equals.hydra
 >  λpairs.
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^^^^^ source.hydra variable.parameter.hydra
 #        ^ source.hydra punctuation.separator.binder.hydra
 >    let sccs := topologicalSortComponents pairs in
@@ -2057,7 +2103,7 @@
 #               ^ source.hydra
 #                ^^ source.hydra keyword.operator.assignment.hydra
 #                  ^ source.hydra
-#                   ^ source.hydra keyword.operator.lambda.hydra
+#                   ^ source.hydra storage.type.function.lambda.hydra
 #                    ^^^ source.hydra variable.parameter.hydra
 #                       ^ source.hydra punctuation.separator.binder.hydra
 #                        ^^ source.hydra variable.other.hydra
@@ -2116,7 +2162,7 @@
 #                               ^ source.hydra keyword.operator.equals.hydra
 >  λpairs.
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^^^^^ source.hydra variable.parameter.hydra
 #        ^ source.hydra punctuation.separator.binder.hydra
 >    let graphResult := adjacencyListsToGraph pairs in
@@ -2149,7 +2195,7 @@
 #^^^^ source.hydra
 #    ^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #             ^^ source.hydra
-#               ^ source.hydra keyword.operator.lambda.hydra
+#               ^ source.hydra storage.type.function.lambda.hydra
 #                ^^^^ source.hydra variable.parameter.hydra
 #                    ^ source.hydra punctuation.separator.binder.hydra
 #                     ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
@@ -2176,7 +2222,7 @@
 #                          ^ source.hydra keyword.operator.equals.hydra
 >  λgetKey, getAdj, nodes.
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^^^^^^ source.hydra variable.parameter.hydra
 #         ^ source.hydra punctuation.separator.binder.hydra
 #          ^ source.hydra
@@ -2197,7 +2243,7 @@
 #                                   ^^ source.hydra
 #                                     ^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                                              ^^ source.hydra
-#                                                ^ source.hydra keyword.operator.lambda.hydra
+#                                                ^ source.hydra storage.type.function.lambda.hydra
 #                                                 ^ source.hydra variable.parameter.hydra
 #                                                  ^ source.hydra punctuation.separator.binder.hydra
 #                                                   ^ source.hydra
@@ -2220,7 +2266,7 @@
 #                ^ source.hydra
 #                 ^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                          ^^ source.hydra
-#                            ^ source.hydra keyword.operator.lambda.hydra
+#                            ^ source.hydra storage.type.function.lambda.hydra
 #                             ^ source.hydra variable.parameter.hydra
 #                              ^ source.hydra punctuation.separator.binder.hydra
 #                               ^ source.hydra
@@ -2252,14 +2298,14 @@
 #^^^^ source.hydra
 #    ^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #             ^^ source.hydra
-#               ^ source.hydra keyword.operator.lambda.hydra
+#               ^ source.hydra storage.type.function.lambda.hydra
 #                ^ source.hydra variable.parameter.hydra
 #                 ^ source.hydra punctuation.separator.binder.hydra
 #                  ^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                                  ^^ source.hydra
 #                                    ^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                                             ^^ source.hydra
-#                                               ^ source.hydra keyword.operator.lambda.hydra
+#                                               ^ source.hydra storage.type.function.lambda.hydra
 #                                                ^ source.hydra variable.parameter.hydra
 #                                                 ^ source.hydra punctuation.separator.binder.hydra
 #                                                  ^^^^^^^^^^^ source.hydra variable.other.qualified.hydra

@@ -45,10 +45,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: ColumnName,
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                  ^^ source.hydra
 >
 >  ## The domain (type) of the column
@@ -57,7 +57,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  domain: t}
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^ source.hydra variable.other.hydra
@@ -82,15 +82,15 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  foreignRelation: RelationName,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
-#                   ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^^ source.hydra
 >
 >  keys: map<ColumnName, ColumnName>@{
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
 #        ^^^ source.hydra support.type.hydra
@@ -104,7 +104,7 @@
 #                                    ^^ source.hydra
 >    description = "The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation.",
 #^^^^ source.hydra
-#    ^^^^^^^^^^^ source.hydra variable.other.hydra
+#    ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
@@ -114,7 +114,7 @@
 #                                                                                                                                                                    ^^ source.hydra
 >    minLength = 1:int32}}
 #^^^^ source.hydra
-#    ^^^^^^^^^ source.hydra variable.other.hydra
+#    ^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
 #               ^ source.hydra
@@ -141,7 +141,7 @@
 #                                      ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                       ^ source.hydra keyword.operator.annotation.hydra
 #                                        ^ source.hydra
-#                                         ^^^^^^^^^ source.hydra variable.other.hydra
+#                                         ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                  ^ source.hydra
 #                                                   ^ source.hydra keyword.operator.equals.hydra
 #                                                    ^ source.hydra
@@ -214,15 +214,15 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: RelationName,
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                    ^^ source.hydra
 >
 >  columns: list<ColumnSchema t>@{description = "A list of column specifications", minLength = 1:int32},
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
 #           ^^^^ source.hydra support.type.hydra
@@ -233,7 +233,7 @@
 #                              ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                               ^ source.hydra keyword.operator.annotation.hydra
 #                                ^ source.hydra
-#                                 ^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                 ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                            ^ source.hydra
 #                                             ^ source.hydra keyword.operator.equals.hydra
 #                                              ^ source.hydra
@@ -241,7 +241,7 @@
 #                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                                                                ^^ source.hydra
-#                                                                                  ^^^^^^^^^ source.hydra variable.other.hydra
+#                                                                                  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                           ^ source.hydra
 #                                                                                            ^ source.hydra keyword.operator.equals.hydra
 #                                                                                             ^ source.hydra
@@ -256,7 +256,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  primaryKeys: list<PrimaryKey>,
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
@@ -271,7 +271,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  foreignKeys: list<ForeignKey>}
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
 #               ^^^^ source.hydra support.type.hydra
@@ -332,7 +332,7 @@
 #                                ^ source.hydra punctuation.definition.typeargs.end.hydra
 #                                 ^ source.hydra keyword.operator.annotation.hydra
 #                                  ^ source.hydra
-#                                   ^^^^^^^^^ source.hydra variable.other.hydra
+#                                   ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                            ^ source.hydra
 #                                             ^ source.hydra keyword.operator.equals.hydra
 #                                              ^ source.hydra

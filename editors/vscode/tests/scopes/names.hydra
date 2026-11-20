@@ -1,0 +1,33 @@
+# SYNTAX TEST "source.hydra" "type names, field/variant names, variables (Josh #806 priorities)"
+
+module hydra.test.names
+
+# P1: type names — bare AND qualified — get the type colour wherever they appear.
+# P2: field names (record/union type fields) get the member colour; field TYPES are type-coloured.
+type Edge = record{source: Node, target: Node, kind: hydra.core.model.Term}
+#    ^^^^ entity.name.type.hydra
+#                  ^^^^^^ variable.other.member.hydra
+#                          ^^^^ entity.name.type.hydra
+#                                              ^^^^ variable.other.member.hydra
+#                                                    ^^^^^^^^^^^^^^^^^^^^^ entity.name.type.hydra
+
+# P2: construction field names → member; P3: value variables stay plain variables.
+term e = Edge{source = a, target = b}
+#        ^^^^ entity.name.type.nominal.hydra
+#             ^^^^^^ variable.other.member.hydra
+#                      ^ variable.other.hydra
+
+# P2: bracketed projection field name (Josh's exact example) → member.
+term f = Graph[schemaTypes]
+#        ^^^^^ entity.name.type.nominal.hydra
+#              ^^^^^^^^^^^ variable.other.member.hydra
+
+# P1: a bare upper-case name applied to a collection is still a type reference.
+term app = Container {x}
+#          ^^^^^^^^^ entity.name.type.hydra
+
+# P3: a lower-case qualified name (a primitive/term reference) stays a variable, NOT a type
+# (type-reference only claims upper-case-final names). Primitive-name recognition proper is a
+# language-server follow-up (#836).
+term g = hydra.core.lib.lists.cons
+#        ^^^^^^^^^^^^^^^^^^^^^^^^^^ variable.other.qualified.hydra

@@ -69,10 +69,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  checking: CheckingError,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                         ^^ source.hydra
 >
 >  ## An error that occurred during decoding of a term
@@ -81,10 +81,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  decoding: DecodingError,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                         ^^ source.hydra
 >
 >  ## A duplicate binding name error
@@ -93,10 +93,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  duplicateBinding: DuplicateBindingError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra punctuation.separator.type.hydra
 #                   ^ source.hydra
-#                    ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                         ^^ source.hydra
 >
 >  ## A duplicate field name error
@@ -105,10 +105,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  duplicateField: DuplicateFieldError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra punctuation.separator.type.hydra
 #                 ^ source.hydra
-#                  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                     ^^ source.hydra
 >
 >  ## An error that occurred while extracting a value from a term
@@ -117,10 +117,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  extraction: ExtractionError,
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
-#              ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                             ^^ source.hydra
 >
 >  ## A type inference error
@@ -129,10 +129,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  inference: InferenceError,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#             ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                           ^^ source.hydra
 >
 >  ## A literal value validation error
@@ -141,10 +141,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  invalidLiteral: InvalidLiteralError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra punctuation.separator.type.hydra
 #                 ^ source.hydra
-#                  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                     ^^ source.hydra
 >
 >  ## Any other error
@@ -153,10 +153,10 @@
 #    ^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  other: OtherError,
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^^^^^^^ source.hydra variable.other.hydra
+#         ^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^^ source.hydra
 >
 >  ## A name-resolution error
@@ -165,10 +165,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  resolution: ResolutionError,
 #^^ source.hydra
-#  ^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra punctuation.separator.type.hydra
 #             ^ source.hydra
-#              ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#              ^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                             ^^ source.hydra
 >
 >  ## A reference to an undefined field
@@ -177,10 +177,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  undefinedField: UndefinedFieldError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra punctuation.separator.type.hydra
 #                 ^ source.hydra
-#                  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                     ^^ source.hydra
 >
 >  ## A reference to an undefined term variable
@@ -189,10 +189,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  undefinedTermVariable: UndefinedTermVariableError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
-#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                   ^^ source.hydra
 >
 >  ## A term variable whose type is not known
@@ -201,10 +201,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  untypedTermVariable: UntypedTermVariableError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra punctuation.separator.type.hydra
 #                      ^ source.hydra
-#                       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                       ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                               ^^ source.hydra
 >
 >  ## An unexpected term variant
@@ -213,10 +213,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  unexpectedTermVariant: UnexpectedTermVariantError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
-#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                   ^^ source.hydra
 >
 >  ## An unexpected type variant
@@ -225,10 +225,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  unexpectedTypeVariant: UnexpectedTypeVariantError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra punctuation.separator.type.hydra
 #                        ^ source.hydra
-#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                         ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                                   ^^ source.hydra
 >
 >  ## A type unification error
@@ -237,10 +237,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  unification: UnificationError}
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
-#               ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#               ^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^^ source.hydra
 >
 >## An error that occurred while extracting a typed value from a term
@@ -262,10 +262,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  emptyList: EmptyListError,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#             ^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                           ^^ source.hydra
 >
 >  ## Multiple let bindings were found with the same name
@@ -274,10 +274,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  multipleBindings: MultipleBindingsError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra punctuation.separator.type.hydra
 #                   ^ source.hydra
-#                    ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                    ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                         ^^ source.hydra
 >
 >  ## Multiple record fields were found with the same field name
@@ -286,10 +286,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  multipleFields: MultipleFieldsError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra punctuation.separator.type.hydra
 #                 ^ source.hydra
-#                  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                     ^^ source.hydra
 >
 >  ## No field with the expected name was found in a record
@@ -298,10 +298,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  noMatchingField: NoMatchingFieldError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
-#                   ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                       ^^ source.hydra
 >
 >  ## No let binding with the expected name was found
@@ -310,10 +310,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  noSuchBinding: NoSuchBindingError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra punctuation.separator.type.hydra
 #                ^ source.hydra
-#                 ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                 ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                   ^^ source.hydra
 >
 >  ## A case statement did not contain enough cases to match the target
@@ -322,10 +322,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  notEnoughCases: NotEnoughCasesError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                ^ source.hydra punctuation.separator.type.hydra
 #                 ^ source.hydra
-#                  ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                  ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                     ^^ source.hydra
 >
 >  ## A term, type, literal, or other value had an unexpected shape
@@ -334,10 +334,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  unexpectedShape: UnexpectedShapeError}
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
-#                   ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                       ^^ source.hydra
 >
 >## An error that occurred during type inference
@@ -359,10 +359,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  checking: CheckingError,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#            ^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                         ^^ source.hydra
 >
 >  ## A generic inference error carrying a message and a subterm path. Placeholder arm; sites should migrate to typed variants.
@@ -371,10 +371,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  other: OtherInferenceError,
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#         ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                            ^^ source.hydra
 >
 >  ## A unification failure encountered while inferring types
@@ -383,10 +383,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  unification: UnificationInferenceError}
 #^^ source.hydra
-#  ^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra punctuation.separator.type.hydra
 #              ^ source.hydra
-#               ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#               ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                        ^^ source.hydra
 >
 >## Multiple let bindings with the same name were found
@@ -408,10 +408,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## Multiple fields with the same name were found in a record
@@ -433,10 +433,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  fieldName: Name}
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^ source.hydra variable.other.hydra
+#             ^^^^ source.hydra entity.name.type.hydra
 #                 ^^ source.hydra
 >
 >## No field with the expected name was present
@@ -458,10 +458,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  fieldName: Name}
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^ source.hydra variable.other.hydra
+#             ^^^^ source.hydra entity.name.type.hydra
 #                 ^^ source.hydra
 >
 >## No let binding with the expected name was present
@@ -483,10 +483,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## No primitive function with the expected name was registered in the graph
@@ -508,10 +508,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  name: Name}
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^ source.hydra variable.other.hydra
+#        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
 >## A case statement was missing a case for the requested variant
@@ -560,10 +560,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  path: SubtermPath,
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^^ source.hydra
 >
 >  ## A human-readable error message
@@ -572,7 +572,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  message: string}
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
 #           ^^^^^^ source.hydra support.type.hydra
@@ -612,10 +612,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  noSuchBinding: NoSuchBindingError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #               ^ source.hydra punctuation.separator.type.hydra
 #                ^ source.hydra
-#                 ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                 ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                   ^^ source.hydra
 >
 >  ## No primitive function with the expected name was found in the graph
@@ -624,10 +624,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  noSuchPrimitive: NoSuchPrimitiveError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
-#                   ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                       ^^ source.hydra
 >
 >  ## No field with the expected name was present in a record or case statement
@@ -636,10 +636,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  noMatchingField: NoMatchingFieldError,
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
-#                   ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                       ^^ source.hydra
 >
 >  ## A generic resolution error carrying a message
@@ -648,10 +648,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  other: OtherResolutionError,
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#         ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                             ^^ source.hydra
 >
 >  ## A term had a shape other than the one expected (e.g. a record, an injection)
@@ -660,10 +660,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  unexpectedShape: UnexpectedShapeError}
 #^^ source.hydra
-#  ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                 ^ source.hydra punctuation.separator.type.hydra
 #                  ^ source.hydra
-#                   ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                       ^^ source.hydra
 >
 >## A term, type, literal, or related value had a shape other than the one expected
@@ -685,7 +685,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  expected: string,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
 #            ^^^^^^ source.hydra support.type.hydra
@@ -697,7 +697,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  actual: string}
 #^^ source.hydra
-#  ^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^ source.hydra variable.other.member.hydra
 #        ^ source.hydra punctuation.separator.type.hydra
 #         ^ source.hydra
 #          ^^^^^^ source.hydra support.type.hydra
@@ -722,10 +722,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  leftType: Type,
 #^^ source.hydra
-#  ^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^ source.hydra variable.other.member.hydra
 #          ^ source.hydra punctuation.separator.type.hydra
 #           ^ source.hydra
-#            ^^^^ source.hydra variable.other.hydra
+#            ^^^^ source.hydra entity.name.type.hydra
 #                ^^ source.hydra
 >
 >  ## The right-hand type in the unification
@@ -734,10 +734,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  rightType: Type,
 #^^ source.hydra
-#  ^^^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^^^ source.hydra variable.other.member.hydra
 #           ^ source.hydra punctuation.separator.type.hydra
 #            ^ source.hydra
-#             ^^^^ source.hydra variable.other.hydra
+#             ^^^^ source.hydra entity.name.type.hydra
 #                 ^^ source.hydra
 >
 >  ## A human-readable error message
@@ -746,7 +746,7 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  message: string}
 #^^ source.hydra
-#  ^^^^^^^ source.hydra variable.other.hydra
+#  ^^^^^^^ source.hydra variable.other.member.hydra
 #         ^ source.hydra punctuation.separator.type.hydra
 #          ^ source.hydra
 #           ^^^^^^ source.hydra support.type.hydra
@@ -771,10 +771,10 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  path: SubtermPath,
 #^^ source.hydra
-#  ^^^^ source.hydra variable.other.hydra
+#  ^^^^ source.hydra variable.other.member.hydra
 #      ^ source.hydra punctuation.separator.type.hydra
 #       ^ source.hydra
-#        ^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                   ^^ source.hydra
 >
 >  ## The underlying unification error
@@ -783,8 +783,8 @@
 #    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >  cause: UnificationError}
 #^^ source.hydra
-#  ^^^^^ source.hydra variable.other.hydra
+#  ^^^^^ source.hydra variable.other.member.hydra
 #       ^ source.hydra punctuation.separator.type.hydra
 #        ^ source.hydra
-#         ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#         ^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                         ^^ source.hydra

@@ -26,6 +26,8 @@
         { "include": "#operators-ascii" },
         { "include": "#type-brackets" },
         { "include": "#nominal-sugar" },
+        { "include": "#field-name" },
+        { "include": "#type-reference" },
         { "include": "#qualified-name" }
       ]
     },
@@ -34,9 +36,9 @@
       "comment": "§2.4 binder heads: the region between a binder (λ Λ forall ∀) and the dot that terminates it. At bracket depth zero bare names are SINGLE dot-free segments and the terminating '.' is STRUCTURAL (not part of a qualified name). A dotted name here must be backtick-escaped; inside nested <...>/(...)/backticks dots read greedily as usual. This begin/end scope claims the glyph + head so the greedy #qualified-name rule cannot glue 'y.either' (binder name + terminating dot + following keyword) into one token. The head ends at the first depth-zero '.'; nested '<...>' groups and backticks are consumed as inner patterns so their dots do not end the head.",
       "begin": "(λ)|(Λ)|(∀)|\\b(forall)\\b",
       "beginCaptures": {
-        "1": { "name": "keyword.operator.lambda.hydra" },
-        "2": { "name": "keyword.operator.type-lambda.hydra" },
-        "3": { "name": "keyword.operator.forall-scheme.hydra" },
+        "1": { "name": "storage.type.function.lambda.hydra" },
+        "2": { "name": "storage.type.function.type-lambda.hydra" },
+        "3": { "name": "keyword.control.forall.hydra" },
         "4": { "name": "support.type.hydra" }
       },
       "end": "\\.",
@@ -262,13 +264,13 @@
     },
 
     "operators-unicode": {
-      "comment": "§2.3 Unicode operators/binders. λ Λ ∀ → ⇒ ⟨ ⟩. 'forall' (the keyword, §2.3) is handled as a type keyword above; ∀ is the type-scheme binder here.",
+      "comment": "§2.3 Unicode operators/binders. λ Λ ∀ → ⇒ ⟨ ⟩. Scope choice is tuned so mainstream themes actually COLOR these (the earlier keyword.operator.* scopes render as default-foreground gray in VS Code Dark+ and weakly in IntelliJ's TextMate theme — #806 highlighting-refinement). Binders λ/Λ → storage.type.* (blue in Dark+, declaration-like); the arrows →/⇒ and the ∀ scheme-binder → keyword.control.* (purple in Dark+), distinct from the blue binders. 'forall' (the keyword, §2.3) is a type keyword handled above; ∀ is the type-scheme binder here. (⟨ ⟩ stay punctuation — deliberately uncolored.)",
       "patterns": [
-        { "match": "λ", "name": "keyword.operator.lambda.hydra" },
-        { "match": "Λ", "name": "keyword.operator.type-lambda.hydra" },
-        { "match": "∀", "name": "keyword.operator.forall-scheme.hydra" },
-        { "match": "→", "name": "keyword.operator.arrow.hydra" },
-        { "match": "⇒", "name": "keyword.operator.constraint-arrow.hydra" },
+        { "match": "λ", "name": "storage.type.function.lambda.hydra" },
+        { "match": "Λ", "name": "storage.type.function.type-lambda.hydra" },
+        { "match": "∀", "name": "keyword.control.forall.hydra" },
+        { "match": "→", "name": "keyword.control.arrow.hydra" },
+        { "match": "⇒", "name": "keyword.control.constraint-arrow.hydra" },
         { "match": "⟨", "name": "punctuation.definition.typeapp.begin.hydra" },
         { "match": "⟩", "name": "punctuation.definition.typeapp.end.hydra" }
       ]
@@ -333,13 +335,67 @@
     },
 
     "nominal-sugar": {
-      "comment": "§3 nominal sugar (#809, LANDED): a type name immediately before '{...}' or '[...]' (NO intervening whitespace) is nominal construction/elimination. We tag the name as a type reference; the braces/brackets fall through to normal punctuation. The abutting (?=[{\\[]) lookahead enforces the no-space rule — 'Name {' (with a space) is ordinary application and NOT matched here.",
-      "match": "([A-Za-z_][A-Za-z0-9_]*(?:\\.[A-Za-z_][A-Za-z0-9_]*)*)(?=[{\\[])",
-      "name": "entity.name.type.nominal.hydra"
+      "comment": "§3 nominal sugar (#809, LANDED): a type name immediately before '{...}' or '[...]' (NO intervening whitespace) is nominal construction/elimination. The name scopes as a type reference. For the '[...]' form (projection 'Name[field]' / unwrap 'Name[]'), this is a begin/end block so the FIELD NAME inside the brackets is scoped as a member (variable.other.member) rather than falling through to the plain-variable catch-all — one of Josh's #806 priorities (bracketed projection field names). For the '{...}' construction form, the name is matched alone and the inner fields are scoped by #sugar-fields / the record-field rules. The abutting lookahead/adjacency enforces the no-space rule — 'Name {' or 'Name [' (with a space) is ordinary application, NOT matched here.",
+      "patterns": [
+        {
+          "comment": "Projection / unwrap: 'Name[field]' or 'Name[]'. Name → type ref; inner field name → member.",
+          "begin": "([A-Za-z_][A-Za-z0-9_]*(?:\\.[A-Za-z_][A-Za-z0-9_]*)*)(\\[)",
+          "end": "\\]",
+          "beginCaptures": {
+            "1": { "name": "entity.name.type.nominal.hydra" },
+            "2": { "name": "punctuation.definition.projection.begin.hydra" }
+          },
+          "endCaptures": { "0": { "name": "punctuation.definition.projection.end.hydra" } },
+          "patterns": [
+            {
+              "comment": "The projected field name inside 'Name[field]'.",
+              "match": "[A-Za-z_][A-Za-z0-9_]*",
+              "name": "variable.other.member.hydra"
+            }
+          ]
+        },
+        {
+          "comment": "Construction/injection/wrap: 'Name{...}'. Only the name here; inner fields handled downstream.",
+          "match": "([A-Za-z_][A-Za-z0-9_]*(?:\\.[A-Za-z_][A-Za-z0-9_]*)*)(?=\\{)",
+          "name": "entity.name.type.nominal.hydra"
+        }
+      ]
+    },
+
+    "field-name": {
+      "comment": "§3 field / entry / variant names: a single-segment name immediately followed by a field separator — ':' (record/union typeField, §3), or '=' (termField / sugarField / map entry, §3). Scoped as variable.other.member so record/union field names, injection/record construction field names, and map-entry keys are visually distinct from plain variables (a Josh #806 priority). Runs AFTER #binder-head (so 'λx:t.' binder names are not grabbed) and AFTER #literals (so a suffixed literal '42:int32' is not seen as a field). The trailing separator is only looked-ahead, not consumed, so the existing separator rules still scope it.",
+      "patterns": [
+        {
+          "comment": "Field/variant name before ':' (type field) — e.g. 'brackets: Brackets', 'name: string'.",
+          "match": "([A-Za-z_][A-Za-z0-9_]*)(?=\\s*:(?!=))",
+          "name": "variable.other.member.hydra"
+        },
+        {
+          "comment": "Field name / map-entry key before '=' (but not ':=' assignment, and not '==' #811 compare) — e.g. 'firstName = ...'.",
+          "match": "([A-Za-z_][A-Za-z0-9_]*)(?=\\s*=(?![=]))",
+          "name": "variable.other.member.hydra"
+        }
+      ]
+    },
+
+    "type-reference": {
+      "comment": "§2.4/§3 type references by naming convention: a bare or qualified name whose LAST segment is upper-case-initial is a type/constructor reference in the Hydra kernel (types and union variants are UpperCamel; terms, primitives, fields, and locals are lowerCamel). Scoping these as entity.name.type gives bare and qualified type names (InferenceError, hydra.core.model.Term) the type colour wherever they appear — a Josh #806 priority — without a brittle position analysis a TextMate grammar cannot do. A lower-case-initial name (hydra.core.lib.lists, a local) is left to #qualified-name. (Primitive-reference recognition — e.g. bare 'at' vs 'lists.at', which needs the import set — is a language-server semantic-tokens follow-up, #836; see plan.)",
+      "patterns": [
+        {
+          "comment": "Qualified name ending in an upper-case segment (hydra.core.model.Term) → type.",
+          "match": "\\b[A-Za-z_][A-Za-z0-9_]*(?:\\.[A-Za-z_][A-Za-z0-9_]*)*\\.[A-Z][A-Za-z0-9_]*\\b",
+          "name": "entity.name.type.hydra"
+        },
+        {
+          "comment": "Bare upper-case-initial single-segment name (InferenceError, Term) → type.",
+          "match": "\\b[A-Z][A-Za-z0-9_]*\\b",
+          "name": "entity.name.type.hydra"
+        }
+      ]
     },
 
     "qualified-name": {
-      "comment": "§2.4: a bare dotted name, read greedily as one qualified name (hydra.core.model.Term). Primitive references and variables share this form (§3 variableTerm). The last segment starting uppercase hints a type/constructor; we keep a single scope for simplicity and let themes distinguish via the dotted punctuation.",
+      "comment": "§2.4: a bare dotted name, read greedily as one qualified name (hydra.core.model.Term). Primitive references and variables share this form (§3 variableTerm). Reached only for LOWER-case-initial-final names (upper-case-final ones are claimed by #type-reference as types).",
       "patterns": [
         {
           "comment": "Qualified (dotted) name — at least one dot.",

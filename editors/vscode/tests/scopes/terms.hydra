@@ -12,13 +12,13 @@ term bin = "aGVsbG8=":binary
 #                     ^^^^^^ support.type.literal.binary.hydra
 
 term lam = λx.x
-#          ^ keyword.operator.lambda.hydra
+#          ^ storage.type.function.lambda.hydra
 
 term lamv = λ foo . bar
-#           ^ keyword.operator.lambda.hydra
+#           ^ storage.type.function.lambda.hydra
 
 term tlam = Λt.unit
-#           ^ keyword.operator.type-lambda.hydra
+#           ^ storage.type.function.type-lambda.hydra
 #              ^^^^ support.type.hydra
 
 term letin = let x := 1:int32 in x
@@ -33,7 +33,7 @@ term esc = `has space`
 
 term rec = Person{firstName = "Alice", age = 30:int32}
 #          ^^^^^^ entity.name.type.nominal.hydra
-#                 ^^^^^^^^^ variable.other.hydra
+#                 ^^^^^^^^^ variable.other.member.hydra
 #                           ^ keyword.operator.equals.hydra
 
 term proj = Person[firstName]
@@ -43,7 +43,7 @@ term unwr = Meters[]
 #           ^^^^^^ entity.name.type.nominal.hydra
 
 term app = Name {x}
-#          ^^^^ variable.other.hydra
+#          ^^^^ entity.name.type.hydra
 
 term ascribe = x : int32
 #                ^ punctuation.separator.type.hydra

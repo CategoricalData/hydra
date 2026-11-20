@@ -38,7 +38,7 @@
 #                                ^ source.hydra keyword.operator.equals.hydra
 >  λe.concat
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
 #     ^^^^^^ source.hydra variable.other.hydra
@@ -53,11 +53,14 @@
 >        ModuleName[] (ConflictingModuleNameError[first] e),
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                  ^^^^ source.hydra
+#                  ^ source.hydra punctuation.definition.projection.begin.hydra
+#                   ^ source.hydra punctuation.definition.projection.end.hydra
+#                    ^^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                ^ source.hydra
-#                                                 ^^^^^ source.hydra variable.other.hydra
-#                                                      ^^ source.hydra
+#                                                ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                 ^^^^^ source.hydra variable.other.member.hydra
+#                                                      ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                       ^ source.hydra
 #                                                        ^ source.hydra variable.other.hydra
 #                                                         ^^^ source.hydra
 >        " vs ",
@@ -69,11 +72,14 @@
 >        ModuleName[] (ConflictingModuleNameError[second] e)]
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                  ^^^^ source.hydra
+#                  ^ source.hydra punctuation.definition.projection.begin.hydra
+#                   ^ source.hydra punctuation.definition.projection.end.hydra
+#                    ^^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                ^ source.hydra
-#                                                 ^^^^^^ source.hydra variable.other.hydra
-#                                                       ^^ source.hydra
+#                                                ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                 ^^^^^^ source.hydra variable.other.member.hydra
+#                                                       ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                        ^ source.hydra
 #                                                         ^ source.hydra variable.other.hydra
 #                                                          ^^^ source.hydra
 >
@@ -88,7 +94,7 @@
 #                                 ^ source.hydra keyword.operator.equals.hydra
 >  λe.concat
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
 #     ^^^^^^ source.hydra variable.other.hydra
@@ -103,11 +109,14 @@
 >        ModuleName[] (ConflictingVariantNameError[moduleName] e),
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                  ^^^^ source.hydra
+#                  ^ source.hydra punctuation.definition.projection.begin.hydra
+#                   ^ source.hydra punctuation.definition.projection.end.hydra
+#                    ^^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                 ^ source.hydra
-#                                                  ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                            ^^ source.hydra
+#                                                 ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                  ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                            ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                             ^ source.hydra
 #                                                              ^ source.hydra variable.other.hydra
 #                                                               ^^^ source.hydra
 >        ": variant ",
@@ -119,11 +128,14 @@
 >        Name[] (ConflictingVariantNameError[variantName] e),
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra entity.name.type.nominal.hydra
-#            ^^^^ source.hydra
+#            ^ source.hydra punctuation.definition.projection.begin.hydra
+#             ^ source.hydra punctuation.definition.projection.end.hydra
+#              ^^ source.hydra
 #                ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                           ^ source.hydra
-#                                            ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                       ^^ source.hydra
+#                                           ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                            ^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                       ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                        ^ source.hydra
 #                                                         ^ source.hydra variable.other.hydra
 #                                                          ^^^ source.hydra
 >        " of type ",
@@ -135,11 +147,14 @@
 >        Name[] (ConflictingVariantNameError[typeName] e),
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra entity.name.type.nominal.hydra
-#            ^^^^ source.hydra
+#            ^ source.hydra punctuation.definition.projection.begin.hydra
+#             ^ source.hydra punctuation.definition.projection.end.hydra
+#              ^^ source.hydra
 #                ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                           ^ source.hydra
-#                                            ^^^^^^^^ source.hydra variable.other.hydra
-#                                                    ^^ source.hydra
+#                                           ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                            ^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                    ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                     ^ source.hydra
 #                                                      ^ source.hydra variable.other.hydra
 #                                                       ^^^ source.hydra
 >        " produces constructor name ",
@@ -151,11 +166,14 @@
 >        Name[] (ConflictingVariantNameError[conflictingName] e),
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra entity.name.type.nominal.hydra
-#            ^^^^ source.hydra
+#            ^ source.hydra punctuation.definition.projection.begin.hydra
+#             ^ source.hydra punctuation.definition.projection.end.hydra
+#              ^^ source.hydra
 #                ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                           ^ source.hydra
-#                                            ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                           ^^ source.hydra
+#                                           ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                            ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                           ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                            ^ source.hydra
 #                                                             ^ source.hydra variable.other.hydra
 #                                                              ^^^ source.hydra
 >        " which conflicts with another type definition"]
@@ -176,7 +194,7 @@
 #                                    ^ source.hydra keyword.operator.equals.hydra
 >  λe.concat
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
 #     ^^^^^^ source.hydra variable.other.hydra
@@ -191,11 +209,14 @@
 >        Name[] (DefinitionNotInModuleNameError[name] e),
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra entity.name.type.nominal.hydra
-#            ^^^^ source.hydra
+#            ^ source.hydra punctuation.definition.projection.begin.hydra
+#             ^ source.hydra punctuation.definition.projection.end.hydra
+#              ^^ source.hydra
 #                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                              ^ source.hydra
-#                                               ^^^^ source.hydra variable.other.hydra
-#                                                   ^^ source.hydra
+#                                              ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                               ^^^^ source.hydra variable.other.member.hydra
+#                                                   ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                    ^ source.hydra
 #                                                     ^ source.hydra variable.other.hydra
 #                                                      ^^^ source.hydra
 >        " is not in module namespace ",
@@ -207,11 +228,14 @@
 >        ModuleName[] (DefinitionNotInModuleNameError[moduleName] e)]
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                  ^^^^ source.hydra
+#                  ^ source.hydra punctuation.definition.projection.begin.hydra
+#                   ^ source.hydra punctuation.definition.projection.end.hydra
+#                    ^^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                    ^ source.hydra
-#                                                     ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                               ^^ source.hydra
+#                                                    ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                     ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                               ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                                ^ source.hydra
 #                                                                 ^ source.hydra variable.other.hydra
 #                                                                  ^^^ source.hydra
 >
@@ -226,7 +250,7 @@
 #                                ^ source.hydra keyword.operator.equals.hydra
 >  λe.concat
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
 #     ^^^^^^ source.hydra variable.other.hydra
@@ -241,11 +265,14 @@
 >        ModuleName[] (DefinitionsOutOfOrderError[moduleName] e),
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                  ^^^^ source.hydra
+#                  ^ source.hydra punctuation.definition.projection.begin.hydra
+#                   ^ source.hydra punctuation.definition.projection.end.hydra
+#                    ^^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                ^ source.hydra
-#                                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                           ^^ source.hydra
+#                                                ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                           ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                            ^ source.hydra
 #                                                             ^ source.hydra variable.other.hydra
 #                                                              ^^^ source.hydra
 >        ": definitions out of order: ",
@@ -257,11 +284,14 @@
 >        Name[] (DefinitionsOutOfOrderError[precedingName] e),
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra entity.name.type.nominal.hydra
-#            ^^^^ source.hydra
+#            ^ source.hydra punctuation.definition.projection.begin.hydra
+#             ^ source.hydra punctuation.definition.projection.end.hydra
+#              ^^ source.hydra
 #                ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                          ^ source.hydra
-#                                           ^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                        ^^ source.hydra
+#                                          ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                           ^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                        ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                         ^ source.hydra
 #                                                          ^ source.hydra variable.other.hydra
 #                                                           ^^^ source.hydra
 >        " precedes ",
@@ -273,11 +303,14 @@
 >        Name[] (DefinitionsOutOfOrderError[followingName] e)]
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra entity.name.type.nominal.hydra
-#            ^^^^ source.hydra
+#            ^ source.hydra punctuation.definition.projection.begin.hydra
+#             ^ source.hydra punctuation.definition.projection.end.hydra
+#              ^^ source.hydra
 #                ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                          ^ source.hydra
-#                                           ^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                        ^^ source.hydra
+#                                          ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                           ^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                        ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                         ^ source.hydra
 #                                                          ^ source.hydra variable.other.hydra
 #                                                           ^^^ source.hydra
 >
@@ -292,7 +325,7 @@
 #                                  ^ source.hydra keyword.operator.equals.hydra
 >  λe.concat
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
 #     ^^^^^^ source.hydra variable.other.hydra
@@ -307,11 +340,14 @@
 >        ModuleName[] (DuplicateDefinitionNameError[moduleName] e),
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                  ^^^^ source.hydra
+#                  ^ source.hydra punctuation.definition.projection.begin.hydra
+#                   ^ source.hydra punctuation.definition.projection.end.hydra
+#                    ^^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                  ^ source.hydra
-#                                                   ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                             ^^ source.hydra
+#                                                  ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                   ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                             ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                              ^ source.hydra
 #                                                               ^ source.hydra variable.other.hydra
 #                                                                ^^^ source.hydra
 >        ": duplicate definition name ",
@@ -323,11 +359,14 @@
 >        Name[] (DuplicateDefinitionNameError[name] e)]
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra entity.name.type.nominal.hydra
-#            ^^^^ source.hydra
+#            ^ source.hydra punctuation.definition.projection.begin.hydra
+#             ^ source.hydra punctuation.definition.projection.end.hydra
+#              ^^ source.hydra
 #                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                            ^ source.hydra
-#                                             ^^^^ source.hydra variable.other.hydra
-#                                                 ^^ source.hydra
+#                                            ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                             ^^^^ source.hydra variable.other.member.hydra
+#                                                 ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                  ^ source.hydra
 #                                                   ^ source.hydra variable.other.hydra
 #                                                    ^^^ source.hydra
 >
@@ -342,7 +381,7 @@
 #                              ^ source.hydra keyword.operator.equals.hydra
 >  λe.concat ["duplicate module namespace ", ModuleName[] (DuplicateModuleNameError[moduleName] e)]
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
 #     ^^^^^^ source.hydra variable.other.hydra
@@ -352,11 +391,14 @@
 #                                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                          ^^ source.hydra
 #                                            ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                      ^^^^ source.hydra
+#                                                      ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                       ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                        ^^ source.hydra
 #                                                          ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                                  ^ source.hydra
-#                                                                                   ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                             ^^ source.hydra
+#                                                                                  ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                                                   ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                                                             ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                                                              ^ source.hydra
 #                                                                                               ^ source.hydra variable.other.hydra
 #                                                                                                ^^^ source.hydra
 >
@@ -371,7 +413,7 @@
 #                                ^ source.hydra keyword.operator.equals.hydra
 >  λe.concat
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
 #     ^^^^^^ source.hydra variable.other.hydra
@@ -386,11 +428,14 @@
 >        ModuleName[] (InvalidDefinitionNameError[moduleName] e),
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                  ^^^^ source.hydra
+#                  ^ source.hydra punctuation.definition.projection.begin.hydra
+#                   ^ source.hydra punctuation.definition.projection.end.hydra
+#                    ^^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                ^ source.hydra
-#                                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                           ^^ source.hydra
+#                                                ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                           ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                            ^ source.hydra
 #                                                             ^ source.hydra variable.other.hydra
 #                                                              ^^^ source.hydra
 >        ": definition ",
@@ -402,11 +447,14 @@
 >        Name[] (InvalidDefinitionNameError[name] e),
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra entity.name.type.nominal.hydra
-#            ^^^^ source.hydra
+#            ^ source.hydra punctuation.definition.projection.begin.hydra
+#             ^ source.hydra punctuation.definition.projection.end.hydra
+#              ^^ source.hydra
 #                ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                          ^ source.hydra
-#                                           ^^^^ source.hydra variable.other.hydra
-#                                               ^^ source.hydra
+#                                          ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                           ^^^^ source.hydra variable.other.member.hydra
+#                                               ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                ^ source.hydra
 #                                                 ^ source.hydra variable.other.hydra
 #                                                  ^^^ source.hydra
 >        " does not match expected ",
@@ -420,9 +468,10 @@
 #        ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                      ^^ source.hydra
 #                        ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                  ^ source.hydra
-#                                                   ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                     ^^ source.hydra
+#                                                  ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                   ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                                     ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                                      ^ source.hydra
 #                                                                       ^ source.hydra variable.other.hydra
 #                                                                        ^^^ source.hydra
 >
@@ -437,7 +486,7 @@
 #                        ^ source.hydra keyword.operator.equals.hydra
 >  λe.concat2
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
 #     ^^^^^^^ source.hydra variable.other.hydra
@@ -450,11 +499,11 @@
 #^^^^^^^ source.hydra
 #       ^^^^^ source.hydra keyword.control.hydra
 #            ^ source.hydra
-#             ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#             ^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                               ^^^ source.hydra
 >        conflictingVariantName = conflictingVariantNameError,
 #^^^^^^^^ source.hydra
-#        ^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                              ^ source.hydra
 #                               ^ source.hydra keyword.operator.equals.hydra
 #                                ^ source.hydra
@@ -462,7 +511,7 @@
 #                                                            ^^ source.hydra
 >        definitionNotInModuleName = definitionNotInModuleNameError,
 #^^^^^^^^ source.hydra
-#        ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                 ^ source.hydra
 #                                  ^ source.hydra keyword.operator.equals.hydra
 #                                   ^ source.hydra
@@ -470,7 +519,7 @@
 #                                                                  ^^ source.hydra
 >        definitionsOutOfOrder = definitionsOutOfOrderError,
 #^^^^^^^^ source.hydra
-#        ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                             ^ source.hydra
 #                              ^ source.hydra keyword.operator.equals.hydra
 #                               ^ source.hydra
@@ -478,7 +527,7 @@
 #                                                          ^^ source.hydra
 >        duplicateDefinitionName = duplicateDefinitionNameError,
 #^^^^^^^^ source.hydra
-#        ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                               ^ source.hydra
 #                                ^ source.hydra keyword.operator.equals.hydra
 #                                 ^ source.hydra
@@ -486,7 +535,7 @@
 #                                                              ^^ source.hydra
 >        invalidDefinitionName = invalidDefinitionNameError,
 #^^^^^^^^ source.hydra
-#        ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                             ^ source.hydra
 #                              ^ source.hydra keyword.operator.equals.hydra
 #                               ^ source.hydra
@@ -494,7 +543,7 @@
 #                                                          ^^ source.hydra
 >        invalidModuleNameConvention = invalidModuleNameConventionError,
 #^^^^^^^^ source.hydra
-#        ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                   ^ source.hydra
 #                                    ^ source.hydra keyword.operator.equals.hydra
 #                                     ^ source.hydra
@@ -502,7 +551,7 @@
 #                                                                      ^^ source.hydra
 >        missingDocumentation = missingDocumentationError}
 #^^^^^^^^ source.hydra
-#        ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
@@ -524,7 +573,7 @@
 #                                      ^ source.hydra keyword.operator.equals.hydra
 >  λe.concat
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
 #     ^^^^^^ source.hydra variable.other.hydra
@@ -539,11 +588,14 @@
 >        ModuleName[] (InvalidModuleNameConventionError[moduleName] e),
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                  ^^^^ source.hydra
+#                  ^ source.hydra punctuation.definition.projection.begin.hydra
+#                   ^ source.hydra punctuation.definition.projection.end.hydra
+#                    ^^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                      ^ source.hydra
-#                                                       ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                 ^^ source.hydra
+#                                                      ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                       ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                                 ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                                  ^ source.hydra
 #                                                                   ^ source.hydra variable.other.hydra
 #                                                                    ^^^ source.hydra
 >        " does not match the dotted-camelCase naming convention"]
@@ -564,7 +616,7 @@
 #                         ^ source.hydra keyword.operator.equals.hydra
 >  λe.concat2
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
 #     ^^^^^^^ source.hydra variable.other.hydra
@@ -577,11 +629,11 @@
 #^^^^^^^ source.hydra
 #       ^^^^^ source.hydra keyword.control.hydra
 #            ^ source.hydra
-#             ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#             ^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                                ^^^ source.hydra
 >        conflictingModuleName = conflictingModuleNameError,
 #^^^^^^^^ source.hydra
-#        ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                             ^ source.hydra
 #                              ^ source.hydra keyword.operator.equals.hydra
 #                               ^ source.hydra
@@ -589,7 +641,7 @@
 #                                                          ^^ source.hydra
 >        duplicateModuleName = duplicateModuleNameError,
 #^^^^^^^^ source.hydra
-#        ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
@@ -597,7 +649,7 @@
 #                                                      ^^ source.hydra
 >        invalidModule = invalidModuleError,
 #^^^^^^^^ source.hydra
-#        ^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                     ^ source.hydra
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
@@ -605,7 +657,7 @@
 #                                          ^^ source.hydra
 >        invalidPackageName = invalidPackageNameError,
 #^^^^^^^^ source.hydra
-#        ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                          ^ source.hydra
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
@@ -613,7 +665,7 @@
 #                                                    ^^ source.hydra
 >        moduleInMultiplePackages = moduleInMultiplePackagesError,
 #^^^^^^^^ source.hydra
-#        ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                ^ source.hydra
 #                                 ^ source.hydra keyword.operator.equals.hydra
 #                                  ^ source.hydra
@@ -621,7 +673,7 @@
 #                                                                ^^ source.hydra
 >        nestedModuleName = nestedModuleNameError,
 #^^^^^^^^ source.hydra
-#        ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
@@ -629,7 +681,7 @@
 #                                                ^^ source.hydra
 >        undeclaredDependency = undeclaredDependencyError}
 #^^^^^^^^ source.hydra
-#        ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#        ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                            ^ source.hydra
 #                             ^ source.hydra keyword.operator.equals.hydra
 #                              ^ source.hydra
@@ -651,7 +703,7 @@
 #                             ^ source.hydra keyword.operator.equals.hydra
 >  λe.concat
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
 #     ^^^^^^ source.hydra variable.other.hydra
@@ -666,11 +718,14 @@
 >        PackageName[] (InvalidPackageNameError[packageName] e),
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                   ^^^^ source.hydra
+#                   ^ source.hydra punctuation.definition.projection.begin.hydra
+#                    ^ source.hydra punctuation.definition.projection.end.hydra
+#                     ^^ source.hydra
 #                       ^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                              ^ source.hydra
-#                                               ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                          ^^ source.hydra
+#                                              ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                               ^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                          ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                           ^ source.hydra
 #                                                            ^ source.hydra variable.other.hydra
 #                                                             ^^^ source.hydra
 >        " does not match the hyphen-separated lowercase naming convention"]
@@ -691,7 +746,7 @@
 #                               ^ source.hydra keyword.operator.equals.hydra
 >  λe.concat
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
 #     ^^^^^^ source.hydra variable.other.hydra
@@ -706,11 +761,14 @@
 >        ModuleName[] (MissingDocumentationError[moduleName] e),
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                  ^^^^ source.hydra
+#                  ^ source.hydra punctuation.definition.projection.begin.hydra
+#                   ^ source.hydra punctuation.definition.projection.end.hydra
+#                    ^^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                               ^ source.hydra
-#                                                ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                          ^^ source.hydra
+#                                               ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                          ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                           ^ source.hydra
 #                                                            ^ source.hydra variable.other.hydra
 #                                                             ^^^ source.hydra
 >        ": definition ",
@@ -722,11 +780,14 @@
 >        Name[] (MissingDocumentationError[name] e),
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra entity.name.type.nominal.hydra
-#            ^^^^ source.hydra
+#            ^ source.hydra punctuation.definition.projection.begin.hydra
+#             ^ source.hydra punctuation.definition.projection.end.hydra
+#              ^^ source.hydra
 #                ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                         ^ source.hydra
-#                                          ^^^^ source.hydra variable.other.hydra
-#                                              ^^ source.hydra
+#                                         ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                          ^^^^ source.hydra variable.other.member.hydra
+#                                              ^ source.hydra punctuation.definition.projection.end.hydra
+#                                               ^ source.hydra
 #                                                ^ source.hydra variable.other.hydra
 #                                                 ^^^ source.hydra
 >        " lacks a description annotation"]
@@ -747,7 +808,7 @@
 #                                   ^ source.hydra keyword.operator.equals.hydra
 >  λe.concat
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
 #     ^^^^^^ source.hydra variable.other.hydra
@@ -762,11 +823,14 @@
 >        ModuleName[] (ModuleInMultiplePackagesError[moduleName] e),
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                  ^^^^ source.hydra
+#                  ^ source.hydra punctuation.definition.projection.begin.hydra
+#                   ^ source.hydra punctuation.definition.projection.end.hydra
+#                    ^^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                   ^ source.hydra
-#                                                    ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                              ^^ source.hydra
+#                                                   ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                    ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                              ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                               ^ source.hydra
 #                                                                ^ source.hydra variable.other.hydra
 #                                                                 ^^^ source.hydra
 >        " is declared by more than one package: ",
@@ -778,11 +842,14 @@
 >        PackageName[] (ModuleInMultiplePackagesError[firstPackage] e),
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                   ^^^^ source.hydra
+#                   ^ source.hydra punctuation.definition.projection.begin.hydra
+#                    ^ source.hydra punctuation.definition.projection.end.hydra
+#                     ^^ source.hydra
 #                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                    ^ source.hydra
-#                                                     ^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                 ^^ source.hydra
+#                                                    ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                     ^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                                 ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                                  ^ source.hydra
 #                                                                   ^ source.hydra variable.other.hydra
 #                                                                    ^^^ source.hydra
 >        " vs ",
@@ -794,11 +861,14 @@
 >        PackageName[] (ModuleInMultiplePackagesError[secondPackage] e)]
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                   ^^^^ source.hydra
+#                   ^ source.hydra punctuation.definition.projection.begin.hydra
+#                    ^ source.hydra punctuation.definition.projection.end.hydra
+#                     ^^ source.hydra
 #                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                    ^ source.hydra
-#                                                     ^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                  ^^ source.hydra
+#                                                    ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                     ^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                                  ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                                   ^ source.hydra
 #                                                                    ^ source.hydra variable.other.hydra
 #                                                                     ^^^ source.hydra
 >
@@ -813,7 +883,7 @@
 #                           ^ source.hydra keyword.operator.equals.hydra
 >  λe.concat
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
 #     ^^^^^^ source.hydra variable.other.hydra
@@ -828,11 +898,14 @@
 >        ModuleName[] (NestedModuleNameError[outer] e),
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                  ^^^^ source.hydra
+#                  ^ source.hydra punctuation.definition.projection.begin.hydra
+#                   ^ source.hydra punctuation.definition.projection.end.hydra
+#                    ^^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                           ^ source.hydra
-#                                            ^^^^^ source.hydra variable.other.hydra
-#                                                 ^^ source.hydra
+#                                           ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                            ^^^^^ source.hydra variable.other.member.hydra
+#                                                 ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                  ^ source.hydra
 #                                                   ^ source.hydra variable.other.hydra
 #                                                    ^^^ source.hydra
 >        " is a strict dotted-prefix of module namespace ",
@@ -844,11 +917,14 @@
 >        ModuleName[] (NestedModuleNameError[inner] e)]
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                  ^^^^ source.hydra
+#                  ^ source.hydra punctuation.definition.projection.begin.hydra
+#                   ^ source.hydra punctuation.definition.projection.end.hydra
+#                    ^^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                           ^ source.hydra
-#                                            ^^^^^ source.hydra variable.other.hydra
-#                                                 ^^ source.hydra
+#                                           ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                            ^^^^^ source.hydra variable.other.member.hydra
+#                                                 ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                  ^ source.hydra
 #                                                   ^ source.hydra variable.other.hydra
 #                                                    ^^^ source.hydra
 >
@@ -863,7 +939,7 @@
 #                               ^ source.hydra keyword.operator.equals.hydra
 >  λe.concat
 #^^ source.hydra
-#  ^ source.hydra keyword.operator.lambda.hydra
+#  ^ source.hydra storage.type.function.lambda.hydra
 #   ^ source.hydra variable.parameter.hydra
 #    ^ source.hydra punctuation.separator.binder.hydra
 #     ^^^^^^ source.hydra variable.other.hydra
@@ -878,11 +954,14 @@
 >        ModuleName[] (UndeclaredDependencyError[moduleName] e),
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                  ^^^^ source.hydra
+#                  ^ source.hydra punctuation.definition.projection.begin.hydra
+#                   ^ source.hydra punctuation.definition.projection.end.hydra
+#                    ^^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                               ^ source.hydra
-#                                                ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                          ^^ source.hydra
+#                                               ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                          ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                           ^ source.hydra
 #                                                            ^ source.hydra variable.other.hydra
 #                                                             ^^^ source.hydra
 >        " references ",
@@ -894,11 +973,14 @@
 >        Name[] (UndeclaredDependencyError[referencedName] e),
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra entity.name.type.nominal.hydra
-#            ^^^^ source.hydra
+#            ^ source.hydra punctuation.definition.projection.begin.hydra
+#             ^ source.hydra punctuation.definition.projection.end.hydra
+#              ^^ source.hydra
 #                ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                         ^ source.hydra
-#                                          ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                        ^^ source.hydra
+#                                         ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                          ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                        ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                         ^ source.hydra
 #                                                          ^ source.hydra variable.other.hydra
 #                                                           ^^^ source.hydra
 >        ", whose owning module ",
@@ -910,11 +992,14 @@
 >        ModuleName[] (UndeclaredDependencyError[owningModuleName] e),
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                  ^^^^ source.hydra
+#                  ^ source.hydra punctuation.definition.projection.begin.hydra
+#                   ^ source.hydra punctuation.definition.projection.end.hydra
+#                    ^^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                               ^ source.hydra
-#                                                ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                ^^ source.hydra
+#                                               ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                ^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                                ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                                 ^ source.hydra
 #                                                                  ^ source.hydra variable.other.hydra
 #                                                                   ^^^ source.hydra
 >        " is not among its declared dependencies; add it to moduleDependencies"]
