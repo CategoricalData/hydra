@@ -479,11 +479,17 @@ main = do
   -- hydra.build.modules.dedupPreservingOrder". This holds for the plain demo
   -- invocation (--kernel-only --include-tests, no --package/--all-packages),
   -- which previously hit the empty `otherwise` branch and dropped hydra-build.
+  --
+  -- #738: the emitted test set also includes hydra.pg.test.* (e.g.
+  -- hydra.pg.test.subtermGraph), which references hydra.pg.* main modules, so with
+  -- --include-tests hydra-pg (and its dependency hydra-rdf) must be in the universe
+  -- too; otherwise Haskell-host cross-generation fails with "untyped term variable:
+  -- hydra.pg.subtermGraph.termNodeIdTerm".
   let extPackagesToLoad
         | optExtOnly opts                           = extDemoPackages
         | Just p <- optPackage opts, p `elem` allExtPackages = packageDeps p
         | optAllPackages opts                       = ["hydra-build"]
-        | optIncludeTests opts                      = ["hydra-build"]
+        | optIncludeTests opts                      = ["hydra-build", "hydra-pg", "hydra-rdf"]
         | otherwise                                 = []
 
   dslMods <- if optIncludeDsls opts
