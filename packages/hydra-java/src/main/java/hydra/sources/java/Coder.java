@@ -6249,6 +6249,95 @@ public class Coder {
                     var("cx"),
                     var("g")));
 
+    // Count the leading function arrows of a type (the term-level arity its signature implies).
+    // Descends through annotations only; STOPS at anything that is not a Type.FUNCTION -- in
+    // particular it does NOT descend into Type.FORALL bodies (would capture forall-bound vars) or
+    // Type.WRAP (a newtype like Parser is a nullary value, not a function). (#734)
+    public static final Def encodeTermDefinition_arrowArity = def("encodeTermDefinition_arrowArity")
+        .lam("t")
+        .to(() ->
+                matchWithDefault(Type.TYPE_,
+                    hydra.core.dsl.Strip.deannotateType( var("t")),
+                    int32(0),
+                    field(
+                        Type.FUNCTION,
+                        lambda("ft",
+                            Math_.add(
+                                int32(1),
+                                apply(
+                                    ref(Coder.encodeTermDefinition_arrowArity),
+                                    proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft")))))));
+
+    // Eta-expand a point-free (or under-applied) binding so a Java method with explicit parameters
+    // is emitted rather than a nullary method returning a curried Function. A binding like
+    // `regex = alternation` whose signature strips to Graph -> Term -> X has zero lambda params, so
+    // the coder would otherwise emit `static Function<Graph,Function<Term,X>> regex()` -- which no
+    // call site can invoke as `regex(g, t)`. We wrap it as `\v{k}..v{n-1} -> term v{k} .. v{n-1}`
+    // up to the signature's arrow arity. Newtype-wrapped values (Parser, etc.) are unaffected
+    // because arrowArity only counts raw Type.FUNCTION arrows. (#734)
+    public static final Def encodeTermDefinition_etaExpand = def("encodeTermDefinition_etaExpand")
+        .lam("ts").lam("term")
+        .to(() ->
+                let(
+                    field("have",
+                        apply(ref(Coder.classifyDataTerm_countLambdaParams), var("term"))),
+                    field("want",
+                        apply(
+                            ref(Coder.encodeTermDefinition_arrowArity),
+                            proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts"))),
+                    Logic.ifElse(
+                        Ordering.lte(var("want"), var("have")),
+                        var("term"),
+                        let(
+                            field("idxs",
+                                Math_.range(var("have"), var("want"))),
+                            field("names",
+                                Lists.map(
+                                    lambda("i",
+                                        wrap(Name.TYPE_,
+                                            Strings.concat2(string("eta"), Literals.printInt32(var("i"))))),
+                                    var("idxs"))),
+                            // Peel the signature's leading domain types; the fresh params correspond to domains
+                            // [have .. want-1] (the first `have` are already the term's existing lambdas). Each
+                            // synthesized lambda MUST carry its domain type -- an untyped param reaches codegen as
+                            // "untyped term variable: etaN" and fails generation (#734). (doms, _) from peel.
+                            field("allDoms",
+                                Pairs.first(apply(ref(Coder.peelDomainsAndCod), var("want"),
+                                    proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts")))),
+                            field("freshDoms",
+                                Lists.drop(var("have"), var("allDoms"))),
+                            // Pair each fresh name with its domain type for typed-lambda construction.
+                            field("nameDoms",
+                                Lists.zip(var("names"), var("freshDoms"))),
+                            // Apply the original term to the fresh variables, left to right.
+                            field("appBody",
+                                Lists.foldl(
+                                    lambda("f",
+                                        lambda("nm",
+                                            inject(Term.TYPE_,
+                                                Term.APPLICATION,
+                                                record(Application.TYPE_,
+                                                    field(Application.FUNCTION, var("f")),
+                                                    field(
+                                                        Application.ARGUMENT,
+                                                        inject(Term.TYPE_,
+                                                            Term.VARIABLE,
+                                                            var("nm"))))))),
+                                    var("term"),
+                                    var("names"))),
+                            // Wrap in typed lambdas, right to left (outermost = first param), each with its domain.
+                            Lists.foldl(
+                                lambda("b",
+                                    lambda("nd",
+                                        inject(Term.TYPE_,
+                                            Term.LAMBDA,
+                                            record(Lambda.TYPE_,
+                                                field(Lambda.PARAMETER, Pairs.first(var("nd"))),
+                                                field(Lambda.DOMAIN, just(Pairs.second(var("nd")))),
+                                                field(Lambda.BODY, var("b")))))),
+                                var("appBody"),
+                                Lists.reverse(var("nameDoms")))))));
+
     public static final Def encodeTermDefinition = def("encodeTermDefinition")
         .lam("env").lam("tdef").lam("cx").lam("g")
         .to(() ->
@@ -6277,7 +6366,10 @@ public class Coder {
                                             hydra.core.dsl.Scoping.termSignatureToTypeScheme(
                                                 var("sig"))))),
                                 field("term",
-                                    hydra.core.dsl.Variables.unshadowVariables( var("term0"))),
+                                    apply(
+                                        ref(Coder.encodeTermDefinition_etaExpand),
+                                        var("ts"),
+                                        hydra.core.dsl.Variables.unshadowVariables( var("term0")))),
                                 Eithers.bind(
                                     apply(
                                         ref(Coder.analyzeJavaFunction),
@@ -14163,6 +14255,8 @@ public class Coder {
             encodeNullaryPrimitiveByName,
             encodeTerm,
             encodeTermDefinition,
+            encodeTermDefinition_arrowArity,
+            encodeTermDefinition_etaExpand,
             encodeTermInternal,
             encodeTermTCO,
             encodeType,
