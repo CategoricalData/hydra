@@ -211,6 +211,12 @@ gate_fail=0
 for pkg in "${TO_PUBLISH[@]}"; do
     manifest="$HYDRA_ROOT/dist/json/$pkg/src/main/json/manifest.json"
     tarball="$OUT_DIR/$pkg-$VERSION.tar.gz"
+    if [ "$pkg" = hydra ]; then
+        # The hand-written umbrella has no generated modules and so no manifest.json;
+        # there is nothing to check for completeness.
+        echo "  SKIP hydra (hand-written umbrella; no generated modules)"
+        continue
+    fi
     if [ ! -f "$manifest" ]; then
         # #772: manifest.json is a generated, always-expected path post-sync; its absence is
         # a path regression, not a benign skip. Failing the gate (not just skipping) matches
