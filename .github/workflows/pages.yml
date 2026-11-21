@@ -208,7 +208,7 @@ jobs:
 
           # Build each package's javadoc through its own gradle build, then
           # collect the output into java/javadoc/<pkg>/. Cross-package @link/@see
-          # references (e.g. hydra-pg -> hydra.core.Type) are wired as real
+          # references (e.g. hydra-pg -> hydra.core.model.Type) are wired as real
           # hyperlinks via -linkoffline: the emitted href points at the
           # dependency's published Pages URL, while the element-list is read from
           # the dependency's just-built local output tree. This requires building
@@ -287,8 +287,8 @@ jobs:
           done
 
           # Sanity check: Term.html confirms the kernel sources rendered.
-          test -f "${root}/hydra-kernel/hydra/core/Term.html" || {
-            echo "::error::hydra/core/Term.html missing from generated javadoc"
+          test -f "${root}/hydra-kernel/hydra/core/model/Term.html" || {
+            echo "::error::hydra/core/model/Term.html missing from generated javadoc"
             exit 1
           }
 
@@ -331,7 +331,7 @@ jobs:
       #      autodoc still imports from the fully-installed venv, so cross-
       #      package imports inside a package's own modules still resolve.
       #
-      # Cross-package links (e.g. hydra-rdf -> hydra.core.Type) are wired as real
+      # Cross-package links (e.g. hydra-rdf -> hydra.core.model.Type) are wired as real
       # hyperlinks via Sphinx intersphinx (the Python analog of JavaDoc's
       # -linkoffline in #616): each dependency's just-built tree emits an
       # objects.inv inventory, and a dependent's conf.py points
@@ -490,7 +490,7 @@ jobs:
       # Per-package Scaladoc WITH cross-package links (hybrid, #619). Two facts
       # force this design:
       #   1. Scala 3.3.7 scaladoc cannot cross-link SEPARATE per-package trees: a
-      #      reference to a type from a binary-jar dependency (e.g. hydra.core.Type
+      #      reference to a type from a binary-jar dependency (e.g. hydra.core.model.Type
       #      from hydra-pg) renders as `data-unresolved-link` before any linking
       #      option runs, and `-external-mappings` only rewrites already-resolved
       #      external symbols (verified 0 links three ways). So per-package builds
