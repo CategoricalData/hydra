@@ -3,7 +3,7 @@
 # The committed (local-mode) form is the hand-maintained source of truth.
 
 name:         hydra
-version:      0.18.1
+version:      0.18.2
 author:       Joshua Shinavier <josh@fortytwo.net>
 license:      Apache-2.0
 license-file: LICENSE
