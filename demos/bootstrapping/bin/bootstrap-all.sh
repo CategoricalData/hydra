@@ -35,12 +35,9 @@
 #   {host}-to-{target}/
 # Run metadata and results are persisted to bootstrap/runs/.
 
-# --- #814 build-slot guard: this script runs `stack build`/`exec`/`test` directly, so serialize it under the
-# shared-~/.stack slot unless already held (reentrant: sync.sh and the other guarded drivers call it). Placed
-# before any argument parsing so the ORIGINAL argv is forwarded; help-only invocations skip the slot. ---
-if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ] && [ "${1:-}" != "--help" ] && [ "${1:-}" != "-h" ]; then
-  exec "$( cd "$( dirname "${BASH_SOURCE[0]}" )/../../.." && pwd )/bin/with-stack-slot.sh" --label "bootstrap-all.sh" -- "$0" "$@"
-fi
+# Capture the ORIGINAL argv before the parse loop below consumes it with `shift`; the #814 build-slot guard
+# (placed after the scope is parsed) must forward these, not the empty post-parse "$@".
+BOOTSTRAP_ORIG_ARGS=("$@")
 
 set -e
 
@@ -145,6 +142,27 @@ for lang in "${HOST_LIST[@]}" "${TARGET_LIST[@]}"; do
         exit 1
     fi
 done
+
+# --- #814 build-slot guard: serialize shared-~/.stack GHC builds fleet-wide. ---
+# This script runs `stack test` directly only for a haskell target (_invoke_target_tests), and the haskell host
+# and target helpers (invoke-haskell-host.sh, test-haskell-target.sh) guard themselves. Everything else reaches
+# GHC only via bin/sync.sh, which takes the slot itself unless its #773/#797 fast path applies. So hold the slot
+# only when haskell is in scope (#672): for the test subcommand, an explicit --paths list decides; without one,
+# the paths come from the run directory and are not known yet, so hold it conservatively. display never builds.
+_bootstrap_needs_slot() {
+    case "$SUBCOMMAND" in
+        display) return 1 ;;
+        test)
+            [ -z "$PATH_FILTER" ] && return 0
+            case ",$PATH_FILTER," in *haskell*) return 0 ;; esac
+            return 1 ;;
+    esac
+    case ",$HOSTS,$TARGETS," in *,haskell,*) return 0 ;; esac
+    return 1
+}
+if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ] && _bootstrap_needs_slot; then
+    exec "$HYDRA_ROOT/bin/with-stack-slot.sh" --label "bootstrap-all.sh" -- "$0" "${BOOTSTRAP_ORIG_ARGS[@]}"
+fi
 
 # ============================================================
 # Run-directory + JSON utilities — defined early because the prep block
