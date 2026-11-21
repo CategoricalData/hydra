@@ -219,27 +219,27 @@ valueToJson = define "valueToJson" $
   doc "Convert a GraphSON Value to a JSON Value" $
   cases G._Value Nothing [
     G._Value_bigDecimal>>: "bd" ~>
-      typedValueToJson @@ string "g:BigDecimal" @@ (Json.valueString $ unwrap G._BigDecimalValue @@ var "bd"),
+      typedValueToJson @@ string "gx:BigDecimal" @@ (Json.valueString $ unwrap G._BigDecimalValue @@ var "bd"),
     G._Value_bigInteger>>: "i" ~>
-      typedValueToJson @@ string "g:BigInteger" @@ (Json.valueNumber $ Literals.bigintToDecimal $ var "i"),
+      typedValueToJson @@ string "gx:BigInteger" @@ (Json.valueNumber $ Literals.bigintToDecimal $ var "i"),
     -- Note: binary is represented as base64-encoded string in GraphSON
     G._Value_binary>>: "b" ~>
-      typedValueToJson @@ string "g:Binary" @@ (Json.valueString $ var "b"),
+      typedValueToJson @@ string "gx:ByteBuffer" @@ (Json.valueString $ var "b"),
     G._Value_boolean>>: "b" ~> Json.valueBoolean (var "b"),
     G._Value_byte>>: "b" ~>
-      typedValueToJson @@ string "g:Byte" @@ (Json.valueNumber $ Literals.bigintToDecimal $ Literals.uint8ToBigint $ var "b"),
+      typedValueToJson @@ string "gx:Byte" @@ (Json.valueNumber $ Literals.bigintToDecimal $ Literals.uint8ToBigint $ var "b"),
     G._Value_char>>: "c" ~>
-      typedValueToJson @@ string "g:Char" @@ (Json.valueString $ Strings.fromList $ Lists.singleton $ Literals.bigintToInt32 $ Literals.uint32ToBigint $ var "c"),
+      typedValueToJson @@ string "gx:Char" @@ (Json.valueString $ Strings.fromList $ Lists.singleton $ Literals.bigintToInt32 $ Literals.uint32ToBigint $ var "c"),
     G._Value_composite>>: "ctv" ~>
       typedValueToJson
         @@ (unwrap G._TypeName @@ (project G._CompositeTypedValue G._CompositeTypedValue_type @@ var "ctv"))
         @@ (mapToJson @@ (project G._CompositeTypedValue G._CompositeTypedValue_fields @@ var "ctv")),
     G._Value_dateTime>>: "dt" ~>
-      typedValueToJson @@ string "g:DateTime" @@ (Json.valueString $ unwrap G._DateTime @@ var "dt"),
+      typedValueToJson @@ string "g:Date" @@ (Json.valueString $ unwrap G._DateTime @@ var "dt"),
     G._Value_double>>: "dv" ~>
       typedValueToJson @@ string "g:Double" @@ (doubleValueToJson @@ var "dv"),
     G._Value_duration>>: "dur" ~>
-      typedValueToJson @@ string "g:Duration" @@ (Json.valueString $ unwrap G._Duration @@ var "dur"),
+      typedValueToJson @@ string "gx:Duration" @@ (Json.valueString $ unwrap G._Duration @@ var "dur"),
     G._Value_float>>: "fv" ~>
       typedValueToJson @@ string "g:Float" @@ (floatValueToJson @@ var "fv"),
     G._Value_integer>>: "i" ~>
@@ -247,7 +247,7 @@ valueToJson = define "valueToJson" $
     G._Value_list>>: "vals" ~>
       typedValueToJson @@ string "g:List" @@ (Json.valueArray $ Lists.map (asTerm valueToJson) $ var "vals"),
     G._Value_long>>: "l" ~>
-      typedValueToJson @@ string "g:Long" @@ (Json.valueNumber $ Literals.bigintToDecimal $ Literals.int64ToBigint $ var "l"),
+      typedValueToJson @@ string "g:Int64" @@ (Json.valueNumber $ Literals.bigintToDecimal $ Literals.int64ToBigint $ var "l"),
     G._Value_map>>: "m" ~>
       typedValueToJson @@ string "g:Map" @@ (mapToJson @@ var "m"),
     G._Value_null>>: constant Json.valueNull,
@@ -256,7 +256,7 @@ valueToJson = define "valueToJson" $
     G._Value_set>>: "vals" ~>
       typedValueToJson @@ string "g:Set" @@ (Json.valueArray $ Lists.map (asTerm valueToJson) $ var "vals"),
     G._Value_short>>: "i" ~>
-      typedValueToJson @@ string "g:Int16" @@ (Json.valueNumber $ Literals.bigintToDecimal $ Literals.int16ToBigint $ var "i"),
+      typedValueToJson @@ string "gx:Int16" @@ (Json.valueNumber $ Literals.bigintToDecimal $ Literals.int16ToBigint $ var "i"),
     G._Value_string>>: "s" ~> Json.valueString (var "s"),
     G._Value_uuid>>: "u" ~>
       typedValueToJson @@ string "g:UUID" @@ (Json.valueString $ unwrap G._Uuid @@ var "u")]
