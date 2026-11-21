@@ -1,7 +1,9 @@
 {
   "currentVersion": "0.18.2",
   "hostVersion": "0.18.1",
-  "hostOverrides": {},
+  "hostOverrides": {
+    "java": "local"
+  },
   "generators": {
     "default": "java",
     "bootstrapSeedHost": "haskell",
