@@ -317,9 +317,15 @@ LANG_UNION=$(printf '%s\n' $HOSTS $TARGETS | awk '!seen[$0]++' | xargs)
 # haskell — a trade-off the existing Phase 5 comment already contemplates — and
 # nothing in this run reads dist/haskell, so it is sound.
 HASKELL_FREE_FAST_PATH=false
+# #672 (F1): the fast path skips Phase 1 (module sources -> dist/json), so it is only sound when
+# dist/json is current with packages/** (.hydra, Haskell DSL sources, package.json). Without this
+# check, a source edit followed by a non-Haskell sync silently left dist/json stale.
+# check-sources-fresh.py compares against the stamp recorded after Phase 1 below or, on a cold tree,
+# against the merge-base with origin/main.
 if [ "$HOST_MODE" != "local" ] \
    && ! printf '%s\n' $LANG_UNION | grep -qx haskell \
-   && [ -d "$HYDRA_ROOT/dist/json" ]; then
+   && [ -d "$HYDRA_ROOT/dist/json" ] \
+   && python3 "$HYDRA_ROOT/bin/lib/check-sources-fresh.py" "$HYDRA_ROOT"; then
     # Every in-scope non-Haskell language must already have a FRESH dist/<L>/hydra-build
     # — not merely a PRESENT output digest (dist/<L>/hydra-build/build/main/digest.json),
     # but one that the same freshness gate the Phase 3 assembler itself uses
@@ -620,6 +626,8 @@ else
     mkdir -p "$(dirname "$HASKELL_SEED_STAMP")"
     haskell_kernel_json_hash > "$HASKELL_SEED_STAMP"
 fi
+# #672 (F1): dist/json is now current with packages/** — stamp it for the fast-path gate above.
+python3 "$HYDRA_ROOT/bin/lib/check-sources-fresh.py" "$HYDRA_ROOT" --record
 
 # ────────────────────────────────────────────────────────────────────
 # Phase 1.5: Auto-heal stale hydra-java / hydra-python / hydra-scala coder

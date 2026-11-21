@@ -1204,6 +1204,14 @@ skip the Haskell kernel build entirely on a warm tree, and #747 for a real order
 bug this exact area produced when a `hostOverrides["java"]="local"` pin interacted
 with the `#703` cold-seed path's own Haskell dependency.
 
+The fast path skips Phase 1 (module sources to `dist/json`), so it is taken only when `dist/json` is current with
+the sources under `packages/` (`.hydra` files, Haskell DSL sources, `package.json`).
+`bin/lib/check-sources-fresh.py` decides this (#672): on a warm tree it compares against a stamp recorded after
+Phase 1, and on a cold tree it requires the sources to be unchanged since the merge-base with `origin/main`.
+A source edit therefore sends a non-Haskell sync down the full path instead of leaving `dist/json` stale.
+Likewise, `bin/test.sh` and `demos/bootstrapping/bin/bootstrap-all.sh` take the build slot only when Haskell is
+in scope; other work reaches GHC only through `bin/sync.sh`, which decides for itself.
+
 ## Build & sync scripts: live entry points vs. orchestration
 
 Some scripts under `bin/` and `heads/*/bin/` have **no automated callers** yet are

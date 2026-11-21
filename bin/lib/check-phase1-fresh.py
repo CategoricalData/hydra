@@ -7,6 +7,8 @@ against the current state.
 
 Inputs hashed:
   - packages/*/src/main/haskell/Hydra/Sources/**.hs           (Haskell DSL sources)
+  - packages/*/src/{main,test}/hydra/**.hydra                 (textual sources, #837/#672)
+  - packages/*/package.json                                   (textualSources, dependencies)
   - packages/hydra-java/src/main/java/hydra/sources/**/*.java (Java DSL sources, #344)
   - packages/hydra-jvm/src/main/java/hydra/sources/**/*.java  (JVM DSL sources, #509)
   - packages/hydra-python/src/main/python/hydra/sources/**/*.py (Python DSL sources, #344)
@@ -81,6 +83,16 @@ def collect_inputs(hydra_root: Path) -> list:
             if sources.is_dir():
                 for hs in sources.rglob("*.hs"):
                     paths.add(hs)
+            # #672: textual .hydra sources (#837) and package.json (textualSources, dependencies)
+            # are Phase 1 inputs too; without them a .hydra-only edit reported "every input clean".
+            for src_set in ("main", "test"):
+                hydra_dir = pkg / "src" / src_set / "hydra"
+                if hydra_dir.is_dir():
+                    for hy in hydra_dir.rglob("*.hydra"):
+                        paths.add(hy)
+            manifest = pkg / "package.json"
+            if manifest.is_file():
+                paths.add(manifest)
     # Host-native DSL source trees (#344, #509). The Java, Python, Scala, and
     # JVM coders are now authored host-native, so edits there change Phase 1
     # outputs even though no .hs file moved. This list previously omitted

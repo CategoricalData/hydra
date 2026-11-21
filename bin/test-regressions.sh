@@ -28,6 +28,8 @@
 #   bin/test-inference-cost-guard.sh          (guards #700, hermetic by default — baseline-file sanity
 #                                              only; live measurement opt-in via
 #                                              HYDRA_INFERENCE_COST_ORACLE=1 + stack slot)
+#   bin/test-sources-freshness.sh             (guards #672, hermetic — fast-path source-freshness gate +
+#                                              haskell-scoped build-slot guards in test.sh/bootstrap-all.sh)
 #
 # The first five build their own Haskell executables from current source
 # before exec'ing them, so this script does not require a pre-built stack
@@ -65,6 +67,7 @@ SCRIPTS=(
     "test-generator-stamp-coder-copy.sh"
     "test-decimal-scale-conformance.sh"
     "test-inference-cost-guard.sh"
+    "test-sources-freshness.sh"
 )
 
 declare -a RESULTS=()
