@@ -43,14 +43,10 @@ set -euo pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 
-# --- #730 build-slot guard: serialize shared-~/.stack GHC builds fleet-wide. ---
-# test.sh pre-syncs via bin/sync.sh (--hosts haskell builds the Haskell host for
-# every target) and its --no-sync haskell branch runs `stack test` directly, so
-# every non-help run touches a Haskell build. Re-exec under the slot wrapper unless
-# already held (reentrant — the inner sync.sh/test-distribution.sh pass through).
-if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ] && [ "${1:-}" != "--help" ] && [ "${1:-}" != "-h" ]; then
-  exec "$HYDRA_ROOT/bin/with-stack-slot.sh" --label "test.sh $*" -- "$0" "$@"
-fi
+# Capture the ORIGINAL argv before the parse loop below consumes it with `shift`; the
+# #730 build-slot guard (after the scope is known) must forward these, not the empty
+# post-parse "$@".
+TEST_ORIG_ARGS=("$@")
 
 # Languages whose test-distribution.sh we know how to call. Order is the
 # default-triad-first convention used by /bootstrap.
@@ -139,6 +135,16 @@ expand_targets() {
 }
 
 TARGETS=$(expand_targets "$TARGETS_ARG")
+
+# --- #730 build-slot guard: serialize shared-~/.stack GHC builds fleet-wide. ---
+# Only a haskell target makes this script run `stack` directly (the --no-sync haskell
+# branch below). Every other target reaches GHC only through bin/sync.sh, which takes
+# the slot itself unless its #773/#797 fast path applies, so a non-Haskell /test must
+# not hold the fleet slot (#672). Re-exec under the slot wrapper unless already held
+# (reentrant — the inner sync.sh/test-distribution.sh pass through).
+if [ -z "${HYDRA_STACK_SLOT_HELD:-}" ] && [[ " $TARGETS " == *" haskell "* ]]; then
+  exec "$HYDRA_ROOT/bin/with-stack-slot.sh" --label "test.sh ${TEST_ORIG_ARGS[*]}" -- "$0" "${TEST_ORIG_ARGS[@]}"
+fi
 
 echo "=== /test scope: $TARGETS ==="
 echo ""
