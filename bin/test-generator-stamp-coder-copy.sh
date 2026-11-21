@@ -10,7 +10,9 @@ fail() { echo "FAIL: $*" >&2; exit 1; }
 pass() { echo "ok: $*"; }
 
 T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT
-cp "$REAL_ROOT/hydra.json" "$T/"
+# Pin python to the local-source path: this test is about the local coder fingerprint, and a
+# published python host (no hostOverrides entry) fingerprints by version, ignoring coder.py edits.
+jq '.hostOverrides.python = "local"' "$REAL_ROOT/hydra.json" > "$T/hydra.json"
 mkdir -p "$T/bin/lib" "$T/heads" "$T/packages"
 cp "$REAL_ROOT"/bin/lib/*.py "$REAL_ROOT"/bin/lib/*.sh "$T/bin/lib/"
 cp -r "$REAL_ROOT/heads/python" "$REAL_ROOT/heads/haskell" "$REAL_ROOT/heads/java" "$T/heads/" 2>/dev/null || true
