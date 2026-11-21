@@ -19,10 +19,9 @@ class PrintFloat {
 
         float abs = Math.abs(value);
         if (abs >= 0.1f && abs < 1.0e7f) {
-            // Java's Float.toString gives shortest decimal for this range
-            return Float.toString(value);
+            return ShortestDecimal.toJavaString(value);
         } else {
-            return toScientific(Float.toString(value));
+            return toScientific(ShortestDecimal.toJavaString(value));
         }
     }
 
@@ -38,9 +37,9 @@ class PrintFloat {
 
         double abs = Math.abs(value);
         if (abs >= 0.1 && abs < 1.0e7) {
-            return Double.toString(value);
+            return ShortestDecimal.toJavaString(value);
         } else {
-            return toScientific(Double.toString(value));
+            return toScientific(ShortestDecimal.toJavaString(value));
         }
     }
 

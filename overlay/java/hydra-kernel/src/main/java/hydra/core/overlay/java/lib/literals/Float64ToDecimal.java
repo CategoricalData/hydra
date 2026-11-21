@@ -19,7 +19,7 @@ import hydra.core.overlay.java.util.Either;
 
 /**
  * Primitive function which converts a float64 (IEEE 754 double) to a decimal (arbitrary-precision exact decimal).
- * Uses Double.toString for the shortest round-trip digits, stripping the cosmetic trailing
+ * Uses the shortest round-trip digits (in Double.toString format, JDK-independent), stripping the cosmetic trailing
  * ".0" Java always appends to whole values -- the decimal's scale must reflect only the
  * significant digits, not that convention (2.0 is scale-0 "2", not scale-1 "2.0").
  */
@@ -39,7 +39,7 @@ public class Float64ToDecimal extends PrimitiveFunction {
     }
 
     public static BigDecimal apply(Double value) {
-        String s = Double.toString(value);
+        String s = ShortestDecimal.toJavaString(value);
         if (s.endsWith(".0")) {
             s = s.substring(0, s.length() - 2);
         }
