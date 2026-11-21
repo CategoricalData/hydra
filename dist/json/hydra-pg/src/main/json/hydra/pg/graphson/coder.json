@@ -711,7 +711,7 @@
                             "function": {
                               "application": {
                                 "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"},
-                                "argument": {"literal": {"string": "g:BigDecimal"}}}},
+                                "argument": {"literal": {"string": "gx:BigDecimal"}}}},
                             "argument": {
                               "inject": {
                                 "typeName": "hydra.core.json.model.Value",
@@ -729,7 +729,7 @@
                             "function": {
                               "application": {
                                 "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"},
-                                "argument": {"literal": {"string": "g:BigInteger"}}}},
+                                "argument": {"literal": {"string": "gx:BigInteger"}}}},
                             "argument": {
                               "inject": {
                                 "typeName": "hydra.core.json.model.Value",
@@ -745,7 +745,9 @@
                         "body": {
                           "application": {
                             "function": {
-                              "application": {"function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}, "argument": {"literal": {"string": "g:Binary"}}}},
+                              "application": {
+                                "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"},
+                                "argument": {"literal": {"string": "gx:ByteBuffer"}}}},
                             "argument": {"inject": {"typeName": "hydra.core.json.model.Value", "field": {"name": "string", "term": {"variable": "b"}}}}}}}}},
                   {
                     "name": "boolean",
@@ -763,7 +765,7 @@
                         "body": {
                           "application": {
                             "function": {
-                              "application": {"function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}, "argument": {"literal": {"string": "g:Byte"}}}},
+                              "application": {"function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}, "argument": {"literal": {"string": "gx:Byte"}}}},
                             "argument": {
                               "inject": {
                                 "typeName": "hydra.core.json.model.Value",
@@ -782,7 +784,7 @@
                         "body": {
                           "application": {
                             "function": {
-                              "application": {"function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}, "argument": {"literal": {"string": "g:Char"}}}},
+                              "application": {"function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}, "argument": {"literal": {"string": "gx:Char"}}}},
                             "argument": {
                               "inject": {
                                 "typeName": "hydra.core.json.model.Value",
@@ -832,9 +834,7 @@
                         "body": {
                           "application": {
                             "function": {
-                              "application": {
-                                "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"},
-                                "argument": {"literal": {"string": "g:DateTime"}}}},
+                              "application": {"function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}, "argument": {"literal": {"string": "g:Date"}}}},
                             "argument": {
                               "inject": {
                                 "typeName": "hydra.core.json.model.Value",
@@ -863,7 +863,7 @@
                             "function": {
                               "application": {
                                 "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"},
-                                "argument": {"literal": {"string": "g:Duration"}}}},
+                                "argument": {"literal": {"string": "gx:Duration"}}}},
                             "argument": {
                               "inject": {
                                 "typeName": "hydra.core.json.model.Value",
@@ -935,7 +935,7 @@
                         "body": {
                           "application": {
                             "function": {
-                              "application": {"function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}, "argument": {"literal": {"string": "g:Long"}}}},
+                              "application": {"function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}, "argument": {"literal": {"string": "g:Int64"}}}},
                             "argument": {
                               "inject": {
                                 "typeName": "hydra.core.json.model.Value",
@@ -1019,7 +1019,7 @@
                         "body": {
                           "application": {
                             "function": {
-                              "application": {"function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}, "argument": {"literal": {"string": "g:Int16"}}}},
+                              "application": {"function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}, "argument": {"literal": {"string": "gx:Int16"}}}},
                             "argument": {
                               "inject": {
                                 "typeName": "hydra.core.json.model.Value",
