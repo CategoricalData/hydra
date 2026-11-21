@@ -4,6 +4,7 @@ import hydra.core.model.Name;
 import hydra.core.model.Term;
 import hydra.core.model.TypeScheme;
 import hydra.core.overlay.java.dsl.Terms;
+import hydra.core.overlay.java.dsl.Types;
 import hydra.core.graph.Graph;
 import hydra.core.overlay.java.tools.PrimitiveFunction;
 
@@ -13,7 +14,6 @@ import java.util.function.Function;
 
 import static hydra.core.overlay.java.dsl.Types.either;
 import static hydra.core.overlay.java.dsl.Types.function;
-import static hydra.core.overlay.java.dsl.Types.scheme;
 import static hydra.core.overlay.java.dsl.Types.set;
 import static hydra.core.overlay.java.dsl.Types.var;
 import hydra.core.errors.Error_;
@@ -32,11 +32,11 @@ public class MapSet extends PrimitiveFunction {
 
     @Override
     public TypeScheme type() {
-        return scheme("a", "b", "z",
+        return Types.constrained3("x", Types.ORD, "y", Types.ORD, "z", Types.NONE,
             function(
-                function(var("a"), either(var("z"), var("b"))),
-                set(var("a")),
-                either(var("z"), set(var("b")))));
+                function(var("x"), either(var("z"), var("y"))),
+                set(var("x")),
+                either(var("z"), set(var("y")))));
     }
 
     @Override
