@@ -1071,7 +1071,7 @@ parseModuleWith = define "parseModuleWith" $
 isUnionType :: TypedTermDefinition (Type -> Bool)
 isUnionType = define "isUnionType" $
   doc "True iff a type (after stripping foralls/annotations) is a union type (#809)" $
-  "typ" ~> match _Type (Strip.deannotateTypeParameters @@ var "typ") (Just false) [
+  "typ" ~> match _Type (Strip.deannotateType @@ (Strip.deannotateTypeParameters @@ var "typ")) (Just false) [
     _Type_union>>: constant true]
 
 -- | Build one module's universe entry: its name, paired with the set of its own declared

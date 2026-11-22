@@ -518,7 +518,8 @@ term importDecl =
                 (λmpkg.parsers.pure (ModuleDependency{`module` = modName, package = mpkg}, malias)))))
 
 ## True iff a type (after stripping foralls/annotations) is a union type (#809)
-term isUnionType = λtyp.cases(Type){`union` = λ`_`.true, `_` = false} (deannotateTypeParameters typ)
+term isUnionType =
+  λtyp.cases(Type){`union` = λ`_`.true, `_` = false} (deannotateType (deannotateTypeParameters typ))
 
 ## Parse a specific keyword, followed by optional trailing whitespace
 term keyword = λkw.token (parsers.string kw)

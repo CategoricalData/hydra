@@ -1472,13 +1472,33 @@ parseModulesDependencyClashTest = universalCase "parseModules rejects an input c
     ("a.hydra", "module test.dep\n\nterm x = 1\n")])
   (string "a.hydra: duplicate module name across inputs (or clashing with a dependency module): test.dep")
 
+-- | A unit-injection shorthand ('Choice{yes}') over a union type declared in ANOTHER of the caller's
+-- files is parsed as an injection, even when that union carries a doc comment (#672). The doc comment
+-- annotates the type body, and 'isUnionType' (which builds pass 2's union-name set) previously missed
+-- annotated unions, so the shorthand stayed a one-field record. Only the second module is
+-- fingerprinted ('Lists.drop 1'), so the expected side need not reproduce the type module.
+parseModulesDocumentedUnionTest :: TypedTerm TestCaseWithMetadata
+parseModulesDocumentedUnionTest = universalCase "parseModules corrects an injection over a documented union in another file (#672)"
+  (Eithers.either
+    (Phantoms.lambda "e" $ Phantoms.var "e")
+    (Phantoms.lambda "mods" $ Strings.join (Phantoms.string "\n")
+      (Lists.map ("m" ~> moduleFingerprint (Phantoms.var "m")) (Lists.drop (Phantoms.int32 1) (Phantoms.var "mods"))))
+    (ParsePackaging.parseModules @@ (Phantoms.list ([] :: [TypedTerm Module])) @@ (Phantoms.list [
+      Phantoms.pair (Phantoms.string "u.hydra")
+        (Phantoms.string "module test.u\n\n## A documented union\ntype Choice = union{\n  yes: unit,\n  no: unit}\n"),
+      Phantoms.pair (Phantoms.string "v.hydra")
+        (Phantoms.string "module test.v\n\nimport test.u\n\nterm pick = Choice{yes}\n")])))
+  (moduleFingerprint (termsOnlyModule "test.v"
+    [("pick", Core.termInject (Core.injection (nm "test.u.Choice") (unitFld "yes")))]))
+
 parseModulesGroup :: TypedTermDefinition TestGroup
 parseModulesGroup = define "parseModulesGroup" $
   doc "'parseModules': the downstream '.hydra'-sources two-pass entry point (#842)" $
   Testing.testGroup (string "parseModules") nothing (list ([] :: [TypedTerm TestGroup])) (list [
     parseModulesCrossFileTest,
     parseModulesDuplicateNameTest,
-    parseModulesDependencyClashTest])
+    parseModulesDependencyClashTest,
+    parseModulesDocumentedUnionTest])
 
 sourceSpanGroup :: TypedTermDefinition TestGroup
 sourceSpanGroup = define "sourceSpanGroup" $

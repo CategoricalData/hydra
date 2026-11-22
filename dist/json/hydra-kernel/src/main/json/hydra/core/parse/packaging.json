@@ -3748,7 +3748,10 @@
                                 "domain": {"list": {"variable": "hydra.core.model.FieldType"}},
                                 "body": {"literal": {"boolean": true}}}}}]}},
                     "argument": {
-                      "application": {"function": {"variable": "hydra.core.strip.deannotateTypeParameters"}, "argument": {"variable": "typ"}}}}}}},
+                      "application": {
+                        "function": {"variable": "hydra.core.strip.deannotateType"},
+                        "argument": {
+                          "application": {"function": {"variable": "hydra.core.strip.deannotateTypeParameters"}, "argument": {"variable": "typ"}}}}}}}}},
             "annotation": {
               "map": [
                 {
