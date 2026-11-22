@@ -8,5 +8,7 @@
 
   "agentGuide": "CLAUDE.md",
   "spawnModel": "opusplan",
-  "sessionPrefix": "hydra-"
+  "sessionPrefix": "hydra-",
+
+  "visibility": "public"
 }
