@@ -5591,7 +5591,23 @@
                                                               "application": {
                                                                 "function": {"application": {"function": {"variable": "hydra.java.coder.classifyDataTerm"}, "argument": {"variable": "ts"}}},
                                                                 "argument": {
-                                                                  "application": {"function": {"project": {"typeName": "hydra.core.model.Binding", "fieldName": "term"}}, "argument": {"variable": "el"}}}}}}},
+                                                                  "application": {
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "typeApplication": {"body": {"variable": "hydra.core.lib.logic.ifElse"}, "type": {"variable": "hydra.core.model.Term"}}},
+                                                                            "argument": {
+                                                                              "application": {"function": {"variable": "hydra.java.coder.isLambdaBoundIn_isQualified"}, "argument": {"variable": "name"}}}}},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "function": {
+                                                                              "application": {"function": {"variable": "hydra.java.coder.encodeTermDefinition_etaExpand"}, "argument": {"variable": "ts"}}},
+                                                                            "argument": {
+                                                                              "application": {"function": {"project": {"typeName": "hydra.core.model.Binding", "fieldName": "term"}}, "argument": {"variable": "el"}}}}}}},
+                                                                    "argument": {
+                                                                      "application": {"function": {"project": {"typeName": "hydra.core.model.Binding", "fieldName": "term"}}, "argument": {"variable": "el"}}}}}}}}},
                                                         "type": {"variable": "hydra.core.errors.Error"}}},
                                                     "type": {"variable": "hydra.java.environment.JavaSymbolClass"}}}}}}}}}}}}}}}}}}}}}}}}},
     {
@@ -20786,7 +20802,10 @@
                       {
                         "name": "have",
                         "term": {
-                          "application": {"function": {"variable": "hydra.java.coder.classifyDataTerm_countLambdaParams"}, "argument": {"variable": "term"}}},
+                          "application": {
+                            "function": {"variable": "hydra.java.coder.classifyDataTerm_countLambdaParams"},
+                            "argument": {
+                              "application": {"function": {"variable": "hydra.java.coder.classifyDataTerm_stripTypeLambdas"}, "argument": {"variable": "term"}}}}},
                         "typeScheme": {"variables": [], "body": {"literal": {"integer": "int32"}}, "constraints": []}},
                       {
                         "name": "want",
@@ -20810,9 +20829,21 @@
                                   "application": {
                                     "function": {
                                       "application": {
-                                        "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
-                                        "argument": {"variable": "want"}}},
-                                    "argument": {"variable": "have"}}}}},
+                                        "function": {"variable": "hydra.core.lib.logic.or"},
+                                        "argument": {
+                                          "application": {
+                                            "function": {
+                                              "application": {
+                                                "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.gt"}, "type": {"literal": {"integer": "int32"}}}},
+                                                "argument": {"variable": "have"}}},
+                                            "argument": {"literal": {"integer": {"int32": 0}}}}}}},
+                                    "argument": {
+                                      "application": {
+                                        "function": {
+                                          "application": {
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.core.lib.ordering.lte"}, "type": {"literal": {"integer": "int32"}}}},
+                                            "argument": {"variable": "want"}}},
+                                        "argument": {"literal": {"integer": {"int32": 0}}}}}}}}},
                             "argument": {"variable": "term"}}},
                         "argument": {
                           "let": {
