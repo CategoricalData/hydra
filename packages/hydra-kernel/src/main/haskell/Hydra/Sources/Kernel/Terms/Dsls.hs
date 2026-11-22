@@ -8,6 +8,7 @@ import Hydra.Kernel
 import           Hydra.Core.Overlay.Haskell.Bootstrap (unqualifiedDep, descriptionMetadata)
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Annotations       as Annotations
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core         as Core
+import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Core.Dsl.Coders       as Coders
 import qualified Hydra.Core.Dsl.Lib.Eithers  as Eithers
 import qualified Hydra.Core.Dsl.Lib.Equality as Equality
@@ -237,6 +238,8 @@ dslModule = define "dslModule" $
     "allBindings" <~ (deduplicateBindings @@ Lists.concat2
       (Lists.concat (var "typeDslBindings"))
       (Lists.concat (var "refDslBindings"))) $
+    "typeModuleNames" <~ (Sets.fromList $ Optionals.givens $ Lists.map ("n" ~> Names.moduleNameOf @@ var "n")
+      (Maps.keys (Graph.graphSchemaTypes (var "graph")))) $
     Logic.ifElse (Lists.isEmpty (var "allBindings"))
       (right nothing)
       (right (just (Packaging.module_
@@ -249,7 +252,9 @@ dslModule = define "dslModule" $
           (list ([] :: [TypedTerm Provision]))))
         -- DSL modules depend on:
         -- (1) the original module + its source dependencies + hydra.core.typed (for TypedTerm),
-        -- (2) DSL modules for the source's dependencies (to reference other types' DSL functions), and
+        -- (2) DSL modules for those of the source's dependencies which define types (to reference other types' DSL
+        --     functions); a dependency without types, such as one primitive library on another, has no DSL functions
+        --     to reference, and its DSL module may depend back on this one, and
         -- (3) the original module's own encode/decode modules (referenced by
         --     generateParametricRefBuilders's composition builders)
         (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.distinct (Lists.concat2
@@ -258,7 +263,8 @@ dslModule = define "dslModule" $
             Names.derivedModuleName @@ list [string "decode"] @@ boolean True @@ (Packaging.moduleName (var "mod"))])
           (Lists.concat2
             (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod")))
-            (primitive DefLists.map @@ dslModuleName @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))))))
+            (primitive DefLists.map @@ dslModuleName @@ (Lists.filter ("ns" ~> Sets.member (var "ns") (var "typeModuleNames"))
+              (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod")))))))))
         (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
           (Core.bindingName $ var "b")
           nothing

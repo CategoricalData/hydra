@@ -11,11 +11,7 @@
     {"module": "hydra.core.lib.maps"},
     {"module": "hydra.core.lib.optionals"},
     {"module": "hydra.core.lib.strings"},
-    {"module": "hydra.core.dsl.json.model"},
-    {"module": "hydra.core.dsl.lib.eithers"},
-    {"module": "hydra.core.dsl.lib.maps"},
-    {"module": "hydra.core.dsl.lib.optionals"},
-    {"module": "hydra.core.dsl.lib.strings"}],
+    {"module": "hydra.core.dsl.json.model"}],
   "definitions": [
     {
       "term": {

@@ -211,8 +211,10 @@ main = do
   -- imported from dist/haskell/*/Sources/{Encode,Decode}/*.hs (#448); the
   -- JSON under dist/json is produced independently by writeDerivedJsonPackageSplit
   -- below. Same synthesizer, same content, no .hs needed.
-  encMods <- generateEncoderModules baseUniverse allEncodingModules
-  decMods <- generateDecoderModules baseUniverse allEncodingModules
+  let baseByNamespace = M.fromList [(Kernel.moduleName m, m) | m <- baseUniverse]
+      substituted = fmap (\m -> M.findWithDefault m (Kernel.moduleName m) baseByNamespace)
+  encMods <- generateEncoderModules baseUniverse (substituted allEncodingModules)
+  decMods <- generateDecoderModules baseUniverse (substituted allEncodingModules)
   let synthesizedEncodeDecode = dedupByNamespace (encMods ++ decMods)
 
   nativeTagged <- loadNativePackageModulesTagged distRoot baseUniverse
@@ -450,8 +452,13 @@ main = do
   -- per-host Hydra.Sources.{Encode,Decode}.*.hs source-as-data copy is needed
   -- for the JSON to exist (#474, #448-aligned). Per-package opt-in: add a
   -- module to a package's derivedMainModules list to start deriving for it.
-  let dslSrcMods = allDslModules
-      encSrcMods = allEncodingModules
+  -- #672: derive from the SAME modules the main pass used, i.e. with textual (.hydra) sources
+  -- substituted. allDslModules/allEncodingModules are the compiled Haskell DSL copies; deriving
+  -- from them leaked the DSL copies' declared dependencies into the hydra.core.dsl.* wrappers
+  -- (e.g. 27 instead of the 3 imports hydra.core.lib.chars declares), so the derived JSON did not
+  -- follow the .hydra sources and could not be reproduced by a non-Haskell host.
+  let dslSrcMods = substituted allDslModules
+      encSrcMods = substituted allEncodingModules
   dslResult <- catch
     (writeDerivedJsonPackageSplit routingMap distRoot universe dslSrcMods encSrcMods >> return True)
     (\e -> do

@@ -19,17 +19,8 @@
     {"module": "hydra.core.paths"},
     {"module": "hydra.core.scoping"},
     {"module": "hydra.core.dsl.coders"},
-    {"module": "hydra.core.dsl.constants"},
-    {"module": "hydra.core.dsl.lib.eithers"},
-    {"module": "hydra.core.dsl.lib.lists"},
-    {"module": "hydra.core.dsl.lib.maps"},
-    {"module": "hydra.core.dsl.lib.math"},
-    {"module": "hydra.core.dsl.lib.optionals"},
-    {"module": "hydra.core.dsl.lib.pairs"},
-    {"module": "hydra.core.dsl.lib.sets"},
     {"module": "hydra.core.dsl.model"},
-    {"module": "hydra.core.dsl.paths"},
-    {"module": "hydra.core.dsl.scoping"}],
+    {"module": "hydra.core.dsl.paths"}],
   "definitions": [
     {
       "term": {

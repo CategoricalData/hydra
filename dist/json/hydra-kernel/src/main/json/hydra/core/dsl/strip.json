@@ -9,9 +9,7 @@
     {"module": "hydra.core.lib.lists"},
     {"module": "hydra.core.model"},
     {"module": "hydra.core.rewriting"},
-    {"module": "hydra.core.dsl.lib.lists"},
-    {"module": "hydra.core.dsl.model"},
-    {"module": "hydra.core.dsl.rewriting"}],
+    {"module": "hydra.core.dsl.model"}],
   "definitions": [
     {
       "term": {

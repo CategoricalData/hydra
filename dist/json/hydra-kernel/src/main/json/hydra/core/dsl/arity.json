@@ -13,8 +13,6 @@
     {"module": "hydra.core.packaging"},
     {"module": "hydra.core.typing"},
     {"module": "hydra.core.dsl.graph"},
-    {"module": "hydra.core.dsl.lib.lists"},
-    {"module": "hydra.core.dsl.lib.math"},
     {"module": "hydra.core.dsl.model"},
     {"module": "hydra.core.dsl.packaging"},
     {"module": "hydra.core.dsl.typing"}],

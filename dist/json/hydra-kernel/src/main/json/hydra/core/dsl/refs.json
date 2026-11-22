@@ -13,13 +13,7 @@
     {"module": "hydra.core.lib.sets"},
     {"module": "hydra.core.model"},
     {"module": "hydra.core.names"},
-    {"module": "hydra.core.dsl.lib.lists"},
-    {"module": "hydra.core.dsl.lib.maps"},
-    {"module": "hydra.core.dsl.lib.optionals"},
-    {"module": "hydra.core.dsl.lib.pairs"},
-    {"module": "hydra.core.dsl.lib.sets"},
     {"module": "hydra.core.dsl.model"},
-    {"module": "hydra.core.dsl.names"},
     {"module": "hydra.core.dsl.typed"}],
   "definitions": [
     {

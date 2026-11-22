@@ -19,17 +19,7 @@
     {"module": "hydra.core.lib.strings"},
     {"module": "hydra.core.serialization"},
     {"module": "hydra.core.dsl.ast"},
-    {"module": "hydra.core.dsl.json.model"},
-    {"module": "hydra.core.dsl.lib.equality"},
-    {"module": "hydra.core.dsl.lib.lists"},
-    {"module": "hydra.core.dsl.lib.literals"},
-    {"module": "hydra.core.dsl.lib.logic"},
-    {"module": "hydra.core.dsl.lib.math"},
-    {"module": "hydra.core.dsl.lib.optionals"},
-    {"module": "hydra.core.dsl.lib.ordering"},
-    {"module": "hydra.core.dsl.lib.pairs"},
-    {"module": "hydra.core.dsl.lib.strings"},
-    {"module": "hydra.core.dsl.serialization"}],
+    {"module": "hydra.core.dsl.json.model"}],
   "definitions": [
     {
       "term": {

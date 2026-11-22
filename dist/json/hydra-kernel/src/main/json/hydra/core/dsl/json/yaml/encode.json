@@ -13,12 +13,7 @@
     {"module": "hydra.core.lib.maps"},
     {"module": "hydra.core.lib.pairs"},
     {"module": "hydra.core.yaml.model"},
-    {"module": "hydra.core.dsl.json.encode"},
     {"module": "hydra.core.dsl.json.model"},
-    {"module": "hydra.core.dsl.lib.eithers"},
-    {"module": "hydra.core.dsl.lib.lists"},
-    {"module": "hydra.core.dsl.lib.maps"},
-    {"module": "hydra.core.dsl.lib.pairs"},
     {"module": "hydra.core.dsl.yaml.model"}],
   "definitions": [
     {

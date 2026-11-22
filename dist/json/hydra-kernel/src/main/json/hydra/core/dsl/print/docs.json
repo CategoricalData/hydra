@@ -13,11 +13,8 @@
     {"module": "hydra.core.packaging"},
     {"module": "hydra.core.parse.docs"},
     {"module": "hydra.core.dsl.docs"},
-    {"module": "hydra.core.dsl.lib.lists"},
-    {"module": "hydra.core.dsl.lib.strings"},
     {"module": "hydra.core.dsl.model"},
-    {"module": "hydra.core.dsl.packaging"},
-    {"module": "hydra.core.dsl.parse.docs"}],
+    {"module": "hydra.core.dsl.packaging"}],
   "definitions": [
     {
       "term": {

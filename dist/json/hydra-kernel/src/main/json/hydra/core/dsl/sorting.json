@@ -18,17 +18,6 @@
     {"module": "hydra.core.lib.pairs"},
     {"module": "hydra.core.lib.sets"},
     {"module": "hydra.core.topology"},
-    {"module": "hydra.core.dsl.constants"},
-    {"module": "hydra.core.dsl.lib.equality"},
-    {"module": "hydra.core.dsl.lib.functions"},
-    {"module": "hydra.core.dsl.lib.lists"},
-    {"module": "hydra.core.dsl.lib.logic"},
-    {"module": "hydra.core.dsl.lib.maps"},
-    {"module": "hydra.core.dsl.lib.math"},
-    {"module": "hydra.core.dsl.lib.optionals"},
-    {"module": "hydra.core.dsl.lib.ordering"},
-    {"module": "hydra.core.dsl.lib.pairs"},
-    {"module": "hydra.core.dsl.lib.sets"},
     {"module": "hydra.core.dsl.topology"}],
   "definitions": [
     {

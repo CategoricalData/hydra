@@ -8,6 +8,7 @@ import hydra.core.decode.model as decode.model
 import hydra.core.encode.model as encode.model
 import hydra.core.errors
 import hydra.core.formatting
+import hydra.core.graph
 import hydra.core.lexical
 import hydra.core.lib.eithers as eithers
 import hydra.core.lib.equality
@@ -98,8 +99,13 @@ term dslModule =
                 let allBindings := deduplicateBindings
                     (lists.concat2
                       (lists.concat typeDslBindings)
-                      (lists.concat refDslBindings))
-                in ifElse
+                      (lists.concat refDslBindings)) in
+                let typeModuleNames := sets.fromList
+                    (optionals.givens
+                      (lists.map
+                        (λn.moduleNameOf n)
+                        (maps.keys (Graph[schemaTypes] graph)))) in
+                ifElse
                   (lists.isEmpty allBindings)
                   right(none)
                   right(given(Module{
@@ -128,9 +134,11 @@ term dslModule =
                                 (Module[dependencies] mod))
                               (lists.map
                                 dslModuleName
-                                (lists.map
-                                  (λdep.ModuleDependency[`module`] dep)
-                                  (Module[dependencies] mod)))))),
+                                (lists.filter
+                                  (λns.sets.member ns typeModuleNames)
+                                  (lists.map
+                                    (λdep.ModuleDependency[`module`] dep)
+                                    (Module[dependencies] mod))))))),
                     definitions = lists.map
                         (λb.Definition{
                             `term` = TermDefinition{

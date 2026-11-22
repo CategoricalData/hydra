@@ -12,10 +12,6 @@
     {"module": "hydra.core.print.errors"},
     {"module": "hydra.core.testing"},
     {"module": "hydra.core.typing"},
-    {"module": "hydra.core.dsl.inference"},
-    {"module": "hydra.core.dsl.lexical"},
-    {"module": "hydra.core.dsl.lib.eithers"},
-    {"module": "hydra.core.dsl.print.errors"},
     {"module": "hydra.core.dsl.testing"},
     {"module": "hydra.core.dsl.typing"}],
   "definitions": [
