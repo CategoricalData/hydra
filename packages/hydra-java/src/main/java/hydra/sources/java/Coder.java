@@ -1921,12 +1921,22 @@ public class Coder {
                                                     apply(
                                                         unwrap(Name.TYPE_),
                                                         proj(Binding.TYPE_, Binding.NAME, "el")))))),
+                                    // Classify module-level (qualified) definitions by their eta-expanded
+                                    // form, so call sites use the same arity encodeTermDefinition emits.
+                                    // Otherwise a hoisted `h = \m -> f m` of type A -> B -> C is declared
+                                    // h(eta0, eta1) but called curried as h(m).apply(v). (#734)
                                     lambda("ts",
                                         right(
                                             apply(
                                                 ref(Coder.classifyDataTerm),
                                                 var("ts"),
-                                                proj(Binding.TYPE_, Binding.TERM, "el"))))))))));
+                                                Logic.ifElse(
+                                                    apply(ref(Coder.isLambdaBoundIn_isQualified), var("name")),
+                                                    apply(
+                                                        ref(Coder.encodeTermDefinition_etaExpand),
+                                                        var("ts"),
+                                                        proj(Binding.TYPE_, Binding.TERM, "el")),
+                                                    proj(Binding.TYPE_, Binding.TERM, "el")))))))))));
 
     public static final Def classifyDataTerm = def("classifyDataTerm")
         .lam("ts").lam("term")
@@ -6268,25 +6278,30 @@ public class Coder {
                                     ref(Coder.encodeTermDefinition_arrowArity),
                                     proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft")))))));
 
-    // Eta-expand a point-free (or under-applied) binding so a Java method with explicit parameters
-    // is emitted rather than a nullary method returning a curried Function. A binding like
-    // `regex = alternation` whose signature strips to Graph -> Term -> X has zero lambda params, so
-    // the coder would otherwise emit `static Function<Graph,Function<Term,X>> regex()` -- which no
-    // call site can invoke as `regex(g, t)`. We wrap it as `\v{k}..v{n-1} -> term v{k} .. v{n-1}`
-    // up to the signature's arrow arity. Newtype-wrapped values (Parser, etc.) are unaffected
-    // because arrowArity only counts raw Type.FUNCTION arrows. (#734)
+    // Eta-expand a point-free binding so a Java method with explicit parameters is emitted rather
+    // than a nullary method returning a curried Function. A binding like `regex = alternation` whose
+    // signature strips to Graph -> Term -> X has zero lambda params, so the coder would otherwise emit
+    // `static Function<Graph,Function<Term,X>> regex()` -- which no call site can invoke as
+    // `regex(g, t)`. We wrap it as `\eta0..eta{n-1} -> term eta0 .. eta{n-1}` up to the signature's
+    // arrow arity. Only zero-lambda bindings (counted beneath any type lambdas) are expanded; a binding
+    // that already has lambdas keeps its arity, which call sites already honor. Newtype-wrapped values
+    // (Parser, etc.) are unaffected because arrowArity only counts raw Type.FUNCTION arrows. (#734)
     public static final Def encodeTermDefinition_etaExpand = def("encodeTermDefinition_etaExpand")
         .lam("ts").lam("term")
         .to(() ->
                 let(
                     field("have",
-                        apply(ref(Coder.classifyDataTerm_countLambdaParams), var("term"))),
+                        apply(
+                            ref(Coder.classifyDataTerm_countLambdaParams),
+                            apply(ref(Coder.classifyDataTerm_stripTypeLambdas), var("term")))),
                     field("want",
                         apply(
                             ref(Coder.encodeTermDefinition_arrowArity),
                             proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts"))),
                     Logic.ifElse(
-                        Ordering.lte(var("want"), var("have")),
+                        Logic.or(
+                            Ordering.gt(var("have"), int32(0)),
+                            Ordering.lte(var("want"), int32(0))),
                         var("term"),
                         let(
                             field("idxs",
