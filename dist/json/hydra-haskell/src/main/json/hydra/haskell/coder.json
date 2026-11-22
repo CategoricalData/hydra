@@ -31,6 +31,7 @@
     {"module": "hydra.core.paths"},
     {"module": "hydra.core.ast"},
     {"module": "hydra.core.coders"},
+    {"module": "hydra.core.constraints.model"},
     {"module": "hydra.core.model"},
     {"module": "hydra.core.diff"},
     {"module": "hydra.core.docs"},
