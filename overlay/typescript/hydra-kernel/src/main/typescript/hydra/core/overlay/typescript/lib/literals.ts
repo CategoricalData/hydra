@@ -275,36 +275,45 @@ export const printUint8 = (n: number): string => n.toString();
 export const printUint16 = (n: number): string => n.toString();
 export const printUint32 = (n: number): string => n.toString();
 export const printUint64 = (n: bigint): string => n.toString();
+// Normalize a `toExponential()`-style string ("5e-2", "1.4e-324") to Haskell
+// notation: mantissa always has a '.', exponent has no leading '+' or zero-padding
+// (e.g. `5e-2` -> `5.0e-2`, `1.4e+21` -> `1.4e21`).
+const _normalizeExponential = (s: string): string => {
+  const eIdx = s.indexOf("e");
+  const mantissa = s.slice(0, eIdx);
+  const expPart = s.slice(eIdx + 1);
+  const fixedMantissa = mantissa.includes(".") ? mantissa : `${mantissa}.0`;
+  const sign = expPart.startsWith("-") ? "-" : "";
+  const digits = expPart.replace(/^[+-]?0*/, "") || "0";
+  return `${fixedMantissa}e${sign}${digits}`;
+};
+
 // Show a float at ~12 significant digits, matching the convention used
 // by the kernel test fixtures. Haskell's `show` for `Double` uses
-// exponential notation when `abs(x) < 0.1` and the standard non-
-// exponential form otherwise. For exp form the mantissa is normalized
-// to a single non-zero digit before the dot (e.g. `5.0e-2`, not
-// `0.05`). Returns "NaN" / "Infinity" / "-Infinity" for edge cases and
-// `<n>.0` for integer-valued floats.
+// exponential notation when `abs(x) < 0.1` or `abs(x) >= 1e7`, and the
+// standard non-exponential form otherwise. For exp form the mantissa is
+// normalized to a single non-zero digit before the dot (e.g. `5.0e-2`,
+// not `0.05`). Returns "NaN" / "Infinity" / "-Infinity" for edge cases
+// and `<n>.0` for integer-valued floats.
+//
+// Does NOT rely on `toExponential()`'s own notation threshold: unlike
+// Haskell, native JS `toString()` only switches to exponential notation
+// at 1e21 (not 1e7), so the upper Haskell-notation boundary must be
+// checked explicitly rather than left to `toString()` (#763).
 const _showFloatPrecise = (f: number): string => {
   if (Number.isNaN(f)) return "NaN";
   if (f === Infinity) return "Infinity";
   if (f === -Infinity) return "-Infinity";
   if (f === 0) return Object.is(f, -0) ? "-0.0" : "0.0";
   const abs = Math.abs(f);
-  if (abs < 0.1) {
-    // Haskell shows values < 0.1 in exponential notation
-    // (e.g. `5.0e-2`, `1.22464679915e-16`). Use toExponential() for the
+  if (abs < 0.1 || abs >= 1.0e7) {
+    // Haskell shows values outside [0.1, 1e7) in exponential notation
+    // (e.g. `5.0e-2`, `1.22464679915e-16`, `1.0e7`). Use toExponential() for the
     // shortest round-trip mantissa, then normalize to Haskell style.
     // toExponential() with no arg picks the shortest exact representation.
-    let s = f.toExponential();
-    const eIdx = s.indexOf("e");
-    const mantissa = s.slice(0, eIdx);
-    const expPart = s.slice(eIdx + 1);
-    // Ensure mantissa contains a '.', so `5e-2` → `5.0e-2`.
-    const fixedMantissa = mantissa.includes(".") ? mantissa : `${mantissa}.0`;
-    // Strip leading "+" and zero-padding from exponent: e+05 → e5, e-05 → e-5.
-    const sign = expPart.startsWith("-") ? "-" : "";
-    const digits = expPart.replace(/^[+-]?0*/, "") || "0";
-    return `${fixedMantissa}e${sign}${digits}`;
+    return _normalizeExponential(f.toExponential());
   }
-  // For values >= 0.1, use shortest round-trip representation via toString().
+  // For values in [0.1, 1e7), use shortest round-trip representation via toString().
   // This matches Haskell's `show :: Double -> String` for finite values.
   let s = f.toString();
   if (s.includes("e")) {
