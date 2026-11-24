@@ -80,12 +80,14 @@ module_ = Module {
      toDefinition fieldTypeFromSchema,
      toDefinition findFieldTypeIn,
      toDefinition graphToTermGraph,
+     toDefinition instantiateForalls,
      toDefinition rootExpectedType,
      toDefinition schemaToTypeGraph,
      toDefinition synthesizeType,
      toDefinition termAttributesOf,
      toDefinition termGraphNode,
      toDefinition termReferenceFor,
+     toDefinition typeApplicationChain,
      toDefinition typeAttributesOf,
      toDefinition typeGraphNode,
      toDefinition typeLinks,
@@ -164,7 +166,7 @@ graphToTermGraph = define "graphToTermGraph" $
     <> " are inline (a tree); variable occurrences become symbolic references carrying their binding"
     <> " node's id. Input must be a POST-INFERENCE (elaborated) graph: binding schemes present, lambda"
     <> " domains present, typeLambda/typeApplication explicit. Node types are synthesized in one O(n)"
-    <> " bidirectional pass; a missing annotation (or an untyped empty leaf) is a precondition failure.") $
+    <> " bidirectional pass; a missing annotation is a precondition failure.") $
   "graph" ~>
   "boundTerms" <~ Graph.graphBoundTerms (var "graph") $
   -- Schema: the constructor/nominal types available by name. graphBoundTypes gives type SCHEMES; the
@@ -188,6 +190,20 @@ graphToTermGraph = define "graphToTermGraph" $
             @@ (Paths.subtermPath $ list ([] :: [TypedTerm SubtermStep]))
             @@ var "term"))
       (Maps.toList (var "boundTerms" :: TypedTerm (M.Map Name Term))))
+
+instantiateForalls :: TypedTermDefinition (M.Map Name Type -> Type -> [Type] -> Maybe Type)
+instantiateForalls = define "instantiateForalls" $
+  doc ("Instantiate the leading foralls of a type with a list of type arguments, outermost forall first,"
+    <> " as one simultaneous substitution (accumulated in `subst`), so an argument mentioning a later"
+    <> " forall's parameter is not captured. `none` if the type has fewer foralls than arguments.") $
+  "subst" ~> "typ" ~> "args" ~>
+  Optionals.match (Lists.uncons $ var "args")
+    (just (Substitution.substInType @@ Typing.typeSubst (var "subst") @@ var "typ"))
+    ("uc" ~> match _Type (var "typ") (Just nothing) [
+      _Type_forall>>: "ft" ~> instantiateForalls
+        @@ Maps.insert (Core.forallTypeParameter $ var "ft") (Pairs.first $ var "uc") (var "subst")
+        @@ (Core.forallTypeBody $ var "ft")
+        @@ (Pairs.second $ var "uc")])
 
 rootExpectedType :: TypedTermDefinition (M.Map Name Type -> Name -> Maybe Type)
 rootExpectedType = define "rootExpectedType" $
@@ -226,17 +242,20 @@ synthesizeType = define "synthesizeType" $
   doc ("Synthesize the type of an elaborated subterm, syntax-directed and without unification, threading"
     <> " `expected` top-down. Reads annotations (lambda domain, typeApplication type) and combines child"
     <> " types bottom-up; synthesis-incomplete leaves (empty list/set/map, optional none, either's absent"
-    <> " branch) CONSUME `expected`. `expected = none` at such a leaf is a precondition failure with path.") $
+    <> " branch) CONSUME `expected`. With `expected = none`, such a leaf has its polymorphic constructor"
+    <> " type (e.g. none : forall t. optional<t>), which the type applications that inference wraps around"
+    <> " it instantiate (none<float64> : optional<float64>).") $
   "graph" ~> "schema" ~> "env" ~> "root" ~> "expected" ~> "path" ~> "term" ~>
   "recurseInto" <~ ("mexp" ~> "child" ~> synthesizeType @@ var "graph" @@ var "schema" @@ var "env" @@ var "root" @@ var "mexp" @@ var "path" @@ var "child") $
   "fail" <~ ("msg" ~> (left (Error.errorOther $ Error.otherError $ Strings.concat2
     (Strings.concat2 (string "synthesizeType precondition: ") (var "msg"))
     (Strings.concat2 (string " at ") (Core.unName $ var "root")))
     :: TypedTerm (Prelude.Either Error Type))) $
-  -- consumeExpected: for synthesis-incomplete leaves; expected=none is THE failure case.
-  "consumeExpected" <~ ("what" ~> Optionals.match (var "expected")
-    (var "fail" @@ Strings.concat2 (string "untyped ") (var "what"))
-    ("t" ~> right (var "t"))) $
+  -- consumeExpected: for synthesis-incomplete leaves; with no expected type, the leaf's polymorphic
+  -- constructor type, as elaborated input instantiates it through enclosing type applications.
+  "consumeExpected" <~ ("poly" ~> right (Optionals.withDefault (var "poly") (var "expected"))) $
+  "tvar" <~ ("v" ~> Core.typeVariable (Core.name $ var "v")) $
+  "forall1" <~ ("v" ~> "body" ~> Core.typeForall $ Core.forallType (Core.name $ var "v") (var "body")) $
   -- expected-projection helpers: refine `expected` for a present element/body child, so a nested empty
   -- collection under a present parent still receives its element type.
   "elementOfExpected" <~ Optionals.bind (var "expected")
@@ -267,14 +286,14 @@ synthesizeType = define "synthesizeType" $
       Eithers.map
         ("bt" ~> Core.typeForall $ Core.forallType (Core.typeLambdaParameter $ var "tl") (var "bt"))
         (var "recurseInto" @@ nothing @@ (Core.typeLambdaBody $ var "tl")),
-    -- typeApplication: instantiate the body's forall with the explicit type argument (direct subst)
-    _Term_typeApplication>>: "ta" ~>
-      Eithers.bind (var "recurseInto" @@ nothing @@ (Core.typeApplicationTermBody $ var "ta"))
-        ("bt" ~> match _Type (var "bt")
-          (Just $ var "fail" @@ string "type application of a non-forall") [
-          _Type_forall>>: "ft" ~> right (Substitution.substInType
-            @@ (Substitution.singletonTypeSubst @@ (Core.forallTypeParameter $ var "ft") @@ (Core.typeApplicationTermType $ var "ta"))
-            @@ (Core.forallTypeBody $ var "ft"))]),
+    -- typeApplication: instantiate the innermost body's foralls with the whole chain of explicit type
+    -- arguments at once (direct, simultaneous subst)
+    _Term_typeApplication>>: constant (
+      "chain" <~ (typeApplicationChain @@ var "term") $
+      Eithers.bind (var "recurseInto" @@ nothing @@ (Pairs.first $ var "chain"))
+        ("bt" ~> Optionals.match (instantiateForalls @@ (Maps.empty :: TypedTerm (M.Map Name Type)) @@ var "bt" @@ (Pairs.second $ var "chain"))
+          (var "fail" @@ string "type application of a non-forall")
+          ("t" ~> right (var "t")))),
     -- variable: from the term environment (lambda/let-bound); else a graph binding's declared type
     _Term_variable>>: "name" ~> Optionals.match (Maps.lookup (var "name" :: TypedTerm Name) (var "env"))
       (Optionals.match (Maps.lookup (var "name" :: TypedTerm Name) (var "schema"))
@@ -287,19 +306,20 @@ synthesizeType = define "synthesizeType" $
     _Term_literal>>: "lit" ~> right (Core.typeLiteral $ Reflect.literalType @@ var "lit"),
     -- optional: elementType from the present value; empty (none) consumes expected
     _Term_optional>>: "mt" ~> Optionals.match (var "mt")
-      (var "consumeExpected" @@ string "optional none")
+      (var "consumeExpected" @@ (var "forall1" @@ string "t" @@ (Core.typeOptional $ var "tvar" @@ string "t")))
       ("t" ~> Eithers.map (reify Core.typeOptional) (var "recurseInto" @@ (var "elementOfExpected") @@ var "t")),
     -- list: elementType from the first element; empty consumes expected
     _Term_list>>: "els" ~> Optionals.match (Lists.head $ var "els")
-      (var "consumeExpected" @@ string "empty list")
+      (var "consumeExpected" @@ (var "forall1" @@ string "t" @@ (Core.typeList $ var "tvar" @@ string "t")))
       ("t0" ~> Eithers.map (reify Core.typeList) (var "recurseInto" @@ (var "elementOfExpected") @@ var "t0")),
     -- set: elementType from the first element; empty consumes expected
     _Term_set>>: "s" ~> Optionals.match (Lists.head $ Sets.toList (var "s" :: TypedTerm (S.Set Term)))
-      (var "consumeExpected" @@ string "empty set")
+      (var "consumeExpected" @@ (var "forall1" @@ string "t" @@ (Core.typeSet $ var "tvar" @@ string "t")))
       ("t0" ~> Eithers.map (reify Core.typeSet) (var "recurseInto" @@ (var "elementOfExpected") @@ var "t0")),
     -- map: K/V from the first entry; empty consumes expected
     _Term_map>>: "m" ~> Optionals.match (Lists.head $ Maps.toList (var "m" :: TypedTerm (M.Map Term Term)))
-      (var "consumeExpected" @@ string "empty map")
+      (var "consumeExpected" @@ (var "forall1" @@ string "k" @@ (var "forall1" @@ string "v"
+        @@ (Core.typeMap $ Core.mapType (var "tvar" @@ string "k") (var "tvar" @@ string "v")))))
       ("kv" ~>
         Eithers.bind (var "recurseInto" @@ nothing @@ (Pairs.first $ var "kv"))
           ("kt" ~> Eithers.map
@@ -311,8 +331,10 @@ synthesizeType = define "synthesizeType" $
         ("ft" ~> Eithers.map
           ("st" ~> Core.typePair $ Core.pairType (var "ft") (var "st"))
           (var "recurseInto" @@ nothing @@ (Pairs.second $ var "p"))),
-    -- either: one side present; the WHOLE value's type must come from expected (absent branch unknown)
-    _Term_either>>: "e" ~> var "consumeExpected" @@ string "either value",
+    -- either: one side present; the WHOLE value's type comes from expected, or from the type arguments
+    -- that inference applies to it (left first, then right)
+    _Term_either>>: constant (var "consumeExpected" @@ (var "forall1" @@ string "l" @@ (var "forall1" @@ string "r"
+      @@ (Core.typeEither $ Core.eitherType (var "tvar" @@ string "l") (var "tvar" @@ string "r"))))),
     -- record: the declared type of its named record type in the schema
     _Term_record>>: "r" ~> Optionals.match (Maps.lookup (Core.recordTypeName $ var "r") (var "schema"))
       (var "fail" @@ Strings.concat2 (string "record type not in schema: ") (Core.unName $ Core.recordTypeName $ var "r"))
@@ -461,6 +483,16 @@ termReferenceFor = define "termReferenceFor" $
       Logic.ifElse (Sets.member (var "name" :: TypedTerm Name) (var "lambdaScope"))
         (right $ Paths.termReferenceLambda $ Paths.lambdaVariableReference (var "name") (var "binderId") (var "occType"))
         (right $ Paths.termReferenceLet $ Paths.letVariableReference (var "name") (var "binderId") (var "occType")))
+
+typeApplicationChain :: TypedTermDefinition (Term -> (Term, [Type]))
+typeApplicationChain = define "typeApplicationChain" $
+  doc ("Split a chain of type applications into its innermost body and its type arguments, innermost"
+    <> " first (the order in which they instantiate the body's foralls, outermost forall first)") $
+  "term" ~> match _Term (var "term") (Just $ pair (var "term") (list ([] :: [TypedTerm Type]))) [
+    _Term_typeApplication>>: "ta" ~>
+      "inner" <~ (typeApplicationChain @@ (Core.typeApplicationTermBody $ var "ta")) $
+      pair (Pairs.first $ var "inner")
+        (Lists.concat2 (Pairs.second $ var "inner") (list [Core.typeApplicationTermType $ var "ta"]))]
 
 typeAttributesOf :: TypedTermDefinition (Type -> [TypeAttributeLink])
 typeAttributesOf = define "typeAttributesOf" $
