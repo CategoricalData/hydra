@@ -1886,14 +1886,14 @@ term allTests =
                                 `string`}}}}
                         Term{
                           `record` = Record{
-                            typeName = Name{"test"},
+                            typeName = Name{"Relationship"},
                             fields = [
                               Field{name = Name{"target"}, `term` = Term{literal = Literal{`string` = "example.AtomId"}}},
                               Field{name = Name{"note"}, `term` = Term{literal = Literal{`string` = "authored by"}}}]}}),
                 expected = λ`_`.`term`
                       Term{
                         `record` = Record{
-                          typeName = Name{"test"},
+                          typeName = Name{"Relationship"},
                           fields = [
                             Field{name = Name{"target"}, `term` = Term{literal = Literal{`string` = "example.AtomId"}}},
                             Field{name = Name{"note"}, `term` = Term{literal = Literal{`string` = "authored by"}}}]}}}},
@@ -1958,13 +1958,13 @@ term allTests =
                           `list` = [
                             Term{
                               `record` = Record{
-                                typeName = Name{"test"},
+                                typeName = Name{"Relationship"},
                                 fields = [
                                   Field{name = Name{"target"}, `term` = Term{literal = Literal{`string` = "example.AtomId1"}}},
                                   Field{name = Name{"note"}, `term` = Term{literal = Literal{`string` = "authored by"}}}]}},
                             Term{
                               `record` = Record{
-                                typeName = Name{"test"},
+                                typeName = Name{"Relationship"},
                                 fields = [
                                   Field{name = Name{"target"}, `term` = Term{literal = Literal{`string` = "example.AtomId2"}}},
                                   Field{name = Name{"note"}, `term` = Term{literal = Literal{`string` = "cites"}}}]}}]}),
@@ -1973,16 +1973,182 @@ term allTests =
                         `list` = [
                           Term{
                             `record` = Record{
-                              typeName = Name{"test"},
+                              typeName = Name{"Relationship"},
                               fields = [
                                 Field{name = Name{"target"}, `term` = Term{literal = Literal{`string` = "example.AtomId1"}}},
                                 Field{name = Name{"note"}, `term` = Term{literal = Literal{`string` = "authored by"}}}]}},
                           Term{
                             `record` = Record{
-                              typeName = Name{"test"},
+                              typeName = Name{"Relationship"},
                               fields = [
                                 Field{name = Name{"target"}, `term` = Term{literal = Literal{`string` = "example.AtomId2"}}},
                                 Field{name = Name{"note"}, `term` = Term{literal = Literal{`string` = "cites"}}}]}}]}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "wrapper over a type application of a polymorphic record",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λjson.eithers.either
+                          (λe.e)
+                          (λdecoded.`term` decoded)
+                          (fromJson
+                            (maps.fromList
+                              [
+                                (
+                                  Name{"Measurement"},
+                                  Type{
+                                    `forall` = ForallType{
+                                      parameter = Name{"u"},
+                                      body = Type{
+                                        `record` = [
+                                          FieldType{name = Name{"unit"}, `type` = Type{variable = Name{"u"}}},
+                                          FieldType{name = Name{"value"}, `type` = Type{literal = LiteralType{float = FloatType{`float64`}}}},
+                                          FieldType{name = Name{"error"}, `type` = Type{`optional` = Type{literal = LiteralType{float = FloatType{`float64`}}}}}]}}}),
+                                (
+                                  Name{"TimeUnit"},
+                                  Type{
+                                    `union` = [FieldType{name = Name{"millisecond"}, `type` = Type{`unit`}}, FieldType{name = Name{"second"}, `type` = Type{`unit`}}]}),
+                                (
+                                  Name{"Duration"},
+                                  Type{
+                                    `wrap` = Type{
+                                      application = ApplicationType{
+                                        function = Type{variable = Name{"Measurement"}},
+                                        argument = Type{variable = Name{"TimeUnit"}}}}}),
+                                (Name{"Offset"}, Type{`wrap` = Type{variable = Name{"Duration"}}})])
+                            true
+                            Name{"test"}
+                            Type{
+                              variable = Name{"Offset"}}
+                            json))
+                      (toJson
+                        (maps.fromList
+                          [
+                            (
+                              Name{"Measurement"},
+                              Type{
+                                `forall` = ForallType{
+                                  parameter = Name{"u"},
+                                  body = Type{
+                                    `record` = [
+                                      FieldType{name = Name{"unit"}, `type` = Type{variable = Name{"u"}}},
+                                      FieldType{name = Name{"value"}, `type` = Type{literal = LiteralType{float = FloatType{`float64`}}}},
+                                      FieldType{name = Name{"error"}, `type` = Type{`optional` = Type{literal = LiteralType{float = FloatType{`float64`}}}}}]}}}),
+                            (
+                              Name{"TimeUnit"},
+                              Type{
+                                `union` = [FieldType{name = Name{"millisecond"}, `type` = Type{`unit`}}, FieldType{name = Name{"second"}, `type` = Type{`unit`}}]}),
+                            (
+                              Name{"Duration"},
+                              Type{
+                                `wrap` = Type{
+                                  application = ApplicationType{
+                                    function = Type{variable = Name{"Measurement"}},
+                                    argument = Type{variable = Name{"TimeUnit"}}}}}),
+                            (Name{"Offset"}, Type{`wrap` = Type{variable = Name{"Duration"}}})])
+                        true
+                        Name{"test"}
+                        Type{variable = Name{"Offset"}}
+                        Term{
+                          `wrap` = WrappedTerm{
+                            typeName = Name{"Offset"},
+                            body = Term{
+                              `wrap` = WrappedTerm{
+                                typeName = Name{"Duration"},
+                                body = Term{
+                                  `record` = Record{
+                                    typeName = Name{"Measurement"},
+                                    fields = [
+                                      Field{
+                                        name = Name{"unit"},
+                                        `term` = Term{
+                                          `inject` = Injection{
+                                            typeName = Name{"TimeUnit"},
+                                            field = Field{name = Name{"second"}, `term` = Term{`unit`}}}}},
+                                      Field{name = Name{"value"}, `term` = Term{literal = Literal{float = FloatValue{`float64` = 1.5:float64}}}},
+                                      Field{name = Name{"error"}, `term` = Term{`optional` = none}}]}}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        `wrap` = WrappedTerm{
+                          typeName = Name{"Offset"},
+                          body = Term{
+                            `wrap` = WrappedTerm{
+                              typeName = Name{"Duration"},
+                              body = Term{
+                                `record` = Record{
+                                  typeName = Name{"Measurement"},
+                                  fields = [
+                                    Field{
+                                      name = Name{"unit"},
+                                      `term` = Term{
+                                        `inject` = Injection{
+                                          typeName = Name{"TimeUnit"},
+                                          field = Field{name = Name{"second"}, `term` = Term{`unit`}}}}},
+                                    Field{name = Name{"value"}, `term` = Term{literal = Literal{float = FloatValue{`float64` = 1.5:float64}}}},
+                                    Field{name = Name{"error"}, `term` = Term{`optional` = none}}]}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "decode a wrapper over a type application of a polymorphic record",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.e)
+                      (λdecoded.`term` decoded)
+                      (fromJson
+                        (maps.fromList
+                          [
+                            (
+                              Name{"Measurement"},
+                              Type{
+                                `forall` = ForallType{
+                                  parameter = Name{"u"},
+                                  body = Type{
+                                    `record` = [
+                                      FieldType{name = Name{"unit"}, `type` = Type{variable = Name{"u"}}},
+                                      FieldType{name = Name{"value"}, `type` = Type{literal = LiteralType{float = FloatType{`float64`}}}},
+                                      FieldType{name = Name{"error"}, `type` = Type{`optional` = Type{literal = LiteralType{float = FloatType{`float64`}}}}}]}}}),
+                            (
+                              Name{"TimeUnit"},
+                              Type{
+                                `union` = [FieldType{name = Name{"millisecond"}, `type` = Type{`unit`}}, FieldType{name = Name{"second"}, `type` = Type{`unit`}}]}),
+                            (
+                              Name{"Duration"},
+                              Type{
+                                `wrap` = Type{
+                                  application = ApplicationType{
+                                    function = Type{variable = Name{"Measurement"}},
+                                    argument = Type{variable = Name{"TimeUnit"}}}}}),
+                            (Name{"Offset"}, Type{`wrap` = Type{variable = Name{"Duration"}}})])
+                        true
+                        Name{"Offset"}
+                        Type{variable = Name{"Offset"}}
+                        Value{
+                          object = [("unit", Value{`string` = "second"}), ("value", Value{number = 1.5})]}),
+                expected = λ`_`.`term`
+                      Term{
+                        `wrap` = WrappedTerm{
+                          typeName = Name{"Offset"},
+                          body = Term{
+                            `wrap` = WrappedTerm{
+                              typeName = Name{"Duration"},
+                              body = Term{
+                                `record` = Record{
+                                  typeName = Name{"Measurement"},
+                                  fields = [
+                                    Field{
+                                      name = Name{"unit"},
+                                      `term` = Term{
+                                        `inject` = Injection{
+                                          typeName = Name{"TimeUnit"},
+                                          field = Field{name = Name{"second"}, `term` = Term{`unit`}}}}},
+                                    Field{name = Name{"value"}, `term` = Term{literal = Literal{float = FloatValue{`float64` = 1.5:float64}}}},
+                                    Field{name = Name{"error"}, `term` = Term{`optional` = none}}]}}}}}}}},
             description = none,
             tags = [],
             provisions = []}]},

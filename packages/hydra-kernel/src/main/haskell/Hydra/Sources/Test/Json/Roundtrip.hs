@@ -314,12 +314,12 @@ relationshipTypes = Maps.fromList $ Phantoms.list [
 parametricTypeRoundtripGroup :: TypedTerm TestGroup
 parametricTypeRoundtripGroup = subgroup "parametric types" [
     -- A field typed as a direct instantiation of a polymorphic type: (Relationship @ string).
-    -- Note: like every other roundtripTest[WithTypes] case, the decoded record is tagged with
-    -- the harness's fixed top-level type name ("test"), not the resolved type's own name.
+    -- The decoded record is named after the applied type (Relationship), not the harness's
+    -- top-level type name ("test") (#854).
     roundtripTestWithTypes "type application of a polymorphic record"
       relationshipTypes
       (T.apply (T.variable "Relationship") T.string)
-      (record (name "test") [
+      (record (name "Relationship") [
         "target">: string "example.AtomId",
         "note">: string "authored by"]),
 
@@ -329,12 +329,59 @@ parametricTypeRoundtripGroup = subgroup "parametric types" [
       relationshipTypes
       (T.list $ T.apply (T.variable "Relationship") T.string)
       (list [
-        record (name "test") [
+        record (name "Relationship") [
           "target">: string "example.AtomId1",
           "note">: string "authored by"],
-        record (name "test") [
+        record (name "Relationship") [
           "target">: string "example.AtomId2",
-          "note">: string "cites"]])]
+          "note">: string "cites"]]),
+
+    -- A wrapper over an application of a polymorphic record, itself wrapped (#854):
+    -- Offset = wrap(Duration), Duration = wrap(Measurement TimeUnit). The record must be named
+    -- after Measurement, not after the enclosing wrapper Duration.
+    roundtripTestWithTypes "wrapper over a type application of a polymorphic record"
+      measurementTypes
+      (T.variable "Offset")
+      measurementOffsetTerm,
+
+    decodeTestWithTypes "decode a wrapper over a type application of a polymorphic record"
+      measurementTypes
+      (name "Offset")
+      (T.variable "Offset")
+      (Typed.TypedTerm (EncodeJsonModel.value (Model.ValueObject [
+        ("unit", Model.ValueString "second"),
+        ("value", Model.ValueNumber 1.5)])))
+      measurementOffsetTerm]
+
+-- | Measurement = forall u. {unit: u, value: float64, error: optional<float64>};
+-- TimeUnit = union {millisecond, second}; Duration = wrap(Measurement TimeUnit); Offset = wrap(Duration)
+measurementTypes :: TypedTerm (M.Map Name Type)
+measurementTypes = Maps.fromList $ Phantoms.list [
+  Phantoms.pair (name "Measurement") (T.forAll "u" $ T.record (name "Measurement") [
+    "unit">: T.variable "u",
+    "value">: T.float64,
+    "error">: T.optional T.float64]),
+  Phantoms.pair (name "TimeUnit") (T.union (name "TimeUnit") [
+    "millisecond">: T.unit,
+    "second">: T.unit]),
+  Phantoms.pair (name "Duration") (T.wrap (name "Duration") (T.apply (T.variable "Measurement") (T.variable "TimeUnit"))),
+  Phantoms.pair (name "Offset") (T.wrap (name "Offset") (T.variable "Duration"))]
+
+measurementOffsetTerm :: TypedTerm Term
+measurementOffsetTerm = wrap (name "Offset") $ wrap (name "Duration") $ record (name "Measurement") [
+  "unit">: inject (name "TimeUnit") "second" unit,
+  "value">: float64 1.5,
+  "error">: optional nothing]
+
+-- | Like decodeTest, but with a caller-supplied type lookup table and top-level type name.
+decodeTestWithTypes :: String -> TypedTerm (M.Map Name Type) -> TypedTerm Name -> TypedTerm Type -> TypedTerm Value
+  -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
+decodeTestWithTypes testName types tname typ jsonVal expectedTerm = universalCase testName
+  (Eithers.either
+    (Phantoms.lambda "e" $ Phantoms.var "e")
+    (Phantoms.lambda "decoded" $ PrintCore.term @@ Phantoms.var "decoded")
+    (JsonDecode.fromJson @@ types @@ Literals.true @@ tname @@ typ @@ jsonVal))
+  (PrintCore.term @@ expectedTerm)
 
 -- | Decode a pre-built JSON Value to a Term and show the result.
 -- Used for backward-compat tests: verify the old {"variant": {}} form still decodes.

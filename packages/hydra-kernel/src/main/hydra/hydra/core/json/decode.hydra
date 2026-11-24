@@ -248,12 +248,23 @@ term fromJson =
                 ["cannot apply a non-parametric type: ", `type` fn])}
             fn
       in cases(Type){
-        application = λat.eithers.either
+        application = λat.
+            let appHead := λt.cases(Type){
+                  application = λinner.appHead
+                        (ApplicationType[function] inner),
+                  `_` = t}
+                  (deannotateType t) in
+            let headName := cases(Type){
+                variable = λname.name,
+                `_` = tname}
+                (deannotateType
+                  (appHead (ApplicationType[function] at))) in
+            eithers.either
               (λerr.left(err))
               (λreducedType.fromJson
                   types
                   compactMaps
-                  tname
+                  headName
                   reducedType
                   value)
               (reduceApp at),

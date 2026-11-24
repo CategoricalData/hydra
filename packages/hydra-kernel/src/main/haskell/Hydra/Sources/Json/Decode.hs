@@ -351,11 +351,19 @@ fromJson = define "fromJson" $
       string "unsupported type for JSON decoding: ",
       PrintCore.type_ @@ var "typ"]) [
 
-    -- Type applications (parametric type instantiation): beta-reduce, then decode
+    -- Type applications (parametric type instantiation): beta-reduce, then decode. When the
+    -- application's head is a named type (e.g. Measurement in (Measurement TimeUnit)), decode
+    -- against that name rather than the enclosing one, so a record or union reached through the
+    -- application is named after its own type, not after a wrapper around the application (#854).
     _Type_application>>: "at" ~>
+      "appHead" <~ ("t" ~> match _Type (Strip.deannotateType @@ var "t") (Just $ var "t") [
+        _Type_application>>: "inner" ~> var "appHead" @@ (Core.applicationTypeFunction $ var "inner")]) $
+      "headName" <~ (match _Type (Strip.deannotateType @@ (var "appHead" @@ (Core.applicationTypeFunction $ var "at")))
+        (Just $ var "tname") [
+        _Type_variable>>: "name" ~> var "name"]) $
       Eithers.either
         ("err" ~> left $ var "err")
-        ("reducedType" ~> fromJson @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "reducedType" @@ var "value")
+        ("reducedType" ~> fromJson @@ var "types" @@ var "compactMaps" @@ var "headName" @@ var "reducedType" @@ var "value")
         (var "reduceApp" @@ var "at"),
 
     -- Forall reached directly (not via an enclosing Application): decode the body.
