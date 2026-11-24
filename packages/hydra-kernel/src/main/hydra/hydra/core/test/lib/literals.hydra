@@ -2884,6 +2884,32 @@ term allTests =
             tags = [],
             provisions = [Name{"hydra.core.lib.literals.printFloat32.rendersRoundTrippableRepresentation"}]},
           TestCaseWithMetadata{
+            name = "negative zero (float32)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.literals.printFloat32"}},
+                            argument = Term{
+                              literal = Literal{
+                                float = FloatValue{
+                                  `float32` = -0.0:float32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = "-0.0"}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.literals.printFloat32.rendersRoundTrippableRepresentation"}]},
+          TestCaseWithMetadata{
             name = "small positive (float32)",
             case = TestCase{
               universal = UniversalTestCase{
@@ -2986,6 +3012,84 @@ term allTests =
                           `string` = "0.1"}}}},
             description = none,
             tags = [],
+            provisions = [Name{"hydra.core.lib.literals.printFloat32.rendersRoundTrippableRepresentation"}]},
+          TestCaseWithMetadata{
+            name = "notation boundary below (float32)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.literals.printFloat32"}},
+                            argument = Term{
+                              literal = Literal{
+                                float = FloatValue{
+                                  `float32` = 9999999.0:float32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = "9999999.0"}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.literals.printFloat32.rendersRoundTrippableRepresentation"}]},
+          TestCaseWithMetadata{
+            name = "notation boundary at (float32)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.literals.printFloat32"}},
+                            argument = Term{
+                              literal = Literal{
+                                float = FloatValue{
+                                  `float32` = 1.0e7:float32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = "1.0e7"}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.literals.printFloat32.rendersRoundTrippableRepresentation"}]},
+          TestCaseWithMetadata{
+            name = "subnormal (float32)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.literals.printFloat32"}},
+                            argument = Term{
+                              literal = Literal{
+                                float = FloatValue{
+                                  `float32` = 1.0e-45:float32}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = "1.0e-45"}}}},
+            description = none,
+            tags = [],
             provisions = [Name{"hydra.core.lib.literals.printFloat32.rendersRoundTrippableRepresentation"}]}]},
       TestGroup{
         name = "rendersRoundTrippableRepresentation",
@@ -3041,6 +3145,32 @@ term allTests =
                       Term{
                         literal = Literal{
                           `string` = "0.0"}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.literals.printFloat64.rendersRoundTrippableRepresentation"}]},
+          TestCaseWithMetadata{
+            name = "negative zero (float64)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.literals.printFloat64"}},
+                            argument = Term{
+                              literal = Literal{
+                                float = FloatValue{
+                                  `float64` = -0.0:float64}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = "-0.0"}}}},
             description = none,
             tags = [],
             provisions = [Name{"hydra.core.lib.literals.printFloat64.rendersRoundTrippableRepresentation"}]},
@@ -3145,6 +3275,84 @@ term allTests =
                       Term{
                         literal = Literal{
                           `string` = "0.1"}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.literals.printFloat64.rendersRoundTrippableRepresentation"}]},
+          TestCaseWithMetadata{
+            name = "notation boundary below (float64)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.literals.printFloat64"}},
+                            argument = Term{
+                              literal = Literal{
+                                float = FloatValue{
+                                  `float64` = 9999999.0:float64}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = "9999999.0"}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.literals.printFloat64.rendersRoundTrippableRepresentation"}]},
+          TestCaseWithMetadata{
+            name = "notation boundary at (float64)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.literals.printFloat64"}},
+                            argument = Term{
+                              literal = Literal{
+                                float = FloatValue{
+                                  `float64` = 1.0e7:float64}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = "1.0e7"}}}},
+            description = none,
+            tags = [],
+            provisions = [Name{"hydra.core.lib.literals.printFloat64.rendersRoundTrippableRepresentation"}]},
+          TestCaseWithMetadata{
+            name = "subnormal (float64)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe."<<eval error>>")
+                      (λt.`term` t)
+                      (reduceTerm
+                        testContext
+                        testGraph
+                        true
+                        Term{
+                          application = Application{
+                            function = Term{
+                              variable = Name{"hydra.core.lib.literals.printFloat64"}},
+                            argument = Term{
+                              literal = Literal{
+                                float = FloatValue{
+                                  `float64` = 5.0e-324:float64}}}}}),
+                expected = λ`_`.`term`
+                      Term{
+                        literal = Literal{
+                          `string` = "5.0e-324"}}}},
             description = none,
             tags = [],
             provisions = [Name{"hydra.core.lib.literals.printFloat64.rendersRoundTrippableRepresentation"}]}]},

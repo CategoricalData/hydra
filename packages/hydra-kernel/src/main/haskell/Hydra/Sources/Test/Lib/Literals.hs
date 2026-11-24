@@ -302,10 +302,16 @@ literalsPrintFloat32 = subgroup "rendersRoundTrippableRepresentation" [
   test "positive (float32)" "rendersRoundTrippableRepresentation" 3.14 "3.14",
   test "negative (float32)" "rendersRoundTrippableRepresentation" (-2.5) "-2.5",
   test "zero (float32)" "rendersRoundTrippableRepresentation" 0.0 "0.0",
+  test "negative zero (float32)" "rendersRoundTrippableRepresentation" (-0.0) "-0.0",
   test "small positive (float32)" "rendersRoundTrippableRepresentation" 0.05 "5.0e-2",
   test "small positive 2 (float32)" "rendersRoundTrippableRepresentation" 0.03 "3.0e-2",
   test "very small (float32)" "rendersRoundTrippableRepresentation" 0.001 "1.0e-3",
-  test "normal decimal (float32)" "rendersRoundTrippableRepresentation" 0.1 "0.1"]
+  test "normal decimal (float32)" "rendersRoundTrippableRepresentation" 0.1 "0.1",
+  test "notation boundary below (float32)" "rendersRoundTrippableRepresentation" 9999999.0 "9999999.0",
+  test "notation boundary at (float32)" "rendersRoundTrippableRepresentation" 1.0e7 "1.0e7",
+  -- float32 subnormal (Float.MIN_VALUE); shortest round-trip is "1.0e-45", not Java's "1.4e-45".
+  -- Regression check for #763 (cross-host printFloat divergence on subnormal values).
+  test "subnormal (float32)" "rendersRoundTrippableRepresentation" 1.0e-45 "1.0e-45"]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.printFloat32 [float32 x] (string result)
 
@@ -313,10 +319,16 @@ literalsPrintFloat64 :: TypedTerm TestGroup
 literalsPrintFloat64 = subgroup "rendersRoundTrippableRepresentation" [
   test "positive (float64)" "rendersRoundTrippableRepresentation" 3.14159 "3.14159",
   test "zero (float64)" "rendersRoundTrippableRepresentation" 0.0 "0.0",
+  test "negative zero (float64)" "rendersRoundTrippableRepresentation" (-0.0) "-0.0",
   test "small positive (float64)" "rendersRoundTrippableRepresentation" 0.05 "5.0e-2",
   test "small positive 2 (float64)" "rendersRoundTrippableRepresentation" 0.03 "3.0e-2",
   test "very small (float64)" "rendersRoundTrippableRepresentation" 0.001 "1.0e-3",
-  test "normal decimal (float64)" "rendersRoundTrippableRepresentation" 0.1 "0.1"]
+  test "normal decimal (float64)" "rendersRoundTrippableRepresentation" 0.1 "0.1",
+  test "notation boundary below (float64)" "rendersRoundTrippableRepresentation" 9999999.0 "9999999.0",
+  test "notation boundary at (float64)" "rendersRoundTrippableRepresentation" 1.0e7 "1.0e7",
+  -- float64 subnormal (Double.MIN_VALUE); shortest round-trip is "5.0e-324", not Java's "4.9e-324".
+  -- Regression check for #763 (cross-host printFloat divergence on subnormal values).
+  test "subnormal (float64)" "rendersRoundTrippableRepresentation" 5.0e-324 "5.0e-324"]
   where
     test name segment x result = primCaseWithProvisions name [segment] DefLiterals.printFloat64 [float64 x] (string result)
 
