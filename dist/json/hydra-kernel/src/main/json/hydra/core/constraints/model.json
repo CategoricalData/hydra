@@ -1,0 +1,329 @@
+{
+  "name": "hydra.core.constraints.model",
+  "metadata": {
+    "description": "A typed vocabulary of value constraints -- data-level restrictions the structural type system cannot express (cardinality, length, range, pattern, membership, boolean combinations, uniqueness, and an arbitrary-predicate escape hatch). Constraints are author-supplied data that travel with a model, declared as freestanding, fully typechecked ConstraintSet values and enforced by hydra.core.validate.model, which emits hydra.core.error.model findings. The normative meaning of each TermConstraint variant is its translation to a boolean predicate term (the #345 Stage-1 refinement reading), shipped with a single reference implementation and conformance fixtures. The first (and, for 1.0, only) inhabited member of the hydra.<pkg>.constraints.model family, paralleling hydra.<pkg>.validate.model and hydra.<pkg>.error.model. See issue #734 (parent #712; #345 Stage 0).",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
+  "dependencies": [{"module": "hydra.core.model"}, {"module": "hydra.core.paths"}, {"module": "hydra.core.regex"}],
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.core.constraints.model.Bounds",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "min",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": {"integer": "int32"}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The minimum count, inclusive; absent means no lower bound."}}}]}}}},
+                  {
+                    "name": "max",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"literal": {"integer": "int32"}}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The maximum count, inclusive; absent means no upper bound."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "An inclusive count range with optional lower and upper endpoints. Shared by the cardinality and length constraints, both of which restrict a count (of elements/entries, or of code points). An absent endpoint imposes no bound on that side; both absent restricts nothing."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.constraints.model.ConstraintSet",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "typeName",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.model.Name"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The name of the type whose instances these constraints restrict."}}}]}}}},
+                  {
+                    "name": "constraints",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.core.constraints.model.PathConstraint"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The path-located constraints that apply to instances of the named type."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "All value constraints declared for one named type: the freestanding, fully typechecked unit of attachment. Unlike an annotation payload (an untyped term decoded by convention), a ConstraintSet is ordinary graph data whose type is checked by the normal inference machinery. The typeName resolves against the graph the same way nominal types resolve during validation; a ConstraintSet naming an unknown type is a finding, not a skip. A constraint set can target only a NAMED type (the same discipline SHACL and relational schemas impose). For a polymorphic target, paths are relative to the body with quantifiers stripped, type variables are opaque leaves (no path descends through a variable), and the constraints apply at every instantiation."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.constraints.model.PathConstraint",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "path",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.paths.SubtypePath"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The subtype path locating the focus position(s) the constraint restricts."}}}]}}}},
+                  {
+                    "name": "constraint",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.constraints.model.TermConstraint"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The constraint tested against each focus value."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A term constraint located at a position within a type, addressed by a subtype path. The path is declared at the type level and interpreted against instances as a one-to-many map at validation time: listElement/setElement fans out to every element, mapKeys/mapValues to every key/value, optionalElement to the value iff present, unionField f to the injected value iff the instance is variant f, and recordField f / wrapBody select the single corresponding subterm. The empty path selects the instance itself. A non-data step (e.g. functionDomain, forallBody), or a step that cannot apply to the instance's actual shape, is a malformed-constraint finding -- never a silent skip."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.constraints.model.TermBound",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "value",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.model.Term"},
+                        "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The bounding term."}}}]}}}},
+                  {
+                    "name": "inclusive",
+                    "type": {
+                      "annotated": {
+                        "body": {"literal": "boolean"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "True if the endpoint is inclusive (<= / >=), false if exclusive (< / >)."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "One endpoint of a term range: a bounding term together with whether the endpoint is inclusive. The bound is an arbitrary term, not only a literal, so a range over any ordered type is expressible (e.g. a minimum day-of-week over a union whose variant order defines the ordering). Literal ranges are the special case where the bound term is a literal. The bound term must match the focus type and that type must satisfy the ordering class; a mismatch is a validation-time malformed-constraint finding."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.constraints.model.TermConstraint",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {
+                    "name": "cardinality",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.constraints.model.Bounds"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The element/entry count of a list, set, or map focus must fall within the bounds. Predicate reading: gte/lte over Lists.length / Sets.size / Maps.size."}}}]}}}},
+                  {
+                    "name": "length",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.constraints.model.Bounds"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The code-point length of a string focus must fall within the bounds. Predicate reading: gte/lte over Strings.length."}}}]}}}},
+                  {
+                    "name": "range",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.constraints.model.TermRange"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The focus term must lie within the given range of the focus (ordered) type. Predicate reading: hydra.core.lib.ordering.gte/lte. Requires the ordering class on the focus type."}}}]}}}},
+                  {
+                    "name": "pattern",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.regex.Regex"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "A string focus must match the regular expression, as a whole (anchored at both ends). Predicate reading: hydra.core.lib.regex.matches over the printed AST."}}}]}}}},
+                  {
+                    "name": "equals",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.model.Term"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The focus term must equal the given term. Predicate reading: equality over the focus (equality) type. (sh:hasValue.)"}}}]}}}},
+                  {
+                    "name": "oneOf",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.core.model.Term"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "The focus term must equal one of the given terms. Predicate reading: membership by equality. Requires the equality class on the focus type. (sh:in.)"}}}]}}}},
+                  {
+                    "name": "allOf",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.core.constraints.model.TermConstraint"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "Every sub-constraint must hold at the focus. Predicate reading: conjunction. (sh:and.)"}}}]}}}},
+                  {
+                    "name": "anyOf",
+                    "type": {
+                      "annotated": {
+                        "body": {"list": {"variable": "hydra.core.constraints.model.TermConstraint"}},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "At least one sub-constraint must hold at the focus. Predicate reading: disjunction. (sh:or.)"}}}]}}}},
+                  {
+                    "name": "not",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.constraints.model.TermConstraint"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {"literal": {"string": "The sub-constraint must NOT hold at the focus. Predicate reading: negation. (sh:not.)"}}}]}}}},
+                  {
+                    "name": "uniqueness",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.paths.SubtypePath"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "RESERVED (not yet enforced in 1.0). The values selected by the given key path must be pairwise distinct. Predicate reading: pairwise-distinctness by equality. Requires the equality class."}}}]}}}},
+                  {
+                    "name": "predicate",
+                    "type": {
+                      "annotated": {
+                        "body": {"variable": "hydra.core.model.Term"},
+                        "annotation": {
+                          "map": [
+                            {
+                              "key": {"variable": "description"},
+                              "value": {
+                                "literal": {
+                                  "string": "RESERVED (not yet enforced in 1.0). An arbitrary unary predicate: a term of type t -> boolean, applied to the focus and evaluated. The escape hatch; it is already a Stage-1 predicate."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A restriction on a focus term. The normative meaning of each variant is its translation to a boolean predicate term; a variant is well-formed at a focus only where that focus type satisfies the variant's class gate (ordering for range; equality for equals/oneOf/uniqueness; only the obvious shape for cardinality/length/pattern), checked with hydra.core.classes.classIsSatisfiedByType. Nine variants are enforced by hydra.core.validate.model in 1.0; uniqueness and predicate are reserved -- defined so that later enforcement does not widen the union (a breaking change for exhaustive matchers), but encountering one when the rule is enabled produces a \"reserved constraint not yet enforced\" finding, never a silent pass."}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.core.constraints.model.TermRange",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {
+                    "name": "min",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.core.constraints.model.TermBound"}},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The lower bound; absent means unbounded below."}}}]}}}},
+                  {
+                    "name": "max",
+                    "type": {
+                      "annotated": {
+                        "body": {"optional": {"variable": "hydra.core.constraints.model.TermBound"}},
+                        "annotation": {
+                          "map": [
+                            {"key": {"variable": "description"}, "value": {"literal": {"string": "The upper bound; absent means unbounded above."}}}]}}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A range over an ordered type, with optional lower and upper term bounds, each independently inclusive or exclusive. An absent endpoint imposes no bound on that side."}}}]}}},
+          "constraints": []}}}]}
