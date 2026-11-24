@@ -23,16 +23,28 @@ object literals:
   def decimalToFloat64(x: BigDecimal): Double = x.toDouble
   def float(ft: Any)(x: BigDecimal): Any = x // Placeholder
   // BigDecimal cannot represent NaN or Infinity; use sentinel zero (mirrors Java).
-  // Strips the cosmetic trailing ".0" Scala's toString always appends to whole values --
-  // the decimal's scale must reflect only the significant digits (2.0f is scale-0 "2",
-  // not scale-1 "2.0").
-  private def stripCosmeticZero(s: String): String =
-    if (s.endsWith(".0")) s.substring(0, s.length - 2) else s
+  // Uses shortestDigitsFloat32/64 rather than Float/Double.toString, which does not always
+  // produce the shortest round-tripping decimal for subnormal values on JDK versions prior to 19
+  // (JDK-4511638; see shortestDigitsFloat64 and #763).
   def float32ToDecimal(x: Float): BigDecimal =
-    if x.isNaN || x.isInfinite then BigDecimal(0) else BigDecimal(stripCosmeticZero(x.toString))
+    if x.isNaN || x.isInfinite then BigDecimal(0)
+    else if x == 0.0f then BigDecimal(0)
+    else
+      val d = shortestDigitsFloat32(x)
+      val unscaled = new java.math.BigDecimal(new java.math.BigInteger(d.digits))
+        .scaleByPowerOfTen(d.exponent - (d.digits.length - 1))
+      val result = BigDecimal(unscaled)
+      if d.negative then -result else result
   def float32ToFloat64(x: Float): Double = x.toDouble
   def float64ToDecimal(x: Double): BigDecimal =
-    if x.isNaN || x.isInfinite then BigDecimal(0) else BigDecimal(stripCosmeticZero(x.toString))
+    if x.isNaN || x.isInfinite then BigDecimal(0)
+    else if x == 0.0 then BigDecimal(0)
+    else
+      val d = shortestDigitsFloat64(x)
+      val unscaled = new java.math.BigDecimal(new java.math.BigInteger(d.digits))
+        .scaleByPowerOfTen(d.exponent - (d.digits.length - 1))
+      val result = BigDecimal(unscaled)
+      if d.negative then -result else result
   def float64ToFloat32(x: Double): Float = x.toFloat
   def int(it: Any)(x: BigInt): Any = x // Placeholder
   def int8ToBigint(x: Byte): BigInt = BigInt(x)
@@ -72,58 +84,75 @@ object literals:
   def parseUint32(s: String): Option[Long] = s.toLongOption.filter(n => n >= 0 && n <= 4294967295L)
   def parseUint64(s: String): Option[BigInt] = try { val n = BigInt(s); if (n >= 0 && n <= BigInt("18446744073709551615")) Some(n) else None } catch { case _: Exception => None }
 
+  // Significant digits (trailing zeros stripped) and base-10 exponent of the leading digit.
+  private case class Digits(negative: Boolean, digits: String, exponent: Int):
+    def toScientific: String =
+      val mantissa = if digits.length == 1 then digits + ".0" else digits.charAt(0) + "." + digits.substring(1)
+      (if negative then "-" else "") + mantissa + "e" + exponent
+    def toDecimal: String =
+      val sign = if negative then "-" else ""
+      if exponent >= 0 then
+        val intPart =
+          if digits.length > exponent + 1 then digits.substring(0, exponent + 1)
+          else digits + "0" * (exponent + 1 - digits.length)
+        val fracPart = if digits.length > exponent + 1 then digits.substring(exponent + 1) else "0"
+        sign + intPart + "." + (if fracPart.isEmpty then "0" else fracPart)
+      else
+        sign + "0." + "0" * (-exponent - 1) + digits
+
+  // Decomposes a "%e"-formatted string (e.g. "5.000000000000000e-324") into digits + exponent.
+  private def decompose(formatted: String, negative: Boolean): Digits =
+    val eIdx = formatted.indexOf('e')
+    val mantissa = formatted.substring(0, eIdx).replace(".", "")
+    val exponent = formatted.substring(eIdx + 1).toInt
+    var end = mantissa.length
+    while end > 1 && mantissa.charAt(end - 1) == '0' do end -= 1
+    Digits(negative, mantissa.substring(0, end), exponent)
+
+  // Finds the shortest decimal digit string that round-trips to the exact double bit pattern.
+  // Does NOT delegate to Double.toString for digit selection: it does not always produce the
+  // shortest round-tripping decimal for subnormal values on JDK versions prior to 19
+  // (JDK-4511638; e.g. Double.toString(Double.MIN_VALUE) gives "4.9E-324" instead of the correct,
+  // shorter "5E-324"). Instead this searches increasing significant-digit counts and verifies
+  // each candidate round-trips back to the exact input via parseDouble (#763).
+  private def shortestDigitsFloat64(value: Double): Digits =
+    val negative = value < 0
+    val abs = scala.math.abs(value)
+    (1 to 17).iterator
+      .map(sig => String.format(java.util.Locale.ROOT, s"%.${sig - 1}e", abs))
+      .find(s => s.toDouble == abs)
+      .map(decompose(_, negative))
+      .getOrElse(decompose(String.format(java.util.Locale.ROOT, "%.16e", abs), negative))
+
+  // Finds the shortest decimal digit string that round-trips to the exact float bit pattern.
+  private def shortestDigitsFloat32(value: Float): Digits =
+    val negative = value < 0
+    val abs = scala.math.abs(value)
+    (1 to 9).iterator
+      .map(sig => String.format(java.util.Locale.ROOT, s"%.${sig - 1}e", abs))
+      .find(s => s.toFloat == abs)
+      .map(decompose(_, negative))
+      .getOrElse(decompose(String.format(java.util.Locale.ROOT, "%.8e", abs), negative))
+
   // Format a float32 to match Hydra's show for Float (Haskell-compatible)
   private def showHaskellFloat32(x: Float): String =
     if x.isNaN then "NaN"
     else if x.isInfinite then if x > 0 then "Infinity" else "-Infinity"
-    else if x == 0.0f then if (java.lang.Float.floatToRawIntBits(x) < 0) "-0.0" else "0.0"
+    else if x == 0.0f then if (java.lang.Float.floatToRawIntBits(x) != 0) "-0.0" else "0.0"
     else
+      val d = shortestDigitsFloat32(x)
       val abs = scala.math.abs(x)
-      if abs >= 0.1f && abs < 1.0e7f then x.toString
-      else toScientific(x.toString)
+      if abs >= 0.1f && abs < 1.0e7f then d.toDecimal else d.toScientific
 
   // Format a double to match Hydra's show for Double (Haskell-compatible)
   private def showHaskellDouble(x: Double): String =
     if x.isNaN then "NaN"
     else if x.isInfinite then if x > 0 then "Infinity" else "-Infinity"
-    else if x == 0.0 then if (java.lang.Double.doubleToRawLongBits(x) < 0) "-0.0" else "0.0"
+    else if x == 0.0 then if (java.lang.Double.doubleToRawLongBits(x) != 0) "-0.0" else "0.0"
     else
+      val d = shortestDigitsFloat64(x)
       val abs = scala.math.abs(x)
-      if abs >= 0.1 && abs < 1.0e7 then x.toString
-      else toScientific(x.toString)
-
-  // Convert a Java float/double string representation to scientific notation
-  private def toScientific(javaStr: String): String =
-    val eIdx = javaStr.indexOf('E')
-    if eIdx >= 0 then
-      // Already in scientific notation, just lowercase the E
-      javaStr.substring(0, eIdx) + "e" + javaStr.substring(eIdx + 1)
-    else
-      // Decimal form - convert to scientific notation
-      val negative = javaStr.startsWith("-")
-      val abs = if negative then javaStr.substring(1) else javaStr
-      val dot = abs.indexOf('.')
-      if dot < 0 then javaStr
-      else
-        val intPart = abs.substring(0, dot)
-        val fracPart = abs.substring(dot + 1)
-        val allDigits = intPart + fracPart
-        // Find first non-zero digit
-        var firstNonZero = 0
-        while firstNonZero < allDigits.length && allDigits.charAt(firstNonZero) == '0' do firstNonZero += 1
-        if firstNonZero >= allDigits.length then "0.0"
-        else
-          val exponent = dot - firstNonZero - 1
-          var significant = allDigits.substring(firstNonZero)
-          // Remove trailing zeros
-          while significant.length > 1 && significant.endsWith("0") do
-            significant = significant.substring(0, significant.length - 1)
-          val mantissa = if significant.length == 1 then significant + ".0"
-                         else significant.charAt(0).toString + "." + significant.substring(1)
-          val sb = new StringBuilder
-          if negative then sb.append('-')
-          sb.append(mantissa).append('e').append(exponent)
-          sb.toString
+      if abs >= 0.1 && abs < 1.0e7 then d.toDecimal else d.toScientific
 
   def printBigint(x: BigInt): String = x.toString
   def printBoolean(x: Boolean): String = if x then "true" else "false"
