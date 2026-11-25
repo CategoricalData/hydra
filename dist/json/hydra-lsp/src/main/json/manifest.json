@@ -1,0 +1,8 @@
+{
+  "mainDslModules": ["hydra.ext.lsp.protocol"],
+  "mainEncodingModules": [],
+  "mainModules": ["hydra.ext.lsp.protocol", "hydra.ext.lsp.wire", "hydra.lsp.analysis"],
+  "manifestFormatVersion": 1,
+  "moduleFormatVersion": 1,
+  "package": "hydra-lsp",
+  "testModules": []}

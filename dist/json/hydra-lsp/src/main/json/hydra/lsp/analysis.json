@@ -1,0 +1,86 @@
+{
+  "name": "hydra.lsp.analysis",
+  "metadata": {
+    "description": "Pure analysis over Hydra source text for the language server",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
+  "dependencies": [
+    {"module": "hydra.core.parse.packaging"},
+    {"module": "hydra.core.print.packaging"},
+    {"module": "hydra.core.paths"},
+    {"module": "hydra.core.ast"},
+    {"module": "hydra.core.coders"},
+    {"module": "hydra.core.model"},
+    {"module": "hydra.core.diff"},
+    {"module": "hydra.core.docs"},
+    {"module": "hydra.core.error.checking"},
+    {"module": "hydra.core.error.model"},
+    {"module": "hydra.core.error.file"},
+    {"module": "hydra.core.error.packaging"},
+    {"module": "hydra.core.error.system"},
+    {"module": "hydra.core.errors"},
+    {"module": "hydra.core.file"},
+    {"module": "hydra.core.graph"},
+    {"module": "hydra.core.json.model"},
+    {"module": "hydra.core.markdown"},
+    {"module": "hydra.core.packaging"},
+    {"module": "hydra.core.parsing"},
+    {"module": "hydra.core.query"},
+    {"module": "hydra.core.regex"},
+    {"module": "hydra.core.relational"},
+    {"module": "hydra.core.system"},
+    {"module": "hydra.core.tabular"},
+    {"module": "hydra.core.testing"},
+    {"module": "hydra.core.time"},
+    {"module": "hydra.core.topology"},
+    {"module": "hydra.core.typed"},
+    {"module": "hydra.core.typing"},
+    {"module": "hydra.core.util"},
+    {"module": "hydra.core.validation"},
+    {"module": "hydra.core.variants"}],
+  "definitions": [
+    {
+      "term": {
+        "name": "hydra.lsp.analysis.format",
+        "signature": {
+          "typeParameters": [],
+          "parameters": [{"name": "arg0", "type": {"literal": "string"}, "isLazy": false}],
+          "result": {"type": {"optional": {"literal": "string"}}}},
+        "body": {
+          "annotated": {
+            "body": {
+              "lambda": {
+                "parameter": "text",
+                "domain": {"literal": "string"},
+                "body": {
+                  "application": {
+                    "function": {
+                      "application": {
+                        "function": {
+                          "application": {
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"typeApplication": {"body": {"variable": "hydra.core.lib.eithers.either"}, "type": {"literal": "string"}}},
+                                    "type": {"variable": "hydra.core.packaging.Module"}}},
+                                "type": {"optional": {"literal": "string"}}}},
+                            "argument": {
+                              "lambda": {
+                                "parameter": "_",
+                                "domain": {"literal": "string"},
+                                "body": {"typeApplication": {"body": {"optional": null}, "type": {"literal": "string"}}}}}}},
+                        "argument": {
+                          "lambda": {
+                            "parameter": "m",
+                            "domain": {"variable": "hydra.core.packaging.Module"},
+                            "body": {
+                              "optional": {
+                                "application": {"function": {"variable": "hydra.core.print.packaging.moduleDefinition"}, "argument": {"variable": "m"}}}}}}}},
+                    "argument": {"application": {"function": {"variable": "hydra.core.parse.packaging.parseModule"}, "argument": {"variable": "text"}}}}}}},
+            "annotation": {
+              "map": [
+                {
+                  "key": {"variable": "description"},
+                  "value": {"literal": {"string": "Canonical formatting: parse a module and print it back; nothing if the text does not parse"}}}]}}}}}]}

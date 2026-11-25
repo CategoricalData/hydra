@@ -1,0 +1,306 @@
+{
+  "name": "hydra.ext.lsp.protocol",
+  "metadata": {
+    "description": "A subset of the Language Server Protocol 3.17 types, sufficient for diagnostics and formatting. Positions are 0-based; characters are UTF-16 code units. Enumerations (e.g. DiagnosticSeverity) are unions; the JSON codec maps them to the protocol's integers (error=1, warning=2, information=3, hint=4; TextDocumentSyncKind none=0, full=1, incremental=2).",
+    "comments": [],
+    "seeAlso": [],
+    "provisions": []},
+  "dependencies": [{"module": "hydra.core.json.model"}, {"module": "hydra.core.model"}],
+  "definitions": [
+    {
+      "type": {
+        "name": "hydra.ext.lsp.protocol.Diagnostic",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "range", "type": {"variable": "hydra.ext.lsp.protocol.Range"}},
+                  {"name": "severity", "type": {"optional": {"variable": "hydra.ext.lsp.protocol.DiagnosticSeverity"}}},
+                  {"name": "code", "type": {"optional": {"literal": "string"}}},
+                  {"name": "source", "type": {"optional": {"literal": "string"}}},
+                  {"name": "message", "type": {"literal": "string"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A diagnostic, such as a compiler error or warning"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.lsp.protocol.DiagnosticSeverity",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "union": [
+                  {"name": "error", "type": "unit"},
+                  {"name": "warning", "type": "unit"},
+                  {"name": "information", "type": "unit"},
+                  {"name": "hint", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The severity of a diagnostic; encoded on the wire as an integer 1-4"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.lsp.protocol.DidChangeParams",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "textDocument", "type": {"variable": "hydra.ext.lsp.protocol.VersionedTextDocumentIdentifier"}},
+                  {"name": "contentChanges", "type": {"list": {"variable": "hydra.ext.lsp.protocol.TextDocumentContentChangeEvent"}}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parameters of textDocument/didChange"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.lsp.protocol.DidCloseParams",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"record": [{"name": "textDocument", "type": {"variable": "hydra.ext.lsp.protocol.TextDocumentIdentifier"}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parameters of textDocument/didClose"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.lsp.protocol.DidOpenParams",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"record": [{"name": "textDocument", "type": {"variable": "hydra.ext.lsp.protocol.TextDocumentItem"}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parameters of textDocument/didOpen"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.lsp.protocol.DocumentFormattingParams",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "textDocument", "type": {"variable": "hydra.ext.lsp.protocol.TextDocumentIdentifier"}},
+                  {"name": "options", "type": {"variable": "hydra.ext.lsp.protocol.FormattingOptions"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Parameters of textDocument/formatting"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.lsp.protocol.FormattingOptions",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "tabSize", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "insertSpaces", "type": {"literal": "boolean"}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Formatting options (subset)"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.lsp.protocol.InitializeParams",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "processId", "type": {"optional": {"literal": {"integer": "int32"}}}},
+                  {"name": "rootUri", "type": {"optional": {"literal": "string"}}}]},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "Parameters of the initialize request (subset)"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.lsp.protocol.InitializeResult",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"record": [{"name": "capabilities", "type": {"variable": "hydra.ext.lsp.protocol.ServerCapabilities"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "The result of the initialize request"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.lsp.protocol.JsonRpcMessage",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "id", "type": {"optional": {"variable": "hydra.core.json.model.Value"}}},
+                  {"name": "method", "type": {"optional": {"literal": "string"}}},
+                  {"name": "params", "type": {"optional": {"variable": "hydra.core.json.model.Value"}}},
+                  {"name": "result", "type": {"optional": {"variable": "hydra.core.json.model.Value"}}},
+                  {"name": "error", "type": {"optional": {"variable": "hydra.core.json.model.Value"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {
+                      "literal": {
+                        "string": "A JSON-RPC 2.0 message envelope; params, result and error payloads are generic JSON, decoded by the handlers"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.lsp.protocol.Position",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "line", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "character", "type": {"literal": {"integer": "int32"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A zero-based position in a text document; character is a UTF-16 code-unit offset"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.lsp.protocol.PublishDiagnosticsParams",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "uri", "type": {"literal": "string"}},
+                  {"name": "version", "type": {"optional": {"literal": {"integer": "int32"}}}},
+                  {"name": "diagnostics", "type": {"list": {"variable": "hydra.ext.lsp.protocol.Diagnostic"}}}]},
+              "annotation": {
+                "map": [
+                  {"key": {"variable": "description"}, "value": {"literal": {"string": "Parameters of textDocument/publishDiagnostics"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.lsp.protocol.Range",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "start", "type": {"variable": "hydra.ext.lsp.protocol.Position"}},
+                  {"name": "end", "type": {"variable": "hydra.ext.lsp.protocol.Position"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A range in a text document, from start (inclusive) to end (exclusive)"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.lsp.protocol.ServerCapabilities",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "textDocumentSync", "type": {"variable": "hydra.ext.lsp.protocol.TextDocumentSyncKind"}},
+                  {"name": "documentFormattingProvider", "type": {"literal": "boolean"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "The capabilities this server advertises; only implemented features are listed"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.lsp.protocol.TextDocumentContentChangeEvent",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"record": [{"name": "text", "type": {"literal": "string"}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "A content change; under full sync this is the entire new text"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.lsp.protocol.TextDocumentIdentifier",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"record": [{"name": "uri", "type": {"literal": "string"}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "Identifies a text document by URI"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.lsp.protocol.TextDocumentItem",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "uri", "type": {"literal": "string"}},
+                  {"name": "languageId", "type": {"literal": "string"}},
+                  {"name": "version", "type": {"literal": {"integer": "int32"}}},
+                  {"name": "text", "type": {"literal": "string"}}]},
+              "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "An opened text document"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.lsp.protocol.TextDocumentSyncKind",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {"union": [{"name": "none", "type": "unit"}, {"name": "full", "type": "unit"}, {"name": "incremental", "type": "unit"}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "How document changes are synced; encoded on the wire as an integer 0-2"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.lsp.protocol.TextEdit",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [
+                  {"name": "range", "type": {"variable": "hydra.ext.lsp.protocol.Range"}},
+                  {"name": "newText", "type": {"literal": "string"}}]},
+              "annotation": {
+                "map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A textual edit applied to a document"}}}]}}},
+          "constraints": []}}},
+    {
+      "type": {
+        "name": "hydra.ext.lsp.protocol.VersionedTextDocumentIdentifier",
+        "body": {
+          "variables": [],
+          "body": {
+            "annotated": {
+              "body": {
+                "record": [{"name": "uri", "type": {"literal": "string"}}, {"name": "version", "type": {"literal": {"integer": "int32"}}}]},
+              "annotation": {
+                "map": [
+                  {
+                    "key": {"variable": "description"},
+                    "value": {"literal": {"string": "Identifies a specific version of a text document"}}}]}}},
+          "constraints": []}}}]}
