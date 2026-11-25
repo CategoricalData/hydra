@@ -24,7 +24,8 @@
 module Main where
 
 import Hydra.Generation (writeModulesJsonPackageSplit, writeDerivedJsonPackageSplit, writeTestModulesJson, loadNativePackageModules, loadNativePackageModuleNamesTagged, generateEncoderModules, generateDecoderModules, isDerivedModule)
-import Hydra.PackageRouting (RoutingMap, defaultDistJsonRoot, buildRoutingMap, namespaceToPackageIn)
+import Hydra.PackageRouting (RoutingMap, defaultDistJsonRoot, buildRoutingMap, namespaceToPackageIn, namespaceToPackageMaybeIn)
+import Hydra.TextualSources (substituteTextualSources)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules,
   hydraCoqModules, hydraGoModules, hydraJvmModules, hydraJavaModules, hydraTypeScriptModules,
@@ -41,6 +42,7 @@ import qualified Hydra.Sources.Demos.GenPG.Transform as GenPGTransform
 
 import Control.Monad (when)
 import qualified Data.List as L
+import qualified Data.Map as M
 import qualified Data.Set as S
 import System.Environment (getArgs)
 import System.Exit (exitFailure, exitSuccess)
@@ -77,9 +79,14 @@ isNativeOwned m =
 -- output can route modules to their owning package via namespaceToPackage.
 -- Encode/decode modules are synthesized in-memory (#448) rather than loaded
 -- from dist/haskell Sources/Encode Sources/Decode .hs files.
-buildFullMainUniverse :: IO [Kernel.Module]
+--
+-- Modules a package declares in package.json "textualSources" are sourced from their .hydra files (#837),
+-- and the derived (DSL wrapper + encode + decode) source lists are drawn from the same substituted
+-- modules (#672), exactly as in update-json-main, so that both paths write identical JSON. Returns the
+-- universe together with the substituted DSL and encoding source modules.
+buildFullMainUniverse :: IO ([Kernel.Module], [Kernel.Module], [Kernel.Module])
 buildFullMainUniverse = do
-  let baseUniverse = dedupByNamespace $ L.concat
+  let baseUniverseDsl = dedupByNamespace $ L.concat
         [ mainModules
         , dslSourceModules
         , hydraCoqModules
@@ -98,9 +105,14 @@ buildFullMainUniverse = do
         , hydraExtPackageModules
         , [GenPGTransform.module_]
         ]
-  encMods <- generateEncoderModules baseUniverse allEncodingModules
-  decMods <- generateDecoderModules baseUniverse allEncodingModules
-  return $ dedupByNamespace (baseUniverse ++ encMods ++ decMods)
+  baseUniverse <- substituteTextualSources (namespaceToPackageMaybeIn (buildRoutingMap extRoutingInput)) "../../packages" baseUniverseDsl
+  let baseByNamespace = M.fromList [(Kernel.moduleName m, m) | m <- baseUniverse]
+      substituted = fmap (\m -> M.findWithDefault m (Kernel.moduleName m) baseByNamespace)
+      dslSrcMods = substituted allDslModules
+      encSrcMods = substituted allEncodingModules
+  encMods <- generateEncoderModules baseUniverse encSrcMods
+  decMods <- generateDecoderModules baseUniverse encSrcMods
+  return (dedupByNamespace (baseUniverse ++ encMods ++ decMods), dslSrcMods, encSrcMods)
 
 
 data Options = Options
@@ -216,18 +228,18 @@ main = do
   nativeRoutingInput <- loadNativePackageModuleNamesTagged distRoot
   let routingMap        = buildRoutingMap (extRoutingInput ++ nativeRoutingInput)
 
-  fullMainUniverse <- buildFullMainUniverse
+  (fullMainUniverse, dslSrcMods, encSrcMods) <- buildFullMainUniverse
 
   case optPackage opts of
-    Just pkg -> runSinglePackage routingMap fullMainUniverse pkg srcSet distRoot includeJavaPython
-    Nothing  -> runAllPackages      routingMap fullMainUniverse srcSet distRoot includeJavaPython
+    Just pkg -> runSinglePackage routingMap fullMainUniverse dslSrcMods encSrcMods pkg srcSet distRoot includeJavaPython
+    Nothing  -> runAllPackages      routingMap fullMainUniverse dslSrcMods encSrcMods srcSet distRoot includeJavaPython
 
   putStrLn "=== Done. ==="
 
 -- | Transform a single package. Historical behaviour, kept for scoped
 -- callers that invoke one package at a time.
-runSinglePackage :: RoutingMap -> [Kernel.Module] -> String -> String -> FilePath -> Bool -> IO ()
-runSinglePackage routingMap fullMainUniverse pkg srcSet distRoot includeJavaPython = do
+runSinglePackage :: RoutingMap -> [Kernel.Module] -> [Kernel.Module] -> [Kernel.Module] -> String -> String -> FilePath -> Bool -> IO ()
+runSinglePackage routingMap fullMainUniverse dslSrcMods encSrcMods pkg srcSet distRoot includeJavaPython = do
   let outDir = distRoot FP.</> pkg FP.</> "src" FP.</> srcSet FP.</> "json"
   putStrLn $ "=== Transform Haskell DSL -> JSON: " ++ pkg ++ " (" ++ srcSet ++ ") ==="
 
@@ -296,7 +308,7 @@ runSinglePackage routingMap fullMainUniverse pkg srcSet distRoot includeJavaPyth
           -- encode/decode) are synthesizer-authoritative and must never be
           -- re-inferred/incrementally-cached. Routing distributes each derived
           -- module to its owning package regardless of what triggered the run.
-          writeDerivedJsonPackageSplit routingMap distRoot universe allDslModules allEncodingModules
+          writeDerivedJsonPackageSplit routingMap distRoot universe dslSrcMods encSrcMods
     -- #605: route through the per-package incremental test driver rather than
     -- the flat 'writeModulesJson', which re-infers the entire main+test
     -- universe on every cache miss and drives isolated per-package invocations
@@ -309,8 +321,8 @@ runSinglePackage routingMap fullMainUniverse pkg srcSet distRoot includeJavaPyth
 -- per-package JSON tree based on namespaceToPackage, so passing the whole
 -- universe produces the same on-disk layout as per-package calls — but
 -- we only pay the Haskell startup + DSL-compile cost once.
-runAllPackages :: RoutingMap -> [Kernel.Module] -> String -> FilePath -> Bool -> IO ()
-runAllPackages routingMap fullMainUniverse srcSet distRoot includeJavaPython = do
+runAllPackages :: RoutingMap -> [Kernel.Module] -> [Kernel.Module] -> [Kernel.Module] -> String -> FilePath -> Bool -> IO ()
+runAllPackages routingMap fullMainUniverse dslSrcMods encSrcMods srcSet distRoot includeJavaPython = do
   putStrLn $ "=== Transform Haskell DSL -> JSON: all packages (" ++ srcSet ++ ") ==="
 
   -- #346: load already-generated hydra-java / hydra-python JSON so their types
@@ -353,7 +365,7 @@ runAllPackages routingMap fullMainUniverse srcSet distRoot includeJavaPython = d
       putStrLn ""
       putStrLn $ "  Generating derived (DSL wrapper + encode + decode) modules for "
         ++ show (length allDslModules) ++ " type modules..."
-      writeDerivedJsonPackageSplit routingMap distRoot fullUniverse allDslModules allEncodingModules
+      writeDerivedJsonPackageSplit routingMap distRoot fullUniverse dslSrcMods encSrcMods
     "test" -> do
       let allTestMods = concatMap packageTestModules allPackages
       when (null allTestMods) $ do
