@@ -528,43 +528,64 @@
            (string-append sign mantissa "e" (number->string exp))))
         (else (number->string x))))
 
-    ;; Format a float32 value with minimum digits for unique representation
-    ;; Simplified version without IEEE 754 bytevector round-trip
+    ;; Format a float32 value as the shortest significant-digit string (1..9 digits) that round-trips
+    ;; through float32, using exact rational arithmetic (no log/round on floats, so subnormals and
+    ;; negative zero render correctly; #763). Notation: decimal for 0.1 <= |x| < 1e7, else D.DDDeN.
     (define (haskell-show-float32 x)
       (cond
         ((not (real? x)) "NaN")  ;; complex results from out-of-domain trig
         ((not (= x x)) "NaN")
         ((or (= x +inf.0) (= x -inf.0)) (if (> x 0) "Infinity" "-Infinity"))
+        ((= x 0.0) (if (eqv? x -0.0) "-0.0" "0.0"))
         (else
-      (let ((f32 (float32-approx x)))
-        (define (f32-roundtrip v) (float32-approx v))
-        (define (f32-equal? a b) (= (float32-approx a) (float32-approx b)))
-        ;; Round to n significant digits and format
-        (define (round-sig x n)
-          (if (= x 0.0) 0.0
-              (let* ((e (exact (floor (/ (log (safe-abs x)) (log 10)))))
-                     (scale (expt 10 (- n e 1)))
-                     (rounded (/ (round (* x scale)) scale)))
-                (* 1.0 rounded))))
-        (define (try-digits n)
-          (if (> n 9) (number->string f32)
-              (let* ((rounded (round-sig f32 n))
-                     (s (number->string rounded)))
-                (if (f32-equal? rounded f32)
-                    s
-                    (try-digits (+ n 1))))))
-        (cond
-          ((= f32 0.0) "0.0")
-          ((and (not (= f32 0.0))
-                (or (< (safe-abs f32) 0.1) (>= (safe-abs f32) 1.0e7)))
-           (let* ((e (exact (floor (/ (log (safe-abs f32)) (log 10)))))
-                  (m (/ f32 (expt 10.0 e)))
-                  (m-rounded (* 1.0 (/ (round (* (safe-abs m) 1e6)) 1e6)))
-                  (adj-e (if (>= m-rounded 10.0) (+ e 1) e))
-                  (adj-m (if (>= m-rounded 10.0) (/ m-rounded 10.0) m-rounded))
-                  (sign (if (< f32 0) "-" "")))
-             (string-append sign (number->string adj-m) "e" (number->string adj-e))))
-          (else (try-digits 1)))))))
+         (let* ((f32 (float32-approx x))
+                (neg (< f32 0))
+                (ex (exact (abs f32)))
+                (e10 (let loop ((e 0))
+                       (cond ((>= ex (expt 10 (+ e 1))) (loop (+ e 1)))
+                             ((< ex (expt 10 e)) (loop (- e 1)))
+                             (else e))))
+                (round-digits (lambda (n)
+                                (let* ((unit (expt 10 (- e10 (- n 1))))
+                                       (d (round (/ ex unit))))
+                                  (cons d unit))))
+                (hit (let loop ((n 1))
+                       (let* ((du (round-digits n))
+                              (v (* (car du) (cdr du))))
+                         (if (or (>= n 9)
+                                 (= (float32-approx (inexact v)) (abs f32)))
+                             du
+                             (loop (+ n 1))))))
+                (value (* (car hit) (cdr hit)))
+                ;; Re-derive digits and exponent from the exact rounded value (handles carry to 10^n).
+                (vexp (let loop ((e e10))
+                        (cond ((>= value (expt 10 (+ e 1))) (loop (+ e 1)))
+                              ((< value (expt 10 e)) (loop (- e 1)))
+                              (else e))))
+                (digs (let* ((raw (number->string (car hit)))
+                             (len (string-length raw)))
+                        ;; strip trailing zeros
+                        (let loop ((end len))
+                          (if (and (> end 1) (char=? (string-ref raw (- end 1)) #\0))
+                              (loop (- end 1))
+                              (substring raw 0 end)))))
+                (sign (if neg "-" "")))
+           (if (and (>= vexp -1) (< vexp 7))
+               ;; Decimal notation.
+               (let* ((n (string-length digs))
+                      (int-len (+ vexp 1)))
+                 (string-append
+                  sign
+                  (cond
+                    ((<= int-len 0)
+                     (string-append "0." (make-string (- (- int-len)) #\0) digs))
+                    ((>= int-len n)
+                     (string-append digs (make-string (- int-len n) #\0) ".0"))
+                    (else
+                     (string-append (substring digs 0 int-len) "." (substring digs int-len n))))))
+               (string-append sign (substring digs 0 1) "."
+                              (if (> (string-length digs) 1) (substring digs 1 (string-length digs)) "0")
+                              "e" (number->string vexp)))))))
 
     ;; print_decimal :: Decimal -> String
     ;; Representation-faithful decimal rendering: per docs/specification/syntax.md #2.6, prints
