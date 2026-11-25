@@ -30,7 +30,6 @@
     {"module": "hydra.core.variants"},
     {"module": "hydra.core.dsl.paths"},
     {"module": "hydra.core.dsl.ast"},
-    {"module": "hydra.core.dsl.classes"},
     {"module": "hydra.core.dsl.coders"},
     {"module": "hydra.core.dsl.model"},
     {"module": "hydra.core.dsl.error.checking"},
