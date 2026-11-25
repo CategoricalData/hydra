@@ -50,6 +50,7 @@ import qualified Hydra.Sources.Kernel.Lib.Strings           as LibStrings
 import qualified Hydra.Sources.Kernel.Lib.System            as LibSystem
 import qualified Hydra.Sources.Kernel.Lib.Text              as LibText
 import qualified Hydra.Sources.Kernel.Terms.Names           as Names
+import qualified Hydra.Sources.Kernel.Terms.Ordering        as Ordering
 import qualified Hydra.Sources.Kernel.Terms.Parsers         as Parsers
 import qualified Hydra.Sources.Kernel.Terms.Positions       as Positions
 import qualified Hydra.Sources.Kernel.Terms.Predicates     as Predicates
@@ -143,6 +144,7 @@ kernelPrimaryTermsModules = [
   Literals.module_,
 
   Names.module_,
+  Ordering.module_,
   Parsers.module_,
   Positions.module_,
   Predicates.module_,
