@@ -128,12 +128,13 @@ object Libraries:
     case Term.list(items) => items
     case _ => throw new RuntimeException(s"expected list, got $t")
 
+  // Set elements and map keys are normalized by removing annotations at every depth (#848)
   private def exSet(t: Term): Set[Term] = strip(t) match
-    case Term.set(items) => items
+    case Term.set(items) => items.map(stripKey)
     case _ => throw new RuntimeException(s"expected set, got $t")
 
   private def exMap(t: Term): Map[Term, Term] = strip(t) match
-    case Term.map(entries) => entries
+    case Term.map(entries) => entries.map((k, v) => stripKey(k) -> v)
     case _ => throw new RuntimeException(s"expected map, got $t")
 
   private def exMaybe(t: Term): Option[Term] = strip(t) match
@@ -166,7 +167,7 @@ object Libraries:
   private def mkBool(b: Boolean): Term = Term.literal(Literal.boolean(b))
   private def mkBinary(b: String): Term = Term.literal(Literal.binary(b))
   private def mkList(items: Seq[Term]): Term = Term.list(items)
-  private def mkSet(items: Set[Term]): Term = Term.set(items)
+  private def mkSet(items: Set[Term]): Term = Term.set(items.map(stripKey))
   private def mkMapTerm(entries: Map[Term, Term]): Term = Term.map(entries)
   private def mkMaybe(opt: Option[Term]): Term = Term.optional(opt)
   private def mkEither(e: Either[Term, Term]): Term = Term.either(e)
@@ -178,6 +179,37 @@ object Libraries:
 
   /** Apply a curried 2-argument function: f(x)(y). */
   private def app2(f: Term, x: Term, y: Term): Term = app(app(f, x), y)
+
+  // --- Order keys (#848) ---
+  // Values are compared by their order keys (hydra.core.ordering.termOrderKey), so union variants compare in declared
+  // order and annotations are ignored at every depth. Map keys and set elements are stored without annotations.
+
+  private type Er[A] = Either[hydra.core.errors.Error, A]
+
+  private def orderKey(g: hydra.core.graph.Graph, t: Term): E =
+    _root_.hydra.core.ordering.termOrderKey(g)(t)
+
+  private def orderKeys(g: hydra.core.graph.Graph, ts: Seq[Term]): Er[Seq[Term]] =
+    ts.foldLeft[Er[Seq[Term]]](Right(Seq.empty)) { (accE, t) =>
+      accE.flatMap(acc => orderKey(g, t).map(acc :+ _))
+    }
+
+  private def compareByKey(g: hydra.core.graph.Graph, a: Term, b: Term): Er[Int] =
+    for { ka <- orderKey(g, a); kb <- orderKey(g, b) } yield ordering.compareTerms(ka, kb)
+
+  /** Stable-sort items by keys parallel to them. */
+  private def sortByKeys[A](items: Seq[A], keys: Seq[Term]): Seq[A] =
+    items.zip(keys).sortWith((x, y) => ordering.compareTerms(x._2, y._2) < 0).map(_._1)
+
+  private def sortTerms(g: hydra.core.graph.Graph, ts: Seq[Term]): Er[Seq[Term]] =
+    orderKeys(g, ts).map(ks => sortByKeys(ts, ks))
+
+  /** Map entries in the order of the order keys of their keys. */
+  private def sortedEntries(g: hydra.core.graph.Graph, m: Map[Term, Term]): Er[Seq[(Term, Term)]] =
+    val entries = m.toSeq
+    orderKeys(g, entries.map(_._1)).map(ks => sortByKeys(entries, ks))
+
+  private def stripKey(t: Term): Term = _root_.hydra.core.strip.removeTermAnnotations(t)
 
   // --- Higher-order traversal helpers ---
 
@@ -534,9 +566,10 @@ object Libraries:
       // would wrongly be true -- #727/#719) and IEEE-754-native rather than Hydra's extended
       // totalOrder for floats (NaN != NaN; -0.0 == 0.0 -- #745). compareTerms already handles
       // both correctly (and recursively, so a decimal/float nested inside a map/set/record
-      // value is covered too, not just a bare top-level literal).
+      // value is covered too, not just a bare top-level literal). Since #848 it compares the order
+      // keys of the two values, so annotations are ignored at every depth.
       hydra.core.lib.equality.equal.name -> mkPrimImpl(hydra.core.lib.equality.equal.name, tSchemeConstrained(xEq, tFun(x, tFun(x, tBool))),
-        impl2((a, b) => mkBool(ordering.compareTerms(a, b) == 0))),
+        g => args => compareByKey(g, args(0), args(1)).map(c => mkBool(c == 0))),
     )
 
   // ===== Ordering primitives (moved from equality — R20) =====
@@ -547,25 +580,24 @@ object Libraries:
     Map(
       // compare, gt, gte, lt, lte, max, min. Use compareTerms for structural comparison of values.
       hydra.core.lib.ordering.compare.name -> mkPrimImpl(hydra.core.lib.ordering.compare.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, tComparison))),
-        impl2 { (a, b) =>
-          val c = ordering.compareTerms(a, b)
+        g => args => compareByKey(g, args(0), args(1)).map { c =>
           val comp = if c < 0 then hydra.core.util.Comparison.lessThan
                      else if c > 0 then hydra.core.util.Comparison.greaterThan
                      else hydra.core.util.Comparison.equalTo
           mkComparison(comp)
         }),
       hydra.core.lib.ordering.gt.name -> mkPrimImpl(hydra.core.lib.ordering.gt.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, tBool))),
-        impl2((a, b) => mkBool(ordering.compareTerms(a, b) > 0))),
+        g => args => compareByKey(g, args(0), args(1)).map(c => mkBool(c > 0))),
       hydra.core.lib.ordering.gte.name -> mkPrimImpl(hydra.core.lib.ordering.gte.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, tBool))),
-        impl2((a, b) => mkBool(ordering.compareTerms(a, b) >= 0))),
+        g => args => compareByKey(g, args(0), args(1)).map(c => mkBool(c >= 0))),
       hydra.core.lib.ordering.lt.name -> mkPrimImpl(hydra.core.lib.ordering.lt.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, tBool))),
-        impl2((a, b) => mkBool(ordering.compareTerms(a, b) < 0))),
+        g => args => compareByKey(g, args(0), args(1)).map(c => mkBool(c < 0))),
       hydra.core.lib.ordering.lte.name -> mkPrimImpl(hydra.core.lib.ordering.lte.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, tBool))),
-        impl2((a, b) => mkBool(ordering.compareTerms(a, b) <= 0))),
+        g => args => compareByKey(g, args(0), args(1)).map(c => mkBool(c <= 0))),
       hydra.core.lib.ordering.max.name -> mkPrimImpl(hydra.core.lib.ordering.max.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, x))),
-        impl2((a, b) => if ordering.compareTerms(a, b) >= 0 then a else b)),
+        g => args => compareByKey(g, args(0), args(1)).map(c => if c >= 0 then args(0) else args(1))),
       hydra.core.lib.ordering.min.name -> mkPrimImpl(hydra.core.lib.ordering.min.name, tSchemeConstrained(xOrd, tFun(x, tFun(x, x))),
-        impl2((a, b) => if ordering.compareTerms(a, b) <= 0 then a else b)),
+        g => args => compareByKey(g, args(0), args(1)).map(c => if c <= 0 then args(0) else args(1))),
     )
 
   // ===== Functions primitives (identity moved from equality — R21) =====
@@ -792,9 +824,9 @@ object Libraries:
                 mkList(exList(acc) :+ mkPairTerm(key, x))
               }
             }
-          }.map { paired =>
+          }.flatMap { paired =>
             val pairs = exList(paired).map(exPair)
-            mkList(pairs.sortWith((a, b) => ordering.compareTerms(a._1, b._1) < 0).map(_._2))
+            orderKeys(g, pairs.map(_._1)).map(ks => mkList(sortByKeys(pairs.map(_._2), ks)))
           }
         }),
       hydra.core.lib.lists.span.name -> mkPrimImpl(hydra.core.lib.lists.span.name, tScheme(Seq("a"),
@@ -833,17 +865,22 @@ object Libraries:
         impl2((n, xs) => mkList(exList(xs).drop(exInt32(n))))),
       hydra.core.lib.lists.member.name -> mkPrimImpl(hydra.core.lib.lists.member.name, tSchemeConstrained(aEq,
         tFun(a, tFun(tList(a), tBool))),
-        impl2((x, xs) => mkBool(exList(xs).contains(x)))),
+        g => args => for {
+          k <- orderKey(g, args(0))
+          ks <- orderKeys(g, exList(args(1)))
+        } yield mkBool(ks.exists(o => ordering.compareTerms(k, o) == 0))),
       hydra.core.lib.lists.group.name -> mkPrimImpl(hydra.core.lib.lists.group.name, tSchemeConstrained(aEq,
         tFun(tList(a), tList(tList(a)))),
-        impl1 { xs =>
-          val items = exList(xs)
-          def doGroup(remaining: Seq[Term]): Seq[Seq[Term]] =
-            if remaining.isEmpty then Seq.empty
-            else
-              val (same, rest) = remaining.span(_ == remaining.head)
-              same +: doGroup(rest)
-          mkList(doGroup(items).map(mkList))
+        g => args => {
+          val items = exList(args(0))
+          orderKeys(g, items).map { ks =>
+            def doGroup(remaining: Seq[(Term, Term)]): Seq[Seq[Term]] =
+              if remaining.isEmpty then Seq.empty
+              else
+                val (same, rest) = remaining.span(p => ordering.compareTerms(p._2, remaining.head._2) == 0)
+                same.map(_._1) +: doGroup(rest)
+            mkList(doGroup(items.zip(ks)).map(mkList))
+          }
         }),
       hydra.core.lib.lists.join.name -> mkPrimImpl(hydra.core.lib.lists.join.name, tScheme(Seq("a"),
         tFun(tList(a), tFun(tList(tList(a)), tList(a)))),
@@ -878,7 +915,15 @@ object Libraries:
         impl1(xs => { val items = exList(xs); mkMaybe(lists.tail(items).map(mkList)) })),
       hydra.core.lib.lists.distinct.name -> mkPrimImpl(hydra.core.lib.lists.distinct.name, tSchemeConstrained(aEq,
         tFun(tList(a), tList(a))),
-        impl1(xs => mkList(exList(xs).distinct))),
+        g => args => {
+          val items = exList(args(0))
+          orderKeys(g, items).map { ks =>
+            val kept = items.zip(ks).foldLeft(Seq.empty[(Term, Term)]) { (acc, p) =>
+              if acc.exists(q => ordering.compareTerms(q._2, p._2) == 0) then acc else acc :+ p
+            }
+            mkList(kept.map(_._1))
+          }
+        }),
       hydra.core.lib.lists.isEmpty.name -> mkPrimImpl(hydra.core.lib.lists.isEmpty.name, tScheme(Seq("a"),
         tFun(tList(a), tBool)),
         impl1(xs => mkBool(exList(xs).isEmpty))),
@@ -893,7 +938,7 @@ object Libraries:
         impl1(x => mkList(Seq(x)))),
       hydra.core.lib.lists.sort.name -> mkPrimImpl(hydra.core.lib.lists.sort.name, tSchemeConstrained(aOrd,
         tFun(tList(a), tList(a))),
-        impl1(xs => mkList(exList(xs).sortWith((a, b) => ordering.lt(a)(b))))),
+        g => args => sortTerms(g, exList(args(0))).map(mkList)),
       hydra.core.lib.lists.take.name -> mkPrimImpl(hydra.core.lib.lists.take.name, tScheme(Seq("a"),
         tFun(tInt32, tFun(tList(a), tList(a)))),
         impl2((n, xs) => mkList(exList(xs).take(exInt32(n))))),
@@ -946,7 +991,7 @@ object Libraries:
       hydra.core.lib.maps.alter.name -> mkPrimImpl(hydra.core.lib.maps.alter.name, tSchemeConstrained(Seq(("v", Seq.empty), ("k", Seq("ordering"))),
         tFun(tFun(tOpt(v), tOpt(v)), tFun(k, tFun(mapKV, mapKV)))),
         g => args => {
-          val f = args(0); val key = args(1); val m = exMap(args(2))
+          val f = args(0); val key = stripKey(args(1)); val m = exMap(args(2))
           val current = mkMaybe(m.get(key))
           applyAndReduce(g, f, current).map { result =>
             exMaybe(result) match
@@ -996,43 +1041,43 @@ object Libraries:
       // First-order
       hydra.core.lib.maps.delete.name -> mkPrimImpl(hydra.core.lib.maps.delete.name, tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
         tFun(k, tFun(mapKV, mapKV))),
-        impl2((key, m) => mkMapTerm(exMap(m).removed(key)))),
+        impl2((key, m) => mkMapTerm(exMap(m).removed(stripKey(key))))),
       hydra.core.lib.maps.elems.name -> mkPrimImpl(hydra.core.lib.maps.elems.name, tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
         tFun(mapKV, tList(v))),
-        impl1(m => mkList(exMap(m).values.toSeq))),
+        g => args => sortedEntries(g, exMap(args(0))).map(es => mkList(es.map(_._2)))),
       hydra.core.lib.maps.empty.name -> mkPrimImpl(hydra.core.lib.maps.empty.name, tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
         mapKV),
         impl0(mkMapTerm(Map.empty))),
       hydra.core.lib.maps.findWithDefault.name -> withLazy(mkPrimImpl(hydra.core.lib.maps.findWithDefault.name, tSchemeConstrained(Seq(("v", Seq.empty), ("k", Seq("ordering"))),
         tFun(v, tFun(k, tFun(mapKV, v)))),
-        impl3((d, key, m) => exMap(m).getOrElse(key, d))), Seq(0)),
+        impl3((d, key, m) => exMap(m).getOrElse(stripKey(key), d))), Seq(0)),
       hydra.core.lib.maps.fromList.name -> mkPrimImpl(hydra.core.lib.maps.fromList.name, tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
         tFun(tList(tPair(k, v)), mapKV)),
-        impl1(pairs => mkMapTerm(exList(pairs).map(p => { val (a, b) = exPair(p); a -> b }).toMap))),
+        impl1(pairs => mkMapTerm(exList(pairs).map(p => { val (a, b) = exPair(p); stripKey(a) -> b }).toMap))),
       hydra.core.lib.maps.insert.name -> mkPrimImpl(hydra.core.lib.maps.insert.name, tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
         tFun(k, tFun(v, tFun(mapKV, mapKV)))),
-        impl3((key, value, m) => mkMapTerm(exMap(m).updated(key, value)))),
+        impl3((key, value, m) => mkMapTerm(exMap(m).updated(stripKey(key), value)))),
       hydra.core.lib.maps.keys.name -> mkPrimImpl(hydra.core.lib.maps.keys.name, tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
         tFun(mapKV, tList(k))),
-        impl1(m => mkList(exMap(m).keys.toSeq))),
+        g => args => sortedEntries(g, exMap(args(0))).map(es => mkList(es.map(_._1)))),
       hydra.core.lib.maps.lookup.name -> mkPrimImpl(hydra.core.lib.maps.lookup.name, tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
         tFun(k, tFun(mapKV, tOpt(v)))),
-        impl2((key, m) => mkMaybe(exMap(m).get(key)))),
+        impl2((key, m) => mkMaybe(exMap(m).get(stripKey(key))))),
       hydra.core.lib.maps.member.name -> mkPrimImpl(hydra.core.lib.maps.member.name, tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
         tFun(k, tFun(mapKV, tBool))),
-        impl2((key, m) => mkBool(exMap(m).contains(key)))),
+        impl2((key, m) => mkBool(exMap(m).contains(stripKey(key))))),
       hydra.core.lib.maps.isEmpty.name -> mkPrimImpl(hydra.core.lib.maps.isEmpty.name, tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
         tFun(mapKV, tBool)),
         impl1(m => mkBool(exMap(m).isEmpty))),
       hydra.core.lib.maps.singleton.name -> mkPrimImpl(hydra.core.lib.maps.singleton.name, tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
         tFun(k, tFun(v, mapKV))),
-        impl2((key, value) => mkMapTerm(Map(key -> value)))),
+        impl2((key, value) => mkMapTerm(Map(stripKey(key) -> value)))),
       hydra.core.lib.maps.size.name -> mkPrimImpl(hydra.core.lib.maps.size.name, tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
         tFun(mapKV, tInt32)),
         impl1(m => mkInt32(exMap(m).size))),
       hydra.core.lib.maps.toList.name -> mkPrimImpl(hydra.core.lib.maps.toList.name, tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
         tFun(mapKV, tList(tPair(k, v)))),
-        impl1(m => mkList(exMap(m).toSeq.map((k, v) => mkPairTerm(k, v))))),
+        g => args => sortedEntries(g, exMap(args(0))).map(es => mkList(es.map((k, v) => mkPairTerm(k, v))))),
       hydra.core.lib.maps.union.name -> mkPrimImpl(hydra.core.lib.maps.union.name, tSchemeConstrained(Seq(("k", Seq("ordering")), ("v", Seq.empty)),
         tFun(mapKV, tFun(mapKV, mapKV))),
         impl2((m1, m2) => mkMapTerm(exMap(m2) ++ exMap(m1)))),
@@ -1245,7 +1290,7 @@ object Libraries:
       // First-order
       hydra.core.lib.sets.delete.name -> mkPrimImpl(hydra.core.lib.sets.delete.name, tSchemeConstrained(aOrd,
         tFun(a, tFun(tSet(a), tSet(a)))),
-        impl2((x, s) => mkSet(exSet(s) - x))),
+        impl2((x, s) => mkSet(exSet(s) - stripKey(x)))),
       hydra.core.lib.sets.difference.name -> mkPrimImpl(hydra.core.lib.sets.difference.name, tSchemeConstrained(aOrd,
         tFun(tSet(a), tFun(tSet(a), tSet(a)))),
         impl2((s1, s2) => mkSet(exSet(s1) -- exSet(s2)))),
@@ -1260,13 +1305,13 @@ object Libraries:
         impl1(xs => mkSet(exList(xs).toSet))),
       hydra.core.lib.sets.insert.name -> mkPrimImpl(hydra.core.lib.sets.insert.name, tSchemeConstrained(aOrd,
         tFun(a, tFun(tSet(a), tSet(a)))),
-        impl2((x, s) => mkSet(exSet(s) + x))),
+        impl2((x, s) => mkSet(exSet(s) + stripKey(x)))),
       hydra.core.lib.sets.intersection.name -> mkPrimImpl(hydra.core.lib.sets.intersection.name, tSchemeConstrained(aOrd,
         tFun(tSet(a), tFun(tSet(a), tSet(a)))),
         impl2((s1, s2) => mkSet(exSet(s1).intersect(exSet(s2))))),
       hydra.core.lib.sets.member.name -> mkPrimImpl(hydra.core.lib.sets.member.name, tSchemeConstrained(aOrd,
         tFun(a, tFun(tSet(a), tBool))),
-        impl2((x, s) => mkBool(exSet(s).contains(x)))),
+        impl2((x, s) => mkBool(exSet(s).contains(stripKey(x))))),
       hydra.core.lib.sets.isEmpty.name -> mkPrimImpl(hydra.core.lib.sets.isEmpty.name, tSchemeConstrained(aOrd,
         tFun(tSet(a), tBool)),
         impl1(s => mkBool(exSet(s).isEmpty))),
@@ -1278,7 +1323,7 @@ object Libraries:
         impl1(s => mkInt32(exSet(s).size))),
       hydra.core.lib.sets.toList.name -> mkPrimImpl(hydra.core.lib.sets.toList.name, tSchemeConstrained(aOrd,
         tFun(tSet(a), tList(a))),
-        impl1(s => mkList(exSet(s).toSeq))),
+        g => args => sortTerms(g, exSet(args(0)).toSeq).map(mkList)),
       hydra.core.lib.sets.union.name -> mkPrimImpl(hydra.core.lib.sets.union.name, tSchemeConstrained(aOrd,
         tFun(tSet(a), tFun(tSet(a), tSet(a)))),
         impl2((s1, s2) => mkSet(exSet(s1).union(exSet(s2))))),

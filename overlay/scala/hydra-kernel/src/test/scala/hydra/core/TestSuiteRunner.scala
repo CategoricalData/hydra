@@ -488,8 +488,10 @@ object TestSuiteRunner {
     val testTypes: Map[hydra.core.model.Name, hydra.core.model.Type] = hydra.core.test.testGraph.testTypes
     val kernelTypes: Map[hydra.core.model.Name, hydra.core.model.Type] = buildKernelTypes()
     val allTypes: Map[hydra.core.model.Name, hydra.core.model.Type] = kernelTypes ++ testTypes
-    val schemaTypes: Map[hydra.core.model.Name, TypeScheme] = allTypes.map { case (k, v) =>
-      k -> hydra.core.resolution.typeToTypeScheme(v)
+    // The bootstrap types sit under allTypes so that union values of kernel types (e.g. encoded Terms used as map
+    // keys) can be ordered by declared variant order, which needs the union's definition in the schema (#848).
+    val schemaTypes: Map[hydra.core.model.Name, TypeScheme] = (hydra.core.bootstrap.typesByName ++ allTypes).map {
+      case (k, v) => k -> hydra.core.resolution.typeToTypeScheme(v)
     }
 
     // Bound terms
