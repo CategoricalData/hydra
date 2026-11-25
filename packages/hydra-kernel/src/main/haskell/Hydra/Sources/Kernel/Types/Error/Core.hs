@@ -869,7 +869,7 @@ untypedTermVariableError = define "UntypedTermVariableError" $
 -- Y10. VoidInNonBottomPositionError (optional)
 voidInNonBottomPositionError :: TypeDefinition
 voidInNonBottomPositionError = define "VoidInNonBottomPositionError" $
-  doc "TypeVoid appearing in a position where no value can be constructed, such as a record field, list element, map key/value, set element, pair component, or function codomain (optional)" $
+  doc "TypeVoid as a record field, a pair component, a list, set or optional element, or a map key or value (optional). Void is allowed as an either side, a union variant, a function domain or codomain, and an effect result" $
   T.record [
     "location">:
       doc "The path to the void type in a non-bottom position" $

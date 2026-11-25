@@ -1099,28 +1099,6 @@ term validateTypeNode =
                     `_` = none}
                     body))
                 none],
-      `either` = λet.firstFindingType
-            [
-              ifElse
-                (enabled p Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
-                (optionals.map
-                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
-                  (checkVoid (EitherType[`left`] et)))
-                none,
-              ifElse
-                (enabled p Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
-                (optionals.map
-                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
-                  (checkVoid (EitherType[`right`] et)))
-                none],
-      `effect` = λet.ifElse
-            (enabled
-              p
-              Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
-            (optionals.map
-              (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
-              (checkVoid et))
-            none,
       `forall` = λft.
           let paramName := ForallType[parameter] ft
           in firstFindingType
@@ -1149,14 +1127,6 @@ term validateTypeNode =
                         location = SubtermPath{[]},
                         name = paramName}})))
                 none],
-      function = λft.ifElse
-            (enabled
-              p
-              Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
-            (optionals.map
-              (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
-              (checkVoid (FunctionType[codomain] ft)))
-            none,
       `list` = λlt.ifElse
             (enabled
               p
@@ -1191,6 +1161,14 @@ term validateTypeNode =
                   (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
                   (checkVoid (MapType[values] mt)))
                 none],
+      `optional` = λot.ifElse
+            (enabled
+              p
+              Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
+            (optionals.map
+              (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
+              (checkVoid ot))
+            none,
       pair = λpt.firstFindingType
             [
               ifElse
@@ -1287,12 +1265,6 @@ term validateTypeNode =
                         duplicateUnionTypeFieldNames = DuplicateUnionTypeFieldNamesError{
                           location = SubtermPath{[]},
                           name = dupName}}))))
-                none,
-              ifElse
-                (enabled p Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
-                (optionals.map
-                  (λf.(Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"}, f))
-                  (firstTypeError (lists.map (λf.checkVoid (FieldType[`type`] f)) fields)))
                 none],
       variable = λvarName.ifElse
             (enabled

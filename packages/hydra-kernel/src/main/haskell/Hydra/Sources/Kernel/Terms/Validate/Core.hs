@@ -1361,19 +1361,6 @@ validateTypeNode = define "validateTypeNode" $
                 record _NestedTypeAnnotationError [
                   _NestedTypeAnnotationError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep]))]])],
 
-    -- Y10: TypeEither — void in either components
-    _Type_either>>: "et" ~>
-      firstFindingType @@ list [
-        guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition
-          (checkVoid @@ (Core.eitherTypeLeft $ var "et")),
-        guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition
-          (checkVoid @@ (Core.eitherTypeRight $ var "et"))],
-
-    -- Y10: TypeEffect — void result type
-    _Type_effect>>: "et" ~>
-      guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition
-        (checkVoid @@ var "et"),
-
     -- Y7/Y13: TypeForall — type variable shadowing and naming
     _Type_forall>>: "ft" ~>
       "paramName" <~ Core.forallTypeParameter (var "ft") $
@@ -1395,11 +1382,6 @@ validateTypeNode = define "validateTypeNode" $
                 _InvalidForallParameterNameError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep])),
                 _InvalidForallParameterNameError_name>>: var "paramName"]))],
 
-    -- Y10: TypeFunction — void in codomain
-    _Type_function>>: "ft" ~>
-      guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition
-        (checkVoid @@ (Core.functionTypeCodomain $ var "ft")),
-
     -- Y10: TypeList — void element type
     _Type_list>>: "lt" ~>
       guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition
@@ -1420,6 +1402,11 @@ validateTypeNode = define "validateTypeNode" $
           (checkVoid @@ var "keyType"),
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition
           (checkVoid @@ (Core.mapTypeValues $ var "mt"))],
+
+    -- Y10: TypeOptional — void element type
+    _Type_optional>>: "ot" ~>
+      guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition
+        (checkVoid @@ var "ot"),
 
     -- Y10: TypePair — void in pair components
     _Type_pair>>: "pt" ~>
@@ -1466,7 +1453,8 @@ validateTypeNode = define "validateTypeNode" $
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition
           (checkVoid @@ var "elemType")],
 
-    -- Y2/Y3/Y5/Y10: TypeUnion — empty, single-variant, duplicate field names, void in fields
+    -- Y2/Y3/Y5: TypeUnion — empty, single-variant, duplicate field names. A void variant is allowed: it simply
+    -- cannot be injected.
     _Type_union>>: "fields" ~>
       firstFindingType @@ list [
         -- Y2. EmptyUnionTypeError
@@ -1496,12 +1484,7 @@ validateTypeNode = define "validateTypeNode" $
               mkJustType $ inject _InvalidTypeError _InvalidTypeError_duplicateUnionTypeFieldNames $
                 record _DuplicateUnionTypeFieldNamesError [
                   _DuplicateUnionTypeFieldNamesError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep])),
-                  _DuplicateUnionTypeFieldNamesError_name>>: var "dupName"])),
-        -- Y10. VoidInNonBottomPositionError — check field types
-        guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition
-          (firstTypeError @@ (Lists.map
-            ("f" ~> checkVoid @@ (Core.fieldTypeType $ var "f"))
-            (var "fields")))],
+                  _DuplicateUnionTypeFieldNamesError_name>>: var "dupName"]))],
 
     -- Y6. UndefinedTypeVariableError
     _Type_variable>>: "varName" ~>
