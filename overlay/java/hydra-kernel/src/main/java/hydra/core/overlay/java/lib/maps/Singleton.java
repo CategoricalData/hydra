@@ -48,7 +48,7 @@ public class Singleton extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> Either.right(Terms.map(PersistentMap.singleton(args.get(0), args.get(1))));
+        return args -> graph -> Either.right(Terms.map(PersistentMap.singleton(hydra.core.overlay.java.lib.OrderKeys.strip(args.get(0)), args.get(1))));
     }
 
     /**

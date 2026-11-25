@@ -48,8 +48,8 @@ public class Member extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(
-                (Function<Map<Term, Term>, Term>) mp -> Terms.boolean_(mp.containsKey(args.get(0))),
-                hydra.core.extract.Model.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
+                (Function<Map<Term, Term>, Term>) mp -> Terms.boolean_(mp.containsKey(hydra.core.overlay.java.lib.OrderKeys.strip(args.get(0)))),
+                hydra.core.overlay.java.lib.OrderKeys.map(graph, args.get(1)));
     }
 
     /**

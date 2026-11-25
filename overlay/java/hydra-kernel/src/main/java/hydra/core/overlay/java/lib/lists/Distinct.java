@@ -36,7 +36,9 @@ public class Distinct extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-      return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<List<Term>, Term>) l -> Terms.list(Distinct.apply(l)), hydra.core.extract.Model.list(graph, args.get(0)));
+      // Distinct by order key, so values differing only in annotations are duplicates (#848)
+      return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.list(graph, args.get(0)),
+          l -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<List<Term>, Term>) Terms::list, hydra.core.overlay.java.lib.OrderKeys.distinct(graph, l)));
     }
 
     /**

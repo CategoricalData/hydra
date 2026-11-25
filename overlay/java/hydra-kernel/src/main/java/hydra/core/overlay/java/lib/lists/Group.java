@@ -36,14 +36,15 @@ public class Group extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<List<Term>, Term>) lst -> {
-                List<List<Term>> groups = apply(lst);
+        // Group by order key, so values differing only in annotations are equal (#848)
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.list(graph, args.get(0)),
+            lst -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<List<List<Term>>, Term>) groups -> {
                 ConsList<Term> reversed = ConsList.empty();
                 for (List<Term> g : groups) {
                     reversed = ConsList.cons(Terms.list(g), reversed);
                 }
                 return Terms.list(reversed.reverse());
-            }, hydra.core.extract.Model.list(graph, args.get(0)));
+            }, hydra.core.overlay.java.lib.OrderKeys.group(graph, lst)));
     }
 
     /**

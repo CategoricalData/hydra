@@ -54,14 +54,15 @@ public class ToList extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> {
-            Either<Error_, Map<Term, Term>> r = hydra.core.extract.Model.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(0));
-            return hydra.core.overlay.java.lib.eithers.Map.apply(m -> {
+            Either<Error_, Map<Term, Term>> r = hydra.core.overlay.java.lib.OrderKeys.map(graph, args.get(0));
+            // Listed in the order of the keys' order keys, so union variants come out in declared order (#848)
+            return hydra.core.overlay.java.lib.eithers.Bind.apply(r, m -> hydra.core.overlay.java.lib.eithers.Map.apply(entries -> {
                 ConsList<Term> reversed = ConsList.empty();
-                for (Map.Entry<Term, Term> e : m.entrySet()) {
+                for (Map.Entry<Term, Term> e : entries) {
                     reversed = ConsList.cons(Terms.pair(e.getKey(), e.getValue()), reversed);
                 }
                 return Terms.list(reversed.reverse());
-            }, r);
+            }, hydra.core.overlay.java.lib.OrderKeys.sortedEntries(graph, m)));
         };
     }
 

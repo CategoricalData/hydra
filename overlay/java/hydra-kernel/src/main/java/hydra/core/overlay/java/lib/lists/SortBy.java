@@ -48,12 +48,11 @@ public class SortBy extends PrimitiveFunction {
                     if (r.isLeft()) return (Either) r;
                     keys.add(((Either.Right<Error_, Term>) r).value);
                 }
-                Integer[] indices = new Integer[indexed.size()];
-                for (int i = 0; i < indices.length; i++) indices[i] = i;
-                java.util.Arrays.sort(indices, Comparator.comparing(i -> (Comparable) keys.get(i)));
-                ConsList<Term> reversed = ConsList.empty();
-                for (int i : indices) reversed = ConsList.cons(indexed.get(i), reversed);
-                return Either.right(Terms.list(reversed.reverse()));
+                // Sort by the order keys of the computed keys, so union variants come out in declared order (#848)
+                Either<Error_, List<Term>> orderKeys = hydra.core.overlay.java.lib.OrderKeys.keys(graph, keys);
+                if (orderKeys.isLeft()) return (Either) orderKeys;
+                List<Term> sorted = hydra.core.overlay.java.lib.OrderKeys.sortByKeys(indexed, ((Either.Right<Error_, List<Term>>) orderKeys).value);
+                return Either.right(Terms.list(ConsList.fromList(sorted)));
             });
     }
 

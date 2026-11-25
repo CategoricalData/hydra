@@ -53,10 +53,10 @@ public class Map extends PrimitiveFunction {
             return hydra.core.overlay.java.lib.eithers.Map.apply(arg -> {
                 PersistentSet<Term> result = PersistentSet.<Term>empty();
                 for (Term e : arg) {
-                    result = result.insert(Terms.apply(mapping, e));
+                    result = result.insert(hydra.core.overlay.java.lib.OrderKeys.strip(Terms.apply(mapping, e)));
                 }
                 return Terms.set(result);
-            }, hydra.core.extract.Model.set(graph, args.get(1)));
+            }, hydra.core.overlay.java.lib.OrderKeys.set(graph, args.get(1)));
         };
     }
 

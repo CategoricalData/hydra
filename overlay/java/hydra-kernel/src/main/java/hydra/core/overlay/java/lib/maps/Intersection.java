@@ -47,9 +47,9 @@ public class Intersection extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(0)), mp1 ->
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.overlay.java.lib.OrderKeys.map(graph, args.get(0)), mp1 ->
             hydra.core.overlay.java.lib.eithers.Map.apply(mp2 -> Terms.map(apply(mp1, mp2)),
-                hydra.core.extract.Model.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(1))));
+                hydra.core.overlay.java.lib.OrderKeys.map(graph, args.get(1))));
     }
 
     /**

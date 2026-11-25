@@ -34,8 +34,10 @@ public class Equal extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        // Term equality is sufficient here, as we assume that type inference has already succeeded.
-        return args -> graph -> Either.right(Terms.boolean_(args.get(0).equals(args.get(1))));
+        // Compare by order keys, so annotations are ignored at every depth (#848)
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(
+            (Integer cmp) -> Terms.boolean_(cmp == 0),
+            hydra.core.overlay.java.lib.OrderKeys.compare(graph, args.get(0), args.get(1)));
     }
 
     /**

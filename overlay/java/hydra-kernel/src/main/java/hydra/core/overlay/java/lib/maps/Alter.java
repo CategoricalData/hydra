@@ -50,9 +50,9 @@ public class Alter extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), (Map<Term, Term> mp) -> {
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.overlay.java.lib.OrderKeys.map(graph, args.get(2)), (Map<Term, Term> mp) -> {
                 Term f = args.get(0);
-                Term key = args.get(1);
+                Term key = hydra.core.overlay.java.lib.OrderKeys.strip(args.get(1));
                 Optional<Term> currentValue = Lookup.apply(key, mp);
                 Either<Error_, Term> r = hydra.core.Reduction.reduceTerm(
                     hydra.core.Lexical.emptyInferenceContext(), graph, true, Terms.apply(f, Terms.optional(currentValue)));

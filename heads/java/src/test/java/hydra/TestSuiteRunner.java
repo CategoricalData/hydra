@@ -108,8 +108,12 @@ public class TestSuiteRunner {
         Map<Name, Type> kernelTypes = buildKernelTypes();
         Map<Name, Type> allTypes = new HashMap<>(kernelTypes);
         allTypes.putAll(testTypes); // test types override kernel types if any overlap
+        // The bootstrap types sit under allTypes so that union values of kernel types (e.g. encoded Terms used as map
+        // keys) can be ordered by declared variant order, which needs the union's definition in the schema (#848).
+        Map<Name, Type> schemaSourceTypes = new HashMap<>(hydra.core.Bootstrap.typesByName());
+        schemaSourceTypes.putAll(allTypes);
         hydra.core.overlay.java.util.PersistentMap<Name, TypeScheme> schemaTypes = hydra.core.overlay.java.util.PersistentMap.empty();
-        for (Map.Entry<Name, Type> entry : allTypes.entrySet()) {
+        for (Map.Entry<Name, Type> entry : schemaSourceTypes.entrySet()) {
             schemaTypes = schemaTypes.insert(entry.getKey(), hydra.core.Resolution.typeToTypeScheme(entry.getValue()));
         }
 

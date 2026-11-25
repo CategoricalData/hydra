@@ -37,7 +37,7 @@ public class Filter extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph ->
-            hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.set(graph, args.get(1)), arg -> {
+            hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.overlay.java.lib.OrderKeys.set(graph, args.get(1)), arg -> {
                 PersistentSet<Term> result = PersistentSet.<Term>empty();
                 for (Term x : arg) {
                     Either<Error_, Term> r = hydra.core.Reduction.reduceTerm(

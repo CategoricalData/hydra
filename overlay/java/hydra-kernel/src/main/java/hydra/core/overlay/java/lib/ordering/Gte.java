@@ -34,10 +34,10 @@ public class Gte extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> {
-            int cmp = Compare.compareTerms(args.get(0), args.get(1));
-            return Either.right(Terms.boolean_(cmp >= 0));
-        };
+        // Compare by order keys, so union variants compare in declared order (#848)
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(
+            (Integer cmp) -> Terms.boolean_(cmp >= 0),
+            hydra.core.overlay.java.lib.OrderKeys.compare(graph, args.get(0), args.get(1)));
     }
 
     /**

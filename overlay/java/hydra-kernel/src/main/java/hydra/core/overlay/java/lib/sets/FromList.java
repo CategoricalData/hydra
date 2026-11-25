@@ -50,7 +50,7 @@ public class FromList extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(arg -> Terms.set(apply(arg)), hydra.core.extract.Model.list(graph, args.get(0)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(arg -> hydra.core.overlay.java.lib.OrderKeys.setTerm(arg), hydra.core.extract.Model.list(graph, args.get(0)));
     }
 
     /**

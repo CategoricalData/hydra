@@ -50,13 +50,12 @@ public class ToList extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(terms -> {
-            // Term needs a custom comparator (compareTerms), so sort in an ArrayList scratch
-            // buffer and convert the sorted result to a ConsList.
-            ArrayList<Term> scratch = new ArrayList<>(terms);
-            scratch.sort(hydra.core.overlay.java.lib.ordering.Compare::compareTerms);
-            return Terms.list(ConsList.fromList(scratch));
-        }, hydra.core.extract.Model.set(graph, args.get(0)));
+        // Elements are listed in the order of their order keys, so union variants come out in declared order (#848)
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(
+            hydra.core.overlay.java.lib.OrderKeys.set(graph, args.get(0)),
+            terms -> hydra.core.overlay.java.lib.eithers.Map.apply(
+                sorted -> Terms.list(ConsList.fromList(sorted)),
+                hydra.core.overlay.java.lib.OrderKeys.sort(graph, new ArrayList<>(terms))));
     }
 
     /**

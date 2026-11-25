@@ -41,7 +41,7 @@ public class MapSet extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.set(graph, args.get(1)), items -> {
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.overlay.java.lib.OrderKeys.set(graph, args.get(1)), items -> {
                 Term fn = args.get(0);
                 PersistentSet<Term> results = PersistentSet.<Term>empty();
                 for (Term element : items) {
@@ -58,7 +58,7 @@ public class MapSet extends PrimitiveFunction {
                         return Either.right(new Term.Either(new hydra.core.overlay.java.util.Either.Left<>(
                             ((hydra.core.overlay.java.util.Either.Left<Term, Term>) inner).value)));
                     }
-                    results = results.insert(((hydra.core.overlay.java.util.Either.Right<Term, Term>) inner).value);
+                    results = results.insert(hydra.core.overlay.java.lib.OrderKeys.strip(((hydra.core.overlay.java.util.Either.Right<Term, Term>) inner).value));
                 }
                 return Either.right(new Term.Either(new hydra.core.overlay.java.util.Either.Right<>(Terms.set(results))));
             });

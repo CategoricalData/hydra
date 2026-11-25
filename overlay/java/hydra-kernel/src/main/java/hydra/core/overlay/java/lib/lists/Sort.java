@@ -36,11 +36,11 @@ public class Sort extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<List<Term>, Term>) lst -> {
-                ArrayList<Term> scratch = new ArrayList<>(lst);
-                scratch.sort(hydra.core.overlay.java.lib.ordering.Compare::compareTerms);
-                return Terms.list(ConsList.fromList(scratch));
-            }, hydra.core.extract.Model.list(graph, args.get(0)));
+        // Sort by order keys, so union variants come out in declared order (#848)
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.list(graph, args.get(0)),
+            lst -> hydra.core.overlay.java.lib.eithers.Map.apply(
+                (Function<List<Term>, Term>) sorted -> Terms.list(ConsList.fromList(sorted)),
+                hydra.core.overlay.java.lib.OrderKeys.sort(graph, lst)));
     }
 
     /**

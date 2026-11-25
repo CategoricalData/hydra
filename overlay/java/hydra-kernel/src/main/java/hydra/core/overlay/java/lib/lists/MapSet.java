@@ -44,7 +44,7 @@ public class MapSet extends PrimitiveFunction {
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> {
             Term f = args.get(0);
-            Either<Error_, Set<Term>> sResult = hydra.core.extract.Model.set(graph, args.get(1));
+            Either<Error_, Set<Term>> sResult = hydra.core.overlay.java.lib.OrderKeys.set(graph, args.get(1));
             if (sResult.isLeft()) return (Either) sResult;
             Set<Term> s = ((Either.Right<Error_, Set<Term>>) sResult).value;
 
@@ -64,7 +64,7 @@ public class MapSet extends PrimitiveFunction {
             for (List<Term> combo : combinations) {
                 PersistentSet<Term> resultSet = PersistentSet.<Term>empty();
                 for (Term y : combo) {
-                    resultSet = resultSet.insert(y);
+                    resultSet = resultSet.insert(hydra.core.overlay.java.lib.OrderKeys.strip(y));
                 }
                 result.add(Terms.set(resultSet));
             }

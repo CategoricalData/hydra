@@ -48,13 +48,13 @@ public class MapKeys extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph ->
-            hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(1)), mp -> {
+            hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.overlay.java.lib.OrderKeys.map(graph, args.get(1)), mp -> {
                 PersistentMap<Term, Term> result = PersistentMap.<Term, Term>empty();
                 for (java.util.Map.Entry<Term, Term> e : mp.entrySet()) {
                     Either<Error_, Term> r = hydra.core.Reduction.reduceTerm(
                         hydra.core.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(0), e.getKey()));
                     if (r.isLeft()) return (Either) r;
-                    result = result.insert(((Either.Right<Error_, Term>) r).value, e.getValue());
+                    result = result.insert(hydra.core.overlay.java.lib.OrderKeys.strip(((Either.Right<Error_, Term>) r).value), e.getValue());
                 }
                 return Either.right(Terms.map(result));
             });

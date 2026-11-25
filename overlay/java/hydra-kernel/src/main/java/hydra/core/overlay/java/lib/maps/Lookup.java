@@ -48,7 +48,7 @@ public class Lookup extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<Map<Term, Term>, Term>) mp -> Terms.optional(apply(args.get(0), mp)), hydra.core.extract.Model.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<Map<Term, Term>, Term>) mp -> Terms.optional(apply(hydra.core.overlay.java.lib.OrderKeys.strip(args.get(0)), mp)), hydra.core.overlay.java.lib.OrderKeys.map(graph, args.get(1)));
     }
 
     /**

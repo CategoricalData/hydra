@@ -49,7 +49,7 @@ public class FilterWithKey extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(1)), mp -> {
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.overlay.java.lib.OrderKeys.map(graph, args.get(1)), mp -> {
                 Term pred = args.get(0);
                 PersistentMap<Term, Term> result = PersistentMap.<Term, Term>empty();
                 for (Map.Entry<Term, Term> entry : mp.entrySet()) {

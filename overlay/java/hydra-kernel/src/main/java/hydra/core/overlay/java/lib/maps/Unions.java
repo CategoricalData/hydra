@@ -49,7 +49,7 @@ public class Unions extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(maps -> Terms.map(apply(maps)),
-            hydra.core.extract.Model.listOf(t -> hydra.core.extract.Model.map(t2 -> Either.right(t2), t2 -> Either.right(t2), graph, t), graph, args.get(0)));
+            hydra.core.extract.Model.listOf(t -> hydra.core.overlay.java.lib.OrderKeys.map(graph, t), graph, args.get(0)));
     }
 
     /**

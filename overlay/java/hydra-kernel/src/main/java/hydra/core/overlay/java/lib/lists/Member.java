@@ -35,7 +35,9 @@ public class Member extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<List<Term>, Term>) lst -> Terms.boolean_(lst.contains(args.get(0))), hydra.core.extract.Model.list(graph, args.get(1)));
+        // Membership by order key, so annotations are ignored at every depth (#848)
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.list(graph, args.get(1)),
+            lst -> hydra.core.overlay.java.lib.eithers.Map.apply((Function<Boolean, Term>) Terms::boolean_, hydra.core.overlay.java.lib.OrderKeys.member(graph, args.get(0), lst)));
     }
 
     /**

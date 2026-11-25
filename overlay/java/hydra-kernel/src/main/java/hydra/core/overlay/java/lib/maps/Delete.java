@@ -48,8 +48,8 @@ public class Delete extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> {
-            Term key = args.get(0);
-            return hydra.core.overlay.java.lib.eithers.Map.apply(before -> Terms.map(apply(key, before)), hydra.core.extract.Model.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
+            Term key = hydra.core.overlay.java.lib.OrderKeys.strip(args.get(0));
+            return hydra.core.overlay.java.lib.eithers.Map.apply(before -> Terms.map(apply(key, before)), hydra.core.overlay.java.lib.OrderKeys.map(graph, args.get(1)));
         };
     }
 

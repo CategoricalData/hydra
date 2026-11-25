@@ -49,7 +49,7 @@ public class Bimap extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph ->
-            hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.extract.Model.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), mp -> {
+            hydra.core.overlay.java.lib.eithers.Bind.apply(hydra.core.overlay.java.lib.OrderKeys.map(graph, args.get(2)), mp -> {
                 PersistentMap<Term, Term> result = PersistentMap.<Term, Term>empty();
                 for (Map.Entry<Term, Term> entry : mp.entrySet()) {
                     Either<Error_, Term> kr = hydra.core.Reduction.reduceTerm(
@@ -58,7 +58,7 @@ public class Bimap extends PrimitiveFunction {
                     Either<Error_, Term> vr = hydra.core.Reduction.reduceTerm(
                         hydra.core.Lexical.emptyInferenceContext(), graph, true, Terms.apply(args.get(1), entry.getValue()));
                     if (vr.isLeft()) return (Either) vr;
-                    result = result.insert(((Either.Right<Error_, Term>) kr).value,
+                    result = result.insert(hydra.core.overlay.java.lib.OrderKeys.strip(((Either.Right<Error_, Term>) kr).value),
                                             ((Either.Right<Error_, Term>) vr).value);
                 }
                 return Either.right(Terms.map(result));

@@ -32,16 +32,16 @@ public class Compare extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
-        return args -> graph -> {
-            int cmp = compareTerms(args.get(0), args.get(1));
+        // Compare by order keys, so union variants compare in declared order (#848)
+        return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply((Integer cmp) -> {
             if (cmp < 0) {
-                return Either.right(Terms.injectUnit(Comparison.TYPE_, Comparison.LESS_THAN));
+                return Terms.injectUnit(Comparison.TYPE_, Comparison.LESS_THAN);
             } else if (cmp > 0) {
-                return Either.right(Terms.injectUnit(Comparison.TYPE_, Comparison.GREATER_THAN));
+                return Terms.injectUnit(Comparison.TYPE_, Comparison.GREATER_THAN);
             } else {
-                return Either.right(Terms.injectUnit(Comparison.TYPE_, Comparison.EQUAL_TO));
+                return Terms.injectUnit(Comparison.TYPE_, Comparison.EQUAL_TO);
             }
-        };
+        }, hydra.core.overlay.java.lib.OrderKeys.compare(graph, args.get(0), args.get(1)));
     }
 
     /**

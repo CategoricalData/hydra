@@ -54,10 +54,10 @@ public class FindWithDefault extends PrimitiveFunction {
     protected Function<List<Term>, Function<Graph, Either<Error_, Term>>> implementation() {
         return args -> graph -> hydra.core.overlay.java.lib.eithers.Map.apply(
                 (Function<Map<Term, Term>, Term>) mp -> {
-                    Optional<Term> result = Lookup.apply(args.get(1), mp);
+                    Optional<Term> result = Lookup.apply(hydra.core.overlay.java.lib.OrderKeys.strip(args.get(1)), mp);
                     return result.orElse(args.get(0));
                 },
-                hydra.core.extract.Model.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)));
+                hydra.core.overlay.java.lib.OrderKeys.map(graph, args.get(2)));
     }
 
     /**
