@@ -56,19 +56,26 @@
     ]
   },
   "scripts": {
+    "bundle:server": "NODE_PATH=node_modules esbuild ../../dist/typescript/hydra-lsp/src/main/typescript/hydra/lsp/overlay/typescript/main.ts --bundle --platform=node --format=cjs --outfile=out/server.cjs",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "test:grammar": "vscode-tmgrammar-test -g syntaxes/hydra.tmLanguage.json \"tests/scopes/*.hydra\"",
     "test:corpus:refresh": "bash tests/refresh-corpus.sh",
     "test:corpus": "vscode-tmgrammar-snap -g syntaxes/hydra.tmLanguage.json \"tests/corpus/*.hydra\"",
+    "test:server": "node tests/lsp-smoke.cjs out/server.cjs",
     "test": "npm run test:grammar && npm run test:corpus",
     "package": "vsce package"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
   },
   "devDependencies": {
     "@types/node": "^18.19.0",
     "@types/vscode": "^1.75.0",
     "@vscode/vsce": "^2.24.0",
+    "esbuild": "^0.21.5",
     "typescript": "^5.4.0",
+    "vscode-languageserver": "^9.0.1",
     "vscode-tmgrammar-test": "^0.1.3"
   }
 }

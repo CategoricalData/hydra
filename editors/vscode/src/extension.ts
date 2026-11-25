@@ -12,7 +12,11 @@
 // server (#808). This activation path is where that server client would later be
 // started; it is kept deliberately small so #808 can bolt on without restructuring.
 
+import * as fs from 'fs';
 import * as vscode from 'vscode';
+import { LanguageClient, TransportKind } from 'vscode-languageclient/node';
+
+let client: LanguageClient | undefined;
 
 // The abbreviation table. Keys are typed WITHOUT the leading backslash; the trigger
 // character ('\\') is handled by the completion provider. Kept in sync with the
@@ -76,8 +80,29 @@ export function activate(context: vscode.ExtensionContext): void {
   );
 
   context.subscriptions.push(provider);
+  startLanguageServer(context);
 }
 
-export function deactivate(): void {
-  // Nothing to tear down yet. The #808 language-server client would be stopped here.
+// Starts the bundled Hydra language server (#836; produced by `npm run bundle:server`) over stdio.
+// If the bundle is absent the extension still works for highlighting and abbreviations.
+function startLanguageServer(context: vscode.ExtensionContext): void {
+  const serverModule = context.asAbsolutePath('out/server.cjs');
+  if (!fs.existsSync(serverModule)) {
+    console.log('Hydra language server bundle not found at ' + serverModule + '; running without diagnostics/formatting.');
+    return;
+  }
+  client = new LanguageClient(
+    'hydra',
+    'Hydra language server',
+    {
+      run: { module: serverModule, transport: TransportKind.stdio },
+      debug: { module: serverModule, transport: TransportKind.stdio },
+    },
+    { documentSelector: [{ language: 'hydra' }] },
+  );
+  void client.start();
+}
+
+export function deactivate(): Thenable<void> | undefined {
+  return client?.stop();
 }
