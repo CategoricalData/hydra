@@ -73,6 +73,8 @@ import qualified Hydra.Sources.Kernel.Terms.Sorting        as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution   as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Templates      as Templates
 import qualified Hydra.Sources.Kernel.Terms.Unification    as Unification
+import qualified Hydra.Sources.Kernel.Terms.Variables      as Variables
+import qualified Hydra.Sources.Json.Encode                 as Encode
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import           Prelude hiding ((++), decodeFloat)
 import qualified Data.Int                                  as I
@@ -96,10 +98,11 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Resolution.ns, Strip.ns, Substitution.ns, PrintCore.ns, moduleName Literals.module_, moduleName ExtractCore.module_] L.++ KernelTypes.kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Encode.ns, Resolution.ns, Strip.ns, Substitution.ns, PrintCore.ns, Variables.ns, moduleName Literals.module_, moduleName ExtractCore.module_] L.++ KernelTypes.kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling.")}
   where
     definitions = [
+      toDefinition compileDecoder,
       toDefinition decodeFloat,
       toDefinition decodeInteger,
       toDefinition decodeLiteral,
@@ -108,8 +111,263 @@ module_ = Module {
       toDefinition expectObject,
       toDefinition expectString,
       toDefinition fromJson,
+      toDefinition jsonCoder,
       toDefinition parseSpecialFloat,
       toDefinition parseSpecialFloat32]
+
+-- | Compile a type into a staged JSON decoder node (#850). A node is a 'Coder' whose decode
+-- function takes a resolver for named types (supplied by 'jsonCoder') paired with a JSON value;
+-- its encode function is an unused stub. Nodes are data rather than bare functions because the
+-- coders eta-expand bare functions to their full arity, which would move the compile-time work
+-- back under the per-value lambda. All schema work happens once here; every error is still
+-- reported at decode time with fromJson's message, so behavior matches fromJson exactly.
+compileDecoder :: TypedTermDefinition (M.Map Name Type -> Bool -> Name -> Type -> Coder Term (Name -> Value -> Either String Term, Value) String)
+compileDecoder = define "compileDecoder" $
+  doc ("Compile a type into a staged JSON decoder node (#850). A node is a Coder whose decode"
+    <> " function takes a resolver for named types (see jsonCoder) paired with a JSON value; its"
+    <> " encode function is unused. Nodes are data rather than bare functions so that no host's"
+    <> " eta expansion can move the compile-time work under the decoding lambda. All schema work"
+    <> " (annotation stripping, type-application reduction, field and variant tables) happens once"
+    <> " here rather than at every node of every decoded value, while every error is still reported"
+    <> " at decode time, exactly as fromJson reports it.") $
+  "types" ~> "compactMaps" ~> "tname" ~> "typ" ~>
+  "stripped" <~ (Strip.deannotateType @@ var "typ") $
+  "recurse" <~ ("t" ~> compileDecoder @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "t") $
+  "decodeVariablePayload" <~ ("payload" ~> match _Value (var "payload")
+    (Just $ left $ string "expected a JSON string as the \"@var\" variable name")
+    [_Value_string>>: "s" ~> right $ Core.termVariable $ Core.name $ var "s"]) $
+  -- The reserved {"@var": "name"} marker (#798); see the note in fromJson.
+  "checkVariable" <~ ("f" ~> "run" ~> "value" ~> match _Value (var "value")
+    (Just $ var "f" @@ var "run" @@ var "value") [
+    _Value_object>>: "pairs" ~>
+      Logic.ifElse (Equality.equal (Lists.length $ var "pairs") (int32 1))
+        ("onlyPair" <~ (Optionals.withDefault (pair (string "") Json.valueNull) (Lists.at (int32 0) (var "pairs"))) $
+          Logic.ifElse (Equality.equal (Pairs.first $ var "onlyPair") (string "@var"))
+            (var "decodeVariablePayload" @@ (Pairs.second $ var "onlyPair"))
+            (var "f" @@ var "run" @@ var "value"))
+        (var "f" @@ var "run" @@ var "value")]) $
+  "unusedEncode" <~ (constant $ left $ string "a compiled JSON decoder node does not encode") $
+  -- Optional and wrap nodes defer the marker check to their inner node, as fromJson does.
+  "plainNode" <~ ("f" ~> Coders.coder (var "unusedEncode")
+    ("rv" ~> var "f" @@ (Pairs.first $ var "rv") @@ (Pairs.second $ var "rv"))) $
+  "checkedNode" <~ ("f" ~> Coders.coder (var "unusedEncode")
+    ("rv" ~> var "checkVariable" @@ var "f" @@ (Pairs.first $ var "rv") @@ (Pairs.second $ var "rv"))) $
+  "applyNode" <~ ("d" ~> "run" ~> "v" ~> Coders.coderDecode (var "d") @@ pair (var "run") (var "v")) $
+  "failWith" <~ ("msg" ~> var "checkedNode" @@ ("run" ~> "value" ~> left (var "msg"))) $
+  "withVariableCheck" <~ ("d" ~> var "checkedNode" @@ ("run" ~> "value" ~> var "applyNode" @@ var "d" @@ var "run" @@ var "value")) $
+  "reduceApp" <~ ("app" ~>
+    "fn" <~ (Strip.deannotateType @@ (Core.applicationTypeFunction $ var "app")) $
+    "arg" <~ (Core.applicationTypeArgument $ var "app") $
+    match _Type (var "fn")
+      (Just $ left $ Strings.concat $ list [
+        string "cannot apply a non-parametric type: ",
+        PrintCore.type_ @@ var "fn"]) [
+      _Type_application>>: "innerApp" ~>
+        Eithers.either
+          ("err" ~> left $ var "err")
+          ("reducedFn" ~> var "reduceApp" @@ (Core.applicationType (var "reducedFn") (var "arg")))
+          (var "reduceApp" @@ var "innerApp"),
+      _Type_forall>>: "ft" ~>
+        right $ Substitution.substInType
+          @@ (Substitution.singletonTypeSubst @@ (Core.forallTypeParameter $ var "ft") @@ var "arg")
+          @@ (Core.forallTypeBody $ var "ft"),
+      _Type_variable>>: "name" ~>
+        Optionals.match (Maps.lookup (var "name" :: TypedTerm Name) (var "types")) (left $ Strings.concat $ list [
+            string "unknown type variable: ",
+            Core.unName $ var "name"]) ("resolvedFn" ~> var "reduceApp" @@ (Core.applicationType (var "resolvedFn") (var "arg")))]) $
+  "decodeElements" <~ ("elemDecoder" ~> "run" ~> "arr" ~>
+    Eithers.mapList ("v" ~> var "applyNode" @@ var "elemDecoder" @@ var "run" @@ var "v") (var "arr")) $
+  match _Type (var "stripped")
+    (Just $ var "failWith" @@ (Strings.concat $ list [
+      string "unsupported type for JSON decoding: ",
+      PrintCore.type_ @@ var "typ"])) [
+
+    -- As in fromJson, the reduced type is compiled under the name of the application's head when that
+    -- head is a named type, so the record inside wrap(Measurement TimeUnit) is named Measurement (#854).
+    _Type_application>>: "at" ~>
+      "appHead" <~ ("t" ~> match _Type (Strip.deannotateType @@ var "t") (Just $ var "t") [
+        _Type_application>>: "inner" ~> var "appHead" @@ (Core.applicationTypeFunction $ var "inner")]) $
+      "headName" <~ (match _Type (Strip.deannotateType @@ (var "appHead" @@ (Core.applicationTypeFunction $ var "at")))
+        (Just $ var "tname") [
+        _Type_variable>>: "name" ~> var "name"]) $
+      Eithers.either
+        ("err" ~> var "failWith" @@ var "err")
+        ("reducedType" ~> var "withVariableCheck"
+          @@ (compileDecoder @@ var "types" @@ var "compactMaps" @@ var "headName" @@ var "reducedType"))
+        (var "reduceApp" @@ var "at"),
+
+    _Type_forall>>: "ft" ~> var "withVariableCheck" @@ (var "recurse" @@ (Core.forallTypeBody $ var "ft")),
+
+    _Type_literal>>: "lt" ~> var "checkedNode" @@ ("run" ~> "value" ~> decodeLiteral @@ var "lt" @@ var "value"),
+
+    _Type_list>>: "elemType" ~>
+      "elemDecoder" <~ (var "recurse" @@ var "elemType") $
+      var "checkedNode" @@ ("run" ~> "value" ~> match _Value (var "value")
+        (Just $ left $ string "expected array") [
+        _Value_null>>: constant $ right $ Core.termList (list ([] :: [TypedTerm Term])),
+        _Value_array>>: "arr" ~> Eithers.map ("ts" ~> Core.termList $ var "ts")
+          (var "decodeElements" @@ var "elemDecoder" @@ var "run" @@ var "arr")]),
+
+    _Type_set>>: "elemType" ~>
+      "elemDecoder" <~ (var "recurse" @@ var "elemType") $
+      var "checkedNode" @@ ("run" ~> "value" ~> match _Value (var "value")
+        (Just $ left $ string "expected array") [
+        _Value_null>>: constant $ right $ Core.termSet Sets.empty,
+        _Value_array>>: "arr" ~> Eithers.map ("elems" ~> Core.termSet $ Sets.fromList $ var "elems")
+          (var "decodeElements" @@ var "elemDecoder" @@ var "run" @@ var "arr")]),
+
+    _Type_optional>>: "innerType" ~>
+      "innerDecoder" <~ (var "recurse" @@ var "innerType") $
+      "isNestedMaybe" <~ (match _Type (Strip.deannotateType @@ var "innerType") (Just false) [
+        _Type_optional>>: constant true]) $
+      "decodeGiven" <~ ("run" ~> "v" ~>
+        Eithers.map ("t" ~> Core.termOptional $ just $ var "t") (var "applyNode" @@ var "innerDecoder" @@ var "run" @@ var "v")) $
+      Logic.ifElse (var "isNestedMaybe")
+        (var "plainNode" @@ ("run" ~> "value" ~> match _Value (var "value")
+          (Just $ left $ string "expected null or single-element array for nested Maybe") [
+          _Value_null>>: constant $ right $ Core.termOptional nothing,
+          _Value_array>>: "arr" ~>
+            "len" <~ (Lists.length $ var "arr") $
+            Logic.ifElse (Equality.equal (var "len") (int32 0))
+              (right $ Core.termOptional nothing)
+              (Logic.ifElse (Equality.equal (var "len") (int32 1))
+                (Optionals.match (Lists.head $ var "arr")
+                  (left $ string "expected single-element array for Just")
+                  ("firstVal" ~> var "decodeGiven" @@ var "run" @@ var "firstVal"))
+                (left $ string "expected single-element array for Just"))]))
+        (var "plainNode" @@ ("run" ~> "value" ~> match _Value (var "value")
+          (Just $ var "decodeGiven" @@ var "run" @@ var "value") [
+          _Value_null>>: constant $ right $ Core.termOptional nothing])),
+
+    _Type_record>>: "rt" ~>
+      "fieldDecoders" <~ (Lists.map
+        ("ft" ~> pair (Core.fieldTypeName $ var "ft") (var "recurse" @@ (Core.fieldTypeType $ var "ft")))
+        (var "rt")) $
+      var "checkedNode" @@ ("run" ~> "value" ~> match _Value (var "value")
+        (Just $ left $ string "expected object") [
+        _Value_object>>: "pairs" ~>
+          "obj" <~ (Maps.fromList $ var "pairs" :: TypedTerm (M.Map String Value)) $
+          "decodeField" <~ ("fd" ~>
+            "fname" <~ (Pairs.first $ var "fd") $
+            Eithers.map ("v" ~> Core.field (var "fname") (var "v"))
+              (var "applyNode" @@ (Pairs.second $ var "fd") @@ var "run"
+                @@ (Maps.findWithDefault Json.valueNull (Core.unName $ var "fname") (var "obj")))) $
+          Eithers.map
+            ("fs" ~> Core.termRecord $ Core.record (var "tname") (var "fs"))
+            (Eithers.mapList (var "decodeField") (var "fieldDecoders"))]),
+
+    -- Variants are tabulated by name once. The list is reversed so that, as with fromJson's
+    -- linear search, the first of any duplicate names wins.
+    _Type_union>>: "rt" ~>
+      "isUnitType" <~ ("t" ~> match _Type (Strip.deannotateType @@ var "t") (Just false) [
+        _Type_unit>>: constant true]) $
+      "variants" <~ (Maps.fromList $ Lists.reverse $ Lists.map
+        ("ft" ~> pair
+          (Core.unName $ Core.fieldTypeName $ var "ft")
+          (pair
+            (var "isUnitType" @@ (Core.fieldTypeType $ var "ft"))
+            (var "recurse" @@ (Core.fieldTypeType $ var "ft"))))
+        (var "rt")) $
+      "toInjection" <~ ("key" ~> "t" ~> Core.termInject $ Core.injection
+        (var "tname")
+        (Core.field (Core.name $ var "key") (var "t"))) $
+      "unknownVariant" <~ ("key" ~> left $ Strings.concat $ list [string "unknown variant: ", var "key"]) $
+      var "checkedNode" @@ ("run" ~> "value" ~> match _Value (var "value")
+        (Just $ left $ string "expected string or object for union") [
+        _Value_string>>: "s" ~>
+          Optionals.match (Maps.lookup (var "s" :: TypedTerm String) (var "variants"))
+            (var "unknownVariant" @@ var "s")
+            ("variant" ~> Logic.ifElse (Pairs.first $ var "variant")
+              (right $ var "toInjection" @@ var "s" @@ Core.termUnit)
+              (left $ Strings.concat $ list [string "compact string form requires unit-typed variant, got non-unit type for variant: ", var "s"])),
+        _Value_object>>: "obj" ~>
+          "objMap" <~ (Maps.fromList $ var "obj" :: TypedTerm (M.Map String Value)) $
+          "objKeys" <~ (Maps.keys $ var "objMap") $
+          Logic.ifElse (Equality.equal (Lists.length $ var "objKeys") (int32 1))
+            (Optionals.match (Lists.head $ var "objKeys")
+              (left $ string "expected single-key object for union")
+              ("k" ~> Optionals.match (Maps.lookup (var "k" :: TypedTerm String) (var "variants"))
+                (var "unknownVariant" @@ var "k")
+                ("variant" ~> Eithers.map ("t" ~> var "toInjection" @@ var "k" @@ var "t")
+                  (var "applyNode" @@ (Pairs.second $ var "variant") @@ var "run"
+                    @@ (Maps.findWithDefault Json.valueNull (var "k") (var "objMap"))))))
+            (left $ string "expected single-key object for union")]),
+
+    _Type_unit>>: constant $ var "checkedNode" @@ ("run" ~> "value" ~> match _Value (var "value")
+      (Just $ left $ string "expected object") [
+      _Value_object>>: constant $ right Core.termUnit]),
+
+    _Type_wrap>>: "wn" ~>
+      "bodyDecoder" <~ (var "recurse" @@ var "wn") $
+      var "plainNode" @@ ("run" ~> "value" ~> Eithers.map
+        ("v" ~> Core.termWrap $ Core.wrappedTerm (var "tname") (var "v"))
+        (var "applyNode" @@ var "bodyDecoder" @@ var "run" @@ var "value")),
+
+    _Type_map>>: "mt" ~>
+      "keyDecoder" <~ (var "recurse" @@ (Core.mapTypeKeys $ var "mt")) $
+      "valDecoder" <~ (var "recurse" @@ (Core.mapTypeValues $ var "mt")) $
+      "compact" <~ (Logic.and (var "compactMaps") (Resolution.mapKeyResolvesToString @@ var "types" @@ (Core.mapTypeKeys $ var "mt"))) $
+      "decodeEntry" <~ ("run" ~> "kj" ~> "vj" ~>
+        Eithers.either
+          ("err" ~> left $ var "err")
+          ("k" ~> Eithers.map ("v" ~> pair (var "k") (var "v")) (var "applyNode" @@ var "valDecoder" @@ var "run" @@ var "vj"))
+          (var "applyNode" @@ var "keyDecoder" @@ var "run" @@ var "kj")) $
+      "decodeArrayEntry" <~ ("run" ~> "entryJson" ~>
+        Eithers.either
+          ("err" ~> left $ var "err")
+          ("entryObj" ~>
+            Optionals.match (Maps.lookup (string "key") (var "entryObj")) (left $ string "missing key in map entry") ("kj" ~>
+              Optionals.match (Maps.lookup (string "value") (var "entryObj")) (left $ string "missing value in map entry") ("vj" ~>
+                var "decodeEntry" @@ var "run" @@ var "kj" @@ var "vj")))
+          (expectObject @@ var "entryJson")) $
+      "toMapTerm" <~ ("entries" ~> Eithers.map ("es" ~> Core.termMap $ Maps.fromList $ var "es") (var "entries")) $
+      var "checkedNode" @@ ("run" ~> "value" ~> match _Value (var "value")
+        (Just $ left $ string "expected object or array for map") [
+        _Value_null>>: constant (right $ Core.termMap Maps.empty),
+        _Value_array>>: "arr" ~> var "toMapTerm" @@ (Eithers.mapList ("e" ~> var "decodeArrayEntry" @@ var "run" @@ var "e") (var "arr")),
+        _Value_object>>: "obj" ~>
+          Logic.ifElse (var "compact")
+            ("rawKeys" <~ (Lists.map (reify Pairs.first) (var "obj" :: TypedTerm [(String, Value)])) $
+              Logic.ifElse (Equality.equal (Lists.length $ var "rawKeys") (Lists.length $ Lists.distinct $ var "rawKeys"))
+                (var "toMapTerm" @@ (Eithers.mapList
+                  ("kv" ~> var "decodeEntry" @@ var "run" @@ (Json.valueString $ Pairs.first $ var "kv") @@ (Pairs.second $ var "kv"))
+                  (var "obj")))
+                (left $ string "duplicate key in compact map object"))
+            (left $ string "expected array for map with non-string-resolving key type")]),
+
+    _Type_pair>>: "pt" ~>
+      "firstDecoder" <~ (var "recurse" @@ (Core.pairTypeFirst $ var "pt")) $
+      "secondDecoder" <~ (var "recurse" @@ (Core.pairTypeSecond $ var "pt")) $
+      var "checkedNode" @@ ("run" ~> "value" ~> Eithers.either
+        ("err" ~> left $ var "err")
+        ("obj" ~>
+          Optionals.match (Maps.lookup (string "first") (var "obj")) (left $ string "missing first in pair") ("fj" ~>
+            Optionals.match (Maps.lookup (string "second") (var "obj")) (left $ string "missing second in pair") ("sj" ~>
+              Eithers.either
+                ("err" ~> left $ var "err")
+                ("f" ~> Eithers.map ("s" ~> Core.termPair $ pair (var "f") (var "s")) (var "applyNode" @@ var "secondDecoder" @@ var "run" @@ var "sj"))
+                (var "applyNode" @@ var "firstDecoder" @@ var "run" @@ var "fj"))))
+        (expectObject @@ var "value")),
+
+    _Type_either>>: "et" ~>
+      "leftDecoder" <~ (var "recurse" @@ (Core.eitherTypeLeft $ var "et")) $
+      "rightDecoder" <~ (var "recurse" @@ (Core.eitherTypeRight $ var "et")) $
+      var "checkedNode" @@ ("run" ~> "value" ~> Eithers.either
+        ("err" ~> left $ var "err")
+        ("obj" ~>
+          "leftJson" <~ (Maps.lookup (string "left") (var "obj")) $
+          "rightJson" <~ (Maps.lookup (string "right") (var "obj")) $
+          Logic.ifElse (Logic.and (Optionals.isGiven $ var "leftJson") (Optionals.isGiven $ var "rightJson"))
+            (left $ string "Either object must not carry both left and right keys")
+            (Optionals.match (var "leftJson")
+              (Optionals.match (var "rightJson") (left $ string "expected left or right in Either") ("rj" ~>
+                Eithers.map ("v" ~> Core.termEither $ right $ var "v") (var "applyNode" @@ var "rightDecoder" @@ var "run" @@ var "rj")))
+              ("lj" ~> Eithers.map ("v" ~> Core.termEither $ left $ var "v") (var "applyNode" @@ var "leftDecoder" @@ var "run" @@ var "lj"))))
+        (expectObject @@ var "value")),
+
+    -- Named types are resolved at decode time through the resolver, which jsonCoder backs with
+    -- a table of decoders compiled once per reachable name.
+    _Type_variable>>: "name" ~> var "checkedNode" @@ ("run" ~> "value" ~> var "run" @@ var "name" @@ var "value")]
 
 -- | Decode a JSON value to a float term
 -- Float32 and Float64 accept finite values as JSON numbers
@@ -610,6 +868,55 @@ fromJson = define "fromJson" $
     ("payload" ~> match _Value (var "payload")
       (Just $ left $ string "expected a JSON string as the \"@var\" variable name")
       [_Value_string>>: "s" ~> right $ Core.termVariable $ Core.name $ var "s"])
+
+-- | Build a staged JSON coder for a type (#850). Its decode function is equivalent to 'fromJson'
+-- applied to the same arguments, and its encode function to 'toJson'; but the schema is compiled
+-- once, when the coder is built, so a caller that keeps the coder and applies it to many values
+-- does not re-interpret the schema per value. (Rebuilding the coder for every value is slower
+-- than fromJson, which is why fromJson keeps its own implementation.) Each reachable named type is
+-- compiled exactly once, into tables consulted through recursive local resolver functions rather
+-- than recursive values, so no host needs lazy let-bindings to terminate.
+jsonCoder :: TypedTermDefinition (M.Map Name Type -> Bool -> Name -> Type -> Coder Term Value String)
+jsonCoder = define "jsonCoder" $
+  doc ("Build a staged JSON coder for a type (#850). Its decode function is equivalent to fromJson"
+    <> " applied to the same arguments, and its encode function to toJson, but the schema is compiled"
+    <> " once when the coder is built, so a caller that keeps the coder and applies it to many values"
+    <> " does not re-interpret the schema for each one. Each named type reachable from the given type"
+    <> " is compiled exactly once, and named-type references go through a recursive local function"
+    <> " rather than a recursive value, so no host needs lazy let-bindings.") $
+  "types" ~> "compactMaps" ~> "tname" ~> "typ" ~>
+  "namesIn" <~ ("n" ~> Optionals.match (Maps.lookup (var "n" :: TypedTerm Name) (var "types"))
+    Sets.empty
+    ("t" ~> Variables.freeVariablesInType @@ var "t")) $
+  "reach" <~ ("pending" ~> "visited" ~> Logic.ifElse (Sets.isEmpty $ var "pending")
+    (var "visited")
+    ("newVisited" <~ (Sets.union (var "visited") (var "pending")) $
+      "next" <~ (Sets.unions $ Lists.map (var "namesIn") (Sets.toList $ var "pending")) $
+      var "reach" @@ (Sets.difference (var "next") (var "newVisited")) @@ var "newVisited")) $
+  "reachable" <~ (var "reach" @@ (Variables.freeVariablesInType @@ var "typ") @@ Sets.empty) $
+  "decoders" <~ (Maps.fromList $ Optionals.givens $ Lists.map
+    ("n" ~> Optionals.match (Maps.lookup (var "n" :: TypedTerm Name) (var "types"))
+      nothing
+      ("t" ~> just $ pair (var "n") (compileDecoder @@ var "types" @@ var "compactMaps" @@ var "n" @@ var "t")))
+    (Sets.toList $ var "reachable")) $
+  "runDecoder" <~ ("name" ~> "value" ~> Optionals.match (Maps.lookup (var "name" :: TypedTerm Name) (var "decoders"))
+    (left $ Strings.concat $ list [
+      string "unknown type variable: ",
+      Core.unName $ var "name"])
+    ("d" ~> Coders.coderDecode (var "d") @@ pair (var "runDecoder") (var "value"))) $
+  "encoders" <~ (Maps.fromList $ Optionals.givens $ Lists.map
+    ("n" ~> Optionals.match (Maps.lookup (var "n" :: TypedTerm Name) (var "types"))
+      nothing
+      ("t" ~> just $ pair (var "n") (Encode.compileEncoder @@ var "types" @@ var "compactMaps" @@ var "t")))
+    (Sets.toList $ var "reachable")) $
+  "runEncoder" <~ ("name" ~> "term" ~> Optionals.match (Maps.lookup (var "name" :: TypedTerm Name) (var "encoders"))
+    (Encode.toJsonUntyped @@ var "term")
+    ("e" ~> Coders.coderEncode (var "e") @@ pair (var "runEncoder") (var "term"))) $
+  "rootDecoder" <~ (compileDecoder @@ var "types" @@ var "compactMaps" @@ var "tname" @@ var "typ") $
+  "rootEncoder" <~ (Encode.compileEncoder @@ var "types" @@ var "compactMaps" @@ var "typ") $
+  Coders.coder
+    ("term" ~> Coders.coderEncode (var "rootEncoder") @@ pair (var "runEncoder") (var "term"))
+    ("value" ~> Coders.coderDecode (var "rootDecoder") @@ pair (var "runDecoder") (var "value"))
 
 -- | Decode a JSON value to a literal term given a literal type
 -- | Parse a string as an IEEE sentinel float that the JSON number grammar cannot express:
