@@ -929,7 +929,7 @@
                     "function": {"variable": "hydra.core.lib.strings.concat"},
                     "argument": {
                       "list": [
-                        {"literal": {"string": "map key type contains a function type: "}},
+                        {"literal": {"string": "map key type is not comparable (it contains a function or effect type): "}},
                         {
                           "application": {
                             "function": {"variable": "hydra.core.print.model.type"},
@@ -960,7 +960,7 @@
                     "function": {"variable": "hydra.core.lib.strings.concat"},
                     "argument": {
                       "list": [
-                        {"literal": {"string": "set element type contains a function type: "}},
+                        {"literal": {"string": "set element type is not comparable (it contains a function or effect type): "}},
                         {
                           "application": {
                             "function": {"variable": "hydra.core.print.model.type"},

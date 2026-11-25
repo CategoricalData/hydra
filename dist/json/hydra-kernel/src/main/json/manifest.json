@@ -262,6 +262,7 @@
     "hydra.core.markdown",
     "hydra.core.model",
     "hydra.core.names",
+    "hydra.core.ordering",
     "hydra.core.packaging",
     "hydra.core.parse.core",
     "hydra.core.parse.docs",

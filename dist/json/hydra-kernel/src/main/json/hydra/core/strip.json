@@ -425,48 +425,54 @@
                       {
                         "name": "remove",
                         "term": {
-                          "lambda": {
-                            "parameter": "recurse",
-                            "domain": {"function": {"domain": {"variable": "hydra.core.model.Term"}, "codomain": {"variable": "hydra.core.model.Term"}}},
+                          "typeLambda": {
+                            "parameter": "t0",
                             "body": {
                               "lambda": {
-                                "parameter": "term",
-                                "domain": {"variable": "hydra.core.model.Term"},
+                                "parameter": "recurse",
+                                "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.model.Term"}}},
                                 "body": {
-                                  "let": {
-                                    "bindings": [
-                                      {
-                                        "name": "rewritten",
-                                        "term": {"application": {"function": {"variable": "recurse"}, "argument": {"variable": "term"}}},
-                                        "typeScheme": {"variables": [], "body": {"variable": "hydra.core.model.Term"}, "constraints": []}}],
+                                  "lambda": {
+                                    "parameter": "term",
+                                    "domain": {"variable": "t0"},
                                     "body": {
-                                      "application": {
-                                        "function": {
-                                          "cases": {
-                                            "typeName": "hydra.core.model.Term",
-                                            "default": {"variable": "rewritten"},
-                                            "cases": [
-                                              {
-                                                "name": "annotated",
-                                                "handler": {
-                                                  "lambda": {
-                                                    "parameter": "at",
-                                                    "domain": {"variable": "hydra.core.model.AnnotatedTerm"},
-                                                    "body": {
-                                                      "application": {
-                                                        "function": {"project": {"typeName": "hydra.core.model.AnnotatedTerm", "fieldName": "body"}},
-                                                        "argument": {"variable": "at"}}}}}}]}},
-                                        "argument": {"variable": "term"}}}}}}}}},
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "rewritten",
+                                            "term": {"application": {"function": {"variable": "recurse"}, "argument": {"variable": "term"}}},
+                                            "typeScheme": {"variables": [], "body": {"variable": "hydra.core.model.Term"}, "constraints": []}}],
+                                        "body": {
+                                          "application": {
+                                            "function": {
+                                              "cases": {
+                                                "typeName": "hydra.core.model.Term",
+                                                "default": {"variable": "rewritten"},
+                                                "cases": [
+                                                  {
+                                                    "name": "annotated",
+                                                    "handler": {
+                                                      "lambda": {
+                                                        "parameter": "at",
+                                                        "domain": {"variable": "hydra.core.model.AnnotatedTerm"},
+                                                        "body": {
+                                                          "application": {
+                                                            "function": {"project": {"typeName": "hydra.core.model.AnnotatedTerm", "fieldName": "body"}},
+                                                            "argument": {"variable": "at"}}}}}}]}},
+                                            "argument": {"variable": "rewritten"}}}}}}}}}}},
                         "typeScheme": {
-                          "variables": [],
+                          "variables": ["t0"],
                           "body": {
                             "function": {
-                              "domain": {"function": {"domain": {"variable": "hydra.core.model.Term"}, "codomain": {"variable": "hydra.core.model.Term"}}},
-                              "codomain": {"function": {"domain": {"variable": "hydra.core.model.Term"}, "codomain": {"variable": "hydra.core.model.Term"}}}}},
+                              "domain": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.model.Term"}}},
+                              "codomain": {"function": {"domain": {"variable": "t0"}, "codomain": {"variable": "hydra.core.model.Term"}}}}},
                           "constraints": []}}],
                     "body": {
                       "application": {
-                        "function": {"application": {"function": {"variable": "hydra.core.rewriting.rewriteTerm"}, "argument": {"variable": "remove"}}},
+                        "function": {
+                          "application": {
+                            "function": {"variable": "hydra.core.rewriting.rewriteTerm"},
+                            "argument": {"typeApplication": {"body": {"variable": "remove"}, "type": {"variable": "hydra.core.model.Term"}}}}},
                         "argument": {"variable": "term"}}}}}}},
             "annotation": {
               "map": [
