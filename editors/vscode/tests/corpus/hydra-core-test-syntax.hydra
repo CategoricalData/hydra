@@ -3030,6 +3030,87 @@ term parseModulesGroup =
             expected = λ`_`."a.hydra: duplicate module name across inputs (or clashing with a dependency module): test.dep"}},
         description = none,
         tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "parseModules corrects an injection over a documented union in another file (#672)",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λmods.strings.join
+                      "\n"
+                      (lists.map
+                        (λm.strings.concat
+                            [
+                              ModuleName[] (Module[name] m),
+                              "\n",
+                              strings.join
+                                "\n"
+                                (lists.map
+                                  (λd.cases(Definition){
+                                      `type` = λtd.strings.concat
+                                            [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
+                                      `term` = λtd.strings.concat
+                                            [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
+                                      `primitive` = λpd.Name[] (PrimitiveDefinition[name] pd)}
+                                      d)
+                                  (Module[definitions] m))])
+                        (lists.drop 1:int32 mods)))
+                  (parseModules
+                    []
+                    [
+                      ("u.hydra", "module test.u\n\n## A documented union\ntype Choice = union{\n  yes: unit,\n  no: unit}\n"),
+                      ("v.hydra", "module test.v\n\nimport test.u\n\nterm pick = Choice{yes}\n")]),
+            expected = λ`_`.strings.concat
+                  [
+                    ModuleName[]
+                      (Module[name]
+                        Module{
+                          name = ModuleName{"test.v"},
+                          metadata = none,
+                          dependencies = [],
+                          definitions = [
+                            Definition{
+                              `term` = TermDefinition{
+                                name = Name{"test.v.pick"},
+                                metadata = none,
+                                signature = none,
+                                body = Term{
+                                  `inject` = Injection{
+                                    typeName = Name{"test.u.Choice"},
+                                    field = Field{
+                                      name = Name{"yes"},
+                                      `term` = Term{`unit`}}}}}}]}),
+                    "\n",
+                    strings.join
+                      "\n"
+                      (lists.map
+                        (λd.cases(Definition){
+                            `type` = λtd.strings.concat
+                                  [Name[] (TypeDefinition[name] td), " = ", model.typeScheme (TypeDefinition[body] td)],
+                            `term` = λtd.strings.concat
+                                  [Name[] (TermDefinition[name] td), " = ", model.term (TermDefinition[body] td)],
+                            `primitive` = λpd.Name[] (PrimitiveDefinition[name] pd)}
+                            d)
+                        (Module[definitions]
+                          Module{
+                            name = ModuleName{"test.v"},
+                            metadata = none,
+                            dependencies = [],
+                            definitions = [
+                              Definition{
+                                `term` = TermDefinition{
+                                  name = Name{"test.v.pick"},
+                                  metadata = none,
+                                  signature = none,
+                                  body = Term{
+                                    `inject` = Injection{
+                                      typeName = Name{"test.u.Choice"},
+                                      field = Field{
+                                        name = Name{"yes"},
+                                        `term` = Term{`unit`}}}}}}]}))]}},
+        description = none,
+        tags = [],
         provisions = []}]}
 
 ## Primitive '@requirement'/'@recommendation' provision-name qualification (#711/#837)

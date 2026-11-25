@@ -1,10 +1,17 @@
 ## Test cases for path serialization round-trips, term-graph paths, and path erasure
 module hydra.core.test.subterms
 
-import hydra.core.lib.optionals
+import hydra.core.graph
+import hydra.core.lib.eithers as eithers
+import hydra.core.lib.maps as maps
+import hydra.core.lib.optionals as optionals
+import hydra.core.lib.sets as sets
 import hydra.core.model
 import hydra.core.paths
-import hydra.core.print.paths
+import hydra.core.print.errors
+import hydra.core.print.model
+import hydra.core.print.paths as paths
+import hydra.core.subterms
 import hydra.core.testing
 import hydra.core.validate.paths
 
@@ -23,14 +30,14 @@ term allTests =
             name = "annotatedAnnotation",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep
                             SubtermStep{annotatedAnnotation}))),
-                expected = λ`_`.subtermStep
+                expected = λ`_`.paths.subtermStep
                       SubtermStep{annotatedAnnotation}}},
             description = none,
             tags = [],
@@ -39,13 +46,15 @@ term allTests =
             name = "annotatedBody",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep SubtermStep{annotatedBody}))),
-                expected = λ`_`.subtermStep SubtermStep{annotatedBody}}},
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep
+                            SubtermStep{annotatedBody}))),
+                expected = λ`_`.paths.subtermStep
+                      SubtermStep{annotatedBody}}},
             description = none,
             tags = [],
             provisions = []},
@@ -53,14 +62,14 @@ term allTests =
             name = "applicationArgument",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep
                             SubtermStep{applicationArgument}))),
-                expected = λ`_`.subtermStep
+                expected = λ`_`.paths.subtermStep
                       SubtermStep{applicationArgument}}},
             description = none,
             tags = [],
@@ -69,14 +78,14 @@ term allTests =
             name = "applicationFunction",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep
                             SubtermStep{applicationFunction}))),
-                expected = λ`_`.subtermStep
+                expected = λ`_`.paths.subtermStep
                       SubtermStep{applicationFunction}}},
             description = none,
             tags = [],
@@ -85,14 +94,14 @@ term allTests =
             name = "casesCase (named)",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep
                             SubtermStep{casesCase = Name{"foo"}}))),
-                expected = λ`_`.subtermStep
+                expected = λ`_`.paths.subtermStep
                       SubtermStep{
                         casesCase = Name{"foo"}}}},
             description = none,
@@ -102,13 +111,15 @@ term allTests =
             name = "casesDefault",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep SubtermStep{casesDefault}))),
-                expected = λ`_`.subtermStep SubtermStep{casesDefault}}},
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep
+                            SubtermStep{casesDefault}))),
+                expected = λ`_`.paths.subtermStep
+                      SubtermStep{casesDefault}}},
             description = none,
             tags = [],
             provisions = []},
@@ -116,13 +127,15 @@ term allTests =
             name = "eitherLeft",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep SubtermStep{eitherLeft}))),
-                expected = λ`_`.subtermStep SubtermStep{eitherLeft}}},
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep
+                            SubtermStep{eitherLeft}))),
+                expected = λ`_`.paths.subtermStep
+                      SubtermStep{eitherLeft}}},
             description = none,
             tags = [],
             provisions = []},
@@ -130,13 +143,15 @@ term allTests =
             name = "eitherRight",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep SubtermStep{eitherRight}))),
-                expected = λ`_`.subtermStep SubtermStep{eitherRight}}},
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep
+                            SubtermStep{eitherRight}))),
+                expected = λ`_`.paths.subtermStep
+                      SubtermStep{eitherRight}}},
             description = none,
             tags = [],
             provisions = []},
@@ -144,15 +159,15 @@ term allTests =
             name = "injectField (named)",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep
                             SubtermStep{
                               injectField = Name{"bar"}}))),
-                expected = λ`_`.subtermStep
+                expected = λ`_`.paths.subtermStep
                       SubtermStep{
                         injectField = Name{"bar"}}}},
             description = none,
@@ -162,13 +177,15 @@ term allTests =
             name = "lambdaBody",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep SubtermStep{lambdaBody}))),
-                expected = λ`_`.subtermStep SubtermStep{lambdaBody}}},
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep
+                            SubtermStep{lambdaBody}))),
+                expected = λ`_`.paths.subtermStep
+                      SubtermStep{lambdaBody}}},
             description = none,
             tags = [],
             provisions = []},
@@ -176,14 +193,14 @@ term allTests =
             name = "letBinding (named)",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep
                             SubtermStep{letBinding = Name{"x"}}))),
-                expected = λ`_`.subtermStep
+                expected = λ`_`.paths.subtermStep
                       SubtermStep{
                         letBinding = Name{"x"}}}},
             description = none,
@@ -193,13 +210,13 @@ term allTests =
             name = "letBody",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep SubtermStep{letBody}))),
-                expected = λ`_`.subtermStep SubtermStep{letBody}}},
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep SubtermStep{letBody}))),
+                expected = λ`_`.paths.subtermStep SubtermStep{letBody}}},
             description = none,
             tags = [],
             provisions = []},
@@ -207,14 +224,14 @@ term allTests =
             name = "listElement (indexed)",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep
                             SubtermStep{listElement = 3:int32}))),
-                expected = λ`_`.subtermStep
+                expected = λ`_`.paths.subtermStep
                       SubtermStep{
                         listElement = 3:int32}}},
             description = none,
@@ -224,14 +241,14 @@ term allTests =
             name = "mapEntry (indexed)",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep
                             SubtermStep{mapEntry = 0:int32}))),
-                expected = λ`_`.subtermStep
+                expected = λ`_`.paths.subtermStep
                       SubtermStep{mapEntry = 0:int32}}},
             description = none,
             tags = [],
@@ -240,13 +257,15 @@ term allTests =
             name = "optionalGiven",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep SubtermStep{optionalGiven}))),
-                expected = λ`_`.subtermStep SubtermStep{optionalGiven}}},
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep
+                            SubtermStep{optionalGiven}))),
+                expected = λ`_`.paths.subtermStep
+                      SubtermStep{optionalGiven}}},
             description = none,
             tags = [],
             provisions = []},
@@ -254,13 +273,13 @@ term allTests =
             name = "pairFirst",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep SubtermStep{pairFirst}))),
-                expected = λ`_`.subtermStep SubtermStep{pairFirst}}},
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep SubtermStep{pairFirst}))),
+                expected = λ`_`.paths.subtermStep SubtermStep{pairFirst}}},
             description = none,
             tags = [],
             provisions = []},
@@ -268,13 +287,15 @@ term allTests =
             name = "pairSecond",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep SubtermStep{pairSecond}))),
-                expected = λ`_`.subtermStep SubtermStep{pairSecond}}},
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep
+                            SubtermStep{pairSecond}))),
+                expected = λ`_`.paths.subtermStep
+                      SubtermStep{pairSecond}}},
             description = none,
             tags = [],
             provisions = []},
@@ -282,15 +303,15 @@ term allTests =
             name = "recordField (named)",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep
                             SubtermStep{
                               recordField = Name{"field"}}))),
-                expected = λ`_`.subtermStep
+                expected = λ`_`.paths.subtermStep
                       SubtermStep{
                         recordField = Name{"field"}}}},
             description = none,
@@ -300,14 +321,14 @@ term allTests =
             name = "setElement (indexed)",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep
                             SubtermStep{setElement = 2:int32}))),
-                expected = λ`_`.subtermStep
+                expected = λ`_`.paths.subtermStep
                       SubtermStep{
                         setElement = 2:int32}}},
             description = none,
@@ -317,14 +338,14 @@ term allTests =
             name = "typeApplicationBody",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep
                             SubtermStep{typeApplicationBody}))),
-                expected = λ`_`.subtermStep
+                expected = λ`_`.paths.subtermStep
                       SubtermStep{typeApplicationBody}}},
             description = none,
             tags = [],
@@ -333,13 +354,15 @@ term allTests =
             name = "typeLambdaBody",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep SubtermStep{typeLambdaBody}))),
-                expected = λ`_`.subtermStep SubtermStep{typeLambdaBody}}},
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep
+                            SubtermStep{typeLambdaBody}))),
+                expected = λ`_`.paths.subtermStep
+                      SubtermStep{typeLambdaBody}}},
             description = none,
             tags = [],
             provisions = []},
@@ -347,13 +370,13 @@ term allTests =
             name = "wrapBody",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtermStep s)
-                        (parseSubtermStep
-                          (subtermStep SubtermStep{wrapBody}))),
-                expected = λ`_`.subtermStep SubtermStep{wrapBody}}},
+                      (optionals.map
+                        (λs.paths.subtermStep s)
+                        (paths.parseSubtermStep
+                          (paths.subtermStep SubtermStep{wrapBody}))),
+                expected = λ`_`.paths.subtermStep SubtermStep{wrapBody}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -366,13 +389,15 @@ term allTests =
             name = "annotatedBody",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtypeStep s)
-                        (parseSubtypeStep
-                          (subtypeStep SubtypeStep{annotatedBody}))),
-                expected = λ`_`.subtypeStep SubtypeStep{annotatedBody}}},
+                      (optionals.map
+                        (λs.paths.subtypeStep s)
+                        (paths.parseSubtypeStep
+                          (paths.subtypeStep
+                            SubtypeStep{annotatedBody}))),
+                expected = λ`_`.paths.subtypeStep
+                      SubtypeStep{annotatedBody}}},
             description = none,
             tags = [],
             provisions = []},
@@ -380,14 +405,14 @@ term allTests =
             name = "applicationArgument",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtypeStep s)
-                        (parseSubtypeStep
-                          (subtypeStep
+                      (optionals.map
+                        (λs.paths.subtypeStep s)
+                        (paths.parseSubtypeStep
+                          (paths.subtypeStep
                             SubtypeStep{applicationArgument}))),
-                expected = λ`_`.subtypeStep
+                expected = λ`_`.paths.subtypeStep
                       SubtypeStep{applicationArgument}}},
             description = none,
             tags = [],
@@ -396,14 +421,14 @@ term allTests =
             name = "applicationFunction",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtypeStep s)
-                        (parseSubtypeStep
-                          (subtypeStep
+                      (optionals.map
+                        (λs.paths.subtypeStep s)
+                        (paths.parseSubtypeStep
+                          (paths.subtypeStep
                             SubtypeStep{applicationFunction}))),
-                expected = λ`_`.subtypeStep
+                expected = λ`_`.paths.subtypeStep
                       SubtypeStep{applicationFunction}}},
             description = none,
             tags = [],
@@ -412,13 +437,15 @@ term allTests =
             name = "effectValue",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtypeStep s)
-                        (parseSubtypeStep
-                          (subtypeStep SubtypeStep{effectValue}))),
-                expected = λ`_`.subtypeStep SubtypeStep{effectValue}}},
+                      (optionals.map
+                        (λs.paths.subtypeStep s)
+                        (paths.parseSubtypeStep
+                          (paths.subtypeStep
+                            SubtypeStep{effectValue}))),
+                expected = λ`_`.paths.subtypeStep
+                      SubtypeStep{effectValue}}},
             description = none,
             tags = [],
             provisions = []},
@@ -426,13 +453,15 @@ term allTests =
             name = "eitherLeft",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtypeStep s)
-                        (parseSubtypeStep
-                          (subtypeStep SubtypeStep{eitherLeft}))),
-                expected = λ`_`.subtypeStep SubtypeStep{eitherLeft}}},
+                      (optionals.map
+                        (λs.paths.subtypeStep s)
+                        (paths.parseSubtypeStep
+                          (paths.subtypeStep
+                            SubtypeStep{eitherLeft}))),
+                expected = λ`_`.paths.subtypeStep
+                      SubtypeStep{eitherLeft}}},
             description = none,
             tags = [],
             provisions = []},
@@ -440,13 +469,15 @@ term allTests =
             name = "eitherRight",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtypeStep s)
-                        (parseSubtypeStep
-                          (subtypeStep SubtypeStep{eitherRight}))),
-                expected = λ`_`.subtypeStep SubtypeStep{eitherRight}}},
+                      (optionals.map
+                        (λs.paths.subtypeStep s)
+                        (paths.parseSubtypeStep
+                          (paths.subtypeStep
+                            SubtypeStep{eitherRight}))),
+                expected = λ`_`.paths.subtypeStep
+                      SubtypeStep{eitherRight}}},
             description = none,
             tags = [],
             provisions = []},
@@ -454,13 +485,15 @@ term allTests =
             name = "forallBody",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtypeStep s)
-                        (parseSubtypeStep
-                          (subtypeStep SubtypeStep{forallBody}))),
-                expected = λ`_`.subtypeStep SubtypeStep{forallBody}}},
+                      (optionals.map
+                        (λs.paths.subtypeStep s)
+                        (paths.parseSubtypeStep
+                          (paths.subtypeStep
+                            SubtypeStep{forallBody}))),
+                expected = λ`_`.paths.subtypeStep
+                      SubtypeStep{forallBody}}},
             description = none,
             tags = [],
             provisions = []},
@@ -468,14 +501,14 @@ term allTests =
             name = "functionCodomain",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtypeStep s)
-                        (parseSubtypeStep
-                          (subtypeStep
+                      (optionals.map
+                        (λs.paths.subtypeStep s)
+                        (paths.parseSubtypeStep
+                          (paths.subtypeStep
                             SubtypeStep{functionCodomain}))),
-                expected = λ`_`.subtypeStep
+                expected = λ`_`.paths.subtypeStep
                       SubtypeStep{functionCodomain}}},
             description = none,
             tags = [],
@@ -484,13 +517,15 @@ term allTests =
             name = "functionDomain",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtypeStep s)
-                        (parseSubtypeStep
-                          (subtypeStep SubtypeStep{functionDomain}))),
-                expected = λ`_`.subtypeStep SubtypeStep{functionDomain}}},
+                      (optionals.map
+                        (λs.paths.subtypeStep s)
+                        (paths.parseSubtypeStep
+                          (paths.subtypeStep
+                            SubtypeStep{functionDomain}))),
+                expected = λ`_`.paths.subtypeStep
+                      SubtypeStep{functionDomain}}},
             description = none,
             tags = [],
             provisions = []},
@@ -498,13 +533,15 @@ term allTests =
             name = "listElement",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtypeStep s)
-                        (parseSubtypeStep
-                          (subtypeStep SubtypeStep{listElement}))),
-                expected = λ`_`.subtypeStep SubtypeStep{listElement}}},
+                      (optionals.map
+                        (λs.paths.subtypeStep s)
+                        (paths.parseSubtypeStep
+                          (paths.subtypeStep
+                            SubtypeStep{listElement}))),
+                expected = λ`_`.paths.subtypeStep
+                      SubtypeStep{listElement}}},
             description = none,
             tags = [],
             provisions = []},
@@ -512,13 +549,13 @@ term allTests =
             name = "mapKeys",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtypeStep s)
-                        (parseSubtypeStep
-                          (subtypeStep SubtypeStep{mapKeys}))),
-                expected = λ`_`.subtypeStep SubtypeStep{mapKeys}}},
+                      (optionals.map
+                        (λs.paths.subtypeStep s)
+                        (paths.parseSubtypeStep
+                          (paths.subtypeStep SubtypeStep{mapKeys}))),
+                expected = λ`_`.paths.subtypeStep SubtypeStep{mapKeys}}},
             description = none,
             tags = [],
             provisions = []},
@@ -526,13 +563,13 @@ term allTests =
             name = "mapValues",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtypeStep s)
-                        (parseSubtypeStep
-                          (subtypeStep SubtypeStep{mapValues}))),
-                expected = λ`_`.subtypeStep SubtypeStep{mapValues}}},
+                      (optionals.map
+                        (λs.paths.subtypeStep s)
+                        (paths.parseSubtypeStep
+                          (paths.subtypeStep SubtypeStep{mapValues}))),
+                expected = λ`_`.paths.subtypeStep SubtypeStep{mapValues}}},
             description = none,
             tags = [],
             provisions = []},
@@ -540,13 +577,15 @@ term allTests =
             name = "optionalElement",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtypeStep s)
-                        (parseSubtypeStep
-                          (subtypeStep SubtypeStep{optionalElement}))),
-                expected = λ`_`.subtypeStep SubtypeStep{optionalElement}}},
+                      (optionals.map
+                        (λs.paths.subtypeStep s)
+                        (paths.parseSubtypeStep
+                          (paths.subtypeStep
+                            SubtypeStep{optionalElement}))),
+                expected = λ`_`.paths.subtypeStep
+                      SubtypeStep{optionalElement}}},
             description = none,
             tags = [],
             provisions = []},
@@ -554,13 +593,13 @@ term allTests =
             name = "pairFirst",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtypeStep s)
-                        (parseSubtypeStep
-                          (subtypeStep SubtypeStep{pairFirst}))),
-                expected = λ`_`.subtypeStep SubtypeStep{pairFirst}}},
+                      (optionals.map
+                        (λs.paths.subtypeStep s)
+                        (paths.parseSubtypeStep
+                          (paths.subtypeStep SubtypeStep{pairFirst}))),
+                expected = λ`_`.paths.subtypeStep SubtypeStep{pairFirst}}},
             description = none,
             tags = [],
             provisions = []},
@@ -568,13 +607,15 @@ term allTests =
             name = "pairSecond",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtypeStep s)
-                        (parseSubtypeStep
-                          (subtypeStep SubtypeStep{pairSecond}))),
-                expected = λ`_`.subtypeStep SubtypeStep{pairSecond}}},
+                      (optionals.map
+                        (λs.paths.subtypeStep s)
+                        (paths.parseSubtypeStep
+                          (paths.subtypeStep
+                            SubtypeStep{pairSecond}))),
+                expected = λ`_`.paths.subtypeStep
+                      SubtypeStep{pairSecond}}},
             description = none,
             tags = [],
             provisions = []},
@@ -582,15 +623,15 @@ term allTests =
             name = "recordField (named)",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtypeStep s)
-                        (parseSubtypeStep
-                          (subtypeStep
+                      (optionals.map
+                        (λs.paths.subtypeStep s)
+                        (paths.parseSubtypeStep
+                          (paths.subtypeStep
                             SubtypeStep{
                               recordField = Name{"field"}}))),
-                expected = λ`_`.subtypeStep
+                expected = λ`_`.paths.subtypeStep
                       SubtypeStep{
                         recordField = Name{"field"}}}},
             description = none,
@@ -600,13 +641,15 @@ term allTests =
             name = "setElement",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtypeStep s)
-                        (parseSubtypeStep
-                          (subtypeStep SubtypeStep{setElement}))),
-                expected = λ`_`.subtypeStep SubtypeStep{setElement}}},
+                      (optionals.map
+                        (λs.paths.subtypeStep s)
+                        (paths.parseSubtypeStep
+                          (paths.subtypeStep
+                            SubtypeStep{setElement}))),
+                expected = λ`_`.paths.subtypeStep
+                      SubtypeStep{setElement}}},
             description = none,
             tags = [],
             provisions = []},
@@ -614,15 +657,15 @@ term allTests =
             name = "unionField (named)",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtypeStep s)
-                        (parseSubtypeStep
-                          (subtypeStep
+                      (optionals.map
+                        (λs.paths.subtypeStep s)
+                        (paths.parseSubtypeStep
+                          (paths.subtypeStep
                             SubtypeStep{
                               unionField = Name{"variant"}}))),
-                expected = λ`_`.subtypeStep
+                expected = λ`_`.paths.subtypeStep
                       SubtypeStep{
                         unionField = Name{"variant"}}}},
             description = none,
@@ -632,13 +675,13 @@ term allTests =
             name = "wrapBody",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<parse failed>>"
-                      (`map`
-                        (λs.subtypeStep s)
-                        (parseSubtypeStep
-                          (subtypeStep SubtypeStep{wrapBody}))),
-                expected = λ`_`.subtypeStep SubtypeStep{wrapBody}}},
+                      (optionals.map
+                        (λs.paths.subtypeStep s)
+                        (paths.parseSubtypeStep
+                          (paths.subtypeStep SubtypeStep{wrapBody}))),
+                expected = λ`_`.paths.subtypeStep SubtypeStep{wrapBody}}},
             description = none,
             tags = [],
             provisions = []}]},
@@ -651,10 +694,10 @@ term allTests =
             name = "listElement -> listElement",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<no type-side position>>"
-                      (`map`
-                        (λsp.subtypePath sp)
+                      (optionals.map
+                        (λsp.paths.subtypePath sp)
                         (eraseSubtermPath
                           SubtermPath{[SubtermStep{listElement = 0:int32}]})),
                 expected = λ`_`."listElement"}},
@@ -665,10 +708,10 @@ term allTests =
             name = "setElement -> setElement",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<no type-side position>>"
-                      (`map`
-                        (λsp.subtypePath sp)
+                      (optionals.map
+                        (λsp.paths.subtypePath sp)
                         (eraseSubtermPath
                           SubtermPath{[SubtermStep{setElement = 0:int32}]})),
                 expected = λ`_`."setElement"}},
@@ -679,10 +722,10 @@ term allTests =
             name = "optionalGiven -> optionalElement",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<no type-side position>>"
-                      (`map`
-                        (λsp.subtypePath sp)
+                      (optionals.map
+                        (λsp.paths.subtypePath sp)
                         (eraseSubtermPath
                           SubtermPath{[SubtermStep{optionalGiven}]})),
                 expected = λ`_`."optionalElement"}},
@@ -693,10 +736,10 @@ term allTests =
             name = "injectField -> unionField (name preserved)",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<no type-side position>>"
-                      (`map`
-                        (λsp.subtypePath sp)
+                      (optionals.map
+                        (λsp.paths.subtypePath sp)
                         (eraseSubtermPath
                           SubtermPath{[SubtermStep{injectField = Name{"left"}}]})),
                 expected = λ`_`."unionField:left"}},
@@ -707,10 +750,10 @@ term allTests =
             name = "recordField -> recordField (name preserved)",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<no type-side position>>"
-                      (`map`
-                        (λsp.subtypePath sp)
+                      (optionals.map
+                        (λsp.paths.subtypePath sp)
                         (eraseSubtermPath
                           SubtermPath{[SubtermStep{recordField = Name{"age"}}]})),
                 expected = λ`_`."recordField:age"}},
@@ -721,10 +764,10 @@ term allTests =
             name = "mapEntry . pairFirst -> mapKeys",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<no type-side position>>"
-                      (`map`
-                        (λsp.subtypePath sp)
+                      (optionals.map
+                        (λsp.paths.subtypePath sp)
                         (eraseSubtermPath
                           SubtermPath{[SubtermStep{mapEntry = 2:int32}, SubtermStep{pairFirst}]})),
                 expected = λ`_`."mapKeys"}},
@@ -735,10 +778,10 @@ term allTests =
             name = "mapEntry . pairSecond -> mapValues",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<no type-side position>>"
-                      (`map`
-                        (λsp.subtypePath sp)
+                      (optionals.map
+                        (λsp.paths.subtypePath sp)
                         (eraseSubtermPath
                           SubtermPath{[SubtermStep{mapEntry = 2:int32}, SubtermStep{pairSecond}]})),
                 expected = λ`_`."mapValues"}},
@@ -749,10 +792,10 @@ term allTests =
             name = "nested: listElement . recordField -> listElement . recordField (name preserved)",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<no type-side position>>"
-                      (`map`
-                        (λsp.subtypePath sp)
+                      (optionals.map
+                        (λsp.paths.subtypePath sp)
                         (eraseSubtermPath
                           SubtermPath{[SubtermStep{listElement = 0:int32}, SubtermStep{recordField = Name{"x"}}]})),
                 expected = λ`_`."listElement/recordField:x"}},
@@ -763,10 +806,10 @@ term allTests =
             name = "lambdaBody -> (none)",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<no type-side position>>"
-                      (`map`
-                        (λsp.subtypePath sp)
+                      (optionals.map
+                        (λsp.paths.subtypePath sp)
                         (eraseSubtermPath
                           SubtermPath{[SubtermStep{lambdaBody}]})),
                 expected = λ`_`."<<no type-side position>>"}},
@@ -777,10 +820,10 @@ term allTests =
             name = "applicationFunction -> (none)",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<no type-side position>>"
-                      (`map`
-                        (λsp.subtypePath sp)
+                      (optionals.map
+                        (λsp.paths.subtypePath sp)
                         (eraseSubtermPath
                           SubtermPath{[SubtermStep{applicationFunction}]})),
                 expected = λ`_`."<<no type-side position>>"}},
@@ -791,13 +834,769 @@ term allTests =
             name = "mapEntry (unprojected) -> (none)",
             case = TestCase{
               universal = UniversalTestCase{
-                actual = λ`_`.withDefault
+                actual = λ`_`.optionals.withDefault
                       "<<no type-side position>>"
-                      (`map`
-                        (λsp.subtypePath sp)
+                      (optionals.map
+                        (λsp.paths.subtypePath sp)
                         (eraseSubtermPath
                           SubtermPath{[SubtermStep{mapEntry = 0:int32}]})),
                 expected = λ`_`."<<no type-side position>>"}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "synthesizeType on elaborated empty leaves",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "none<float64>",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.error e)
+                      (λty.`type` ty)
+                      (synthesizeType
+                        Graph{
+                          boundTerms = maps.fromList [],
+                          boundTypes = maps.fromList [],
+                          classConstraints = maps.empty,
+                          lambdaVariables = sets.empty,
+                          metadata = maps.empty,
+                          primitives = maps.empty,
+                          schemaTypes = maps.empty,
+                          typeVariables = sets.empty}
+                        maps.empty
+                        maps.empty
+                        Name{"x"}
+                        none
+                        SubtermPath{[]}
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `optional` = none},
+                            `type` = Type{
+                              literal = LiteralType{
+                                float = FloatType{
+                                  `float64`}}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        `optional` = Type{
+                          literal = LiteralType{
+                            float = FloatType{
+                              `float64`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "[]<string>",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.error e)
+                      (λty.`type` ty)
+                      (synthesizeType
+                        Graph{
+                          boundTerms = maps.fromList [],
+                          boundTypes = maps.fromList [],
+                          classConstraints = maps.empty,
+                          lambdaVariables = sets.empty,
+                          metadata = maps.empty,
+                          primitives = maps.empty,
+                          schemaTypes = maps.empty,
+                          typeVariables = sets.empty}
+                        maps.empty
+                        maps.empty
+                        Name{"x"}
+                        none
+                        SubtermPath{[]}
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `list` = []},
+                            `type` = Type{
+                              literal = LiteralType{
+                                `string`}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        `list` = Type{
+                          literal = LiteralType{
+                            `string`}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "empty set<int32>",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.error e)
+                      (λty.`type` ty)
+                      (synthesizeType
+                        Graph{
+                          boundTerms = maps.fromList [],
+                          boundTypes = maps.fromList [],
+                          classConstraints = maps.empty,
+                          lambdaVariables = sets.empty,
+                          metadata = maps.empty,
+                          primitives = maps.empty,
+                          schemaTypes = maps.empty,
+                          typeVariables = sets.empty}
+                        maps.empty
+                        maps.empty
+                        Name{"x"}
+                        none
+                        SubtermPath{[]}
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `set` = sets.empty},
+                            `type` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        `set` = Type{
+                          literal = LiteralType{
+                            integer = IntegerType{
+                              `int32`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "empty map<string><int32>",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.error e)
+                      (λty.`type` ty)
+                      (synthesizeType
+                        Graph{
+                          boundTerms = maps.fromList [],
+                          boundTypes = maps.fromList [],
+                          classConstraints = maps.empty,
+                          lambdaVariables = sets.empty,
+                          metadata = maps.empty,
+                          primitives = maps.empty,
+                          schemaTypes = maps.empty,
+                          typeVariables = sets.empty}
+                        maps.empty
+                        maps.empty
+                        Name{"x"}
+                        none
+                        SubtermPath{[]}
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              typeApplication = TypeApplicationTerm{
+                                body = Term{
+                                  `map` = maps.empty},
+                                `type` = Type{
+                                  literal = LiteralType{
+                                    `string`}}}},
+                            `type` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        `map` = MapType{
+                          keys = Type{
+                            literal = LiteralType{
+                              `string`}},
+                          values = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "left(1)<int32><string>",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.error e)
+                      (λty.`type` ty)
+                      (synthesizeType
+                        Graph{
+                          boundTerms = maps.fromList [],
+                          boundTypes = maps.fromList [],
+                          classConstraints = maps.empty,
+                          lambdaVariables = sets.empty,
+                          metadata = maps.empty,
+                          primitives = maps.empty,
+                          schemaTypes = maps.empty,
+                          typeVariables = sets.empty}
+                        maps.empty
+                        maps.empty
+                        Name{"x"}
+                        none
+                        SubtermPath{[]}
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              typeApplication = TypeApplicationTerm{
+                                body = Term{
+                                  `either` = left(Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 1:int32}}})},
+                                `type` = Type{
+                                  literal = LiteralType{
+                                    integer = IntegerType{
+                                      `int32`}}}}},
+                            `type` = Type{
+                              literal = LiteralType{
+                                `string`}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        `either` = EitherType{
+                          `left` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}},
+                          `right` = Type{
+                            literal = LiteralType{
+                              `string`}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "right(1.5)<string><float64>",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.error e)
+                      (λty.`type` ty)
+                      (synthesizeType
+                        Graph{
+                          boundTerms = maps.fromList [],
+                          boundTypes = maps.fromList [],
+                          classConstraints = maps.empty,
+                          lambdaVariables = sets.empty,
+                          metadata = maps.empty,
+                          primitives = maps.empty,
+                          schemaTypes = maps.empty,
+                          typeVariables = sets.empty}
+                        maps.empty
+                        maps.empty
+                        Name{"x"}
+                        none
+                        SubtermPath{[]}
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              typeApplication = TypeApplicationTerm{
+                                body = Term{
+                                  `either` = right(Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float64` = 1.5:float64}}})},
+                                `type` = Type{
+                                  literal = LiteralType{
+                                    `string`}}}},
+                            `type` = Type{
+                              literal = LiteralType{
+                                float = FloatType{
+                                  `float64`}}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        `either` = EitherType{
+                          `left` = Type{
+                            literal = LiteralType{
+                              `string`}},
+                          `right` = Type{
+                            literal = LiteralType{
+                              float = FloatType{
+                                `float64`}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "left(1)<r><int32> (no capture)",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.error e)
+                      (λty.`type` ty)
+                      (synthesizeType
+                        Graph{
+                          boundTerms = maps.fromList [],
+                          boundTypes = maps.fromList [],
+                          classConstraints = maps.empty,
+                          lambdaVariables = sets.empty,
+                          metadata = maps.empty,
+                          primitives = maps.empty,
+                          schemaTypes = maps.empty,
+                          typeVariables = sets.empty}
+                        maps.empty
+                        maps.empty
+                        Name{"x"}
+                        none
+                        SubtermPath{[]}
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              typeApplication = TypeApplicationTerm{
+                                body = Term{
+                                  `either` = left(Term{
+                                      literal = Literal{
+                                        integer = IntegerValue{
+                                          `int32` = 1:int32}}})},
+                                `type` = Type{
+                                  variable = Name{"r"}}}},
+                            `type` = Type{
+                              literal = LiteralType{
+                                integer = IntegerType{
+                                  `int32`}}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        `either` = EitherType{
+                          `left` = Type{
+                            variable = Name{"r"}},
+                          `right` = Type{
+                            literal = LiteralType{
+                              integer = IntegerType{
+                                `int32`}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "bare none: its polymorphic type",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.error e)
+                      (λty.`type` ty)
+                      (synthesizeType
+                        Graph{
+                          boundTerms = maps.fromList [],
+                          boundTypes = maps.fromList [],
+                          classConstraints = maps.empty,
+                          lambdaVariables = sets.empty,
+                          metadata = maps.empty,
+                          primitives = maps.empty,
+                          schemaTypes = maps.empty,
+                          typeVariables = sets.empty}
+                        maps.empty
+                        maps.empty
+                        Name{"x"}
+                        none
+                        SubtermPath{[]}
+                        Term{`optional` = none}),
+                expected = λ`_`.`type`
+                      Type{
+                        `forall` = ForallType{
+                          parameter = Name{"t"},
+                          body = Type{
+                            `optional` = Type{
+                              variable = Name{"t"}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "partial map<string>: forall over the value type",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.error e)
+                      (λty.`type` ty)
+                      (synthesizeType
+                        Graph{
+                          boundTerms = maps.fromList [],
+                          boundTypes = maps.fromList [],
+                          classConstraints = maps.empty,
+                          lambdaVariables = sets.empty,
+                          metadata = maps.empty,
+                          primitives = maps.empty,
+                          schemaTypes = maps.empty,
+                          typeVariables = sets.empty}
+                        maps.empty
+                        maps.empty
+                        Name{"x"}
+                        none
+                        SubtermPath{[]}
+                        Term{
+                          typeApplication = TypeApplicationTerm{
+                            body = Term{
+                              `map` = maps.empty},
+                            `type` = Type{
+                              literal = LiteralType{
+                                `string`}}}}),
+                expected = λ`_`.`type`
+                      Type{
+                        `forall` = ForallType{
+                          parameter = Name{"v"},
+                          body = Type{
+                            `map` = MapType{
+                              keys = Type{
+                                literal = LiteralType{
+                                  `string`}},
+                              values = Type{
+                                variable = Name{"v"}}}}}}}},
+            description = none,
+            tags = [],
+            provisions = []}]},
+      TestGroup{
+        name = "graphToTermGraph on elaborated absent optionals",
+        description = none,
+        subgroups = [],
+        `cases` = [
+          TestCaseWithMetadata{
+            name = "plain record, optional given",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.error e)
+                      (λ`_`."ok")
+                      (graphToTermGraph
+                        Graph{
+                          boundTerms = maps.fromList
+                              [
+                                (
+                                  Name{"x"},
+                                  Term{
+                                    `record` = Record{
+                                      typeName = Name{"example.Span"},
+                                      fields = [
+                                        Field{name = Name{"start"}, `term` = Term{literal = Literal{float = FloatValue{`float64` = 1.5:float64}}}},
+                                        Field{
+                                          name = Name{"end"},
+                                          `term` = Term{`optional` = given(Term{literal = Literal{float = FloatValue{`float64` = 2.0:float64}}})}}]}})],
+                          boundTypes = maps.fromList
+                              [
+                                (
+                                  Name{"example.Measurement"},
+                                  TypeScheme{
+                                    variables = [],
+                                    body = Type{
+                                      `forall` = ForallType{
+                                        parameter = Name{"u"},
+                                        body = Type{
+                                          `record` = [
+                                            FieldType{name = Name{"unit"}, `type` = Type{variable = Name{"u"}}},
+                                            FieldType{name = Name{"value"}, `type` = Type{literal = LiteralType{float = FloatType{`float64`}}}},
+                                            FieldType{name = Name{"error"}, `type` = Type{`optional` = Type{literal = LiteralType{float = FloatType{`float64`}}}}}]}}},
+                                    constraints = maps.empty}),
+                                (
+                                  Name{"example.TimeUnit"},
+                                  TypeScheme{
+                                    variables = [],
+                                    body = Type{
+                                      `union` = [FieldType{name = Name{"millisecond"}, `type` = Type{`unit`}}, FieldType{name = Name{"second"}, `type` = Type{`unit`}}]},
+                                    constraints = maps.empty}),
+                                (
+                                  Name{"example.Duration"},
+                                  TypeScheme{
+                                    variables = [],
+                                    body = Type{
+                                      `wrap` = Type{
+                                        application = ApplicationType{
+                                          function = Type{
+                                            variable = Name{"example.Measurement"}},
+                                          argument = Type{
+                                            variable = Name{"example.TimeUnit"}}}}},
+                                    constraints = maps.empty}),
+                                (
+                                  Name{"example.Offset"},
+                                  TypeScheme{variables = [], body = Type{`wrap` = Type{variable = Name{"example.Duration"}}}, constraints = maps.empty}),
+                                (
+                                  Name{"example.Span"},
+                                  TypeScheme{
+                                    variables = [],
+                                    body = Type{
+                                      `record` = [
+                                        FieldType{name = Name{"start"}, `type` = Type{literal = LiteralType{float = FloatType{`float64`}}}},
+                                        FieldType{name = Name{"end"}, `type` = Type{`optional` = Type{literal = LiteralType{float = FloatType{`float64`}}}}}]},
+                                    constraints = maps.empty}),
+                                (Name{"x"}, TypeScheme{variables = [], body = Type{variable = Name{"example.Span"}}, constraints = maps.empty})],
+                          classConstraints = maps.empty,
+                          lambdaVariables = sets.empty,
+                          metadata = maps.empty,
+                          primitives = maps.empty,
+                          schemaTypes = maps.empty,
+                          typeVariables = sets.empty}),
+                expected = λ`_`."ok"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "plain record, optional none",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.error e)
+                      (λ`_`."ok")
+                      (graphToTermGraph
+                        Graph{
+                          boundTerms = maps.fromList
+                              [
+                                (
+                                  Name{"x"},
+                                  Term{
+                                    `record` = Record{
+                                      typeName = Name{"example.Span"},
+                                      fields = [
+                                        Field{name = Name{"start"}, `term` = Term{literal = Literal{float = FloatValue{`float64` = 1.5:float64}}}},
+                                        Field{
+                                          name = Name{"end"},
+                                          `term` = Term{
+                                            typeApplication = TypeApplicationTerm{
+                                              body = Term{`optional` = none},
+                                              `type` = Type{
+                                                literal = LiteralType{
+                                                  float = FloatType{
+                                                    `float64`}}}}}}]}})],
+                          boundTypes = maps.fromList
+                              [
+                                (
+                                  Name{"example.Measurement"},
+                                  TypeScheme{
+                                    variables = [],
+                                    body = Type{
+                                      `forall` = ForallType{
+                                        parameter = Name{"u"},
+                                        body = Type{
+                                          `record` = [
+                                            FieldType{name = Name{"unit"}, `type` = Type{variable = Name{"u"}}},
+                                            FieldType{name = Name{"value"}, `type` = Type{literal = LiteralType{float = FloatType{`float64`}}}},
+                                            FieldType{name = Name{"error"}, `type` = Type{`optional` = Type{literal = LiteralType{float = FloatType{`float64`}}}}}]}}},
+                                    constraints = maps.empty}),
+                                (
+                                  Name{"example.TimeUnit"},
+                                  TypeScheme{
+                                    variables = [],
+                                    body = Type{
+                                      `union` = [FieldType{name = Name{"millisecond"}, `type` = Type{`unit`}}, FieldType{name = Name{"second"}, `type` = Type{`unit`}}]},
+                                    constraints = maps.empty}),
+                                (
+                                  Name{"example.Duration"},
+                                  TypeScheme{
+                                    variables = [],
+                                    body = Type{
+                                      `wrap` = Type{
+                                        application = ApplicationType{
+                                          function = Type{
+                                            variable = Name{"example.Measurement"}},
+                                          argument = Type{
+                                            variable = Name{"example.TimeUnit"}}}}},
+                                    constraints = maps.empty}),
+                                (
+                                  Name{"example.Offset"},
+                                  TypeScheme{variables = [], body = Type{`wrap` = Type{variable = Name{"example.Duration"}}}, constraints = maps.empty}),
+                                (
+                                  Name{"example.Span"},
+                                  TypeScheme{
+                                    variables = [],
+                                    body = Type{
+                                      `record` = [
+                                        FieldType{name = Name{"start"}, `type` = Type{literal = LiteralType{float = FloatType{`float64`}}}},
+                                        FieldType{name = Name{"end"}, `type` = Type{`optional` = Type{literal = LiteralType{float = FloatType{`float64`}}}}}]},
+                                    constraints = maps.empty}),
+                                (Name{"x"}, TypeScheme{variables = [], body = Type{variable = Name{"example.Span"}}, constraints = maps.empty})],
+                          classConstraints = maps.empty,
+                          lambdaVariables = sets.empty,
+                          metadata = maps.empty,
+                          primitives = maps.empty,
+                          schemaTypes = maps.empty,
+                          typeVariables = sets.empty}),
+                expected = λ`_`."ok"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "parametric record, optional given",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.error e)
+                      (λ`_`."ok")
+                      (graphToTermGraph
+                        Graph{
+                          boundTerms = maps.fromList
+                              [
+                                (
+                                  Name{"x"},
+                                  Term{
+                                    `wrap` = WrappedTerm{
+                                      typeName = Name{"example.Offset"},
+                                      body = Term{
+                                        `wrap` = WrappedTerm{
+                                          typeName = Name{"example.Duration"},
+                                          body = Term{
+                                            typeApplication = TypeApplicationTerm{
+                                              body = Term{
+                                                `record` = Record{
+                                                  typeName = Name{"example.Measurement"},
+                                                  fields = [
+                                                    Field{
+                                                      name = Name{"unit"},
+                                                      `term` = Term{
+                                                        `inject` = Injection{
+                                                          typeName = Name{"example.TimeUnit"},
+                                                          field = Field{name = Name{"second"}, `term` = Term{`unit`}}}}},
+                                                    Field{name = Name{"value"}, `term` = Term{literal = Literal{float = FloatValue{`float64` = 1.5:float64}}}},
+                                                    Field{
+                                                      name = Name{"error"},
+                                                      `term` = Term{`optional` = given(Term{literal = Literal{float = FloatValue{`float64` = 0.1:float64}}})}}]}},
+                                              `type` = Type{
+                                                variable = Name{"example.TimeUnit"}}}}}}}})],
+                          boundTypes = maps.fromList
+                              [
+                                (
+                                  Name{"example.Measurement"},
+                                  TypeScheme{
+                                    variables = [],
+                                    body = Type{
+                                      `forall` = ForallType{
+                                        parameter = Name{"u"},
+                                        body = Type{
+                                          `record` = [
+                                            FieldType{name = Name{"unit"}, `type` = Type{variable = Name{"u"}}},
+                                            FieldType{name = Name{"value"}, `type` = Type{literal = LiteralType{float = FloatType{`float64`}}}},
+                                            FieldType{name = Name{"error"}, `type` = Type{`optional` = Type{literal = LiteralType{float = FloatType{`float64`}}}}}]}}},
+                                    constraints = maps.empty}),
+                                (
+                                  Name{"example.TimeUnit"},
+                                  TypeScheme{
+                                    variables = [],
+                                    body = Type{
+                                      `union` = [FieldType{name = Name{"millisecond"}, `type` = Type{`unit`}}, FieldType{name = Name{"second"}, `type` = Type{`unit`}}]},
+                                    constraints = maps.empty}),
+                                (
+                                  Name{"example.Duration"},
+                                  TypeScheme{
+                                    variables = [],
+                                    body = Type{
+                                      `wrap` = Type{
+                                        application = ApplicationType{
+                                          function = Type{
+                                            variable = Name{"example.Measurement"}},
+                                          argument = Type{
+                                            variable = Name{"example.TimeUnit"}}}}},
+                                    constraints = maps.empty}),
+                                (
+                                  Name{"example.Offset"},
+                                  TypeScheme{variables = [], body = Type{`wrap` = Type{variable = Name{"example.Duration"}}}, constraints = maps.empty}),
+                                (
+                                  Name{"example.Span"},
+                                  TypeScheme{
+                                    variables = [],
+                                    body = Type{
+                                      `record` = [
+                                        FieldType{name = Name{"start"}, `type` = Type{literal = LiteralType{float = FloatType{`float64`}}}},
+                                        FieldType{name = Name{"end"}, `type` = Type{`optional` = Type{literal = LiteralType{float = FloatType{`float64`}}}}}]},
+                                    constraints = maps.empty}),
+                                (Name{"x"}, TypeScheme{variables = [], body = Type{variable = Name{"example.Offset"}}, constraints = maps.empty})],
+                          classConstraints = maps.empty,
+                          lambdaVariables = sets.empty,
+                          metadata = maps.empty,
+                          primitives = maps.empty,
+                          schemaTypes = maps.empty,
+                          typeVariables = sets.empty}),
+                expected = λ`_`."ok"}},
+            description = none,
+            tags = [],
+            provisions = []},
+          TestCaseWithMetadata{
+            name = "parametric record, optional none",
+            case = TestCase{
+              universal = UniversalTestCase{
+                actual = λ`_`.eithers.either
+                      (λe.error e)
+                      (λ`_`."ok")
+                      (graphToTermGraph
+                        Graph{
+                          boundTerms = maps.fromList
+                              [
+                                (
+                                  Name{"x"},
+                                  Term{
+                                    `wrap` = WrappedTerm{
+                                      typeName = Name{"example.Offset"},
+                                      body = Term{
+                                        `wrap` = WrappedTerm{
+                                          typeName = Name{"example.Duration"},
+                                          body = Term{
+                                            typeApplication = TypeApplicationTerm{
+                                              body = Term{
+                                                `record` = Record{
+                                                  typeName = Name{"example.Measurement"},
+                                                  fields = [
+                                                    Field{
+                                                      name = Name{"unit"},
+                                                      `term` = Term{
+                                                        `inject` = Injection{
+                                                          typeName = Name{"example.TimeUnit"},
+                                                          field = Field{name = Name{"second"}, `term` = Term{`unit`}}}}},
+                                                    Field{name = Name{"value"}, `term` = Term{literal = Literal{float = FloatValue{`float64` = 1.5:float64}}}},
+                                                    Field{
+                                                      name = Name{"error"},
+                                                      `term` = Term{
+                                                        typeApplication = TypeApplicationTerm{
+                                                          body = Term{`optional` = none},
+                                                          `type` = Type{
+                                                            literal = LiteralType{
+                                                              float = FloatType{
+                                                                `float64`}}}}}}]}},
+                                              `type` = Type{
+                                                variable = Name{"example.TimeUnit"}}}}}}}})],
+                          boundTypes = maps.fromList
+                              [
+                                (
+                                  Name{"example.Measurement"},
+                                  TypeScheme{
+                                    variables = [],
+                                    body = Type{
+                                      `forall` = ForallType{
+                                        parameter = Name{"u"},
+                                        body = Type{
+                                          `record` = [
+                                            FieldType{name = Name{"unit"}, `type` = Type{variable = Name{"u"}}},
+                                            FieldType{name = Name{"value"}, `type` = Type{literal = LiteralType{float = FloatType{`float64`}}}},
+                                            FieldType{name = Name{"error"}, `type` = Type{`optional` = Type{literal = LiteralType{float = FloatType{`float64`}}}}}]}}},
+                                    constraints = maps.empty}),
+                                (
+                                  Name{"example.TimeUnit"},
+                                  TypeScheme{
+                                    variables = [],
+                                    body = Type{
+                                      `union` = [FieldType{name = Name{"millisecond"}, `type` = Type{`unit`}}, FieldType{name = Name{"second"}, `type` = Type{`unit`}}]},
+                                    constraints = maps.empty}),
+                                (
+                                  Name{"example.Duration"},
+                                  TypeScheme{
+                                    variables = [],
+                                    body = Type{
+                                      `wrap` = Type{
+                                        application = ApplicationType{
+                                          function = Type{
+                                            variable = Name{"example.Measurement"}},
+                                          argument = Type{
+                                            variable = Name{"example.TimeUnit"}}}}},
+                                    constraints = maps.empty}),
+                                (
+                                  Name{"example.Offset"},
+                                  TypeScheme{variables = [], body = Type{`wrap` = Type{variable = Name{"example.Duration"}}}, constraints = maps.empty}),
+                                (
+                                  Name{"example.Span"},
+                                  TypeScheme{
+                                    variables = [],
+                                    body = Type{
+                                      `record` = [
+                                        FieldType{name = Name{"start"}, `type` = Type{literal = LiteralType{float = FloatType{`float64`}}}},
+                                        FieldType{name = Name{"end"}, `type` = Type{`optional` = Type{literal = LiteralType{float = FloatType{`float64`}}}}}]},
+                                    constraints = maps.empty}),
+                                (Name{"x"}, TypeScheme{variables = [], body = Type{variable = Name{"example.Offset"}}, constraints = maps.empty})],
+                          classConstraints = maps.empty,
+                          lambdaVariables = sets.empty,
+                          metadata = maps.empty,
+                          primitives = maps.empty,
+                          schemaTypes = maps.empty,
+                          typeVariables = sets.empty}),
+                expected = λ`_`."ok"}},
             description = none,
             tags = [],
             provisions = []}]}],
