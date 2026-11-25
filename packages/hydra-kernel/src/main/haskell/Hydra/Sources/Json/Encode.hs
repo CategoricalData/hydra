@@ -48,7 +48,7 @@ import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms                           
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Tests                           as Tests
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Types                           as Types
 import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
-import qualified Hydra.Sources.Kernel.Terms.All            as KernelTerms
+--import qualified Hydra.Sources.Kernel.Terms.All            as KernelTerms
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Arity          as Arity
 import qualified Hydra.Sources.Kernel.Terms.Checking       as Checking
@@ -101,12 +101,252 @@ module_ = Module {
             moduleMetadata = Bootstrap.descriptionMetadata (Just "JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling.")}
   where
     definitions = [
+      toDefinition compileEncoder,
       toDefinition encodeFloat,
       toDefinition encodeInteger,
       toDefinition encodeLiteral,
       toDefinition requiresJsonStringSentinel,
       toDefinition toJson,
       toDefinition toJsonUntyped]
+
+-- | Compile a type into a staged JSON encoder node (#850), the encoding counterpart of
+-- 'Hydra.Sources.Json.Decode.compileDecoder'. A node is a 'Coder' whose encode function takes a
+-- resolver for named types (supplied by jsonCoder) paired with a term; its decode function is an
+-- unused stub. Nodes (including per-field encoders) are data rather than bare functions, so that
+-- no host's eta expansion can move compile-time work under the per-term lambda. Every error is
+-- still reported at encode time with toJson's message, so behavior matches toJson exactly.
+compileEncoder :: TypedTermDefinition (M.Map Name Type -> Bool -> Type -> Coder (Name -> Term -> Either String Value, Term) Value String)
+compileEncoder = define "compileEncoder" $
+  doc ("Compile a type into a staged JSON encoder node (#850). A node is a Coder whose encode"
+    <> " function takes a resolver for named types (see hydra.core.json.decode.jsonCoder) paired with"
+    <> " a term; its decode function is unused. Nodes are data rather than bare functions so that no"
+    <> " host's eta expansion can move the compile-time work under the encoding lambda. All schema"
+    <> " work happens once here rather than at every node of every encoded term, while every error is"
+    <> " still reported at encode time, exactly as toJson reports it.") $
+  "types" ~> "compactMaps" ~> "typ" ~>
+  "recurse" <~ ("t" ~> compileEncoder @@ var "types" @@ var "compactMaps" @@ var "t") $
+  "unusedDecode" <~ (constant $ left $ string "a compiled JSON encoder node does not decode") $
+  -- Every node first checks for a variable term (#798), as toJson does at every position.
+  "node" <~ ("f" ~> Coders.coder
+    ("rt" ~>
+      "term" <~ (Pairs.second $ var "rt") $
+      "strippedTerm" <~ (Strip.deannotateTerm @@ var "term") $
+      match _Term (var "strippedTerm")
+        (Just $ var "f" @@ (Pairs.first $ var "rt") @@ var "term" @@ var "strippedTerm") [
+        _Term_variable>>: "n" ~>
+          right $ Json.valueObject $ list [pair (string "@var") (Json.valueString $ Core.unName $ var "n")]])
+    (var "unusedDecode")) $
+  "applyNode" <~ ("e" ~> "run" ~> "t" ~> Coders.coderEncode (var "e") @@ pair (var "run") (var "t")) $
+  "failWith" <~ ("msg" ~> var "node" @@ ("run" ~> "term" ~> "strippedTerm" ~> left (var "msg"))) $
+  "encodeElements" <~ ("elemEncoder" ~> "run" ~> "terms" ~>
+    Eithers.mapList ("t" ~> var "applyNode" @@ var "elemEncoder" @@ var "run" @@ var "t") (var "terms")) $
+  "reduceApp" <~ ("app" ~>
+    "fn" <~ (Strip.deannotateType @@ (Core.applicationTypeFunction $ var "app")) $
+    "arg" <~ (Core.applicationTypeArgument $ var "app") $
+    match _Type (var "fn")
+      (Just $ left $ Strings.concat $ list [
+        string "cannot apply a non-parametric type: ",
+        PrintCore.type_ @@ var "fn"]) [
+      _Type_application>>: "innerApp" ~>
+        Eithers.either
+          ("err" ~> left $ var "err")
+          ("reducedFn" ~> var "reduceApp" @@ (Core.applicationType (var "reducedFn") (var "arg")))
+          (var "reduceApp" @@ var "innerApp"),
+      _Type_forall>>: "ft" ~>
+        right $ Substitution.substInType
+          @@ (Substitution.singletonTypeSubst @@ (Core.forallTypeParameter $ var "ft") @@ var "arg")
+          @@ (Core.forallTypeBody $ var "ft"),
+      _Type_variable>>: "name" ~>
+        Optionals.match (Maps.lookup (var "name" :: TypedTerm Name) (var "types")) (left $ Strings.concat $ list [
+            string "unknown type variable: ",
+            Core.unName $ var "name"]) ("resolvedFn" ~> var "reduceApp" @@ (Core.applicationType (var "resolvedFn") (var "arg")))]) $
+  match _Type (Strip.deannotateType @@ var "typ")
+    (Just $ var "failWith" @@ (Strings.concat $ list [
+      string "unsupported type for JSON encoding: ",
+      PrintCore.type_ @@ var "typ"])) [
+
+    _Type_application>>: "at" ~>
+      Eithers.either
+        ("err" ~> var "failWith" @@ var "err")
+        ("reducedType" ~> var "recurse" @@ var "reducedType")
+        (var "reduceApp" @@ var "at"),
+
+    _Type_forall>>: "ft" ~> var "recurse" @@ (Core.forallTypeBody $ var "ft"),
+
+    _Type_literal>>: constant $ var "node" @@ ("run" ~> "term" ~> "strippedTerm" ~>
+      match _Term (var "strippedTerm")
+        (Just $ left $ string "expected literal term") [
+        _Term_literal>>: "lit" ~> encodeLiteral @@ var "lit"]),
+
+    _Type_list>>: "elemType" ~>
+      "elemEncoder" <~ (var "recurse" @@ var "elemType") $
+      var "node" @@ ("run" ~> "term" ~> "strippedTerm" ~>
+        match _Term (var "strippedTerm")
+          (Just $ left $ string "expected list term") [
+          _Term_list>>: "terms" ~> Eithers.map ("vs" ~> Json.valueArray $ var "vs")
+            (var "encodeElements" @@ var "elemEncoder" @@ var "run" @@ var "terms")]),
+
+    _Type_set>>: "elemType" ~>
+      "elemEncoder" <~ (var "recurse" @@ var "elemType") $
+      var "node" @@ ("run" ~> "term" ~> "strippedTerm" ~>
+        match _Term (var "strippedTerm")
+          (Just $ left $ string "expected set term") [
+          _Term_set>>: "vals" ~> Eithers.map ("vs" ~> Json.valueArray $ var "vs")
+            (var "encodeElements" @@ var "elemEncoder" @@ var "run" @@ (Sets.toList $ var "vals"))]),
+
+    _Type_optional>>: "innerType" ~>
+      "innerEncoder" <~ (var "recurse" @@ var "innerType") $
+      "isNestedMaybe" <~ (match _Type (Strip.deannotateType @@ var "innerType") (Just false) [
+        _Type_optional>>: constant true]) $
+      var "node" @@ ("run" ~> "term" ~> "strippedTerm" ~>
+        match _Term (var "strippedTerm")
+          (Just $ left $ string "expected maybe term") [
+          _Term_optional>>: "opt" ~> optCases (var "opt")
+            (right Json.valueNull)
+            ("v" ~>
+              "encoded" <~ (var "applyNode" @@ var "innerEncoder" @@ var "run" @@ var "v") $
+              Logic.ifElse (var "isNestedMaybe")
+                (Eithers.map ("ev" ~> Json.valueArray $ list [var "ev"]) (var "encoded"))
+                (var "encoded"))]),
+
+    -- Field encoders are compiled per field type and paired positionally with the record's
+    -- fields, as toJson does. A simple optional field (Maybe T, T not Maybe) is omitted when
+    -- absent and encoded as its plain value when present.
+    _Type_record>>: "rt" ~>
+      "isSimpleMaybe" <~ ("ftype" ~>
+        match _Type (Strip.deannotateType @@ var "ftype") (Just false) [
+          _Type_optional>>: "innerT" ~>
+            match _Type (Strip.deannotateType @@ var "innerT") (Just true) [
+              _Type_optional>>: constant false]]) $
+      "fieldNode" <~ ("g" ~> Coders.coder
+        ("rf" ~> var "g" @@ (Pairs.first $ var "rf") @@ (Pairs.second $ var "rf"))
+        (var "unusedDecode")) $
+      "fieldEncoder" <~ ("ft" ~>
+        "ftype" <~ (Core.fieldTypeType $ var "ft") $
+        Logic.ifElse (var "isSimpleMaybe" @@ var "ftype")
+          ("innerEncoder" <~ (var "recurse" @@ (match _Type (Strip.deannotateType @@ var "ftype") (Just $ var "ftype") [
+              _Type_optional>>: "it" ~> var "it"])) $
+            var "fieldNode" @@ ("run" ~> "f" ~>
+              "fname" <~ (Core.unName $ Core.fieldName $ var "f") $
+              match _Term (Strip.deannotateTerm @@ (Core.fieldTerm $ var "f"))
+                (Just $ left $ string "expected maybe term for optional field") [
+                _Term_optional>>: "opt" ~> optCases (var "opt")
+                  (right nothing)
+                  ("v" ~> Eithers.map ("ev" ~> just $ pair (var "fname") (var "ev"))
+                    (var "applyNode" @@ var "innerEncoder" @@ var "run" @@ var "v"))]))
+          ("valueEncoder" <~ (var "recurse" @@ var "ftype") $
+            var "fieldNode" @@ ("run" ~> "f" ~>
+              Eithers.map ("ev" ~> just $ pair (Core.unName $ Core.fieldName $ var "f") (var "ev"))
+                (var "applyNode" @@ var "valueEncoder" @@ var "run" @@ (Core.fieldTerm $ var "f"))))) $
+      "encoders" <~ (Lists.map (var "fieldEncoder") (var "rt")) $
+      var "node" @@ ("run" ~> "term" ~> "strippedTerm" ~>
+        match _Term (var "strippedTerm")
+          (Just $ left $ string "expected record term") [
+          _Term_record>>: "r" ~> Eithers.map ("ps" ~> Json.valueObject $ Optionals.givens $ var "ps")
+            (Eithers.mapList
+              ("ef" ~> Coders.coderEncode (Pairs.first $ var "ef") @@ pair (var "run") (Pairs.second $ var "ef"))
+              (Lists.zip (var "encoders") (Core.recordFields $ var "r")))]),
+
+    -- Variants are tabulated by name once; reversed so that the first of any duplicate names
+    -- wins, as with toJson's linear search.
+    _Type_union>>: "rt" ~>
+      "variants" <~ (Maps.fromList $ Lists.reverse $ Lists.map
+        ("ft" ~> pair
+          (Core.unName $ Core.fieldTypeName $ var "ft")
+          (pair
+            (match _Type (Strip.deannotateType @@ (Core.fieldTypeType $ var "ft")) (Just false) [
+              _Type_unit>>: constant true])
+            (var "recurse" @@ (Core.fieldTypeType $ var "ft"))))
+        (var "rt")) $
+      var "node" @@ ("run" ~> "term" ~> "strippedTerm" ~>
+        match _Term (var "strippedTerm")
+          (Just $ left $ string "expected union term") [
+          _Term_inject>>: "inj" ~>
+            "field" <~ (Core.injectionField $ var "inj") $
+            "fname" <~ (Core.unName $ Core.fieldName $ var "field") $
+            Optionals.match (Maps.lookup (var "fname" :: TypedTerm String) (var "variants"))
+              (left $ Strings.concat $ list [string "unknown variant: ", var "fname"])
+              ("variant" ~> Logic.ifElse (Pairs.first $ var "variant")
+                (right $ Json.valueString $ var "fname")
+                (Eithers.map ("v" ~> Json.valueObject $ list [pair (var "fname") (var "v")])
+                  (var "applyNode" @@ (Pairs.second $ var "variant") @@ var "run" @@ (Core.fieldTerm $ var "field"))))]),
+
+    _Type_unit>>: constant $ var "node" @@ ("run" ~> "term" ~> "strippedTerm" ~>
+      right $ Json.valueObject $ list ([] :: [TypedTerm (String, Value)])),
+
+    _Type_wrap>>: "wn" ~>
+      "bodyEncoder" <~ (var "recurse" @@ var "wn") $
+      var "node" @@ ("run" ~> "term" ~> "strippedTerm" ~>
+        match _Term (var "strippedTerm")
+          (Just $ left $ string "expected wrapped term") [
+          _Term_wrap>>: "wt" ~> var "applyNode" @@ var "bodyEncoder" @@ var "run" @@ (Core.wrappedTermBody $ var "wt")]),
+
+    _Type_map>>: "mt" ~>
+      "keyEncoder" <~ (var "recurse" @@ (Core.mapTypeKeys $ var "mt")) $
+      "valEncoder" <~ (var "recurse" @@ (Core.mapTypeValues $ var "mt")) $
+      "typeAllowsCompact" <~ (Logic.and (var "compactMaps") (Resolution.mapKeyResolvesToString @@ var "types" @@ (Core.mapTypeKeys $ var "mt"))) $
+      var "node" @@ ("run" ~> "term" ~> "strippedTerm" ~>
+        match _Term (var "strippedTerm")
+          (Just $ left $ string "expected map term") [
+          _Term_map>>: "m" ~>
+            "hasVariableKey" <~ (Optionals.match (Lists.find
+                ("k" ~> match _Term (Strip.deannotateTerm @@ var "k") (Just false) [
+                  _Term_variable>>: constant true])
+                (Maps.keys $ var "m"))
+              false
+              (constant true)) $
+            "compact" <~ (Logic.and (var "typeAllowsCompact") (Logic.not (var "hasVariableKey"))) $
+            Logic.ifElse (var "compact")
+              ("encodeCompactEntry" <~ ("kv" ~> Eithers.either
+                  ("err" ~> left $ var "err")
+                  ("ek" ~> Eithers.either
+                    ("err" ~> left $ var "err")
+                    ("ks" ~> Eithers.map ("ev" ~> pair (var "ks") (var "ev"))
+                      (var "applyNode" @@ var "valEncoder" @@ var "run" @@ (Pairs.second $ var "kv")))
+                    (match _Value (var "ek")
+                      (Just $ left $ string "internal error: string-resolving map key did not encode to a JSON string") [
+                      _Value_string>>: "s" ~> right $ var "s"]))
+                  (var "applyNode" @@ var "keyEncoder" @@ var "run" @@ (Pairs.first $ var "kv"))) $
+                Eithers.map ("es" ~> Json.valueObject $ var "es")
+                  (Eithers.mapList (var "encodeCompactEntry") (Maps.toList $ var "m")))
+              ("encodeEntry" <~ ("kv" ~> Eithers.either
+                  ("err" ~> left $ var "err")
+                  ("ek" ~> Eithers.map
+                    ("ev" ~> Json.valueObject $ list [pair (string "key") (var "ek"), pair (string "value") (var "ev")])
+                    (var "applyNode" @@ var "valEncoder" @@ var "run" @@ (Pairs.second $ var "kv")))
+                  (var "applyNode" @@ var "keyEncoder" @@ var "run" @@ (Pairs.first $ var "kv"))) $
+                Eithers.map ("es" ~> Json.valueArray $ var "es")
+                  (Eithers.mapList (var "encodeEntry") (Maps.toList $ var "m")))]),
+
+    _Type_pair>>: "pt" ~>
+      "firstEncoder" <~ (var "recurse" @@ (Core.pairTypeFirst $ var "pt")) $
+      "secondEncoder" <~ (var "recurse" @@ (Core.pairTypeSecond $ var "pt")) $
+      var "node" @@ ("run" ~> "term" ~> "strippedTerm" ~>
+        match _Term (var "strippedTerm")
+          (Just $ left $ string "expected pair term") [
+          _Term_pair>>: "p" ~> Eithers.either
+            ("err" ~> left $ var "err")
+            ("ef" ~> Eithers.map
+              ("es" ~> Json.valueObject $ list [pair (string "first") (var "ef"), pair (string "second") (var "es")])
+              (var "applyNode" @@ var "secondEncoder" @@ var "run" @@ (Pairs.second $ var "p")))
+            (var "applyNode" @@ var "firstEncoder" @@ var "run" @@ (Pairs.first $ var "p"))]),
+
+    _Type_either>>: "et" ~>
+      "leftEncoder" <~ (var "recurse" @@ (Core.eitherTypeLeft $ var "et")) $
+      "rightEncoder" <~ (var "recurse" @@ (Core.eitherTypeRight $ var "et")) $
+      var "node" @@ ("run" ~> "term" ~> "strippedTerm" ~>
+        match _Term (var "strippedTerm")
+          (Just $ left $ string "expected either term") [
+          _Term_either>>: "e" ~> Eithers.either
+            ("l" ~> Eithers.map ("v" ~> Json.valueObject $ list [pair (string "left") (var "v")])
+              (var "applyNode" @@ var "leftEncoder" @@ var "run" @@ var "l"))
+            ("r" ~> Eithers.map ("v" ~> Json.valueObject $ list [pair (string "right") (var "v")])
+              (var "applyNode" @@ var "rightEncoder" @@ var "run" @@ var "r"))
+            (var "e")]),
+
+    -- Named types are resolved at encode time through the resolver; jsonCoder falls back to
+    -- toJsonUntyped for a name with no definition, as toJson does.
+    _Type_variable>>: "name" ~> var "node" @@ ("run" ~> "term" ~> "strippedTerm" ~> var "run" @@ var "name" @@ var "term")]
 
 -- | Encode a float value to JSON.
 -- Float32 and Float64 encode finite, non-negative-zero values as JSON numbers; values the
