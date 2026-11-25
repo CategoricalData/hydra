@@ -17,7 +17,10 @@ import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Literals      as Literals
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms
 import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms                ((@@))
+import qualified Hydra.Core.Dsl.Coders        as Coders
 import qualified Hydra.Core.Dsl.Lib.Eithers   as Eithers
+import qualified Hydra.Core.Dsl.Lib.Equality  as Equality
+import qualified Hydra.Core.Dsl.Lib.Logic     as Logic
 import qualified Hydra.Core.Dsl.Lib.Maps      as Maps
 import qualified Hydra.Core.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
@@ -74,6 +77,38 @@ allTests = define "allTests" $
       variableRoundtripGroup,
       wireShapeGroup]
 
+-- | The top-level type name used by tests that do not supply their own.
+defaultTypeName :: TypedTerm Name
+defaultTypeName = Core.name (Phantoms.string "test")
+
+-- | Decode with fromJson, and require the staged jsonCoder (#850) built for the same arguments to
+-- agree exactly (the same term, or the same error). Every decoding test below goes through this,
+-- so the whole suite also covers the staged decoder; a disagreement surfaces as a distinctive error.
+-- Decoded terms are compared in printed form, as the tests compare them, since a NaN float is not
+-- equal to itself.
+agreedDecode :: TypedTerm (M.Map Name Type) -> TypedTerm Bool -> TypedTerm Name -> TypedTerm Type -> TypedTerm Value
+  -> TypedTerm (Either String Term)
+agreedDecode types compactMaps tname typ jsonVal = Logic.ifElse
+  (Equality.equal
+    (printed $ Coders.coderDecode (JsonDecode.jsonCoder @@ types @@ compactMaps @@ tname @@ typ) @@ jsonVal)
+    (printed reference))
+  reference
+  (Phantoms.left $ Phantoms.string "staged jsonCoder decode disagrees with fromJson")
+  where
+    reference = JsonDecode.fromJson @@ types @@ compactMaps @@ tname @@ typ @@ jsonVal
+    printed = Eithers.map (Phantoms.lambda "t" $ PrintCore.term @@ Phantoms.var "t")
+
+-- | Encode with toJson, and require the staged jsonCoder (#850) to agree exactly, as for agreedDecode.
+agreedEncode :: TypedTerm (M.Map Name Type) -> TypedTerm Bool -> TypedTerm Type -> TypedTerm Term -> TypedTerm (Either String Value)
+agreedEncode types compactMaps typ term = Logic.ifElse
+  (Equality.equal
+    (Coders.coderEncode (JsonDecode.jsonCoder @@ types @@ compactMaps @@ defaultTypeName @@ typ) @@ term)
+    reference)
+  reference
+  (Phantoms.left $ Phantoms.string "staged jsonCoder encode disagrees with toJson")
+  where
+    reference = EncodeModule.toJson @@ types @@ compactMaps @@ defaultTypeName @@ typ @@ term
+
 -- Helper for creating JSON round-trip test cases (universal)
 -- Encodes term to JSON, decodes back, shows both and compares.
 roundtripTest :: String -> TypedTerm Type -> TypedTerm Term -> TypedTerm TestCaseWithMetadata
@@ -87,8 +122,8 @@ roundtripTestWithTags testName tags typ term = universalCaseWithTags testName ta
       Eithers.either
         (Phantoms.lambda "e" $ Phantoms.var "e")
         (Phantoms.lambda "decoded" $ PrintCore.term @@ Phantoms.var "decoded")
-        (JsonDecode.fromJson @@ Maps.empty @@ Literals.true @@ Core.name (Phantoms.string "test") @@ typ @@ Phantoms.var "json"))
-    (EncodeModule.toJson @@ Maps.empty @@ Literals.true @@ Core.name (Phantoms.string "test") @@ typ @@ term))
+        (agreedDecode Maps.empty Literals.true defaultTypeName typ (Phantoms.var "json")))
+    (agreedEncode Maps.empty Literals.true typ term))
   (PrintCore.term @@ term)
 
 -- Helper that pins the encoder's exact wire shape: encodes a term to JSON, serializes
@@ -100,7 +135,7 @@ wireShapeTest testName typ term expectedJson = universalCase testName
   (Eithers.either
     (Phantoms.lambda "e" $ Phantoms.var "e")
     (Phantoms.lambda "json" $ JsonWriter.printJson @@ Phantoms.var "json")
-    (EncodeModule.toJson @@ Maps.empty @@ Literals.true @@ Core.name (Phantoms.string "test") @@ typ @@ term))
+    (agreedEncode Maps.empty Literals.true typ term))
   (Phantoms.string expectedJson)
 
 -- Like wireShapeTest, but with an explicit compactMaps flag instead of always True. Used to
@@ -113,7 +148,7 @@ wireShapeTestWithCompactMaps testName compactMaps typ term expectedJson = univer
   (Eithers.either
     (Phantoms.lambda "e" $ Phantoms.var "e")
     (Phantoms.lambda "json" $ JsonWriter.printJson @@ Phantoms.var "json")
-    (EncodeModule.toJson @@ Maps.empty @@ compactMaps @@ Core.name (Phantoms.string "test") @@ typ @@ term))
+    (agreedEncode Maps.empty compactMaps typ term))
   (Phantoms.string expectedJson)
 
 -- Like roundtripTest, but with a caller-supplied type lookup table instead of an empty
@@ -127,8 +162,8 @@ roundtripTestWithTypes testName types typ term = universalCase testName
       Eithers.either
         (Phantoms.lambda "e" $ Phantoms.var "e")
         (Phantoms.lambda "decoded" $ PrintCore.term @@ Phantoms.var "decoded")
-        (JsonDecode.fromJson @@ types @@ Literals.true @@ Core.name (Phantoms.string "test") @@ typ @@ Phantoms.var "json"))
-    (EncodeModule.toJson @@ types @@ Literals.true @@ Core.name (Phantoms.string "test") @@ typ @@ term))
+        (agreedDecode types Literals.true defaultTypeName typ (Phantoms.var "json")))
+    (agreedEncode types Literals.true typ term))
   (PrintCore.term @@ term)
 
 ----------------------------------------
@@ -380,7 +415,7 @@ decodeTestWithTypes testName types tname typ jsonVal expectedTerm = universalCas
   (Eithers.either
     (Phantoms.lambda "e" $ Phantoms.var "e")
     (Phantoms.lambda "decoded" $ PrintCore.term @@ Phantoms.var "decoded")
-    (JsonDecode.fromJson @@ types @@ Literals.true @@ tname @@ typ @@ jsonVal))
+    (agreedDecode types Literals.true tname typ jsonVal))
   (PrintCore.term @@ expectedTerm)
 
 -- | Decode a pre-built JSON Value to a Term and show the result.
@@ -390,7 +425,7 @@ decodeTest testName typ jsonVal expectedTerm = universalCase testName
   (Eithers.either
     (Phantoms.lambda "e" $ Phantoms.var "e")
     (Phantoms.lambda "decoded" $ PrintCore.term @@ Phantoms.var "decoded")
-    (JsonDecode.fromJson @@ Maps.empty @@ Literals.true @@ Core.name (Phantoms.string "test") @@ typ @@ jsonVal))
+    (agreedDecode Maps.empty Literals.true defaultTypeName typ jsonVal))
   (PrintCore.term @@ expectedTerm)
 
 -- | Decode a pre-built JSON Value and assert that decoding is rejected (returns an error).
@@ -400,7 +435,7 @@ decodeFailureTest testName typ jsonVal = universalCase testName
   (Eithers.either
     (Phantoms.lambda "e" $ Phantoms.string "rejected")
     (Phantoms.lambda "decoded" $ Strings.concat2 (Phantoms.string "unexpected: ") (PrintCore.term @@ Phantoms.var "decoded"))
-    (JsonDecode.fromJson @@ Maps.empty @@ Literals.true @@ Core.name (Phantoms.string "test") @@ typ @@ jsonVal))
+    (agreedDecode Maps.empty Literals.true defaultTypeName typ jsonVal))
   (Phantoms.string "rejected")
 
 ----------------------------------------
