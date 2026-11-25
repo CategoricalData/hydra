@@ -36,7 +36,6 @@ import { createHash } from "node:crypto";
 import { defaultImplementations } from "../../../lib/defaults.js";
 
 import * as libChars from "./chars.js";
-import * as libEquality from "./equality.js";
 import * as libFunctions from "./functions.js";
 import * as libLists from "./lists.js";
 import * as libLiterals from "./literals.js";
@@ -52,6 +51,8 @@ import * as libStrings from "./strings.js";
 // they take a function argument that's a Term and must call reduceTerm
 // with `apply(closure, arg)` to evaluate.
 import { reduceTerm } from "../../../reduction.js";
+import { termOrderKey } from "../../../ordering.js";
+import { removeTermAnnotations } from "../../../strip.js";
 import * as lexical from "../../../lexical.js";
 // Integral helpers live in a LEAF module so primitive implementations (math.ts)
 // can use them without importing this registry — importing back into libraries.ts
@@ -370,6 +371,40 @@ const dBool = (g: Graph, t: Term) => extractCore.boolean_(g, t) as Either<HydraE
 const dString = (g: Graph, t: Term) => extractCore.string_(g, t) as Either<HydraError, string>;
 const dBinary = (g: Graph, t: Term) => extractCore.binary(g, t) as Either<HydraError, Uint8Array>;
 const dAny = (_g: Graph, t: Term): Either<HydraError, Term> => right(t);
+
+// Object-level values are compared by their order key (#848): union variants compare in declared order, and
+// annotations are ignored at every depth. Map keys and set elements are also stored without annotations.
+const orderKey = (g: Graph, t: Term): Either<HydraError, Term> =>
+  (termOrderKey as never as (g: Graph, t: Term) => Either<HydraError, Term>)(g, t);
+
+const stripKey = (t: unknown): Term => (removeTermAnnotations as never as (t: Term) => Term)(t as Term);
+
+// Compare two values by their order keys, using the structural comparator on the keys.
+const compareByKey = (g: Graph, a: Term, b: Term): Either<HydraError, number> =>
+  bind(orderKey(g, a), (ka) => bind(orderKey(g, b), (kb) => right(libOrdering.compareValues(ka, kb))));
+
+// Stable sort by the order key of termOf(x).
+const sortByKey = <A>(g: Graph, xs: readonly A[], termOf: (x: A) => Term): Either<HydraError, A[]> => {
+  const keyed: Array<[Term, A]> = [];
+  for (const x of xs) {
+    const r = orderKey(g, termOf(x));
+    if (r.tag === "left") return r as never;
+    keyed.push([r.value, x]);
+  }
+  keyed.sort((a, b) => libOrdering.compareValues(a[0], b[0]));
+  return right(keyed.map((p) => p[1]));
+};
+
+// The order keys of a list of values.
+const keysOf = (g: Graph, xs: readonly Term[]): Either<HydraError, Term[]> => {
+  const out: Term[] = [];
+  for (const x of xs) {
+    const r = orderKey(g, x);
+    if (r.tag === "left") return r as never;
+    out.push(r.value);
+  }
+  return right(out);
+};
 
 // Decode any integer literal (any width) to a JS number. Useful for math
 // primitives that accept multiple widths.
@@ -1029,31 +1064,29 @@ const literalsPrimitives = (): readonly Primitive[] => [
 
 const equalityPrimitives = (): readonly Primitive[] => {
   const a = tyVar("a");
-  const bin = (qname: string, cls: string, f: (x: unknown, y: unknown) => boolean): Primitive =>
+  const bin = (qname: string, cls: string, f: (c: number) => boolean): Primitive =>
     prim(qname, schemeC(tyFn(a, tyFn(a, tyBool)), ["a"], [["a", [cls]]]),
-      (_g, args) =>
+      (g, args) =>
         bind(need(args, 0, qname), (a0) =>
           bind(need(args, 1, qname), (a1) =>
-            right(tBool(f(a0 as unknown, a1 as unknown))))));
+            bind(compareByKey(g, a0, a1), (c) => right(tBool(f(c)))))));
   return [
-    bin("hydra.core.lib.equality.equal", "equality", libEquality.equal),
-    bin("hydra.core.lib.ordering.lt", "ordering", libOrdering.lt),
-    bin("hydra.core.lib.ordering.lte", "ordering", libOrdering.lte),
-    bin("hydra.core.lib.ordering.gt", "ordering", libOrdering.gt),
-    bin("hydra.core.lib.ordering.gte", "ordering", libOrdering.gte),
+    bin("hydra.core.lib.equality.equal", "equality", (c) => c === 0),
+    bin("hydra.core.lib.ordering.lt", "ordering", (c) => c < 0),
+    bin("hydra.core.lib.ordering.lte", "ordering", (c) => c <= 0),
+    bin("hydra.core.lib.ordering.gt", "ordering", (c) => c > 0),
+    bin("hydra.core.lib.ordering.gte", "ordering", (c) => c >= 0),
     prim("hydra.core.lib.ordering.compare", schemeC(tyFn(a, tyFn(a, { tag: "variable", value: { value: "hydra.core.util.Comparison" } } as never as Type)), ["a"], [["a", ["ordering"]]]),
-      (_g, args) =>
+      (g, args) =>
         bind(need(args, 0, "compare"), (a0) =>
-          bind(need(args, 1, "compare"), (a1) => {
-            // The kernel-level Comparison value is the **Term** encoding:
-            // `inject(hydra.core.util.Comparison){<arm>=unit}`. Show.core.term
-            // renders this via cases on Term_inject. (The native
-            // discriminated-union shape from libOrdering.compare is for
-            // host-language code, not Term-level rendering.)
-            const c = libOrdering.compare(a0 as unknown, a1 as unknown);
-            const arm = c.tag; // "lessThan" | "equalTo" | "greaterThan"
-            return right(tInject("hydra.core.util.Comparison", arm, { tag: "unit" } as never));
-          }))),
+          bind(need(args, 1, "compare"), (a1) =>
+            bind(compareByKey(g, a0, a1), (c) => {
+              // The kernel-level Comparison value is the **Term** encoding:
+              // `inject(hydra.core.util.Comparison){<arm>=unit}`. Show.core.term
+              // renders this via cases on Term_inject.
+              const arm = c < 0 ? "lessThan" : c > 0 ? "greaterThan" : "equalTo";
+              return right(tInject("hydra.core.util.Comparison", arm, { tag: "unit" } as never));
+            })))),
     prim("hydra.core.lib.functions.absurd", scheme(tyFn(tyVoid, a), ["a"]),
       (_g, args) =>
         bind(need(args, 0, "absurd"), (a0) => right(libFunctions.absurd(a0)))),
@@ -1061,15 +1094,15 @@ const equalityPrimitives = (): readonly Primitive[] => {
       (_g, args) =>
         bind(need(args, 0, "identity"), (a0) => right(libFunctions.identity(a0)))),
     prim("hydra.core.lib.ordering.min", schemeC(tyFn(a, tyFn(a, a)), ["a"], [["a", ["ordering"]]]),
-      (_g, args) =>
+      (g, args) =>
         bind(need(args, 0, "min"), (a0) =>
           bind(need(args, 1, "min"), (a1) =>
-            right(libOrdering.lt(a0, a1) ? a0 : a1)))),
+            bind(compareByKey(g, a0, a1), (c) => right(c <= 0 ? a0 : a1))))),
     prim("hydra.core.lib.ordering.max", schemeC(tyFn(a, tyFn(a, a)), ["a"], [["a", ["ordering"]]]),
-      (_g, args) =>
+      (g, args) =>
         bind(need(args, 0, "max"), (a0) =>
           bind(need(args, 1, "max"), (a1) =>
-            right(libOrdering.lt(a1, a0) ? a0 : a1)))),
+            bind(compareByKey(g, a0, a1), (c) => right(c >= 0 ? a0 : a1))))),
   ];
 };
 
@@ -1418,10 +1451,12 @@ const listsPrimitives = (): readonly Primitive[] => {
             })))),
     // Simple non-HOF list ops that we already have via the runtime.
     prim("hydra.core.lib.lists.member", schemeC(tyFnCurried(tyVar("a"), tyList(tyVar("a")), tyBool), ["a"], [["a", ["equality"]]]),
-      (_g, args) =>
+      (g, args) =>
         bind(need(args, 0, "elem"), (x) =>
           bind(need(args, 1, "elem"), (xs) =>
-            bind(asList(xs), (lst) => right(tBool(lst.some((y) => libEquality.equal(x as unknown, y as unknown)))))))),
+            bind(asList(xs), (lst) =>
+              bind(orderKey(g, x), (kx) =>
+                bind(keysOf(g, lst), (ks) => right(tBool(ks.some((ky) => libOrdering.compareValues(kx, ky) === 0))))))))),
     prim("hydra.core.lib.lists.concat2", scheme(tyFnCurried(tyList(tyVar("a")), tyList(tyVar("a")), tyList(tyVar("a"))), ["a"]),
       (_g, args) =>
         bind(need(args, 0, "concat2"), (xs) =>
@@ -1509,37 +1544,40 @@ const listsPrimitives = (): readonly Primitive[] => {
           bind(need(args, 1, "replicate"), (x) =>
             bind(dAnyInt(g, a0), (n) => right(mkList(Array.from({ length: Math.max(n, 0) }, () => x))))))),
     prim("hydra.core.lib.lists.distinct", schemeC(tyFn(tyList(tyVar("a")), tyList(tyVar("a"))), ["a"], [["a", ["equality"]]]),
-      (_g, args) =>
+      (g, args) =>
         bind(need(args, 0, "nub"), (xs) =>
-          bind(asList(xs), (lst) => {
-            const out: Term[] = [];
-            for (const x of lst) {
-              if (!out.some((y) => libEquality.equal(x as unknown, y as unknown))) out.push(x);
-            }
-            return right(mkList(out));
-          }))),
+          bind(asList(xs), (lst) =>
+            bind(keysOf(g, lst), (ks) => {
+              const out: Term[] = [];
+              const seen: Term[] = [];
+              lst.forEach((x, i) => {
+                if (!seen.some((k) => libOrdering.compareValues(k, ks[i]!) === 0)) {
+                  seen.push(ks[i]!);
+                  out.push(x);
+                }
+              });
+              return right(mkList(out));
+            })))),
     prim("hydra.core.lib.lists.group", schemeC(tyFn(tyList(tyVar("a")), tyList(tyList(tyVar("a")))), ["a"], [["a", ["equality"]]]),
-      (_g, args) =>
+      (g, args) =>
         bind(need(args, 0, "group"), (xs) =>
-          bind(asList(xs), (lst) => {
+          bind(asList(xs), (lst) => bind(keysOf(g, lst), (ks) => {
             if (lst.length === 0) return right(mkList([]));
             const out: Term[][] = [[lst[0]!]];
             for (let i = 1; i < lst.length; i++) {
-              if (libEquality.equal(lst[i] as unknown, lst[i - 1] as unknown)) {
+              if (libOrdering.compareValues(ks[i], ks[i - 1]) === 0) {
                 out[out.length - 1]!.push(lst[i]!);
               } else {
                 out.push([lst[i]!]);
               }
             }
-            return right(mkList(out.map((g) => mkList(g))));
-          }))),
+            return right(mkList(out.map((grp) => mkList(grp))));
+          })))),
     prim("hydra.core.lib.lists.sort", schemeC(tyFn(tyList(tyVar("a")), tyList(tyVar("a"))), ["a"], [["a", ["ordering"]]]),
-      (_g, args) =>
+      (g, args) =>
         bind(need(args, 0, "sort"), (xs) =>
-          bind(asList(xs), (lst) => {
-            const sorted = [...lst].sort((a, b) => libOrdering.lt(a as unknown, b as unknown) ? -1 : libOrdering.lt(b as unknown, a as unknown) ? 1 : 0);
-            return right(mkList(sorted));
-          }))),
+          bind(asList(xs), (lst) =>
+            bind(sortByKey(g, lst, (x) => x), (sorted) => right(mkList(sorted)))))),
     prim("hydra.core.lib.lists.sortBy", schemeC(tyFnCurried(tyFn(tyVar("a"), tyVar("b")), tyList(tyVar("a")), tyList(tyVar("a"))), ["a", "b"], [["b", ["ordering"]]]),
       (g, args) =>
         bind(need(args, 0, "sortOn"), (fn) =>
@@ -1553,8 +1591,7 @@ const listsPrimitives = (): readonly Primitive[] => {
                 if (r.tag === "left") return r as Either<HydraError, Term>;
                 keyed.push([x, r.value]);
               }
-              keyed.sort((a, b) => libOrdering.lt(a[1] as unknown, b[1] as unknown) ? -1 : libOrdering.lt(b[1] as unknown, a[1] as unknown) ? 1 : 0);
-              return right(mkList(keyed.map((p) => p[0])));
+              return bind(sortByKey(g, keyed, (p) => p[1]), (sorted) => right(mkList(sorted.map((p) => p[0]))));
             })))),
     prim("hydra.core.lib.lists.partition", scheme(tyFnCurried(tyFn(tyVar("a"), tyBool), tyList(tyVar("a")), tyPair(tyList(tyVar("a")), tyList(tyVar("a")))), ["a"]),
       (g, args) =>
@@ -1616,9 +1653,10 @@ const listsPrimitives = (): readonly Primitive[] => {
 // === lib.sets (selected) ===
 
 const setsPrimitives = (): readonly Primitive[] => {
+  // Set arguments are normalized so that their elements carry no annotations (#848).
   const asSet = (t: Term): Either<HydraError, ReadonlySet<Term>> => {
     const x = t as { tag: string; value?: ReadonlySet<Term> };
-    if (x.tag === "set") return right(x.value ?? new Set());
+    if (x.tag === "set") return right(libSets.fromList(libSets.toList(x.value ?? new Set()).map(stripKey)));
     return left({ tag: "other", value: "expected a set" } as never);
   };
   const mkSet = (s: ReadonlySet<Term>): Term => ({ tag: "set", value: s } as never);
@@ -1637,32 +1675,34 @@ const setsPrimitives = (): readonly Primitive[] => {
       (_g, args) =>
         bind(need(args, 0, "member"), (e) =>
           bind(need(args, 1, "member"), (s) =>
-            bind(asSet(s), (st) => right(tBool(libSets.member(e as Term, st))))))),
+            bind(asSet(s), (st) => right(tBool(libSets.member(stripKey(e), st))))))),
     prim("hydra.core.lib.sets.singleton", schemeC(tyFn(tyVar("a"), tySet(tyVar("a"))), ["a"], [["a", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "singleton"), (e) =>
-          right(mkSet(libSets.singleton(e as Term))))),
+          right(mkSet(libSets.singleton(stripKey(e)))))),
     prim("hydra.core.lib.sets.insert", schemeC(tyFnCurried(tyVar("a"), tySet(tyVar("a")), tySet(tyVar("a"))), ["a"], [["a", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "insert"), (e) =>
           bind(need(args, 1, "insert"), (s) =>
-            bind(asSet(s), (st) => right(mkSet(libSets.insert(e as Term, st))))))),
+            bind(asSet(s), (st) => right(mkSet(libSets.insert(stripKey(e), st))))))),
     prim("hydra.core.lib.sets.delete", schemeC(tyFnCurried(tyVar("a"), tySet(tyVar("a")), tySet(tyVar("a"))), ["a"], [["a", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "delete"), (e) =>
           bind(need(args, 1, "delete"), (s) =>
-            bind(asSet(s), (st) => right(mkSet(libSets.delete_(e as Term, st))))))),
+            bind(asSet(s), (st) => right(mkSet(libSets.delete_(stripKey(e), st))))))),
     prim("hydra.core.lib.sets.fromList", schemeC(tyFn(tyList(tyVar("a")), tySet(tyVar("a"))), ["a"], [["a", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "fromList"), (a0) => {
           const lst = a0 as { tag: string; value?: readonly Term[] };
           if (lst.tag !== "list") return left({ tag: "other", value: "fromList: expected list" } as never);
-          return right(mkSet(libSets.fromList(lst.value ?? [])));
+          return right(mkSet(libSets.fromList((lst.value ?? []).map(stripKey))));
         })),
     prim("hydra.core.lib.sets.toList", schemeC(tyFn(tySet(tyVar("a")), tyList(tyVar("a"))), ["a"], [["a", ["ordering"]]]),
-      (_g, args) =>
+      (g, args) =>
         bind(need(args, 0, "toList"), (s) =>
-          bind(asSet(s), (st) => right({ tag: "list", value: [...libSets.toList(st)] } as never)))),
+          bind(asSet(s), (st) =>
+            bind(sortByKey(g, libSets.toList(st) as readonly Term[], (x) => x), (sorted) =>
+              right({ tag: "list", value: sorted } as never))))),
     prim("hydra.core.lib.sets.union", schemeC(tyFnCurried(tySet(tyVar("a")), tySet(tyVar("a")), tySet(tyVar("a"))), ["a"], [["a", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "union"), (a) =>
@@ -1706,7 +1746,7 @@ const setsPrimitives = (): readonly Primitive[] => {
                 const app: Term = { tag: "application", value: { function_: fn, argument: e } } as never;
                 const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, eg: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
                 if (r.tag === "left") return r as Either<HydraError, Term>;
-                out.push(r.value);
+                out.push(stripKey(r.value));
               }
               return right(mkSet(libSets.fromList(out)));
             })))),
@@ -1738,11 +1778,18 @@ const setsPrimitives = (): readonly Primitive[] => {
 // canonical-key wrapping.
 
 const mapsPrimitives = (): readonly Primitive[] => {
+  // Map arguments are normalized so that their keys carry no annotations (#848).
   const asMap = (t: Term): Either<HydraError, ReadonlyMap<unknown, Term>> => {
     const x = t as { tag: string; value?: ReadonlyMap<unknown, Term> };
-    if (x.tag === "map") return right(x.value ?? new Map());
+    if (x.tag === "map") {
+      const entries = libMaps.toList(x.value ?? new Map()).map(([k, v]) => [stripKey(k), v as Term] as const);
+      return right(libMaps.fromList(entries) as ReadonlyMap<unknown, Term>);
+    }
     return left({ tag: "other", value: "expected a map" } as never);
   };
+  // The entries of a map, in the order of their keys' order keys.
+  const sortedEntries = (g: Graph, mp: ReadonlyMap<unknown, Term>): Either<HydraError, Array<readonly [any, any]>> =>
+    sortByKey(g, libMaps.toList(mp), (kv) => kv[0] as Term);
   const mkMap = (m: ReadonlyMap<unknown, Term>): Term => ({ tag: "map", value: m } as never);
   return [
     prim("hydra.core.lib.maps.isEmpty", schemeC(tyFn(tyMap(tyVar("k"), tyVar("v")), tyBool), ["k", "v"], [["k", ["ordering"]]]),
@@ -1761,25 +1808,25 @@ const mapsPrimitives = (): readonly Primitive[] => {
         bind(need(args, 0, "lookup"), (k) =>
           bind(need(args, 1, "lookup"), (m) =>
             bind(asMap(m), (mp) => {
-              const r = libMaps.lookup(k, mp);
+              const r = libMaps.lookup(stripKey(k), mp);
               return right(r.tag === "given" ? tOptionalGiven(r.value as Term) : tOptionalNone);
             })))),
     prim("hydra.core.lib.maps.member", schemeC(tyFnCurried(tyVar("k"), tyMap(tyVar("k"), tyVar("v")), tyBool), ["k", "v"], [["k", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "member"), (k) =>
           bind(need(args, 1, "member"), (m) =>
-            bind(asMap(m), (mp) => right(tBool(libMaps.member(k, mp))))))),
+            bind(asMap(m), (mp) => right(tBool(libMaps.member(stripKey(k), mp))))))),
     prim("hydra.core.lib.maps.insert", schemeC(tyFnCurried(tyVar("k"), tyVar("v"), tyMap(tyVar("k"), tyVar("v")), tyMap(tyVar("k"), tyVar("v"))), ["k", "v"], [["k", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "insert"), (k) =>
           bind(need(args, 1, "insert"), (v) =>
             bind(need(args, 2, "insert"), (m) =>
-              bind(asMap(m), (mp) => right(mkMap(libMaps.insert(k, v as Term, mp) as ReadonlyMap<unknown, Term>))))))),
+              bind(asMap(m), (mp) => right(mkMap(libMaps.insert(stripKey(k), v as Term, mp) as ReadonlyMap<unknown, Term>))))))),
     prim("hydra.core.lib.maps.delete", schemeC(tyFnCurried(tyVar("k"), tyMap(tyVar("k"), tyVar("v")), tyMap(tyVar("k"), tyVar("v"))), ["k", "v"], [["k", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "delete"), (k) =>
           bind(need(args, 1, "delete"), (m) =>
-            bind(asMap(m), (mp) => right(mkMap(libMaps.delete_(k, mp) as ReadonlyMap<unknown, Term>)))))),
+            bind(asMap(m), (mp) => right(mkMap(libMaps.delete_(stripKey(k), mp) as ReadonlyMap<unknown, Term>)))))),
     prim("hydra.core.lib.maps.fromList", schemeC(tyFn(tyList(tyPair(tyVar("k"), tyVar("v"))), tyMap(tyVar("k"), tyVar("v"))), ["k", "v"], [["k", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "fromList"), (a0) => {
@@ -1787,30 +1834,33 @@ const mapsPrimitives = (): readonly Primitive[] => {
           if (lst.tag !== "list") return left({ tag: "other", value: "fromList: expected list" } as never);
           const pairs: readonly (readonly [unknown, Term])[] = (lst.value ?? []).map((t) => {
             const p = t as { tag: string; value?: readonly [unknown, Term] };
-            return p.value!;
+            return [stripKey(p.value![0]), p.value![1]] as const;
           });
           return right(mkMap(libMaps.fromList(pairs) as ReadonlyMap<unknown, Term>));
         })),
     prim("hydra.core.lib.maps.toList", schemeC(tyFn(tyMap(tyVar("k"), tyVar("v")), tyList(tyPair(tyVar("k"), tyVar("v")))), ["k", "v"], [["k", ["ordering"]]]),
-      (_g, args) =>
+      (g, args) =>
         bind(need(args, 0, "toList"), (m) =>
           bind(asMap(m), (mp) =>
-            right({ tag: "list", value: libMaps.toList(mp).map((kv) => ({ tag: "pair", value: kv })) } as never)))),
+            bind(sortedEntries(g, mp), (es) =>
+              right({ tag: "list", value: es.map((kv) => ({ tag: "pair", value: kv })) } as never))))),
     prim("hydra.core.lib.maps.keys", schemeC(tyFn(tyMap(tyVar("k"), tyVar("v")), tyList(tyVar("k"))), ["k", "v"], [["k", ["ordering"]]]),
-      (_g, args) =>
+      (g, args) =>
         bind(need(args, 0, "keys"), (m) =>
           bind(asMap(m), (mp) =>
-            right({ tag: "list", value: [...libMaps.keys(mp)] } as never)))),
+            bind(sortedEntries(g, mp), (es) =>
+              right({ tag: "list", value: es.map((kv) => kv[0]) } as never))))),
     prim("hydra.core.lib.maps.values", schemeC(tyFn(tyMap(tyVar("k"), tyVar("v")), tyList(tyVar("v"))), ["k", "v"], [["k", ["ordering"]]]),
-      (_g, args) =>
+      (g, args) =>
         bind(need(args, 0, "values"), (m) =>
           bind(asMap(m), (mp) =>
-            right({ tag: "list", value: [...libMaps.values(mp) as readonly Term[]] } as never)))),
+            bind(sortedEntries(g, mp), (es) =>
+              right({ tag: "list", value: es.map((kv) => kv[1]) } as never))))),
     prim("hydra.core.lib.maps.singleton", schemeC(tyFnCurried(tyVar("k"), tyVar("v"), tyMap(tyVar("k"), tyVar("v"))), ["k", "v"], [["k", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "singleton"), (k) =>
           bind(need(args, 1, "singleton"), (v) =>
-            right(mkMap(libMaps.singleton(k, v as Term) as ReadonlyMap<unknown, Term>))))),
+            right(mkMap(libMaps.singleton(stripKey(k), v as Term) as ReadonlyMap<unknown, Term>))))),
     prim("hydra.core.lib.maps.union", schemeC(tyFnCurried(tyMap(tyVar("k"), tyVar("v")), tyMap(tyVar("k"), tyVar("v")), tyMap(tyVar("k"), tyVar("v"))), ["k", "v"], [["k", ["ordering"]]]),
       (_g, args) =>
         bind(need(args, 0, "union"), (a) =>
@@ -1855,7 +1905,8 @@ const mapsPrimitives = (): readonly Primitive[] => {
           bind(need(args, 1, "alter"), (k) =>
             bind(need(args, 2, "alter"), (m) =>
               bind(asMap(m), (mp) => {
-                const cur = libMaps.lookup(k, mp);
+                const key = stripKey(k);
+                const cur = libMaps.lookup(key, mp);
                 const curOptional: Term = cur.tag === "given"
                   ? tOptionalGiven(cur.value as Term)
                   : tOptionalNone;
@@ -1868,9 +1919,9 @@ const mapsPrimitives = (): readonly Primitive[] => {
                 if (r.tag !== "optional") return left({ tag: "other", value: "alter: closure didn't return Optional" } as never);
                 const next = r.value;
                 if (next?.tag === "given" && next.value !== undefined) {
-                  return right(mkMap(libMaps.insert(k, next.value, mp) as ReadonlyMap<unknown, Term>));
+                  return right(mkMap(libMaps.insert(key, next.value, mp) as ReadonlyMap<unknown, Term>));
                 }
-                return right(mkMap(libMaps.delete_(k, mp) as ReadonlyMap<unknown, Term>));
+                return right(mkMap(libMaps.delete_(key, mp) as ReadonlyMap<unknown, Term>));
               })))))
     ,
     // map :: (v1 -> v2) -> Map k v1 -> Map k v2 — ordering on k
@@ -1901,7 +1952,7 @@ const mapsPrimitives = (): readonly Primitive[] => {
                 const app: Term = { tag: "application", value: { function_: fn, argument: k as Term } } as never;
                 const r = (reduceTerm as never as (cx: InferenceContext, g: Graph, e: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, app);
                 if (r.tag === "left") return r as Either<HydraError, Term>;
-                out.push([r.value, v as Term] as const);
+                out.push([stripKey(r.value), v as Term] as const);
               }
               return right(mkMap(libMaps.fromList(out) as ReadonlyMap<unknown, Term>));
             })))),
@@ -1932,16 +1983,17 @@ const mapsPrimitives = (): readonly Primitive[] => {
           bind(need(args, 1, "findWithDefault"), (k) =>
             bind(need(args, 2, "findWithDefault"), (m) =>
               bind(asMap(m), (mp) => {
-                const r = libMaps.lookup(k, mp);
+                const r = libMaps.lookup(stripKey(k), mp);
                 return right(r.tag === "given" ? (r.value as Term) : (d as Term));
               })))),
       [0]),
     // elems :: Map k v -> [v]
     prim("hydra.core.lib.maps.elems", schemeC(tyFn(tyMap(tyVar("k"), tyVar("v")), tyList(tyVar("v"))), ["k", "v"], [["k", ["ordering"]]]),
-      (_g, args) =>
+      (g, args) =>
         bind(need(args, 0, "elems"), (m) =>
           bind(asMap(m), (mp) =>
-            right({ tag: "list", value: [...libMaps.values(mp) as readonly Term[]] } as never)))),
+            bind(sortedEntries(g, mp), (es) =>
+              right({ tag: "list", value: es.map((kv) => kv[1]) } as never))))),
     // bimap :: (k1 -> k2) -> (v1 -> v2) -> Map k1 v1 -> Map k2 v2 — ordering on both keys
     prim("hydra.core.lib.maps.bimap", schemeC(tyFnCurried(tyFn(tyVar("k1"), tyVar("k2")), tyFn(tyVar("v1"), tyVar("v2")), tyMap(tyVar("k1"), tyVar("v1")), tyMap(tyVar("k2"), tyVar("v2"))),
         ["k1", "k2", "v1", "v2"], [["k1", ["ordering"]], ["k2", ["ordering"]]]),
@@ -1958,7 +2010,7 @@ const mapsPrimitives = (): readonly Primitive[] => {
                   if (rk.tag === "left") return rk as Either<HydraError, Term>;
                   const rv = (reduceTerm as never as (cx: InferenceContext, g: Graph, e: boolean, t: Term) => Either<HydraError, Term>)(getReduceCx(), g, true, appV);
                   if (rv.tag === "left") return rv as Either<HydraError, Term>;
-                  out.push([rk.value, rv.value] as const);
+                  out.push([stripKey(rk.value), rv.value] as const);
                 }
                 return right(mkMap(libMaps.fromList(out) as ReadonlyMap<unknown, Term>));
               }))))),
