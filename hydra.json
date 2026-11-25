@@ -55,6 +55,7 @@
     "hydra-build",
     "hydra-pg",
     "hydra-rdf",
+    "hydra-lsp",
     "hydra-rust",
     "hydra-ext",
     "hydra-bench"

@@ -1,0 +1,9 @@
+{
+  "packageFormatVersion": 1,
+  "name": "hydra-lsp",
+  "description": "The Hydra language server (LSP): protocol types, wire translation and analysis",
+  "sourceLanguage": "haskell",
+  "targetLanguages": ["haskell", "typescript"],
+  "dependencies": ["hydra-kernel"],
+  "publishable": false
+}
