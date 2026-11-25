@@ -41,6 +41,7 @@ import qualified Hydra.Sources.TypeScript.Manifest as TypeScriptManifest
 import qualified Hydra.Sources.Lisp.Manifest as LispManifest
 import qualified Hydra.Sources.Pg.Manifest as PgManifest
 import qualified Hydra.Sources.Rdf.Manifest as RdfManifest
+import qualified Hydra.Sources.Lsp.Manifest as LspManifest
 import qualified Hydra.Sources.Rust.Manifest as RustManifest
 import qualified Hydra.Sources.Wasm.Manifest as WasmManifest
 
@@ -137,6 +138,9 @@ hydraPgTestModules = PgManifest.testModules
 hydraPythonModules :: [Module]
 hydraPythonModules = []
 
+hydraLspModules :: [Module]
+hydraLspModules = LspManifest.mainModules
+
 hydraRdfModules :: [Module]
 hydraRdfModules = RdfManifest.mainModules
 
@@ -178,6 +182,7 @@ allDslModules =
   ++ TypeScriptManifest.mainDslModules
   ++ LispManifest.mainDslModules
   ++ PgManifest.mainDslModules
+  ++ LspManifest.mainDslModules
   ++ RdfManifest.mainDslModules
   ++ RustManifest.mainDslModules
   ++ WasmManifest.mainDslModules
@@ -194,6 +199,7 @@ allEncodingModules =
   ++ TypeScriptManifest.mainEncodingModules
   ++ LispManifest.mainEncodingModules
   ++ PgManifest.mainEncodingModules
+  ++ LspManifest.mainEncodingModules
   ++ RdfManifest.mainEncodingModules
   ++ RustManifest.mainEncodingModules
   ++ WasmManifest.mainEncodingModules
@@ -250,6 +256,7 @@ extRoutingInput =
   -- by bare name), analogous to hydra.java.gradle above. Declared explicitly so the
   -- fail-loud router routes it to hydra-python (#511).
   , ("hydra-python",     map moduleName hydraPythonModules ++ [ModuleName "hydra.python.pyproject"])
+  , ("hydra-lsp",        map moduleName hydraLspModules)
   , ("hydra-rdf",        map moduleName hydraRdfModules)
   , ("hydra-rust",       map moduleName hydraRustModules)
   , ("hydra-scala",      map moduleName hydraScalaModules)
@@ -339,6 +346,7 @@ hydraExtModules =
   ++ hydraLispModules
   ++ hydraPgModules
   ++ hydraPythonModules
+  ++ hydraLspModules
   ++ hydraRdfModules
   ++ hydraRustModules
   ++ hydraScalaModules

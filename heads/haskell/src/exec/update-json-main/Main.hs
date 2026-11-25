@@ -35,7 +35,7 @@ import Hydra.Sources.Ext (
   hydraBenchModules,
   hydraCoqModules, hydraGoModules, hydraJvmModules, hydraJavaModules, hydraTypeScriptModules,
   hydraPythonModules, hydraScalaModules, hydraLispModules,
-  hydraPgModules, hydraRdfModules, hydraRustModules, hydraWasmModules,
+  hydraPgModules, hydraLspModules, hydraRdfModules, hydraRustModules, hydraWasmModules,
   hydraBuildModules,
   hydraExtPackageModules,
   allDslModules, allEncodingModules, extRoutingInput)
@@ -194,6 +194,7 @@ main = do
         , hydraLispModules
         , hydraPgModules
         , hydraRdfModules
+        , hydraLspModules
         , hydraRustModules
         , hydraWasmModules
         , hydraBuildModules
