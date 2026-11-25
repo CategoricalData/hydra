@@ -44,7 +44,7 @@ term atOrFail =
 
 ## Unify type constraints and check the substitution
 term bindConstraints =
-  λflowCx, cx, constraints.eithers.bind
+  λflowCx, cx, schema, constraints.eithers.bind
       (eithers.bimap
         (λ`_e`.Error{
             inference = InferenceError{
@@ -123,7 +123,7 @@ term buildTypeApplicationTerm =
 
 ## Check that every constrained type variable's final resolved type is an instance of each class it was constrained to.
 term dischargeClassConstraints =
-  λfcx, cx, subst, constraints.
+  λfcx, schema, subst, constraints.
     let substMap := TypeSubst[] subst in
     let checkOne := λpair.
         let varName := first pair in
@@ -138,7 +138,7 @@ term dischargeClassConstraints =
                     classConstraint
                 in ifElse
                   (classIsSatisfiedByType
-                    (Graph[schemaTypes] cx)
+                    schema
                     className
                     resolvedType)
                   right(unit)
@@ -170,7 +170,7 @@ term extendContext =
 
 ## Finalize an inferred term by checking for unbound type variables, then normalizing type variables
 term finalizeInferredTerm =
-  λflowCx, cx, `term`.
+  λflowCx, cx, schema, `term`.
     let term2 := bindUnboundTypeVariables cx `term`
     in eithers.bind
       (checkForUnboundTypeVariables flowCx cx term2)
@@ -178,8 +178,8 @@ term finalizeInferredTerm =
 
 ## Infer a term's type and map over the result
 term forInferredTerm =
-  λfcx, cx, `term`, desc, f.eithers.bind
-      (inferTypeOfTerm fcx cx `term` desc)
+  λfcx, cx, schema, `term`, desc, f.eithers.bind
+      (inferTypeOfTerm fcx cx schema `term` desc)
       (λrp.right((f rp, InferenceResult[context] rp)))
 
 ## Get all free variables in a graph's bound types
@@ -222,6 +222,7 @@ term headOrFail =
 term inferGraphTypes =
   λfcx0, bindings0, g0.
     let fcx := fcx0 in
+    let schema := Graph[schemaTypes] g0 in
     let let0 := Let{bindings = bindings0, body = Term{`unit`}} in
     let fromLetTerm := λl.
         let bindings := Let[bindings] l in
@@ -239,18 +240,18 @@ term inferGraphTypes =
           typeVariables = Graph[typeVariables] rawG} in
         (g, bindings) in
     eithers.bind
-      (inferTypeOfTerm fcx g0 Term{`let` = let0} "graph term")
+      (inferTypeOfTerm fcx g0 schema Term{`let` = let0} "graph term")
       (λresult.
         let fcx2 := InferenceResult[context] result in
         let `term` := InferenceResult[`term`] result in
         eithers.bind
           (dischargeClassConstraints
             fcx2
-            g0
+            schema
             (InferenceResult[subst] result)
             (InferenceResult[classConstraints] result))
           (λ`_`.eithers.bind
-              (finalizeInferredTerm fcx2 g0 `term`)
+              (finalizeInferredTerm fcx2 g0 schema `term`)
               (λfinalized.cases(Term){
                   `let` = λl.right((fromLetTerm l, fcx2)),
                   variable = λ`_`.left(Error{
@@ -263,18 +264,20 @@ term inferGraphTypes =
 
 ## Infer the type of a term in a given inference context, running the same soundness tail (class-constraint discharge and finalization) as the other top-level entry points
 term inferInGraphContext =
-  λfcx, cx, `term`.eithers.bind
-      (inferTypeOfTerm fcx cx `term` "single term")
+  λfcx, cx, `term`.
+    let schema := Graph[schemaTypes] cx
+    in eithers.bind
+      (inferTypeOfTerm fcx cx schema `term` "single term")
       (λresult.
         let fcx2 := InferenceResult[context] result
         in eithers.bind
           (dischargeClassConstraints
             fcx2
-            cx
+            schema
             (InferenceResult[subst] result)
             (InferenceResult[classConstraints] result))
           (λ`_`.eithers.bind
-              (finalizeInferredTerm fcx2 cx (InferenceResult[`term`] result))
+              (finalizeInferredTerm fcx2 cx schema (InferenceResult[`term`] result))
               (λfinalized.right(InferenceResult{
                   `term` = finalized,
                   `type` = InferenceResult[`type`] result,
@@ -284,7 +287,7 @@ term inferInGraphContext =
 
 ## Infer types for multiple terms, propagating class constraints from sub-expressions
 term inferMany =
-  λfcx, cx, pairs.
+  λfcx, cx, schema, pairs.
     let emptyResult := right((([], ([], (idTypeSubst, maps.empty))), fcx))
     in optionals.match
       (lists.uncons pairs)
@@ -295,7 +298,7 @@ term inferMany =
         let e := first headPair in
         let desc := second headPair in
         eithers.bind
-          (inferTypeOfTerm fcx cx e desc)
+          (inferTypeOfTerm fcx cx schema e desc)
           (λresult1.
             let fcx2 := InferenceResult[context] result1 in
             let e1 := InferenceResult[`term`] result1 in
@@ -303,7 +306,7 @@ term inferMany =
             let s1 := InferenceResult[subst] result1 in
             let c1 := InferenceResult[classConstraints] result1 in
             eithers.bind
-              (inferMany fcx2 (substInContext s1 cx) tl)
+              (inferMany fcx2 (substInContext s1 cx) schema tl)
               (λrp2.
                 let result2 := first rp2 in
                 let fcx3 := second rp2 in
@@ -311,7 +314,7 @@ term inferMany =
                 let t2 := first (second result2) in
                 let s2 := first (second (second result2)) in
                 let c2 := second (second (second result2)) in
-                let c1Subst := substInClassConstraints (Graph[schemaTypes] cx) s2 c1 in
+                let c1Subst := substInClassConstraints schema s2 c1 in
                 let mergedConstraints := mergeClassConstraints c1Subst c2 in
                 right((
                   (
@@ -322,22 +325,23 @@ term inferMany =
 ## Map a possibly untyped term to a fully typed term and its type
 term inferTypeOf =
   λfcx, cx, `term`.
+    let schema := Graph[schemaTypes] cx in
     let letTerm := Term{
       `let` = Let{
         bindings = [Binding{name = Name{"ignoredVariableName"}, `term` = `term`, typeScheme = none}],
-        body = Term{literal = Literal{`string` = "ignoredBody"}}}}
-    in eithers.bind
-      (inferTypeOfTerm fcx cx letTerm "infer type of term")
+        body = Term{literal = Literal{`string` = "ignoredBody"}}}} in
+    eithers.bind
+      (inferTypeOfTerm fcx cx schema letTerm "infer type of term")
       (λresult.
         let fcx2 := InferenceResult[context] result
         in eithers.bind
           (dischargeClassConstraints
             fcx2
-            cx
+            schema
             (InferenceResult[subst] result)
             (InferenceResult[classConstraints] result))
           (λ`_`.eithers.bind
-              (finalizeInferredTerm fcx2 cx (InferenceResult[`term`] result))
+              (finalizeInferredTerm fcx2 cx schema (InferenceResult[`term`] result))
               (λfinalized.eithers.bind
                   (extract.model.let cx finalized)
                   (λletResult.
@@ -368,12 +372,12 @@ term inferTypeOf =
 
 ## Infer the type of an annotated term (Either version). Paper: inference.tex, rule Ann.
 term inferTypeOfAnnotatedTerm =
-  λfcx, cx, at.
+  λfcx, cx, schema, at.
     let `term` := AnnotatedTerm[body] at in
     let ann := AnnotatedTerm[annotation] at in
     let fcxBody := pushSubtermStep SubtermStep{annotatedBody} fcx in
     eithers.bind
-      (inferTypeOfTerm fcxBody cx `term` "annotated term")
+      (inferTypeOfTerm fcxBody cx schema `term` "annotated term")
       (λresult.
         let fcx2 := restoreTrace fcx (InferenceResult[context] result) in
         let iterm := InferenceResult[`term`] result in
@@ -381,7 +385,10 @@ term inferTypeOfAnnotatedTerm =
         let isubst := InferenceResult[subst] result in
         let iconstraints := InferenceResult[classConstraints] result in
         right(InferenceResult{
-          `term` = Term{annotated = AnnotatedTerm{body = iterm, annotation = ann}},
+          `term` = Term{
+            annotated = AnnotatedTerm{
+              body = iterm,
+              annotation = ann}},
           `type` = itype,
           subst = isubst,
           classConstraints = iconstraints,
@@ -389,12 +396,12 @@ term inferTypeOfAnnotatedTerm =
 
 ## Infer the type of a function application (Either version). Paper: inference.tex, rule App (elaboration form).
 term inferTypeOfApplication =
-  λfcx0, cx, app.
+  λfcx0, cx, schema, app.
     let e0 := Application[function] app in
     let e1 := Application[argument] app in
     let fcxFun := pushSubtermStep SubtermStep{applicationFunction} fcx0 in
     eithers.bind
-      (inferTypeOfTerm fcxFun cx e0 "lhs")
+      (inferTypeOfTerm fcxFun cx schema e0 "lhs")
       (λlhsResult.
         let fcx2 := restoreTrace fcx0 (InferenceResult[context] lhsResult) in
         let a := InferenceResult[`term`] lhsResult in
@@ -403,7 +410,7 @@ term inferTypeOfApplication =
         let c0 := InferenceResult[classConstraints] lhsResult in
         let fcxArg := pushSubtermStep SubtermStep{applicationArgument} fcx2 in
         eithers.bind
-          (inferTypeOfTerm fcxArg (substInContext s0 cx) e1 "rhs")
+          (inferTypeOfTerm fcxArg (substInContext s0 cx) schema e1 "rhs")
           (λrhsResult.
             let fcx3 := restoreTrace fcx0 (InferenceResult[context] rhsResult) in
             let b := InferenceResult[`term`] rhsResult in
@@ -426,7 +433,10 @@ term inferTypeOfApplication =
                   fcx4
                   (Graph[schemaTypes] cx)
                   (substInType s1 t0)
-                  Type{function = FunctionType{domain = t1, codomain = Type{variable = v}}}
+                  Type{
+                    function = FunctionType{
+                      domain = t1,
+                      codomain = Type{variable = v}}}
                   "application lhs"))
               (λs2.eithers.bind
                   (checkTypeSubst fcx4 cx s2)
@@ -440,10 +450,10 @@ term inferTypeOfApplication =
                     let rType := substInType s2 Type{variable = v} in
                     let rSubst := composeTypeSubstList [s0, s1, s2] in
                     let c0Subst := substInClassConstraints
-                        (Graph[schemaTypes] cx)
+                        schema
                         s2
-                        (substInClassConstraints (Graph[schemaTypes] cx) s1 c0) in
-                    let c1Subst := substInClassConstraints (Graph[schemaTypes] cx) s2 c1 in
+                        (substInClassConstraints schema s1 c0) in
+                    let c1Subst := substInClassConstraints schema s2 c1 in
                     let rConstraints := mergeClassConstraints c0Subst c1Subst in
                     right(InferenceResult{
                       `term` = rExpr,
@@ -454,7 +464,7 @@ term inferTypeOfApplication =
 
 ## Infer the type of a case statement (Either version). Paper: inference.tex, rules Case and Case_d.
 term inferTypeOfCaseStatement =
-  λfcx, cx, caseStmt.
+  λfcx, cx, schema, caseStmt.
     let tname := CaseStatement[typeName] caseStmt in
     let dflt := CaseStatement[default] caseStmt in
     let match := CaseStatement[`cases`] caseStmt in
@@ -472,7 +482,12 @@ term inferTypeOfCaseStatement =
             let fcxDflt := pushSubtermStep SubtermStep{casesDefault} fcx2
             in eithers.bind
               (eithers.mapOptional
-                (λt.inferTypeOfTerm fcxDflt cx t (strings.concat ["case ", Name[] tname, ".<default>"]))
+                (λt.inferTypeOfTerm
+                    fcxDflt
+                    cx
+                    schema
+                    t
+                    (strings.concat ["case ", Name[] tname, ".<default>"]))
                 dflt)
               (λdfltRp.
                 let dfltResult := dfltRp in
@@ -485,6 +500,7 @@ term inferTypeOfCaseStatement =
                   (inferMany
                     fcx3
                     cx
+                    schema
                     (lists.map
                       (λf.(CaseAlternative[handler] f, strings.concat ["case ", Name[] tname, ".", Name[] (CaseAlternative[name] f)]))
                       match))
@@ -537,6 +553,7 @@ term inferTypeOfCaseStatement =
                       (mapConstraints
                         fcx5
                         cx
+                        schema
                         (λsubst.yieldWithConstraints
                             fcx5
                             (buildTypeApplicationTerm
@@ -558,22 +575,20 @@ term inferTypeOfCaseStatement =
                                 domain = nominalApplication
                                     tname
                                     (lists.map
-                                      (λx.Type{variable = x})
+                                      (λx.Type{
+                                          variable = x})
                                       svars),
                                 codomain = cod}}
                             (composeTypeSubstList
                               (lists.concat
                                 [optionals.toList (optionals.map InferenceResult[subst] dfltResult), [isubst, subst]]))
-                            (substInClassConstraints
-                              (Graph[schemaTypes] cx)
-                              subst
-                              allElemConstraints))
+                            (substInClassConstraints schema subst allElemConstraints))
                         (lists.concat [dfltConstraints, caseConstraints]))
                       (λmcResult.right(mcResult))))))
 
 ## Infer the type of a collection. The classNames parameter specifies type classes (e.g. ordering) that the element type variable must satisfy. Paper: inference.tex, shared implementation of the collection introduction rules (Lst_0/Lst_+, Set_0/Set_+).
 term inferTypeOfCollection =
-  λfcx, cx, typCons, trmCons, desc, classNames, els.
+  λfcx, cx, schema, typCons, trmCons, desc, classNames, els.
     let varResult := freshName fcx in
     let var := first varResult in
     let fcx2 := second varResult in
@@ -599,6 +614,7 @@ term inferTypeOfCollection =
         (inferMany
           fcx2
           cx
+          schema
           (lists.zip
             els
             (lists.map
@@ -625,6 +641,7 @@ term inferTypeOfCollection =
             (mapConstraints
               fcx3
               cx
+              schema
               (λsubst2.
                 let iterm := trmCons terms in
                 let itype := typCons Type{variable = var} in
@@ -635,7 +652,7 @@ term inferTypeOfCollection =
                   itype
                   isubst
                   (substInClassConstraints
-                    (Graph[schemaTypes] cx)
+                    schema
                     subst2
                     allConstraints))
               constraints)
@@ -643,9 +660,9 @@ term inferTypeOfCollection =
 
 ## Infer the type of an either value (Either version). Paper: inference.tex, rules Eith_L and Eith_R.
 term inferTypeOfEither =
-  λfcx, cx, e.eithers.either
+  λfcx, cx, schema, e.eithers.either
       (λl.eithers.bind
-          (inferTypeOfTerm fcx cx l "either left value")
+          (inferTypeOfTerm fcx cx schema l "either left value")
           (λr1.
             let fcx2 := InferenceResult[context] r1 in
             let iterm := InferenceResult[`term`] r1 in
@@ -666,7 +683,7 @@ term inferTypeOfEither =
             let eitherType := Type{`either` = EitherType{`left` = leftType, `right` = rightType}} in
             right(yieldChecked fcx3 termWithBothTypes eitherType subst)))
       (λr.eithers.bind
-          (inferTypeOfTerm fcx cx r "either right value")
+          (inferTypeOfTerm fcx cx schema r "either right value")
           (λr1.
             let fcx2 := InferenceResult[context] r1 in
             let iterm := InferenceResult[`term`] r1 in
@@ -690,14 +707,14 @@ term inferTypeOfEither =
 
 ## Infer the type of a union injection (Either version). Paper: inference.tex, rule Inj.
 term inferTypeOfInjection =
-  λfcx, cx, injection.
+  λfcx, cx, schema, injection.
     let tname := Injection[typeName] injection in
     let field := Injection[field] injection in
     let fname := Field[name] field in
     let `term` := Field[`term`] field in
     let fcxInj := pushSubtermStep SubtermStep{injectField = fname} fcx in
     eithers.bind
-      (inferTypeOfTerm fcxInj cx `term` "injected term")
+      (inferTypeOfTerm fcxInj cx schema `term` "injected term")
       (λresult.
         let fcx2 := restoreTrace fcx (InferenceResult[context] result)
         in eithers.bind
@@ -719,6 +736,7 @@ term inferTypeOfInjection =
                       (mapConstraints
                         fcx3
                         cx
+                        schema
                         (λsubst.ifElse
                             (maps.isEmpty iconstraints)
                             (yield
@@ -749,16 +767,13 @@ term inferTypeOfInjection =
                                 tname
                                 (lists.map (λx.Type{variable = x}) svars))
                               (composeTypeSubst isubst subst)
-                              (substInClassConstraints
-                                (Graph[schemaTypes] cx)
-                                subst
-                                iconstraints)))
+                              (substInClassConstraints schema subst iconstraints)))
                         [TypeConstraint{`left` = ftyp, `right` = ityp, comment = "schema type of injected field"}])
                       (λmcResult.right(mcResult))))))
 
 ## Infer the type of a lambda function (Either version). Paper: inference.tex, rule Abs (elaboration form).
 term inferTypeOfLambda =
-  λfcx, cx, lambda.
+  λfcx, cx, schema, lambda.
     let var := Lambda[parameter] lambda in
     let body := Lambda[body] lambda in
     let vdomResult := freshName fcx in
@@ -770,20 +785,24 @@ term inferTypeOfLambda =
         cx in
     let fcxBody := pushSubtermStep SubtermStep{lambdaBody} fcx2 in
     eithers.bind
-      (inferTypeOfTerm fcxBody cx2 body "lambda body")
+      (inferTypeOfTerm fcxBody cx2 schema body "lambda body")
       (λresult.
         let fcx3 := restoreTrace fcx2 (InferenceResult[context] result) in
         let iterm := InferenceResult[`term`] result in
         let icod := InferenceResult[`type`] result in
         let isubst := InferenceResult[subst] result in
         let rdom := substInType isubst dom in
-        let rterm := Term{lambda = Lambda{parameter = var, domain = given(rdom), body = iterm}} in
+        let rterm := Term{
+          lambda = Lambda{
+            parameter = var,
+            domain = given(rdom),
+            body = iterm}} in
         let rtype := Type{function = FunctionType{domain = rdom, codomain = icod}} in
         let vars := sets.unions
             [freeVariablesInType rdom, freeVariablesInType icod, freeVariablesInContext (substInContext isubst cx2)] in
         let cx3 := substInContext isubst cx in
         let iconstraints := substInClassConstraints
-            (Graph[schemaTypes] cx)
+            schema
             isubst
             (InferenceResult[classConstraints] result) in
         right(InferenceResult{
@@ -795,7 +814,7 @@ term inferTypeOfLambda =
 
 ## Normalize a let term before inferring its type (Either version). The bindings are partitioned into strongly connected components and reorganized as nested lets, one let per SCC, in dependency order. This is the standard Hindley-Milner treatment of mutual recursion: each SCC is generalized once at its boundary (sound, because nothing inside the cluster sees a polymorphic instance of its siblings), and acyclic bindings generalize individually as usual. Paper: inference.tex, the SCC treatment of cycles (section introduction) and the remark following the elaboration-form Let rule.
 term inferTypeOfLet =
-  λfcx0, cx, let0.
+  λfcx0, cx, schema, let0.
     let fcx := fcx0 in
     let bindings0 := Let[bindings] let0 in
     let body0 := Let[body] let0 in
@@ -811,7 +830,9 @@ term inferTypeOfLet =
     let createLet := λe, group.Term{
           `let` = Let{
             bindings = optionals.givens
-                (lists.map (λn.maps.lookup n bindingMap) group),
+                (lists.map
+                  (λn.maps.lookup n bindingMap)
+                  group),
             body = e}} in
     let rewrittenLet := lists.foldl createLet body0 (lists.reverse groups) in
     let restoreLet := λiterm.
@@ -837,7 +858,9 @@ term inferTypeOfLet =
         Term{
           `let` = Let{
             bindings = optionals.givens
-                (lists.map (λn.maps.lookup n bindingMap2) names),
+                (lists.map
+                  (λn.maps.lookup n bindingMap2)
+                  names),
             body = e}} in
     let rewriteResult := λiresult.
         let fcxR := InferenceResult[context] iresult in
@@ -852,14 +875,14 @@ term inferTypeOfLet =
           classConstraints = iconstraints,
           context = fcxR} in
     let res := cases(Term){
-        `let` = λl.inferTypeOfLetNormalized fcx cx l,
-        `_` = inferTypeOfTerm fcx cx rewrittenLet "empty let term"}
+        `let` = λl.inferTypeOfLetNormalized fcx cx schema l,
+        `_` = inferTypeOfTerm fcx cx schema rewrittenLet "empty let term"}
         rewrittenLet in
     eithers.map rewriteResult res
 
 ## Infer the type of a let (letrec) term which is already in a normal form (Either version). Paper: inference.tex, rule Let (elaboration form).
 term inferTypeOfLetNormalized =
-  λfcx0, cx0, letTerm.
+  λfcx0, cx0, schema, letTerm.
     let fcx := fcx0 in
     let bins0 := Let[bindings] letTerm in
     let body0 := Let[body] letTerm in
@@ -876,7 +899,7 @@ term inferTypeOfLetNormalized =
             tbins0))
         cx0 in
     eithers.bind
-      (inferTypesOfTemporaryBindings fcx2 cx1 bins0)
+      (inferTypesOfTemporaryBindings fcx2 cx1 schema bins0)
       (λirRp.
         let inferredResult := first irRp in
         let fcx3 := second irRp in
@@ -905,7 +928,7 @@ term inferTypeOfLetNormalized =
               (λ`_`.
                 let g2base := substInContext (composeTypeSubst s1 s2) cx0 in
                 let constraintsWithS2 := substInClassConstraints
-                    (Graph[schemaTypes] cx0)
+                    schema
                     s2
                     inferredConstraints in
                 let composedSubst := composeTypeSubst s1 s2 in
@@ -919,7 +942,7 @@ term inferTypeOfLetNormalized =
                     maps.empty
                     bins0 in
                 let originalConstraintsSubst := substInClassConstraints
-                    (Graph[schemaTypes] cx0)
+                    schema
                     composedSubst
                     originalBindingConstraints in
                 let allInferredConstraints := mergeClassConstraints
@@ -943,9 +966,11 @@ term inferTypeOfLetNormalized =
                     (lists.map (λt.generalize g2 (substInType s2 t)) tbins1) in
                 let fcx3Body := pushSubtermStep SubtermStep{letBody} fcx3 in
                 eithers.bind
-                  (inferTypeOfTerm fcx3Body (extendContext tsbins1 g2) body0 "let body")
+                  (inferTypeOfTerm fcx3Body (extendContext tsbins1 g2) schema body0 "let body")
                   (λbodyResult.
-                    let fcx4 := restoreTrace fcx3 (InferenceResult[context] bodyResult) in
+                    let fcx4 := restoreTrace
+                        fcx3
+                        (InferenceResult[context] bodyResult) in
                     let body1 := InferenceResult[`term`] bodyResult in
                     let tbody := InferenceResult[`type`] bodyResult in
                     let sbody := InferenceResult[subst] bodyResult in
@@ -976,13 +1001,16 @@ term inferTypeOfLetNormalized =
                               (composeTypeSubst sbody s2)
                               typeLambdaTerm,
                           typeScheme = given(finalTs)} in
-                    let bins1 := lists.map createBinding (lists.zip tsbins1 bterms1Subst) in
+                    let bins1 := lists.map
+                        createBinding
+                        (lists.zip tsbins1 bterms1Subst) in
                     let bodyConstraints := substInClassConstraints
-                        (Graph[schemaTypes] cx0)
+                        schema
                         sbody
-                        (InferenceResult[classConstraints] bodyResult) in
+                        (InferenceResult[classConstraints]
+                          bodyResult) in
                     let bindingConstraintsSubst := substInClassConstraints
-                        (Graph[schemaTypes] cx0)
+                        schema
                         sbody
                         constraintsWithS2 in
                     let allConstraints := mergeClassConstraints
@@ -1000,7 +1028,14 @@ term inferTypeOfLetNormalized =
 
 ## Infer the type of a list (Either version). Paper: inference.tex, rules Lst_0 and Lst_+.
 term inferTypeOfList =
-  λfcx, cx.inferTypeOfCollection fcx cx (λx.Type{`list` = x}) (λx.Term{`list` = x}) "list element" sets.empty
+  λfcx, cx, schema.inferTypeOfCollection
+      fcx
+      cx
+      schema
+      (λx.Type{`list` = x})
+      (λx.Term{`list` = x})
+      "list element"
+      sets.empty
 
 ## Infer the type of a literal. Paper: inference.tex, rule Lit.
 term inferTypeOfLiteral =
@@ -1013,7 +1048,7 @@ term inferTypeOfLiteral =
 
 ## Infer the type of a map (Either version). Paper: inference.tex, rules Map_0 and Map_+.
 term inferTypeOfMap =
-  λfcx, cx, m.
+  λfcx, cx, schema, m.
     let kvarResult := freshName fcx in
     let kvar := first kvarResult in
     let fcx2 := second kvarResult in
@@ -1024,7 +1059,8 @@ term inferTypeOfMap =
         kvar
         TypeVariableConstraints{
           classes = sets.singleton
-              TypeClassConstraint{simple = Name{"ordering"}}} in
+              TypeClassConstraint{
+                simple = Name{"ordering"}}} in
     ifElse
       (maps.isEmpty m)
       right(yieldWithConstraints
@@ -1034,7 +1070,7 @@ term inferTypeOfMap =
         idTypeSubst
         keyConstraints)
       (eithers.bind
-        (inferMany fcx3 cx (lists.map (λk.(k, "map key")) (maps.keys m)))
+        (inferMany fcx3 cx schema (lists.map (λk.(k, "map key")) (maps.keys m)))
         (λkRp.
           let kResults := first kRp in
           let fcx4 := second kRp in
@@ -1043,7 +1079,11 @@ term inferTypeOfMap =
           let ksubst := first (second (second kResults)) in
           let kElemConstraints := second (second (second kResults)) in
           eithers.bind
-            (inferMany fcx4 (substInContext ksubst cx) (lists.map (λv.(v, "map value")) (maps.elems m)))
+            (inferMany
+              fcx4
+              (substInContext ksubst cx)
+              schema
+              (lists.map (λv.(v, "map value")) (maps.elems m)))
             (λvRp.
               let vResults := first vRp in
               let fcx5 := second vRp in
@@ -1070,22 +1110,27 @@ term inferTypeOfMap =
                 (mapConstraints
                   fcx5
                   cx
+                  schema
                   (λsubst.yieldWithConstraints
                       fcx5
                       Term{`map` = maps.fromList (lists.zip kterms vterms)}
-                      Type{`map` = MapType{keys = Type{variable = kvar}, values = Type{variable = vvar}}}
+                      Type{
+                        `map` = MapType{
+                          keys = Type{variable = kvar},
+                          values = Type{variable = vvar}}}
                       (composeTypeSubstList [ksubst, vsubst, subst])
-                      (substInClassConstraints (Graph[schemaTypes] cx) subst allMapConstraints))
+                      (substInClassConstraints schema subst allMapConstraints))
                   (lists.concat [kcons, vcons]))
                 (λmcResult.right(mcResult)))))
 
 ## Infer the type of a Maybe value. Paper: inference.tex, rules Opt_0 and Opt_1.
 term inferTypeOfOptional =
-  λfcx, cx, m.
+  λfcx, cx, schema, m.
     let trmCons := λterms.Term{`optional` = lists.head terms}
     in inferTypeOfCollection
       fcx
       cx
+      schema
       (λx.Type{`optional` = x})
       trmCons
       "optional element"
@@ -1094,8 +1139,8 @@ term inferTypeOfOptional =
 
 ## Infer the type of a pair (Either version). Paper: inference.tex, rule Pair.
 term inferTypeOfPair =
-  λfcx, cx, p.eithers.bind
-      (inferMany fcx cx [(first p, "pair first element"), (second p, "pair second element")])
+  λfcx, cx, schema, p.eithers.bind
+      (inferMany fcx cx schema [(first p, "pair first element"), (second p, "pair second element")])
       (λrp.
         let results := first rp in
         let fcx2 := second rp in
@@ -1129,7 +1174,7 @@ term inferTypeOfPair =
 
 ## Infer the type of a record projection (Either version). Paper: inference.tex, rule Proj.
 term inferTypeOfProjection =
-  λfcx, cx, proj.
+  λfcx, cx, schema, proj.
     let tname := Projection[typeName] proj in
     let fname := Projection[fieldName] proj in
     eithers.bind
@@ -1160,7 +1205,7 @@ term inferTypeOfProjection =
 
 ## Infer the type of a record (Either version). Paper: inference.tex, rule Rec.
 term inferTypeOfRecord =
-  λfcx, cx, `record`.
+  λfcx, cx, schema, `record`.
     let tname := Record[typeName] `record` in
     let fields := Record[fields] `record` in
     let fnames := lists.map Field[name] fields in
@@ -1173,7 +1218,10 @@ term inferTypeOfRecord =
           (inferMany
             fcx2
             cx
-            (lists.map (λf.(Field[`term`] f, strings.concat2 "field " (Name[] (Field[name] f)))) fields))
+            schema
+            (lists.map
+              (λf.(Field[`term`] f, strings.concat2 "field " (Name[] (Field[name] f))))
+              fields))
           (λrp.
             let results := first rp in
             let fcx3 := second rp in
@@ -1192,6 +1240,7 @@ term inferTypeOfRecord =
               (mapConstraints
                 fcx3
                 cx
+                schema
                 (λsubst.yieldWithConstraints
                     fcx3
                     (buildTypeApplicationTerm
@@ -1205,15 +1254,16 @@ term inferTypeOfRecord =
                               iterms}})
                     (nominalApplication tname (lists.map (λx.Type{variable = x}) svars))
                     (composeTypeSubst isubst subst)
-                    (substInClassConstraints (Graph[schemaTypes] cx) subst recElemConstraints))
+                    (substInClassConstraints schema subst recElemConstraints))
                 [TypeConstraint{`left` = stype, `right` = ityp, comment = "schema type of record"}])
               (λmcResult.right(mcResult))))
 
 ## Infer the type of a set (Either version). Paper: inference.tex, rules Set_0 and Set_+.
 term inferTypeOfSet =
-  λfcx, cx, s.inferTypeOfCollection
+  λfcx, cx, schema, s.inferTypeOfCollection
       fcx
       cx
+      schema
       (λx.Type{`set` = x})
       (λterms.Term{`set` = sets.fromList terms})
       "set element"
@@ -1222,38 +1272,38 @@ term inferTypeOfSet =
 
 ## Infer the type of a given term (Either version)
 term inferTypeOfTerm =
-  λfcx, cx, `term`, desc.
+  λfcx, cx, schema, `term`, desc.
     let fcx2 := fcx
     in cases(Term){
-      annotated = λa.inferTypeOfAnnotatedTerm fcx2 cx a,
-      application = λa.inferTypeOfApplication fcx2 cx a,
-      `cases` = λc.inferTypeOfCaseStatement fcx2 cx c,
-      `either` = λe.inferTypeOfEither fcx2 cx e,
-      lambda = λl.inferTypeOfLambda fcx2 cx l,
-      `let` = λl.inferTypeOfLet fcx2 cx l,
-      `list` = λels.inferTypeOfList fcx2 cx els,
+      annotated = λa.inferTypeOfAnnotatedTerm fcx2 cx schema a,
+      application = λa.inferTypeOfApplication fcx2 cx schema a,
+      `cases` = λc.inferTypeOfCaseStatement fcx2 cx schema c,
+      `either` = λe.inferTypeOfEither fcx2 cx schema e,
+      lambda = λl.inferTypeOfLambda fcx2 cx schema l,
+      `let` = λl.inferTypeOfLet fcx2 cx schema l,
+      `list` = λels.inferTypeOfList fcx2 cx schema els,
       literal = λl.right(inferTypeOfLiteral fcx2 l),
-      `map` = λm.inferTypeOfMap fcx2 cx m,
-      `optional` = λm.inferTypeOfOptional fcx2 cx m,
-      pair = λp.inferTypeOfPair fcx2 cx p,
-      `project` = λp.inferTypeOfProjection fcx2 cx p,
-      `record` = λr.inferTypeOfRecord fcx2 cx r,
-      `set` = λs.inferTypeOfSet fcx2 cx s,
-      typeApplication = λtt.inferTypeOfTypeApplication fcx2 cx tt,
-      typeLambda = λta.inferTypeOfTypeLambda fcx2 cx ta,
-      `inject` = λi.inferTypeOfInjection fcx2 cx i,
+      `map` = λm.inferTypeOfMap fcx2 cx schema m,
+      `optional` = λm.inferTypeOfOptional fcx2 cx schema m,
+      pair = λp.inferTypeOfPair fcx2 cx schema p,
+      `project` = λp.inferTypeOfProjection fcx2 cx schema p,
+      `record` = λr.inferTypeOfRecord fcx2 cx schema r,
+      `set` = λs.inferTypeOfSet fcx2 cx schema s,
+      typeApplication = λtt.inferTypeOfTypeApplication fcx2 cx schema tt,
+      typeLambda = λta.inferTypeOfTypeLambda fcx2 cx schema ta,
+      `inject` = λi.inferTypeOfInjection fcx2 cx schema i,
       `unit` = λ`_`.right(inferTypeOfUnit fcx2),
-      `unwrap` = λtname.inferTypeOfUnwrap fcx2 cx tname,
-      variable = λname.inferTypeOfVariable fcx2 cx name,
-      `wrap` = λw.inferTypeOfWrappedTerm fcx2 cx w}
+      `unwrap` = λtname.inferTypeOfUnwrap fcx2 cx schema tname,
+      variable = λname.inferTypeOfVariable fcx2 cx schema name,
+      `wrap` = λw.inferTypeOfWrappedTerm fcx2 cx schema w}
       `term`
 
 ## Infer the type of a type application (Either version). Paper: inference.tex, type application terms in the elaborated Term grammar.
 term inferTypeOfTypeApplication =
-  λfcx, cx, tt.
+  λfcx, cx, schema, tt.
     let fcxBody := pushSubtermStep SubtermStep{typeApplicationBody} fcx
     in eithers.bind
-      (inferTypeOfTerm fcxBody cx (TypeApplicationTerm[body] tt) "type application term")
+      (inferTypeOfTerm fcxBody cx schema (TypeApplicationTerm[body] tt) "type application term")
       (λresult.
         let fcx2 := restoreTrace fcx (InferenceResult[context] result)
         in right(InferenceResult{
@@ -1265,10 +1315,10 @@ term inferTypeOfTypeApplication =
 
 ## Infer the type of a type abstraction (Either version). Paper: inference.tex, type abstraction terms in the elaborated Term grammar.
 term inferTypeOfTypeLambda =
-  λfcx, cx, ta.
+  λfcx, cx, schema, ta.
     let fcxBody := pushSubtermStep SubtermStep{typeLambdaBody} fcx
     in eithers.bind
-      (inferTypeOfTerm fcxBody cx (TypeLambda[body] ta) "type abstraction")
+      (inferTypeOfTerm fcxBody cx schema (TypeLambda[body] ta) "type abstraction")
       (λresult.
         let fcx2 := restoreTrace fcx (InferenceResult[context] result)
         in right(InferenceResult{
@@ -1289,7 +1339,7 @@ term inferTypeOfUnit =
 
 ## Infer the type of an unwrap operation (Either version). Paper: inference.tex, rule Unwr.
 term inferTypeOfUnwrap =
-  λfcx, cx, tname.eithers.bind
+  λfcx, cx, schema, tname.eithers.bind
       (requireSchemaType fcx (Graph[schemaTypes] cx) tname)
       (λstRp.
         let schemaType := first stRp in
@@ -1305,13 +1355,15 @@ term inferTypeOfUnwrap =
                 function = FunctionType{
                   domain = nominalApplication
                       tname
-                      (lists.map (λx.Type{variable = x}) svars),
+                      (lists.map
+                        (λx.Type{variable = x})
+                        svars),
                   codomain = wtyp}}
               idTypeSubst)))
 
 ## Infer the type of a variable (Either version). Paper: inference.tex, rule Var (elaboration form), with rule Prim as the primitive-namespace fallback.
 term inferTypeOfVariable =
-  λfcx, cx, name.optionals.match
+  λfcx, cx, schema, name.optionals.match
       (maps.lookup name (Graph[boundTypes] cx))
       (optionals.match
         (optionals.map
@@ -1325,7 +1377,7 @@ term inferTypeOfVariable =
           let constraints := TypeScheme[constraints] ts in
           right(yieldCheckedWithConstraints
             fcx2
-            cx
+            schema
             (buildTypeApplicationTerm (TypeScheme[variables] ts) Term{variable = name})
             (TypeScheme[body] ts)
             idTypeSubst
@@ -1346,7 +1398,7 @@ term inferTypeOfVariable =
 
 ## Infer the type of a wrapped term (Either version). Paper: inference.tex, rule Wrp.
 term inferTypeOfWrappedTerm =
-  λfcx, cx, wt.
+  λfcx, cx, schema, wt.
     let tname := WrappedTerm[typeName] wt in
     let `term` := WrappedTerm[body] wt in
     eithers.bind
@@ -1356,7 +1408,7 @@ term inferTypeOfWrappedTerm =
         let fcx2 := second stRp in
         let fcxBody := pushSubtermStep SubtermStep{wrapBody} fcx2 in
         eithers.bind
-          (inferTypeOfTerm fcxBody cx `term` "wrapped term")
+          (inferTypeOfTerm fcxBody cx schema `term` "wrapped term")
           (λresult.
             let fcx3 := restoreTrace fcx2 (InferenceResult[context] result) in
             let svars := TypeScheme[variables] schemaType in
@@ -1369,6 +1421,7 @@ term inferTypeOfWrappedTerm =
               (mapConstraints
                 fcx3
                 cx
+                schema
                 (λsubst.yield
                     fcx3
                     (buildTypeApplicationTerm
@@ -1381,7 +1434,7 @@ term inferTypeOfWrappedTerm =
 
 ## Infer types for temporary let bindings (Either version)
 term inferTypesOfTemporaryBindings =
-  λfcx, cx, bins.
+  λfcx, cx, schema, bins.
     let emptyResult := right((([], ([], (idTypeSubst, maps.empty))), fcx))
     in optionals.match
       (lists.uncons bins)
@@ -1393,7 +1446,12 @@ term inferTypesOfTemporaryBindings =
         let v := Binding[`term`] binding in
         let fcxBind := pushSubtermStep SubtermStep{letBinding = k} fcx in
         eithers.bind
-          (inferTypeOfTerm fcxBind cx v (strings.concat ["temporary let binding '", Name[] k, "'"]))
+          (inferTypeOfTerm
+            fcxBind
+            cx
+            schema
+            v
+            (strings.concat ["temporary let binding '", Name[] k, "'"]))
           (λresult1.
             let fcx2 := restoreTrace fcx (InferenceResult[context] result1) in
             let j := InferenceResult[`term`] result1 in
@@ -1423,16 +1481,17 @@ term inferTypesOfTemporaryBindings =
                         (TypeScheme[body] instantiatedTs)
                         `u_prime`
                         "original binding type"))
-                    (λunifySubst.right(substInClassConstraints
-                        (Graph[schemaTypes] cx)
-                        unifySubst
-                        freshConstraints))))
+                    (λunifySubst.right(substInClassConstraints schema unifySubst freshConstraints))))
               (λoriginalBindingConstraints.
                 let c1 := mergeClassConstraints
                     c1Inferred
                     originalBindingConstraints
                 in eithers.bind
-                  (inferTypesOfTemporaryBindings fcx2 (substInContext u cx) tl)
+                  (inferTypesOfTemporaryBindings
+                    fcx2
+                    (substInContext u cx)
+                    schema
+                    tl)
                   (λrp2.
                     let result2 := first rp2 in
                     let fcx3 := second rp2 in
@@ -1441,10 +1500,7 @@ term inferTypesOfTemporaryBindings =
                     let restPair := second (second result2) in
                     let r := first restPair in
                     let c2 := second restPair in
-                    let c1Subst := substInClassConstraints
-                        (Graph[schemaTypes] cx)
-                        r
-                        c1 in
+                    let c1Subst := substInClassConstraints schema r c1 in
                     let mergedConstraints := mergeClassConstraints c1Subst c2 in
                     right((
                       (
@@ -1458,7 +1514,7 @@ term isUnbound =
 
 ## Map over type constraints after unification
 term mapConstraints =
-  λflowCx, cx, f, constraints.eithers.bind
+  λflowCx, cx, schema, f, constraints.eithers.bind
       (eithers.bimap
         (λ`_e`.Error{
             inference = InferenceError{
@@ -1520,13 +1576,10 @@ term yieldChecked =
 
 ## Create a checked inference result with class constraints
 term yieldCheckedWithConstraints =
-  λfcx, cx, `term`, typ, subst, constraints.
+  λfcx, schema, `term`, typ, subst, constraints.
     let iterm := substTypesInTerm subst `term` in
     let itype := substInType subst typ in
-    let iconstraints := substInClassConstraints
-        (Graph[schemaTypes] cx)
-        subst
-        constraints in
+    let iconstraints := substInClassConstraints schema subst constraints in
     InferenceResult{
       `term` = iterm,
       `type` = itype,
