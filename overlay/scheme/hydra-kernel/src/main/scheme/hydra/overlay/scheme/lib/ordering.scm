@@ -9,7 +9,10 @@
           hydra_overlay_scheme_lib_ordering_lte
           hydra_overlay_scheme_lib_ordering_max
           hydra_overlay_scheme_lib_ordering_min
-          generic-compare)
+          generic-compare
+          make-ordered-term
+          ordered-term?
+          ordered-term-value)
   (begin
 
     (define (obj->string x)
@@ -111,8 +114,19 @@
                       '() vh)
           (lambda (x y) (< (generic-compare (car x) (car y)) 0)))))
 
+    ;; A term paired with its order key (#848), built by the ordered term coders in prims.scm: the list
+    ;; (hydra--ordered-term key value). Comparison uses the key, so union variants compare in declared order
+    ;; and annotations are ignored at every depth; the coders hand the value (not the key) back to the
+    ;; interpreter.
+    (define (make-ordered-term key value) (list 'hydra--ordered-term key value))
+    (define (ordered-term? x) (and (pair? x) (eq? (car x) 'hydra--ordered-term)))
+    (define (ordered-term-key x) (cadr x))
+    (define (ordered-term-value x) (car (cddr x)))
+
     (define (generic-compare a b)
       (cond
+        ((and (ordered-term? a) (ordered-term? b))
+         (generic-compare (ordered-term-key a) (ordered-term-key b)))
         ((equal? a b) 0)
         ((and (real? a) (real? b) (inexact? a) (inexact? b))
          ;; IEEE 754 extended totalOrder (docs/specification/ordering-and-equality.md):

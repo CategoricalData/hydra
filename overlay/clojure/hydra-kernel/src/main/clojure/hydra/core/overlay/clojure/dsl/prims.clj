@@ -6,14 +6,16 @@
             [hydra.core.packaging :refer :all]
             [hydra.core.scoping :refer [hydra_core_scoping_type_scheme_to_term_signature]]
             [hydra.core.lib.defaults]
-            [hydra.core.reduction])
+            [hydra.core.reduction]
+            [hydra.core.overlay.clojure.lib.ordering])
   (:import [hydra.core.model hydra_core_model_function_type hydra_core_model_type_scheme
                        hydra_core_model_application hydra_core_model_injection hydra_core_model_field
                        hydra_core_model_either_type hydra_core_model_map_type hydra_core_model_pair_type
                        hydra_core_model_type_variable_constraints]
            [hydra.core.graph hydra_core_graph_primitive hydra_core_graph_term_coder]
            [hydra.core.packaging hydra_core_packaging_primitive_definition]
-           [hydra.core.errors hydra_core_errors_other_error]))
+           [hydra.core.errors hydra_core_errors_other_error]
+           [hydra.core.overlay.clojure.lib.ordering OrderedTerm]))
 
 ;; Empty InferenceContext placeholder. After #446 the primitive implementation
 ;; carrier no longer receives an InferenceContext, but the coder encode/decode
@@ -431,6 +433,39 @@
    (list :variable _name)
    (fn [cx g t] (list :right t))
    (fn [cx t] (list :right t))))
+
+;; Ordered term coders (#848): a compared value becomes an OrderedTerm carrying its order key, computed by
+;; the generated hydra.core.ordering.termOrderKey with the graph in hand. tc-ordered-key also removes
+;; annotations from the stored term at every depth, for map keys and set elements.
+(defn- generated-fn [ns-sym var-sym]
+  (deref (or (resolve var-sym) (ns-resolve ns-sym var-sym))))
+
+(defn- ordered-encoder [strip?]
+  (fn [cx g t]
+    (let [r (((generated-fn 'hydra.core.ordering 'hydra_core_ordering_term_order_key) g) t)]
+      (if (= (first r) :left)
+        r
+        (list :right (hydra.core.overlay.clojure.lib.ordering.OrderedTerm.
+                       (second r)
+                       (if strip?
+                         ((generated-fn 'hydra.core.strip 'hydra_core_strip_remove_term_annotations) t)
+                         t)))))))
+
+(defn tc-ordered
+  "TermCoder for a type variable whose values are compared by their order key."
+  [_name]
+  (->hydra_core_graph_term_coder
+   (list :variable _name)
+   (ordered-encoder false)
+   (fn [cx v] (list :right (.-value ^hydra.core.overlay.clojure.lib.ordering.OrderedTerm v)))))
+
+(defn tc-ordered-key
+  "TermCoder for a map key or set element: compared by its order key, stored without annotations."
+  [_name]
+  (->hydra_core_graph_term_coder
+   (list :variable _name)
+   (ordered-encoder true)
+   (fn [cx v] (list :right (.-value ^hydra.core.overlay.clojure.lib.ordering.OrderedTerm v)))))
 
 (defn tc-term []
   (->hydra_core_graph_term_coder

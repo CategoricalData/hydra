@@ -112,7 +112,7 @@
           (let loop ((rest xs))
             (cond
               ((null? rest) #f)
-              ((equal? x (car rest)) #t)
+              ((= (generic-compare x (car rest)) 0) #t)
               (else (loop (cdr rest))))))))
 
     ;; filter :: (a -> Bool) -> [a] -> [a]
@@ -238,7 +238,7 @@
         (let loop ((rest xs) (seen '()) (acc '()))
           (if (null? rest)
               (reverse acc)
-              (if (member (car rest) seen)
+              (if (member (car rest) seen (lambda (a b) (= (generic-compare a b) 0)))
                   (loop (cdr rest) seen acc)
                   (loop (cdr rest) (cons (car rest) seen) (cons (car rest) acc)))))))
 
@@ -376,7 +376,7 @@
                        (groups '()))
               (if (null? rest)
                   (reverse (cons (reverse current-group) groups))
-                  (if (equal? (car rest) current-val)
+                  (if (= (generic-compare (car rest) current-val) 0)
                       (loop (cdr rest) current-val (cons (car rest) current-group) groups)
                       (loop (cdr rest) (car rest) (list (car rest))
                             (cons (reverse current-group) groups))))))))

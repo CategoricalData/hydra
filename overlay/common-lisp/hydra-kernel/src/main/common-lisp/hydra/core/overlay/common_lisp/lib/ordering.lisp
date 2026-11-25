@@ -77,9 +77,18 @@
                   a)
          t)))
 
+;; A term paired with its order key (#848), built by the ordered term coders in prims.lisp. Comparison
+;; uses the key, so union variants compare in declared order and annotations are ignored at every depth;
+;; the coders hand the value (not the key) back to the interpreter.
+(defstruct (ordered-term (:constructor make-ordered-term (key value)))
+  key
+  value)
+
 (defun generic-compare (a b)
   (cond
     ((eq a b) 0)
+    ((and (ordered-term-p a) (ordered-term-p b))
+     (generic-compare (ordered-term-key a) (ordered-term-key b)))
     ((and (null a) (null b)) 0)
     ((null a) -1)
     ((null b) 1)

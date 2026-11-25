@@ -110,7 +110,7 @@
                                       ["x" "y" "z"] (fun x (p/tc-either z y)) (p/tc-optional x) (p/tc-either z (p/tc-optional y)))
      (prim-name 'hydra.core.lib.eithers/hydra_core_lib_eithers_map_set)  (p/prim2 (prim-name 'hydra.core.lib.eithers/hydra_core_lib_eithers_map_set)
                                      (fn [f s] ((eithers/hydra_overlay_clojure_lib_eithers_map_set f) s))
-                                     ["x" "y" "z"] (fun x (p/tc-either z y)) (p/tc-set x) (p/tc-either z (p/tc-set y)))
+                                     ["x" "y" "z"] (fun (p/tc-ordered-key "x") (p/tc-either z (p/tc-ordered-key "y"))) (p/tc-set (p/tc-ordered-key "x")) (p/tc-either z (p/tc-set (p/tc-ordered-key "y"))))
      (prim-name 'hydra.core.lib.eithers/hydra_core_lib_eithers_partition) (p/prim1 (prim-name 'hydra.core.lib.eithers/hydra_core_lib_eithers_partition)
                                               eithers/hydra_overlay_clojure_lib_eithers_partition
                                               [] (p/tc-list (p/tc-either x y)) (p/tc-pair (p/tc-list x) (p/tc-list y)))
@@ -124,18 +124,20 @@
 (defn register-equality []
   (let [
         x (p/tc-variable "x")
+        ;; compared values carry their order key (#848)
+        xo (p/tc-ordered "x")
         ord-x {"x" ["ordering"]}
         eq-x {"x" ["equality"]}]
-    {(prim-name 'hydra.core.lib.equality/hydra_core_lib_equality_equal)    (p/prim2 (prim-name 'hydra.core.lib.equality/hydra_core_lib_equality_equal)    (fn [a b] ((equality/hydra_overlay_clojure_lib_equality_equal a) b))    [] x x (p/tc-boolean) eq-x)
+    {(prim-name 'hydra.core.lib.equality/hydra_core_lib_equality_equal)    (p/prim2 (prim-name 'hydra.core.lib.equality/hydra_core_lib_equality_equal)    (fn [a b] ((equality/hydra_overlay_clojure_lib_equality_equal a) b))    [] xo xo (p/tc-boolean) eq-x)
      (prim-name 'hydra.core.lib.functions/hydra_core_lib_functions_absurd)   (p/prim1 (prim-name 'hydra.core.lib.functions/hydra_core_lib_functions_absurd)   functions/hydra_overlay_clojure_lib_functions_absurd   [] (p/tc-void) x)
      (prim-name 'hydra.core.lib.functions/hydra_core_lib_functions_identity) (p/prim1 (prim-name 'hydra.core.lib.functions/hydra_core_lib_functions_identity) functions/hydra_overlay_clojure_lib_functions_identity [] x x)
-     (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_compare)  (p/prim2 (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_compare)  (fn [a b] ((ordering/hydra_overlay_clojure_lib_ordering_compare a) b))  [] x x (p/tc-comparison) ord-x)
-     (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_gt)       (p/prim2 (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_gt)       (fn [a b] ((ordering/hydra_overlay_clojure_lib_ordering_gt a) b))       [] x x (p/tc-boolean) ord-x)
-     (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_gte)      (p/prim2 (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_gte)      (fn [a b] ((ordering/hydra_overlay_clojure_lib_ordering_gte a) b))      [] x x (p/tc-boolean) ord-x)
-     (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_lt)       (p/prim2 (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_lt)       (fn [a b] ((ordering/hydra_overlay_clojure_lib_ordering_lt a) b))       [] x x (p/tc-boolean) ord-x)
-     (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_lte)      (p/prim2 (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_lte)      (fn [a b] ((ordering/hydra_overlay_clojure_lib_ordering_lte a) b))      [] x x (p/tc-boolean) ord-x)
-     (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_max)      (p/prim2 (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_max)      (fn [a b] ((ordering/hydra_overlay_clojure_lib_ordering_max a) b))      [] x x x ord-x)
-     (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_min)      (p/prim2 (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_min)      (fn [a b] ((ordering/hydra_overlay_clojure_lib_ordering_min a) b))      [] x x x ord-x)}))
+     (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_compare)  (p/prim2 (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_compare)  (fn [a b] ((ordering/hydra_overlay_clojure_lib_ordering_compare a) b))  [] xo xo (p/tc-comparison) ord-x)
+     (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_gt)       (p/prim2 (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_gt)       (fn [a b] ((ordering/hydra_overlay_clojure_lib_ordering_gt a) b))       [] xo xo (p/tc-boolean) ord-x)
+     (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_gte)      (p/prim2 (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_gte)      (fn [a b] ((ordering/hydra_overlay_clojure_lib_ordering_gte a) b))      [] xo xo (p/tc-boolean) ord-x)
+     (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_lt)       (p/prim2 (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_lt)       (fn [a b] ((ordering/hydra_overlay_clojure_lib_ordering_lt a) b))       [] xo xo (p/tc-boolean) ord-x)
+     (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_lte)      (p/prim2 (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_lte)      (fn [a b] ((ordering/hydra_overlay_clojure_lib_ordering_lte a) b))      [] xo xo (p/tc-boolean) ord-x)
+     (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_max)      (p/prim2 (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_max)      (fn [a b] ((ordering/hydra_overlay_clojure_lib_ordering_max a) b))      [] xo xo xo ord-x)
+     (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_min)      (p/prim2 (prim-name 'hydra.core.lib.ordering/hydra_core_lib_ordering_min)      (fn [a b] ((ordering/hydra_overlay_clojure_lib_ordering_min a) b))      [] xo xo xo ord-x)}))
 
 ;; ============================================================
 ;; Lists
@@ -145,7 +147,10 @@
   (let [
         a (p/tc-variable "a")
         b (p/tc-variable "b")
-        c (p/tc-variable "c")]
+        c (p/tc-variable "c")
+        ;; compared values carry their order key (#848)
+        ao (p/tc-ordered "a")
+        bo (p/tc-ordered "b")]
     {(prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_apply)      (p/prim2 (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_apply)
                                         (fn [fs xs] ((lists/hydra_overlay_clojure_lib_lists_apply fs) xs))
                                         [] (p/tc-list (fun a b)) (p/tc-list a) (p/tc-list b))
@@ -167,7 +172,7 @@
                                         [] (fun a (p/tc-boolean)) (p/tc-list a) (p/tc-list a))
      (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_member)     (p/prim2 (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_member)
                                         (fn [x xs] ((lists/hydra_overlay_clojure_lib_lists_member x) xs))
-                                        [] a (p/tc-list a) (p/tc-boolean) {"a" ["equality"]})
+                                        [] ao (p/tc-list ao) (p/tc-boolean) {"a" ["equality"]})
      (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_filter)     (p/prim2 (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_filter)
                                         (fn [f xs] ((lists/hydra_overlay_clojure_lib_lists_filter f) xs))
                                         [] (fun a (p/tc-boolean)) (p/tc-list a) (p/tc-list a))
@@ -180,7 +185,7 @@
      (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_foldr)      (p/prim3 (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_foldr)
                                         (fn [f init xs] (((lists/hydra_overlay_clojure_lib_lists_foldr (fn [el] (fn [acc] ((f el) acc)))) init) xs))
                                         [] (fun a (fun b b)) b (p/tc-list a) b)
-     (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_group)      (p/prim1 (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_group)      lists/hydra_overlay_clojure_lib_lists_group      [] (p/tc-list a) (p/tc-list (p/tc-list a)) {"a" ["equality"]})
+     (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_group)      (p/prim1 (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_group)      lists/hydra_overlay_clojure_lib_lists_group      [] (p/tc-list ao) (p/tc-list (p/tc-list ao)) {"a" ["equality"]})
      (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_join)       (p/prim2 (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_join)
                                          (fn [sep xss] ((lists/hydra_overlay_clojure_lib_lists_join sep) xss))
                                          [] (p/tc-list a) (p/tc-list (p/tc-list a)) (p/tc-list a))
@@ -198,7 +203,7 @@
      (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_init)       (p/prim1 (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_init)       lists/hydra_overlay_clojure_lib_lists_init       [] (p/tc-list a) (p/tc-optional (p/tc-list a)))
      (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_last)       (p/prim1 (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_last)       lists/hydra_overlay_clojure_lib_lists_last       [] (p/tc-list a) (p/tc-optional a))
      (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_tail)       (p/prim1 (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_tail)       lists/hydra_overlay_clojure_lib_lists_tail       [] (p/tc-list a) (p/tc-optional (p/tc-list a)))
-     (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_distinct)   (p/prim1 (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_distinct)   lists/hydra_overlay_clojure_lib_lists_distinct   [] (p/tc-list a) (p/tc-list a) {"a" ["equality"]})
+     (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_distinct)   (p/prim1 (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_distinct)   lists/hydra_overlay_clojure_lib_lists_distinct   [] (p/tc-list ao) (p/tc-list ao) {"a" ["equality"]})
      (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_is_empty)       (p/prim1 (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_is_empty)       lists/hydra_overlay_clojure_lib_lists_is_empty       [] (p/tc-list a) (p/tc-boolean))
      (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_partition)   (p/prim2 (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_partition)
                                          (fn [f xs] ((lists/hydra_overlay_clojure_lib_lists_partition f) xs))
@@ -208,10 +213,10 @@
                                         [] (p/tc-int32) a (p/tc-list a))
      (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_reverse)    (p/prim1 (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_reverse)    lists/hydra_overlay_clojure_lib_lists_reverse    [] (p/tc-list a) (p/tc-list a))
      (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_singleton)  (p/prim1 (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_singleton)  lists/hydra_overlay_clojure_lib_lists_singleton  [] a (p/tc-list a))
-     (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_sort)       (p/prim1 (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_sort)       lists/hydra_overlay_clojure_lib_lists_sort       [] (p/tc-list a) (p/tc-list a) {"a" ["ordering"]})
+     (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_sort)       (p/prim1 (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_sort)       lists/hydra_overlay_clojure_lib_lists_sort       [] (p/tc-list ao) (p/tc-list ao) {"a" ["ordering"]})
      (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_sort_by)     (p/prim2 (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_sort_by)
                                         (fn [f xs] ((lists/hydra_overlay_clojure_lib_lists_sort_by f) xs))
-                                        [] (fun a b) (p/tc-list a) (p/tc-list a))
+                                        [] (fun a bo) (p/tc-list a) (p/tc-list a))
      (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_span)       (p/prim2 (prim-name 'hydra.core.lib.lists/hydra_core_lib_lists_span)
                                         (fn [f xs] ((lists/hydra_overlay_clojure_lib_lists_span f) xs))
                                         [] (fun a (p/tc-boolean)) (p/tc-list a) (p/tc-pair (p/tc-list a) (p/tc-list a)))
@@ -251,9 +256,10 @@
 
 (defn register-maps []
   (let [
-        k  (p/tc-variable "k")
-        k1 (p/tc-variable "k1")
-        k2 (p/tc-variable "k2")
+        ;; map keys carry their order key and are stored without annotations (#848)
+        k  (p/tc-ordered-key "k")
+        k1 (p/tc-ordered-key "k1")
+        k2 (p/tc-ordered-key "k2")
         v  (p/tc-variable "v")
         v1 (p/tc-variable "v1")
         v2 (p/tc-variable "v2")
@@ -450,8 +456,9 @@
 
 (defn register-sets []
   (let [
-        a (p/tc-variable "a")
-        b (p/tc-variable "b")
+        ;; set elements carry their order key and are stored without annotations (#848)
+        a (p/tc-ordered-key "a")
+        b (p/tc-ordered-key "b")
         ;; All set primitives have ordering constraint on element type
         ord-a {"a" ["ordering"]}
         ord-ab {"a" ["ordering"] "b" ["ordering"]}]

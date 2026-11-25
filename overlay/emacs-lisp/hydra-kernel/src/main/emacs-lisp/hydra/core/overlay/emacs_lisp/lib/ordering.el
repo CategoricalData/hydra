@@ -78,8 +78,17 @@
                   a)
          t)))
 
+;; A term paired with its order key (#848), built by the ordered term coders in prims.el. Comparison
+;; uses the key, so union variants compare in declared order and annotations are ignored at every depth;
+;; the coders hand the value (not the key) back to the interpreter.
+(cl-defstruct (hydra-ordered-term (:constructor make-hydra-ordered-term (key value)))
+  key
+  value)
+
 (defun generic-compare (a b)
   (cond
+    ((and (hydra-ordered-term-p a) (hydra-ordered-term-p b))
+     (generic-compare (hydra-ordered-term-key a) (hydra-ordered-term-key b)))
     ((and (null a) (null b)) 0)
     ;; Treat an empty hash-table as equal to nil — both represent the
     ;; empty map/set, and the kernel mixes the two representations

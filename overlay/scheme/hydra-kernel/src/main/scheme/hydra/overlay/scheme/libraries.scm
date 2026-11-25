@@ -169,7 +169,7 @@
                                               #f (fun x (tc-either z y)) (tc-optional x) (tc-either z (tc-optional y))))
           (cons (prim-name def:hydra_core_lib_eithers_map_set)  (prim2 (prim-name def:hydra_core_lib_eithers_map_set)
                                              hydra_overlay_scheme_lib_eithers_map_set
-                                             #f (fun x (tc-either z y)) (tc-set x) (tc-either z (tc-set y))))
+                                             #f (fun (tc-ordered-key "x") (tc-either z (tc-ordered-key "y"))) (tc-set (tc-ordered-key "x")) (tc-either z (tc-set (tc-ordered-key "y")))))
           (cons (prim-name def:hydra_core_lib_eithers_partition) (prim1 (prim-name def:hydra_core_lib_eithers_partition)
                                                       hydra_overlay_scheme_lib_eithers_partition
                                                       #f (tc-list (tc-either x y)) (tc-pair (tc-list x) (tc-list y))))
@@ -182,7 +182,8 @@
 
     (define (register-equality)
       (let (
-            (x (tc-variable "x"))
+            ;; compared values carry their order key (#848)
+            (x (tc-ordered "x"))
             (eq-x  (list (list "x" (make-hydra_core_model_type_variable_constraints (constraints "equality"))))))
         (list
           (cons (prim-name def:hydra_core_lib_equality_equal)    (prim2 (prim-name def:hydra_core_lib_equality_equal)    hydra_overlay_scheme_lib_equality_equal    #f x x (tc-boolean) eq-x)))))
@@ -197,7 +198,8 @@
     ;; #417: comparison primitives moved from hydra.core.lib.equality to hydra.core.lib.ordering.
     (define (register-ordering)
       (let (
-            (x (tc-variable "x"))
+            ;; compared values carry their order key (#848)
+            (x (tc-ordered "x"))
             (ord-x (list (list "x" (make-hydra_core_model_type_variable_constraints (constraints "ordering"))))))
         (list
           (cons (prim-name def:hydra_core_lib_ordering_compare)  (prim2 (prim-name def:hydra_core_lib_ordering_compare)  hydra_overlay_scheme_lib_ordering_compare  #f x x (tc-comparison) ord-x))
@@ -323,6 +325,9 @@
             (a (tc-variable "a"))
             (b (tc-variable "b"))
             (c (tc-variable "c"))
+            ;; compared values carry their order key (#848)
+            (ao (tc-ordered "a"))
+            (bo (tc-ordered "b"))
             (ord-a (list (list "a" (make-hydra_core_model_type_variable_constraints (constraints "ordering")))))
             (eq-a  (list (list "a" (make-hydra_core_model_type_variable_constraints (constraints "equality"))))))
         (list
@@ -347,7 +352,7 @@
                                                  #f (fun a (tc-boolean)) (tc-list a) (tc-list a)))
           (cons (prim-name def:hydra_core_lib_lists_member)       (prim2 (prim-name def:hydra_core_lib_lists_member)
                                                  hydra_overlay_scheme_lib_lists_member
-                                                 #f a (tc-list a) (tc-boolean) eq-a))
+                                                 #f ao (tc-list ao) (tc-boolean) eq-a))
           (cons (prim-name def:hydra_core_lib_lists_filter)     (prim2 (prim-name def:hydra_core_lib_lists_filter)
                                                  hydra_overlay_scheme_lib_lists_filter
                                                  #f (fun a (tc-boolean)) (tc-list a) (tc-list a)))
@@ -370,7 +375,7 @@
                                                            (lambda (el) (lambda (acc) ((f el) acc))))
                                                          init) xs))))
                                                  #f (fun a (fun b b)) b (tc-list a) b))
-          (cons (prim-name def:hydra_core_lib_lists_group)      (prim1 (prim-name def:hydra_core_lib_lists_group)      hydra_overlay_scheme_lib_lists_group      #f (tc-list a) (tc-list (tc-list a)) eq-a))
+          (cons (prim-name def:hydra_core_lib_lists_group)      (prim1 (prim-name def:hydra_core_lib_lists_group)      hydra_overlay_scheme_lib_lists_group      #f (tc-list ao) (tc-list (tc-list ao)) eq-a))
           (cons (prim-name def:hydra_core_lib_lists_join) (prim2 (prim-name def:hydra_core_lib_lists_join)
                                                   hydra_overlay_scheme_lib_lists_join
                                                   #f (tc-list a) (tc-list (tc-list a)) (tc-list a)))
@@ -386,7 +391,7 @@
           (cons (prim-name def:hydra_core_lib_lists_init)  (prim1 (prim-name def:hydra_core_lib_lists_init)  hydra_overlay_scheme_lib_lists_init #f (tc-list a) (tc-optional (tc-list a))))
           (cons (prim-name def:hydra_core_lib_lists_last)  (prim1 (prim-name def:hydra_core_lib_lists_last)  hydra_overlay_scheme_lib_lists_last #f (tc-list a) (tc-optional a)))
           (cons (prim-name def:hydra_core_lib_lists_tail)  (prim1 (prim-name def:hydra_core_lib_lists_tail)  hydra_overlay_scheme_lib_lists_tail #f (tc-list a) (tc-optional (tc-list a))))
-          (cons (prim-name def:hydra_core_lib_lists_distinct)        (prim1 (prim-name def:hydra_core_lib_lists_distinct)        hydra_overlay_scheme_lib_lists_distinct        #f (tc-list a) (tc-list a) eq-a))
+          (cons (prim-name def:hydra_core_lib_lists_distinct)        (prim1 (prim-name def:hydra_core_lib_lists_distinct)        hydra_overlay_scheme_lib_lists_distinct        #f (tc-list ao) (tc-list ao) eq-a))
           (cons (prim-name def:hydra_core_lib_lists_is_empty)       (prim1 (prim-name def:hydra_core_lib_lists_is_empty)       hydra_overlay_scheme_lib_lists_is_empty       #f (tc-list a) (tc-boolean)))
           (cons (prim-name def:hydra_core_lib_lists_partition)   (prim2 (prim-name def:hydra_core_lib_lists_partition)
                                                   hydra_overlay_scheme_lib_lists_partition
@@ -396,10 +401,10 @@
                                                  #f (tc-int32) a (tc-list a)))
           (cons (prim-name def:hydra_core_lib_lists_reverse)    (prim1 (prim-name def:hydra_core_lib_lists_reverse)    hydra_overlay_scheme_lib_lists_reverse    #f (tc-list a) (tc-list a)))
           (cons (prim-name def:hydra_core_lib_lists_singleton)  (prim1 (prim-name def:hydra_core_lib_lists_singleton)  hydra_overlay_scheme_lib_lists_singleton  #f a (tc-list a)))
-          (cons (prim-name def:hydra_core_lib_lists_sort)       (prim1 (prim-name def:hydra_core_lib_lists_sort)       hydra_overlay_scheme_lib_lists_sort       #f (tc-list a) (tc-list a) ord-a))
+          (cons (prim-name def:hydra_core_lib_lists_sort)       (prim1 (prim-name def:hydra_core_lib_lists_sort)       hydra_overlay_scheme_lib_lists_sort       #f (tc-list ao) (tc-list ao) ord-a))
           (cons (prim-name def:hydra_core_lib_lists_sort_by)     (prim2 (prim-name def:hydra_core_lib_lists_sort_by)
                                                  hydra_overlay_scheme_lib_lists_sort_by
-                                                 #f (fun a b) (tc-list a) (tc-list a)))
+                                                 #f (fun a bo) (tc-list a) (tc-list a)))
           (cons (prim-name def:hydra_core_lib_lists_span)       (prim2 (prim-name def:hydra_core_lib_lists_span)
                                                  hydra_overlay_scheme_lib_lists_span
                                                  #f (fun a (tc-boolean)) (tc-list a) (tc-pair (tc-list a) (tc-list a))))
@@ -445,9 +450,10 @@
 
     (define (register-maps)
       (let (
-            (k  (tc-variable "k"))
-            (k1 (tc-variable "k1"))
-            (k2 (tc-variable "k2"))
+            ;; map keys carry their order key and are stored without annotations (#848)
+            (k  (tc-ordered-key "k"))
+            (k1 (tc-ordered-key "k1"))
+            (k2 (tc-ordered-key "k2"))
             (v  (tc-variable "v"))
             (v1 (tc-variable "v1"))
             (v2 (tc-variable "v2"))
@@ -642,8 +648,9 @@
 
     (define (register-sets)
       (let (
-            (a (tc-variable "a"))
-            (b (tc-variable "b"))
+            ;; set elements carry their order key and are stored without annotations (#848)
+            (a (tc-ordered-key "a"))
+            (b (tc-ordered-key "b"))
             (ord-a (list (list "a" (make-hydra_core_model_type_variable_constraints (constraints "ordering")))))
             (ord-ab (list (list "a" (make-hydra_core_model_type_variable_constraints (constraints "ordering")))
                           (list "b" (make-hydra_core_model_type_variable_constraints (constraints "ordering"))))))

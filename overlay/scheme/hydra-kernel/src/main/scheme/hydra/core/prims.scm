@@ -13,6 +13,9 @@
           (hydra core scoping)
           (hydra core reduction)
           (hydra core extract model)
+          (hydra core ordering)
+          (hydra core strip)
+          (only (hydra overlay scheme lib ordering) make-ordered-term ordered-term-value)
           (hydra overlay scheme lib maps)
           (hydra overlay scheme lib pairs)
           (hydra overlay scheme lib sets)
@@ -27,7 +30,7 @@
           tc-string tc-binary
           tc-list tc-set tc-map tc-optional tc-either tc-pair
           tc-effect tc-unit tc-void tc-named
-          tc-variable tc-term tc-comparison
+          tc-variable tc-term tc-comparison tc-ordered tc-ordered-key
           tc-function tc-function-with-reduce
           prim0 prim1 prim2 prim3 lazy-args default-fallback-primitive)
   (begin
@@ -384,6 +387,29 @@
        (list 'variable name)
         (lambda (cx) (lambda (g) (lambda (t) (list 'right t))))
         (lambda (cx) (lambda (t) (list 'right t)))))
+
+    ;; Ordered term coders (#848): a compared value becomes an ordered term carrying its order key,
+    ;; computed by the generated hydra.core.ordering.termOrderKey with the graph in hand. tc-ordered-key
+    ;; also removes annotations from the stored term at every depth, for map keys and set elements.
+    (define (ordered-term-encoder strip)
+      (lambda (cx) (lambda (g) (lambda (t)
+        (let ((r ((hydra_core_ordering_term_order_key g) t)))
+          (if (eq? (car r) 'left)
+              r
+              (list 'right (make-ordered-term (cadr r)
+                                              (if strip (hydra_core_strip_remove_term_annotations t) t)))))))))
+
+    (define (tc-ordered name)
+      (make-hydra_core_graph_term_coder
+       (list 'variable name)
+        (ordered-term-encoder #f)
+        (lambda (cx) (lambda (v) (list 'right (ordered-term-value v))))))
+
+    (define (tc-ordered-key name)
+      (make-hydra_core_graph_term_coder
+       (list 'variable name)
+        (ordered-term-encoder #t)
+        (lambda (cx) (lambda (v) (list 'right (ordered-term-value v))))))
 
     (define (tc-term)
       (make-hydra_core_graph_term_coder

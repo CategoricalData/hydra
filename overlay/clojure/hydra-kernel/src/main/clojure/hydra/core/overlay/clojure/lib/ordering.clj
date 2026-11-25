@@ -65,11 +65,26 @@
         (let [x (.nextInt ia) y (.nextInt ib)]
           (if (= x y) (recur) (compare x y)))))))
 
+;; A term paired with its order key (#848), built by the ordered term coders in dsl/prims.clj. Equality,
+;; hashing and comparison use the key, so union variants compare in declared order and annotations are
+;; ignored at every depth; the coders hand the value (not the key) back to the interpreter.
+(declare generic-compare)
+
+(deftype OrderedTerm [key value]
+  Object
+  (equals [_ other]
+    (and (instance? OrderedTerm other) (zero? (generic-compare key (.-key ^OrderedTerm other)))))
+  (hashCode [_] (hash key))
+  Comparable
+  (compareTo [_ other] (generic-compare key (.-key ^OrderedTerm other))))
+
 (defn generic-compare
   "Generic comparison function for arbitrary Clojure values, returning -1, 0, or 1."
   [a b]
   (cond
     (identical? a b) 0
+    (and (instance? OrderedTerm a) (instance? OrderedTerm b))
+    (generic-compare (.-key ^OrderedTerm a) (.-key ^OrderedTerm b))
     (nil? a) (if (nil? b) 0 -1)
     (nil? b) 1
     ;; Hydra decimal ordering is by numeric value first, with numerically-equal decimals of

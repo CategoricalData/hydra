@@ -83,7 +83,7 @@
   (lambda (x)
     "Check if an element is in a list."
     (lambda (xs)
-      (if (member x xs) t nil))))
+      (if (cl-member x xs :test (lambda (a b) (zerop (generic-compare a b)))) t nil))))
 
 ;; filter :: (a -> Bool) -> [a] -> [a]
 (defvar hydra_overlay_emacs_lisp_lib_lists_filter
@@ -132,7 +132,7 @@
               (current-group (list (car xs)))
               (current-val (car xs)))
           (dolist (x (cdr xs))
-            (if (equal current-val x)
+            (if (zerop (generic-compare current-val x))
                 (push x current-group)
                 (progn
                   (push (nreverse current-group) groups)
@@ -226,7 +226,7 @@
     (let ((seen nil)
           (acc nil))
       (dolist (x xs (nreverse acc))
-        (unless (member x seen)
+        (unless (cl-member x seen :test (lambda (a b) (zerop (generic-compare a b))))
           (push x seen)
           (push x acc))))))
 

@@ -89,7 +89,7 @@
 (defvar hydra_overlay_common_lisp_lib_lists_member
   (lambda (x)
     (lambda (xs)
-      (if (member x xs :test #'equal) t nil))))
+      (if (member x xs :test (lambda (a b) (= (generic-compare a b) 0))) t nil))))
 
 ;; filter :: (a -> Bool) -> [a] -> [a]
 ;; Filter a list based on a predicate.
@@ -138,7 +138,7 @@
               (current-group (list (car xs)))
               (current-val (car xs)))
           (dolist (x (cdr xs))
-            (if (equal current-val x)
+            (if (= (generic-compare current-val x) 0)
                 (push x current-group)
                 (progn
                   (push (nreverse current-group) groups)
@@ -230,7 +230,7 @@
     (let ((seen nil)
           (acc nil))
       (dolist (x xs (nreverse acc))
-        (unless (member x seen :test #'equal)
+        (unless (member x seen :test (lambda (a b) (= (generic-compare a b) 0)))
           (push x seen)
           (push x acc))))))
 

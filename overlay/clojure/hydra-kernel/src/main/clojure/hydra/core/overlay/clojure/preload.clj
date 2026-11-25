@@ -53,7 +53,7 @@
    "hydra.core.decoding" "hydra.core.dependencies" "hydra.core.differentiation" "hydra.core.encoding"
    "hydra.core.environment" "hydra.core.extract.model" "hydra.core.extract.util" "hydra.core.formatting"
    "hydra.core.hoisting" "hydra.core.inference" "hydra.core.languages" "hydra.core.lexical"
-   "hydra.core.literals" "hydra.core.names" "hydra.core.parsers"
+   "hydra.core.literals" "hydra.core.names" "hydra.core.ordering" "hydra.core.parsers"
    "hydra.core.predicates" "hydra.core.reduction" "hydra.core.reflect" "hydra.core.resolution"
    "hydra.core.rewriting" "hydra.core.scoping" "hydra.core.serialization" "hydra.core.strip"
    "hydra.core.print.paths" "hydra.core.print.model" "hydra.core.print.errors" "hydra.core.print.error.model"

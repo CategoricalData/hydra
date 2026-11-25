@@ -322,6 +322,29 @@
     (lambda (_cx) (lambda (_g) (lambda (t_) (list :right t_))))
     (lambda (_cx) (lambda (t_) (list :right t_)))))
 
+;; Ordered term coders (#848): a compared value becomes a hydra-ordered-term carrying its order key,
+;; computed by the generated hydra.core.ordering.termOrderKey with the graph in hand. tc-ordered-key also
+;; removes annotations from the stored term at every depth, for map keys and set elements.
+(defun hydra-ordered-term-encoder (strip)
+  (lambda (_cx) (lambda (g) (lambda (t_)
+    (let ((r (funcall (funcall hydra_core_ordering_term_order_key g) t_)))
+      (if (eq (car r) :left)
+          r
+        (list :right (make-hydra-ordered-term (cadr r)
+                                              (if strip
+                                                  (funcall hydra_core_strip_remove_term_annotations t_)
+                                                t_)))))))))
+
+(defun tc-ordered (name)
+  (make-hydra_core_graph_term_coder (list :variable name)
+    (hydra-ordered-term-encoder nil)
+    (lambda (_cx) (lambda (v) (list :right (hydra-ordered-term-value v))))))
+
+(defun tc-ordered-key (name)
+  (make-hydra_core_graph_term_coder (list :variable name)
+    (hydra-ordered-term-encoder t)
+    (lambda (_cx) (lambda (v) (list :right (hydra-ordered-term-value v))))))
+
 (defun tc-term ()
   (make-hydra_core_graph_term_coder (list :variable "hydra.core.model.Term")
     (lambda (_cx) (lambda (_g) (lambda (t_) (list :right t_))))
