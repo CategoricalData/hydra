@@ -289,10 +289,10 @@ extendContext = define "extendContext" $
 -- same InferenceResult record on the way to one of these entry points, so checking there is
 -- complete. (inferInGraphContext formerly skipped this tail and so silently accepted ill-typed
 -- terms -- #748; it now runs the same discharge + finalize tail as the other two.)
-dischargeClassConstraints :: TypedTermDefinition (InferenceContext -> TypeSubst -> M.Map Name TypeVariableConstraints -> Prelude.Either Error ())
+dischargeClassConstraints :: TypedTermDefinition (InferenceContext -> Graph -> TypeSubst -> M.Map Name TypeVariableConstraints -> Prelude.Either Error ())
 dischargeClassConstraints = define "dischargeClassConstraints" $
   doc "Check that every constrained type variable's final resolved type is an instance of each class it was constrained to." $
-  "fcx" ~> "subst" ~> "constraints" ~>
+  "fcx" ~> "cx" ~> "subst" ~> "constraints" ~>
   "substMap" <~ Typing.unTypeSubst (var "subst") $
   "checkOne" <~ ("pair" ~>
     "varName" <~ Pairs.first (var "pair") $
@@ -303,7 +303,7 @@ dischargeClassConstraints = define "dischargeClassConstraints" $
         "checkClass" <~ ("classConstraint" ~>
           "className" <~ match _TypeClassConstraint (var "classConstraint") Nothing [
             _TypeClassConstraint_simple>>: "n" ~> var "n"] $
-          Logic.ifElse (Classes.classIsSatisfiedByType @@ var "className" @@ var "resolvedType")
+          Logic.ifElse (Classes.classIsSatisfiedByType @@ (Graph.graphSchemaTypes $ var "cx") @@ var "className" @@ var "resolvedType")
             (right unit)
             (left (Error.errorInference $ Error.inferenceErrorOther $ Error.otherInferenceError
               (Paths.subtermPath (Lists.reverse $ Typing.inferenceContextTrace (var "fcx")))
@@ -406,7 +406,7 @@ inferGraphTypes = define "inferGraphTypes" $
   "result" <<~ inferTypeOfTerm @@ var "fcx" @@ var "g0" @@ (Core.termLet $ var "let0") @@ (string "graph term") $
   "fcx2" <~ Typing.inferenceResultContext (var "result") $
   "term" <~ Typing.inferenceResultTerm (var "result") $
-  "_" <<~ dischargeClassConstraints @@ var "fcx2" @@ (Typing.inferenceResultSubst (var "result")) @@ (Typing.inferenceResultClassConstraints (var "result")) $
+  "_" <<~ dischargeClassConstraints @@ var "fcx2" @@ var "g0" @@ (Typing.inferenceResultSubst (var "result")) @@ (Typing.inferenceResultClassConstraints (var "result")) $
   "finalized" <<~ finalizeInferredTerm @@ var "fcx2" @@ var "g0" @@ var "term" $
   match _Term (var "finalized")
     Nothing [
@@ -421,7 +421,7 @@ inferInGraphContext = define "inferInGraphContext" $
   "fcx" ~> "cx" ~> "term" ~>
   "result" <<~ inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ var "term" @@ (string "single term") $
   "fcx2" <~ Typing.inferenceResultContext (var "result") $
-  "_" <<~ dischargeClassConstraints @@ var "fcx2" @@ (Typing.inferenceResultSubst (var "result")) @@ (Typing.inferenceResultClassConstraints (var "result")) $
+  "_" <<~ dischargeClassConstraints @@ var "fcx2" @@ var "cx" @@ (Typing.inferenceResultSubst (var "result")) @@ (Typing.inferenceResultClassConstraints (var "result")) $
   "finalized" <<~ finalizeInferredTerm @@ var "fcx2" @@ var "cx" @@ Typing.inferenceResultTerm (var "result") $
   right $ Typing.inferenceResult
     (var "finalized")
@@ -453,7 +453,7 @@ inferMany = define "inferMany" $
     "t2" <~ Pairs.first (Pairs.second $ var "result2") $
     "s2" <~ Pairs.first (Pairs.second $ Pairs.second $ var "result2") $
     "c2" <~ Pairs.second (Pairs.second $ Pairs.second $ var "result2") $
-    "c1Subst" <~ Substitution.substInClassConstraints @@ var "s2" @@ var "c1" $
+    "c1Subst" <~ Substitution.substInClassConstraints @@ (Graph.graphSchemaTypes $ var "cx") @@ var "s2" @@ var "c1" $
     "mergedConstraints" <~ mergeClassConstraints @@ var "c1Subst" @@ var "c2" $
     right $ pair (pair
       (Lists.cons (Substitution.substTypesInTerm @@ var "s2" @@ var "e1") (var "e2"))
@@ -472,7 +472,7 @@ inferTypeOf = define "inferTypeOf" $
     (MetaTerms.string "ignoredBody")) $
   "result" <<~ inferTypeOfTerm @@ var "fcx" @@ var "cx" @@ var "letTerm" @@ (string "infer type of term") $
   "fcx2" <~ Typing.inferenceResultContext (var "result") $
-  "_" <<~ dischargeClassConstraints @@ var "fcx2" @@ (Typing.inferenceResultSubst (var "result")) @@ (Typing.inferenceResultClassConstraints (var "result")) $
+  "_" <<~ dischargeClassConstraints @@ var "fcx2" @@ var "cx" @@ (Typing.inferenceResultSubst (var "result")) @@ (Typing.inferenceResultClassConstraints (var "result")) $
   "finalized" <<~ finalizeInferredTerm @@ var "fcx2" @@ var "cx" @@ Typing.inferenceResultTerm (var "result") $
   "letResult" <<~ ExtractCore.let_ @@ var "cx" @@ var "finalized" $
   "bindings" <~ Core.letBindings (var "letResult") $
@@ -560,8 +560,8 @@ inferTypeOfApplication = define "inferTypeOfApplication" $
     (Substitution.substTypesInTerm @@ var "s2" @@ var "b")) $
   "rType" <~ Substitution.substInType @@ var "s2" @@ Core.typeVariable (var "v") $
   "rSubst" <~ Substitution.composeTypeSubstList @@ list [var "s0", var "s1", var "s2"] $
-  "c0Subst" <~ Substitution.substInClassConstraints @@ var "s2" @@ (Substitution.substInClassConstraints @@ var "s1" @@ var "c0") $
-  "c1Subst" <~ Substitution.substInClassConstraints @@ var "s2" @@ var "c1" $
+  "c0Subst" <~ Substitution.substInClassConstraints @@ (Graph.graphSchemaTypes $ var "cx") @@ var "s2" @@ (Substitution.substInClassConstraints @@ (Graph.graphSchemaTypes $ var "cx") @@ var "s1" @@ var "c0") $
+  "c1Subst" <~ Substitution.substInClassConstraints @@ (Graph.graphSchemaTypes $ var "cx") @@ var "s2" @@ var "c1" $
   "rConstraints" <~ mergeClassConstraints @@ var "c0Subst" @@ var "c1Subst" $
   right $ Typing.inferenceResult (var "rExpr") (var "rType") (var "rSubst") (var "rConstraints") (var "fcx4")
 
@@ -633,7 +633,7 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
         @@ (Lists.concat $ list [
           Optionals.toList (Optionals.map (reify Typing.inferenceResultSubst) (var "dfltResult")),
           list [var "isubst", var "subst"]]))
-      @@ (Substitution.substInClassConstraints @@ var "subst" @@ var "allElemConstraints"))
+      @@ (Substitution.substInClassConstraints @@ (Graph.graphSchemaTypes $ var "cx") @@ var "subst" @@ var "allElemConstraints"))
     @@ (Lists.concat $ list [var "dfltConstraints", var "caseConstraints"]) $
   right (var "mcResult")
 
@@ -672,7 +672,7 @@ inferTypeOfCollection = define "inferTypeOfCollection" $
         "iterm" <~ var "trmCons" @@ var "terms" $
         "itype" <~ var "typCons" @@ (Core.typeVariable $ var "var") $
         "isubst" <~ Substitution.composeTypeSubst @@ var "subst1" @@ var "subst2" $
-        yieldWithConstraints @@ var "fcx3" @@ var "iterm" @@ var "itype" @@ var "isubst" @@ (Substitution.substInClassConstraints @@ var "subst2" @@ var "allConstraints")) @@
+        yieldWithConstraints @@ var "fcx3" @@ var "iterm" @@ var "itype" @@ var "isubst" @@ (Substitution.substInClassConstraints @@ (Graph.graphSchemaTypes $ var "cx") @@ var "subst2" @@ var "allConstraints")) @@
       var "constraints" $
     right (var "mcResult"))
 
@@ -755,7 +755,7 @@ inferTypeOfInjection = define "inferTypeOfInjection" $
             @@ (Core.termInject $ Core.injection (var "tname") $ Core.field (var "fname") (var "iterm")))
           @@ (Resolution.nominalApplication @@ var "tname" @@ Lists.map (reify Core.typeVariable) (var "svars"))
           @@ (Substitution.composeTypeSubst @@ var "isubst" @@ var "subst")
-          @@ (Substitution.substInClassConstraints @@ var "subst" @@ var "iconstraints"))) @@
+          @@ (Substitution.substInClassConstraints @@ (Graph.graphSchemaTypes $ var "cx") @@ var "subst" @@ var "iconstraints"))) @@
     list [Typing.typeConstraint (var "ftyp") (var "ityp") (string "schema type of injected field")] $
   right (var "mcResult")
 
@@ -786,7 +786,7 @@ inferTypeOfLambda = define "inferTypeOfLambda" $
     Variables.freeVariablesInType @@ var "icod",
     freeVariablesInContext @@ (Substitution.substInContext @@ var "isubst" @@ var "cx2")]) $
   "cx3" <~ Substitution.substInContext @@ var "isubst" @@ var "cx" $
-  "iconstraints" <~ Substitution.substInClassConstraints @@ var "isubst" @@ (Typing.inferenceResultClassConstraints $ var "result") $
+  "iconstraints" <~ Substitution.substInClassConstraints @@ (Graph.graphSchemaTypes $ var "cx") @@ var "isubst" @@ (Typing.inferenceResultClassConstraints $ var "result") $
   right (Typing.inferenceResult (var "rterm") (var "rtype") (var "isubst") (var "iconstraints") (var "fcx3"))
 inferTypeOfLet :: TypedTermDefinition (InferenceContext -> Graph -> Let -> Prelude.Either Error InferenceResult)
 inferTypeOfLet = define "inferTypeOfLet" $
@@ -891,7 +891,7 @@ inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
   "g2base" <~ (Substitution.substInContext @@
     (Substitution.composeTypeSubst @@ var "s1" @@ var "s2") @@
     (var "cx0")) $
-  "constraintsWithS2" <~ Substitution.substInClassConstraints @@ var "s2" @@ var "inferredConstraints" $
+  "constraintsWithS2" <~ Substitution.substInClassConstraints @@ (Graph.graphSchemaTypes $ var "cx0") @@ var "s2" @@ var "inferredConstraints" $
 
   "composedSubst" <~ Substitution.composeTypeSubst @@ var "s1" @@ var "s2" $
   "originalBindingConstraints" <~ Lists.foldl
@@ -899,7 +899,7 @@ inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
       Optionals.match (Core.bindingTypeScheme $ var "b") (var "acc") ("ts" ~> mergeClassConstraints @@ var "acc" @@ (Core.typeSchemeConstraints $ var "ts")))
     (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints))
     (var "bins0") $
-  "originalConstraintsSubst" <~ Substitution.substInClassConstraints @@ var "composedSubst" @@ var "originalBindingConstraints" $
+  "originalConstraintsSubst" <~ Substitution.substInClassConstraints @@ (Graph.graphSchemaTypes $ var "cx0") @@ var "composedSubst" @@ var "originalBindingConstraints" $
 
   "allInferredConstraints" <~ mergeClassConstraints @@ var "constraintsWithS2" @@ var "originalConstraintsSubst" $
   "mergedConstraints" <~ mergeClassConstraints @@ (Graph.graphClassConstraints $ var "g2base") @@ var "allInferredConstraints" $
@@ -958,8 +958,8 @@ inferTypeOfLetNormalized = define "inferTypeOfLetNormalized" $
   "bins1" <~ (Lists.map (var "createBinding") $
     Lists.zip (var "tsbins1") (var "bterms1Subst")) $
 
-  "bodyConstraints" <~ Substitution.substInClassConstraints @@ var "sbody" @@ (Typing.inferenceResultClassConstraints $ var "bodyResult") $
-  "bindingConstraintsSubst" <~ Substitution.substInClassConstraints @@ var "sbody" @@ var "constraintsWithS2" $
+  "bodyConstraints" <~ Substitution.substInClassConstraints @@ (Graph.graphSchemaTypes $ var "cx0") @@ var "sbody" @@ (Typing.inferenceResultClassConstraints $ var "bodyResult") $
+  "bindingConstraintsSubst" <~ Substitution.substInClassConstraints @@ (Graph.graphSchemaTypes $ var "cx0") @@ var "sbody" @@ var "constraintsWithS2" $
   "allConstraints" <~ mergeClassConstraints @@ var "bindingConstraintsSubst" @@ var "bodyConstraints" $
 
   right (Typing.inferenceResult
@@ -1036,7 +1036,7 @@ inferTypeOfMap = define "inferTypeOfMap" $
         @@ (Core.termMap $ Maps.fromList $ Lists.zip (var "kterms") (var "vterms"))
         @@ (Core.typeMap $ Core.mapType (Core.typeVariable $ var "kvar") (Core.typeVariable $ var "vvar"))
         @@ (Substitution.composeTypeSubstList @@ list [var "ksubst", var "vsubst", var "subst"])
-        @@ (Substitution.substInClassConstraints @@ var "subst" @@ var "allMapConstraints")) @@
+        @@ (Substitution.substInClassConstraints @@ (Graph.graphSchemaTypes $ var "cx") @@ var "subst" @@ var "allMapConstraints")) @@
       (Lists.concat $ list [var "kcons", var "vcons"]) $
     right (var "mcResult"))
 
@@ -1140,7 +1140,7 @@ inferTypeOfRecord = define "inferTypeOfRecord" $
           (var "iterms")))
       @@ (Resolution.nominalApplication @@ var "tname" @@ Lists.map (reify Core.typeVariable) (var "svars"))
       @@ (Substitution.composeTypeSubst @@ var "isubst" @@ var "subst")
-      @@ (Substitution.substInClassConstraints @@ var "subst" @@ var "recElemConstraints")) @@
+      @@ (Substitution.substInClassConstraints @@ (Graph.graphSchemaTypes $ var "cx") @@ var "subst" @@ var "recElemConstraints")) @@
     list [Typing.typeConstraint (var "stype") (var "ityp") (string "schema type of record")] $
   right (var "mcResult")
 
@@ -1262,6 +1262,7 @@ inferTypeOfVariable = define "inferTypeOfVariable" $
         "constraints" <~ Core.typeSchemeConstraints (var "ts") $
         right (yieldCheckedWithConstraints
           @@ var "fcx2"
+          @@ var "cx"
           @@ (buildTypeApplicationTerm
             @@ Core.typeSchemeVariables (var "ts")
             @@ Core.termVariable (var "name"))
@@ -1351,7 +1352,7 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
             @@ (Core.typeSchemeBody $ var "instantiatedTs")
             @@ var "u_prime"
             @@ string "original binding type") $
-        right (Substitution.substInClassConstraints @@ var "unifySubst" @@ var "freshConstraints")) $
+        right (Substitution.substInClassConstraints @@ (Graph.graphSchemaTypes $ var "cx") @@ var "unifySubst" @@ var "freshConstraints")) $
 
     "c1" <~ mergeClassConstraints @@ var "c1Inferred" @@ var "originalBindingConstraints" $
 
@@ -1365,7 +1366,7 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
     "restPair" <~ Pairs.second (Pairs.second $ var "result2") $
     "r" <~ Pairs.first (var "restPair") $
     "c2" <~ Pairs.second (var "restPair") $
-    "c1Subst" <~ Substitution.substInClassConstraints @@ var "r" @@ var "c1" $
+    "c1Subst" <~ Substitution.substInClassConstraints @@ (Graph.graphSchemaTypes $ var "cx") @@ var "r" @@ var "c1" $
     "mergedConstraints" <~ mergeClassConstraints @@ var "c1Subst" @@ var "c2" $
     right $ pair (pair
       (Lists.cons (Substitution.substTypesInTerm @@ var "r" @@ var "j") (var "h"))
@@ -1445,14 +1446,14 @@ yieldChecked = define "yieldChecked" $
   "itype" <~ Substitution.substInType @@ var "subst" @@ var "typ" $
   Typing.inferenceResult (var "iterm") (var "itype") (var "subst") Maps.empty (var "fcx")
 
-yieldCheckedWithConstraints :: TypedTermDefinition (InferenceContext -> Term -> Type -> TypeSubst -> M.Map Name TypeVariableConstraints -> InferenceResult)
+yieldCheckedWithConstraints :: TypedTermDefinition (InferenceContext -> Graph -> Term -> Type -> TypeSubst -> M.Map Name TypeVariableConstraints -> InferenceResult)
 yieldCheckedWithConstraints = define "yieldCheckedWithConstraints" $
   doc "Create a checked inference result with class constraints" $
-  "fcx" ~> "term" ~> "typ" ~> "subst" ~> "constraints" ~>
+  "fcx" ~> "cx" ~> "term" ~> "typ" ~> "subst" ~> "constraints" ~>
   "iterm" <~ Substitution.substTypesInTerm @@ var "subst" @@ var "term" $
   "itype" <~ Substitution.substInType @@ var "subst" @@ var "typ" $
   -- Apply the substitution to constraint keys as well, so they track the final variable names
-  "iconstraints" <~ Substitution.substInClassConstraints @@ var "subst" @@ var "constraints" $
+  "iconstraints" <~ Substitution.substInClassConstraints @@ (Graph.graphSchemaTypes $ var "cx") @@ var "subst" @@ var "constraints" $
   Typing.inferenceResult (var "iterm") (var "itype") (var "subst") (var "iconstraints") (var "fcx")
 
 -- ============================================================================

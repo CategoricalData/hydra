@@ -356,7 +356,7 @@ type NominalTypeKindMismatchError = record{
   ## The type variant that the name actually resolves to
   actualVariant: TypeVariant}
 
-## A map type whose key type is or directly contains a function type, which cannot be compared for equality
+## A map type whose key type is not comparable: it is, or contains (possibly through a nominal type), a function or effect type
 type NonComparableMapKeyTypeError = record{
 
   ## The path to the map type
@@ -365,7 +365,7 @@ type NonComparableMapKeyTypeError = record{
   ## The non-comparable key type
   keyType: Type}
 
-## A set type whose element type is or directly contains a function type, which cannot be compared for equality
+## A set type whose element type is not comparable: it is, or contains (possibly through a nominal type), a function or effect type
 type NonComparableSetElementTypeError = record{
 
   ## The path to the set type

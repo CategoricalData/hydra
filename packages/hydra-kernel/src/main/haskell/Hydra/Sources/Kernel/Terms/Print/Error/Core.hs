@@ -357,14 +357,14 @@ nonComparableMapKeyTypeError :: TypedTermDefinition (NonComparableMapKeyTypeErro
 nonComparableMapKeyTypeError = define "nonComparableMapKeyTypeError" $
   doc "Show a non-comparable map key type error as a string" $
   "e" ~> Strings.concat $ list [
-    string "map key type contains a function type: ",
+    string "map key type is not comparable (it contains a function or effect type): ",
     PrintCore.type_ @@ (project _NonComparableMapKeyTypeError _NonComparableMapKeyTypeError_keyType @@ var "e")]
 
 nonComparableSetElementTypeError :: TypedTermDefinition (NonComparableSetElementTypeError -> String)
 nonComparableSetElementTypeError = define "nonComparableSetElementTypeError" $
   doc "Show a non-comparable set element type error as a string" $
   "e" ~> Strings.concat $ list [
-    string "set element type contains a function type: ",
+    string "set element type is not comparable (it contains a function or effect type): ",
     PrintCore.type_ @@ (project _NonComparableSetElementTypeError _NonComparableSetElementTypeError_elementType @@ var "e")]
 
 redundantWrapUnwrapError :: TypedTermDefinition (RedundantWrapUnwrapError -> String)

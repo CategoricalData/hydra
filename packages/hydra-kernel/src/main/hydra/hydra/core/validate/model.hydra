@@ -2,6 +2,7 @@
 module hydra.core.validate.model
 
 import hydra.core.annotations
+import hydra.core.classes
 import hydra.core.error.model
 import hydra.core.graph
 import hydra.core.lib.equality
@@ -999,58 +1000,80 @@ term term =
       ValidationResult{errors = [], warnings = []}
       t
 
-## Validate a type against the given ValidationProfile, threading a ValidationResult accumulator through subtypes. Errors hard-stop traversal once maxErrors is reached.
+## Validate a type against the given ValidationProfile, threading a ValidationResult accumulator through subtypes. Nominal types are resolved through the given schema where a check needs them (e.g. comparability of map keys and set elements). Errors hard-stop traversal once maxErrors is reached.
 term type =
-  λp, acc, boundVars, typ.ifElse
-      (ordering.gte (lists.length (ValidationResult[errors] acc)) (ValidationProfile[maxErrors] p))
+  λp, schema, acc, boundVars, typ.ifElse
+      (ordering.gte
+        (lists.length (ValidationResult[errors] acc))
+        (ValidationProfile[maxErrors] p))
       acc
-      (let acc1 := appendFindingType p acc (validateTypeNode p boundVars typ)
+      (let acc1 := appendFindingType p acc (validateTypeNode p schema boundVars typ)
       in ifElse
-        (ordering.gte (lists.length (ValidationResult[errors] acc1)) (ValidationProfile[maxErrors] p))
+        (ordering.gte
+          (lists.length (ValidationResult[errors] acc1))
+          (ValidationProfile[maxErrors] p))
         acc1
         (cases(Type){
           `forall` = λft.
-              let newBound := sets.insert (ForallType[parameter] ft) boundVars
-              in `type` p acc1 newBound (ForallType[body] ft),
-          annotated = λann.`type` p acc1 boundVars (AnnotatedType[body] ann),
+              let newBound := sets.insert
+                  (ForallType[parameter] ft)
+                  boundVars
+              in `type` p schema acc1 newBound (ForallType[body] ft),
+          annotated = λann.`type` p schema acc1 boundVars (AnnotatedType[body] ann),
           application = λat.
               let acc2 := `type`
                   p
+                  schema
                   acc1
                   boundVars
                   (ApplicationType[function] at)
-              in `type` p acc2 boundVars (ApplicationType[argument] at),
-          `effect` = λet.`type` p acc1 boundVars et,
+              in `type`
+                p
+                schema
+                acc2
+                boundVars
+                (ApplicationType[argument] at),
+          `effect` = λet.`type` p schema acc1 boundVars et,
           `either` = λet.
-              let acc2 := `type` p acc1 boundVars (EitherType[`left`] et)
-              in `type` p acc2 boundVars (EitherType[`right`] et),
+              let acc2 := `type`
+                  p
+                  schema
+                  acc1
+                  boundVars
+                  (EitherType[`left`] et)
+              in `type` p schema acc2 boundVars (EitherType[`right`] et),
           function = λft.
-              let acc2 := `type` p acc1 boundVars (FunctionType[domain] ft)
-              in `type` p acc2 boundVars (FunctionType[codomain] ft),
-          `list` = λlt.`type` p acc1 boundVars lt,
+              let acc2 := `type`
+                  p
+                  schema
+                  acc1
+                  boundVars
+                  (FunctionType[domain] ft)
+              in `type` p schema acc2 boundVars (FunctionType[codomain] ft),
+          `list` = λlt.`type` p schema acc1 boundVars lt,
           `map` = λmt.
-              let acc2 := `type` p acc1 boundVars (MapType[keys] mt)
-              in `type` p acc2 boundVars (MapType[values] mt),
-          `optional` = λmt.`type` p acc1 boundVars mt,
+              let acc2 := `type` p schema acc1 boundVars (MapType[keys] mt)
+              in `type` p schema acc2 boundVars (MapType[values] mt),
+          `optional` = λmt.`type` p schema acc1 boundVars mt,
           pair = λpt.
-              let acc2 := `type` p acc1 boundVars (PairType[first] pt)
-              in `type` p acc2 boundVars (PairType[second] pt),
+              let acc2 := `type` p schema acc1 boundVars (PairType[first] pt)
+              in `type` p schema acc2 boundVars (PairType[second] pt),
           `record` = λfields.lists.foldl
-                (λa, f.`type` p a boundVars (FieldType[`type`] f))
+                (λa, f.`type` p schema a boundVars (FieldType[`type`] f))
                 acc1
                 fields,
-          `set` = λst.`type` p acc1 boundVars st,
+          `set` = λst.`type` p schema acc1 boundVars st,
           `union` = λfields.lists.foldl
-                (λa, f.`type` p a boundVars (FieldType[`type`] f))
+                (λa, f.`type` p schema a boundVars (FieldType[`type`] f))
                 acc1
                 fields,
-          `wrap` = λwt.`type` p acc1 boundVars wt,
+          `wrap` = λwt.`type` p schema acc1 boundVars wt,
           `_` = acc1}
           typ))
 
 ## Check a single type node for validation errors. Rules disabled by the profile are not evaluated.
 term validateTypeNode =
-  λp, boundVars, typ.cases(Type){
+  λp, schema, boundVars, typ.cases(Type){
       annotated = λann.
           let body := AnnotatedType[body] ann in
           let annMap := getAnnotationMap (AnnotatedType[annotation] ann) in
@@ -1150,13 +1173,13 @@ term validateTypeNode =
                 (enabled p Name{"hydra.core.error.model.InvalidTypeError.nonComparableMapKeyType"})
                 (optionals.map
                   (λf.(Name{"hydra.core.error.model.InvalidTypeError.nonComparableMapKeyType"}, f))
-                  (cases(Type){
-                    function = λ`_`.given(InvalidTypeError{
-                          nonComparableMapKeyType = NonComparableMapKeyTypeError{
-                            location = SubtermPath{[]},
-                            keyType = keyType}}),
-                    `_` = none}
-                    keyType))
+                  (ifElse
+                    (isComparableType schema keyType)
+                    none
+                    given(InvalidTypeError{
+                      nonComparableMapKeyType = NonComparableMapKeyTypeError{
+                        location = SubtermPath{[]},
+                        keyType = keyType}})))
                 none,
               ifElse
                 (enabled p Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})
@@ -1216,13 +1239,13 @@ term validateTypeNode =
                 (enabled p Name{"hydra.core.error.model.InvalidTypeError.nonComparableSetElementType"})
                 (optionals.map
                   (λf.(Name{"hydra.core.error.model.InvalidTypeError.nonComparableSetElementType"}, f))
-                  (cases(Type){
-                    function = λ`_`.given(InvalidTypeError{
-                          nonComparableSetElementType = NonComparableSetElementTypeError{
-                            location = SubtermPath{[]},
-                            elementType = elemType}}),
-                    `_` = none}
-                    elemType))
+                  (ifElse
+                    (isComparableType schema elemType)
+                    none
+                    given(InvalidTypeError{
+                      nonComparableSetElementType = NonComparableSetElementTypeError{
+                        location = SubtermPath{[]},
+                        elementType = elemType}})))
                 none,
               ifElse
                 (enabled p Name{"hydra.core.error.model.InvalidTypeError.voidInNonBottomPosition"})

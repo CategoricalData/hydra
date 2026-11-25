@@ -571,7 +571,7 @@ nestedTypeAnnotationError = define "NestedTypeAnnotationError" $
 -- Y11. NonComparableMapKeyTypeError
 nonComparableMapKeyTypeError :: TypeDefinition
 nonComparableMapKeyTypeError = define "NonComparableMapKeyTypeError" $
-  doc "A map type whose key type is or directly contains a function type, which cannot be compared for equality" $
+  doc "A map type whose key type is not comparable: it is, or contains (possibly through a nominal type), a function or effect type" $
   T.record [
     "location">:
       doc "The path to the map type" $
@@ -584,7 +584,7 @@ nonComparableMapKeyTypeError = define "NonComparableMapKeyTypeError" $
 -- Y12. NonComparableSetElementTypeError
 nonComparableSetElementTypeError :: TypeDefinition
 nonComparableSetElementTypeError = define "NonComparableSetElementTypeError" $
-  doc "A set type whose element type is or directly contains a function type, which cannot be compared for equality" $
+  doc "A set type whose element type is not comparable: it is, or contains (possibly through a nominal type), a function or effect type" $
   T.record [
     "location">:
       doc "The path to the set type" $

@@ -132,7 +132,7 @@ singletonTypeSubst = define "singletonTypeSubst" $
 -- When a type variable is mapped to another type variable, or to a type with genuine free type
 -- variables (see "isGenuineVarName" below), the constraint is re-keyed/propagated to those
 -- variables only. When a type variable is mapped to a type with no genuine free variables, the
--- variable is dead: any class it satisfies (e.g. ordering/equality, which are universal) is
+-- variable is dead: any class it satisfies (e.g. ordering/equality, for a comparable type) is
 -- dropped, since a later Inference.dischargeClassConstraints check against the same resolved type
 -- could only reach the same verdict -- dropping precomputes that inevitable success. Any class it
 -- does NOT satisfy is retained under the ORIGINAL variable name so discharge still rejects it (see
@@ -150,10 +150,10 @@ singletonTypeSubst = define "singletonTypeSubst" $
 -- are rebuilt in full on every substitution, making whole-module constraint propagation quadratic
 -- in term size (#702). Pruning keeps the map bounded by the number of currently-live constrained
 -- variables, which is small (the polymorphic arity of the binding being inferred).
-substInClassConstraints :: TypedTermDefinition (TypeSubst -> M.Map Name TypeVariableConstraints -> M.Map Name TypeVariableConstraints)
+substInClassConstraints :: TypedTermDefinition (M.Map Name TypeScheme -> TypeSubst -> M.Map Name TypeVariableConstraints -> M.Map Name TypeVariableConstraints)
 substInClassConstraints = define "substInClassConstraints" $
   doc "Apply a type substitution to class constraints, propagating to free variables or discharging/retaining on concrete resolution" $
-  "subst" ~> "constraints" ~>
+  "schema" ~> "subst" ~> "constraints" ~>
   "substMap" <~ Typing.unTypeSubst (var "subst") $
   Logic.ifElse (Logic.or (Maps.isEmpty (var "substMap" :: TypedTerm (M.Map Name Type))) (Maps.isEmpty (var "constraints" :: TypedTerm (M.Map Name TypeVariableConstraints))))
     (var "constraints" :: TypedTerm (M.Map Name TypeVariableConstraints)) $
@@ -185,15 +185,29 @@ substInClassConstraints = define "substInClassConstraints" $
         ("targetType" ~>
           "genuineVars" <~ Lists.filter (var "isGenuineVarName") (Sets.toList (Variables.freeVariablesInType @@ var "targetType")) $
           Logic.ifElse (Logic.not $ Lists.isEmpty (var "genuineVars"))
-            (Lists.foldl
+            -- Live variable: propagate the constraints to the genuine free variables. But equality and
+            -- ordering cannot be propagated into a type that is incomparable whatever its variables
+            -- resolve to (one containing a function or effect type, #848): those classes are also
+            -- retained under the original name, so that discharge rejects them.
+            ("incomparable" <~ Sets.filter
+              ("c" ~>
+                "cn" <~ match _TypeClassConstraint (var "c") Nothing [_TypeClassConstraint_simple>>: "n" ~> var "n"] $
+                Logic.and
+                  (Logic.or (Equality.equal (var "cn") (Core.name $ string "equality")) (Equality.equal (var "cn") (Core.name $ string "ordering")))
+                  (Logic.not $ Classes.isComparableType @@ var "schema" @@ var "targetType"))
+              (Core.typeVariableConstraintsClasses $ var "metadata") $
+             "acc1" <~ Logic.ifElse (Sets.isEmpty (var "incomparable" :: TypedTerm (S.Set TypeClassConstraint)))
+               (var "acc")
+               (var "insertOrMerge" @@ var "varName" @@ (Core.typeVariableConstraints $ var "incomparable") @@ var "acc") $
+             Lists.foldl
               ("acc2" ~> "freeVar" ~> var "insertOrMerge" @@ var "freeVar" @@ var "metadata" @@ var "acc2")
-              (var "acc")
+              (var "acc1")
               (var "genuineVars"))
             -- Dead variable: drop classes the target type already satisfies (discharge would
             -- pass them anyway); retain only the unsatisfied ones, under the original name, so
             -- discharge still rejects them.
             ("unsatisfied" <~ Sets.filter
-              ("c" ~> Logic.not $ Classes.classIsSatisfiedByType @@ (match _TypeClassConstraint (var "c") Nothing [_TypeClassConstraint_simple>>: "n" ~> var "n"]) @@ var "targetType")
+              ("c" ~> Logic.not $ Classes.classIsSatisfiedByType @@ var "schema" @@ (match _TypeClassConstraint (var "c") Nothing [_TypeClassConstraint_simple>>: "n" ~> var "n"]) @@ var "targetType")
               (Core.typeVariableConstraintsClasses $ var "metadata") $
              Logic.ifElse (Sets.isEmpty (var "unsatisfied" :: TypedTerm (S.Set TypeClassConstraint)))
                (var "acc")
@@ -206,7 +220,7 @@ substInContext = define "substInContext" $
   doc "Apply a type substitution to a graph's bound types and class constraints" $
   lambdas ["subst", "cx"] $
     "newBoundTypes" <~ Maps.map (substInTypeScheme @@ var "subst") (Graph.graphBoundTypes $ var "cx") $
-    "newClassConstraints" <~ substInClassConstraints @@ var "subst" @@ (Graph.graphClassConstraints $ var "cx") $
+    "newClassConstraints" <~ substInClassConstraints @@ (Graph.graphSchemaTypes $ var "cx") @@ var "subst" @@ (Graph.graphClassConstraints $ var "cx") $
     "cx2" <~ Graph.graphWithBoundTypes (var "cx") (var "newBoundTypes") $
     Graph.graphWithClassConstraints (var "cx2") (var "newClassConstraints")
 
@@ -253,8 +267,11 @@ substInTypeScheme = define "substInTypeScheme" $
     Core.typeScheme
       (Core.typeSchemeVariables $ var "ts")
       (substInType @@ var "scopedSubst" @@ (Core.typeSchemeBody $ var "ts"))
-      -- Also apply the substitution to the constraints
-      (substInClassConstraints @@ var "scopedSubst" @@ (Core.typeSchemeConstraints $ var "ts"))
+      -- Also apply the substitution to the constraints. No schema is available here (this function is
+      -- reached from substTypesInTerm, which is graph-free), so nominal types are not resolved when
+      -- pruning: a scheme's constraints are bookkeeping, and class-constraint discharge works from the
+      -- inference result's own constraint map, which is substituted with the schema (#848).
+      (substInClassConstraints @@ (Maps.empty :: TypedTerm (M.Map Name TypeScheme)) @@ var "scopedSubst" @@ (Core.typeSchemeConstraints $ var "ts"))
 
 substTypesInTerm :: TypedTermDefinition (TypeSubst -> Term -> Term)
 substTypesInTerm = define "substTypesInTerm" $

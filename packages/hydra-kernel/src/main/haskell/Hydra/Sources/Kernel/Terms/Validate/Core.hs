@@ -23,6 +23,7 @@ import Hydra.Core.Overlay.Haskell.Libraries
 import qualified Hydra.Core.Dsl.Paths    as Paths
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Annotations       as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Annotations as KernelAnnotations
+import qualified Hydra.Sources.Kernel.Terms.Classes   as Classes
 import qualified Hydra.Core.Dsl.Ast          as Ast
 import qualified Hydra.Core.Overlay.Haskell.Bootstrap         as Bootstrap
 import qualified Hydra.Core.Dsl.Coders       as Coders
@@ -89,7 +90,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([KernelAnnotations.ns, Names.ns, Reflect.ns, Rewriting.ns, Scoping.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Classes.ns, KernelAnnotations.ns, Names.ns, Reflect.ns, Rewriting.ns, Scoping.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleMetadata = Bootstrap.descriptionMetadata (Just "Validation functions for core terms and types")}
   where
    definitions = [
@@ -1260,13 +1261,14 @@ term = define "term" $
 -- binders extend it before recursing into the body.
 type_ :: TypedTermDefinition (
   ValidationProfile
+  -> M.Map Name TypeScheme
   -> ValidationResult InvalidTypeError
   -> S.Set Name
   -> Type
   -> ValidationResult InvalidTypeError)
 type_ = define "type" $
-  doc "Validate a type against the given ValidationProfile, threading a ValidationResult accumulator through subtypes. Errors hard-stop traversal once maxErrors is reached." $
-  "p" ~> "acc" ~> "boundVars" ~> "typ" ~>
+  doc "Validate a type against the given ValidationProfile, threading a ValidationResult accumulator through subtypes. Nominal types are resolved through the given schema where a check needs them (e.g. comparability of map keys and set elements). Errors hard-stop traversal once maxErrors is reached." $
+  "p" ~> "schema" ~> "acc" ~> "boundVars" ~> "typ" ~>
   -- Hard stop: if maxErrors already reached, leave accumulator unchanged.
   Logic.ifElse
     (Ordering.gte
@@ -1276,7 +1278,7 @@ type_ = define "type" $
     -- Otherwise: classify the per-node finding, append it to the accumulator,
     -- then re-check the cap before recursing into subtypes.
     ("acc1" <~ appendFindingType @@ var "p" @@ var "acc"
-        @@ (validateTypeNode @@ var "p" @@ var "boundVars" @@ var "typ") $
+        @@ (validateTypeNode @@ var "p" @@ var "schema" @@ var "boundVars" @@ var "typ") $
       Logic.ifElse
         (Ordering.gte
           (Lists.length $ Validation.validationResultErrors $ var "acc1")
@@ -1289,54 +1291,54 @@ type_ = define "type" $
           -- For forall, extend bound vars before recursing into the body.
           _Type_forall>>: "ft" ~>
             "newBound" <~ Sets.insert (Core.forallTypeParameter $ var "ft") (var "boundVars") $
-            type_ @@ var "p" @@ var "acc1" @@ var "newBound" @@ (Core.forallTypeBody $ var "ft"),
+            type_ @@ var "p" @@ var "schema" @@ var "acc1" @@ var "newBound" @@ (Core.forallTypeBody $ var "ft"),
           _Type_annotated>>: "ann" ~>
-            type_ @@ var "p" @@ var "acc1" @@ var "boundVars" @@ (Core.annotatedTypeBody $ var "ann"),
+            type_ @@ var "p" @@ var "schema" @@ var "acc1" @@ var "boundVars" @@ (Core.annotatedTypeBody $ var "ann"),
           _Type_application>>: "at" ~>
-            "acc2" <~ type_ @@ var "p" @@ var "acc1" @@ var "boundVars" @@ (Core.applicationTypeFunction $ var "at") $
-            type_ @@ var "p" @@ var "acc2" @@ var "boundVars" @@ (Core.applicationTypeArgument $ var "at"),
+            "acc2" <~ type_ @@ var "p" @@ var "schema" @@ var "acc1" @@ var "boundVars" @@ (Core.applicationTypeFunction $ var "at") $
+            type_ @@ var "p" @@ var "schema" @@ var "acc2" @@ var "boundVars" @@ (Core.applicationTypeArgument $ var "at"),
           _Type_effect>>: "et" ~>
-            type_ @@ var "p" @@ var "acc1" @@ var "boundVars" @@ var "et",
+            type_ @@ var "p" @@ var "schema" @@ var "acc1" @@ var "boundVars" @@ var "et",
           _Type_either>>: "et" ~>
-            "acc2" <~ type_ @@ var "p" @@ var "acc1" @@ var "boundVars" @@ (Core.eitherTypeLeft $ var "et") $
-            type_ @@ var "p" @@ var "acc2" @@ var "boundVars" @@ (Core.eitherTypeRight $ var "et"),
+            "acc2" <~ type_ @@ var "p" @@ var "schema" @@ var "acc1" @@ var "boundVars" @@ (Core.eitherTypeLeft $ var "et") $
+            type_ @@ var "p" @@ var "schema" @@ var "acc2" @@ var "boundVars" @@ (Core.eitherTypeRight $ var "et"),
           _Type_function>>: "ft" ~>
-            "acc2" <~ type_ @@ var "p" @@ var "acc1" @@ var "boundVars" @@ (Core.functionTypeDomain $ var "ft") $
-            type_ @@ var "p" @@ var "acc2" @@ var "boundVars" @@ (Core.functionTypeCodomain $ var "ft"),
+            "acc2" <~ type_ @@ var "p" @@ var "schema" @@ var "acc1" @@ var "boundVars" @@ (Core.functionTypeDomain $ var "ft") $
+            type_ @@ var "p" @@ var "schema" @@ var "acc2" @@ var "boundVars" @@ (Core.functionTypeCodomain $ var "ft"),
           _Type_list>>: "lt" ~>
-            type_ @@ var "p" @@ var "acc1" @@ var "boundVars" @@ var "lt",
+            type_ @@ var "p" @@ var "schema" @@ var "acc1" @@ var "boundVars" @@ var "lt",
           _Type_map>>: "mt" ~>
-            "acc2" <~ type_ @@ var "p" @@ var "acc1" @@ var "boundVars" @@ (Core.mapTypeKeys $ var "mt") $
-            type_ @@ var "p" @@ var "acc2" @@ var "boundVars" @@ (Core.mapTypeValues $ var "mt"),
+            "acc2" <~ type_ @@ var "p" @@ var "schema" @@ var "acc1" @@ var "boundVars" @@ (Core.mapTypeKeys $ var "mt") $
+            type_ @@ var "p" @@ var "schema" @@ var "acc2" @@ var "boundVars" @@ (Core.mapTypeValues $ var "mt"),
           _Type_optional>>: "mt" ~>
-            type_ @@ var "p" @@ var "acc1" @@ var "boundVars" @@ var "mt",
+            type_ @@ var "p" @@ var "schema" @@ var "acc1" @@ var "boundVars" @@ var "mt",
           _Type_pair>>: "pt" ~>
-            "acc2" <~ type_ @@ var "p" @@ var "acc1" @@ var "boundVars" @@ (Core.pairTypeFirst $ var "pt") $
-            type_ @@ var "p" @@ var "acc2" @@ var "boundVars" @@ (Core.pairTypeSecond $ var "pt"),
+            "acc2" <~ type_ @@ var "p" @@ var "schema" @@ var "acc1" @@ var "boundVars" @@ (Core.pairTypeFirst $ var "pt") $
+            type_ @@ var "p" @@ var "schema" @@ var "acc2" @@ var "boundVars" @@ (Core.pairTypeSecond $ var "pt"),
           _Type_record>>: "fields" ~>
             -- Fold over field types, threading the accumulator. Each step
             -- re-checks the max-errors cap inside the recursive call.
             Lists.foldl
-              ("a" ~> "f" ~> type_ @@ var "p" @@ var "a" @@ var "boundVars" @@ (Core.fieldTypeType $ var "f"))
+              ("a" ~> "f" ~> type_ @@ var "p" @@ var "schema" @@ var "a" @@ var "boundVars" @@ (Core.fieldTypeType $ var "f"))
               (var "acc1")
               (var "fields"),
           _Type_set>>: "st" ~>
-            type_ @@ var "p" @@ var "acc1" @@ var "boundVars" @@ var "st",
+            type_ @@ var "p" @@ var "schema" @@ var "acc1" @@ var "boundVars" @@ var "st",
           _Type_union>>: "fields" ~>
             Lists.foldl
-              ("a" ~> "f" ~> type_ @@ var "p" @@ var "a" @@ var "boundVars" @@ (Core.fieldTypeType $ var "f"))
+              ("a" ~> "f" ~> type_ @@ var "p" @@ var "schema" @@ var "a" @@ var "boundVars" @@ (Core.fieldTypeType $ var "f"))
               (var "acc1")
               (var "fields"),
           _Type_wrap>>: "wt" ~>
-            type_ @@ var "p" @@ var "acc1" @@ var "boundVars" @@ var "wt"]))
+            type_ @@ var "p" @@ var "schema" @@ var "acc1" @@ var "boundVars" @@ var "wt"]))
 
 -- | Check if a type is TypeVoid and return a VoidInNonBottomPositionError if so
 -- | Check a single type node for validation errors (without recursing into subtypes).
 -- Profile-aware variant; rules disabled by the profile are skipped entirely.
-validateTypeNode :: TypedTermDefinition (ValidationProfile -> S.Set Name -> Type -> Maybe (Name, InvalidTypeError))
+validateTypeNode :: TypedTermDefinition (ValidationProfile -> M.Map Name TypeScheme -> S.Set Name -> Type -> Maybe (Name, InvalidTypeError))
 validateTypeNode = define "validateTypeNode" $
   doc "Check a single type node for validation errors. Rules disabled by the profile are not evaluated." $
-  "p" ~> "boundVars" ~> "typ" ~>
+  "p" ~> "schema" ~> "boundVars" ~> "typ" ~>
   match _Type (var "typ") (Just nothing) [
 
     -- Y8/Y9: TypeAnnotated — nested or empty annotations
@@ -1408,12 +1410,12 @@ validateTypeNode = define "validateTypeNode" $
       "keyType" <~ Core.mapTypeKeys (var "mt") $
       firstFindingType @@ list [
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_nonComparableMapKeyType
-          (match _Type (var "keyType") (Just noTypeError) [
-            _Type_function>>: constant $
-              mkJustType $ inject _InvalidTypeError _InvalidTypeError_nonComparableMapKeyType $
-                record _NonComparableMapKeyTypeError [
-                  _NonComparableMapKeyTypeError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep])),
-                  _NonComparableMapKeyTypeError_keyType>>: var "keyType"]]),
+          (Logic.ifElse (Classes.isComparableType @@ var "schema" @@ var "keyType")
+            noTypeError
+            (mkJustType $ inject _InvalidTypeError _InvalidTypeError_nonComparableMapKeyType $
+              record _NonComparableMapKeyTypeError [
+                _NonComparableMapKeyTypeError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep])),
+                _NonComparableMapKeyTypeError_keyType>>: var "keyType"])),
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition
           (checkVoid @@ var "keyType"),
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition
@@ -1455,12 +1457,12 @@ validateTypeNode = define "validateTypeNode" $
     _Type_set>>: "elemType" ~>
       firstFindingType @@ list [
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_nonComparableSetElementType
-          (match _Type (var "elemType") (Just noTypeError) [
-            _Type_function>>: constant $
-              mkJustType $ inject _InvalidTypeError _InvalidTypeError_nonComparableSetElementType $
-                record _NonComparableSetElementTypeError [
-                  _NonComparableSetElementTypeError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep])),
-                  _NonComparableSetElementTypeError_elementType>>: var "elemType"]]),
+          (Logic.ifElse (Classes.isComparableType @@ var "schema" @@ var "elemType")
+            noTypeError
+            (mkJustType $ inject _InvalidTypeError _InvalidTypeError_nonComparableSetElementType $
+              record _NonComparableSetElementTypeError [
+                _NonComparableSetElementTypeError_location>>: wrap _SubtermPath (list ([] :: [TypedTerm SubtermStep])),
+                _NonComparableSetElementTypeError_elementType>>: var "elemType"])),
         guardedTypeRule (var "p") _InvalidTypeError _InvalidTypeError_voidInNonBottomPosition
           (checkVoid @@ var "elemType")],
 

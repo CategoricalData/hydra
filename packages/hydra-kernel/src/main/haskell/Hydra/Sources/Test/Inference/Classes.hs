@@ -41,7 +41,8 @@ module_ = Module {
       Phantoms.toDefinition testGroupForLetBindings,
       Phantoms.toDefinition testGroupForComposition,
       Phantoms.toDefinition testGroupForNestedContainers,
-      Phantoms.toDefinition testGroupForCollectionTerms]
+      Phantoms.toDefinition testGroupForCollectionTerms,
+      Phantoms.toDefinition testGroupForComparability]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
@@ -56,7 +57,8 @@ allTests = define "allTests" $
     testGroupForLetBindings,
     testGroupForComposition,
     testGroupForNestedContainers,
-    testGroupForCollectionTerms]
+    testGroupForCollectionTerms,
+    testGroupForComparability]
 
 -- | Constraints derived from collection term literals (set and map syntax).
 testGroupForCollectionTerms :: TypedTermDefinition TestGroup
@@ -276,6 +278,49 @@ testGroupForMonomorphicConstraints = define "testGroupForMonomorphicConstraints"
       expectMono 1 []
         (primitive DefLists.sort @@ list [int32 3, int32 1, int32 2])
         (T.list T.int32)]]
+
+-- | Comparability (#848): equality and ordering hold only for types with no function or effect
+-- subexpression, including through nominal types and polymorphic instantiation.
+testGroupForComparability :: TypedTermDefinition TestGroup
+testGroupForComparability = define "testGroupForComparability" $
+  supergroup "Comparability" [
+
+    subgroup "Function types are not comparable" [
+      expectFailure 1 []
+        (primitive DefEquality.equal @@ incInt32 @@ incInt32),
+      expectFailure 2 []
+        (primitive DefOrdering.compare @@ lambda "x" (var "x") @@ lambda "x" (var "x")),
+      expectFailure 3 []
+        (primitive DefMaps.singleton @@ incInt32 @@ string "v")],
+
+    subgroup "Nested function types are not comparable" [
+      expectFailure 1 []
+        (primitive DefSets.singleton @@ pair (int32 1) incInt32),
+      -- The constraint cannot be propagated to the free variable alone
+      expectFailure 2 []
+        (lambda "y" $ primitive DefSets.singleton @@ pair (var "y") incInt32),
+      -- A polymorphic record type instantiated at a function type
+      expectFailure 3 []
+        (primitive DefSets.singleton @@ record (TestTypes.testTypeLatLonPolyName) [
+          "lat">: incInt32,
+          "lon">: incInt32])],
+
+    subgroup "Comparable types are accepted" [
+      -- A function type is allowed as a map value
+      expectMono 1 []
+        (primitive DefMaps.singleton @@ string "k" @@ incInt32)
+        (T.map T.string (T.function T.int32 T.int32)),
+      expectMono 2 []
+        (primitive DefSets.singleton @@ record (TestTypes.testTypeLatLonPolyName) [
+          "lat">: float32 1.0,
+          "lon">: float32 2.0])
+        (T.set $ T.apply (Core.typeVariable (TestTypes.testTypeLatLonPolyName)) T.float32),
+      expectMono 3 []
+        (primitive DefSets.singleton @@ pair (int32 1) (string "a"))
+        (T.set $ T.pair T.int32 T.string)]]
+  where
+    -- Inference ignores lambda domain annotations, so the body fixes the type at int32 -> int32
+    incInt32 = lambda "x" $ primitive DefMath.add @@ var "x" @@ int32 1
 
 -- | Nested container types where constraints apply at multiple levels.
 testGroupForNestedContainers :: TypedTermDefinition TestGroup

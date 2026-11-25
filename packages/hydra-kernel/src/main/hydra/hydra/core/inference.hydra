@@ -123,7 +123,7 @@ term buildTypeApplicationTerm =
 
 ## Check that every constrained type variable's final resolved type is an instance of each class it was constrained to.
 term dischargeClassConstraints =
-  λfcx, subst, constraints.
+  λfcx, cx, subst, constraints.
     let substMap := TypeSubst[] subst in
     let checkOne := λpair.
         let varName := first pair in
@@ -138,6 +138,7 @@ term dischargeClassConstraints =
                     classConstraint
                 in ifElse
                   (classIsSatisfiedByType
+                    (Graph[schemaTypes] cx)
                     className
                     resolvedType)
                   right(unit)
@@ -245,6 +246,7 @@ term inferGraphTypes =
         eithers.bind
           (dischargeClassConstraints
             fcx2
+            g0
             (InferenceResult[subst] result)
             (InferenceResult[classConstraints] result))
           (λ`_`.eithers.bind
@@ -268,6 +270,7 @@ term inferInGraphContext =
         in eithers.bind
           (dischargeClassConstraints
             fcx2
+            cx
             (InferenceResult[subst] result)
             (InferenceResult[classConstraints] result))
           (λ`_`.eithers.bind
@@ -308,7 +311,7 @@ term inferMany =
                 let t2 := first (second result2) in
                 let s2 := first (second (second result2)) in
                 let c2 := second (second (second result2)) in
-                let c1Subst := substInClassConstraints s2 c1 in
+                let c1Subst := substInClassConstraints (Graph[schemaTypes] cx) s2 c1 in
                 let mergedConstraints := mergeClassConstraints c1Subst c2 in
                 right((
                   (
@@ -330,6 +333,7 @@ term inferTypeOf =
         in eithers.bind
           (dischargeClassConstraints
             fcx2
+            cx
             (InferenceResult[subst] result)
             (InferenceResult[classConstraints] result))
           (λ`_`.eithers.bind
@@ -435,8 +439,11 @@ term inferTypeOfApplication =
                         argument = substTypesInTerm s2 b}} in
                     let rType := substInType s2 Type{variable = v} in
                     let rSubst := composeTypeSubstList [s0, s1, s2] in
-                    let c0Subst := substInClassConstraints s2 (substInClassConstraints s1 c0) in
-                    let c1Subst := substInClassConstraints s2 c1 in
+                    let c0Subst := substInClassConstraints
+                        (Graph[schemaTypes] cx)
+                        s2
+                        (substInClassConstraints (Graph[schemaTypes] cx) s1 c0) in
+                    let c1Subst := substInClassConstraints (Graph[schemaTypes] cx) s2 c1 in
                     let rConstraints := mergeClassConstraints c0Subst c1Subst in
                     right(InferenceResult{
                       `term` = rExpr,
@@ -557,7 +564,10 @@ term inferTypeOfCaseStatement =
                             (composeTypeSubstList
                               (lists.concat
                                 [optionals.toList (optionals.map InferenceResult[subst] dfltResult), [isubst, subst]]))
-                            (substInClassConstraints subst allElemConstraints))
+                            (substInClassConstraints
+                              (Graph[schemaTypes] cx)
+                              subst
+                              allElemConstraints))
                         (lists.concat [dfltConstraints, caseConstraints]))
                       (λmcResult.right(mcResult))))))
 
@@ -624,7 +634,10 @@ term inferTypeOfCollection =
                   iterm
                   itype
                   isubst
-                  (substInClassConstraints subst2 allConstraints))
+                  (substInClassConstraints
+                    (Graph[schemaTypes] cx)
+                    subst2
+                    allConstraints))
               constraints)
             (λmcResult.right(mcResult))))
 
@@ -736,7 +749,10 @@ term inferTypeOfInjection =
                                 tname
                                 (lists.map (λx.Type{variable = x}) svars))
                               (composeTypeSubst isubst subst)
-                              (substInClassConstraints subst iconstraints)))
+                              (substInClassConstraints
+                                (Graph[schemaTypes] cx)
+                                subst
+                                iconstraints)))
                         [TypeConstraint{`left` = ftyp, `right` = ityp, comment = "schema type of injected field"}])
                       (λmcResult.right(mcResult))))))
 
@@ -766,7 +782,10 @@ term inferTypeOfLambda =
         let vars := sets.unions
             [freeVariablesInType rdom, freeVariablesInType icod, freeVariablesInContext (substInContext isubst cx2)] in
         let cx3 := substInContext isubst cx in
-        let iconstraints := substInClassConstraints isubst (InferenceResult[classConstraints] result) in
+        let iconstraints := substInClassConstraints
+            (Graph[schemaTypes] cx)
+            isubst
+            (InferenceResult[classConstraints] result) in
         right(InferenceResult{
           `term` = rterm,
           `type` = rtype,
@@ -885,7 +904,10 @@ term inferTypeOfLetNormalized =
               (checkTypeSubst fcx3 cx0 s2)
               (λ`_`.
                 let g2base := substInContext (composeTypeSubst s1 s2) cx0 in
-                let constraintsWithS2 := substInClassConstraints s2 inferredConstraints in
+                let constraintsWithS2 := substInClassConstraints
+                    (Graph[schemaTypes] cx0)
+                    s2
+                    inferredConstraints in
                 let composedSubst := composeTypeSubst s1 s2 in
                 let originalBindingConstraints := lists.foldl
                     (λacc, b.optionals.match
@@ -897,6 +919,7 @@ term inferTypeOfLetNormalized =
                     maps.empty
                     bins0 in
                 let originalConstraintsSubst := substInClassConstraints
+                    (Graph[schemaTypes] cx0)
                     composedSubst
                     originalBindingConstraints in
                 let allInferredConstraints := mergeClassConstraints
@@ -955,9 +978,11 @@ term inferTypeOfLetNormalized =
                           typeScheme = given(finalTs)} in
                     let bins1 := lists.map createBinding (lists.zip tsbins1 bterms1Subst) in
                     let bodyConstraints := substInClassConstraints
+                        (Graph[schemaTypes] cx0)
                         sbody
                         (InferenceResult[classConstraints] bodyResult) in
                     let bindingConstraintsSubst := substInClassConstraints
+                        (Graph[schemaTypes] cx0)
                         sbody
                         constraintsWithS2 in
                     let allConstraints := mergeClassConstraints
@@ -1050,7 +1075,7 @@ term inferTypeOfMap =
                       Term{`map` = maps.fromList (lists.zip kterms vterms)}
                       Type{`map` = MapType{keys = Type{variable = kvar}, values = Type{variable = vvar}}}
                       (composeTypeSubstList [ksubst, vsubst, subst])
-                      (substInClassConstraints subst allMapConstraints))
+                      (substInClassConstraints (Graph[schemaTypes] cx) subst allMapConstraints))
                   (lists.concat [kcons, vcons]))
                 (λmcResult.right(mcResult)))))
 
@@ -1180,7 +1205,7 @@ term inferTypeOfRecord =
                               iterms}})
                     (nominalApplication tname (lists.map (λx.Type{variable = x}) svars))
                     (composeTypeSubst isubst subst)
-                    (substInClassConstraints subst recElemConstraints))
+                    (substInClassConstraints (Graph[schemaTypes] cx) subst recElemConstraints))
                 [TypeConstraint{`left` = stype, `right` = ityp, comment = "schema type of record"}])
               (λmcResult.right(mcResult))))
 
@@ -1300,6 +1325,7 @@ term inferTypeOfVariable =
           let constraints := TypeScheme[constraints] ts in
           right(yieldCheckedWithConstraints
             fcx2
+            cx
             (buildTypeApplicationTerm (TypeScheme[variables] ts) Term{variable = name})
             (TypeScheme[body] ts)
             idTypeSubst
@@ -1397,7 +1423,10 @@ term inferTypesOfTemporaryBindings =
                         (TypeScheme[body] instantiatedTs)
                         `u_prime`
                         "original binding type"))
-                    (λunifySubst.right(substInClassConstraints unifySubst freshConstraints))))
+                    (λunifySubst.right(substInClassConstraints
+                        (Graph[schemaTypes] cx)
+                        unifySubst
+                        freshConstraints))))
               (λoriginalBindingConstraints.
                 let c1 := mergeClassConstraints
                     c1Inferred
@@ -1412,7 +1441,10 @@ term inferTypesOfTemporaryBindings =
                     let restPair := second (second result2) in
                     let r := first restPair in
                     let c2 := second restPair in
-                    let c1Subst := substInClassConstraints r c1 in
+                    let c1Subst := substInClassConstraints
+                        (Graph[schemaTypes] cx)
+                        r
+                        c1 in
                     let mergedConstraints := mergeClassConstraints c1Subst c2 in
                     right((
                       (
@@ -1488,10 +1520,13 @@ term yieldChecked =
 
 ## Create a checked inference result with class constraints
 term yieldCheckedWithConstraints =
-  λfcx, `term`, typ, subst, constraints.
+  λfcx, cx, `term`, typ, subst, constraints.
     let iterm := substTypesInTerm subst `term` in
     let itype := substInType subst typ in
-    let iconstraints := substInClassConstraints subst constraints in
+    let iconstraints := substInClassConstraints
+        (Graph[schemaTypes] cx)
+        subst
+        constraints in
     InferenceResult{
       `term` = iterm,
       `type` = itype,

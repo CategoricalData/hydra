@@ -9,7 +9,11 @@ import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Core          as Core
 import           Hydra.Core.Overlay.Haskell.Dsl.Phantoms      as Phantoms hiding ((++))
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Meta.Types         as T
+import qualified Hydra.Core.Dsl.Lib.Lists     as Lists
+import qualified Hydra.Core.Dsl.Lib.Literals  as Literals
 import qualified Hydra.Core.Dsl.Lib.Maps      as Maps
+import qualified Hydra.Core.Dsl.Lib.Sets      as Sets
+import qualified Hydra.Core.Dsl.Lib.Strings   as Strings
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
@@ -17,6 +21,7 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 import Hydra.Core.Testing
+import qualified Hydra.Sources.Kernel.Terms.Classes as Classes
 import qualified Hydra.Sources.Kernel.Terms.Print.Core as PrintCore
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 
@@ -28,7 +33,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([PrintCore.ns, Substitution.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([Classes.ns, PrintCore.ns, Substitution.ns] ++ kernelTypesModuleNames),
             moduleMetadata = descriptionMetadata ((Just "Test cases for type and term substitution operations"))}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -41,7 +46,9 @@ allTests = define "allTests" $
     doc "Test cases for type and term substitution operations" $
     supergroup "substitution" [
       substInTypeTests,
-      substInTypeSchemeTests]
+      substInTypeSchemeTests,
+      comparabilityTests,
+      substInClassConstraintsTests]
 
 -- Helper to build names
 nm :: String -> TypedTerm Name
@@ -65,6 +72,40 @@ showSubstInTypeSchemeBody pairs inputScheme =
   PrintCore.type_ @@ (Core.typeSchemeBody $ Substitution.substInTypeScheme @@
     (wrap _TypeSubst (Maps.fromList (subst pairs))) @@ inputScheme)
 
+-- | A schema of nominal types for the comparability tests (#848)
+comparabilitySchema :: TypedTerm (M.Map Name TypeScheme)
+comparabilitySchema = Maps.fromList $ list [
+  pair (nm "test.Point") (scheme [] $ T.record (nm "test.Point") [fieldOf "x" T.int32, fieldOf "y" T.int32]),
+  pair (nm "test.WithFunction") (scheme [] $ T.record (nm "test.WithFunction") [fieldOf "f" (T.function T.int32 T.int32)]),
+  pair (nm "test.Box") (scheme ["a"] $ T.wrap (nm "test.Box") (T.var "a")),
+  pair (nm "test.Tagged") (scheme ["a"] $ T.wrap (nm "test.Tagged") T.string),
+  pair (nm "test.IntList") (scheme [] $ T.union (nm "test.IntList") [
+    fieldOf "nil" T.unit,
+    fieldOf "cons" (T.pair T.int32 (T.var "test.IntList"))]),
+  pair (nm "test.FunctionList") (scheme [] $ T.union (nm "test.FunctionList") [
+    fieldOf "nil" T.unit,
+    fieldOf "cons" (T.pair (T.function T.int32 T.int32) (T.var "test.FunctionList"))])]
+
+-- | A field of a record or union type
+fieldOf :: String -> TypedTerm Type -> (TypedTerm Name, TypedTerm Type)
+fieldOf fname ftype = (nm fname, ftype)
+
+-- | Universal isComparableType test case
+comparableCase :: String -> TypedTerm Type -> Bool -> TypedTerm TestCaseWithMetadata
+comparableCase cname typ expected = universalCase cname
+  (Literals.printBoolean $ Classes.isComparableType @@ comparabilitySchema @@ typ)
+  (string $ if expected then "true" else "false")
+
+-- | Universal substInClassConstraints test case: substitute into a single class constraint on t0,
+-- and show the names of the variables which carry constraints afterward
+substInClassConstraintsCase :: String -> String -> [(String, TypedTerm Type)] -> [String] -> TypedTerm TestCaseWithMetadata
+substInClassConstraintsCase cname className pairs expected = universalCase cname
+  (Strings.join (string ",") $ Lists.map (reify Core.unName) $ Maps.keys $
+    Substitution.substInClassConstraints @@ comparabilitySchema
+      @@ (wrap _TypeSubst (Maps.fromList (subst pairs)))
+      @@ (Maps.singleton (nm "t0") (Core.typeVariableConstraints $ Sets.singleton $ Core.typeClassConstraintSimple $ nm className)))
+  (string $ L.intercalate "," expected)
+
 -- Helper for building substitution pairs
 subst :: [(String, TypedTerm Type)] -> TypedTerm [(Name, Type)]
 subst pairs = list [pair (nm n) t | (n, t) <- pairs]
@@ -78,6 +119,49 @@ substInTypeSchemeBodyCase :: String -> [(String, TypedTerm Type)] -> TypedTerm T
 substInTypeSchemeBodyCase cname pairs input expectedBody =
   universalCase cname (showSubstInTypeSchemeBody pairs input)
     (PrintCore.type_ @@ expectedBody)
+
+-- ============================================================
+-- Comparability tests (#848)
+-- ============================================================
+
+comparabilityTests :: TypedTerm TestGroup
+comparabilityTests = subgroup "isComparableType" [
+  comparableCase "literal" T.int32 True,
+  comparableCase "unit" T.unit True,
+  comparableCase "void" T.void True,
+  comparableCase "function" (T.function T.int32 T.int32) False,
+  comparableCase "effect" (Core.typeEffect T.int32) False,
+  comparableCase "list of maps" (T.list $ T.map T.string T.int32) True,
+  comparableCase "function in a pair" (T.pair T.int32 (T.function T.int32 T.int32)) False,
+  comparableCase "function as a map value" (T.map T.string (T.function T.int32 T.int32)) False,
+  comparableCase "effect in a list" (T.list $ Core.typeEffect T.string) False,
+  comparableCase "annotated function" (T.annot Maps.empty (T.function T.int32 T.int32)) False,
+  comparableCase "type variable" (T.var "t0") True,
+  comparableCase "forall over a comparable body" (T.forAll "a" $ T.list $ T.var "a") True,
+  comparableCase "forall over a function" (T.forAll "a" $ T.function (T.var "a") (T.var "a")) False,
+  comparableCase "nominal record" (T.var "test.Point") True,
+  comparableCase "nominal record with a function field" (T.var "test.WithFunction") False,
+  comparableCase "nominal type nested in a set" (T.set $ T.var "test.WithFunction") False,
+  comparableCase "polymorphic wrapper at a comparable type" (T.apply (T.var "test.Box") T.int32) True,
+  comparableCase "polymorphic wrapper at a function type" (T.apply (T.var "test.Box") (T.function T.int32 T.int32)) False,
+  comparableCase "phantom parameter at a function type" (T.apply (T.var "test.Tagged") (T.function T.int32 T.int32)) True,
+  comparableCase "recursive union" (T.var "test.IntList") True,
+  comparableCase "recursive union with a function" (T.var "test.FunctionList") False]
+
+substInClassConstraintsTests :: TypedTerm TestGroup
+substInClassConstraintsTests = subgroup "substInClassConstraints" [
+  substInClassConstraintsCase "ordering propagates to free variables" "ordering"
+    [("t0", T.pair (T.var "t1") T.int32)] ["t1"],
+  substInClassConstraintsCase "ordering is discharged by a comparable type" "ordering"
+    [("t0", T.var "test.Point")] [],
+  substInClassConstraintsCase "ordering is retained on a function type" "ordering"
+    [("t0", T.function T.int32 T.int32)] ["t0"],
+  substInClassConstraintsCase "ordering is retained on a nominal type with a function field" "ordering"
+    [("t0", T.var "test.WithFunction")] ["t0"],
+  substInClassConstraintsCase "ordering is retained, not just propagated, on a function with free variables" "ordering"
+    [("t0", T.pair (T.var "t1") (T.function T.int32 T.int32))] ["t0", "t1"],
+  substInClassConstraintsCase "numeric propagates to a variable" "numeric"
+    [("t0", T.var "t1")] ["t1"]]
 
 -- ============================================================
 -- substInType tests

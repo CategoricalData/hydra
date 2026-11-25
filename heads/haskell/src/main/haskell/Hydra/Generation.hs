@@ -424,7 +424,7 @@ validatePackagesSemantic profile typed exemptTypeNames exemptTermNames pkgs =
     validateTypeDef td =
       let TypeScheme vs body _ = typeDefinitionBody td
           inScope = S.union allTypeNames (S.fromList vs)
-          vr = ValidateCore.type_ profile emptyCoreResult inScope body
+          vr = ValidateCore.type_ profile (graphSchemaTypes graph) emptyCoreResult inScope body
       in case validationResultErrors vr of
            []    -> Nothing
            err:_ -> Just err
