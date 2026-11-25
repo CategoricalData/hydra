@@ -335,37 +335,21 @@ const _showFloatPrecise = (f: number): string => {
 // precision to match what the kernel test fixtures expect (the
 // canonical round-trip representation of the float32 value, not the
 // full float64 approximation).
-export const printFloat32 = (f: number): string => _showFloatPreciseSig(f, 7);
-export const printFloat64 = (f: number): string => _showFloatPrecise(f);
-
-const _showFloatPreciseSig = (f: number, sig: number): string => {
+// float32 renders the shortest digit string (1..9 significant digits) that
+// round-trips through Math.fround. A fixed 7-digit precision is not enough:
+// subnormals such as 1.0e-45 (Float.MIN_VALUE) print as 1.401298e-45 (#763).
+export const printFloat32 = (f: number): string => {
   if (Number.isNaN(f)) return "NaN";
   if (f === Infinity) return "Infinity";
   if (f === -Infinity) return "-Infinity";
   if (f === 0) return Object.is(f, -0) ? "-0.0" : "0.0";
   const abs = Math.abs(f);
-  if (abs < 0.1) {
-    let s = f.toExponential(sig - 1);
-    s = s.replace(/(\.\d*?)0+e/, "$1e").replace(/\.e/, ".0e");
-    if (!s.includes(".")) s = s.replace(/e/, ".0e");
-    s = s.replace(/e\+?(-?)0*(\d)/, "e$1$2");
-    return s;
-  }
-  let s = f.toPrecision(sig);
-  if (s.includes("e")) {
-    s = s.replace(/(\.\d*?)0+e/, "$1e").replace(/\.e/, ".0e");
-    if (!s.includes(".")) s = s.replace(/e/, ".0e");
-    s = s.replace(/e\+?(-?)0*(\d)/, "e$1$2");
-    return s;
-  }
-  if (s.includes(".")) {
-    s = s.replace(/0+$/, "");
-    if (s.endsWith(".")) s += "0";
-  } else {
-    s += ".0";
-  }
-  return s;
+  let sig = 1;
+  while (sig < 9 && Math.fround(Number(abs.toExponential(sig - 1))) !== abs) sig++;
+  // Reuse the float64 notation rules on the shortest float32 digits.
+  return _showFloatPrecise(f < 0 ? -Number(abs.toExponential(sig - 1)) : Number(abs.toExponential(sig - 1)));
 };
+export const printFloat64 = (f: number): string => _showFloatPrecise(f);
 
 // (Legacy aliases retained for the encoder until it switches to the
 // generic show* family.)
