@@ -123,10 +123,11 @@ The homogeneous containers, each with a matching type variant:
 
 - `list<t>` — an ordered, possibly-repeating sequence; every element has type `t`.
 - `set<t>` — an unordered collection of **distinct** elements of type `t`. `t` MUST be comparable
-  (not a `function` type); a `set` over a non-comparable element type is non-conforming
+  ([classes.md](classes.md#comparable-types): no function, effect, or quantified type anywhere inside it,
+  looking through named types); a `set` over a non-comparable element type is non-conforming
   ([validation.md](validation.md)).
 - `map<k,v>` — a finite association of keys of type `k` to values of type `v`; keys are distinct. `k`
-  MUST be comparable.
+  MUST be comparable in the same sense. `v` may be any type.
 - `optional<t>` — zero or one element of type `t` (`none`, or one present value).
 
 Distinctness of set elements and map keys is by structural equality.
@@ -145,9 +146,11 @@ The anonymous (structural) products and sums — anonymous because, unlike §8, 
   inhabitant.
 - `void` — the **nullary sum**: the uninhabited bottom type. **[HYDRA-DM-VOID-UNINHABITED]** No term has
   type `void`; it has no term variant, since it cannot be constructed. **[HYDRA-DM-VOID-BOTTOM-ONLY]** `void`
-  may appear only in bottom position — not inside a function codomain's constituents, nor inside a
-  list/set/map/pair/either/optional element, nor as a record field or union variant type
-  ([validation.md](validation.md)).
+  may appear only where an uninhabited type is meaningful: as an `either` side or a union variant (that
+  alternative cannot be chosen), as a function domain or codomain, as an `effect` result (a computation that
+  never returns), under a wrapper, or at the top level. It MUST NOT appear as a record field or `pair`
+  component, which would make the whole product uninhabited, nor as a `list`, `set` or `optional` element or
+  a `map` key or value, which would leave the container permanently empty ([validation.md](validation.md)).
 
 The record generalizes `pair` to n **named** fields; the union generalizes `either` to n **named**
 variants (§8).
@@ -207,7 +210,9 @@ to terms. The falsifiable content:
 
 - **[HYDRA-DM-ANNOTATION-TRANSPARENT]** Annotations are transparent to meaning: a value and its annotated
   form have the same type, the same reduction behavior, and compare equal under structural equality
-  and the total order. An implementation for which an annotation changes any of these does not conform.
+  and the total order, at every depth of a compared value. An implementation for which an annotation changes
+  any of these does not conform. Map keys and set elements are therefore stored without annotations
+  ([ordering-and-equality.md](ordering-and-equality.md#values-and-terms)).
 - **[HYDRA-DM-ANNOTATION-PRESERVED]** Annotations are preserved across the wire and across transformations
   that do not deliberately rewrite them: documentation and provenance survive code generation.
 - **[HYDRA-DM-ANNOTATION-ROUNDTRIP]** Annotations round-trip through the textual syntax, including when

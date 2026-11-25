@@ -121,9 +121,10 @@ case covers every variant) · duplicateBinding · duplicate record/case fields �
 emptyLetBindings · emptyCaseStatement · emptyTypeNameInTerm.
 
 **Types.** emptyUnionType (an empty union is uninhabited) · duplicate record fields / union variants ·
-undefinedTypeVariable (bound by an enclosing `∀`/`forall`) · voidInNonBottomPosition (`void` only in
-bottom position; see [syntax.md](syntax.md)) · nonComparableMapKeyType / nonComparableSetElementType
-(key/element types are comparable — see [ordering-and-equality.md](ordering-and-equality.md)).
+undefinedTypeVariable (bound by an enclosing `∀`/`forall`) · voidInNonBottomPosition (no `void` record
+field, pair component, or container element; see [data-model.md](data-model.md)) · nonComparableMapKeyType /
+nonComparableSetElementType (key/element types are comparable — see
+[ordering-and-equality.md](ordering-and-equality.md)).
 
 **Packages and modules.** duplicate module names · duplicate definition names · conflictingModuleNames
 (no lowercased collision) · conflictingVariantNames · definition-name prefixing (every definition name

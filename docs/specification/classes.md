@@ -18,18 +18,52 @@ kernel class definitions and carry their provisions in the generated module page
 
 | Class | Member primitives | Instances |
 |---|---|---|
-| `equality` | `hydra.core.lib.equality.equal`, `hydra.core.lib.equality.notEqual` | every Hydra type |
-| `ordering` | `hydra.core.lib.ordering.compare`, `gt`, `gte`, `lt`, `lte`, `max`, `min` | every Hydra type |
+| `equality` | `hydra.core.lib.equality.equal`, `hydra.core.lib.equality.notEqual` | every comparable type (below) |
+| `ordering` | `hydra.core.lib.ordering.compare`, `gt`, `gte`, `lt`, `lte`, `max`, `min` | every comparable type (below) |
 | `numeric` | `hydra.core.lib.math.add`, `sub`, `mul`, `negate`, `abs`, `signum` | the nine integer types (int8, int16, int32, int64, uint8, uint16, uint32, uint64, bigint) and the two floating-point types (float32, float64) |
 | `integral` | `hydra.core.lib.math.div`, `mod`, `rem`, `even`, `odd` | the nine integer types |
 | `fractional` | `hydra.core.lib.math.divide` | float32, float64 |
 
-`equality` and `ordering` are universal: every Hydra value can be tested for structural
-equality and compared under the total order.
+`equality` and `ordering` have the same instances, the comparable types: every value of a comparable type can
+be tested for structural equality and compared under the total order.
 Their value-level semantics — structural equality and the per-type-constructor total order,
 including the extended total order for floating-point values — are specified in
 [ordering-and-equality.md](ordering-and-equality.md).
 `compare x y` is `equalTo` exactly when `equal x y` is `true`.
+
+### Comparable types
+
+**[HYDRA-CLS-COMPARABLE]** A type is comparable unless a function, an effect, or a quantified type occurs
+anywhere inside it.
+In detail:
+
+- `function` and `effect<t>` types are not comparable: a function has no structural equality, and an effect
+  is a deferred computation, not a value.
+- A `forall` type in value position is not comparable.
+- `unit`, `void`, and every literal type are comparable. Floating-point types use the extended total order.
+- `list`, `set`, `optional`, `pair`, `either`, and `map` are comparable exactly when all of their component
+  types are comparable. For `map`, that includes both the key type and the value type.
+- A record, union, or wrapper type is comparable exactly when all of its field, variant, or wrapped types
+  are comparable.
+- Annotations are transparent: an annotated type is comparable exactly when its body is.
+- A named type is comparable exactly when its definition is.
+  The check looks through names at any depth.
+  A polymorphic definition applied to arguments is instantiated with those arguments.
+  A recursive reference that is already being checked counts as comparable.
+- A type variable carries the obligation instead of discharging it.
+  Inference keeps an `equality` or `ordering` constraint on the variable, and the constraint is checked
+  wherever the variable is instantiated.
+  In a type definition, a parameter of the definition used as a map key or set element is likewise checked at
+  each instantiation, since type definitions have no constraint syntax.
+
+Comparability is a property of object-level types.
+The type `hydra.core.model.Term` is itself comparable: it is an ordinary union with no function inside it,
+and a lambda *term* is a `hydra.core.model.Lambda` record, not a function value.
+So a program may compare or key a map by terms that encode functions, but not by the functions themselves.
+
+Using an equality or ordering primitive at a non-comparable type is a type error.
+A map key type or set element type that is not comparable is a validation error
+(nonComparableMapKeyType / nonComparableSetElementType in [validation.md](validation.md)).
 
 The arithmetic classes are not universal, and their instance lists above are exhaustive.
 `decimal` has no arithmetic instance: it is a presentation and interchange type, exact
