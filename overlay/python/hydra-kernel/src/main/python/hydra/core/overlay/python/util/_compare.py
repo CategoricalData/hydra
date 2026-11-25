@@ -54,12 +54,41 @@ _VARIANT_FAMILY_AND_ORDINAL: dict[str, tuple[str, int]] = {
 }
 
 
+class OrderedTerm:
+    """A term paired with its order key (#848), as produced by the interpreter's ordered term coders.
+
+    Equality and ordering compare the keys, so union variants compare in declared order and annotations are
+    ignored at every depth. Instances can be stored in ``PersistentSet``/``PersistentMap``, which order by
+    ``compare``.
+    """
+
+    __slots__ = ("key", "value")
+
+    def __init__(self, key: Any, value: Any) -> None:
+        self.key = key
+        self.value = value
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, OrderedTerm) and compare(self.key, other.key) == 0
+
+    def __lt__(self, other: OrderedTerm) -> bool:
+        return compare(self.key, other.key) < 0
+
+    def __hash__(self) -> int:
+        # Hash the printed key rather than the key itself: native float hashing disagrees with compare at NaN,
+        # while the printed form agrees with compare (it distinguishes -0.0 from 0.0, and decimal scales).
+        return hash(repr(self.key))
+
+
 def compare(x: Any, y: Any) -> int:
     """Return -1 if x < y, 0 if equal, +1 if x > y, structurally."""
     # Identity short-circuit: any value compares equal to itself. Hot in
     # PersistentMap inserts where lookup-then-skip is common.
     if x is y:
         return 0
+
+    if isinstance(x, OrderedTerm) and isinstance(y, OrderedTerm):
+        return compare(x.key, y.key)
 
     tx, ty = type(x), type(y)
 

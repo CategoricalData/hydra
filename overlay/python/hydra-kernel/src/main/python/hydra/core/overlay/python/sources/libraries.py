@@ -61,7 +61,7 @@ def register_equality_primitives() -> dict[Name, Primitive]:
 
     primitives: dict[Name, Primitive] = {}
 
-    x = prims.variable("x")
+    x = prims.ordered("x")
     _xEq = prims.v_eq("x")
 
     primitives[def_equality.equal.name] = prims.prim2(
@@ -104,7 +104,7 @@ def register_ordering_primitives() -> dict[Name, Primitive]:
 
     primitives: dict[Name, Primitive] = {}
 
-    x = prims.variable("x")
+    x = prims.ordered("x")
     _xOrd = prims.v_ord("x")
 
     primitives[def_ordering.compare.name] = prims.prim2(
@@ -311,7 +311,8 @@ def register_eithers_primitives() -> dict[Name, Primitive]:
     # mapSet :: (x -> Either z y) -> Set x -> Either z (Set y)
     primitives[def_eithers.map_set.name] = prims.prim2(
         def_eithers.map_set.name, eithers.map_set, [_x, _y, _z],
-        fun(x, prims.either(z, y)), prims.set_(x), prims.either(z, prims.set_(y))
+        fun(prims.ordered_key("x"), prims.either(z, prims.ordered_key("y"))), prims.set_(prims.ordered_key("x")),
+        prims.either(z, prims.set_(prims.ordered_key("y")))
     )
     primitives[def_eithers.partition.name] = prims.prim1(
         def_eithers.partition.name, eithers.partition, [_x, _y],
@@ -345,6 +346,11 @@ def register_lists_primitives() -> dict[Name, Primitive]:
     _aEq = prims.v_eq("a")
     _aOrd = prims.v_ord("a")
     _bOrd = prims.v_ord("b")
+    # Compared values and set elements are matched by their order key (#848)
+    a_ord = prims.ordered("a")
+    b_ord = prims.ordered("b")
+    a_key = prims.ordered_key("a")
+    b_key = prims.ordered_key("b")
 
     # prim2: apply :: [a -> b] -> [a] -> [b]
     primitives[def_lists.apply.name] = prims.prim2(
@@ -389,7 +395,7 @@ def register_lists_primitives() -> dict[Name, Primitive]:
     # prim2: member :: Eq a => a -> [a] -> Bool
     primitives[def_lists.member.name] = prims.prim2(
         def_lists.member.name, lists.member, [_aEq],
-        a, prims.list_(a), prims.boolean()
+        a_ord, prims.list_(a_ord), prims.boolean()
     )
     # prim2: filter :: (a -> Bool) -> [a] -> [a]
     primitives[def_lists.filter.name] = prims.prim2(
@@ -420,7 +426,7 @@ def register_lists_primitives() -> dict[Name, Primitive]:
     # prim1: group :: Eq a => [a] -> [[a]]
     primitives[def_lists.group.name] = prims.prim1(
         def_lists.group.name, lists.group, [_aEq],
-        prims.list_(a), prims.list_(prims.list_(a))
+        prims.list_(a_ord), prims.list_(prims.list_(a_ord))
     )
     # prim2: join :: [a] -> [[a]] -> [a]
     primitives[def_lists.join.name] = prims.prim2(
@@ -454,7 +460,7 @@ def register_lists_primitives() -> dict[Name, Primitive]:
     # prim2: mapSet :: (x -> [y]) -> set x -> [set y]
     primitives[def_lists.map_set.name] = prims.prim2(
         def_lists.map_set.name, lists.map_set, [_aOrd, _bOrd],
-        fun(a, prims.list_(b)), prims.set_(a), prims.list_(prims.set_(b))
+        fun(a_key, prims.list_(b_key)), prims.set_(a_key), prims.list_(prims.set_(b_key))
     )
     # prim2: at :: Int32 -> [a] -> optional a
     primitives[def_lists.at.name] = prims.prim2(
@@ -484,7 +490,7 @@ def register_lists_primitives() -> dict[Name, Primitive]:
     # prim1: distinct :: Eq a => [a] -> [a]
     primitives[def_lists.distinct.name] = prims.prim1(
         def_lists.distinct.name, lists.distinct, [_aEq],
-        prims.list_(a), prims.list_(a)
+        prims.list_(a_ord), prims.list_(a_ord)
     )
     # prim1: null :: [a] -> Bool
     primitives[def_lists.is_empty.name] = prims.prim1(
@@ -513,12 +519,12 @@ def register_lists_primitives() -> dict[Name, Primitive]:
     # prim1: sort :: Ord a => [a] -> [a]
     primitives[def_lists.sort.name] = prims.prim1(
         def_lists.sort.name, lists.sort, [_aOrd],
-        prims.list_(a), prims.list_(a)
+        prims.list_(a_ord), prims.list_(a_ord)
     )
     # prim2: sortBy :: Ord b => (a -> b) -> [a] -> [a]
     primitives[def_lists.sort_by.name] = prims.prim2(
         def_lists.sort_by.name, lists.sort_by, [_a, _bOrd],
-        fun(a, b), prims.list_(a), prims.list_(a)
+        fun(a, b_ord), prims.list_(a), prims.list_(a)
     )
     # prim2: span :: (a -> Bool) -> [a] -> ([a], [a])
     primitives[def_lists.span.name] = prims.prim2(
@@ -591,9 +597,9 @@ def register_maps_primitives() -> dict[Name, Primitive]:
 
     primitives: dict[Name, Primitive] = {}
 
-    k = prims.variable("k")
-    k1 = prims.variable("k1")
-    k2 = prims.variable("k2")
+    k = prims.ordered_key("k")
+    k1 = prims.ordered_key("k1")
+    k2 = prims.ordered_key("k2")
     v = prims.variable("v")
     v1 = prims.variable("v1")
     v2 = prims.variable("v2")
@@ -963,8 +969,8 @@ def register_sets_primitives() -> dict[Name, Primitive]:
 
     primitives: dict[Name, Primitive] = {}
 
-    a = prims.variable("a")
-    b = prims.variable("b")
+    a = prims.ordered_key("a")
+    b = prims.ordered_key("b")
     _aOrd = prims.v_ord("a")
     _bOrd = prims.v_ord("b")
 

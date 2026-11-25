@@ -27,6 +27,7 @@ from hydra.core.graph import Graph, Primitive, TermCoder
 from hydra.core.packaging import PrimitiveDefinition
 from hydra.core.scoping import type_scheme_to_term_signature
 from hydra.core.util import Comparison
+from hydra.core.overlay.python.util._compare import OrderedTerm
 
 A = TypeVar("A")
 B = TypeVar("B")
@@ -587,6 +588,40 @@ def variable(v: str) -> TermCoder[Term]:
         type=types.var(v),
         encode=lambda cx, g, t: Right(t),
         decode=lambda cx, t: Right(t)
+    )
+
+
+def ordered(v: str) -> TermCoder[OrderedTerm]:
+    """TermCoder for a type variable whose values are compared by their order key (#848)."""
+    def encode(cx, g, t):
+        import hydra.core.ordering as kernel_ordering
+        match kernel_ordering.term_order_key(g, t):
+            case Left() as err:
+                return err
+            case Right(value=key):
+                return Right(OrderedTerm(key, t))
+    return TermCoder(
+        type=types.var(v),
+        encode=encode,
+        decode=lambda cx, o: Right(o.value)
+    )
+
+
+def ordered_key(v: str) -> TermCoder[OrderedTerm]:
+    """TermCoder for a map key or set element. Like ``ordered``, but the stored term also has its annotations
+    removed at every depth, so keys which differ only in annotations are the same key."""
+    def encode(cx, g, t):
+        import hydra.core.ordering as kernel_ordering
+        import hydra.core.strip as strip
+        match kernel_ordering.term_order_key(g, t):
+            case Left() as err:
+                return err
+            case Right(value=key):
+                return Right(OrderedTerm(key, strip.remove_term_annotations(t)))
+    return TermCoder(
+        type=types.var(v),
+        encode=encode,
+        decode=lambda cx, o: Right(o.value)
     )
 
 
