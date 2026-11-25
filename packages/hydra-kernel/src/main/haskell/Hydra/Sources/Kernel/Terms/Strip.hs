@@ -161,7 +161,7 @@ removeTermAnnotations = define "removeTermAnnotations" $
   "term" ~>
   "remove" <~ ("recurse" ~> "term" ~>
     "rewritten" <~ var "recurse" @@ var "term" $
-    match _Term (var "term")
+    match _Term (var "rewritten")
       (Just $ var "rewritten") [
       _Term_annotated>>: "at" ~> Core.annotatedTermBody $ var "at"]) $
   Rewriting.rewriteTerm @@ var "remove" @@ var "term"

@@ -57,7 +57,8 @@ term removeTermAnnotations =
   λ`term`.
     let remove := λrecurse, `term`.
         let rewritten := recurse `term`
-        in cases(Term){annotated = λat.AnnotatedTerm[body] at, `_` = rewritten} `term`
+        in cases(Term){annotated = λat.AnnotatedTerm[body] at, `_` = rewritten}
+          rewritten
     in rewriteTerm remove `term`
 
 ## Recursively remove type annotations, including within subtypes
