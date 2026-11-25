@@ -8,6 +8,8 @@ import Hydra.Kernel
 import Hydra.Core.Overlay.Haskell.Dsl.Prims as Prims
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Terms as Terms
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Types as Types
+import qualified Hydra.Core.Ordering as KernelOrdering
+import qualified Hydra.Core.Strip as Strip
 
 import qualified Hydra.Core.Overlay.Haskell.Lib.Chars as Chars
 import qualified Hydra.Core.Overlay.Haskell.Lib.Eithers as Eithers
@@ -68,6 +70,41 @@ w_ = variable "w"
 x_ = variable "x"
 y_ = variable "y"
 z_ = variable "z"
+
+-- | A term paired with its order key (#848). Equality and ordering compare the keys, so union variants compare in
+--   declared order and annotations are ignored at every depth.
+data OrderedTerm = OrderedTerm {orderedTermKey :: Term, orderedTermValue :: Term}
+
+instance Eq OrderedTerm where
+  a == b = compare a b == EQ
+
+instance Ord OrderedTerm where
+  compare a b = termCompareOrdering (orderedTermKey a) (orderedTermKey b)
+
+-- | A term coder for a value compared by its order key
+ordered :: String -> TermCoder OrderedTerm
+ordered v = TermCoder (Types.var v) encode decode
+  where
+    encode _cx g t = (\k -> OrderedTerm k t) <$> KernelOrdering.termOrderKey g t
+    decode _cx = Right . orderedTermValue
+
+-- | A term coder for a map key or set element. Like 'ordered', but the stored term also has its annotations removed
+--   at every depth, so keys which differ only in annotations are the same key.
+orderedKey :: String -> TermCoder OrderedTerm
+orderedKey v = TermCoder (Types.var v) encode decode
+  where
+    encode _cx g t = (\k -> OrderedTerm k (Strip.removeTermAnnotations t)) <$> KernelOrdering.termOrderKey g t
+    decode _cx = Right . orderedTermValue
+
+-- Ordered term coders for type variables: "o" for compared values, "s" for map keys and set elements
+k1s_, k2s_, ks_, xo_, xs_, yo_, ys_ :: TermCoder OrderedTerm
+k1s_ = orderedKey "k1"
+k2s_ = orderedKey "k2"
+ks_ = orderedKey "k"
+xo_ = ordered "x"
+xs_ = orderedKey "x"
+yo_ = ordered "y"
+ys_ = orderedKey "y"
 
 -- | A TermCoder for function types which uses beta reduction to bridge term-level
 --   functions to native functions. This allows higher-order primitives like map,
@@ -143,14 +180,14 @@ hydraLibEithers = standardLibrary [
     prim2       DefEithers.map              Eithers.map              (funT x_ y_) (Prims.either_ z_ x_) (Prims.either_ z_ y_),
     prim2       DefEithers.mapList          Eithers.mapList          (fun x_ (Prims.either_ z_ y_)) (list x_) (Prims.either_ z_ (list y_)),
     prim2       DefEithers.mapOptional         Eithers.mapOptional         (fun x_ (Prims.either_ z_ y_)) (optional x_) (Prims.either_ z_ (optional y_)),
-    prim2       DefEithers.mapSet           Eithers.mapSet           (fun x_ (Prims.either_ z_ y_)) (set x_) (Prims.either_ z_ (set y_)),
+    prim2       DefEithers.mapSet           Eithers.mapSet           (fun xs_ (Prims.either_ z_ ys_)) (set xs_) (Prims.either_ z_ (set ys_)),
     prim1       DefEithers.partition        Eithers.partition        (list $ Prims.either_ x_ y_) (pair (list x_) (list y_)),
     prim1       DefEithers.partition Eithers.partition (list $ Prims.either_ x_ y_) (pair (list x_) (list y_)),
     prim1       DefEithers.right            Eithers.right            y_ (Prims.either_ x_ y_),
     prim1       DefEithers.rights           Eithers.rights           (list $ Prims.either_ x_ y_) (list y_)]
 
 -- hydra.core.lib.equality.equal / hydra.core.lib.ordering.compare (+gt/gte/lt/lte/max/min) are
--- registered below at Term (x_ is the identity TermCoder), so termEqual/termCompare
+-- registered below at OrderedTerm (xo_), whose Ord instance uses termCompareOrdering on the order key, so they
 -- special-case Literal.Decimal for scale-aware comparison per docs/specification/
 -- ordering-and-equality.md, instead of using the generic Equality.equal/Ordering.compare
 -- (which stay polymorphic Eq/Ord-constrained -- they're also called directly, at
@@ -299,58 +336,34 @@ termCompareOrdering x y
     compareBindings (Binding nax tax tsax : as) (Binding nbx tbx tsbx : bs) =
       compare nax nbx <> termCompareOrdering tax tbx <> compare tsax tsbx <> compareBindings as bs
 
-termEqual :: Term -> Term -> Bool
-termEqual x y = termCompareOrdering x y == EQ
-
-termNotEqual :: Term -> Term -> Bool
-termNotEqual x y = not (termEqual x y)
-
-termCompare :: Term -> Term -> Comparison
-termCompare x y = case termCompareOrdering x y of
+orderedCompare :: OrderedTerm -> OrderedTerm -> Comparison
+orderedCompare x y = case compare x y of
   LT -> ComparisonLessThan
   GT -> ComparisonGreaterThan
   EQ -> ComparisonEqualTo
 
-termGt :: Term -> Term -> Bool
-termGt x y = case termCompare x y of
-  ComparisonGreaterThan -> True
-  _ -> False
+-- | The greater of two values, or the first if they are equal
+orderedMax :: OrderedTerm -> OrderedTerm -> OrderedTerm
+orderedMax x y = if x >= y then x else y
 
-termGte :: Term -> Term -> Bool
-termGte x y = case termCompare x y of
-  ComparisonLessThan -> False
-  _ -> True
-
-termLt :: Term -> Term -> Bool
-termLt x y = case termCompare x y of
-  ComparisonLessThan -> True
-  _ -> False
-
-termLte :: Term -> Term -> Bool
-termLte x y = case termCompare x y of
-  ComparisonGreaterThan -> False
-  _ -> True
-
-termMax :: Term -> Term -> Term
-termMax x y = if termGte x y then x else y
-
-termMin :: Term -> Term -> Term
-termMin x y = if termLte x y then x else y
+-- | The lesser of two values, or the first if they are equal
+orderedMin :: OrderedTerm -> OrderedTerm -> OrderedTerm
+orderedMin x y = if x <= y then x else y
 
 hydraLibEquality :: Library
 hydraLibEquality = standardLibrary [
-    prim2 DefEquality.equal    termEqual    x_ x_ boolean,
-    prim2 DefEquality.notEqual termNotEqual x_ x_ boolean]
+    prim2 DefEquality.equal    (==) xo_ xo_ boolean,
+    prim2 DefEquality.notEqual (/=) xo_ xo_ boolean]
 
 hydraLibOrdering :: Library
 hydraLibOrdering = standardLibrary [
-    prim2 DefOrdering.compare  termCompare  x_ x_ comparison,
-    prim2 DefOrdering.gt       termGt       x_ x_ boolean,
-    prim2 DefOrdering.gte      termGte      x_ x_ boolean,
-    prim2 DefOrdering.lt       termLt       x_ x_ boolean,
-    prim2 DefOrdering.lte      termLte      x_ x_ boolean,
-    prim2 DefOrdering.max      termMax      x_ x_ x_,
-    prim2 DefOrdering.min      termMin      x_ x_ x_]
+    prim2 DefOrdering.compare  orderedCompare xo_ xo_ comparison,
+    prim2 DefOrdering.gt       (>)            xo_ xo_ boolean,
+    prim2 DefOrdering.gte      (>=)           xo_ xo_ boolean,
+    prim2 DefOrdering.lt       (<)            xo_ xo_ boolean,
+    prim2 DefOrdering.lte      (<=)           xo_ xo_ boolean,
+    prim2 DefOrdering.max      orderedMax     xo_ xo_ xo_,
+    prim2 DefOrdering.min      orderedMin     xo_ xo_ xo_]
 
 hydraLibFunctions :: Library
 hydraLibFunctions = standardLibrary [
@@ -369,16 +382,16 @@ hydraLibLists = standardLibrary [
     prim1     DefLists.concat      Lists.concat        (list (list x_)) (list x_),
     prim2     DefLists.concat2     Lists.concat2       (list x_) (list x_) (list x_),
     prim2     DefLists.cons        Lists.cons          x_ (list x_) (list x_),
-    prim1     DefLists.distinct    Lists.distinct      (list x_) (list x_),
+    prim1     DefLists.distinct    Lists.distinct      (list xo_) (list xo_),
     prim2     DefLists.drop        Lists.drop          int32 (list x_) (list x_),
     prim2     DefLists.dropWhile   Lists.dropWhile     (fun x_ boolean) (list x_) (list x_),
-    prim2     DefLists.member        Lists.member          x_ (list x_) boolean,
+    prim2     DefLists.member        Lists.member          xo_ (list xo_) boolean,
     prim2     DefLists.filter      Lists.filter        (fun x_ boolean) (list x_) (list x_),
     prim2     DefLists.find        Lists.find          (fun x_ boolean) (list x_) (optional x_),
     prim3     DefLists.foldList    Lists.foldList      (fun x_ (fun y_ (list x_))) x_ (list y_) (list x_),
     prim3     DefLists.foldl       Lists.foldl         (funT y_ (funT x_ y_)) y_ (list x_) y_,
     prim3     DefLists.foldr       Lists.foldr         (funT x_ (funT y_ y_)) y_ (list x_) y_,
-    prim1     DefLists.group       Lists.group         (list x_) (list (list x_)),
+    prim1     DefLists.group       Lists.group         (list xo_) (list (list xo_)),
     prim1     DefLists.head        Lists.head          (list x_) (optional x_),
     prim1     DefLists.init        Lists.init          (list x_) (optional (list x_)),
     prim2     DefLists.join Lists.join   (list x_) (list (list x_)) (list x_),
@@ -389,22 +402,22 @@ hydraLibLists = standardLibrary [
     prim2     DefLists.map         Lists.map           (funT x_ y_) (list x_) (list y_),
     prim2     DefLists.mapList     Lists.mapList       (fun x_ (list y_)) (list x_) (list (list y_)),
     prim2     DefLists.mapOptional Lists.mapOptional   (fun x_ (list y_)) (optional x_) (list (optional y_)),
-    prim2     DefLists.mapSet      Lists.mapSet        (fun x_ (list y_)) (set x_) (list (set y_)),
-    prim2     DefLists.member      Lists.member        x_ (list x_) boolean,
+    prim2     DefLists.mapSet      Lists.mapSet        (fun xs_ (list ys_)) (set xs_) (list (set ys_)),
+    prim2     DefLists.member      Lists.member        xo_ (list xo_) boolean,
     prim2     DefLists.at     Lists.at       int32 (list x_) (optional x_),
     prim1     DefLists.head   Lists.head     (list x_) (optional x_),
     prim1     DefLists.init   Lists.init     (list x_) (optional (list x_)),
     prim1     DefLists.last   Lists.last     (list x_) (optional x_),
     prim1     DefLists.tail   Lists.tail     (list x_) (optional (list x_)),
-    prim1     DefLists.distinct         Lists.distinct           (list x_) (list x_),
+    prim1     DefLists.distinct         Lists.distinct           (list xo_) (list xo_),
     prim1     DefLists.isEmpty     Lists.isEmpty       (list x_) boolean,
     prim2     DefLists.partition   Lists.partition     (fun x_ boolean) (list x_) (pair (list x_) (list x_)),
     prim2     DefLists.replicate   Lists.replicate     int32 x_ (list x_),
     prim1     DefLists.reverse     Lists.reverse       (list x_) (list x_),
     prim1     DefLists.singleton   Lists.singleton     x_ (list x_),
-    prim1     DefLists.sort        Lists.sort          (list x_) (list x_),
-    prim2     DefLists.sortBy      Lists.sortBy        (fun x_ y_) (list x_) (list x_),
-    prim2     DefLists.sortBy      Lists.sortBy        (fun x_ y_) (list x_) (list x_),
+    prim1     DefLists.sort        Lists.sort          (list xo_) (list xo_),
+    prim2     DefLists.sortBy      Lists.sortBy        (fun x_ yo_) (list x_) (list x_),
+    prim2     DefLists.sortBy      Lists.sortBy        (fun x_ yo_) (list x_) (list x_),
     prim2     DefLists.span        Lists.span          (fun x_ boolean) (list x_) (pair (list x_) (list x_)),
     prim1     DefLists.tail        Lists.tail          (list x_) (optional (list x_)),
     prim2     DefLists.take        Lists.take          int32 (list x_) (list x_),
@@ -481,31 +494,31 @@ hydraLibLogic = standardLibrary [
 
 hydraLibMaps :: Library
 hydraLibMaps = standardLibrary [
-    prim3     DefMaps.alter           Maps.alter             (fun (optional v_) (optional v_)) k_ mapKv mapKv,
-    prim3     DefMaps.bimap           Maps.bimap             (fun k1_ k2_) (fun v1_ v2_) (Prims.map k1_ v1_) (Prims.map k2_ v2_),
-    prim2     DefMaps.delete          Maps.delete            k_ mapKv mapKv,
+    prim3     DefMaps.alter           Maps.alter             (fun (optional v_) (optional v_)) ks_ mapKv mapKv,
+    prim3     DefMaps.bimap           Maps.bimap             (fun k1s_ k2s_) (fun v1_ v2_) (Prims.map k1s_ v1_) (Prims.map k2s_ v2_),
+    prim2     DefMaps.delete          Maps.delete            ks_ mapKv mapKv,
     prim2     DefMaps.difference      Maps.difference        mapKv mapKv mapKv,
     prim1     DefMaps.elems           Maps.elems             mapKv (list v_),
     prim0     DefMaps.empty           Maps.empty             mapKv,
     prim2     DefMaps.filter          Maps.filter            (fun v_ boolean) mapKv mapKv,
-    prim2     DefMaps.filterWithKey   Maps.filterWithKey     (fun k_ (fun v_ boolean)) mapKv mapKv,
-    prim3 DefMaps.findWithDefault Maps.findWithDefault   v_ k_ mapKv v_,
-    prim1     DefMaps.fromList        Maps.fromList          (list $ pair k_ v_) mapKv,
-    prim3     DefMaps.insert          Maps.insert            k_ v_ mapKv mapKv,
+    prim2     DefMaps.filterWithKey   Maps.filterWithKey     (fun ks_ (fun v_ boolean)) mapKv mapKv,
+    prim3 DefMaps.findWithDefault Maps.findWithDefault   v_ ks_ mapKv v_,
+    prim1     DefMaps.fromList        Maps.fromList          (list $ pair ks_ v_) mapKv,
+    prim3     DefMaps.insert          Maps.insert            ks_ v_ mapKv mapKv,
     prim2     DefMaps.intersection    Maps.intersection      mapKv mapKv mapKv,
-    prim1     DefMaps.keys            Maps.keys              mapKv (list k_),
-    prim2     DefMaps.lookup          Maps.lookup            k_ mapKv (optional v_),
-    prim2     DefMaps.map             Maps.map               (funT v1_ v2_) (Prims.map k_ v1_) (Prims.map k_ v2_),
-    prim2     DefMaps.mapKeys         Maps.mapKeys           (fun k1_ k2_) (Prims.map k1_ v_) (Prims.map k2_ v_),
-    prim2     DefMaps.member          Maps.member            k_ mapKv boolean,
+    prim1     DefMaps.keys            Maps.keys              mapKv (list ks_),
+    prim2     DefMaps.lookup          Maps.lookup            ks_ mapKv (optional v_),
+    prim2     DefMaps.map             Maps.map               (funT v1_ v2_) (Prims.map ks_ v1_) (Prims.map ks_ v2_),
+    prim2     DefMaps.mapKeys         Maps.mapKeys           (fun k1s_ k2s_) (Prims.map k1s_ v_) (Prims.map k2s_ v_),
+    prim2     DefMaps.member          Maps.member            ks_ mapKv boolean,
     prim1     DefMaps.isEmpty         Maps.isEmpty           mapKv boolean,
-    prim2     DefMaps.singleton       Maps.singleton         k_ v_ mapKv,
+    prim2     DefMaps.singleton       Maps.singleton         ks_ v_ mapKv,
     prim1     DefMaps.size            Maps.size              mapKv int32,
-    prim1     DefMaps.toList          Maps.toList            mapKv (list $ pair k_ v_),
+    prim1     DefMaps.toList          Maps.toList            mapKv (list $ pair ks_ v_),
     prim2     DefMaps.union           Maps.union             mapKv mapKv mapKv,
     prim1     DefMaps.unions          Maps.unions            (list mapKv) mapKv]
   where
-    mapKv = Prims.map k_ v_
+    mapKv = Prims.map ks_ v_
 
 hydraLibMathFloat64 :: Library
 hydraLibMathFloat64 = standardLibrary [
@@ -577,7 +590,7 @@ hydraLibOptionals = standardLibrary [
     prim2     DefOptionals.map       Optionals.map          (funT x_ y_) (optional x_) (optional y_),
     prim2     DefOptionals.mapList   Optionals.mapList      (fun x_ (optional y_)) (list x_) (optional (list y_)),
     prim2     DefOptionals.mapOptional  Optionals.mapOptional     (fun x_ $ optional y_) (list x_) (list y_),
-    prim2     DefOptionals.mapSet    Optionals.mapSet       (fun x_ (optional y_)) (set x_) (optional (set y_)),
+    prim2     DefOptionals.mapSet    Optionals.mapSet       (fun xs_ (optional ys_)) (set xs_) (optional (set ys_)),
     prim1     DefOptionals.given     Optionals.given        x_ (optional x_),
     prim1     DefOptionals.toList    Optionals.toList       (optional x_) (list x_),
     prim2 DefOptionals.withDefault Optionals.withDefault    x_ (optional x_) x_]
@@ -600,21 +613,21 @@ hydraLibRegex = standardLibrary [
 
 hydraLibSets :: Library
 hydraLibSets = standardLibrary [
-    prim2     DefSets.delete       Sets.delete       x_ (set x_) (set x_),
-    prim2     DefSets.difference   Sets.difference   (set x_) (set x_) (set x_),
-    prim0     DefSets.empty        Sets.empty        (set x_),
-    prim2     DefSets.filter       Sets.filter       (fun x_ boolean) (set x_) (set x_),
-    prim1     DefSets.fromList     Sets.fromList     (list x_) (set x_),
-    prim2     DefSets.insert       Sets.insert       x_ (set x_) (set x_),
-    prim2     DefSets.intersection Sets.intersection (set x_) (set x_) (set x_),
-    prim2     DefSets.map          Sets.map          (fun x_ y_) (set x_) (set y_),
-    prim2     DefSets.member       Sets.member       x_ (set x_) boolean,
-    prim1     DefSets.isEmpty      Sets.isEmpty      (set x_) boolean,
-    prim1     DefSets.singleton    Sets.singleton    x_ (set x_),
-    prim1     DefSets.size         Sets.size         (set x_) int32,
-    prim1     DefSets.toList       Sets.toList       (set x_) (list x_),
-    prim2     DefSets.union        Sets.union        (set x_) (set x_) (set x_),
-    prim1     DefSets.unions       Sets.unions       (list $ set x_) (set x_)]
+    prim2     DefSets.delete       Sets.delete       xs_ (set xs_) (set xs_),
+    prim2     DefSets.difference   Sets.difference   (set xs_) (set xs_) (set xs_),
+    prim0     DefSets.empty        Sets.empty        (set xs_),
+    prim2     DefSets.filter       Sets.filter       (fun xs_ boolean) (set xs_) (set xs_),
+    prim1     DefSets.fromList     Sets.fromList     (list xs_) (set xs_),
+    prim2     DefSets.insert       Sets.insert       xs_ (set xs_) (set xs_),
+    prim2     DefSets.intersection Sets.intersection (set xs_) (set xs_) (set xs_),
+    prim2     DefSets.map          Sets.map          (fun xs_ ys_) (set xs_) (set ys_),
+    prim2     DefSets.member       Sets.member       xs_ (set xs_) boolean,
+    prim1     DefSets.isEmpty      Sets.isEmpty      (set xs_) boolean,
+    prim1     DefSets.singleton    Sets.singleton    xs_ (set xs_),
+    prim1     DefSets.size         Sets.size         (set xs_) int32,
+    prim1     DefSets.toList       Sets.toList       (set xs_) (list xs_),
+    prim2     DefSets.union        Sets.union        (set xs_) (set xs_) (set xs_),
+    prim1     DefSets.unions       Sets.unions       (list $ set xs_) (set xs_)]
 
 hydraLibStrings :: Library
 hydraLibStrings = standardLibrary [
