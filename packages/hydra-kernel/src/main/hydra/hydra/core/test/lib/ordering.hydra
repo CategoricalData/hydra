@@ -2,6 +2,7 @@
 module hydra.core.test.lib.ordering
 
 import hydra.core.lib.eithers as eithers
+import hydra.core.lib.maps
 import hydra.core.model
 import hydra.core.print.model
 import hydra.core.reduction
@@ -3318,5 +3319,556 @@ term allTests =
                 description = none,
                 tags = [],
                 provisions = [Name{"hydra.core.lib.ordering.min.returnsSmallerOperand"}]}]}],
+        `cases` = []},
+      TestGroup{
+        name = "object-level values",
+        description = none,
+        subgroups = [
+          TestGroup{
+            name = "declared variant order",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "compare: an earlier variant is less",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      `inject` = Injection{
+                                        typeName = Name{"Number"},
+                                        field = Field{
+                                          name = Name{"int"},
+                                          `term` = Term{
+                                            literal = Literal{
+                                              integer = IntegerValue{
+                                                `int32` = 1:int32}}}}}}}},
+                                argument = Term{
+                                  `inject` = Injection{
+                                    typeName = Name{"Number"},
+                                    field = Field{
+                                      name = Name{"float"},
+                                      `term` = Term{
+                                        literal = Literal{
+                                          float = FloatValue{
+                                            `float32` = 100.0:float32}}}}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"lessThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = []},
+              TestCaseWithMetadata{
+                name = "compare: a later variant is greater",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      `inject` = Injection{
+                                        typeName = Name{"Number"},
+                                        field = Field{
+                                          name = Name{"float"},
+                                          `term` = Term{
+                                            literal = Literal{
+                                              float = FloatValue{
+                                                `float32` = 100.0:float32}}}}}}}},
+                                argument = Term{
+                                  `inject` = Injection{
+                                    typeName = Name{"Number"},
+                                    field = Field{
+                                      name = Name{"int"},
+                                      `term` = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 1:int32}}}}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"greaterThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = []},
+              TestCaseWithMetadata{
+                name = "compare: the same variant compares by payload",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      `inject` = Injection{
+                                        typeName = Name{"Number"},
+                                        field = Field{
+                                          name = Name{"int"},
+                                          `term` = Term{
+                                            literal = Literal{
+                                              integer = IntegerValue{
+                                                `int32` = 2:int32}}}}}}}},
+                                argument = Term{
+                                  `inject` = Injection{
+                                    typeName = Name{"Number"},
+                                    field = Field{
+                                      name = Name{"int"},
+                                      `term` = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 1:int32}}}}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"greaterThan"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = []},
+              TestCaseWithMetadata{
+                name = "max picks the later variant",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.max"}},
+                                    argument = Term{
+                                      `inject` = Injection{
+                                        typeName = Name{"Number"},
+                                        field = Field{
+                                          name = Name{"float"},
+                                          `term` = Term{
+                                            literal = Literal{
+                                              float = FloatValue{
+                                                `float32` = 100.0:float32}}}}}}}},
+                                argument = Term{
+                                  `inject` = Injection{
+                                    typeName = Name{"Number"},
+                                    field = Field{
+                                      name = Name{"int"},
+                                      `term` = Term{
+                                        literal = Literal{
+                                          integer = IntegerValue{
+                                            `int32` = 1:int32}}}}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"Number"},
+                              field = Field{
+                                name = Name{"float"},
+                                `term` = Term{
+                                  literal = Literal{
+                                    float = FloatValue{
+                                      `float32` = 100.0:float32}}}}}}}},
+                description = none,
+                tags = [],
+                provisions = []},
+              TestCaseWithMetadata{
+                name = "lists.sort sorts by declared order",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.lists.sort"}},
+                                argument = Term{
+                                  `list` = [
+                                    Term{
+                                      `inject` = Injection{
+                                        typeName = Name{"Number"},
+                                        field = Field{
+                                          name = Name{"float"},
+                                          `term` = Term{
+                                            literal = Literal{
+                                              float = FloatValue{
+                                                `float32` = 100.0:float32}}}}}},
+                                    Term{
+                                      `inject` = Injection{
+                                        typeName = Name{"Number"},
+                                        field = Field{
+                                          name = Name{"int"},
+                                          `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}}}}]}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `list` = [
+                              Term{
+                                `inject` = Injection{
+                                  typeName = Name{"Number"},
+                                  field = Field{
+                                    name = Name{"int"},
+                                    `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}}}},
+                              Term{
+                                `inject` = Injection{
+                                  typeName = Name{"Number"},
+                                  field = Field{
+                                    name = Name{"float"},
+                                    `term` = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float32` = 100.0:float32}}}}}}]}}},
+                description = none,
+                tags = [],
+                provisions = []},
+              TestCaseWithMetadata{
+                name = "sets.toList lists elements in declared order",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.sets.toList"}},
+                                argument = Term{
+                                  `set` = {
+                                    Term{
+                                      `inject` = Injection{
+                                        typeName = Name{"Number"},
+                                        field = Field{
+                                          name = Name{"float"},
+                                          `term` = Term{
+                                            literal = Literal{
+                                              float = FloatValue{
+                                                `float32` = 100.0:float32}}}}}},
+                                    Term{
+                                      `inject` = Injection{
+                                        typeName = Name{"Number"},
+                                        field = Field{
+                                          name = Name{"int"},
+                                          `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}}}}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `list` = [
+                              Term{
+                                `inject` = Injection{
+                                  typeName = Name{"Number"},
+                                  field = Field{
+                                    name = Name{"int"},
+                                    `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}}}},
+                              Term{
+                                `inject` = Injection{
+                                  typeName = Name{"Number"},
+                                  field = Field{
+                                    name = Name{"float"},
+                                    `term` = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float32` = 100.0:float32}}}}}}]}}},
+                description = none,
+                tags = [],
+                provisions = []},
+              TestCaseWithMetadata{
+                name = "maps.keys lists keys in declared order",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.maps.keys"}},
+                                argument = Term{
+                                  `map` = {
+                                    Term{
+                                      `inject` = Injection{
+                                        typeName = Name{"Number"},
+                                        field = Field{
+                                          name = Name{"float"},
+                                          `term` = Term{
+                                            literal = Literal{
+                                              float = FloatValue{
+                                                `float32` = 100.0:float32}}}}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 0:int32}}},
+                                    Term{
+                                      `inject` = Injection{
+                                        typeName = Name{"Number"},
+                                        field = Field{
+                                          name = Name{"int"},
+                                          `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}}}} = Term{literal = Literal{integer = IntegerValue{`int32` = 0:int32}}}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `list` = [
+                              Term{
+                                `inject` = Injection{
+                                  typeName = Name{"Number"},
+                                  field = Field{
+                                    name = Name{"int"},
+                                    `term` = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}}}},
+                              Term{
+                                `inject` = Injection{
+                                  typeName = Name{"Number"},
+                                  field = Field{
+                                    name = Name{"float"},
+                                    `term` = Term{
+                                      literal = Literal{
+                                        float = FloatValue{
+                                          `float32` = 100.0:float32}}}}}}]}}},
+                description = none,
+                tags = [],
+                provisions = []}]},
+          TestGroup{
+            name = "annotations are ignored",
+            description = none,
+            subgroups = [],
+            `cases` = [
+              TestCaseWithMetadata{
+                name = "equal ignores a nested annotation",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.equality.equal"}},
+                                    argument = Term{
+                                      `list` = [
+                                        Term{
+                                          annotated = AnnotatedTerm{
+                                            body = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                            annotation = Term{
+                                              `map` = mapKeys
+                                                  (λn.Term{variable = n})
+                                                  {
+                                                    Name{"note"} = Term{literal = Literal{`string` = "hello"}}}}}}]}}},
+                                argument = Term{
+                                  `list` = [Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}]}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              `boolean` = true}}}},
+                description = none,
+                tags = [],
+                provisions = []},
+              TestCaseWithMetadata{
+                name = "compare ignores a nested annotation",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  application = Application{
+                                    function = Term{
+                                      variable = Name{"hydra.core.lib.ordering.compare"}},
+                                    argument = Term{
+                                      `list` = [
+                                        Term{
+                                          annotated = AnnotatedTerm{
+                                            body = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                            annotation = Term{
+                                              `map` = mapKeys
+                                                  (λn.Term{variable = n})
+                                                  {
+                                                    Name{"note"} = Term{literal = Literal{`string` = "hello"}}}}}}]}}},
+                                argument = Term{
+                                  `list` = [Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}]}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `inject` = Injection{
+                              typeName = Name{"hydra.core.util.Comparison"},
+                              field = Field{
+                                name = Name{"equalTo"},
+                                `term` = Term{
+                                  `unit`}}}}}},
+                description = none,
+                tags = [],
+                provisions = []},
+              TestCaseWithMetadata{
+                name = "a map key with a nested annotation is the same key",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.maps.size"}},
+                                argument = Term{
+                                  application = Application{
+                                    function = Term{
+                                      application = Application{
+                                        function = Term{
+                                          application = Application{
+                                            function = Term{
+                                              variable = Name{"hydra.core.lib.maps.insert"}},
+                                            argument = Term{
+                                              `list` = [Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}]}}},
+                                        argument = Term{
+                                          literal = Literal{
+                                            integer = IntegerValue{
+                                              `int32` = 2:int32}}}}},
+                                    argument = Term{
+                                      `map` = {
+                                        Term{
+                                          `list` = [
+                                            Term{
+                                              annotated = AnnotatedTerm{
+                                                body = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                                annotation = Term{
+                                                  `map` = mapKeys
+                                                      (λn.Term{variable = n})
+                                                      {
+                                                        Name{"note"} = Term{literal = Literal{`string` = "hello"}}}}}}]} = Term{literal = Literal{integer = IntegerValue{`int32` = 0:int32}}}}}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            literal = Literal{
+                              integer = IntegerValue{
+                                `int32` = 1:int32}}}}},
+                description = none,
+                tags = [],
+                provisions = []},
+              TestCaseWithMetadata{
+                name = "map keys are stored without annotations",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.maps.keys"}},
+                                argument = Term{
+                                  `map` = {
+                                    Term{
+                                      `list` = [
+                                        Term{
+                                          annotated = AnnotatedTerm{
+                                            body = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                            annotation = Term{
+                                              `map` = mapKeys
+                                                  (λn.Term{variable = n})
+                                                  {
+                                                    Name{"note"} = Term{literal = Literal{`string` = "hello"}}}}}}]} = Term{literal = Literal{integer = IntegerValue{`int32` = 0:int32}}}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `list` = [Term{`list` = [Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}]}]}}},
+                description = none,
+                tags = [],
+                provisions = []},
+              TestCaseWithMetadata{
+                name = "set elements are stored without annotations",
+                case = TestCase{
+                  universal = UniversalTestCase{
+                    actual = λ`_`.eithers.either
+                          (λe."<<eval error>>")
+                          (λt.`term` t)
+                          (reduceTerm
+                            testContext
+                            testGraph
+                            true
+                            Term{
+                              application = Application{
+                                function = Term{
+                                  variable = Name{"hydra.core.lib.sets.toList"}},
+                                argument = Term{
+                                  `set` = {
+                                    Term{
+                                      `list` = [
+                                        Term{
+                                          annotated = AnnotatedTerm{
+                                            body = Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}},
+                                            annotation = Term{
+                                              `map` = mapKeys
+                                                  (λn.Term{variable = n})
+                                                  {
+                                                    Name{"note"} = Term{literal = Literal{`string` = "hello"}}}}}}]}}}}}),
+                    expected = λ`_`.`term`
+                          Term{
+                            `list` = [Term{`list` = [Term{literal = Literal{integer = IntegerValue{`int32` = 1:int32}}}]}]}}},
+                description = none,
+                tags = [],
+                provisions = []}]}],
         `cases` = []}],
     `cases` = []}

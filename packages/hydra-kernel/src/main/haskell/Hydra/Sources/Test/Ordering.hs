@@ -396,14 +396,12 @@ unionComparisonTests = subgroup "Union comparison" [
     (numberFloatTerm 1.5)
     (numberFloatTerm 2.5)
     "lessThan",
-  -- Different variants: Term.inject compares by variant NAME (lexicographic). This is the
-  -- ACCEPTED, conformant behavior (Josh's ruling, #718/#327) -- NOT a mere term-only limitation:
-  -- Injection carries only the variant name (no ordinal), and compare/Ord never receive the
-  -- union Type, so name order is the correct, schema-free semantics for hydra.core.model.Term
-  -- injections (spec: ordering-and-equality.md, "Injections and variant order"). The Number
-  -- union declares its variants ["int", "float"] -- declared order is int < float, the OPPOSITE
-  -- of name order (float < int) -- so these two cases pin name order over declared order in
-  -- BOTH directions, on every host.
+  -- Different variants, compared as Term data. These cases run compiled host code over
+  -- hydra.core.model.Term values, so they compare at the meta level: an injection is the record
+  -- Injection{typeName, field}, and the record rule compares the variant name (#848; spec:
+  -- ordering-and-equality.md). The Number union declares its variants ["int", "float"], the
+  -- opposite of name order. Object-level Number values, compared by the interpreter with the
+  -- schema in hand, use declared order instead (hydra.core.test.lib.ordering, "object-level values").
   compareTest "Number float vs int -- by variant NAME not declared order (float < int)"
     (numberFloatTerm 100.0)
     (numberIntTerm 1)

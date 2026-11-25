@@ -15,7 +15,11 @@ import qualified Data.Map                     as M
 -- Additional imports specific to this file
 import Hydra.Core.Testing
 import qualified Hydra.Core.Overlay.Haskell.Dsl.Prims as Prims
+import qualified Hydra.Core.Lib.Equality as DefEquality
+import qualified Hydra.Core.Lib.Lists as DefLists
+import qualified Hydra.Core.Lib.Maps as DefMaps
 import qualified Hydra.Core.Lib.Ordering as DefOrdering
+import qualified Hydra.Core.Lib.Sets as DefSets
 import qualified Data.Scientific as Sci
 
 
@@ -45,7 +49,8 @@ allTests = definitionInModule module_ "allTests" $
       supergroup "lt" [orderingLt, orderingLtFloats, orderingLtStrings],
       supergroup "lte" [orderingLte, orderingLteFloats, orderingLteStrings, orderingLteDecimals],
       supergroup "max" [orderingMax, orderingMaxStrings, orderingMaxFloats, orderingMaxDecimals],
-      supergroup "min" [orderingMin, orderingMinStrings, orderingMinFloats, orderingMinDecimals]]
+      supergroup "min" [orderingMin, orderingMinStrings, orderingMinFloats, orderingMinDecimals],
+      orderingObjectLevelValues]
 
 orderingCompare :: TypedTerm TestGroup
 orderingCompare = subgroup "threeWayClassification" [
@@ -313,3 +318,41 @@ orderingCompareMaps = subgroup "threeWayClassification" [
   where
     test testName x y resultField = primCaseWithProvisions testName ["threeWayClassification"] DefOrdering.compare [x, y] (injectUnit (name "hydra.core.util.Comparison") resultField)
     intMap pairs = Terms.map $ Phantoms.map $ M.fromList [(int32 k, int32 v) | (k, v) <- pairs]
+
+-- Object-level values (#848): the interpreter compares union values in the declared order of their variants, and
+-- ignores annotations at every depth. The Number test type declares its variants as [int, float], the opposite of
+-- name order, so each case below would come out differently under name order.
+orderingObjectLevelValues :: TypedTerm TestGroup
+orderingObjectLevelValues = supergroup "object-level values" [
+  subgroup "declared variant order" [
+    primCase "compare: an earlier variant is less" DefOrdering.compare [numInt 1, numFloat 100] (comparison "lessThan"),
+    primCase "compare: a later variant is greater" DefOrdering.compare [numFloat 100, numInt 1] (comparison "greaterThan"),
+    primCase "compare: the same variant compares by payload" DefOrdering.compare [numInt 2, numInt 1]
+      (comparison "greaterThan"),
+    primCase "max picks the later variant" DefOrdering.max [numFloat 100, numInt 1] (numFloat 100),
+    primCase "lists.sort sorts by declared order" DefLists.sort [Terms.list [numFloat 100, numInt 1]]
+      (Terms.list [numInt 1, numFloat 100]),
+    primCase "sets.toList lists elements in declared order" DefSets.toList [Terms.set [numFloat 100, numInt 1]]
+      (Terms.list [numInt 1, numFloat 100]),
+    primCase "maps.keys lists keys in declared order" DefMaps.keys
+      [Terms.map $ Phantoms.map $ M.fromList [(numFloat 100, int32 0), (numInt 1, int32 0)]]
+      (Terms.list [numInt 1, numFloat 100])],
+  subgroup "annotations are ignored" [
+    primCase "equal ignores a nested annotation" DefEquality.equal [Terms.list [noted (int32 1)], Terms.list [int32 1]]
+      (boolean True),
+    primCase "compare ignores a nested annotation" DefOrdering.compare
+      [Terms.list [noted (int32 1)], Terms.list [int32 1]] (comparison "equalTo"),
+    primCase "a map key with a nested annotation is the same key" DefMaps.size
+      [Terms.primitive DefMaps.insert @@ Terms.list [int32 1] @@ int32 2
+        @@ (Terms.map $ Phantoms.map $ M.fromList [(Terms.list [noted (int32 1)], int32 0)])]
+      (int32 1),
+    primCase "map keys are stored without annotations" DefMaps.keys
+      [Terms.map $ Phantoms.map $ M.fromList [(Terms.list [noted (int32 1)], int32 0)]]
+      (Terms.list [Terms.list [int32 1]]),
+    primCase "set elements are stored without annotations" DefSets.toList [Terms.set [Terms.list [noted (int32 1)]]]
+      (Terms.list [Terms.list [int32 1]])]]
+  where
+    numInt n = inject (name "Number") "int" (int32 n)
+    numFloat f = inject (name "Number") "float" (float32 f)
+    comparison = injectUnit (name "hydra.core.util.Comparison")
+    noted = annots (Phantoms.map (M.fromList [(Core.nameLift (Name "note"), string "hello")]))
