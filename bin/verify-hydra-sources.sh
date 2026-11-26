@@ -16,6 +16,14 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PKG_JSON="$ROOT/packages/hydra-kernel/package.json"
+if ! grep -q '"textualSources"' "$PKG_JSON"; then
+  echo "verify-hydra-sources: $PKG_JSON is missing textualSources — a previous --flip/--dsl run" >&2
+  echo "verify-hydra-sources: was interrupted before its cleanup trap could restore it. Fix:" >&2
+  echo "verify-hydra-sources:   git checkout -- packages/hydra-kernel/package.json" >&2
+  echo "verify-hydra-sources: then re-run." >&2
+  exit 2
+fi
 HEAP=10g
 MIN_MB=7000
 FLIP=0
@@ -49,13 +57,15 @@ if [ "$HEAP_MB" -gt "$SPARE_MB" ]; then HEAP_MB=$SPARE_MB; fi
 HEAP="${HEAP_MB}m"
 
 SCRATCH="$(mktemp -d "${TMPDIR:-/tmp}/verify-hydra-sources.XXXXXX")"
-PKG_JSON="$ROOT/packages/hydra-kernel/package.json"
 PKG_BACKUP=""
 cleanup() {
   if [ -n "$PKG_BACKUP" ] && [ -f "$PKG_BACKUP" ]; then cp "$PKG_BACKUP" "$PKG_JSON"; fi
   if [ "$KEEP" = 1 ]; then echo "verify-hydra-sources: scratch kept at $SCRATCH" >&2; else rm -rf "$SCRATCH"; fi
 }
-trap cleanup EXIT
+# Trap INT/TERM too, not just EXIT: a plain EXIT trap does not fire on SIGKILL, but it also
+# would not fire on SIGINT/SIGTERM delivered to a `set -e` script unless explicitly trapped —
+# without this, a killed --flip/--dsl run leaves package.json permanently stripped (#711).
+trap cleanup EXIT INT TERM
 
 # Print the first lines of the unified diff of EVERY differing file (so each category of difference is visible),
 # bounded to ~600 lines overall.
