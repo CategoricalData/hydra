@@ -3,6 +3,7 @@ module hydra.core.substitution
 
 import hydra.core.classes
 import hydra.core.graph
+import hydra.core.lib.equality
 import hydra.core.lib.lists as lists
 import hydra.core.lib.logic
 import hydra.core.lib.maps as maps
@@ -40,7 +41,7 @@ term singletonTypeSubst = λv, t.TypeSubst{maps.singleton v t}
 
 ## Apply a type substitution to class constraints, propagating to free variables or discharging/retaining on concrete resolution
 term substInClassConstraints =
-  λsubst, constraints.
+  λschema, subst, constraints.
     let substMap := TypeSubst[] subst
     in ifElse
       (or (maps.isEmpty substMap) (maps.isEmpty constraints))
@@ -70,20 +71,41 @@ term substInClassConstraints =
                   (sets.toList (freeVariablesInType targetType))
               in ifElse
                 (not (lists.isEmpty genuineVars))
-                (lists.foldl
+                (let incomparable := sets.filter
+                    (λc.
+                      let cn := cases(TypeClassConstraint){simple = λn.n}
+                          c
+                      in and
+                        (or
+                          (equal cn Name{"equality"})
+                          (equal cn Name{"ordering"}))
+                        (not (isComparableType schema targetType)))
+                    (TypeVariableConstraints[classes] metadata) in
+                let acc1 := ifElse
+                    (sets.isEmpty incomparable)
+                    acc
+                    (insertOrMerge
+                      varName
+                      TypeVariableConstraints{classes = incomparable}
+                      acc) in
+                lists.foldl
                   (λacc2, freeVar.insertOrMerge freeVar metadata acc2)
-                  acc
+                  acc1
                   genuineVars)
                 (let unsatisfied := sets.filter
                     (λc.not
                         (classIsSatisfiedByType
+                          schema
                           (cases(TypeClassConstraint){simple = λn.n} c)
                           targetType))
                     (TypeVariableConstraints[classes] metadata)
                 in ifElse
                   (sets.isEmpty unsatisfied)
                   acc
-                  (insertOrMerge varName TypeVariableConstraints{classes = unsatisfied} acc))))
+                  (insertOrMerge
+                    varName
+                    TypeVariableConstraints{classes = unsatisfied}
+                    acc))))
         maps.empty
         (maps.toList constraints))
 
@@ -91,7 +113,7 @@ term substInClassConstraints =
 term substInContext =
   λsubst, cx.
     let newBoundTypes := maps.map (substInTypeScheme subst) (Graph[boundTypes] cx) in
-    let newClassConstraints := substInClassConstraints subst (Graph[classConstraints] cx) in
+    let newClassConstraints := substInClassConstraints (Graph[schemaTypes] cx) subst (Graph[classConstraints] cx) in
     let cx2 := Graph{
       boundTerms = Graph[boundTerms] cx,
       boundTypes = newBoundTypes,
@@ -147,7 +169,7 @@ term substInTypeScheme =
     in TypeScheme{
       variables = TypeScheme[variables] ts,
       body = substInType scopedSubst (TypeScheme[body] ts),
-      constraints = substInClassConstraints scopedSubst (TypeScheme[constraints] ts)}
+      constraints = substInClassConstraints maps.empty scopedSubst (TypeScheme[constraints] ts)}
 
 ## Apply a type substitution to the type annotations within a term
 term substTypesInTerm =

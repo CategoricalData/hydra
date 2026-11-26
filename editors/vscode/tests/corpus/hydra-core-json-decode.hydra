@@ -1,6 +1,8 @@
 ## JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling.
 module hydra.core.json.decode
 
+import hydra.core.coders
+import hydra.core.json.encode
 import hydra.core.json.model
 import hydra.core.lib.eithers as eithers
 import hydra.core.lib.equality
@@ -17,6 +19,351 @@ import hydra.core.print.model
 import hydra.core.resolution
 import hydra.core.strip
 import hydra.core.substitution
+import hydra.core.variables
+
+## Compile a type into a staged JSON decoder node (#850). A node is a Coder whose decode function takes a resolver for named types (see jsonCoder) paired with a JSON value; its encode function is unused. Nodes are data rather than bare functions so that no host's eta expansion can move the compile-time work under the decoding lambda. All schema work (annotation stripping, type-application reduction, field and variant tables) happens once here rather than at every node of every decoded value, while every error is still reported at decode time, exactly as fromJson reports it.
+term compileDecoder =
+  λtypes, compactMaps, tname, typ.
+    let stripped := deannotateType typ in
+    let recurse := λt.compileDecoder types compactMaps tname t in
+    let decodeVariablePayload := λpayload.cases(Value){
+          `string` = λs.right(Term{
+                variable = wrap(Name){s}}),
+          `_` = left("expected a JSON string as the \"@var\" variable name")}
+          payload in
+    let checkVariable := λf, run, value.cases(Value){
+          object = λpairs.ifElse
+                (equal (lists.length pairs) 1:int32)
+                (let onlyPair := withDefault
+                    ("", Value{null})
+                    (lists.at 0:int32 pairs)
+                in ifElse
+                  (equal (first onlyPair) "@var")
+                  (decodeVariablePayload (second onlyPair))
+                  (f run value))
+                (f run value),
+          `_` = f run value}
+          value in
+    let unusedEncode := λ`_`.left("a compiled JSON decoder node does not encode") in
+    let plainNode := λf.Coder{
+          encode = unusedEncode,
+          decode = λrv.f (first rv) (second rv)} in
+    let checkedNode := λf.Coder{
+          encode = unusedEncode,
+          decode = λrv.checkVariable f (first rv) (second rv)} in
+    let applyNode := λd, run, v.Coder[decode] d (run, v) in
+    let failWith := λmsg.checkedNode (λrun, value.left(msg)) in
+    let withVariableCheck := λd.checkedNode (λrun, value.applyNode d run value) in
+    let reduceApp := λapp.
+        let fn := deannotateType (ApplicationType[function] app) in
+        let arg := ApplicationType[argument] app in
+        cases(Type){
+          application = λinnerApp.eithers.either
+                (λerr.left(err))
+                (λreducedFn.reduceApp
+                    ApplicationType{
+                      function = reducedFn,
+                      argument = arg})
+                (reduceApp innerApp),
+          `forall` = λft.right(substInType
+                (singletonTypeSubst
+                  (ForallType[parameter] ft)
+                  arg)
+                (ForallType[body] ft)),
+          variable = λname.match
+                (maps.lookup name types)
+                left(strings.concat
+                  ["unknown type variable: ", Name[] name])
+                (λresolvedFn.reduceApp
+                    ApplicationType{
+                      function = resolvedFn,
+                      argument = arg}),
+          `_` = left(strings.concat
+              ["cannot apply a non-parametric type: ", `type` fn])}
+          fn in
+    let decodeElements := λelemDecoder, run, arr.eithers.mapList
+          (λv.applyNode elemDecoder run v)
+          arr in
+    cases(Type){
+      application = λat.
+          let appHead := λt.cases(Type){
+                application = λinner.appHead
+                      (ApplicationType[function] inner),
+                `_` = t}
+                (deannotateType t) in
+          let headName := cases(Type){
+              variable = λname.name,
+              `_` = tname}
+              (deannotateType
+                (appHead (ApplicationType[function] at))) in
+          eithers.either
+            (λerr.failWith err)
+            (λreducedType.withVariableCheck
+                (compileDecoder
+                  types
+                  compactMaps
+                  headName
+                  reducedType))
+            (reduceApp at),
+      `forall` = λft.withVariableCheck (recurse (ForallType[body] ft)),
+      literal = λlt.checkedNode (λrun, value.decodeLiteral lt value),
+      `list` = λelemType.
+          let elemDecoder := recurse elemType
+          in checkedNode
+            (λrun, value.cases(Value){
+                null = λ`_`.right(Term{
+                      `list` = []}),
+                array = λarr.eithers.map
+                      (λts.Term{
+                          `list` = ts})
+                      (decodeElements elemDecoder run arr),
+                `_` = left("expected array")}
+                value),
+      `set` = λelemType.
+          let elemDecoder := recurse elemType
+          in checkedNode
+            (λrun, value.cases(Value){
+                null = λ`_`.right(Term{
+                      `set` = sets.empty}),
+                array = λarr.eithers.map
+                      (λelems.Term{
+                          `set` = sets.fromList elems})
+                      (decodeElements elemDecoder run arr),
+                `_` = left("expected array")}
+                value),
+      `optional` = λinnerType.
+          let innerDecoder := recurse innerType in
+          let isNestedMaybe := cases(Type){
+              `optional` = λ`_`.true,
+              `_` = false}
+              (deannotateType innerType) in
+          let decodeGiven := λrun, v.eithers.map
+                (λt.Term{
+                    `optional` = given(t)})
+                (applyNode innerDecoder run v) in
+          ifElse
+            isNestedMaybe
+            (plainNode
+              (λrun, value.cases(Value){
+                  null = λ`_`.right(Term{
+                        `optional` = none}),
+                  array = λarr.
+                      let len := lists.length arr
+                      in ifElse
+                        (equal len 0:int32)
+                        right(Term{
+                          `optional` = none})
+                        (ifElse
+                          (equal len 1:int32)
+                          (match
+                            (lists.head arr)
+                            left("expected single-element array for Just")
+                            (λfirstVal.decodeGiven run firstVal))
+                          left("expected single-element array for Just")),
+                  `_` = left("expected null or single-element array for nested Maybe")}
+                  value))
+            (plainNode
+              (λrun, value.cases(Value){
+                  null = λ`_`.right(Term{
+                        `optional` = none}),
+                  `_` = decodeGiven run value}
+                  value)),
+      `record` = λrt.
+          let fieldDecoders := lists.map
+              (λft.(FieldType[name] ft, recurse (FieldType[`type`] ft)))
+              rt
+          in checkedNode
+            (λrun, value.cases(Value){
+                object = λpairs.
+                    let obj := maps.fromList pairs in
+                    let decodeField := λfd.
+                        let fname := first fd
+                        in eithers.map
+                          (λv.Field{
+                              name = fname,
+                              `term` = v})
+                          (applyNode
+                            (second fd)
+                            run
+                            (maps.findWithDefault
+                              Value{
+                                null}
+                              (Name[] fname)
+                              obj)) in
+                    eithers.map
+                      (λfs.Term{
+                          `record` = Record{
+                            typeName = tname,
+                            fields = fs}})
+                      (eithers.mapList
+                        decodeField
+                        fieldDecoders),
+                `_` = left("expected object")}
+                value),
+      `union` = λrt.
+          let isUnitType := λt.cases(Type){`unit` = λ`_`.true, `_` = false}
+                (deannotateType t) in
+          let variants := maps.fromList
+              (lists.reverse
+                (lists.map
+                  (λft.(Name[] (FieldType[name] ft), (isUnitType (FieldType[`type`] ft), recurse (FieldType[`type`] ft))))
+                  rt)) in
+          let toInjection := λkey, t.Term{
+                `inject` = Injection{
+                  typeName = tname,
+                  field = Field{
+                    name = wrap(Name){key},
+                    `term` = t}}} in
+          let unknownVariant := λkey.left(strings.concat
+                ["unknown variant: ", key]) in
+          checkedNode
+            (λrun, value.cases(Value){
+                `string` = λs.match
+                      (maps.lookup s variants)
+                      (unknownVariant s)
+                      (λvariant.ifElse
+                          (first variant)
+                          right(toInjection s Term{
+                            `unit`})
+                          left(strings.concat
+                            ["compact string form requires unit-typed variant, got non-unit type for variant: ", s])),
+                object = λobj.
+                    let objMap := maps.fromList obj in
+                    let objKeys := maps.keys objMap in
+                    ifElse
+                      (equal (lists.length objKeys) 1:int32)
+                      (match
+                        (lists.head objKeys)
+                        left("expected single-key object for union")
+                        (λk.match
+                            (maps.lookup k variants)
+                            (unknownVariant k)
+                            (λvariant.eithers.map
+                                (λt.toInjection k t)
+                                (applyNode
+                                  (second variant)
+                                  run
+                                  (maps.findWithDefault
+                                    Value{
+                                      null}
+                                    k
+                                    objMap)))))
+                      left("expected single-key object for union"),
+                `_` = left("expected string or object for union")}
+                value),
+      `unit` = λ`_`.checkedNode
+            (λrun, value.cases(Value){
+                object = λ`_`.right(Term{`unit`}),
+                `_` = left("expected object")}
+                value),
+      `wrap` = λwn.
+          let bodyDecoder := recurse wn
+          in plainNode
+            (λrun, value.eithers.map
+                (λv.Term{
+                    `wrap` = WrappedTerm{
+                      typeName = tname,
+                      body = v}})
+                (applyNode bodyDecoder run value)),
+      `map` = λmt.
+          let keyDecoder := recurse (MapType[keys] mt) in
+          let valDecoder := recurse (MapType[values] mt) in
+          let compact := and
+              compactMaps
+              (mapKeyResolvesToString types (MapType[keys] mt)) in
+          let decodeEntry := λrun, kj, vj.eithers.either
+                (λerr.left(err))
+                (λk.eithers.map
+                    (λv.(k, v))
+                    (applyNode valDecoder run vj))
+                (applyNode keyDecoder run kj) in
+          let decodeArrayEntry := λrun, entryJson.eithers.either
+                (λerr.left(err))
+                (λentryObj.match
+                    (maps.lookup "key" entryObj)
+                    left("missing key in map entry")
+                    (λkj.match
+                        (maps.lookup "value" entryObj)
+                        left("missing value in map entry")
+                        (λvj.decodeEntry run kj vj)))
+                (expectObject entryJson) in
+          let toMapTerm := λentries.eithers.map
+                (λes.Term{`map` = maps.fromList es})
+                entries in
+          checkedNode
+            (λrun, value.cases(Value){
+                null = λ`_`.right(Term{
+                      `map` = maps.empty}),
+                array = λarr.toMapTerm
+                      (eithers.mapList
+                        (λe.decodeArrayEntry run e)
+                        arr),
+                object = λobj.ifElse
+                      compact
+                      (let rawKeys := lists.map first obj
+                      in ifElse
+                        (equal
+                          (lists.length rawKeys)
+                          (lists.length (lists.distinct rawKeys)))
+                        (toMapTerm
+                          (eithers.mapList
+                            (λkv.decodeEntry
+                                run
+                                Value{
+                                  `string` = first kv}
+                                (second kv))
+                            obj))
+                        left("duplicate key in compact map object"))
+                      left("expected array for map with non-string-resolving key type"),
+                `_` = left("expected object or array for map")}
+                value),
+      pair = λpt.
+          let firstDecoder := recurse (PairType[first] pt) in
+          let secondDecoder := recurse (PairType[second] pt) in
+          checkedNode
+            (λrun, value.eithers.either
+                (λerr.left(err))
+                (λobj.match
+                    (maps.lookup "first" obj)
+                    left("missing first in pair")
+                    (λfj.match
+                        (maps.lookup "second" obj)
+                        left("missing second in pair")
+                        (λsj.eithers.either
+                            (λerr.left(err))
+                            (λf.eithers.map
+                                (λs.Term{pair = (f, s)})
+                                (applyNode secondDecoder run sj))
+                            (applyNode firstDecoder run fj))))
+                (expectObject value)),
+      `either` = λet.
+          let leftDecoder := recurse (EitherType[`left`] et) in
+          let rightDecoder := recurse (EitherType[`right`] et) in
+          checkedNode
+            (λrun, value.eithers.either
+                (λerr.left(err))
+                (λobj.
+                  let leftJson := maps.lookup "left" obj in
+                  let rightJson := maps.lookup "right" obj in
+                  ifElse
+                    (and (isGiven leftJson) (isGiven rightJson))
+                    left("Either object must not carry both left and right keys")
+                    (match
+                      leftJson
+                      (match
+                        rightJson
+                        left("expected left or right in Either")
+                        (λrj.eithers.map
+                            (λv.Term{`either` = right(v)})
+                            (applyNode rightDecoder run rj)))
+                      (λlj.eithers.map
+                          (λv.Term{`either` = left(v)})
+                          (applyNode leftDecoder run lj))))
+                (expectObject value)),
+      variable = λname.checkedNode (λrun, value.run name value),
+      `_` = failWith
+          (strings.concat ["unsupported type for JSON decoding: ", `type` typ])}
+      stripped
 
 ## Decode a JSON value to a float term. Finite values arrive as JSON numbers; NaN/Inf/-0.0 arrive as JSON string sentinels. Float32 and Float64 are symmetric.
 term decodeFloat =
@@ -649,6 +996,49 @@ term fromJson =
           `string` = λs.right(Term{variable = wrap(Name){s}}),
           `_` = left("expected a JSON string as the \"@var\" variable name")}
           payload)
+
+## Build a staged JSON coder for a type (#850). Its decode function is equivalent to fromJson applied to the same arguments, and its encode function to toJson, but the schema is compiled once when the coder is built, so a caller that keeps the coder and applies it to many values does not re-interpret the schema for each one. Each named type reachable from the given type is compiled exactly once, and named-type references go through a recursive local function rather than a recursive value, so no host needs lazy let-bindings.
+term jsonCoder =
+  λtypes, compactMaps, tname, typ.
+    let namesIn := λn.match (maps.lookup n types) sets.empty (λt.freeVariablesInType t) in
+    let reach := λpending, visited.ifElse
+          (sets.isEmpty pending)
+          visited
+          (let newVisited := sets.union visited pending in
+          let next := sets.unions
+              (lists.map namesIn (sets.toList pending)) in
+          reach (sets.difference next newVisited) newVisited) in
+    let reachable := reach (freeVariablesInType typ) sets.empty in
+    let decoders := maps.fromList
+        (givens
+          (lists.map
+            (λn.match
+                (maps.lookup n types)
+                none
+                (λt.given((n, compileDecoder types compactMaps n t))))
+            (sets.toList reachable))) in
+    let runDecoder := λname, value.match
+          (maps.lookup name decoders)
+          left(strings.concat
+            ["unknown type variable: ", Name[] name])
+          (λd.Coder[decode] d (runDecoder, value)) in
+    let encoders := maps.fromList
+        (givens
+          (lists.map
+            (λn.match
+                (maps.lookup n types)
+                none
+                (λt.given((n, compileEncoder types compactMaps t))))
+            (sets.toList reachable))) in
+    let runEncoder := λname, `term`.match
+          (maps.lookup name encoders)
+          (toJsonUntyped `term`)
+          (λe.Coder[encode] e (runEncoder, `term`)) in
+    let rootDecoder := compileDecoder types compactMaps tname typ in
+    let rootEncoder := compileEncoder types compactMaps typ in
+    Coder{
+      encode = λ`term`.Coder[encode] rootEncoder (runEncoder, `term`),
+      decode = λvalue.Coder[decode] rootDecoder (runDecoder, value)}
 
 ## Parse an IEEE sentinel string (NaN, Infinity, -Infinity, -0.0) to a float64. Returns Nothing for unrecognized strings.
 term parseSpecialFloat =

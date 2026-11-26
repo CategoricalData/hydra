@@ -1459,9 +1459,9 @@
 #                 ^^^^^^^^^^^ source.hydra entity.name.type.hydra
 #                            ^^ source.hydra
 >
->## A map type whose key type is or directly contains a function type, which cannot be compared for equality
+>## A map type whose key type is not comparable: it is, or contains (possibly through a nominal type), a function or effect type
 #^^ source.hydra comment.block.documentation.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type NonComparableMapKeyTypeError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -1496,9 +1496,9 @@
 #           ^^^^ source.hydra entity.name.type.hydra
 #               ^^ source.hydra
 >
->## A set type whose element type is or directly contains a function type, which cannot be compared for equality
+>## A set type whose element type is not comparable: it is, or contains (possibly through a nominal type), a function or effect type
 #^^ source.hydra comment.block.documentation.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type NonComparableSetElementTypeError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra
@@ -2334,9 +2334,9 @@
 #        ^^^^ source.hydra entity.name.type.hydra
 #            ^^ source.hydra
 >
->## TypeVoid appearing in a position where no value can be constructed, such as a record field, list element, map key/value, set element, pair component, or function codomain (optional)
+>## TypeVoid as a record field, a pair component, a list, set or optional element, or a map key or value (optional). Void is allowed as an either side, a union variant, a function domain or codomain, and an effect result
 #^^ source.hydra comment.block.documentation.hydra
-#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
+#  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra comment.block.documentation.hydra
 >type VoidInNonBottomPositionError = record{
 #^^^^ source.hydra keyword.other.definition.hydra
 #    ^ source.hydra

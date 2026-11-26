@@ -187,12 +187,17 @@ term nominalTypeKindMismatchError =
 
 ## Show a non-comparable map key type error as a string
 term nonComparableMapKeyTypeError =
-  λe.strings.concat ["map key type contains a function type: ", `type` (NonComparableMapKeyTypeError[keyType] e)]
+  λe.strings.concat
+      [
+        "map key type is not comparable (it contains a function or effect type): ",
+        `type` (NonComparableMapKeyTypeError[keyType] e)]
 
 ## Show a non-comparable set element type error as a string
 term nonComparableSetElementTypeError =
   λe.strings.concat
-      ["set element type contains a function type: ", `type` (NonComparableSetElementTypeError[elementType] e)]
+      [
+        "set element type is not comparable (it contains a function or effect type): ",
+        `type` (NonComparableSetElementTypeError[elementType] e)]
 
 ## Show a redundant wrap/unwrap error as a string
 term redundantWrapUnwrapError =

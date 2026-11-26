@@ -1,10 +1,11 @@
 ## JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling.
 module hydra.core.json.encode
 
+import hydra.core.coders
 import hydra.core.json.model
 import hydra.core.lib.eithers as eithers
 import hydra.core.lib.equality
-import hydra.core.lib.lists
+import hydra.core.lib.lists as lists
 import hydra.core.lib.literals
 import hydra.core.lib.logic
 import hydra.core.lib.maps as maps
@@ -17,6 +18,318 @@ import hydra.core.print.model as model
 import hydra.core.resolution
 import hydra.core.strip
 import hydra.core.substitution
+
+## Compile a type into a staged JSON encoder node (#850). A node is a Coder whose encode function takes a resolver for named types (see hydra.core.json.decode.jsonCoder) paired with a term; its decode function is unused. Nodes are data rather than bare functions so that no host's eta expansion can move the compile-time work under the encoding lambda. All schema work happens once here rather than at every node of every encoded term, while every error is still reported at encode time, exactly as toJson reports it.
+term compileEncoder =
+  λtypes, compactMaps, typ.
+    let recurse := λt.compileEncoder types compactMaps t in
+    let unusedDecode := λ`_`.left("a compiled JSON encoder node does not decode") in
+    let node := λf.Coder{
+          encode = λrt.
+              let `term` := pairs.second rt in
+              let strippedTerm := deannotateTerm `term` in
+              cases(Term){
+                variable = λn.right(Value{
+                      object = [("@var", Value{`string` = Name[] n})]}),
+                `_` = f (pairs.first rt) `term` strippedTerm}
+                strippedTerm,
+          decode = unusedDecode} in
+    let applyNode := λe, run, t.Coder[encode] e (run, t) in
+    let failWith := λmsg.node (λrun, `term`, strippedTerm.left(msg)) in
+    let encodeElements := λelemEncoder, run, terms.eithers.mapList
+          (λt.applyNode elemEncoder run t)
+          terms in
+    let reduceApp := λapp.
+        let fn := deannotateType (ApplicationType[function] app) in
+        let arg := ApplicationType[argument] app in
+        cases(Type){
+          application = λinnerApp.eithers.either
+                (λerr.left(err))
+                (λreducedFn.reduceApp
+                    ApplicationType{
+                      function = reducedFn,
+                      argument = arg})
+                (reduceApp innerApp),
+          `forall` = λft.right(substInType
+                (singletonTypeSubst
+                  (ForallType[parameter] ft)
+                  arg)
+                (ForallType[body] ft)),
+          variable = λname.match
+                (maps.lookup name types)
+                left(strings.concat
+                  ["unknown type variable: ", Name[] name])
+                (λresolvedFn.reduceApp
+                    ApplicationType{
+                      function = resolvedFn,
+                      argument = arg}),
+          `_` = left(strings.concat
+              ["cannot apply a non-parametric type: ", model.type fn])}
+          fn in
+    cases(Type){
+      application = λat.eithers.either
+            (λerr.failWith err)
+            (λreducedType.recurse reducedType)
+            (reduceApp at),
+      `forall` = λft.recurse (ForallType[body] ft),
+      literal = λ`_`.node
+            (λrun, `term`, strippedTerm.cases(Term){
+                literal = λlit.encodeLiteral lit,
+                `_` = left("expected literal term")}
+                strippedTerm),
+      `list` = λelemType.
+          let elemEncoder := recurse elemType
+          in node
+            (λrun, `term`, strippedTerm.cases(Term){
+                `list` = λterms.eithers.map
+                      (λvs.Value{
+                          array = vs})
+                      (encodeElements elemEncoder run terms),
+                `_` = left("expected list term")}
+                strippedTerm),
+      `set` = λelemType.
+          let elemEncoder := recurse elemType
+          in node
+            (λrun, `term`, strippedTerm.cases(Term){
+                `set` = λvals.eithers.map
+                      (λvs.Value{
+                          array = vs})
+                      (encodeElements
+                        elemEncoder
+                        run
+                        (sets.toList vals)),
+                `_` = left("expected set term")}
+                strippedTerm),
+      `optional` = λinnerType.
+          let innerEncoder := recurse innerType in
+          let isNestedMaybe := cases(Type){
+              `optional` = λ`_`.true,
+              `_` = false}
+              (deannotateType innerType) in
+          node
+            (λrun, `term`, strippedTerm.cases(Term){
+                `optional` = λopt.match
+                      opt
+                      right(Value{
+                        null})
+                      (λv.
+                        let encoded := applyNode innerEncoder run v
+                        in ifElse
+                          isNestedMaybe
+                          (eithers.map
+                            (λev.Value{
+                                array = [ev]})
+                            encoded)
+                          encoded),
+                `_` = left("expected maybe term")}
+                strippedTerm),
+      `record` = λrt.
+          let isSimpleMaybe := λftype.cases(Type){
+                `optional` = λinnerT.cases(Type){
+                      `optional` = λ`_`.false,
+                      `_` = true}
+                      (deannotateType innerT),
+                `_` = false}
+                (deannotateType ftype) in
+          let fieldNode := λg.Coder{
+                encode = λrf.g (pairs.first rf) (pairs.second rf),
+                decode = unusedDecode} in
+          let fieldEncoder := λft.
+              let ftype := FieldType[`type`] ft
+              in ifElse
+                (isSimpleMaybe ftype)
+                (let innerEncoder := recurse
+                    (cases(Type){
+                      `optional` = λit.it,
+                      `_` = ftype}
+                      (deannotateType ftype))
+                in fieldNode
+                  (λrun, f.
+                    let fname := Name[] (Field[name] f)
+                    in cases(Term){
+                      `optional` = λopt.match
+                            opt
+                            right(none)
+                            (λv.eithers.map
+                                (λev.given((fname, ev)))
+                                (applyNode innerEncoder run v)),
+                      `_` = left("expected maybe term for optional field")}
+                      (deannotateTerm (Field[`term`] f))))
+                (let valueEncoder := recurse ftype
+                in fieldNode
+                  (λrun, f.eithers.map
+                      (λev.given((Name[] (Field[name] f), ev)))
+                      (applyNode
+                        valueEncoder
+                        run
+                        (Field[`term`] f)))) in
+          let encoders := lists.map fieldEncoder rt in
+          node
+            (λrun, `term`, strippedTerm.cases(Term){
+                `record` = λr.eithers.map
+                      (λps.Value{
+                          object = givens ps})
+                      (eithers.mapList
+                        (λef.Coder[encode]
+                            (pairs.first ef)
+                            (run, pairs.second ef))
+                        (lists.zip encoders (Record[fields] r))),
+                `_` = left("expected record term")}
+                strippedTerm),
+      `union` = λrt.
+          let variants := maps.fromList
+              (lists.reverse
+                (lists.map
+                  (λft.(
+                      Name[] (FieldType[name] ft),
+                      (
+                        cases(Type){`unit` = λ`_`.true, `_` = false} (deannotateType (FieldType[`type`] ft)),
+                        recurse (FieldType[`type`] ft))))
+                  rt))
+          in node
+            (λrun, `term`, strippedTerm.cases(Term){
+                `inject` = λinj.
+                    let field := Injection[field] inj in
+                    let fname := Name[] (Field[name] field) in
+                    match
+                      (maps.lookup fname variants)
+                      left(strings.concat
+                        ["unknown variant: ", fname])
+                      (λvariant.ifElse
+                          (pairs.first variant)
+                          right(Value{
+                            `string` = fname})
+                          (eithers.map
+                            (λv.Value{
+                                object = [(fname, v)]})
+                            (applyNode
+                              (pairs.second variant)
+                              run
+                              (Field[`term`] field)))),
+                `_` = left("expected union term")}
+                strippedTerm),
+      `unit` = λ`_`.node (λrun, `term`, strippedTerm.right(Value{object = []})),
+      `wrap` = λwn.
+          let bodyEncoder := recurse wn
+          in node
+            (λrun, `term`, strippedTerm.cases(Term){
+                `wrap` = λwt.applyNode
+                      bodyEncoder
+                      run
+                      (WrappedTerm[body] wt),
+                `_` = left("expected wrapped term")}
+                strippedTerm),
+      `map` = λmt.
+          let keyEncoder := recurse (MapType[keys] mt) in
+          let valEncoder := recurse (MapType[values] mt) in
+          let typeAllowsCompact := and
+              compactMaps
+              (mapKeyResolvesToString
+                types
+                (MapType[keys] mt)) in
+          node
+            (λrun, `term`, strippedTerm.cases(Term){
+                `map` = λm.
+                    let hasVariableKey := match
+                        (lists.find
+                          (λk.cases(Term){
+                              variable = λ`_`.true,
+                              `_` = false}
+                              (deannotateTerm k))
+                          (maps.keys m))
+                        false
+                        (λ`_`.true) in
+                    let compact := and
+                        typeAllowsCompact
+                        (not hasVariableKey) in
+                    ifElse
+                      compact
+                      (let encodeCompactEntry := λkv.eithers.either
+                            (λerr.left(err))
+                            (λek.eithers.either
+                                (λerr.left(err))
+                                (λks.eithers.map
+                                    (λev.(ks, ev))
+                                    (applyNode
+                                      valEncoder
+                                      run
+                                      (pairs.second kv)))
+                                (cases(Value){
+                                  `string` = λs.right(s),
+                                  `_` = left("internal error: string-resolving map key did not encode to a JSON string")}
+                                  ek))
+                            (applyNode
+                              keyEncoder
+                              run
+                              (pairs.first kv))
+                      in eithers.map
+                        (λes.Value{
+                            object = es})
+                        (eithers.mapList
+                          encodeCompactEntry
+                          (maps.toList m)))
+                      (let encodeEntry := λkv.eithers.either
+                            (λerr.left(err))
+                            (λek.eithers.map
+                                (λev.Value{
+                                    object = [("key", ek), ("value", ev)]})
+                                (applyNode
+                                  valEncoder
+                                  run
+                                  (pairs.second kv)))
+                            (applyNode
+                              keyEncoder
+                              run
+                              (pairs.first kv))
+                      in eithers.map
+                        (λes.Value{
+                            array = es})
+                        (eithers.mapList
+                          encodeEntry
+                          (maps.toList m))),
+                `_` = left("expected map term")}
+                strippedTerm),
+      pair = λpt.
+          let firstEncoder := recurse (PairType[first] pt) in
+          let secondEncoder := recurse (PairType[second] pt) in
+          node
+            (λrun, `term`, strippedTerm.cases(Term){
+                pair = λp.eithers.either
+                      (λerr.left(err))
+                      (λef.eithers.map
+                          (λes.Value{
+                              object = [("first", ef), ("second", es)]})
+                          (applyNode
+                            secondEncoder
+                            run
+                            (pairs.second p)))
+                      (applyNode
+                        firstEncoder
+                        run
+                        (pairs.first p)),
+                `_` = left("expected pair term")}
+                strippedTerm),
+      `either` = λet.
+          let leftEncoder := recurse (EitherType[`left`] et) in
+          let rightEncoder := recurse (EitherType[`right`] et) in
+          node
+            (λrun, `term`, strippedTerm.cases(Term){
+                `either` = λe.eithers.either
+                      (λl.eithers.map
+                          (λv.Value{
+                              object = [("left", v)]})
+                          (applyNode leftEncoder run l))
+                      (λr.eithers.map
+                          (λv.Value{
+                              object = [("right", v)]})
+                          (applyNode rightEncoder run r))
+                      e,
+                `_` = left("expected either term")}
+                strippedTerm),
+      variable = λname.node (λrun, `term`, strippedTerm.run name `term`),
+      `_` = failWith
+          (strings.concat ["unsupported type for JSON encoding: ", model.type typ])}
+      (deannotateType typ)
 
 ## Encode a float value to JSON. Finite values become JSON numbers (shortest round-trip); IEEE specials (NaN/Inf/-0.0) become JSON strings. Float32 and Float64 are symmetric; the schema disambiguates precision on decode.
 term encodeFloat =
@@ -237,7 +550,7 @@ term toJson =
                       (λftf.encodeFieldWithType
                           (pairs.first ftf)
                           (pairs.second ftf))
-                      (zip fieldTypes fields) in
+                      (lists.zip fieldTypes fields) in
                   eithers.map
                     (λpairs.Value{
                         object = givens pairs})
@@ -250,7 +563,7 @@ term toJson =
                   let fname := Name[] (Field[name] field) in
                   let fterm := Field[`term`] field in
                   let ftypeResult := match
-                      (find
+                      (lists.find
                         (λft.equal
                             (Name[] (FieldType[name] ft))
                             fname)
@@ -302,7 +615,7 @@ term toJson =
             cases(Term){
               `map` = λm.
                   let hasVariableKey := match
-                      (find
+                      (lists.find
                         (λk.cases(Term){
                             variable = λ`_`.true,
                             `_` = false}
