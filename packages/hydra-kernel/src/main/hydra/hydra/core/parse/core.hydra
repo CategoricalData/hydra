@@ -19,7 +19,6 @@ import hydra.core.parsers as parsers
 import hydra.core.parsing
 import hydra.core.positions
 import hydra.core.print.model
-import hydra.core.rewriting
 import hydra.core.typing
 
 ## Parse a term-level or type-level '@' annotation suffix
@@ -693,22 +692,7 @@ term parseTermWithSpans =
       (parsers.runParser (parsers.bind whitespace (λ`_`.`term`)) input)
 
 ## Parse a complete type from a string, requiring the parse to consume all input
-term parseType =
-  λinput.cases(ParseResult){
-      success = λs.
-          let remainder := ParseSuccess[remainder] s
-          in ifElse
-            (lists.isEmpty (ParseInput[codepoints] remainder))
-            right(stripSpansInType (ParseSuccess[value] s))
-            left(formatParseFailure
-              input
-              (ParseInput[offset] remainder)
-              "trailing input after type"),
-      failure = λe.left(formatParseFailure
-            input
-            (ParseInput[offset] (ParseError[remainder] e))
-            (ParseError[message] e))}
-      (parsers.runParser (parsers.bind whitespace (λ`_`.`type`)) input)
+term parseType = λinput.eithers.map stripTypeSpans (parseTypeWithSpans input)
 
 ## Parse a complete type scheme from a string, requiring the parse to consume all input
 term parseTypeScheme =
@@ -727,6 +711,24 @@ term parseTypeScheme =
             (ParseInput[offset] (ParseError[remainder] e))
             (ParseError[message] e))}
       (parsers.runParser (parsers.bind whitespace (λ`_`.typeScheme)) input)
+
+## Parse a complete type from a string, keeping source spans as reserved annotations. Use hydra.core.positions.spanAtTypePath to resolve a SubtypePath to a span, and hydra.core.positions.stripTypeSpans to recover the span-free type.
+term parseTypeWithSpans =
+  λinput.cases(ParseResult){
+      success = λs.
+          let remainder := ParseSuccess[remainder] s
+          in ifElse
+            (lists.isEmpty (ParseInput[codepoints] remainder))
+            right(ParseSuccess[value] s)
+            left(formatParseFailure
+              input
+              (ParseInput[offset] remainder)
+              "trailing input after type"),
+      failure = λe.left(formatParseFailure
+            input
+            (ParseInput[offset] (ParseError[remainder] e))
+            (ParseError[message] e))}
+      (parsers.runParser (parsers.bind whitespace (λ`_`.`type`)) input)
 
 ## Parse an atomic term followed by zero or more postfix '@annotation'/'⟨type⟩' suffixes, left-chaining
 term postfixTerm =
@@ -753,8 +755,18 @@ term postfixType =
   parsers.bind
     typeAtom
     (λt0.parsers.map
-        (λanns.lists.foldl (λt, ann.Type{annotated = AnnotatedType{body = t, annotation = ann}}) t0 anns)
-        (parsers.many annot))
+        (λanns.lists.foldl
+            (λt, ps.
+              let annotated := Type{annotated = AnnotatedType{body = t, annotation = first ps}}
+              in match
+                (typeSpan t)
+                annotated
+                (λts.annotateTypeSpan
+                    SourceSpan{start = SourceSpan[start] ts, end = SourceSpan[end] (second ps)}
+                    annotated))
+            t0
+            anns)
+        (parsers.many (parsers.spanned annot)))
 
 ## Parse a primitive signature: ['∀' vars '.' [constraints '⇒']] '(' [name ':' ['lazy'] type (',' ...)] ')' ':' resultType (#837)
 term primitiveSignature =
@@ -806,17 +818,22 @@ term primitiveSignature =
                                           (parsers.optional (typeKeyword "lazy"))
                                           (λmlazy.parsers.map
                                               (λt.(isGiven mlazy, t))
-                                              (parsers.bind
-                                                postfixType
-                                                (λt0.parsers.map
-                                                    (λrest.lists.foldl
-                                                        (λf, a.Type{
-                                                            application = ApplicationType{
-                                                              function = f,
-                                                              argument = a}})
-                                                        t0
-                                                        rest)
-                                                    (parsers.many postfixType))))))))
+                                              (parsers.map
+                                                (λtyp.stripTypeSpans typ)
+                                                (parsers.bind
+                                                  postfixType
+                                                  (λt0.parsers.map
+                                                      (λrest.lists.foldl
+                                                          (λf, a.annotateTypeApplicationSpan
+                                                              f
+                                                              a
+                                                              Type{
+                                                                application = ApplicationType{
+                                                                  function = f,
+                                                                  argument = a}})
+                                                          t0
+                                                          rest)
+                                                      (parsers.many postfixType)))))))))
                               (termKeyword ","))
                             (λparams.parsers.bind
                                 (termKeyword ")")
@@ -831,7 +848,7 @@ term primitiveSignature =
                                             typeParameters = typeParams,
                                             parameters = params,
                                             result = result})
-                                        topType)))))
+                                        (parsers.map (λtyp.stripTypeSpans typ) topType))))))
                       vars
                       mcs)))))
     ((λvars, mcs.
@@ -865,14 +882,19 @@ term primitiveSignature =
                           (parsers.optional (typeKeyword "lazy"))
                           (λmlazy.parsers.map
                               (λt.(isGiven mlazy, t))
-                              (parsers.bind
-                                postfixType
-                                (λt0.parsers.map
-                                    (λrest.lists.foldl
-                                        (λf, a.Type{application = ApplicationType{function = f, argument = a}})
-                                        t0
-                                        rest)
-                                    (parsers.many postfixType))))))))
+                              (parsers.map
+                                (λtyp.stripTypeSpans typ)
+                                (parsers.bind
+                                  postfixType
+                                  (λt0.parsers.map
+                                      (λrest.lists.foldl
+                                          (λf, a.annotateTypeApplicationSpan
+                                              f
+                                              a
+                                              Type{application = ApplicationType{function = f, argument = a}})
+                                          t0
+                                          rest)
+                                      (parsers.many postfixType)))))))))
               (termKeyword ","))
             (λparams.parsers.bind
                 (termKeyword ")")
@@ -885,7 +907,7 @@ term primitiveSignature =
                             typeParameters = typeParams,
                             parameters = params,
                             result = result})
-                        topType)))))
+                        (parsers.map (λtyp.stripTypeSpans typ) topType))))))
       []
       none)
 
@@ -953,21 +975,6 @@ term stringLit =
               (parsers.try escapedChar)
               (parsers.satisfy (λc.and (not (equal c 34:int32)) (not (equal c 92:int32))))))
           (λcs.parsers.bind (parsers.char 34:int32) (λ`_`.parsers.pure (strings.fromList cs)))))
-
-## Remove every span annotation from a type's own annotation payloads
-term stripSpansInType =
-  λtyp.
-    let remove := λrecurse, typ.
-        let rewritten := recurse typ
-        in cases(Type){
-          annotated = λat.Type{
-                annotated = AnnotatedType{
-                  body = AnnotatedType[body] at,
-                  annotation = stripSpans
-                      (AnnotatedType[annotation] at)}},
-          `_` = rewritten}
-          rewritten
-    in rewriteType remove typ
 
 ## Parse a sugar field: 'name = term', or a bare 'name' abbreviating 'name = unit' (#809)
 term sugarField =
@@ -1128,11 +1135,19 @@ term termSignatureArrowChain =
       (parsers.optional (typeKeyword "lazy"))
       (λmlazy.parsers.map
           (λt.(isGiven mlazy, t))
-          (parsers.bind
-            postfixType
-            (λt0.parsers.map
-                (λrest.lists.foldl (λf, a.Type{application = ApplicationType{function = f, argument = a}}) t0 rest)
-                (parsers.many postfixType)))))
+          (parsers.map
+            (λtyp.stripTypeSpans typ)
+            (parsers.bind
+              postfixType
+              (λt0.parsers.map
+                  (λrest.lists.foldl
+                      (λf, a.annotateTypeApplicationSpan
+                          f
+                          a
+                          Type{application = ApplicationType{function = f, argument = a}})
+                      t0
+                      rest)
+                  (parsers.many postfixType))))))
     (λdom.parsers.alt
         (parsers.bind
           (lexeme (parsers.char 8594:int32))
@@ -1160,230 +1175,233 @@ term typeApplicationSuffix =
 
 ## Parse a tightest-level type: any construct other than application, annotation, or function
 term typeAtom =
-  parsers.choice
-    [
-      parsers.map (λlt.Type{literal = lt}) literalTypeLit,
-      parsers.bind
-        (typeKeyword "effect")
-        (λ`_`.parsers.map
-            (λt.Type{`effect` = t})
-            (parsers.bind
-              (typeKeyword "<")
-              (λ`_`.parsers.bind (parsers.lazy (λ`_`.`type`)) (λt.parsers.bind (typeKeyword ">") (λ`_`.parsers.pure t))))),
-      parsers.bind
-        (typeKeyword "either")
-        (λ`_`.parsers.bind
-            (typeKeyword "<")
+  parsers.map
+    (λspanned.annotateTypeSpan (second spanned) (first spanned))
+    (parsers.spanned
+      (parsers.choice
+        [
+          parsers.map (λlt.Type{literal = lt}) literalTypeLit,
+          parsers.bind
+            (typeKeyword "effect")
+            (λ`_`.parsers.map
+                (λt.Type{`effect` = t})
+                (parsers.bind
+                  (typeKeyword "<")
+                  (λ`_`.parsers.bind (parsers.lazy (λ`_`.`type`)) (λt.parsers.bind (typeKeyword ">") (λ`_`.parsers.pure t))))),
+          parsers.bind
+            (typeKeyword "either")
             (λ`_`.parsers.bind
-                (parsers.lazy (λ`_`.`type`))
-                (λl.parsers.bind
-                    (typeKeyword ",")
-                    (λ`_`.parsers.bind
-                        (parsers.lazy (λ`_`.`type`))
-                        (λr.parsers.bind
-                            (typeKeyword ">")
-                            (λ`_`.parsers.pure Type{`either` = EitherType{`left` = l, `right` = r}})))))),
-      parsers.bind
-        (typeKeyword "forall")
-        (λ`_`.parsers.bind
-            (parsers.sepBy1 binderName (typeKeyword ","))
-            (λvs.parsers.bind
-                (typeKeyword ".")
-                (λ`_`.parsers.map
-                    (λbody.lists.foldl
-                        (λt, v.Type{`forall` = ForallType{parameter = v, body = t}})
-                        body
-                        (lists.reverse vs))
-                    (parsers.lazy (λ`_`.`type`))))),
-      parsers.bind
-        (typeKeyword "list")
-        (λ`_`.parsers.map
-            (λt.Type{`list` = t})
-            (parsers.bind
-              (typeKeyword "<")
-              (λ`_`.parsers.bind (parsers.lazy (λ`_`.`type`)) (λt.parsers.bind (typeKeyword ">") (λ`_`.parsers.pure t))))),
-      parsers.bind
-        (typeKeyword "map")
-        (λ`_`.parsers.bind
-            (typeKeyword "<")
+                (typeKeyword "<")
+                (λ`_`.parsers.bind
+                    (parsers.lazy (λ`_`.`type`))
+                    (λl.parsers.bind
+                        (typeKeyword ",")
+                        (λ`_`.parsers.bind
+                            (parsers.lazy (λ`_`.`type`))
+                            (λr.parsers.bind
+                                (typeKeyword ">")
+                                (λ`_`.parsers.pure Type{`either` = EitherType{`left` = l, `right` = r}})))))),
+          parsers.bind
+            (typeKeyword "forall")
             (λ`_`.parsers.bind
-                (parsers.lazy (λ`_`.`type`))
-                (λk.parsers.bind
-                    (typeKeyword ",")
-                    (λ`_`.parsers.bind
-                        (parsers.lazy (λ`_`.`type`))
-                        (λv.parsers.bind
-                            (typeKeyword ">")
-                            (λ`_`.parsers.pure Type{`map` = MapType{keys = k, values = v}})))))),
-      parsers.bind
-        (typeKeyword "optional")
-        (λ`_`.parsers.map
-            (λt.Type{`optional` = t})
-            (parsers.bind
-              (typeKeyword "<")
-              (λ`_`.parsers.bind (parsers.lazy (λ`_`.`type`)) (λt.parsers.bind (typeKeyword ">") (λ`_`.parsers.pure t))))),
-      parsers.bind
-        (typeKeyword "record")
-        (λ`_`.parsers.map
-            (λflds.Type{`record` = flds})
-            (parsers.bind
-              ((λkw.parsers.bind
-                  (parsers.string kw)
+                (parsers.sepBy1 binderName (typeKeyword ","))
+                (λvs.parsers.bind
+                    (typeKeyword ".")
+                    (λ`_`.parsers.map
+                        (λbody.lists.foldl
+                            (λt, v.Type{`forall` = ForallType{parameter = v, body = t}})
+                            body
+                            (lists.reverse vs))
+                        (parsers.lazy (λ`_`.`type`))))),
+          parsers.bind
+            (typeKeyword "list")
+            (λ`_`.parsers.map
+                (λt.Type{`list` = t})
+                (parsers.bind
+                  (typeKeyword "<")
+                  (λ`_`.parsers.bind (parsers.lazy (λ`_`.`type`)) (λt.parsers.bind (typeKeyword ">") (λ`_`.parsers.pure t))))),
+          parsers.bind
+            (typeKeyword "map")
+            (λ`_`.parsers.bind
+                (typeKeyword "<")
+                (λ`_`.parsers.bind
+                    (parsers.lazy (λ`_`.`type`))
+                    (λk.parsers.bind
+                        (typeKeyword ",")
+                        (λ`_`.parsers.bind
+                            (parsers.lazy (λ`_`.`type`))
+                            (λv.parsers.bind
+                                (typeKeyword ">")
+                                (λ`_`.parsers.pure Type{`map` = MapType{keys = k, values = v}})))))),
+          parsers.bind
+            (typeKeyword "optional")
+            (λ`_`.parsers.map
+                (λt.Type{`optional` = t})
+                (parsers.bind
+                  (typeKeyword "<")
+                  (λ`_`.parsers.bind (parsers.lazy (λ`_`.`type`)) (λt.parsers.bind (typeKeyword ">") (λ`_`.parsers.pure t))))),
+          parsers.bind
+            (typeKeyword "record")
+            (λ`_`.parsers.map
+                (λflds.Type{`record` = flds})
+                (parsers.bind
+                  ((λkw.parsers.bind
+                      (parsers.string kw)
+                      (λ`_`.parsers.bind
+                          (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
+                          (λ`_`.parsers.pure kw)))
+                    "{")
                   (λ`_`.parsers.bind
-                      (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
-                      (λ`_`.parsers.pure kw)))
-                "{")
-              (λ`_`.parsers.bind
-                  (parsers.sepBy
-                    (parsers.bind
-                      (parsers.optional
+                      (parsers.sepBy
                         (parsers.bind
-                          (parsers.char 35:int32)
-                          (λ`_`.parsers.bind
+                          (parsers.optional
+                            (parsers.bind
                               (parsers.char 35:int32)
                               (λ`_`.parsers.bind
-                                  (parsers.optional (parsers.char 32:int32))
+                                  (parsers.char 35:int32)
                                   (λ`_`.parsers.bind
-                                      (parsers.map
-                                        (λcs.strings.fromList cs)
-                                        (parsers.many (parsers.satisfy (λc.not (equal c 10:int32)))))
-                                      (λs.parsers.bind
+                                      (parsers.optional (parsers.char 32:int32))
+                                      (λ`_`.parsers.bind
+                                          (parsers.map
+                                            (λcs.strings.fromList cs)
+                                            (parsers.many (parsers.satisfy (λc.not (equal c 10:int32)))))
+                                          (λs.parsers.bind
+                                              (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
+                                              (λ`_`.parsers.pure s)))))))
+                          (λmdesc.parsers.bind
+                              name
+                              (λfname.parsers.bind
+                                  ((λkw.parsers.bind
+                                      (parsers.string kw)
+                                      (λ`_`.parsers.bind
                                           (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
-                                          (λ`_`.parsers.pure s)))))))
-                      (λmdesc.parsers.bind
-                          name
-                          (λfname.parsers.bind
-                              ((λkw.parsers.bind
-                                  (parsers.string kw)
-                                  (λ`_`.parsers.bind
-                                      (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
-                                      (λ`_`.parsers.pure kw)))
-                                ":")
-                              (λ`_`.parsers.map
-                                  (λt.FieldType{
-                                      name = fname,
-                                      `type` = (λmdesc, t.match
-                                            mdesc
-                                            t
-                                            (λd.Type{
-                                                annotated = AnnotatedType{
-                                                  body = t,
-                                                  annotation = Term{
-                                                    `map` = maps.fromList
-                                                        [(Term{variable = Name{"description"}}, Term{literal = Literal{`string` = d}})]}}}))
-                                          mdesc
-                                          t})
-                                  (parsers.lazy (λ`_`.`type`))))))
-                    ((λkw.parsers.bind
-                        (parsers.string kw)
-                        (λ`_`.parsers.bind
-                            (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
-                            (λ`_`.parsers.pure kw)))
-                      ","))
-                  (λflds.parsers.bind
-                      ((λkw.parsers.bind
-                          (parsers.string kw)
-                          (λ`_`.parsers.bind
-                              (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
-                              (λ`_`.parsers.pure kw)))
-                        "}")
-                      (λ`_`.parsers.pure flds))))),
-      parsers.bind
-        (typeKeyword "set")
-        (λ`_`.parsers.map
-            (λt.Type{`set` = t})
-            (parsers.bind
-              (typeKeyword "<")
-              (λ`_`.parsers.bind (parsers.lazy (λ`_`.`type`)) (λt.parsers.bind (typeKeyword ">") (λ`_`.parsers.pure t))))),
-      parsers.bind
-        (typeKeyword "union")
-        (λ`_`.parsers.map
-            (λflds.Type{`union` = flds})
-            (parsers.bind
-              ((λkw.parsers.bind
-                  (parsers.string kw)
+                                          (λ`_`.parsers.pure kw)))
+                                    ":")
+                                  (λ`_`.parsers.map
+                                      (λt.FieldType{
+                                          name = fname,
+                                          `type` = (λmdesc, t.match
+                                                mdesc
+                                                t
+                                                (λd.Type{
+                                                    annotated = AnnotatedType{
+                                                      body = t,
+                                                      annotation = Term{
+                                                        `map` = maps.fromList
+                                                            [(Term{variable = Name{"description"}}, Term{literal = Literal{`string` = d}})]}}}))
+                                              mdesc
+                                              t})
+                                      (parsers.lazy (λ`_`.`type`))))))
+                        ((λkw.parsers.bind
+                            (parsers.string kw)
+                            (λ`_`.parsers.bind
+                                (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
+                                (λ`_`.parsers.pure kw)))
+                          ","))
+                      (λflds.parsers.bind
+                          ((λkw.parsers.bind
+                              (parsers.string kw)
+                              (λ`_`.parsers.bind
+                                  (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
+                                  (λ`_`.parsers.pure kw)))
+                            "}")
+                          (λ`_`.parsers.pure flds))))),
+          parsers.bind
+            (typeKeyword "set")
+            (λ`_`.parsers.map
+                (λt.Type{`set` = t})
+                (parsers.bind
+                  (typeKeyword "<")
+                  (λ`_`.parsers.bind (parsers.lazy (λ`_`.`type`)) (λt.parsers.bind (typeKeyword ">") (λ`_`.parsers.pure t))))),
+          parsers.bind
+            (typeKeyword "union")
+            (λ`_`.parsers.map
+                (λflds.Type{`union` = flds})
+                (parsers.bind
+                  ((λkw.parsers.bind
+                      (parsers.string kw)
+                      (λ`_`.parsers.bind
+                          (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
+                          (λ`_`.parsers.pure kw)))
+                    "{")
                   (λ`_`.parsers.bind
-                      (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
-                      (λ`_`.parsers.pure kw)))
-                "{")
-              (λ`_`.parsers.bind
-                  (parsers.sepBy
-                    (parsers.bind
-                      (parsers.optional
+                      (parsers.sepBy
                         (parsers.bind
-                          (parsers.char 35:int32)
-                          (λ`_`.parsers.bind
+                          (parsers.optional
+                            (parsers.bind
                               (parsers.char 35:int32)
                               (λ`_`.parsers.bind
-                                  (parsers.optional (parsers.char 32:int32))
+                                  (parsers.char 35:int32)
                                   (λ`_`.parsers.bind
-                                      (parsers.map
-                                        (λcs.strings.fromList cs)
-                                        (parsers.many (parsers.satisfy (λc.not (equal c 10:int32)))))
-                                      (λs.parsers.bind
+                                      (parsers.optional (parsers.char 32:int32))
+                                      (λ`_`.parsers.bind
+                                          (parsers.map
+                                            (λcs.strings.fromList cs)
+                                            (parsers.many (parsers.satisfy (λc.not (equal c 10:int32)))))
+                                          (λs.parsers.bind
+                                              (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
+                                              (λ`_`.parsers.pure s)))))))
+                          (λmdesc.parsers.bind
+                              name
+                              (λfname.parsers.bind
+                                  ((λkw.parsers.bind
+                                      (parsers.string kw)
+                                      (λ`_`.parsers.bind
                                           (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
-                                          (λ`_`.parsers.pure s)))))))
-                      (λmdesc.parsers.bind
-                          name
-                          (λfname.parsers.bind
-                              ((λkw.parsers.bind
-                                  (parsers.string kw)
-                                  (λ`_`.parsers.bind
-                                      (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
-                                      (λ`_`.parsers.pure kw)))
-                                ":")
-                              (λ`_`.parsers.map
-                                  (λt.FieldType{
-                                      name = fname,
-                                      `type` = (λmdesc, t.match
-                                            mdesc
-                                            t
-                                            (λd.Type{
-                                                annotated = AnnotatedType{
-                                                  body = t,
-                                                  annotation = Term{
-                                                    `map` = maps.fromList
-                                                        [(Term{variable = Name{"description"}}, Term{literal = Literal{`string` = d}})]}}}))
-                                          mdesc
-                                          t})
-                                  (parsers.lazy (λ`_`.`type`))))))
-                    ((λkw.parsers.bind
-                        (parsers.string kw)
-                        (λ`_`.parsers.bind
-                            (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
-                            (λ`_`.parsers.pure kw)))
-                      ","))
-                  (λflds.parsers.bind
-                      ((λkw.parsers.bind
-                          (parsers.string kw)
-                          (λ`_`.parsers.bind
-                              (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
-                              (λ`_`.parsers.pure kw)))
-                        "}")
-                      (λ`_`.parsers.pure flds))))),
-      parsers.bind (typeKeyword "unit") (λ`_`.parsers.pure Type{`unit`}),
-      parsers.bind (typeKeyword "void") (λ`_`.parsers.pure Type{`void`}),
-      parsers.bind
-        (typeKeyword "wrap")
-        (λ`_`.parsers.bind
+                                          (λ`_`.parsers.pure kw)))
+                                    ":")
+                                  (λ`_`.parsers.map
+                                      (λt.FieldType{
+                                          name = fname,
+                                          `type` = (λmdesc, t.match
+                                                mdesc
+                                                t
+                                                (λd.Type{
+                                                    annotated = AnnotatedType{
+                                                      body = t,
+                                                      annotation = Term{
+                                                        `map` = maps.fromList
+                                                            [(Term{variable = Name{"description"}}, Term{literal = Literal{`string` = d}})]}}}))
+                                              mdesc
+                                              t})
+                                      (parsers.lazy (λ`_`.`type`))))))
+                        ((λkw.parsers.bind
+                            (parsers.string kw)
+                            (λ`_`.parsers.bind
+                                (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
+                                (λ`_`.parsers.pure kw)))
+                          ","))
+                      (λflds.parsers.bind
+                          ((λkw.parsers.bind
+                              (parsers.string kw)
+                              (λ`_`.parsers.bind
+                                  (parsers.map (λ`_`.unit) (parsers.many (parsers.satisfy (λc.isSpace c))))
+                                  (λ`_`.parsers.pure kw)))
+                            "}")
+                          (λ`_`.parsers.pure flds))))),
+          parsers.bind (typeKeyword "unit") (λ`_`.parsers.pure Type{`unit`}),
+          parsers.bind (typeKeyword "void") (λ`_`.parsers.pure Type{`void`}),
+          parsers.bind
+            (typeKeyword "wrap")
+            (λ`_`.parsers.bind
+                (typeKeyword "(")
+                (λ`_`.parsers.bind
+                    (parsers.lazy (λ`_`.`type`))
+                    (λt.parsers.bind (typeKeyword ")") (λ`_`.parsers.pure Type{`wrap` = t})))),
+          parsers.bind
             (typeKeyword "(")
             (λ`_`.parsers.bind
                 (parsers.lazy (λ`_`.`type`))
-                (λt.parsers.bind (typeKeyword ")") (λ`_`.parsers.pure Type{`wrap` = t})))),
-      parsers.bind
-        (typeKeyword "(")
-        (λ`_`.parsers.bind
-            (parsers.lazy (λ`_`.`type`))
-            (λt1.parsers.alt
-                (parsers.bind
-                  (typeKeyword ",")
-                  (λ`_`.parsers.bind
-                      (parsers.lazy (λ`_`.`type`))
-                      (λt2.parsers.bind
-                          (typeKeyword ")")
-                          (λ`_`.parsers.pure Type{pair = PairType{first = t1, second = t2}}))))
-                (parsers.bind (typeKeyword ")") (λ`_`.parsers.pure t1)))),
-      parsers.map (λn.Type{variable = n}) name]
+                (λt1.parsers.alt
+                    (parsers.bind
+                      (typeKeyword ",")
+                      (λ`_`.parsers.bind
+                          (parsers.lazy (λ`_`.`type`))
+                          (λt2.parsers.bind
+                              (typeKeyword ")")
+                              (λ`_`.parsers.pure Type{pair = PairType{first = t1, second = t2}}))))
+                    (parsers.bind (typeKeyword ")") (λ`_`.parsers.pure t1)))),
+          parsers.map (λn.Type{variable = n}) name]))
 
 ## Parse a function type: application-level type, optionally followed by '→' and a recursive right side
 term typeFunction =
@@ -1391,13 +1409,18 @@ term typeFunction =
     (parsers.bind
       postfixType
       (λt0.parsers.map
-          (λrest.lists.foldl (λf, a.Type{application = ApplicationType{function = f, argument = a}}) t0 rest)
+          (λrest.lists.foldl
+              (λf, a.annotateTypeApplicationSpan f a Type{application = ApplicationType{function = f, argument = a}})
+              t0
+              rest)
           (parsers.many postfixType)))
     (λdom.parsers.alt
         (parsers.bind
           (lexeme (parsers.char 8594:int32))
           (λ`_`.parsers.map
-              (λcod.(λd, c.Type{function = FunctionType{domain = d, codomain = c}}) dom cod)
+              (λcod.(λd, c.annotateTypeApplicationSpan d c Type{function = FunctionType{domain = d, codomain = c}})
+                  dom
+                  cod)
               (parsers.lazy (λ`_`.typeFunction))))
         (parsers.pure dom))
 
@@ -1431,10 +1454,10 @@ term typeScheme =
                               (lists.map
                                 (λp.(second p, TypeVariableConstraints{classes = sets.fromList [TypeClassConstraint{simple = first p}]}))
                                 (withDefault [] mcs))})
-                      (parsers.lazy (λ`_`.`type`)))))))
+                      (parsers.map (λtyp.stripTypeSpans typ) (parsers.lazy (λ`_`.`type`))))))))
     (parsers.map
       (λbody.TypeScheme{variables = [], body = body, constraints = maps.empty})
-      (parsers.lazy (λ`_`.`type`)))
+      (parsers.map (λtyp.stripTypeSpans typ) (parsers.lazy (λ`_`.`type`))))
 
 ## Parse one or more decimal digits
 term unsignedDigits =
