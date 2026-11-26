@@ -42,7 +42,14 @@ Consequences:
   (`hydra.core.positions.spanAtPath`), skipping span layers; if the node itself has no span, the nearest
   enclosing node's span is returned. `hydra.core.positions.offsetToPosition` converts an offset to a
   zero-based line and a UTF-16 column (Language Server Protocol convention; lines end at LF, CR, or CR LF).
-  Spans cover terms only; type nodes and module-level parsing do not yet record spans.
+  Types are covered the same way: `parseTypeWithSpans` wraps each parsed type node (atoms, postfix-annotated types,
+  type applications, function types) in a span-only layer under the same reserved key, with function and application
+  types spanning their first part through their last. `parseType` strips them
+  (`hydra.core.positions.stripTypeSpans`), and `stripSpans` also strips spans inside the types a term embeds (lambda
+  domains, type-application payloads, binding type schemes), so `parseTerm` leaves no span layers anywhere.
+  A `SubtypePath` resolves against a span-annotated type with `hydra.core.positions.spanAtTypePath`, with the same
+  nearest-enclosing-span fallback as `spanAtPath`. Type schemes and term signatures parsed at module level are
+  span-free, and module-level parsing does not yet record spans.
 
 ## 2. Lexical structure
 

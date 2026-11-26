@@ -126,6 +126,7 @@ module_ = Module {
      toDefinition parseTermWithSpans,
      toDefinition parseType,
      toDefinition parseTypeScheme,
+     toDefinition parseTypeWithSpans,
      toDefinition postfixTerm,
      toDefinition postfixType,
      toDefinition primitiveSignature,
@@ -134,7 +135,6 @@ module_ = Module {
      toDefinition recordTerm,
      toDefinition signedDigits,
      toDefinition stringLit,
-     toDefinition stripSpansInType,
      toDefinition sugarField,
      toDefinition term,
      toDefinition termField,
@@ -1220,14 +1220,15 @@ angleType =
 typeAtom :: TypedTermDefinition (Parser Type)
 typeAtom = define "typeAtom" $
   doc "Parse a tightest-level type: any construct other than application, annotation, or function" $
-  P.choice @@ list [
+  P.map @@ ("spanned" ~> Positions.annotateTypeSpan @@ (Pairs.second $ var "spanned") @@ (Pairs.first $ var "spanned")) @@
+   (P.spanned @@ (P.choice @@ list [
     P.map @@ ("lt" ~> Core.typeLiteral (var "lt")) @@ (asTerm literalTypeLit),
     effectT, eitherT, forallT, listT, mapT, optionalT, recordT, setT, unionT,
     P.bind @@ (typeKeyword @@ string "unit") @@ (constant $ P.pure @@ Core.typeUnit),
     P.bind @@ (typeKeyword @@ string "void") @@ (constant $ P.pure @@ Core.typeVoid),
     wrapT,
     parenOrPairType,
-    P.map @@ ("n" ~> Core.typeVariable (var "n")) @@ (asTerm name)]
+    P.map @@ ("n" ~> Core.typeVariable (var "n")) @@ (asTerm name)]))
   where
     effectT = P.bind @@ (typeKeyword @@ string "effect") @@ (constant $ P.map @@ ("t" ~> Core.typeEffect (var "t")) @@ angleType)
     listT = P.bind @@ (typeKeyword @@ string "list") @@ (constant $ P.map @@ ("t" ~> Core.typeList (var "t")) @@ angleType)
@@ -1287,9 +1288,15 @@ postfixType = define "postfixType" $
   doc "Parse an atomic type followed by zero or more trailing '@annotation' suffixes" $
   P.bind @@ (asTerm typeAtom) @@ ("t0" ~>
     P.map @@ ("anns" ~> Lists.foldl (asTerm applyAnn) (var "t0") (var "anns")) @@
-      (P.many @@ (asTerm annotSuffix)))
+      (P.many @@ (P.spanned @@ (asTerm annotSuffix))))
   where
-    applyAnn = "t" ~> "ann" ~> Core.typeAnnotated (Core.annotatedType (var "t") (var "ann"))
+    -- An annotated type spans from the start of the annotated type to the end of the annotation.
+    applyAnn = "t" ~> "ps" ~>
+      "annotated" <~ Core.typeAnnotated (Core.annotatedType (var "t") (Pairs.first $ var "ps")) $
+      Optionals.match (Positions.typeSpan @@ var "t") (var "annotated") ("ts" ~>
+        Positions.annotateTypeSpan
+          @@ (Parsing.sourceSpan (Parsing.sourceSpanStart $ var "ts") (Parsing.sourceSpanEnd $ Pairs.second $ var "ps"))
+          @@ var "annotated")
 
 -- | Parse the application level for types (syntax.md #3 precedence 2): one postfix-level type,
 -- then greedily more, left-folding into nested ApplicationType.
@@ -1299,7 +1306,8 @@ typeApplicationLevel =
     P.map @@ ("rest" ~> Lists.foldl (asTerm applyLeft) (var "t0") (var "rest")) @@
       (P.many @@ (asTerm postfixType)))
   where
-    applyLeft = "f" ~> "a" ~> Core.typeApplication (Core.applicationType (var "f") (var "a"))
+    applyLeft = "f" ~> "a" ~>
+      Positions.annotateTypeApplicationSpan @@ var "f" @@ var "a" @@ Core.typeApplication (Core.applicationType (var "f") (var "a"))
 
 -- | Parse the function-arrow level for types (syntax.md #3 precedence 3): one application-level
 -- type, then if '→' follows, recurse for the right side and build FunctionType -- right-
@@ -1316,7 +1324,8 @@ typeFunctionLevel = define "typeFunction" $
               (P.lazy @@ (constant $ asTerm typeFunctionLevel))))
       @@ (P.pure @@ var "dom"))
   where
-    mkFunctionType = "d" ~> "c" ~> Core.typeFunction (Core.functionType (var "d") (var "c"))
+    mkFunctionType = "d" ~> "c" ~>
+      Positions.annotateTypeApplicationSpan @@ var "d" @@ var "c" @@ Core.typeFunction (Core.functionType (var "d") (var "c"))
 
 -- | Parse a type application suffix on a term: '⟨' type '⟩'. Exposed separately from
 -- 'postfixTerm' since the application-term postfix loop needs to try this alongside '@'
@@ -1350,44 +1359,29 @@ type_ = define "type" $
   doc "Parse a full type" $
   asTerm typeFunctionLevel
 
--- | Remove every span annotation from a type. A type's only TERM-valued position is an
--- annotation's payload (e.g. a whole-type or field-level '@{description=...}' map); unlike
--- 'Positions.stripSpans' (which walks a 'Term' and recurses into nested terms directly), this
--- walks the surrounding 'Type' structure via 'Rewriting.rewriteType' and applies
--- 'Positions.stripSpans' only at each 'Type_annotated' node's own annotation payload. Needed
--- because the parser attaches source spans to every parsed term (#815), including any term
--- nested inside a parsed type's annotation -- a freshly-parsed annotated type otherwise carries
--- a stray 'sourceSpan' entry that a hand-built (unparsed) type never has, breaking the round-trip
--- contract (syntax.md #1). Mirrors 'Parse/Packaging.hs's identically-named helper (added there
--- for 'typeDefinitionParser', #711) rather than importing it: 'Packaging' depends on 'Core', not
--- the reverse, so sharing would be circular.
-stripSpansInType :: TypedTermDefinition (Type -> Type)
-stripSpansInType = define "stripSpansInType" $
-  doc "Remove every span annotation from a type's own annotation payloads" $
-  "typ" ~>
-  "remove" <~ ("recurse" ~> "typ" ~>
-    "rewritten" <~ var "recurse" @@ var "typ" $
-    match _Type (var "rewritten")
-      (Just $ var "rewritten") [
-      _Type_annotated>>: "at" ~> Core.typeAnnotated $ Core.annotatedType
-        (Core.annotatedTypeBody $ var "at")
-        (Positions.stripSpans @@ (Core.annotatedTypeAnnotation $ var "at"))]) $
-  Rewriting.rewriteType @@ var "remove" @@ var "typ"
-
--- | Run the type parser on a full input string, requiring all input to be consumed. The parsed
--- type is run through 'stripSpansInType' to remove the source spans the parser attaches to every
--- parsed term (#815), including any term nested in an '@{...}' annotation -- without this, a
--- freshly-parsed annotated type carries stray 'sourceSpan' entries a hand-built type never has,
--- breaking the round-trip contract (#497, #711).
+-- | Run the type parser on a full input string, requiring all input to be consumed. The parsed type is
+-- run through 'Positions.stripTypeSpans' to remove the source spans the parser attaches to every parsed type
+-- (and to any term nested in an '@{...}' annotation), which a hand-built type never has; this keeps the
+-- round-trip contract (#497, #711, #833).
 parseType :: TypedTermDefinition (String -> Either String Type)
 parseType = define "parseType" $
   doc "Parse a complete type from a string, requiring the parse to consume all input" $
+  "input" ~>
+  Eithers.map (asTerm Positions.stripTypeSpans) (parseTypeWithSpans @@ var "input")
+
+-- | Like 'parseType', but keeps the source spans: every parsed type node is wrapped in a span-only annotation layer
+-- (see hydra.core.positions) recording the codepoint range [start, end) it was parsed from.
+parseTypeWithSpans :: TypedTermDefinition (String -> Either String Type)
+parseTypeWithSpans = define "parseTypeWithSpans" $
+  doc ("Parse a complete type from a string, keeping source spans as reserved annotations. Use"
+    <> " hydra.core.positions.spanAtTypePath to resolve a SubtypePath to a span, and"
+    <> " hydra.core.positions.stripTypeSpans to recover the span-free type.") $
   "input" ~>
   match _ParseResult (P.runParser @@ (P.bind @@ whitespace @@ (constant $ asTerm type_)) @@ var "input") Nothing [
     _ParseResult_success>>: "s" ~>
       "remainder" <~ Parsing.parseSuccessRemainder (var "s") $
       Logic.ifElse (Lists.isEmpty (Parsing.parseInputCodepoints $ var "remainder"))
-        (right (stripSpansInType @@ (Parsing.parseSuccessValue (var "s"))))
+        (right (Parsing.parseSuccessValue (var "s")))
         (left (Positions.formatParseFailure @@ var "input" @@ (Parsing.parseInputOffset $ var "remainder") @@ string "trailing input after type")),
     _ParseResult_failure>>: "e" ~> left (Positions.formatParseFailure @@ var "input" @@ (Parsing.parseInputOffset $ Parsing.parseErrorRemainder $ var "e") @@ (Parsing.parseErrorMessage $ var "e"))]
 
@@ -1421,11 +1415,11 @@ typeScheme = define "typeScheme" $
               P.bind @@ (P.optional @@ (P.try @@ constraintsBlock)) @@ ("mcs" ~>
                 P.map @@ ("body" ~> Core.typeScheme (var "vars") (var "body")
                     (Maps.fromList (Lists.map (asTerm toConstraintsEntry) (Optionals.withDefault (list ([] :: [TypedTerm (Name, Name)])) (var "mcs"))))) @@
-                  (P.lazy @@ (constant $ asTerm type_)))))))
+                  (P.map @@ ("typ" ~> Positions.stripTypeSpans @@ var "typ") @@ (P.lazy @@ (constant $ asTerm type_))))))))
     -- No '∀' at all: a monomorphic scheme, equivalent to the '∀' branch with no variables and no
     -- constraints.
     @@ (P.map @@ ("body" ~> Core.typeScheme (list ([] :: [TypedTerm Name])) (var "body") (Maps.empty :: TypedTerm (M.Map Name TypeVariableConstraints))) @@
-          (P.lazy @@ (constant $ asTerm type_)))
+          (P.map @@ ("typ" ~> Positions.stripTypeSpans @@ var "typ") @@ (P.lazy @@ (constant $ asTerm type_))))
   where
     constraintsBlock =
       P.bind @@ (termKeyword @@ string "(") @@ (constant $
@@ -1443,7 +1437,8 @@ typeScheme = define "typeScheme" $
 lazyTypeApplicationLevel :: TypedTerm (Parser (Bool, Type))
 lazyTypeApplicationLevel =
   P.bind @@ (P.optional @@ (typeKeyword @@ string "lazy")) @@ ("mlazy" ~>
-    P.map @@ ("t" ~> pair (Optionals.isGiven $ var "mlazy") (var "t")) @@ (asTerm typeApplicationLevel))
+    P.map @@ ("t" ~> pair (Optionals.isGiven $ var "mlazy") (var "t")) @@
+      (P.map @@ ("typ" ~> Positions.stripTypeSpans @@ var "typ") @@ (asTerm typeApplicationLevel)))
 
 -- | Parse the arrow chain of a term signature (syntax.md #3 precedence 3, signature variant):
 -- one '[lazy] application-level type', then if '→' follows, recurse for the right side --
@@ -1575,7 +1570,7 @@ primitiveSignature = define "primitiveSignature" $
               P.map @@ ("resultType" ~>
                   "result" <~ Typing.result Phantoms.nothing (var "resultType") $
                   Typing.termSignature (var "typeParams") (var "params") (var "result")) @@
-                (asTerm topType)))))
+                (P.map @@ ("typ" ~> Positions.stripTypeSpans @@ var "typ") @@ (asTerm topType))))))
     -- A single 'name: [lazy] type' entry inside the parenthesized parameter list.
     namedParameter =
       P.bind @@ (asTerm binderName) @@ ("pname" ~>

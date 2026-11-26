@@ -70,18 +70,28 @@ module_ = Module {
    definitions = [
      toDefinition annotateApplicationSpan,
      toDefinition annotateSpan,
+     toDefinition annotateTypeApplicationSpan,
+     toDefinition annotateTypeSpan,
      toDefinition formatParseFailure,
      toDefinition keySourceSpan,
      toDefinition offsetToPosition,
      toDefinition peelSpans,
+     toDefinition peelTypeSpans,
      toDefinition spanAtPath,
      toDefinition spanAtSteps,
+     toDefinition spanAtTypePath,
+     toDefinition spanAtTypeSteps,
      toDefinition spanFromTerm,
      toDefinition spanLayer,
      toDefinition spanToTerm,
      toDefinition stripSpans,
+     toDefinition stripTermTypeSpans,
+     toDefinition stripTypeSpans,
      toDefinition subtermAtStep,
-     toDefinition termSpan]
+     toDefinition subtypeAtStep,
+     toDefinition termSpan,
+     toDefinition typeSpan,
+     toDefinition typeSpanLayer]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
 define = definitionInModule module_
@@ -103,6 +113,25 @@ annotateSpan = define "annotateSpan" $
     <> " comments: it is exempt from the round-trip contract and is removed by stripSpans.") $
   "span" ~> "term" ~>
   Core.termAnnotated (Core.annotatedTerm (var "term")
+    (AnnotationsTerms.wrapAnnotationMap @@ (Maps.singleton (asTerm keySourceSpan) (spanToTerm @@ var "span"))))
+
+-- | Annotate a composite type with the span from the start of its first part to the end of its last part
+annotateTypeApplicationSpan :: TypedTermDefinition (Type -> Type -> Type -> Type)
+annotateTypeApplicationSpan = define "annotateTypeApplicationSpan" $
+  doc ("Annotate a composite type (an application or function type) with the span running from the start of its"
+    <> " first part to the end of its last part, when both have spans; otherwise leave it unannotated") $
+  "first" ~> "last" ~> "composite" ~>
+  Optionals.match (typeSpan @@ var "first") (var "composite") ("fs" ~>
+    Optionals.match (typeSpan @@ var "last") (var "composite") ("ls" ~>
+      annotateTypeSpan @@ (Parsing.sourceSpan (Parsing.sourceSpanStart $ var "fs") (Parsing.sourceSpanEnd $ var "ls")) @@ var "composite"))
+
+-- | Wrap a type in a span-only annotation layer
+annotateTypeSpan :: TypedTermDefinition (SourceSpan -> Type -> Type)
+annotateTypeSpan = define "annotateTypeSpan" $
+  doc ("Wrap a type in a layer whose only annotation is the reserved span key. Like term spans, this is surface"
+    <> " trivia, exempt from the round-trip contract, and is removed by stripTypeSpans.") $
+  "span" ~> "type" ~>
+  Core.typeAnnotated (Core.annotatedType (var "type")
     (AnnotationsTerms.wrapAnnotationMap @@ (Maps.singleton (asTerm keySourceSpan) (spanToTerm @@ var "span"))))
 
 -- | The reserved annotation key under which a parsed node's source span is recorded
@@ -164,6 +193,13 @@ peelSpans = define "peelSpans" $
   "term" ~>
   Optionals.match (spanLayer @@ var "term") (var "term") ("layer" ~> peelSpans @@ (Pairs.second $ var "layer"))
 
+-- | Remove span-only annotation layers from the top of a type
+peelTypeSpans :: TypedTermDefinition (Type -> Type)
+peelTypeSpans = define "peelTypeSpans" $
+  doc "Remove span-only annotation layers from the top of a type, leaving the type itself" $
+  "type" ~>
+  Optionals.match (typeSpanLayer @@ var "type") (var "type") ("layer" ~> peelTypeSpans @@ (Pairs.second $ var "layer"))
+
 -- | The span of the node at the end of a subterm path, or of its nearest enclosing node that has one
 spanAtPath :: TypedTermDefinition (SubtermPath -> Term -> Maybe SourceSpan)
 spanAtPath = define "spanAtPath" $
@@ -182,6 +218,24 @@ spanAtSteps = define "spanAtSteps" $
   Optionals.match (Lists.uncons $ var "steps") (var "outer") ("uc" ~>
     Optionals.match (subtermAtStep @@ (Pairs.first $ var "uc") @@ (peelSpans @@ var "term")) (var "outer") ("child" ~>
       Optionals.match (spanAtSteps @@ (Pairs.second $ var "uc") @@ var "child") (var "outer") ("found" ~> just $ var "found")))
+
+-- | The span of the type at the end of a subtype path, or of its nearest enclosing type that has one
+spanAtTypePath :: TypedTermDefinition (SubtypePath -> Type -> Maybe SourceSpan)
+spanAtTypePath = define "spanAtTypePath" $
+  doc ("Resolve a subtype path (computed on the span-free type) against a span-annotated type, returning the span"
+    <> " of the type it reaches. If that type has no span, the span of its nearest enclosing type that has one is"
+    <> " returned; if the path cannot be followed, the span of the last type reached.") $
+  "path" ~> "type" ~>
+  spanAtTypeSteps @@ (unwrap _SubtypePath @@ var "path") @@ var "type"
+
+spanAtTypeSteps :: TypedTermDefinition ([SubtypeStep] -> Type -> Maybe SourceSpan)
+spanAtTypeSteps = define "spanAtTypeSteps" $
+  doc "Resolve a list of subtype steps against a span-annotated type; see spanAtTypePath" $
+  "steps" ~> "type" ~>
+  "outer" <~ (typeSpan @@ var "type") $
+  Optionals.match (Lists.uncons $ var "steps") (var "outer") ("uc" ~>
+    Optionals.match (subtypeAtStep @@ (Pairs.first $ var "uc") @@ (peelTypeSpans @@ var "type")) (var "outer") ("child" ~>
+      Optionals.match (spanAtTypeSteps @@ (Pairs.second $ var "uc") @@ var "child") (var "outer") ("found" ~> just $ var "found")))
 
 -- | Decode a span from its annotation value
 spanFromTerm :: TypedTermDefinition (Term -> Maybe SourceSpan)
@@ -223,18 +277,61 @@ spanToTerm = define "spanToTerm" $
 -- | Remove every span annotation from a term
 stripSpans :: TypedTermDefinition (Term -> Term)
 stripSpans = define "stripSpans" $
-  doc ("Remove every span-only annotation layer from a term, including those inside user annotation payloads."
+  doc ("Remove every span-only annotation layer from a term, including those inside user annotation payloads and"
+    <> " inside the types the term embeds (lambda domains, type applications, binding type schemes)."
     <> " Applied to a freshly parsed term, this yields exactly the term that parsing without spans produces.") $
   "term" ~>
   RewritingTerms.rewriteTerm
     @@ ("recurse" ~> "t" ~>
       Optionals.match (spanLayer @@ var "t")
-        (match _Term (var "t") (Just (var "recurse" @@ var "t")) [
+        (match _Term (var "t") (Just (stripTermTypeSpans @@ (var "recurse" @@ var "t"))) [
           _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTerm
             (stripSpans @@ (Core.annotatedTermBody $ var "at"))
             (stripSpans @@ (Core.annotatedTermAnnotation $ var "at"))])
         ("layer" ~> stripSpans @@ (Pairs.second $ var "layer")))
     @@ var "term"
+
+-- | Remove span annotations from the types held directly by a term node (not its subterms)
+stripTermTypeSpans :: TypedTermDefinition (Term -> Term)
+stripTermTypeSpans = define "stripTermTypeSpans" $
+  doc ("Remove span annotations from the types held directly by a term node: a lambda domain, a type application"
+    <> " payload, or the type schemes of let bindings. Subterms are not visited.") $
+  "term" ~>
+  "stripScheme" <~ ("ts" ~> Core.typeScheme
+    (Core.typeSchemeVariables $ var "ts")
+    (stripTypeSpans @@ (Core.typeSchemeBody $ var "ts"))
+    (Core.typeSchemeConstraints $ var "ts")) $
+  match _Term (var "term") (Just $ var "term") [
+    _Term_lambda>>: "l" ~> Core.termLambda $ Core.lambda
+      (Core.lambdaParameter $ var "l")
+      (Optionals.map (asTerm stripTypeSpans) (Core.lambdaDomain $ var "l"))
+      (Core.lambdaBody $ var "l"),
+    _Term_let>>: "lt" ~> Core.termLet $ Core.let_
+      (Lists.map ("b" ~> Core.binding
+        (Core.bindingName $ var "b")
+        (Core.bindingTerm $ var "b")
+        (Optionals.map (var "stripScheme") (Core.bindingTypeScheme $ var "b")))
+        (Core.letBindings $ var "lt"))
+      (Core.letBody $ var "lt"),
+    _Term_typeApplication>>: "ta" ~> Core.termTypeApplication $ Core.typeApplicationTerm
+      (Core.typeApplicationTermBody $ var "ta")
+      (stripTypeSpans @@ (Core.typeApplicationTermType $ var "ta"))]
+
+-- | Remove every span annotation from a type
+stripTypeSpans :: TypedTermDefinition (Type -> Type)
+stripTypeSpans = define "stripTypeSpans" $
+  doc ("Remove every span-only annotation layer from a type, including those inside user annotation payloads."
+    <> " Applied to a freshly parsed type, this yields exactly the type that parsing without spans produces.") $
+  "type" ~>
+  RewritingTerms.rewriteType
+    @@ ("recurse" ~> "t" ~>
+      Optionals.match (typeSpanLayer @@ var "t")
+        (match _Type (var "t") (Just (var "recurse" @@ var "t")) [
+          _Type_annotated>>: "at" ~> Core.typeAnnotated $ Core.annotatedType
+            (stripTypeSpans @@ (Core.annotatedTypeBody $ var "at"))
+            (stripSpans @@ (Core.annotatedTypeAnnotation $ var "at"))])
+        ("layer" ~> stripTypeSpans @@ (Pairs.second $ var "layer")))
+    @@ var "type"
 
 -- | Follow one subterm step from a term
 subtermAtStep :: TypedTermDefinition (SubtermStep -> Term -> Maybe Term)
@@ -293,9 +390,78 @@ subtermAtStep = define "subtermAtStep" $
     _SubtermStep_wrapBody>>: constant $ match _Term (var "term") (Just nothing) [
       _Term_wrap>>: "w" ~> just $ Core.wrappedTermBody $ var "w"]]
 
+-- | Follow one subtype step from a type
+subtypeAtStep :: TypedTermDefinition (SubtypeStep -> Type -> Maybe Type)
+subtypeAtStep = define "subtypeAtStep" $
+  doc ("Follow a single subtype step from a (span-free) type to the immediate subtype it names, if the type has"
+    <> " that shape.") $
+  "step" ~> "type" ~>
+  "fieldType" <~ ("fname" ~> "fields" ~>
+    Optionals.map ("f" ~> Core.fieldTypeType $ var "f")
+      (Lists.find ("f" ~> Equality.equal (Core.fieldTypeName $ var "f") (var "fname")) (var "fields"))) $
+  match _SubtypeStep (var "step") (Just nothing) [
+    _SubtypeStep_annotatedBody>>: constant $ match _Type (var "type") (Just nothing) [
+      _Type_annotated>>: "a" ~> just $ Core.annotatedTypeBody $ var "a"],
+    _SubtypeStep_applicationArgument>>: constant $ match _Type (var "type") (Just nothing) [
+      _Type_application>>: "a" ~> just $ Core.applicationTypeArgument $ var "a"],
+    _SubtypeStep_applicationFunction>>: constant $ match _Type (var "type") (Just nothing) [
+      _Type_application>>: "a" ~> just $ Core.applicationTypeFunction $ var "a"],
+    _SubtypeStep_effectValue>>: constant $ match _Type (var "type") (Just nothing) [
+      _Type_effect>>: "t" ~> just $ var "t"],
+    _SubtypeStep_eitherLeft>>: constant $ match _Type (var "type") (Just nothing) [
+      _Type_either>>: "e" ~> just $ Core.eitherTypeLeft $ var "e"],
+    _SubtypeStep_eitherRight>>: constant $ match _Type (var "type") (Just nothing) [
+      _Type_either>>: "e" ~> just $ Core.eitherTypeRight $ var "e"],
+    _SubtypeStep_forallBody>>: constant $ match _Type (var "type") (Just nothing) [
+      _Type_forall>>: "f" ~> just $ Core.forallTypeBody $ var "f"],
+    _SubtypeStep_functionCodomain>>: constant $ match _Type (var "type") (Just nothing) [
+      _Type_function>>: "f" ~> just $ Core.functionTypeCodomain $ var "f"],
+    _SubtypeStep_functionDomain>>: constant $ match _Type (var "type") (Just nothing) [
+      _Type_function>>: "f" ~> just $ Core.functionTypeDomain $ var "f"],
+    _SubtypeStep_listElement>>: constant $ match _Type (var "type") (Just nothing) [
+      _Type_list>>: "t" ~> just $ var "t"],
+    _SubtypeStep_mapKeys>>: constant $ match _Type (var "type") (Just nothing) [
+      _Type_map>>: "m" ~> just $ Core.mapTypeKeys $ var "m"],
+    _SubtypeStep_mapValues>>: constant $ match _Type (var "type") (Just nothing) [
+      _Type_map>>: "m" ~> just $ Core.mapTypeValues $ var "m"],
+    _SubtypeStep_optionalElement>>: constant $ match _Type (var "type") (Just nothing) [
+      _Type_optional>>: "t" ~> just $ var "t"],
+    _SubtypeStep_pairFirst>>: constant $ match _Type (var "type") (Just nothing) [
+      _Type_pair>>: "p" ~> just $ Core.pairTypeFirst $ var "p"],
+    _SubtypeStep_pairSecond>>: constant $ match _Type (var "type") (Just nothing) [
+      _Type_pair>>: "p" ~> just $ Core.pairTypeSecond $ var "p"],
+    _SubtypeStep_recordField>>: "fname" ~> match _Type (var "type") (Just nothing) [
+      _Type_record>>: "fs" ~> var "fieldType" @@ var "fname" @@ var "fs"],
+    _SubtypeStep_setElement>>: constant $ match _Type (var "type") (Just nothing) [
+      _Type_set>>: "t" ~> just $ var "t"],
+    _SubtypeStep_unionField>>: "fname" ~> match _Type (var "type") (Just nothing) [
+      _Type_union>>: "fs" ~> var "fieldType" @@ var "fname" @@ var "fs"],
+    _SubtypeStep_wrapBody>>: constant $ match _Type (var "type") (Just nothing) [
+      _Type_wrap>>: "t" ~> just $ var "t"]]
+
 -- | The span recorded on a term's outermost annotation layer
 termSpan :: TypedTermDefinition (Term -> Maybe SourceSpan)
 termSpan = define "termSpan" $
   doc "The source span recorded on a term by the parser, if the term's outermost layer is a span annotation" $
   "term" ~>
   Optionals.map ("layer" ~> Pairs.first $ var "layer") (spanLayer @@ var "term")
+
+-- | The span recorded on a type's outermost annotation layer
+typeSpan :: TypedTermDefinition (Type -> Maybe SourceSpan)
+typeSpan = define "typeSpan" $
+  doc "The source span recorded on a type by the parser, if the type's outermost layer is a span annotation" $
+  "type" ~>
+  Optionals.map ("layer" ~> Pairs.first $ var "layer") (typeSpanLayer @@ var "type")
+
+-- | If the type is a span-only annotation layer, its span and the type it wraps
+typeSpanLayer :: TypedTermDefinition (Type -> Maybe (SourceSpan, Type))
+typeSpanLayer = define "typeSpanLayer" $
+  doc "If a type is a span-only annotation layer (see annotateTypeSpan), return its span and the type it wraps" $
+  "type" ~>
+  match _Type (var "type") (Just nothing) [
+    _Type_annotated>>: "at" ~>
+      "anns" <~ (AnnotationsTerms.getAnnotationMap @@ (Core.annotatedTypeAnnotation $ var "at")) $
+      Logic.ifElse (Equality.equal (Maps.size (var "anns" :: TypedTerm (M.Map Name Term))) (int32 1))
+        (Optionals.bind (Maps.lookup (asTerm keySourceSpan) (var "anns" :: TypedTerm (M.Map Name Term))) ("v" ~>
+          Optionals.map ("sp" ~> pair (var "sp") (Core.annotatedTypeBody $ var "at")) (spanFromTerm @@ var "v")))
+        nothing]

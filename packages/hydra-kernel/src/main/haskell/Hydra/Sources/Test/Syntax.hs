@@ -65,6 +65,7 @@ module_ = Module {
       Phantoms.toDefinition sourcePositionGroup,
       Phantoms.toDefinition sourceSpanGroup,
       Phantoms.toDefinition termDocCommentGroup,
+      Phantoms.toDefinition typeSourceSpanGroup,
       Phantoms.toDefinition unqualifiedNamesGroup]
 
 define :: String -> TypedTerm a -> TypedTermDefinition a
@@ -79,7 +80,7 @@ allTests = define "allTests" $
                  lambdaMultiBinderGroup, lazyParameterRoundtripGroup, mapSetLiteralGroup, moduleAliasGroup,
                  multiLineDocCommentGroup, nominalSugarGroup, parseModulesGroup, primitiveProvisionGroup,
                  primitiveSignatureSyntaxGroup, sourceSpanGroup, sourcePositionGroup, termDocCommentGroup,
-                 unqualifiedNamesGroup]
+                 typeSourceSpanGroup, unqualifiedNamesGroup]
 
 -- | Print a term signature, then parse the printed text back, and show the round-tripped
 -- signature. Compares against the original signature's own printed form, so the test both
@@ -1535,6 +1536,86 @@ sourceSpanGroup = define "sourceSpanGroup" $
     stripSpansTest "strip spans: lambda" "\955x . f x",
     stripSpansTest "strip spans: list" "[1:int32, 2:int32]",
     plainParseHasNoSpansTest "plain parse records no spans" "f x"])
+
+-- | Parse a type with spans, resolve a subtype path, and show the resulting span
+spanAtTypePathTest :: String -> String -> [TypedTerm SubtypeStep] -> String -> TypedTerm TestCaseWithMetadata
+spanAtTypePathTest testName input steps expectedStr = universalCase testName
+  (Eithers.either
+    (Phantoms.lambda "e" $ Phantoms.var "e")
+    (Phantoms.lambda "t" $ showSpan (Positions.spanAtTypePath @@ Paths.subtypePath (list steps) @@ Phantoms.var "t"))
+    (ParseCore.parseTypeWithSpans @@ string input))
+  (string expectedStr)
+
+typeRootSpanTest :: String -> String -> String -> TypedTerm TestCaseWithMetadata
+typeRootSpanTest testName input expectedStr = spanAtTypePathTest testName input [] expectedStr
+
+-- | The span-free type recovered from a span-annotated parse prints identically to the plain parse
+stripTypeSpansTest :: String -> String -> TypedTerm TestCaseWithMetadata
+stripTypeSpansTest testName input = universalCase testName
+  (Eithers.either
+    (Phantoms.lambda "e" $ Phantoms.var "e")
+    (Phantoms.lambda "t" $ PrintCore.type_ @@ (Positions.stripTypeSpans @@ Phantoms.var "t"))
+    (ParseCore.parseTypeWithSpans @@ string input))
+  (Eithers.either (Phantoms.lambda "e" $ Phantoms.var "e") (Phantoms.lambda "t" $ PrintCore.type_ @@ Phantoms.var "t")
+    (ParseCore.parseType @@ string input))
+
+-- | The plain type parser leaves no span annotations anywhere: stripping again changes nothing
+plainTypeParseHasNoSpansTest :: String -> String -> TypedTerm TestCaseWithMetadata
+plainTypeParseHasNoSpansTest testName input = universalCase testName
+  (Eithers.either
+    (Phantoms.lambda "e" $ Phantoms.var "e")
+    (Phantoms.lambda "t" $ PrintCore.type_ @@ Phantoms.var "t")
+    (ParseCore.parseType @@ string input))
+  (Eithers.either
+    (Phantoms.lambda "e" $ Phantoms.var "e")
+    (Phantoms.lambda "t" $ PrintCore.type_ @@ (Positions.stripTypeSpans @@ Phantoms.var "t"))
+    (ParseCore.parseType @@ string input))
+
+-- | The plain term parser leaves no span annotations anywhere, including inside embedded types
+plainTermParseHasNoSpansInTypesTest :: String -> String -> TypedTerm TestCaseWithMetadata
+plainTermParseHasNoSpansInTypesTest testName input = universalCase testName
+  (Eithers.either
+    (Phantoms.lambda "e" $ Phantoms.var "e")
+    (Phantoms.lambda "t" $ PrintCore.term @@ Phantoms.var "t")
+    (ParseCore.parseTerm @@ string input))
+  (Eithers.either
+    (Phantoms.lambda "e" $ Phantoms.var "e")
+    (Phantoms.lambda "t" $ PrintCore.term @@ (Positions.stripSpans @@ Phantoms.var "t"))
+    (ParseCore.parseTerm @@ string input))
+
+typeSourceSpanGroup :: TypedTermDefinition TestGroup
+typeSourceSpanGroup = define "typeSourceSpanGroup" $
+  doc "Source spans recorded by the type parser, and SubtypePath-to-span resolution (#833)" $
+  Testing.testGroup (string "type source spans") nothing (list ([] :: [TypedTerm TestGroup])) (list [
+    typeRootSpanTest "variable" "a" "[0,1)",
+    typeRootSpanTest "span excludes leading whitespace" "  a" "[2,3)",
+    typeRootSpanTest "span excludes trailing whitespace" "a   " "[0,1)",
+    typeRootSpanTest "span excludes trailing comment" "a # note\n" "[0,1)",
+    typeRootSpanTest "function type spans domain through codomain" "a \8594 list<b>" "[0,11)",
+    spanAtTypePathTest "function domain" "a \8594 list<b>"
+      [inject _SubtypeStep _SubtypeStep_functionDomain unit] "[0,1)",
+    spanAtTypePathTest "function codomain" "a \8594 list<b>"
+      [inject _SubtypeStep _SubtypeStep_functionCodomain unit] "[4,11)",
+    spanAtTypePathTest "list element within codomain" "a \8594 list<b>"
+      [inject _SubtypeStep _SubtypeStep_functionCodomain unit,
+       inject _SubtypeStep _SubtypeStep_listElement unit] "[9,10)",
+    spanAtTypePathTest "path that cannot be followed yields the last type reached" "a \8594 list<b>"
+      [inject _SubtypeStep _SubtypeStep_functionDomain unit,
+       inject _SubtypeStep _SubtypeStep_listElement unit] "[0,1)",
+    typeRootSpanTest "type application spans function through argument" "f x" "[0,3)",
+    spanAtTypePathTest "type application argument" "f x"
+      [inject _SubtypeStep _SubtypeStep_applicationArgument unit] "[2,3)",
+    stripTypeSpansTest "strip type spans: function" "a \8594 list<b>",
+    stripTypeSpansTest "strip type spans: application" "f x y",
+    stripTypeSpansTest "strip type spans: record" "record{x: int32, y: list<string>}",
+    plainTypeParseHasNoSpansTest "plain type parse records no spans" "a \8594 list<b>",
+    plainTypeParseHasNoSpansTest "plain type parse records no spans in nested types" "record{x: list<a \8594 b>}",
+    stripSpansTest "strip spans: lambda domain" "\955x:list<int32>.x",
+    stripSpansTest "strip spans: type application" "f\10216int32 \8594 int32\10217",
+    plainTermParseHasNoSpansInTypesTest "plain term parse records no spans in a lambda domain" "\955x:list<int32>.x",
+    plainTermParseHasNoSpansInTypesTest "plain term parse records no spans in a type application" "f\10216int32 \8594 int32\10217",
+    plainTermParseHasNoSpansInTypesTest "plain term parse records no spans in a binding type scheme"
+      "let x:(int32) := 1:int32 in x"])
 
 -- | Convert an offset in a text to a position and show it as "line:column"
 positionTest :: String -> String -> Int -> String -> TypedTerm TestCaseWithMetadata
