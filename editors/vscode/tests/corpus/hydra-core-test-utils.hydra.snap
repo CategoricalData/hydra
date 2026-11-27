@@ -176,7 +176,7 @@
 #        ^^^^^^^^^^^^ source.hydra variable.parameter.hydra
 #                    ^ source.hydra punctuation.separator.binder.hydra
 #                     ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                         ^^ source.hydra
+#                                         ^ source.hydra punctuation.definition.fields.begin.hydra
 >          name = `name_`,
 #^^^^^^^^^^ source.hydra
 #          ^^^^ source.hydra variable.other.member.hydra
@@ -222,7 +222,8 @@
 #                       ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                        ^^^^^^^^^^^ source.hydra variable.other.escaped.hydra
 #                                   ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
-#                                    ^^^ source.hydra
+#                                    ^ source.hydra punctuation.definition.fields.end.hydra
+#                                     ^^ source.hydra
 >      right(tcase)
 #^^^^^^ source.hydra
 #      ^^^^^ source.hydra keyword.control.hydra
@@ -334,7 +335,7 @@
 #            ^^^^^^^^^^^^^ source.hydra variable.parameter.hydra
 #                         ^ source.hydra punctuation.separator.binder.hydra
 #                          ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                   ^^ source.hydra
+#                                   ^ source.hydra punctuation.definition.fields.begin.hydra
 >              name = `name_`,
 #^^^^^^^^^^^^^^ source.hydra
 #              ^^^^ source.hydra variable.other.member.hydra
@@ -370,7 +371,8 @@
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
 #                        ^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                     ^^^ source.hydra
+#                                     ^ source.hydra punctuation.definition.fields.end.hydra
+#                                      ^^ source.hydra
 >          (mapList (λtc.inferTestCase g tc) `cases_`))
 #^^^^^^^^^^^ source.hydra
 #           ^^^^^^^ source.hydra variable.other.hydra

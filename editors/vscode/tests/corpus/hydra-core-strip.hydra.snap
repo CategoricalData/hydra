@@ -389,7 +389,7 @@
 >    TypeScheme{variables = vars, body = deannotateTypeRecursive typ, constraints = constraints}
 #^^^^ source.hydra
 #    ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#              ^ source.hydra
+#              ^ source.hydra punctuation.definition.fields.begin.hydra
 #               ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
@@ -409,7 +409,7 @@
 #                                                                                 ^ source.hydra keyword.operator.equals.hydra
 #                                                                                  ^ source.hydra
 #                                                                                   ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                              ^^ source.hydra
+#                                                                                              ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## Strip System F type annotations from the top levels of a term, but leave application-specific annotations intact
 #^^ source.hydra comment.block.documentation.hydra
@@ -473,13 +473,13 @@
 >          Term{annotated = AnnotatedTerm{body = detypeTerm subj, annotation = ann}},
 #^^^^^^^^^^ source.hydra
 #          ^^^^ source.hydra entity.name.type.nominal.hydra
-#              ^ source.hydra
+#              ^ source.hydra punctuation.definition.fields.begin.hydra
 #               ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
 #                           ^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                        ^ source.hydra
+#                                        ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                         ^^^^ source.hydra variable.other.member.hydra
 #                                             ^ source.hydra
 #                                              ^ source.hydra keyword.operator.equals.hydra
@@ -493,7 +493,9 @@
 #                                                                            ^ source.hydra keyword.operator.equals.hydra
 #                                                                             ^ source.hydra
 #                                                                              ^^^ source.hydra variable.other.hydra
-#                                                                                 ^^^^ source.hydra
+#                                                                                 ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                  ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                   ^^ source.hydra
 >      typeApplication = λtt.deannotateAndDetypeTerm (TypeApplicationTerm[body] tt),
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -773,7 +775,7 @@
 #                             ^ source.hydra variable.parameter.hydra
 #                              ^ source.hydra punctuation.separator.binder.hydra
 #                               ^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                      ^^ source.hydra
+#                                      ^ source.hydra punctuation.definition.fields.begin.hydra
 >              name = Binding[name] b,
 #^^^^^^^^^^^^^^ source.hydra
 #              ^^^^ source.hydra variable.other.member.hydra
@@ -811,7 +813,8 @@
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
 #                           ^^^^ source.hydra keyword.control.hydra
-#                               ^^ source.hydra
+#                               ^ source.hydra punctuation.definition.fields.end.hydra
+#                                ^ source.hydra
 #                                 ^^ source.hydra keyword.control.hydra
 >        cases(Term){
 #^^^^^^^^ source.hydra
@@ -831,7 +834,7 @@
 #                   ^^ source.hydra variable.parameter.hydra
 #                     ^ source.hydra punctuation.separator.binder.hydra
 #                      ^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >                `let` = Let{
 #^^^^^^^^^^^^^^^^ source.hydra
 #                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
@@ -841,7 +844,7 @@
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
 #                        ^^^ source.hydra entity.name.type.nominal.hydra
-#                           ^^ source.hydra
+#                           ^ source.hydra punctuation.definition.fields.begin.hydra
 >                  bindings = `map` stripBinding (Let[bindings] lt),
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^ source.hydra variable.other.member.hydra
@@ -853,14 +856,16 @@
 #                                 ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                                  ^ source.hydra
 #                                   ^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                               ^^ source.hydra
+#                                               ^ source.hydra
+#                                                ^ source.hydra
 #                                                 ^^^ source.hydra entity.name.type.nominal.hydra
 #                                                    ^ source.hydra punctuation.definition.projection.begin.hydra
 #                                                     ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                             ^ source.hydra punctuation.definition.projection.end.hydra
 #                                                              ^ source.hydra
 #                                                               ^^ source.hydra variable.other.hydra
-#                                                                 ^^^ source.hydra
+#                                                                 ^ source.hydra
+#                                                                  ^^ source.hydra
 >                  body = Let[body] lt}},
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^ source.hydra variable.other.member.hydra
@@ -873,7 +878,9 @@
 #                                 ^ source.hydra punctuation.definition.projection.end.hydra
 #                                  ^ source.hydra
 #                                   ^^ source.hydra variable.other.hydra
-#                                     ^^^^ source.hydra
+#                                     ^ source.hydra punctuation.definition.fields.end.hydra
+#                                      ^ source.hydra punctuation.definition.fields.end.hydra
+#                                       ^^ source.hydra
 >          typeApplication = λtt.TypeApplicationTerm[body] tt,
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -990,7 +997,7 @@
 #                             ^ source.hydra variable.parameter.hydra
 #                              ^ source.hydra punctuation.separator.binder.hydra
 #                               ^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                      ^^ source.hydra
+#                                      ^ source.hydra punctuation.definition.fields.begin.hydra
 >              name = Binding[name] b,
 #^^^^^^^^^^^^^^ source.hydra
 #              ^^^^ source.hydra variable.other.member.hydra
@@ -1028,7 +1035,8 @@
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
 #                           ^^^^ source.hydra keyword.control.hydra
-#                               ^^ source.hydra
+#                               ^ source.hydra punctuation.definition.fields.end.hydra
+#                                ^ source.hydra
 #                                 ^^ source.hydra keyword.control.hydra
 >        cases(Term){
 #^^^^^^^^ source.hydra
@@ -1046,7 +1054,7 @@
 #                    ^ source.hydra variable.parameter.hydra
 #                     ^ source.hydra punctuation.separator.binder.hydra
 #                      ^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >                lambda = Lambda{
 #^^^^^^^^^^^^^^^^ source.hydra
 #                ^^^^^^ source.hydra variable.other.member.hydra
@@ -1054,7 +1062,7 @@
 #                       ^ source.hydra keyword.operator.equals.hydra
 #                        ^ source.hydra
 #                         ^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                               ^^ source.hydra
+#                               ^ source.hydra punctuation.definition.fields.begin.hydra
 >                  parameter = Lambda[parameter] l,
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1088,7 +1096,9 @@
 #                                    ^ source.hydra punctuation.definition.projection.end.hydra
 #                                     ^ source.hydra
 #                                      ^ source.hydra variable.other.hydra
-#                                       ^^^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                                        ^ source.hydra punctuation.definition.fields.end.hydra
+#                                         ^^ source.hydra
 >          `let` = λlt.Term{
 #^^^^^^^^^^ source.hydra
 #          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
@@ -1101,7 +1111,7 @@
 #                   ^^ source.hydra variable.parameter.hydra
 #                     ^ source.hydra punctuation.separator.binder.hydra
 #                      ^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >                `let` = Let{
 #^^^^^^^^^^^^^^^^ source.hydra
 #                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
@@ -1111,7 +1121,7 @@
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
 #                        ^^^ source.hydra entity.name.type.nominal.hydra
-#                           ^^ source.hydra
+#                           ^ source.hydra punctuation.definition.fields.begin.hydra
 >                  bindings = `map` stripBinding (Let[bindings] lt),
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1123,14 +1133,16 @@
 #                                 ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                                  ^ source.hydra
 #                                   ^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                               ^^ source.hydra
+#                                               ^ source.hydra
+#                                                ^ source.hydra
 #                                                 ^^^ source.hydra entity.name.type.nominal.hydra
 #                                                    ^ source.hydra punctuation.definition.projection.begin.hydra
 #                                                     ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                             ^ source.hydra punctuation.definition.projection.end.hydra
 #                                                              ^ source.hydra
 #                                                               ^^ source.hydra variable.other.hydra
-#                                                                 ^^^ source.hydra
+#                                                                 ^ source.hydra
+#                                                                  ^^ source.hydra
 >                  body = Let[body] lt}},
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^ source.hydra variable.other.member.hydra
@@ -1143,7 +1155,9 @@
 #                                 ^ source.hydra punctuation.definition.projection.end.hydra
 #                                  ^ source.hydra
 #                                   ^^ source.hydra variable.other.hydra
-#                                     ^^^^ source.hydra
+#                                     ^ source.hydra punctuation.definition.fields.end.hydra
+#                                      ^ source.hydra punctuation.definition.fields.end.hydra
+#                                       ^^ source.hydra
 >          typeApplication = λtt.TypeApplicationTerm[body] tt,
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1263,13 +1277,13 @@
 >          Term{annotated = AnnotatedTerm{body = stripTypeLambdas subj, annotation = ann}},
 #^^^^^^^^^^ source.hydra
 #          ^^^^ source.hydra entity.name.type.nominal.hydra
-#              ^ source.hydra
+#              ^ source.hydra punctuation.definition.fields.begin.hydra
 #               ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                        ^ source.hydra
 #                         ^ source.hydra keyword.operator.equals.hydra
 #                          ^ source.hydra
 #                           ^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                        ^ source.hydra
+#                                        ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                         ^^^^ source.hydra variable.other.member.hydra
 #                                             ^ source.hydra
 #                                              ^ source.hydra keyword.operator.equals.hydra
@@ -1283,7 +1297,9 @@
 #                                                                                  ^ source.hydra keyword.operator.equals.hydra
 #                                                                                   ^ source.hydra
 #                                                                                    ^^^ source.hydra variable.other.hydra
-#                                                                                       ^^^^ source.hydra
+#                                                                                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                        ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                         ^^ source.hydra
 >      typeLambda = λta.stripTypeLambdas (TypeLambda[body] ta),
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^ source.hydra variable.other.member.hydra

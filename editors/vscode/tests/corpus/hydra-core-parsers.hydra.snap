@@ -93,13 +93,14 @@
 #                     ^ source.hydra variable.parameter.hydra
 #                      ^ source.hydra punctuation.separator.binder.hydra
 #                       ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                  ^ source.hydra
+#                                  ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                   ^^^^^^^ source.hydra variable.other.member.hydra
 #                                          ^ source.hydra
 #                                           ^ source.hydra keyword.operator.equals.hydra
 #                                            ^ source.hydra
 #                                             ^ source.hydra variable.other.hydra
-#                                              ^^^ source.hydra
+#                                              ^ source.hydra punctuation.definition.fields.end.hydra
+#                                               ^^ source.hydra
 >          failure = λe.ifElse
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^ source.hydra variable.other.member.hydra
@@ -149,13 +150,14 @@
 >                ParseResult{failure = e}}
 #^^^^^^^^^^^^^^^^ source.hydra
 #                ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                           ^ source.hydra
+#                           ^ source.hydra punctuation.definition.fields.begin.hydra
 #                            ^^^^^^^ source.hydra variable.other.member.hydra
 #                                   ^ source.hydra
 #                                    ^ source.hydra keyword.operator.equals.hydra
 #                                     ^ source.hydra
 #                                      ^ source.hydra variable.other.hydra
-#                                       ^^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                                        ^^ source.hydra
 >          (Parser[] p1 input)
 #^^^^^^^^^^^ source.hydra
 #           ^^^^^^ source.hydra entity.name.type.nominal.hydra
@@ -252,7 +254,7 @@
 #                           ^^ source.hydra variable.parameter.hydra
 #                             ^ source.hydra punctuation.separator.binder.hydra
 #                              ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                         ^^ source.hydra
+#                                         ^ source.hydra punctuation.definition.fields.begin.hydra
 >                      success = ParseSuccess{
 #^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                      ^^^^^^^ source.hydra variable.other.member.hydra
@@ -260,7 +262,7 @@
 #                              ^ source.hydra keyword.operator.equals.hydra
 #                               ^ source.hydra
 #                                ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                            ^^ source.hydra
+#                                            ^ source.hydra punctuation.definition.fields.begin.hydra
 >                        value = ParseSuccess[value]
 #^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                        ^^^^^ source.hydra variable.other.member.hydra
@@ -275,14 +277,16 @@
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                            ^^ source.hydra variable.other.hydra
 >                            (ParseSuccess[value] sa),
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                            ^ source.hydra
 #                             ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                         ^ source.hydra punctuation.definition.projection.begin.hydra
 #                                          ^^^^^ source.hydra variable.other.member.hydra
 #                                               ^ source.hydra punctuation.definition.projection.end.hydra
 #                                                ^ source.hydra
 #                                                 ^^ source.hydra variable.other.hydra
-#                                                   ^^^ source.hydra
+#                                                   ^ source.hydra
+#                                                    ^^ source.hydra
 >                        remainder = ParseSuccess[remainder] sa}},
 #^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                        ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -295,7 +299,9 @@
 #                                                          ^ source.hydra punctuation.definition.projection.end.hydra
 #                                                           ^ source.hydra
 #                                                            ^^ source.hydra variable.other.hydra
-#                                                              ^^^^ source.hydra
+#                                                              ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                               ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                ^^ source.hydra
 >                failure = λe.ParseResult{
 #^^^^^^^^^^^^^^^^ source.hydra
 #                ^^^^^^^ source.hydra variable.other.member.hydra
@@ -306,7 +312,7 @@
 #                           ^ source.hydra variable.parameter.hydra
 #                            ^ source.hydra punctuation.separator.binder.hydra
 #                             ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                        ^^ source.hydra
+#                                        ^ source.hydra punctuation.definition.fields.begin.hydra
 >                      failure = e}}
 #^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                      ^^^^^^^ source.hydra variable.other.member.hydra
@@ -314,7 +320,8 @@
 #                              ^ source.hydra keyword.operator.equals.hydra
 #                               ^ source.hydra
 #                                ^ source.hydra variable.other.hydra
-#                                 ^^^ source.hydra
+#                                 ^ source.hydra punctuation.definition.fields.end.hydra
+#                                  ^^ source.hydra
 >                (Parser[] pa (ParseSuccess[remainder] sf)),
 #^^^^^^^^^^^^^^^^^ source.hydra
 #                 ^^^^^^ source.hydra entity.name.type.nominal.hydra
@@ -340,13 +347,14 @@
 #                     ^ source.hydra variable.parameter.hydra
 #                      ^ source.hydra punctuation.separator.binder.hydra
 #                       ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                  ^ source.hydra
+#                                  ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                   ^^^^^^^ source.hydra variable.other.member.hydra
 #                                          ^ source.hydra
 #                                           ^ source.hydra keyword.operator.equals.hydra
 #                                            ^ source.hydra
 #                                             ^ source.hydra variable.other.hydra
-#                                              ^^^ source.hydra
+#                                              ^ source.hydra punctuation.definition.fields.end.hydra
+#                                               ^^ source.hydra
 >          (Parser[] pf input)
 #^^^^^^^^^^^ source.hydra
 #           ^^^^^^ source.hydra entity.name.type.nominal.hydra
@@ -491,13 +499,14 @@
 #                     ^ source.hydra variable.parameter.hydra
 #                      ^ source.hydra punctuation.separator.binder.hydra
 #                       ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                  ^ source.hydra
+#                                  ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                   ^^^^^^^ source.hydra variable.other.member.hydra
 #                                          ^ source.hydra
 #                                           ^ source.hydra keyword.operator.equals.hydra
 #                                            ^ source.hydra
 #                                             ^ source.hydra variable.other.hydra
-#                                              ^^^ source.hydra
+#                                              ^ source.hydra punctuation.definition.fields.end.hydra
+#                                               ^^ source.hydra
 >          (Parser[] pa input)
 #^^^^^^^^^^^ source.hydra
 #           ^^^^^^ source.hydra entity.name.type.nominal.hydra
@@ -581,7 +590,7 @@
 >  Parser{λinput.ifElse
 #^^ source.hydra
 #  ^^^^^^ source.hydra entity.name.type.nominal.hydra
-#        ^ source.hydra
+#        ^ source.hydra punctuation.definition.fields.begin.hydra
 #         ^ source.hydra storage.type.function.lambda.hydra
 #          ^^^^^ source.hydra variable.parameter.hydra
 #               ^ source.hydra punctuation.separator.binder.hydra
@@ -600,31 +609,32 @@
 >      ParseResult{success = ParseSuccess{value, remainder = input}}
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                 ^ source.hydra
+#                 ^ source.hydra punctuation.definition.fields.begin.hydra
 #                  ^^^^^^^ source.hydra variable.other.member.hydra
 #                         ^ source.hydra
 #                          ^ source.hydra keyword.operator.equals.hydra
 #                           ^ source.hydra
 #                            ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                        ^ source.hydra
-#                                         ^^^^^ source.hydra variable.other.hydra
+#                                        ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                         ^^^^^ source.hydra variable.other.member.hydra
 #                                              ^^ source.hydra
 #                                                ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                         ^ source.hydra
 #                                                          ^ source.hydra keyword.operator.equals.hydra
 #                                                           ^ source.hydra
 #                                                            ^^^^^ source.hydra variable.other.hydra
-#                                                                 ^^^ source.hydra
+#                                                                 ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                  ^ source.hydra punctuation.definition.fields.end.hydra
 >      ParseResult{failure = ParseError{message = "expected end of input", remainder = input}}}
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                 ^ source.hydra
+#                 ^ source.hydra punctuation.definition.fields.begin.hydra
 #                  ^^^^^^^ source.hydra variable.other.member.hydra
 #                         ^ source.hydra
 #                          ^ source.hydra keyword.operator.equals.hydra
 #                           ^ source.hydra
 #                            ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                      ^ source.hydra
+#                                      ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                       ^^^^^^^ source.hydra variable.other.member.hydra
 #                                              ^ source.hydra
 #                                               ^ source.hydra keyword.operator.equals.hydra
@@ -638,7 +648,9 @@
 #                                                                                    ^ source.hydra keyword.operator.equals.hydra
 #                                                                                     ^ source.hydra
 #                                                                                      ^^^^^ source.hydra variable.other.hydra
-#                                                                                           ^^^^ source.hydra
+#                                                                                           ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                            ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                             ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## A parser that always fails with the given error message
 #^^ source.hydra comment.block.documentation.hydra
@@ -654,18 +666,18 @@
 #             ^^^ source.hydra variable.parameter.hydra
 #                ^ source.hydra punctuation.separator.binder.hydra
 #                 ^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 #                        ^ source.hydra storage.type.function.lambda.hydra
 #                         ^^^^^ source.hydra variable.parameter.hydra
 #                              ^ source.hydra punctuation.separator.binder.hydra
 #                               ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                          ^ source.hydra
+#                                          ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                           ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                  ^ source.hydra
 #                                                   ^ source.hydra keyword.operator.equals.hydra
 #                                                    ^ source.hydra
 #                                                     ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                               ^ source.hydra
+#                                                               ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                                                ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                       ^ source.hydra
 #                                                                        ^ source.hydra keyword.operator.equals.hydra
@@ -677,7 +689,9 @@
 #                                                                                         ^ source.hydra keyword.operator.equals.hydra
 #                                                                                          ^ source.hydra
 #                                                                                           ^^^^^ source.hydra variable.other.hydra
-#                                                                                                ^^^^ source.hydra
+#                                                                                                ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                                 ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                                  ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## Create a parser that defers construction of another parser until parsing time. This is essential for breaking recursive parser definitions.
 #^^ source.hydra comment.block.documentation.hydra
@@ -693,7 +707,7 @@
 #             ^ source.hydra variable.parameter.hydra
 #              ^ source.hydra punctuation.separator.binder.hydra
 #               ^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                     ^ source.hydra
+#                     ^ source.hydra punctuation.definition.fields.begin.hydra
 #                      ^ source.hydra storage.type.function.lambda.hydra
 #                       ^^^^^ source.hydra variable.parameter.hydra
 #                            ^ source.hydra punctuation.separator.binder.hydra
@@ -706,7 +720,7 @@
 #                                         ^^^^ source.hydra support.type.hydra
 #                                             ^^ source.hydra
 #                                               ^^^^^ source.hydra variable.other.hydra
-#                                                    ^^ source.hydra
+#                                                    ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## Parse zero or more occurrences of the given parser
 #^^ source.hydra comment.block.documentation.hydra
@@ -816,7 +830,7 @@
 #                   ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                    ^ source.hydra punctuation.separator.binder.hydra
 #                     ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
 >            success = ParseSuccess{
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^^ source.hydra variable.other.member.hydra
@@ -824,7 +838,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                  ^^ source.hydra
+#                                  ^ source.hydra punctuation.definition.fields.begin.hydra
 >              value = lists.reverse acc,
 #^^^^^^^^^^^^^^ source.hydra
 #              ^^^^^ source.hydra variable.other.member.hydra
@@ -842,7 +856,9 @@
 #                        ^ source.hydra keyword.operator.equals.hydra
 #                         ^ source.hydra
 #                          ^^^^^ source.hydra variable.other.hydra
-#                               ^^^^ source.hydra
+#                               ^ source.hydra punctuation.definition.fields.end.hydra
+#                                ^ source.hydra punctuation.definition.fields.end.hydra
+#                                 ^^ source.hydra
 >      (Parser[] p input)
 #^^^^^^^ source.hydra
 #       ^^^^^^ source.hydra entity.name.type.nominal.hydra
@@ -896,7 +912,7 @@
 #                     ^ source.hydra variable.parameter.hydra
 #                      ^ source.hydra punctuation.separator.binder.hydra
 #                       ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                  ^^ source.hydra
+#                                  ^ source.hydra punctuation.definition.fields.begin.hydra
 >                success = ParseSuccess{
 #^^^^^^^^^^^^^^^^ source.hydra
 #                ^^^^^^^ source.hydra variable.other.member.hydra
@@ -904,7 +920,7 @@
 #                        ^ source.hydra keyword.operator.equals.hydra
 #                         ^ source.hydra
 #                          ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                      ^^ source.hydra
+#                                      ^ source.hydra punctuation.definition.fields.begin.hydra
 >                  value = f (ParseSuccess[value] s),
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^ source.hydra variable.other.member.hydra
@@ -912,14 +928,16 @@
 #                        ^ source.hydra keyword.operator.equals.hydra
 #                         ^ source.hydra
 #                          ^ source.hydra variable.other.hydra
-#                           ^^ source.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra
 #                             ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                         ^ source.hydra punctuation.definition.projection.begin.hydra
 #                                          ^^^^^ source.hydra variable.other.member.hydra
 #                                               ^ source.hydra punctuation.definition.projection.end.hydra
 #                                                ^ source.hydra
 #                                                 ^ source.hydra variable.other.hydra
-#                                                  ^^^ source.hydra
+#                                                  ^ source.hydra
+#                                                   ^^ source.hydra
 >                  remainder = ParseSuccess[remainder] s}},
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -932,7 +950,9 @@
 #                                                    ^ source.hydra punctuation.definition.projection.end.hydra
 #                                                     ^ source.hydra
 #                                                      ^ source.hydra variable.other.hydra
-#                                                       ^^^^ source.hydra
+#                                                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                        ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                         ^^ source.hydra
 >          failure = λe.ParseResult{failure = e}}
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^ source.hydra variable.other.member.hydra
@@ -943,13 +963,14 @@
 #                     ^ source.hydra variable.parameter.hydra
 #                      ^ source.hydra punctuation.separator.binder.hydra
 #                       ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                  ^ source.hydra
+#                                  ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                   ^^^^^^^ source.hydra variable.other.member.hydra
 #                                          ^ source.hydra
 #                                           ^ source.hydra keyword.operator.equals.hydra
 #                                            ^ source.hydra
 #                                             ^ source.hydra variable.other.hydra
-#                                              ^^^ source.hydra
+#                                              ^ source.hydra punctuation.definition.fields.end.hydra
+#                                               ^^ source.hydra
 >          (Parser[] pa input)
 #^^^^^^^^^^^ source.hydra
 #           ^^^^^^ source.hydra entity.name.type.nominal.hydra
@@ -983,12 +1004,12 @@
 >  Parser{λinput.ParseResult{
 #^^ source.hydra
 #  ^^^^^^ source.hydra entity.name.type.nominal.hydra
-#        ^ source.hydra
+#        ^ source.hydra punctuation.definition.fields.begin.hydra
 #         ^ source.hydra storage.type.function.lambda.hydra
 #          ^^^^^ source.hydra variable.parameter.hydra
 #               ^ source.hydra punctuation.separator.binder.hydra
 #                ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                           ^^ source.hydra
+#                           ^ source.hydra punctuation.definition.fields.begin.hydra
 >      success = ParseSuccess{
 #^^^^^^ source.hydra
 #      ^^^^^^^ source.hydra variable.other.member.hydra
@@ -996,10 +1017,10 @@
 #              ^ source.hydra keyword.operator.equals.hydra
 #               ^ source.hydra
 #                ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                            ^^ source.hydra
+#                            ^ source.hydra punctuation.definition.fields.begin.hydra
 >        value,
 #^^^^^^^^ source.hydra
-#        ^^^^^ source.hydra variable.other.hydra
+#        ^^^^^ source.hydra variable.other.member.hydra
 #             ^^ source.hydra
 >        remainder = ParseInput{
 #^^^^^^^^ source.hydra
@@ -1008,7 +1029,7 @@
 #                  ^ source.hydra keyword.operator.equals.hydra
 #                   ^ source.hydra
 #                    ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                              ^^ source.hydra
+#                              ^ source.hydra punctuation.definition.fields.begin.hydra
 >          offset = ParseInput[offset] input,
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^ source.hydra variable.other.member.hydra
@@ -1047,7 +1068,10 @@
 #                                            ^ source.hydra punctuation.definition.projection.end.hydra
 #                                             ^ source.hydra
 #                                              ^^^^^ source.hydra variable.other.hydra
-#                                                   ^^^^^ source.hydra
+#                                                   ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                    ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                     ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                      ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## Optionally parse something, returning Nothing if it fails
 #^^ source.hydra comment.block.documentation.hydra
@@ -1093,18 +1117,18 @@
 #             ^ source.hydra variable.parameter.hydra
 #              ^ source.hydra punctuation.separator.binder.hydra
 #               ^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                     ^ source.hydra
+#                     ^ source.hydra punctuation.definition.fields.begin.hydra
 #                      ^ source.hydra storage.type.function.lambda.hydra
 #                       ^^^^^ source.hydra variable.parameter.hydra
 #                            ^ source.hydra punctuation.separator.binder.hydra
 #                             ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                        ^ source.hydra
+#                                        ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                         ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                ^ source.hydra
 #                                                 ^ source.hydra keyword.operator.equals.hydra
 #                                                  ^ source.hydra
 #                                                   ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                               ^ source.hydra
+#                                                               ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                                                ^^^^^ source.hydra variable.other.member.hydra
 #                                                                     ^ source.hydra
 #                                                                      ^ source.hydra keyword.operator.equals.hydra
@@ -1116,7 +1140,9 @@
 #                                                                                     ^ source.hydra keyword.operator.equals.hydra
 #                                                                                      ^ source.hydra
 #                                                                                       ^^^^^ source.hydra variable.other.hydra
-#                                                                                            ^^^^ source.hydra
+#                                                                                            ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                             ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                              ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## Run a parser on the given input string. The string is converted to a codepoint list once, up front, so that the parser itself can consume characters in constant time.
 #^^ source.hydra comment.block.documentation.hydra
@@ -1142,7 +1168,7 @@
 #                     ^ source.hydra variable.other.hydra
 #                      ^ source.hydra
 #                       ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                 ^ source.hydra
+#                                 ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                  ^^^^^^ source.hydra variable.other.member.hydra
 #                                        ^ source.hydra
 #                                         ^ source.hydra keyword.operator.equals.hydra
@@ -1166,7 +1192,7 @@
 #                                                                                     ^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                                                                                                   ^ source.hydra
 #                                                                                                    ^^^^^ source.hydra variable.other.hydra
-#                                                                                                         ^^ source.hydra
+#                                                                                                         ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## Parse a character (codepoint) that satisfies the given predicate
 #^^ source.hydra comment.block.documentation.hydra
@@ -1208,13 +1234,13 @@
 >          ParseResult{failure = ParseError{message = "unexpected end of input", remainder = input}}
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                     ^ source.hydra
+#                     ^ source.hydra punctuation.definition.fields.begin.hydra
 #                      ^^^^^^^ source.hydra variable.other.member.hydra
 #                             ^ source.hydra
 #                              ^ source.hydra keyword.operator.equals.hydra
 #                               ^ source.hydra
 #                                ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                          ^ source.hydra
+#                                          ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                           ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                  ^ source.hydra
 #                                                   ^ source.hydra keyword.operator.equals.hydra
@@ -1228,7 +1254,8 @@
 #                                                                                          ^ source.hydra keyword.operator.equals.hydra
 #                                                                                           ^ source.hydra
 #                                                                                            ^^^^^ source.hydra variable.other.hydra
-#                                                                                                 ^^^ source.hydra
+#                                                                                                 ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                                  ^ source.hydra punctuation.definition.fields.end.hydra
 >          (λuc.
 #^^^^^^^^^^^ source.hydra
 #           ^ source.hydra storage.type.function.lambda.hydra
@@ -1272,7 +1299,7 @@
 >              ParseResult{
 #^^^^^^^^^^^^^^ source.hydra
 #              ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                         ^^ source.hydra
+#                         ^ source.hydra punctuation.definition.fields.begin.hydra
 >                success = ParseSuccess{
 #^^^^^^^^^^^^^^^^ source.hydra
 #                ^^^^^^^ source.hydra variable.other.member.hydra
@@ -1280,7 +1307,7 @@
 #                        ^ source.hydra keyword.operator.equals.hydra
 #                         ^ source.hydra
 #                          ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                      ^^ source.hydra
+#                                      ^ source.hydra punctuation.definition.fields.begin.hydra
 >                  value = c,
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^ source.hydra variable.other.member.hydra
@@ -1296,7 +1323,7 @@
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
 #                              ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                        ^^ source.hydra
+#                                        ^ source.hydra punctuation.definition.fields.begin.hydra
 >                    offset = add (ParseInput[offset] input) 1:int32,
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                    ^^^^^^ source.hydra variable.other.member.hydra
@@ -1304,14 +1331,16 @@
 #                           ^ source.hydra keyword.operator.equals.hydra
 #                            ^ source.hydra
 #                             ^^^ source.hydra variable.other.hydra
-#                                ^^ source.hydra
+#                                ^ source.hydra
+#                                 ^ source.hydra
 #                                  ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                            ^ source.hydra punctuation.definition.projection.begin.hydra
 #                                             ^^^^^^ source.hydra variable.other.member.hydra
 #                                                   ^ source.hydra punctuation.definition.projection.end.hydra
 #                                                    ^ source.hydra
 #                                                     ^^^^^ source.hydra variable.other.hydra
-#                                                          ^^ source.hydra
+#                                                          ^ source.hydra
+#                                                           ^ source.hydra
 #                                                            ^ source.hydra constant.numeric.integer.hydra
 #                                                             ^ source.hydra punctuation.separator.type.hydra
 #                                                              ^^^^^ source.hydra support.type.literal.integer.hydra
@@ -1336,11 +1365,13 @@
 #                               ^ source.hydra keyword.operator.equals.hydra
 #                                ^ source.hydra
 #                                 ^^^^ source.hydra variable.other.hydra
-#                                     ^^^^ source.hydra
+#                                     ^ source.hydra punctuation.definition.fields.end.hydra
+#                                      ^ source.hydra punctuation.definition.fields.end.hydra
+#                                       ^ source.hydra punctuation.definition.fields.end.hydra
 >              ParseResult{
 #^^^^^^^^^^^^^^ source.hydra
 #              ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                         ^^ source.hydra
+#                         ^ source.hydra punctuation.definition.fields.begin.hydra
 >                failure = ParseError{
 #^^^^^^^^^^^^^^^^ source.hydra
 #                ^^^^^^^ source.hydra variable.other.member.hydra
@@ -1348,7 +1379,7 @@
 #                        ^ source.hydra keyword.operator.equals.hydra
 #                         ^ source.hydra
 #                          ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                    ^^ source.hydra
+#                                    ^ source.hydra punctuation.definition.fields.begin.hydra
 >                  message = "character did not satisfy predicate",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^ source.hydra variable.other.member.hydra
@@ -1366,7 +1397,9 @@
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
 #                              ^^^^^ source.hydra variable.other.hydra
-#                                   ^^^^ source.hydra
+#                                   ^ source.hydra punctuation.definition.fields.end.hydra
+#                                    ^ source.hydra punctuation.definition.fields.end.hydra
+#                                     ^^ source.hydra
 >    in wrap(Parser){parse}
 #^^^^ source.hydra
 #    ^^ source.hydra keyword.control.hydra
@@ -1577,7 +1610,7 @@
 >              ParseResult{
 #^^^^^^^^^^^^^^ source.hydra
 #              ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                         ^^ source.hydra
+#                         ^ source.hydra punctuation.definition.fields.begin.hydra
 >                success = ParseSuccess{
 #^^^^^^^^^^^^^^^^ source.hydra
 #                ^^^^^^^ source.hydra variable.other.member.hydra
@@ -1585,13 +1618,14 @@
 #                        ^ source.hydra keyword.operator.equals.hydra
 #                         ^ source.hydra
 #                          ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                      ^^ source.hydra
+#                                      ^ source.hydra punctuation.definition.fields.begin.hydra
 >                  value = (ParseSuccess[value] s, SourceSpan{start = start, end = end}),
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^ source.hydra variable.other.member.hydra
 #                       ^ source.hydra
 #                        ^ source.hydra keyword.operator.equals.hydra
-#                         ^^ source.hydra
+#                         ^ source.hydra
+#                          ^ source.hydra
 #                           ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                       ^ source.hydra punctuation.definition.projection.begin.hydra
 #                                        ^^^^^ source.hydra variable.other.member.hydra
@@ -1600,7 +1634,7 @@
 #                                               ^ source.hydra variable.other.hydra
 #                                                ^^ source.hydra
 #                                                  ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                            ^ source.hydra
+#                                                            ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                                             ^^^^^ source.hydra variable.other.member.hydra
 #                                                                  ^ source.hydra
 #                                                                   ^ source.hydra keyword.operator.equals.hydra
@@ -1612,7 +1646,9 @@
 #                                                                                ^ source.hydra keyword.operator.equals.hydra
 #                                                                                 ^ source.hydra
 #                                                                                  ^^^ source.hydra variable.other.hydra
-#                                                                                     ^^^^ source.hydra
+#                                                                                     ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                      ^ source.hydra
+#                                                                                       ^^ source.hydra
 >                  remainder = ParseSuccess[remainder] s}},
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1625,7 +1661,9 @@
 #                                                    ^ source.hydra punctuation.definition.projection.end.hydra
 #                                                     ^ source.hydra
 #                                                      ^ source.hydra variable.other.hydra
-#                                                       ^^^^ source.hydra
+#                                                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                        ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                         ^^ source.hydra
 >          failure = λe.ParseResult{failure = e}}
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^ source.hydra variable.other.member.hydra
@@ -1636,13 +1674,14 @@
 #                     ^ source.hydra variable.parameter.hydra
 #                      ^ source.hydra punctuation.separator.binder.hydra
 #                       ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                  ^ source.hydra
+#                                  ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                   ^^^^^^^ source.hydra variable.other.member.hydra
 #                                          ^ source.hydra
 #                                           ^ source.hydra keyword.operator.equals.hydra
 #                                            ^ source.hydra
 #                                             ^ source.hydra variable.other.hydra
-#                                              ^^^ source.hydra
+#                                              ^ source.hydra punctuation.definition.fields.end.hydra
+#                                               ^^ source.hydra
 >          (Parser[] p input)
 #^^^^^^^^^^^ source.hydra
 #           ^^^^^^ source.hydra entity.name.type.nominal.hydra
@@ -1707,7 +1746,7 @@
 >    Parser{λinput.
 #^^^^ source.hydra
 #    ^^^^^^ source.hydra entity.name.type.nominal.hydra
-#          ^ source.hydra
+#          ^ source.hydra punctuation.definition.fields.begin.hydra
 #           ^ source.hydra storage.type.function.lambda.hydra
 #            ^^^^^ source.hydra variable.parameter.hydra
 #                 ^ source.hydra punctuation.separator.binder.hydra
@@ -1746,7 +1785,7 @@
 >        ParseResult{
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                   ^^ source.hydra
+#                   ^ source.hydra punctuation.definition.fields.begin.hydra
 >          success = ParseSuccess{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^ source.hydra variable.other.member.hydra
@@ -1754,7 +1793,7 @@
 #                  ^ source.hydra keyword.operator.equals.hydra
 #                   ^ source.hydra
 #                    ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
 >            value = str,
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^ source.hydra variable.other.member.hydra
@@ -1770,7 +1809,7 @@
 #                      ^ source.hydra keyword.operator.equals.hydra
 #                       ^ source.hydra
 #                        ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                  ^^ source.hydra
+#                                  ^ source.hydra punctuation.definition.fields.begin.hydra
 >              offset = add (ParseInput[offset] input) strLen,
 #^^^^^^^^^^^^^^ source.hydra
 #              ^^^^^^ source.hydra variable.other.member.hydra
@@ -1778,14 +1817,16 @@
 #                     ^ source.hydra keyword.operator.equals.hydra
 #                      ^ source.hydra
 #                       ^^^ source.hydra variable.other.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra
 #                            ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                                      ^ source.hydra punctuation.definition.projection.begin.hydra
 #                                       ^^^^^^ source.hydra variable.other.member.hydra
 #                                             ^ source.hydra punctuation.definition.projection.end.hydra
 #                                              ^ source.hydra
 #                                               ^^^^^ source.hydra variable.other.hydra
-#                                                    ^^ source.hydra
+#                                                    ^ source.hydra
+#                                                     ^ source.hydra
 #                                                      ^^^^^^ source.hydra variable.other.hydra
 #                                                            ^^ source.hydra
 >              tokenEnd = ParseInput[tokenEnd] input,
@@ -1812,24 +1853,28 @@
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^ source.hydra variable.other.hydra
 >                  (ParseInput[codepoints] input)}}}
-#^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^ source.hydra
+#                  ^ source.hydra
 #                   ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
 #                             ^ source.hydra punctuation.definition.projection.begin.hydra
 #                              ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                        ^ source.hydra punctuation.definition.projection.end.hydra
 #                                         ^ source.hydra
 #                                          ^^^^^ source.hydra variable.other.hydra
-#                                               ^^^^^ source.hydra
+#                                               ^ source.hydra
+#                                                ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                 ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                  ^ source.hydra punctuation.definition.fields.end.hydra
 >        ParseResult{failure = ParseError{message = strings.concat2 "expected: " str, remainder = input}}}
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                   ^ source.hydra
+#                   ^ source.hydra punctuation.definition.fields.begin.hydra
 #                    ^^^^^^^ source.hydra variable.other.member.hydra
 #                           ^ source.hydra
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
 #                              ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                        ^ source.hydra
+#                                        ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                         ^^^^^^^ source.hydra variable.other.member.hydra
 #                                                ^ source.hydra
 #                                                 ^ source.hydra keyword.operator.equals.hydra
@@ -1847,7 +1892,9 @@
 #                                                                                               ^ source.hydra keyword.operator.equals.hydra
 #                                                                                                ^ source.hydra
 #                                                                                                 ^^^^^ source.hydra variable.other.hydra
-#                                                                                                      ^^^^ source.hydra
+#                                                                                                      ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                                        ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## Make a parser's failure backtrackable, rewinding to the original input on failure
 #^^ source.hydra comment.block.documentation.hydra
@@ -1888,13 +1935,14 @@
 #                     ^ source.hydra variable.parameter.hydra
 #                      ^ source.hydra punctuation.separator.binder.hydra
 #                       ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                  ^ source.hydra
+#                                  ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                   ^^^^^^^ source.hydra variable.other.member.hydra
 #                                          ^ source.hydra
 #                                           ^ source.hydra keyword.operator.equals.hydra
 #                                            ^ source.hydra
 #                                             ^ source.hydra variable.other.hydra
-#                                              ^^^ source.hydra
+#                                              ^ source.hydra punctuation.definition.fields.end.hydra
+#                                               ^^ source.hydra
 >          failure = λe.ParseResult{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^ source.hydra variable.other.member.hydra
@@ -1905,7 +1953,7 @@
 #                     ^ source.hydra variable.parameter.hydra
 #                      ^ source.hydra punctuation.separator.binder.hydra
 #                       ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                  ^^ source.hydra
+#                                  ^ source.hydra punctuation.definition.fields.begin.hydra
 >                failure = ParseError{
 #^^^^^^^^^^^^^^^^ source.hydra
 #                ^^^^^^^ source.hydra variable.other.member.hydra
@@ -1913,7 +1961,7 @@
 #                        ^ source.hydra keyword.operator.equals.hydra
 #                         ^ source.hydra
 #                          ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                    ^^ source.hydra
+#                                    ^ source.hydra punctuation.definition.fields.begin.hydra
 >                  message = ParseError[message] e,
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^ source.hydra variable.other.member.hydra
@@ -1934,7 +1982,9 @@
 #                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
 #                              ^^^^^ source.hydra variable.other.hydra
-#                                   ^^^^ source.hydra
+#                                   ^ source.hydra punctuation.definition.fields.end.hydra
+#                                    ^ source.hydra punctuation.definition.fields.end.hydra
+#                                     ^^ source.hydra
 >          (Parser[] p input)
 #^^^^^^^^^^^ source.hydra
 #           ^^^^^^ source.hydra entity.name.type.nominal.hydra

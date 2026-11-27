@@ -39,7 +39,7 @@
 >  TestGroup{
 #^^ source.hydra
 #  ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#           ^^ source.hydra
+#           ^ source.hydra punctuation.definition.fields.begin.hydra
 >    name = "formatting",
 #^^^^ source.hydra
 #    ^^^^ source.hydra variable.other.member.hydra
@@ -63,11 +63,13 @@
 #    ^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
-#               ^^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
 #                 ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                    ^^ source.hydra
 #                                      ^^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                            ^^^ source.hydra
+#                                                            ^ source.hydra
+#                                                             ^^ source.hydra
 >    `cases` = []}
 #^^^^ source.hydra
 #    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
@@ -75,7 +77,10 @@
 #          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #           ^ source.hydra
 #            ^ source.hydra keyword.operator.equals.hydra
-#             ^^^^^ source.hydra
+#             ^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## Test cases for case conversion
 #^^ source.hydra comment.block.documentation.hydra
@@ -89,7 +94,7 @@
 >  TestGroup{
 #^^ source.hydra
 #  ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#           ^^ source.hydra
+#           ^ source.hydra punctuation.definition.fields.begin.hydra
 >    name = "case conversion",
 #^^^^ source.hydra
 #    ^^^^ source.hydra variable.other.member.hydra
@@ -113,7 +118,10 @@
 #    ^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
-#               ^^^^^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^ source.hydra
+#                  ^^ source.hydra
 >    `cases` = [
 #^^^^ source.hydra
 #    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
@@ -121,11 +129,12 @@
 #          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #           ^ source.hydra
 #            ^ source.hydra keyword.operator.equals.hydra
-#             ^^^ source.hydra
+#             ^ source.hydra
+#              ^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#1 (lower_snake_case -> UPPER_SNAKE_CASE)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -143,7 +152,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -151,7 +160,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -167,15 +176,15 @@
 >                  CaseConvention{lowerSnake}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{upperSnake}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "a_hello_world_42_a42_42a_b",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -196,7 +205,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                        ^^^^ source.hydra
+#                                                        ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                         ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                          ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -210,17 +221,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#2 (lower_snake_case -> camelCase)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -238,7 +256,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -246,7 +264,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -262,15 +280,15 @@
 >                  CaseConvention{lowerSnake}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{camel}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^ source.hydra variable.other.hydra
-#                                      ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^ source.hydra variable.other.member.hydra
+#                                      ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "a_hello_world_42_a42_42a_b",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -291,7 +309,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                  ^^^^ source.hydra
+#                                                  ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                   ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                    ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -305,17 +325,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#3 (lower_snake_case -> PascalCase)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -333,7 +360,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -341,7 +368,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -357,15 +384,15 @@
 >                  CaseConvention{lowerSnake}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{pascal}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^ source.hydra variable.other.hydra
-#                                       ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^ source.hydra variable.other.member.hydra
+#                                       ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "a_hello_world_42_a42_42a_b",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -386,7 +413,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                  ^^^^ source.hydra
+#                                                  ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                   ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                    ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -400,17 +429,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#4 (lower_snake_case -> lower_snake_case)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -428,7 +464,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -436,7 +472,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -452,15 +488,15 @@
 >                  CaseConvention{lowerSnake}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{lowerSnake}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "a_hello_world_42_a42_42a_b",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -481,7 +517,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                        ^^^^ source.hydra
+#                                                        ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                         ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                          ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -495,17 +533,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#17 (lower_snake_case -> UPPER-DASHED-CASE)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -523,7 +568,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -531,7 +576,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -547,15 +592,15 @@
 >                  CaseConvention{lowerSnake}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{upperDashed}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                            ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                            ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "a_hello_world_42_a42_42a_b",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -576,7 +621,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                        ^^^^ source.hydra
+#                                                        ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                         ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                          ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -590,17 +637,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#5 (UPPER_SNAKE_CASE -> lower_snake_case)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -618,7 +672,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -626,7 +680,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -642,15 +696,15 @@
 >                  CaseConvention{upperSnake}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{lowerSnake}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "A_HELLO_WORLD_42_A42_42A_B",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -671,7 +725,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                        ^^^^ source.hydra
+#                                                        ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                         ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                          ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -685,17 +741,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#6 (UPPER_SNAKE_CASE -> camelCase)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -713,7 +776,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -721,7 +784,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -737,15 +800,15 @@
 >                  CaseConvention{upperSnake}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{camel}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^ source.hydra variable.other.hydra
-#                                      ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^ source.hydra variable.other.member.hydra
+#                                      ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "A_HELLO_WORLD_42_A42_42A_B",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -766,7 +829,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                  ^^^^ source.hydra
+#                                                  ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                   ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                    ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -780,17 +845,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#7 (UPPER_SNAKE_CASE -> PascalCase)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -808,7 +880,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -816,7 +888,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -832,15 +904,15 @@
 >                  CaseConvention{upperSnake}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{pascal}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^ source.hydra variable.other.hydra
-#                                       ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^ source.hydra variable.other.member.hydra
+#                                       ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "A_HELLO_WORLD_42_A42_42A_B",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -861,7 +933,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                  ^^^^ source.hydra
+#                                                  ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                   ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                    ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -875,17 +949,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#8 (UPPER_SNAKE_CASE -> UPPER_SNAKE_CASE)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -903,7 +984,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -911,7 +992,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -927,15 +1008,15 @@
 >                  CaseConvention{upperSnake}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{upperSnake}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "A_HELLO_WORLD_42_A42_42A_B",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -956,7 +1037,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                        ^^^^ source.hydra
+#                                                        ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                         ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                          ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -970,17 +1053,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#18 (UPPER_SNAKE_CASE -> UPPER-DASHED-CASE)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -998,7 +1088,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1006,7 +1096,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -1022,15 +1112,15 @@
 >                  CaseConvention{upperSnake}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{upperDashed}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                            ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                            ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "A_HELLO_WORLD_42_A42_42A_B",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -1051,7 +1141,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                        ^^^^ source.hydra
+#                                                        ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                         ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                          ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1065,17 +1157,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#9 (camelCase -> lower_snake_case)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -1093,7 +1192,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1101,7 +1200,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -1117,15 +1216,15 @@
 >                  CaseConvention{camel}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^ source.hydra variable.other.hydra
-#                                      ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^ source.hydra variable.other.member.hydra
+#                                      ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{lowerSnake}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "aHelloWorld42A4242aB",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -1146,7 +1245,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                      ^^^^ source.hydra
+#                                                      ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                        ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1160,17 +1261,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#10 (camelCase -> UPPER_SNAKE_CASE)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -1188,7 +1296,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1196,7 +1304,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -1212,15 +1320,15 @@
 >                  CaseConvention{camel}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^ source.hydra variable.other.hydra
-#                                      ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^ source.hydra variable.other.member.hydra
+#                                      ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{upperSnake}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "aHelloWorld42A4242aB",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -1241,7 +1349,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                      ^^^^ source.hydra
+#                                                      ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                        ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1255,17 +1365,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#11 (camelCase -> PascalCase)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -1283,7 +1400,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1291,7 +1408,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -1307,15 +1424,15 @@
 >                  CaseConvention{camel}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^ source.hydra variable.other.hydra
-#                                      ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^ source.hydra variable.other.member.hydra
+#                                      ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{pascal}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^ source.hydra variable.other.hydra
-#                                       ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^ source.hydra variable.other.member.hydra
+#                                       ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "aHelloWorld42A4242aB",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -1336,7 +1453,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                  ^^^^ source.hydra
+#                                                  ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                   ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                    ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1350,17 +1469,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#12 (camelCase -> camelCase)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -1378,7 +1504,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1386,7 +1512,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -1402,15 +1528,15 @@
 >                  CaseConvention{camel}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^ source.hydra variable.other.hydra
-#                                      ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^ source.hydra variable.other.member.hydra
+#                                      ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{camel}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^ source.hydra variable.other.hydra
-#                                      ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^ source.hydra variable.other.member.hydra
+#                                      ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "aHelloWorld42A4242aB",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -1431,7 +1557,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                  ^^^^ source.hydra
+#                                                  ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                   ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                    ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1445,17 +1573,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#19 (camelCase -> UPPER-DASHED-CASE)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -1473,7 +1608,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1481,7 +1616,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -1497,15 +1632,15 @@
 >                  CaseConvention{camel}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^ source.hydra variable.other.hydra
-#                                      ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^ source.hydra variable.other.member.hydra
+#                                      ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{upperDashed}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                            ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                            ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "aHelloWorld42A4242aB",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -1526,7 +1661,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                      ^^^^ source.hydra
+#                                                      ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                        ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1540,17 +1677,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#13 (PascalCase -> lower_snake_case)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -1568,7 +1712,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1576,7 +1720,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -1592,15 +1736,15 @@
 >                  CaseConvention{pascal}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^ source.hydra variable.other.hydra
-#                                       ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^ source.hydra variable.other.member.hydra
+#                                       ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{lowerSnake}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "AHelloWorld42A4242aB",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -1621,7 +1765,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                      ^^^^ source.hydra
+#                                                      ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                        ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1635,17 +1781,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#14 (PascalCase -> UPPER_SNAKE_CASE)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -1663,7 +1816,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1671,7 +1824,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -1687,15 +1840,15 @@
 >                  CaseConvention{pascal}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^ source.hydra variable.other.hydra
-#                                       ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^ source.hydra variable.other.member.hydra
+#                                       ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{upperSnake}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "AHelloWorld42A4242aB",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -1716,7 +1869,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                      ^^^^ source.hydra
+#                                                      ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                        ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1730,17 +1885,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#15 (PascalCase -> camelCase)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -1758,7 +1920,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1766,7 +1928,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -1782,15 +1944,15 @@
 >                  CaseConvention{pascal}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^ source.hydra variable.other.hydra
-#                                       ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^ source.hydra variable.other.member.hydra
+#                                       ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{camel}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^ source.hydra variable.other.hydra
-#                                      ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^ source.hydra variable.other.member.hydra
+#                                      ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "AHelloWorld42A4242aB",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -1811,7 +1973,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                  ^^^^ source.hydra
+#                                                  ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                   ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                    ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1825,17 +1989,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#16 (PascalCase -> PascalCase)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -1853,7 +2024,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1861,7 +2032,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -1877,15 +2048,15 @@
 >                  CaseConvention{pascal}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^ source.hydra variable.other.hydra
-#                                       ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^ source.hydra variable.other.member.hydra
+#                                       ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{pascal}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^ source.hydra variable.other.hydra
-#                                       ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^ source.hydra variable.other.member.hydra
+#                                       ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "AHelloWorld42A4242aB",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -1906,7 +2077,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                  ^^^^ source.hydra
+#                                                  ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                   ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                    ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1920,17 +2093,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#20 (PascalCase -> UPPER-DASHED-CASE)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -1948,7 +2128,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1956,7 +2136,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -1972,15 +2152,15 @@
 >                  CaseConvention{pascal}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^ source.hydra variable.other.hydra
-#                                       ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^ source.hydra variable.other.member.hydra
+#                                       ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{upperDashed}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                            ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                            ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "AHelloWorld42A4242aB",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -2001,7 +2181,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                      ^^^^ source.hydra
+#                                                      ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                        ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2015,17 +2197,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#21 (UPPER-DASHED-CASE -> lower_snake_case)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -2043,7 +2232,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2051,7 +2240,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -2067,15 +2256,15 @@
 >                  CaseConvention{upperDashed}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                            ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                            ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{lowerSnake}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "A-HELLO-WORLD-42-A42-42A-B",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -2096,7 +2285,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                        ^^^^ source.hydra
+#                                                        ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                         ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                          ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2110,17 +2301,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#22 (UPPER-DASHED-CASE -> UPPER_SNAKE_CASE)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -2138,7 +2336,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2146,7 +2344,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -2162,15 +2360,15 @@
 >                  CaseConvention{upperDashed}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                            ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                            ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{upperSnake}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "A-HELLO-WORLD-42-A42-42A-B",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -2191,7 +2389,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                        ^^^^ source.hydra
+#                                                        ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                         ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                          ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2205,17 +2405,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#23 (UPPER-DASHED-CASE -> camelCase)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -2233,7 +2440,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2241,7 +2448,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -2257,15 +2464,15 @@
 >                  CaseConvention{upperDashed}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                            ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                            ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{camel}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^ source.hydra variable.other.hydra
-#                                      ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^ source.hydra variable.other.member.hydra
+#                                      ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "A-HELLO-WORLD-42-A42-42A-B",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -2286,7 +2493,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                  ^^^^ source.hydra
+#                                                  ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                   ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                    ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2300,17 +2509,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#24 (UPPER-DASHED-CASE -> PascalCase)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -2328,7 +2544,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2336,7 +2552,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -2352,15 +2568,15 @@
 >                  CaseConvention{upperDashed}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                            ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                            ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{pascal}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^ source.hydra variable.other.hydra
-#                                       ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^ source.hydra variable.other.member.hydra
+#                                       ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "A-HELLO-WORLD-42-A42-42A-B",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -2381,7 +2597,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                  ^^^^ source.hydra
+#                                                  ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                   ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                    ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2395,17 +2613,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#25 (UPPER-DASHED-CASE -> UPPER-DASHED-CASE)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -2423,7 +2648,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2431,7 +2656,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.convertCase
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -2447,15 +2672,15 @@
 >                  CaseConvention{upperDashed}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                            ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                            ^ source.hydra punctuation.definition.fields.end.hydra
 >                  CaseConvention{upperDashed}
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
-#                                 ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                            ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                 ^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                            ^ source.hydra punctuation.definition.fields.end.hydra
 >                  "A-HELLO-WORLD-42-A42-42A-B",
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
@@ -2476,7 +2701,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                        ^^^^ source.hydra
+#                                                        ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                         ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                          ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2490,13 +2717,21 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []}]}
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^ source.hydra
+#                         ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## Test cases for rendering a Name in UPPER-DASHED display form
 #^^ source.hydra comment.block.documentation.hydra
@@ -2510,7 +2745,7 @@
 >  TestGroup{
 #^^ source.hydra
 #  ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#           ^^ source.hydra
+#           ^ source.hydra punctuation.definition.fields.begin.hydra
 >    name = "name to upper-dashed",
 #^^^^ source.hydra
 #    ^^^^ source.hydra variable.other.member.hydra
@@ -2534,7 +2769,10 @@
 #    ^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
-#               ^^^^^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^ source.hydra
+#                  ^^ source.hydra
 >    `cases` = [
 #^^^^ source.hydra
 #    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
@@ -2542,11 +2780,12 @@
 #          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #           ^ source.hydra
 #            ^ source.hydra keyword.operator.equals.hydra
-#             ^^^ source.hydra
+#             ^ source.hydra
+#              ^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#1 (hydra.core.lib.lists.concat.emptyLists)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -2564,7 +2803,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2572,7 +2811,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.nameToUpperDashed
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -2588,11 +2827,12 @@
 >                  Name{"hydra.core.lib.lists.concat.emptyLists"},
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^ source.hydra entity.name.type.nominal.hydra
-#                      ^ source.hydra
+#                      ^ source.hydra punctuation.definition.fields.begin.hydra
 #                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                               ^^^ source.hydra
+#                                                               ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                ^^ source.hydra
 >            expected = λ`_`."HYDRA-CORE-LIB-LISTS-CONCAT-EMPTY-LISTS"}},
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2607,7 +2847,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                                     ^^^^ source.hydra
+#                                                                     ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                      ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                       ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2621,17 +2863,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#2 (hydra.core.model.Name)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -2649,7 +2898,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2657,7 +2906,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.nameToUpperDashed
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -2673,11 +2922,12 @@
 >                  Name{"hydra.core.model.Name"},
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^ source.hydra entity.name.type.nominal.hydra
-#                      ^ source.hydra
+#                      ^ source.hydra punctuation.definition.fields.begin.hydra
 #                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                        ^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                              ^^^ source.hydra
+#                                              ^ source.hydra punctuation.definition.fields.end.hydra
+#                                               ^^ source.hydra
 >            expected = λ`_`."HYDRA-CORE-MODEL-NAME"}},
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2692,7 +2942,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                   ^^^^ source.hydra
+#                                                   ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                    ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                     ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2706,17 +2958,24 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []},
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >      TestCaseWithMetadata{
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 >        name = "#3 (singlePart)",
 #^^^^^^^^ source.hydra
 #        ^^^^ source.hydra variable.other.member.hydra
@@ -2734,7 +2993,7 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          universal = UniversalTestCase{
 #^^^^^^^^^^ source.hydra
 #          ^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2742,7 +3001,7 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >            actual = λ`_`.nameToUpperDashed Name{"singlePart"},
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^ source.hydra variable.other.member.hydra
@@ -2757,11 +3016,12 @@
 #                          ^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                           ^ source.hydra
 #                                            ^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                ^ source.hydra
+#                                                ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                                                  ^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                             ^^^ source.hydra
+#                                                             ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                              ^^ source.hydra
 >            expected = λ`_`."SINGLE-PART"}},
 #^^^^^^^^^^^^ source.hydra
 #            ^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2776,7 +3036,9 @@
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                         ^^^^ source.hydra
+#                                         ^ source.hydra punctuation.definition.fields.end.hydra
+#                                          ^ source.hydra punctuation.definition.fields.end.hydra
+#                                           ^^ source.hydra
 >        description = none,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2790,10 +3052,18 @@
 #        ^^^^ source.hydra variable.other.member.hydra
 #            ^ source.hydra
 #             ^ source.hydra keyword.operator.equals.hydra
-#              ^^^^^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
+#                 ^^ source.hydra
 >        provisions = []}]}
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                  ^ source.hydra
 #                   ^ source.hydra keyword.operator.equals.hydra
-#                    ^^^^^^^ source.hydra
+#                    ^ source.hydra
+#                     ^ source.hydra
+#                      ^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^ source.hydra
+#                         ^ source.hydra punctuation.definition.fields.end.hydra

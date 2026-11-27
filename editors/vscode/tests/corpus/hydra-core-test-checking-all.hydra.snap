@@ -71,7 +71,7 @@
 >  TestGroup{
 #^^ source.hydra
 #  ^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#           ^^ source.hydra
+#           ^ source.hydra punctuation.definition.fields.begin.hydra
 >    name = "checking",
 #^^^^ source.hydra
 #    ^^^^ source.hydra variable.other.member.hydra
@@ -95,7 +95,8 @@
 #    ^^^^^^^^^ source.hydra variable.other.member.hydra
 #             ^ source.hydra
 #              ^ source.hydra keyword.operator.equals.hydra
-#               ^^^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra
 >      advanced.allTests,
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
@@ -119,7 +120,8 @@
 >      nominalTypes.allTests],
 #^^^^^^ source.hydra
 #      ^^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
-#                           ^^^ source.hydra
+#                           ^ source.hydra
+#                            ^^ source.hydra
 >    `cases` = []}
 #^^^^ source.hydra
 #    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
@@ -127,4 +129,7 @@
 #          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #           ^ source.hydra
 #            ^ source.hydra keyword.operator.equals.hydra
-#             ^^^^^ source.hydra
+#             ^ source.hydra
+#              ^ source.hydra
+#               ^ source.hydra
+#                ^ source.hydra punctuation.definition.fields.end.hydra

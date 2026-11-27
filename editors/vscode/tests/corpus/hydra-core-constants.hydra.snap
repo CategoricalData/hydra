@@ -50,11 +50,11 @@
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
 #                  ^^^^ source.hydra entity.name.type.nominal.hydra
-#                      ^ source.hydra
+#                      ^ source.hydra punctuation.definition.fields.begin.hydra
 #                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                        ^^^^^^^ source.hydra string.quoted.double.hydra
 #                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## Annotation key for debug identifiers
 #^^ source.hydra comment.block.documentation.hydra
@@ -67,11 +67,11 @@
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
 #                  ^^^^ source.hydra entity.name.type.nominal.hydra
-#                      ^ source.hydra
+#                      ^ source.hydra punctuation.definition.fields.begin.hydra
 #                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                        ^^^^^^^ source.hydra string.quoted.double.hydra
 #                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## Annotation key for deprecated markers
 #^^ source.hydra comment.block.documentation.hydra
@@ -84,11 +84,11 @@
 #                   ^ source.hydra keyword.operator.equals.hydra
 #                    ^ source.hydra
 #                     ^^^^ source.hydra entity.name.type.nominal.hydra
-#                         ^ source.hydra
+#                         ^ source.hydra punctuation.definition.fields.begin.hydra
 #                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                           ^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                      ^^ source.hydra
+#                                      ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## Annotation key for descriptions
 #^^ source.hydra comment.block.documentation.hydra
@@ -101,11 +101,11 @@
 #                    ^ source.hydra keyword.operator.equals.hydra
 #                     ^ source.hydra
 #                      ^^^^ source.hydra entity.name.type.nominal.hydra
-#                          ^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.begin.hydra
 #                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                            ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                        ^^ source.hydra
+#                                        ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## Annotation key for exclusions
 #^^ source.hydra comment.block.documentation.hydra
@@ -118,11 +118,11 @@
 #                ^ source.hydra keyword.operator.equals.hydra
 #                 ^ source.hydra
 #                  ^^^^ source.hydra entity.name.type.nominal.hydra
-#                      ^ source.hydra
+#                      ^ source.hydra punctuation.definition.fields.begin.hydra
 #                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                        ^^^^^^^ source.hydra string.quoted.double.hydra
 #                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                ^^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## A flag which tells the language coders to encode a given encoded type as a term rather than a native type
 #^^ source.hydra comment.block.documentation.hydra
@@ -135,11 +135,11 @@
 #                       ^ source.hydra keyword.operator.equals.hydra
 #                        ^ source.hydra
 #                         ^^^^ source.hydra entity.name.type.nominal.hydra
-#                             ^ source.hydra
+#                             ^ source.hydra punctuation.definition.fields.begin.hydra
 #                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                               ^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                              ^^ source.hydra
+#                                              ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## A counter for generating fresh type variable names
 #^^ source.hydra comment.block.documentation.hydra
@@ -152,11 +152,11 @@
 #                               ^ source.hydra keyword.operator.equals.hydra
 #                                ^ source.hydra
 #                                 ^^^^ source.hydra entity.name.type.nominal.hydra
-#                                     ^ source.hydra
+#                                     ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                                       ^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                              ^^ source.hydra
+#                                                              ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## Annotation key for maximum length constraints
 #^^ source.hydra comment.block.documentation.hydra
@@ -169,11 +169,11 @@
 #                  ^ source.hydra keyword.operator.equals.hydra
 #                   ^ source.hydra
 #                    ^^^^ source.hydra entity.name.type.nominal.hydra
-#                        ^ source.hydra
+#                        ^ source.hydra punctuation.definition.fields.begin.hydra
 #                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                          ^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                    ^^ source.hydra
+#                                    ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## Annotation key for minimum length constraints
 #^^ source.hydra comment.block.documentation.hydra
@@ -186,11 +186,11 @@
 #                  ^ source.hydra keyword.operator.equals.hydra
 #                   ^ source.hydra
 #                    ^^^^ source.hydra entity.name.type.nominal.hydra
-#                        ^ source.hydra
+#                        ^ source.hydra punctuation.definition.fields.begin.hydra
 #                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                          ^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                    ^^ source.hydra
+#                                    ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## Annotation key for preserving field names during code generation
 #^^ source.hydra comment.block.documentation.hydra
@@ -203,11 +203,11 @@
 #                          ^ source.hydra keyword.operator.equals.hydra
 #                           ^ source.hydra
 #                            ^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                                  ^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                    ^^ source.hydra
+#                                                    ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## Annotation key for type information
 #^^ source.hydra comment.block.documentation.hydra
@@ -220,11 +220,11 @@
 #             ^ source.hydra keyword.operator.equals.hydra
 #              ^ source.hydra
 #               ^^^^ source.hydra entity.name.type.nominal.hydra
-#                   ^ source.hydra
+#                   ^ source.hydra punctuation.definition.fields.begin.hydra
 #                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                     ^^^^ source.hydra string.quoted.double.hydra
 #                         ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                          ^^ source.hydra
+#                          ^ source.hydra punctuation.definition.fields.end.hydra
 >
 >## The maximum value of a 32-bit integer
 #^^ source.hydra comment.block.documentation.hydra

@@ -50,7 +50,7 @@
 #                    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                     ^ source.hydra punctuation.separator.binder.hydra
 #                      ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                  ^ source.hydra
+#                                  ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                   ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                                    ^^^^^^ source.hydra variable.other.escaped.hydra
 #                                          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
@@ -58,7 +58,8 @@
 #                                            ^ source.hydra keyword.operator.equals.hydra
 #                                             ^ source.hydra
 #                                              ^^ source.hydra variable.other.hydra
-#                                                ^^^ source.hydra
+#                                                ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                 ^^ source.hydra
 >      `int8` = λ`_`.IntegerValue{`int8` = bigintToInt8 bi},
 #^^^^^^ source.hydra
 #      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
@@ -73,7 +74,7 @@
 #                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                   ^ source.hydra punctuation.separator.binder.hydra
 #                    ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                ^ source.hydra
+#                                ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                 ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                                  ^^^^ source.hydra variable.other.escaped.hydra
 #                                      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
@@ -83,7 +84,8 @@
 #                                          ^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                      ^ source.hydra
 #                                                       ^^ source.hydra variable.other.hydra
-#                                                         ^^^ source.hydra
+#                                                         ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                          ^^ source.hydra
 >      `int16` = λ`_`.IntegerValue{`int16` = bigintToInt16 bi},
 #^^^^^^ source.hydra
 #      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
@@ -98,7 +100,7 @@
 #                   ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                    ^ source.hydra punctuation.separator.binder.hydra
 #                     ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                 ^ source.hydra
+#                                 ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                                   ^^^^^ source.hydra variable.other.escaped.hydra
 #                                        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
@@ -108,7 +110,8 @@
 #                                            ^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                         ^ source.hydra
 #                                                          ^^ source.hydra variable.other.hydra
-#                                                            ^^^ source.hydra
+#                                                            ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                             ^^ source.hydra
 >      `int32` = λ`_`.IntegerValue{`int32` = bigintToInt32 bi},
 #^^^^^^ source.hydra
 #      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
@@ -123,7 +126,7 @@
 #                   ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                    ^ source.hydra punctuation.separator.binder.hydra
 #                     ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                 ^ source.hydra
+#                                 ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                                   ^^^^^ source.hydra variable.other.escaped.hydra
 #                                        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
@@ -133,7 +136,8 @@
 #                                            ^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                         ^ source.hydra
 #                                                          ^^ source.hydra variable.other.hydra
-#                                                            ^^^ source.hydra
+#                                                            ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                             ^^ source.hydra
 >      `int64` = λ`_`.IntegerValue{`int64` = bigintToInt64 bi},
 #^^^^^^ source.hydra
 #      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
@@ -148,7 +152,7 @@
 #                   ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                    ^ source.hydra punctuation.separator.binder.hydra
 #                     ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                 ^ source.hydra
+#                                 ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                                   ^^^^^ source.hydra variable.other.escaped.hydra
 #                                        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
@@ -158,7 +162,8 @@
 #                                            ^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                         ^ source.hydra
 #                                                          ^^ source.hydra variable.other.hydra
-#                                                            ^^^ source.hydra
+#                                                            ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                             ^^ source.hydra
 >      `uint8` = λ`_`.IntegerValue{`uint8` = bigintToUint8 bi},
 #^^^^^^ source.hydra
 #      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
@@ -173,7 +178,7 @@
 #                   ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                    ^ source.hydra punctuation.separator.binder.hydra
 #                     ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                 ^ source.hydra
+#                                 ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                                   ^^^^^ source.hydra variable.other.escaped.hydra
 #                                        ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
@@ -183,7 +188,8 @@
 #                                            ^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                         ^ source.hydra
 #                                                          ^^ source.hydra variable.other.hydra
-#                                                            ^^^ source.hydra
+#                                                            ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                             ^^ source.hydra
 >      `uint16` = λ`_`.IntegerValue{`uint16` = bigintToUint16 bi},
 #^^^^^^ source.hydra
 #      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
@@ -198,7 +204,7 @@
 #                    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                     ^ source.hydra punctuation.separator.binder.hydra
 #                      ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                  ^ source.hydra
+#                                  ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                   ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                                    ^^^^^^ source.hydra variable.other.escaped.hydra
 #                                          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
@@ -208,7 +214,8 @@
 #                                              ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                            ^ source.hydra
 #                                                             ^^ source.hydra variable.other.hydra
-#                                                               ^^^ source.hydra
+#                                                               ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                ^^ source.hydra
 >      `uint32` = λ`_`.IntegerValue{`uint32` = bigintToUint32 bi},
 #^^^^^^ source.hydra
 #      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
@@ -223,7 +230,7 @@
 #                    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                     ^ source.hydra punctuation.separator.binder.hydra
 #                      ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                  ^ source.hydra
+#                                  ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                   ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                                    ^^^^^^ source.hydra variable.other.escaped.hydra
 #                                          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
@@ -233,7 +240,8 @@
 #                                              ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                            ^ source.hydra
 #                                                             ^^ source.hydra variable.other.hydra
-#                                                               ^^^ source.hydra
+#                                                               ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                ^^ source.hydra
 >      `uint64` = λ`_`.IntegerValue{`uint64` = bigintToUint64 bi}}
 #^^^^^^ source.hydra
 #      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
@@ -248,7 +256,7 @@
 #                    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                     ^ source.hydra punctuation.separator.binder.hydra
 #                      ^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                  ^ source.hydra
+#                                  ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                   ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                                    ^^^^^^ source.hydra variable.other.escaped.hydra
 #                                          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
@@ -258,7 +266,8 @@
 #                                              ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                                                            ^ source.hydra
 #                                                             ^^ source.hydra variable.other.hydra
-#                                                               ^^^ source.hydra
+#                                                               ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                ^^ source.hydra
 >      it
 #^^^^^^ source.hydra
 #      ^^ source.hydra variable.other.hydra

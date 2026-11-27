@@ -249,9 +249,10 @@
 #      ^^^^^ source.hydra keyword.control.hydra
 #           ^ source.hydra
 #            ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^ source.hydra
-#                        ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                           ^^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
+#                        ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                           ^ source.hydra punctuation.definition.fields.end.hydra
+#                                            ^^ source.hydra
 >      (ifElse
 #^^^^^^^ source.hydra
 #       ^^^^^^ source.hydra variable.other.hydra
@@ -270,9 +271,10 @@
 #        ^^^^^ source.hydra keyword.control.hydra
 #             ^ source.hydra
 #              ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                         ^ source.hydra
-#                          ^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                       ^^^ source.hydra
+#                         ^ source.hydra punctuation.definition.fields.begin.hydra
+#                          ^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                                        ^^ source.hydra
 >        (ifElse
 #^^^^^^^^^ source.hydra
 #         ^^^^^^ source.hydra variable.other.hydra
@@ -291,9 +293,10 @@
 #          ^^^^^ source.hydra keyword.control.hydra
 #               ^ source.hydra
 #                ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                           ^ source.hydra
-#                            ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                               ^^^ source.hydra
+#                           ^ source.hydra punctuation.definition.fields.begin.hydra
+#                            ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                               ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                ^^ source.hydra
 >          (ifElse
 #^^^^^^^^^^^ source.hydra
 #           ^^^^^^ source.hydra variable.other.hydra
@@ -312,9 +315,10 @@
 #            ^^^^^ source.hydra keyword.control.hydra
 #                 ^ source.hydra
 #                  ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                             ^ source.hydra
-#                              ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                 ^^^ source.hydra
+#                             ^ source.hydra punctuation.definition.fields.begin.hydra
+#                              ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                 ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                  ^^ source.hydra
 >            (ifElse
 #^^^^^^^^^^^^^ source.hydra
 #             ^^^^^^ source.hydra variable.other.hydra
@@ -336,13 +340,14 @@
 #                               ^ source.hydra variable.parameter.hydra
 #                                ^ source.hydra punctuation.separator.binder.hydra
 #                                 ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                            ^ source.hydra
+#                                            ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                             ^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                      ^ source.hydra
 #                                                       ^ source.hydra keyword.operator.equals.hydra
 #                                                        ^ source.hydra
 #                                                         ^ source.hydra variable.other.hydra
-#                                                          ^^^ source.hydra
+#                                                          ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                           ^^ source.hydra
 #                                                             ^^^^ source.hydra variable.other.hydra
 #                                                                 ^^ source.hydra
 >              (ifElse
@@ -363,9 +368,10 @@
 #                ^^^^^ source.hydra keyword.control.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                              ^^^ source.hydra
+#                                 ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                  ^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                              ^ source.hydra punctuation.definition.fields.end.hydra
+#                                               ^^ source.hydra
 >                (ifElse
 #^^^^^^^^^^^^^^^^^ source.hydra
 #                 ^^^^^^ source.hydra variable.other.hydra
@@ -384,9 +390,10 @@
 #                  ^^^^^ source.hydra keyword.control.hydra
 #                       ^ source.hydra
 #                        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                              ^^^ source.hydra
+#                                   ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                    ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                              ^ source.hydra punctuation.definition.fields.end.hydra
+#                                               ^^ source.hydra
 >                  (ifElse
 #^^^^^^^^^^^^^^^^^^^ source.hydra
 #                   ^^^^^^ source.hydra variable.other.hydra
@@ -405,9 +412,10 @@
 #                    ^^^^^ source.hydra keyword.control.hydra
 #                         ^ source.hydra
 #                          ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                     ^ source.hydra
-#                                      ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                 ^^^ source.hydra
+#                                     ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                      ^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                 ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                  ^^ source.hydra
 >                    (ifElse
 #^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                     ^^^^^^ source.hydra variable.other.hydra
@@ -429,13 +437,14 @@
 #                                       ^ source.hydra variable.parameter.hydra
 #                                        ^ source.hydra punctuation.separator.binder.hydra
 #                                         ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                    ^ source.hydra
+#                                                    ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                                     ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                ^ source.hydra
 #                                                                 ^ source.hydra keyword.operator.equals.hydra
 #                                                                  ^ source.hydra
 #                                                                   ^ source.hydra variable.other.hydra
-#                                                                    ^^^ source.hydra
+#                                                                    ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                     ^^ source.hydra
 #                                                                       ^^^^ source.hydra variable.other.hydra
 #                                                                           ^^ source.hydra
 >                      (ifElse
@@ -456,9 +465,10 @@
 #                        ^^^^^ source.hydra keyword.control.hydra
 #                             ^ source.hydra
 #                              ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                         ^ source.hydra
-#                                          ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                    ^^^ source.hydra
+#                                         ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                          ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                    ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                     ^^ source.hydra
 >                        (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                         ^^^^^^ source.hydra variable.other.hydra
@@ -480,13 +490,14 @@
 #                                           ^ source.hydra variable.parameter.hydra
 #                                            ^ source.hydra punctuation.separator.binder.hydra
 #                                             ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                        ^ source.hydra
+#                                                        ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                                         ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                   ^ source.hydra
 #                                                                    ^ source.hydra keyword.operator.equals.hydra
 #                                                                     ^ source.hydra
 #                                                                      ^ source.hydra variable.other.hydra
-#                                                                       ^^^ source.hydra
+#                                                                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                        ^^ source.hydra
 #                                                                          ^^^^ source.hydra variable.other.hydra
 #                                                                              ^^ source.hydra
 >                          (ifElse
@@ -507,9 +518,10 @@
 #                            ^^^^^ source.hydra keyword.control.hydra
 #                                 ^ source.hydra
 #                                  ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                             ^ source.hydra
-#                                              ^^^^^^^ source.hydra variable.other.hydra
-#                                                     ^^^ source.hydra
+#                                             ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                              ^^^^^^^ source.hydra variable.other.member.hydra
+#                                                     ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                      ^^ source.hydra
 >                            (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                             ^^^^^^ source.hydra variable.other.hydra
@@ -531,13 +543,14 @@
 #                                               ^ source.hydra variable.parameter.hydra
 #                                                ^ source.hydra punctuation.separator.binder.hydra
 #                                                 ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                            ^ source.hydra
+#                                                            ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                                             ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                        ^ source.hydra
 #                                                                         ^ source.hydra keyword.operator.equals.hydra
 #                                                                          ^ source.hydra
 #                                                                           ^ source.hydra variable.other.hydra
-#                                                                            ^^^ source.hydra
+#                                                                            ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                             ^^ source.hydra
 #                                                                               ^^^ source.hydra variable.other.hydra
 #                                                                                  ^^ source.hydra
 >                              (ifElse
@@ -561,13 +574,14 @@
 #                                                 ^ source.hydra variable.parameter.hydra
 #                                                  ^ source.hydra punctuation.separator.binder.hydra
 #                                                   ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                              ^ source.hydra
+#                                                              ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                                               ^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                       ^ source.hydra
 #                                                                        ^ source.hydra keyword.operator.equals.hydra
 #                                                                         ^ source.hydra
 #                                                                          ^ source.hydra variable.other.hydra
-#                                                                           ^^^ source.hydra
+#                                                                           ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                            ^^ source.hydra
 #                                                                              ^^^ source.hydra variable.other.hydra
 #                                                                                 ^^ source.hydra
 >                                (ifElse
@@ -588,9 +602,10 @@
 #                                  ^^^^^ source.hydra keyword.control.hydra
 #                                       ^ source.hydra
 #                                        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                   ^ source.hydra
-#                                                    ^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                 ^^^ source.hydra
+#                                                   ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                                    ^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                                 ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                  ^^ source.hydra
 >                                  (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                   ^^^^^^ source.hydra variable.other.hydra
@@ -609,9 +624,10 @@
 #                                    ^^^^^ source.hydra keyword.control.hydra
 #                                         ^ source.hydra
 #                                          ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                     ^ source.hydra
-#                                                      ^^^^^^^^^ source.hydra variable.other.hydra
-#                                                               ^^^ source.hydra
+#                                                     ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                                      ^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                               ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                ^^ source.hydra
 >                                    (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                     ^^^^^^ source.hydra variable.other.hydra
@@ -630,9 +646,10 @@
 #                                      ^^^^^ source.hydra keyword.control.hydra
 #                                           ^ source.hydra
 #                                            ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                       ^ source.hydra
-#                                                        ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                  ^^^ source.hydra
+#                                                       ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                                        ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                                  ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                   ^^ source.hydra
 >                                      (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                       ^^^^^^ source.hydra variable.other.hydra
@@ -654,13 +671,14 @@
 #                                                         ^ source.hydra variable.parameter.hydra
 #                                                          ^ source.hydra punctuation.separator.binder.hydra
 #                                                           ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                      ^ source.hydra
+#                                                                      ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                                                       ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                  ^ source.hydra
 #                                                                                   ^ source.hydra keyword.operator.equals.hydra
 #                                                                                    ^ source.hydra
 #                                                                                     ^ source.hydra variable.other.hydra
-#                                                                                      ^^^ source.hydra
+#                                                                                      ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                       ^^ source.hydra
 #                                                                                         ^^^^ source.hydra variable.other.hydra
 #                                                                                             ^^ source.hydra
 >                                        (ifElse
@@ -684,13 +702,14 @@
 #                                                           ^ source.hydra variable.parameter.hydra
 #                                                            ^ source.hydra punctuation.separator.binder.hydra
 #                                                             ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                        ^ source.hydra
+#                                                                        ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                                                         ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                   ^ source.hydra
 #                                                                                    ^ source.hydra keyword.operator.equals.hydra
 #                                                                                     ^ source.hydra
 #                                                                                      ^ source.hydra variable.other.hydra
-#                                                                                       ^^^ source.hydra
+#                                                                                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                        ^^ source.hydra
 #                                                                                          ^^^ source.hydra variable.other.hydra
 #                                                                                             ^^ source.hydra
 >                                          (ifElse
@@ -711,9 +730,10 @@
 #                                            ^^^^^ source.hydra keyword.control.hydra
 #                                                 ^ source.hydra
 #                                                  ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                             ^ source.hydra
-#                                                              ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                 ^^^ source.hydra
+#                                                             ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                                              ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                                                 ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                  ^^ source.hydra
 >                                            (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                             ^^^^^^ source.hydra variable.other.hydra
@@ -732,9 +752,10 @@
 #                                              ^^^^^ source.hydra keyword.control.hydra
 #                                                   ^ source.hydra
 #                                                    ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                               ^ source.hydra
-#                                                                ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                              ^^^ source.hydra
+#                                                               ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                                                ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                                              ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                               ^^ source.hydra
 >                                              (ifElse (equal tag "wrapBody") given(SubtermStep{wrapBody}) none)))))))))))))))))))))
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                               ^^^^^^ source.hydra variable.other.hydra
@@ -750,9 +771,10 @@
 #                                                                             ^^^^^ source.hydra keyword.control.hydra
 #                                                                                  ^ source.hydra
 #                                                                                   ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                                              ^ source.hydra
-#                                                                                               ^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                       ^^^ source.hydra
+#                                                                                              ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                                                                               ^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                                                                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                                        ^^ source.hydra
 #                                                                                                          ^^^^ source.hydra keyword.control.hydra
 #                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 >
@@ -939,9 +961,10 @@
 #      ^^^^^ source.hydra keyword.control.hydra
 #           ^ source.hydra
 #            ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                       ^ source.hydra
-#                        ^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                     ^^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.begin.hydra
+#                        ^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                     ^ source.hydra punctuation.definition.fields.end.hydra
+#                                      ^^ source.hydra
 >      (ifElse
 #^^^^^^^ source.hydra
 #       ^^^^^^ source.hydra variable.other.hydra
@@ -960,9 +983,10 @@
 #        ^^^^^ source.hydra keyword.control.hydra
 #             ^ source.hydra
 #              ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                         ^ source.hydra
-#                          ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                             ^^^ source.hydra
+#                         ^ source.hydra punctuation.definition.fields.begin.hydra
+#                          ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                             ^ source.hydra punctuation.definition.fields.end.hydra
+#                                              ^^ source.hydra
 >        (ifElse
 #^^^^^^^^^ source.hydra
 #         ^^^^^^ source.hydra variable.other.hydra
@@ -981,9 +1005,10 @@
 #          ^^^^^ source.hydra keyword.control.hydra
 #               ^ source.hydra
 #                ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                           ^ source.hydra
-#                            ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                               ^^^ source.hydra
+#                           ^ source.hydra punctuation.definition.fields.begin.hydra
+#                            ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                               ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                ^^ source.hydra
 >          (ifElse
 #^^^^^^^^^^^ source.hydra
 #           ^^^^^^ source.hydra variable.other.hydra
@@ -1002,9 +1027,10 @@
 #            ^^^^^ source.hydra keyword.control.hydra
 #                 ^ source.hydra
 #                  ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                             ^ source.hydra
-#                              ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                         ^^^ source.hydra
+#                             ^ source.hydra punctuation.definition.fields.begin.hydra
+#                              ^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                         ^ source.hydra punctuation.definition.fields.end.hydra
+#                                          ^^ source.hydra
 >            (ifElse
 #^^^^^^^^^^^^^ source.hydra
 #             ^^^^^^ source.hydra variable.other.hydra
@@ -1023,9 +1049,10 @@
 #              ^^^^^ source.hydra keyword.control.hydra
 #                   ^ source.hydra
 #                    ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                               ^ source.hydra
-#                                ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                          ^^^ source.hydra
+#                               ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                          ^ source.hydra punctuation.definition.fields.end.hydra
+#                                           ^^ source.hydra
 >              (ifElse
 #^^^^^^^^^^^^^^^ source.hydra
 #               ^^^^^^ source.hydra variable.other.hydra
@@ -1044,9 +1071,10 @@
 #                ^^^^^ source.hydra keyword.control.hydra
 #                     ^ source.hydra
 #                      ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                 ^ source.hydra
-#                                  ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                             ^^^ source.hydra
+#                                 ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                  ^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                             ^ source.hydra punctuation.definition.fields.end.hydra
+#                                              ^^ source.hydra
 >                (ifElse
 #^^^^^^^^^^^^^^^^^ source.hydra
 #                 ^^^^^^ source.hydra variable.other.hydra
@@ -1065,9 +1093,10 @@
 #                  ^^^^^ source.hydra keyword.control.hydra
 #                       ^ source.hydra
 #                        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                   ^ source.hydra
-#                                    ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                              ^^^ source.hydra
+#                                   ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                    ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                              ^ source.hydra punctuation.definition.fields.end.hydra
+#                                               ^^ source.hydra
 >                  (ifElse
 #^^^^^^^^^^^^^^^^^^^ source.hydra
 #                   ^^^^^^ source.hydra variable.other.hydra
@@ -1086,9 +1115,10 @@
 #                    ^^^^^ source.hydra keyword.control.hydra
 #                         ^ source.hydra
 #                          ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                     ^ source.hydra
-#                                      ^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                      ^^^ source.hydra
+#                                     ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                      ^^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                      ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                       ^^ source.hydra
 >                    (ifElse
 #^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                     ^^^^^^ source.hydra variable.other.hydra
@@ -1107,9 +1137,10 @@
 #                      ^^^^^ source.hydra keyword.control.hydra
 #                           ^ source.hydra
 #                            ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^ source.hydra
-#                                        ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                      ^^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                        ^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                      ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                       ^^ source.hydra
 >                      (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                       ^^^^^^ source.hydra variable.other.hydra
@@ -1128,9 +1159,10 @@
 #                        ^^^^^ source.hydra keyword.control.hydra
 #                             ^ source.hydra
 #                              ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                         ^ source.hydra
-#                                          ^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                     ^^^ source.hydra
+#                                         ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                          ^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                     ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                      ^^ source.hydra
 >                        (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                         ^^^^^^ source.hydra variable.other.hydra
@@ -1149,9 +1181,10 @@
 #                          ^^^^^ source.hydra keyword.control.hydra
 #                               ^ source.hydra
 #                                ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                           ^ source.hydra
-#                                            ^^^^^^^ source.hydra variable.other.hydra
-#                                                   ^^^ source.hydra
+#                                           ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                            ^^^^^^^ source.hydra variable.other.member.hydra
+#                                                   ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                    ^^ source.hydra
 >                          (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                           ^^^^^^ source.hydra variable.other.hydra
@@ -1170,9 +1203,10 @@
 #                            ^^^^^ source.hydra keyword.control.hydra
 #                                 ^ source.hydra
 #                                  ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                             ^ source.hydra
-#                                              ^^^^^^^^^ source.hydra variable.other.hydra
-#                                                       ^^^ source.hydra
+#                                             ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                              ^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                        ^^ source.hydra
 >                            (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                             ^^^^^^ source.hydra variable.other.hydra
@@ -1191,9 +1225,10 @@
 #                              ^^^^^ source.hydra keyword.control.hydra
 #                                   ^ source.hydra
 #                                    ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                               ^ source.hydra
-#                                                ^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                               ^^^ source.hydra
+#                                               ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                                ^^^^^^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                               ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                ^^ source.hydra
 >                              (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                               ^^^^^^ source.hydra variable.other.hydra
@@ -1212,9 +1247,10 @@
 #                                ^^^^^ source.hydra keyword.control.hydra
 #                                     ^ source.hydra
 #                                      ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                 ^ source.hydra
-#                                                  ^^^^^^^^^ source.hydra variable.other.hydra
-#                                                           ^^^ source.hydra
+#                                                 ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                                  ^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                           ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                            ^^ source.hydra
 >                                (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                 ^^^^^^ source.hydra variable.other.hydra
@@ -1233,9 +1269,10 @@
 #                                  ^^^^^ source.hydra keyword.control.hydra
 #                                       ^ source.hydra
 #                                        ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                   ^ source.hydra
-#                                                    ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                              ^^^ source.hydra
+#                                                   ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                                    ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                              ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                               ^^ source.hydra
 >                                  (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                   ^^^^^^ source.hydra variable.other.hydra
@@ -1257,13 +1294,14 @@
 #                                                     ^ source.hydra variable.parameter.hydra
 #                                                      ^ source.hydra punctuation.separator.binder.hydra
 #                                                       ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                  ^ source.hydra
+#                                                                  ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                                                   ^^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                              ^ source.hydra
 #                                                                               ^ source.hydra keyword.operator.equals.hydra
 #                                                                                ^ source.hydra
 #                                                                                 ^ source.hydra variable.other.hydra
-#                                                                                  ^^^ source.hydra
+#                                                                                  ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                   ^^ source.hydra
 #                                                                                     ^^^^ source.hydra variable.other.hydra
 #                                                                                         ^^ source.hydra
 >                                    (ifElse
@@ -1284,9 +1322,10 @@
 #                                      ^^^^^ source.hydra keyword.control.hydra
 #                                           ^ source.hydra
 #                                            ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                       ^ source.hydra
-#                                                        ^^^^^^^^^^ source.hydra variable.other.hydra
-#                                                                  ^^^ source.hydra
+#                                                       ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                                        ^^^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                                  ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                   ^^ source.hydra
 >                                      (ifElse
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                       ^^^^^^ source.hydra variable.other.hydra
@@ -1308,13 +1347,14 @@
 #                                                         ^ source.hydra variable.parameter.hydra
 #                                                          ^ source.hydra punctuation.separator.binder.hydra
 #                                                           ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                      ^ source.hydra
+#                                                                      ^ source.hydra punctuation.definition.fields.begin.hydra
 #                                                                       ^^^^^^^^^^ source.hydra variable.other.member.hydra
 #                                                                                 ^ source.hydra
 #                                                                                  ^ source.hydra keyword.operator.equals.hydra
 #                                                                                   ^ source.hydra
 #                                                                                    ^ source.hydra variable.other.hydra
-#                                                                                     ^^^ source.hydra
+#                                                                                     ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                      ^^ source.hydra
 #                                                                                        ^^^^ source.hydra variable.other.hydra
 #                                                                                            ^^ source.hydra
 >                                        (ifElse (equal tag "wrapBody") given(SubtypeStep{wrapBody}) none))))))))))))))))))
@@ -1332,9 +1372,10 @@
 #                                                                       ^^^^^ source.hydra keyword.control.hydra
 #                                                                            ^ source.hydra
 #                                                                             ^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                                                                        ^ source.hydra
-#                                                                                         ^^^^^^^^ source.hydra variable.other.hydra
-#                                                                                                 ^^^ source.hydra
+#                                                                                        ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                                                                         ^^^^^^^^ source.hydra variable.other.member.hydra
+#                                                                                                 ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                                                  ^^ source.hydra
 #                                                                                                    ^^^^ source.hydra keyword.control.hydra
 #                                                                                                        ^^^^^^^^^^^^^^^^^^^ source.hydra
 >

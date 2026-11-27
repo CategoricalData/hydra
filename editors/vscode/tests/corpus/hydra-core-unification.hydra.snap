@@ -155,7 +155,7 @@
 #                       ^ source.hydra variable.parameter.hydra
 #                        ^ source.hydra punctuation.separator.binder.hydra
 #                         ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >          `left` = l,
 #^^^^^^^^^^ source.hydra
 #          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
@@ -189,7 +189,8 @@
 #                                                 ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                                                  ^ source.hydra
 #                                                   ^^^^^^^ source.hydra variable.other.hydra
-#                                                          ^^ source.hydra
+#                                                          ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                           ^ source.hydra
 #                                                            ^^ source.hydra keyword.control.hydra
 >    let cannotUnify := left(UnificationError{
 #^^^^ source.hydra
@@ -202,7 +203,7 @@
 #                       ^^^^ source.hydra keyword.control.hydra
 #                           ^ source.hydra
 #                            ^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                            ^^ source.hydra
+#                                            ^ source.hydra punctuation.definition.fields.begin.hydra
 >        leftType = sleft,
 #^^^^^^^^ source.hydra
 #        ^^^^^^^^ source.hydra variable.other.member.hydra
@@ -227,10 +228,12 @@
 #                 ^ source.hydra
 #                  ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >            (strings.concat2
-#^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^ source.hydra
+#            ^ source.hydra
 #             ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >              (strings.concat2
-#^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^ source.hydra
+#              ^ source.hydra
 #               ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >                "cannot unify "
 #^^^^^^^^^^^^^^^^ source.hydra
@@ -238,27 +241,32 @@
 #                 ^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 >                (`type` sleft))
-#^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^ source.hydra
+#                ^ source.hydra
 #                 ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                  ^^^^ source.hydra variable.other.escaped.hydra
 #                      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                       ^ source.hydra
 #                        ^^^^^ source.hydra variable.other.hydra
-#                             ^^^ source.hydra
+#                             ^ source.hydra
+#                              ^ source.hydra
 >              " with ")
 #^^^^^^^^^^^^^^ source.hydra
 #              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #               ^^^^^^ source.hydra string.quoted.double.hydra
 #                     ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                      ^^ source.hydra
+#                      ^ source.hydra
 >            (`type` sright)}) in
-#^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^ source.hydra
+#            ^ source.hydra
 #             ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #              ^^^^ source.hydra variable.other.escaped.hydra
 #                  ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                   ^ source.hydra
 #                    ^^^^^^ source.hydra variable.other.hydra
-#                          ^^^^ source.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra punctuation.definition.fields.end.hydra
+#                            ^^ source.hydra
 #                              ^^ source.hydra keyword.control.hydra
 >    let assertEqual := ifElse (equal sleft sright) right([]) cannotUnify in
 #^^^^ source.hydra
@@ -1500,7 +1508,7 @@
 #              ^^^^ source.hydra keyword.control.hydra
 #                  ^ source.hydra
 #                   ^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                   ^^ source.hydra
+#                                   ^ source.hydra punctuation.definition.fields.begin.hydra
 >                leftType = sleft,
 #^^^^^^^^^^^^^^^^ source.hydra
 #                ^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1525,61 +1533,71 @@
 #                         ^ source.hydra
 #                          ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >                    (strings.concat2
-#^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                    ^ source.hydra
 #                     ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >                      (strings.concat2
-#^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                      ^ source.hydra
 #                       ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >                        (strings.concat2
-#^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                        ^ source.hydra
 #                         ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >                          (strings.concat2
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                          ^ source.hydra
 #                           ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >                            (strings.concat2 "Variable " (Name[] v))
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                            ^ source.hydra
 #                             ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                                            ^ source.hydra
 #                                             ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                                              ^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                        ^^ source.hydra
+#                                                        ^ source.hydra
+#                                                         ^ source.hydra
 #                                                          ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                                              ^ source.hydra punctuation.definition.projection.begin.hydra
 #                                                               ^ source.hydra punctuation.definition.projection.end.hydra
 #                                                                ^ source.hydra
 #                                                                 ^ source.hydra variable.other.hydra
-#                                                                  ^^^ source.hydra
+#                                                                  ^ source.hydra
+#                                                                   ^ source.hydra
 >                            " appears free in type ")
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                   ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                                    ^^ source.hydra
+#                                                    ^ source.hydra
 >                          (`type` t))
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                          ^ source.hydra
 #                           ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                            ^^^^ source.hydra variable.other.escaped.hydra
 #                                ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                                 ^ source.hydra
 #                                  ^ source.hydra variable.other.hydra
-#                                   ^^^ source.hydra
+#                                   ^ source.hydra
+#                                    ^ source.hydra
 >                        " (")
 #^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                         ^^ source.hydra string.quoted.double.hydra
 #                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                            ^^ source.hydra
+#                            ^ source.hydra
 >                      comment)
 #^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                      ^^^^^^^ source.hydra variable.other.hydra
-#                             ^^ source.hydra
+#                             ^ source.hydra
 >                    ")"})
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                     ^ source.hydra string.quoted.double.hydra
 #                      ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                       ^^^ source.hydra
+#                       ^ source.hydra punctuation.definition.fields.end.hydra
+#                        ^^ source.hydra
 >              (bind v t) in
 #^^^^^^^^^^^^^^^ source.hydra
 #               ^^^^ source.hydra variable.other.hydra
@@ -1719,7 +1737,7 @@
 #                  ^^^^ source.hydra keyword.control.hydra
 #                      ^ source.hydra
 #                       ^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                       ^^ source.hydra
+#                                       ^ source.hydra punctuation.definition.fields.begin.hydra
 >                    leftType = sleft,
 #^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                    ^^^^^^^^ source.hydra variable.other.member.hydra
@@ -1744,19 +1762,24 @@
 #                             ^ source.hydra
 #                              ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >                        (strings.concat2
-#^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                        ^ source.hydra
 #                         ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >                          (strings.concat2
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                          ^ source.hydra
 #                           ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >                            (strings.concat2
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                            ^ source.hydra
 #                             ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >                              (strings.concat2
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                              ^ source.hydra
 #                               ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >                                (strings.concat2
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                ^ source.hydra
 #                                 ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >                                  "Cannot unify schema name "
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
@@ -1764,43 +1787,48 @@
 #                                   ^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 >                                  (Name[] v))
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                  ^ source.hydra
 #                                   ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                       ^ source.hydra punctuation.definition.projection.begin.hydra
 #                                        ^ source.hydra punctuation.definition.projection.end.hydra
 #                                         ^ source.hydra
 #                                          ^ source.hydra variable.other.hydra
-#                                           ^^^ source.hydra
+#                                           ^ source.hydra
+#                                            ^ source.hydra
 >                                " with type ")
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                                 ^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                             ^^ source.hydra
+#                                             ^ source.hydra
 >                              (`type` t))
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                              ^ source.hydra
 #                               ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                                ^^^^ source.hydra variable.other.escaped.hydra
 #                                    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
 #                                     ^ source.hydra
 #                                      ^ source.hydra variable.other.hydra
-#                                       ^^^ source.hydra
+#                                       ^ source.hydra
+#                                        ^ source.hydra
 >                            " (")
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                            ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                             ^^ source.hydra string.quoted.double.hydra
 #                               ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                ^^ source.hydra
+#                                ^ source.hydra
 >                          comment)
 #^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                          ^^^^^^^ source.hydra variable.other.hydra
-#                                 ^^ source.hydra
+#                                 ^ source.hydra
 >                        ")"})
 #^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                         ^ source.hydra string.quoted.double.hydra
 #                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                           ^^^ source.hydra
+#                           ^ source.hydra punctuation.definition.fields.end.hydra
+#                            ^^ source.hydra
 >                  (tryBinding v t)) in
 #^^^^^^^^^^^^^^^^^^^ source.hydra
 #                   ^^^^^^^^^^ source.hydra variable.other.hydra
@@ -1992,7 +2020,7 @@
 #                          ^^^^ source.hydra keyword.control.hydra
 #                              ^ source.hydra
 #                               ^^^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                               ^^ source.hydra
+#                                               ^ source.hydra punctuation.definition.fields.begin.hydra
 >                            leftType = sleft,
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                            ^^^^^^^^ source.hydra variable.other.member.hydra
@@ -2017,19 +2045,24 @@
 #                                     ^ source.hydra
 #                                      ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >                                (strings.concat2
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                ^ source.hydra
 #                                 ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >                                  (strings.concat2
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                  ^ source.hydra
 #                                   ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >                                    (strings.concat2
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                    ^ source.hydra
 #                                     ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >                                      (strings.concat2
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                      ^ source.hydra
 #                                       ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >                                        (strings.concat2
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                        ^ source.hydra
 #                                         ^^^^^^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 >                                          "Attempted to unify schema names "
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
@@ -2037,43 +2070,48 @@
 #                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra string.quoted.double.hydra
 #                                                                           ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 >                                          (Name[] name))
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                          ^ source.hydra
 #                                           ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                               ^ source.hydra punctuation.definition.projection.begin.hydra
 #                                                ^ source.hydra punctuation.definition.projection.end.hydra
 #                                                 ^ source.hydra
 #                                                  ^^^^ source.hydra variable.other.hydra
-#                                                      ^^^ source.hydra
+#                                                      ^ source.hydra
+#                                                       ^ source.hydra
 >                                        " and ")
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                        ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                                         ^^^^^ source.hydra string.quoted.double.hydra
 #                                              ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                               ^^ source.hydra
+#                                               ^ source.hydra
 >                                      (Name[] name2))
-#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                                      ^ source.hydra
 #                                       ^^^^ source.hydra entity.name.type.nominal.hydra
 #                                           ^ source.hydra punctuation.definition.projection.begin.hydra
 #                                            ^ source.hydra punctuation.definition.projection.end.hydra
 #                                             ^ source.hydra
 #                                              ^^^^^ source.hydra variable.other.hydra
-#                                                   ^^^ source.hydra
+#                                                   ^ source.hydra
+#                                                    ^ source.hydra
 >                                    " (")
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                    ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                                     ^^ source.hydra string.quoted.double.hydra
 #                                       ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                        ^^ source.hydra
+#                                        ^ source.hydra
 >                                  comment)
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                  ^^^^^^^ source.hydra variable.other.hydra
-#                                         ^^ source.hydra
+#                                         ^ source.hydra
 >                                ")"})
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                                ^ source.hydra string.quoted.double.hydra punctuation.definition.string.begin.hydra
 #                                 ^ source.hydra string.quoted.double.hydra
 #                                  ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
-#                                   ^^^ source.hydra
+#                                   ^ source.hydra punctuation.definition.fields.end.hydra
+#                                    ^^ source.hydra
 >                          (bind name2 sleft))
 #^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.hydra
 #                           ^^^^ source.hydra variable.other.hydra
@@ -2195,7 +2233,7 @@
 #                            ^ source.hydra variable.parameter.hydra
 #                             ^ source.hydra punctuation.separator.binder.hydra
 #                              ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                            ^^ source.hydra
+#                                            ^ source.hydra punctuation.definition.fields.begin.hydra
 >          `left` = l,
 #^^^^^^^^^^ source.hydra
 #          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
@@ -2223,7 +2261,7 @@
 #                  ^ source.hydra keyword.operator.equals.hydra
 #                   ^ source.hydra
 #                    ^^^^^^^ source.hydra variable.other.hydra
-#                           ^^ source.hydra
+#                           ^ source.hydra punctuation.definition.fields.end.hydra
 >    in unifyTypeConstraints cx schemaTypes (lists.zipWith toConstraint l r)
 #^^^^ source.hydra
 #    ^^ source.hydra keyword.control.hydra
@@ -2279,7 +2317,7 @@
 >      [TypeConstraint{`left` = l, `right` = r, comment = comment}]
 #^^^^^^^ source.hydra
 #       ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                     ^ source.hydra
+#                     ^ source.hydra punctuation.definition.fields.begin.hydra
 #                      ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
 #                       ^^^^ source.hydra variable.other.escaped.hydra
 #                           ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
@@ -2301,7 +2339,8 @@
 #                                                       ^ source.hydra keyword.operator.equals.hydra
 #                                                        ^ source.hydra
 #                                                         ^^^^^^^ source.hydra variable.other.hydra
-#                                                                ^^^ source.hydra
+#                                                                ^ source.hydra punctuation.definition.fields.end.hydra
+#                                                                 ^^ source.hydra
 >
 >## Determine whether a type variable appears within a type expression.No distinction is made between free and bound type variables.
 #^^ source.hydra comment.block.documentation.hydra
@@ -2379,9 +2418,10 @@
 #       ^^^^^^^^^^^^ source.hydra variable.other.hydra
 #                   ^ source.hydra
 #                    ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
-#                                  ^ source.hydra
-#                                   ^^^ source.hydra variable.other.hydra
-#                                      ^^ source.hydra
+#                                  ^ source.hydra punctuation.definition.fields.begin.hydra
+#                                   ^^^ source.hydra variable.other.member.hydra
+#                                      ^ source.hydra punctuation.definition.fields.end.hydra
+#                                       ^ source.hydra
 #                                        ^^^^^^^ source.hydra variable.other.hydra
 #                                               ^ source.hydra
 #                                                ^^^^^ source.hydra constant.language.boolean.hydra
