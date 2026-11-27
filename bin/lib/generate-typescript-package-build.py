@@ -139,8 +139,16 @@ def render_package_json(
 """
 
 
+# Overlay entry points that import third-party packages absent from the published npm package (#836:
+# the language server's vscode-languageserver entry point is bundled by editors/vscode, not compiled here).
+EXTRA_TSCONFIG_EXCLUDES: dict[str, list[str]] = {
+    "hydra-lsp": ["src/main/typescript/hydra/lsp/overlay/typescript/main.ts"],
+}
+
+
 def render_tsconfig_build(name: str) -> str:
     """tsconfig.build.json — emits compiled JS + .d.ts into dist/ subdir."""
+    extra_excludes = "".join(f'\n    "{e}",' for e in EXTRA_TSCONFIG_EXCLUDES.get(name, []))
     return f"""\
 // Generated file. Do not edit.
 // Used by publish-npm.sh to compile dist/typescript/{name}/src/main/typescript
@@ -161,7 +169,7 @@ def render_tsconfig_build(name: str) -> str:
   }},
   "include": ["src/main/typescript/**/*.ts"],
   "exclude": [
-    "src/main/typescript/hydra/core/bootstrap-cli.ts",
+    "src/main/typescript/hydra/core/bootstrap-cli.ts",{extra_excludes}
     "src/test"
   ]
 }}

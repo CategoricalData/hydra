@@ -159,6 +159,9 @@ case "$PKG" in
                 echo "  Symlinked hydra-java/java/ into $PKG for cross-coder import"
             fi
         fi
+        # Overlay hand-written package source (e.g. #836's hydra-lsp server shim) onto the generated tree.
+        # A no-op for packages without overlay/typescript/<pkg>/src.
+        "$HYDRA_ROOT/bin/apply-assembly-plan.sh" typescript "$PKG" --dist-root "$HYDRA_ROOT/dist/typescript"
         generate_npm_build "$PKG"
         ;;
 esac
