@@ -19,14 +19,14 @@
         "name": "hydra.core.print.posix.regex.alternation",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"list": {"list": {"variable": "hydra.core.regex.Quantified"}}}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "hydra.core.regex.RegexSequence"}}, "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "alt",
-                "domain": {"list": {"list": {"variable": "hydra.core.regex.Quantified"}}},
+                "domain": {"list": {"variable": "hydra.core.regex.RegexSequence"}},
                 "body": {
                   "application": {
                     "function": {"application": {"function": {"variable": "hydra.core.lib.strings.join"}, "argument": {"literal": {"string": "|"}}}},
@@ -37,7 +37,7 @@
                             "function": {
                               "typeApplication": {
                                 "body": {
-                                  "typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"list": {"variable": "hydra.core.regex.Quantified"}}}},
+                                  "typeApplication": {"body": {"variable": "hydra.core.lib.lists.map"}, "type": {"variable": "hydra.core.regex.RegexSequence"}}},
                                 "type": {"literal": "string"}}},
                             "argument": {"variable": "hydra.core.print.posix.regex.regexSequence"}}},
                         "argument": {"variable": "alt"}}}}}}},
@@ -110,7 +110,7 @@
                             "handler": {
                               "lambda": {
                                 "parameter": "g",
-                                "domain": {"list": {"list": {"variable": "hydra.core.regex.Quantified"}}},
+                                "domain": {"variable": "hydra.core.regex.Alternation"},
                                 "body": {
                                   "application": {
                                     "function": {"variable": "hydra.core.lib.strings.concat"},
@@ -585,14 +585,14 @@
         "name": "hydra.core.print.posix.regex.printRegex",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"list": {"list": {"variable": "hydra.core.regex.Quantified"}}}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": {"list": {"variable": "hydra.core.regex.RegexSequence"}}, "isLazy": false}],
           "result": {"type": {"literal": "string"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "r",
-                "domain": {"list": {"list": {"variable": "hydra.core.regex.Quantified"}}},
+                "domain": {"list": {"variable": "hydra.core.regex.RegexSequence"}},
                 "body": {"application": {"function": {"variable": "hydra.core.print.posix.regex.alternation"}, "argument": {"variable": "r"}}}}},
             "annotation": {
               "map": [

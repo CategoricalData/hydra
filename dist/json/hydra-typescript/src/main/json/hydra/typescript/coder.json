@@ -6339,7 +6339,7 @@
                                                                 "argument": {
                                                                   "lambda": {
                                                                     "parameter": "members",
-                                                                    "domain": {"list": {"variable": "hydra.typescript.syntax.PropertySignature"}},
+                                                                    "domain": {"variable": "hydra.typescript.syntax.ObjectTypeExpression"},
                                                                     "body": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -6488,7 +6488,7 @@
                                                                 "argument": {
                                                                   "lambda": {
                                                                     "parameter": "arms",
-                                                                    "domain": {"list": {"variable": "hydra.typescript.syntax.TypeExpression"}},
+                                                                    "domain": {"variable": "hydra.typescript.syntax.UnionTypeExpression"},
                                                                     "body": {
                                                                       "typeApplication": {
                                                                         "body": {
@@ -7099,7 +7099,7 @@
                                                                                             "argument": {
                                                                                               "lambda": {
                                                                                                 "parameter": "arms",
-                                                                                                "domain": {"list": {"variable": "hydra.typescript.syntax.TypeExpression"}},
+                                                                                                "domain": {"variable": "hydra.typescript.syntax.UnionTypeExpression"},
                                                                                                 "body": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {
@@ -12621,14 +12621,14 @@
         "name": "hydra.typescript.coder.tsTuple",
         "signature": {
           "typeParameters": [],
-          "parameters": [{"name": "arg0", "type": {"list": {"variable": "hydra.typescript.syntax.TypeExpression"}}, "isLazy": false}],
+          "parameters": [{"name": "arg0", "type": {"variable": "hydra.typescript.syntax.TupleTypeExpression"}, "isLazy": false}],
           "result": {"type": {"variable": "hydra.typescript.syntax.TypeExpression"}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "ts",
-                "domain": {"list": {"variable": "hydra.typescript.syntax.TypeExpression"}},
+                "domain": {"variable": "hydra.typescript.syntax.TupleTypeExpression"},
                 "body": {
                   "inject": {"typeName": "hydra.typescript.syntax.TypeExpression", "field": {"name": "tuple", "term": {"variable": "ts"}}}}}},
             "annotation": {"map": [{"key": {"variable": "description"}, "value": {"literal": {"string": "A tuple type"}}}]}}}}},

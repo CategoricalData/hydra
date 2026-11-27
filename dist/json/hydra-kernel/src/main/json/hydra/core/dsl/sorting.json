@@ -315,7 +315,8 @@
           "parameters": [
             {
               "name": "arg0",
-              "type": {"application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"literal": {"integer": "int32"}}}},
+              "type": {
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.topology.Vertex"}}},
               "isLazy": false},
             {
               "name": "arg1",
@@ -327,13 +328,16 @@
               "application": {
                 "function": {"variable": "hydra.core.typed.TypedTerm"},
                 "argument": {
-                  "pair": {"first": {"list": {"literal": {"integer": "int32"}}}, "second": {"variable": "hydra.core.topology.TarjanState"}}}}}}},
+                  "pair": {
+                    "first": {"list": {"variable": "hydra.core.topology.Vertex"}},
+                    "second": {"variable": "hydra.core.topology.TarjanState"}}}}}}},
         "body": {
           "annotated": {
             "body": {
               "lambda": {
                 "parameter": "arg0",
-                "domain": {"application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"literal": {"integer": "int32"}}}},
+                "domain": {
+                  "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.topology.Vertex"}}},
                 "body": {
                   "lambda": {
                     "parameter": "arg1",
@@ -475,11 +479,13 @@
               "type": {
                 "application": {
                   "function": {"variable": "hydra.core.typed.TypedTerm"},
-                  "argument": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"list": {"literal": {"integer": "int32"}}}}}}},
+                  "argument": {
+                    "map": {"keys": {"variable": "hydra.core.topology.Vertex"}, "values": {"list": {"variable": "hydra.core.topology.Vertex"}}}}}},
               "isLazy": false},
             {
               "name": "arg1",
-              "type": {"application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"literal": {"integer": "int32"}}}},
+              "type": {
+                "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.topology.Vertex"}}},
               "isLazy": false},
             {
               "name": "arg2",
@@ -497,11 +503,13 @@
                 "domain": {
                   "application": {
                     "function": {"variable": "hydra.core.typed.TypedTerm"},
-                    "argument": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"list": {"literal": {"integer": "int32"}}}}}}},
+                    "argument": {
+                      "map": {"keys": {"variable": "hydra.core.topology.Vertex"}, "values": {"list": {"variable": "hydra.core.topology.Vertex"}}}}}},
                 "body": {
                   "lambda": {
                     "parameter": "arg1",
-                    "domain": {"application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"literal": {"integer": "int32"}}}},
+                    "domain": {
+                      "application": {"function": {"variable": "hydra.core.typed.TypedTerm"}, "argument": {"variable": "hydra.core.topology.Vertex"}}},
                     "body": {
                       "lambda": {
                         "parameter": "arg2",
@@ -574,13 +582,14 @@
               "type": {
                 "application": {
                   "function": {"variable": "hydra.core.typed.TypedTerm"},
-                  "argument": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"list": {"literal": {"integer": "int32"}}}}}}},
+                  "argument": {
+                    "map": {"keys": {"variable": "hydra.core.topology.Vertex"}, "values": {"list": {"variable": "hydra.core.topology.Vertex"}}}}}},
               "isLazy": false}],
           "result": {
             "type": {
               "application": {
                 "function": {"variable": "hydra.core.typed.TypedTerm"},
-                "argument": {"list": {"list": {"literal": {"integer": "int32"}}}}}}}},
+                "argument": {"list": {"list": {"variable": "hydra.core.topology.Vertex"}}}}}}},
         "body": {
           "annotated": {
             "body": {
@@ -589,7 +598,8 @@
                 "domain": {
                   "application": {
                     "function": {"variable": "hydra.core.typed.TypedTerm"},
-                    "argument": {"map": {"keys": {"literal": {"integer": "int32"}}, "values": {"list": {"literal": {"integer": "int32"}}}}}}},
+                    "argument": {
+                      "map": {"keys": {"variable": "hydra.core.topology.Vertex"}, "values": {"list": {"variable": "hydra.core.topology.Vertex"}}}}}},
                 "body": {
                   "wrap": {
                     "typeName": "hydra.core.typed.TypedTerm",

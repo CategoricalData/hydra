@@ -169,14 +169,12 @@
                             "function": {
                               "typeApplication": {
                                 "body": {
-                                  "typeApplication": {
-                                    "body": {"variable": "hydra.core.parsers.map"},
-                                    "type": {"list": {"list": {"variable": "hydra.core.regex.Quantified"}}}}},
+                                  "typeApplication": {"body": {"variable": "hydra.core.parsers.map"}, "type": {"variable": "hydra.core.regex.Alternation"}}},
                                 "type": {"variable": "hydra.core.regex.Atom"}}},
                             "argument": {
                               "lambda": {
                                 "parameter": "g",
-                                "domain": {"list": {"list": {"variable": "hydra.core.regex.Quantified"}}},
+                                "domain": {"variable": "hydra.core.regex.Alternation"},
                                 "body": {"inject": {"typeName": "hydra.core.regex.Atom", "field": {"name": "group", "term": {"variable": "g"}}}}}}}},
                         "argument": {
                           "application": {
@@ -190,7 +188,7 @@
                                           "typeApplication": {
                                             "body": {"typeApplication": {"body": {"variable": "hydra.core.parsers.between"}, "type": {"literal": {"integer": "int32"}}}},
                                             "type": {"literal": {"integer": "int32"}}}},
-                                        "type": {"list": {"list": {"variable": "hydra.core.regex.Quantified"}}}}},
+                                        "type": {"variable": "hydra.core.regex.Alternation"}}},
                                     "argument": {
                                       "application": {"function": {"variable": "hydra.core.parsers.char"}, "argument": {"literal": {"integer": {"int32": 40}}}}}}},
                                 "argument": {
@@ -198,9 +196,7 @@
                             "argument": {
                               "application": {
                                 "function": {
-                                  "typeApplication": {
-                                    "body": {"variable": "hydra.core.parsers.lazy"},
-                                    "type": {"list": {"list": {"variable": "hydra.core.regex.Quantified"}}}}},
+                                  "typeApplication": {"body": {"variable": "hydra.core.parsers.lazy"}, "type": {"variable": "hydra.core.regex.Alternation"}}},
                                 "argument": {"lambda": {"parameter": "_", "domain": "unit", "body": {"variable": "hydra.core.parse.regex.alternation"}}}}}}}}},
                     {"variable": "hydra.core.parse.regex.characterClass"},
                     {
