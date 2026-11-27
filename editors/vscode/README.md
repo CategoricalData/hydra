@@ -26,10 +26,14 @@ source — and any `.hydra` you write — proper highlighting on first contact.
   completion to insert `λ`, `→`, `∀`. Snippets for the common forms (module header,
   definition, lambda, `let … in`, `cases`) are included too.
 
-Language intelligence (diagnostics, go-to-definition, hover, name completion) is **not**
-part of this extension; it belongs to the Hydra language server
-([#808](https://github.com/CategoricalData/hydra/issues/808)). The extension is built so it
-can later start that server.
+Language intelligence comes from the Hydra language server
+([#808](https://github.com/CategoricalData/hydra/issues/808)), whose first increment
+([#836](https://github.com/CategoricalData/hydra/issues/836)) the extension starts over stdio when the
+bundled server (`out/server.cjs`) is present.
+Today the server implements **document formatting** (canonical form, via `Format Document`);
+diagnostics are wired but not yet produced (they follow the module source-span work in #834).
+Go-to-definition, hover and name completion are later increments.
+Without the bundle the extension still provides highlighting, snippets and Unicode input.
 
 ## Unicode input
 
@@ -82,6 +86,8 @@ globally and opt a hydra-synth project back to JavaScript, or the reverse.
 ```sh
 npm install
 npm run compile        # typecheck + build the extension host (out/)
+npm run bundle:server  # bundle the generated hydra-lsp server into out/server.cjs (needs dist/typescript/hydra-lsp)
+npm run test:server    # LSP stdio smoke test against out/server.cjs
 npm run test:grammar   # scope-assertion tests (tests/scopes/*.hydra)
 npm run test:corpus    # snapshot tests against the kernel's own .hydra sources
 npm test               # both
