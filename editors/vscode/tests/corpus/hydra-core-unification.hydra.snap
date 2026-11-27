@@ -1607,21 +1607,21 @@
 #                      ^ source.hydra variable.other.hydra
 #                       ^^ source.hydra
 #                         ^^ source.hydra keyword.control.hydra
->        let isNominalSchemaType := λts.cases(Type){
+>        let isOpaqueSchemaType := λts.cases(Type){
 #^^^^^^^^ source.hydra
 #        ^^^ source.hydra keyword.control.hydra
 #           ^ source.hydra
-#            ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                               ^ source.hydra
-#                                ^^ source.hydra keyword.operator.assignment.hydra
-#                                  ^ source.hydra
-#                                   ^ source.hydra storage.type.function.lambda.hydra
-#                                    ^^ source.hydra variable.parameter.hydra
-#                                      ^ source.hydra punctuation.separator.binder.hydra
-#                                       ^^^^^ source.hydra keyword.control.hydra
-#                                            ^ source.hydra
-#                                             ^^^^ source.hydra entity.name.type.hydra
-#                                                 ^^^ source.hydra
+#            ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                              ^ source.hydra
+#                               ^^ source.hydra keyword.operator.assignment.hydra
+#                                 ^ source.hydra
+#                                  ^ source.hydra storage.type.function.lambda.hydra
+#                                   ^^ source.hydra variable.parameter.hydra
+#                                     ^ source.hydra punctuation.separator.binder.hydra
+#                                      ^^^^^ source.hydra keyword.control.hydra
+#                                           ^ source.hydra
+#                                            ^^^^ source.hydra entity.name.type.hydra
+#                                                ^^^ source.hydra
 >              `record` = λ`_`.true,
 #^^^^^^^^^^^^^^ source.hydra
 #              ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
@@ -1726,12 +1726,12 @@
 #                ^^ source.hydra variable.parameter.hydra
 #                  ^ source.hydra punctuation.separator.binder.hydra
 #                   ^^^^^^ source.hydra variable.other.hydra
->                  (isNominalSchemaType ts)
+>                  (isOpaqueSchemaType ts)
 #^^^^^^^^^^^^^^^^^^^ source.hydra
-#                   ^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
-#                                      ^ source.hydra
-#                                       ^^ source.hydra variable.other.hydra
-#                                         ^^ source.hydra
+#                   ^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                     ^ source.hydra
+#                                      ^^ source.hydra variable.other.hydra
+#                                        ^^ source.hydra
 >                  left(UnificationError{
 #^^^^^^^^^^^^^^^^^^ source.hydra
 #                  ^^^^ source.hydra keyword.control.hydra
@@ -1829,15 +1829,73 @@
 #                          ^ source.hydra string.quoted.double.hydra punctuation.definition.string.end.hydra
 #                           ^ source.hydra punctuation.definition.fields.end.hydra
 #                            ^^ source.hydra
->                  (tryBinding v t)) in
+>                  (let bodyConstraint := TypeConstraint{
 #^^^^^^^^^^^^^^^^^^^ source.hydra
-#                   ^^^^^^^^^^ source.hydra variable.other.hydra
+#                   ^^^ source.hydra keyword.control.hydra
+#                      ^ source.hydra
+#                       ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                     ^ source.hydra
+#                                      ^^ source.hydra keyword.operator.assignment.hydra
+#                                        ^ source.hydra
+#                                         ^^^^^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                       ^ source.hydra punctuation.definition.fields.begin.hydra
+>                    `left` = deannotateType (TypeScheme[body] ts),
+#^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                     ^^^^ source.hydra variable.other.escaped.hydra
+#                         ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                          ^ source.hydra
+#                           ^ source.hydra keyword.operator.equals.hydra
+#                            ^ source.hydra
+#                             ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                           ^ source.hydra
+#                                            ^ source.hydra
+#                                             ^^^^^^^^^^ source.hydra entity.name.type.nominal.hydra
+#                                                       ^ source.hydra punctuation.definition.projection.begin.hydra
+#                                                        ^^^^ source.hydra variable.other.member.hydra
+#                                                            ^ source.hydra punctuation.definition.projection.end.hydra
+#                                                             ^ source.hydra
+#                                                              ^^ source.hydra variable.other.hydra
+#                                                                ^ source.hydra
+#                                                                 ^^ source.hydra
+>                    `right` = t,
+#^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                    ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.begin.hydra
+#                     ^^^^^ source.hydra variable.other.escaped.hydra
+#                          ^ source.hydra variable.other.escaped.hydra punctuation.definition.name.end.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.equals.hydra
 #                             ^ source.hydra
 #                              ^ source.hydra variable.other.hydra
+#                               ^^ source.hydra
+>                    comment = comment}
+#^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                    ^^^^^^^ source.hydra variable.other.member.hydra
+#                           ^ source.hydra
+#                            ^ source.hydra keyword.operator.equals.hydra
+#                             ^ source.hydra
+#                              ^^^^^^^ source.hydra variable.other.hydra
+#                                     ^ source.hydra punctuation.definition.fields.end.hydra
+>                  in unifyTypeConstraints
+#^^^^^^^^^^^^^^^^^^ source.hydra
+#                  ^^ source.hydra keyword.control.hydra
+#                    ^ source.hydra
+#                     ^^^^^^^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+>                    cx
+#^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                    ^^ source.hydra variable.other.hydra
+>                    schemaTypes
+#^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                    ^^^^^^^^^^^ source.hydra variable.other.hydra
+>                    (lists.cons bodyConstraint rest))) in
+#^^^^^^^^^^^^^^^^^^^^^ source.hydra
+#                     ^^^^^^^^^^ source.hydra variable.other.qualified.hydra
 #                               ^ source.hydra
-#                                ^ source.hydra variable.other.hydra
-#                                 ^^^ source.hydra
-#                                    ^^ source.hydra keyword.control.hydra
+#                                ^^^^^^^^^^^^^^ source.hydra variable.other.hydra
+#                                              ^ source.hydra
+#                                               ^^^^ source.hydra variable.other.hydra
+#                                                   ^^^^ source.hydra
+#                                                       ^^ source.hydra keyword.control.hydra
 >        let noVars := let withConstraints := λconstraints2.unifyTypeConstraints
 #^^^^^^^^ source.hydra
 #        ^^^ source.hydra keyword.control.hydra

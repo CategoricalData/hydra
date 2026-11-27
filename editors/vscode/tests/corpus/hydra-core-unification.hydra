@@ -145,7 +145,7 @@ term unifyTypeConstraints =
                       comment)
                     ")"})
               (bind v t) in
-        let isNominalSchemaType := λts.cases(Type){
+        let isOpaqueSchemaType := λts.cases(Type){
               `record` = λ`_`.true,
               `union` = λ`_`.true,
               `wrap` = λ`_`.true,
@@ -155,7 +155,7 @@ term unifyTypeConstraints =
               (lookup v schemaTypes)
               (tryBinding v t)
               (λts.ifElse
-                  (isNominalSchemaType ts)
+                  (isOpaqueSchemaType ts)
                   left(UnificationError{
                     leftType = sleft,
                     rightType = sright,
@@ -172,7 +172,14 @@ term unifyTypeConstraints =
                             " (")
                           comment)
                         ")"})
-                  (tryBinding v t)) in
+                  (let bodyConstraint := TypeConstraint{
+                    `left` = deannotateType (TypeScheme[body] ts),
+                    `right` = t,
+                    comment = comment}
+                  in unifyTypeConstraints
+                    cx
+                    schemaTypes
+                    (lists.cons bodyConstraint rest))) in
         let noVars := let withConstraints := λconstraints2.unifyTypeConstraints
                 cx
                 schemaTypes
