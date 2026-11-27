@@ -77,6 +77,15 @@ buildOpaqueSchemaMap names = Maps.fromList (Lists.map
   (Phantoms.lambda "n" $ Phantoms.pair (Phantoms.var "n") (T.mono (T.record (Phantoms.var "n") [])))
   names)
 
+-- | Build a schema types map with a single name carrying a genuinely TRANSPARENT (concrete,
+-- non-self-referential) body, standing in for a real kernel alias like
+-- 'hydra.core.topology.Vertex = int32'. Unlike buildSchemaMap's self-referential placeholder
+-- (whose body is TypeVariable name, fine for identity/free-var-binding cases but not usable to
+-- test genuine expand-then-unify against a concrete body), this lets a test assert what
+-- unification against the alias's *actual* structural body produces.
+buildTransparentSchemaMap :: TypedTerm Name -> TypedTerm Type -> TypedTerm (M.Map Name TypeScheme)
+buildTransparentSchemaMap name body = Maps.fromList (Phantoms.list [Phantoms.pair name (T.mono body)])
+
 -- Helper to create type constraints
 constraint :: TypedTerm Type -> TypedTerm Type -> TypedTerm TypeConstraint
 constraint left right = Phantoms.record _TypeConstraint [
@@ -258,6 +267,18 @@ unifyTypesOpaqueFailCase cname schemaTypes left right _errSubstring = universalC
     (UnificationModule.unifyTypes @@ Lexical.emptyInferenceContext @@ buildOpaqueSchemaMap schemaTypes @@ left @@ right @@ Phantoms.string "test"))
   (Phantoms.string "failure")
 
+-- | Universal unifyTypes test case with a single TRANSPARENT schema name carrying a genuine
+-- (non-self-referential) concrete body -- for cases that test expand-then-unify against that
+-- body, as opposed to the identity/free-var-binding cases that buildSchemaMap's self-referential
+-- placeholder already covers.
+unifyTransparentAliasCase :: String -> TypedTerm Name -> TypedTerm Type -> TypedTerm Type -> TypedTerm Type -> [(TypedTerm Name, TypedTerm Type)] -> TypedTerm TestCaseWithMetadata
+unifyTransparentAliasCase cname aliasName aliasBody left right substPairs = universalCase cname
+  (Eithers.either
+    (Phantoms.lambda "_" $ Phantoms.string "failure")
+    (Phantoms.lambda "ts" $ showTypeSubst (Phantoms.var "ts"))
+    (UnificationModule.unifyTypes @@ Lexical.emptyInferenceContext @@ buildTransparentSchemaMap aliasName aliasBody @@ left @@ right @@ Phantoms.string "test"))
+  (showTypeSubst (Phantoms.wrap _TypeSubst (Phantoms.map (M.fromList substPairs))))
+
 unifyTypesTests :: TypedTerm TestGroup
 unifyTypesTests = subgroup "unifyTypes" [
   -- Identical types unify with empty substitution
@@ -425,14 +446,23 @@ unifyTypesTests = subgroup "unifyTypes" [
     "Cannot unify schema name",
 
   -- A TRANSPARENT schema name (literal-bodied, e.g. hydra.core.topology.Vertex = int32) legitimately
-  -- unifies structurally with a matching concrete type -- it is not an opaque nominal, so binding
-  -- it is correct, not a #613-shaped bug. (Regression test: an earlier, too-broad version of the
-  -- #613 fix treated ALL schema names as opaque, which broke this case for real kernel code.)
-  unifyTypesCase "unify a transparent schema name with a matching concrete type"
-    (schema ["Foo"])
+  -- unifies structurally with a matching concrete type -- it is not an opaque nominal, so
+  -- unification succeeds, not a #613-shaped bug. (Regression test: an earlier, too-broad version
+  -- of the #613 fix treated ALL schema names as opaque, which broke this case for real kernel
+  -- code.) Unification succeeds by expanding the alias's body (int32) and unifying THAT against
+  -- the concrete type, rather than by binding the schema NAME itself -- so the substitution is
+  -- empty, not {Foo: int32}. Binding the name would make it a substitution-map key, and since a
+  -- TypeSubst is applied globally across a whole inference batch, that would silently rewrite
+  -- every other, unrelated occurrence of Foo elsewhere in the batch into bare int32 -- exactly
+  -- the #711 print.errors unit-vs-nominal drift (hydra.core.errors.EmptyListError, a transparent
+  -- alias of unit, was being erased this way wherever a sibling definition's unification happened
+  -- to touch it in the same batch).
+  unifyTransparentAliasCase "unify a transparent schema name with a matching concrete type"
+    (nm "Foo")
+    T.int32
     (T.var "Foo")
     T.int32
-    [(nm "Foo", T.int32)],
+    emptySubst,
 
   -- The same schema name occurring in both argument and nested-return position of a signature
   -- must still unify with itself once instantiated (the listDirectory shape from #613): the

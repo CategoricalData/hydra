@@ -172,18 +172,34 @@ unifyTypeConstraints = define "unifyTypeConstraints" $
           ((string "Variable ") ++ (Core.unName (var "v")) ++ (string " appears free in type ") ++ (PrintCore.type_ @@ var "t")
             ++ (string " (") ++ var "comment" ++ (string ")"))))
       (var "bind" @@ var "v" @@ var "t")) $
-    "isNominalSchemaType" <~ ("ts" ~> match _Type (Strip.deannotateType @@ (Core.typeSchemeBody $ var "ts"))
+    -- | A declared schema type name is never a unification VARIABLE -- it must not become a
+    -- substitution KEY -- but an OPAQUE schema (record/union/wrap-bodied, e.g. FilePath) and a
+    -- TRANSPARENT one (literal-bodied, e.g. 'type Vertex = int32') are handled differently:
+    --   * Opaque: unrelated to the other side by construction; unifying it against a mismatched
+    --     concrete type is a genuine error (#613's original fix -- unchanged here).
+    --   * Transparent: structurally equal to its body, so it legitimately unifies with a matching
+    --     concrete type -- but it must do so by unifying its BODY against the other side (a fresh
+    --     constraint, expand-then-unify), never by binding the schema NAME itself to that type.
+    --     Binding the name would add it as a substitution-map key, and since a TypeSubst is
+    --     applied globally across the whole constraint batch, that substitution would later
+    --     rewrite every other, unrelated occurrence of the same schema name elsewhere in the
+    --     batch into its bare structural body -- silently erasing the nominal reference (#711,
+    --     the print.errors unit-vs-nominal drift: hydra.core.errors.EmptyListError, a transparent
+    --     alias of unit, was being bound away whenever the synthesized encode/decode modules for
+    --     its type were also in the same inference universe).
+    "isOpaqueSchemaType" <~ ("ts" ~> match _Type (Strip.deannotateType @@ (Core.typeSchemeBody $ var "ts"))
       (Just false) [
       _Type_record>>: constant true,
       _Type_union>>: constant true,
       _Type_wrap>>: constant true]) $
     "tryBindOrSchema" <~ ("v" ~> "t" ~> Optionals.match (Maps.lookup (var "v" :: TypedTerm Name) (var "schemaTypes"))
       (var "tryBinding" @@ var "v" @@ var "t")
-      ("ts" ~> Logic.ifElse (var "isNominalSchemaType" @@ var "ts")
+      ("ts" ~> Logic.ifElse (var "isOpaqueSchemaType" @@ var "ts")
         (left (Error.unificationError (var "sleft") (var "sright")
             ((string "Cannot unify schema name ") ++ (Core.unName (var "v")) ++ (string " with type ") ++ (PrintCore.type_ @@ var "t")
               ++ (string " (") ++ var "comment" ++ (string ")"))))
-        (var "tryBinding" @@ var "v" @@ var "t"))) $
+        ("bodyConstraint" <~ Typing.typeConstraint (Strip.deannotateType @@ (Core.typeSchemeBody $ var "ts")) (var "t") (var "comment") $
+          unifyTypeConstraints @@ var "cx" @@ var "schemaTypes" @@ (Lists.cons (var "bodyConstraint") (var "rest"))))) $
     "noVars" <~ (
       "withConstraints" <~ ("constraints2" ~> unifyTypeConstraints @@ var "cx" @@ var "schemaTypes" @@ (Lists.concat2 (var "constraints2") (var "rest"))) $
       Eithers.bind (joinTypes @@ var "cx" @@ var "sleft" @@ var "sright" @@ var "comment") (var "withConstraints")) $

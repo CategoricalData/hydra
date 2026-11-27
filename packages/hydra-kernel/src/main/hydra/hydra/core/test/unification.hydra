@@ -1362,9 +1362,10 @@ term allTests =
                       (unifyTypes
                         emptyInferenceContext
                         (maps.fromList
-                          (lists.map
-                            (λn.(n, TypeScheme{variables = [], body = Type{variable = n}, constraints = {=}}))
-                            [Name{"Foo"}]))
+                          [
+                            (
+                              Name{"Foo"},
+                              TypeScheme{variables = [], body = Type{literal = LiteralType{integer = IntegerType{`int32`}}}, constraints = {=}})])
                         Type{variable = Name{"Foo"}}
                         Type{
                           literal = LiteralType{
@@ -1376,9 +1377,7 @@ term allTests =
                         "{",
                         strings.join
                           ", "
-                          (lists.map
-                            (λp.strings.concat [Name[] (first p), ": ", `type` (second p)])
-                            (maps.toList (TypeSubst[] TypeSubst{{Name{"Foo"} = Type{literal = LiteralType{integer = IntegerType{`int32`}}}}}))),
+                          (lists.map (λp.strings.concat [Name[] (first p), ": ", `type` (second p)]) (maps.toList (TypeSubst[] TypeSubst{{=}}))),
                         "}"]}},
             description = none,
             tags = [],
