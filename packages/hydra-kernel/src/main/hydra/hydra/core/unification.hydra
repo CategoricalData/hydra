@@ -187,10 +187,6 @@ term unifyTypeConstraints =
           in eithers.bind
             (joinTypes cx sleft sright comment)
             withConstraints in
-        let dflt := cases(Type){
-            variable = λname.tryBindOrSchema name sleft,
-            `_` = noVars}
-            sright in
         cases(Type){
           variable = λname.cases(Type){
                 variable = λname2.ifElse
@@ -220,7 +216,10 @@ term unifyTypeConstraints =
                         (bind name sright)),
                 `_` = tryBindOrSchema name sright}
                 sright,
-          `_` = dflt}
+          `_` = cases(Type){
+                variable = λname.tryBindOrSchema name sleft,
+                `_` = noVars}
+                sright}
           sleft
     in match
       (lists.uncons constraints)

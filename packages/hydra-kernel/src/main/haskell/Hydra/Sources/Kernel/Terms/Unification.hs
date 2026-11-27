@@ -203,11 +203,10 @@ unifyTypeConstraints = define "unifyTypeConstraints" $
     "noVars" <~ (
       "withConstraints" <~ ("constraints2" ~> unifyTypeConstraints @@ var "cx" @@ var "schemaTypes" @@ (Lists.concat2 (var "constraints2") (var "rest"))) $
       Eithers.bind (joinTypes @@ var "cx" @@ var "sleft" @@ var "sright" @@ var "comment") (var "withConstraints")) $
-    "dflt" <~ match _Type (var "sright")
-      (Just (var "noVars")) [
-      _Type_variable>>: "name" ~> var "tryBindOrSchema" @@ var "name" @@ var "sleft"] $
     match _Type (var "sleft")
-      (Just $ var "dflt") [
+      (Just $ match _Type (var "sright")
+        (Just (var "noVars")) [
+        _Type_variable>>: "name" ~> var "tryBindOrSchema" @@ var "name" @@ var "sleft"]) [
       _Type_variable>>: "name" ~> match _Type (var "sright")
         (Just (var "tryBindOrSchema" @@ var "name" @@ var "sright")) [
         _Type_variable>>: "name2" ~> Logic.ifElse (Core.equalName_ (var "name") (var "name2"))
