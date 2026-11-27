@@ -10,5 +10,8 @@
   "spawnModel": "opusplan",
   "sessionPrefix": "hydra-",
 
-  "visibility": "public"
+  "visibility": "public",
+
+  "_doorbells_comment": "SendMessage only: no tmux pings, which type into panes a human may be typing in (Josh, 2026-11-27).",
+  "doorbells": "claude-sendmessage"
 }
