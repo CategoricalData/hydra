@@ -31,3 +31,25 @@ term app = Container {x}
 # language-server follow-up (#836).
 term g = hydra.core.lib.lists.cons
 #        ^^^^^^^^^^^^^^^^^^^^^^^^^^ variable.other.qualified.hydra
+
+# P2: a BARE sugarField (unit variant / 'name = unit' shorthand) is a member, not a variable.
+term o = TraversalOrder{pre}
+#                       ^^^ variable.other.member.hydra
+term p = Person{a = 1, b}
+#                      ^ variable.other.member.hydra
+
+# Values stay terms: a set or a let inside a field value does not make its names fields.
+term r = Rec{xs = {x, y}, z = let a := 1, w := 2 in w, k}
+#                  ^ variable.other.hydra
+#                                                   ^ variable.other.hydra
+#                                                      ^ variable.other.member.hydra
+
+# Multi-line construction.
+term m = Rec{
+  first = 1,
+  second}
+# ^^^^^^ variable.other.member.hydra
+
+# A qualified name inside a value is never a field.
+term t = TestGroup{subgroups = [cases.allTests, let.allTests], done}
+#                                                              ^^^^ variable.other.member.hydra

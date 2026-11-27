@@ -355,10 +355,53 @@
           ]
         },
         {
-          "comment": "Construction/injection/wrap: 'Name{...}'. Only the name here; inner fields handled downstream.",
-          "match": "([A-Za-z_][A-Za-z0-9_]*(?:\\.[A-Za-z_][A-Za-z0-9_]*)*)(?=\\{)",
-          "name": "entity.name.type.nominal.hydra"
+          "comment": "Construction/injection/wrap: 'Name{...}' (sugarFields, §3). A begin/end block so a BARE sugarField ('Color{red}', 'Person{a = 1, b}': a bare name abbreviates 'name = unit') scopes as a member, not a variable. Field values ('= term') are their own region (#sugar-field-value), so only depth-zero names outside a value — i.e. field positions — are claimed.",
+          "begin": "([A-Za-z_][A-Za-z0-9_]*(?:\\.[A-Za-z_][A-Za-z0-9_]*)*)(\\{)",
+          "end": "\\}",
+          "beginCaptures": {
+            "1": { "name": "entity.name.type.nominal.hydra" },
+            "2": { "name": "punctuation.definition.fields.begin.hydra" }
+          },
+          "endCaptures": { "0": { "name": "punctuation.definition.fields.end.hydra" } },
+          "patterns": [
+            { "include": "#comments" },
+            { "include": "#sugar-field-value" },
+            {
+              "comment": "Bare sugarField: a single-segment name that starts a field (after '{', ',' or at the start of a line) and is followed by ',' or '}'. A name continuing a multi-line wrap term ('TermSubst{f … x in') is not claimed.",
+              "match": "(?:^|(?<=[{,]))\\s*\\b(?!(?:in|none|unit)\\b)([a-z_][A-Za-z0-9_]*)\\b(?=\\s*[,}])",
+              "captures": { "1": { "name": "variable.other.member.hydra" } }
+            },
+            { "include": "#expression" }
+          ]
         }
+      ]
+    },
+
+    "sugar-field-value": {
+      "comment": "The '= term' value of a sugarField inside 'Name{...}'. It ends before the next depth-zero ',' or the closing '}'; bracket groups and 'let … in' (whose bindings are comma-separated) are consumed whole by #balanced-groups so their commas do not end it.",
+      "begin": "(?<![:=<>!])=(?!=)",
+      "end": "(?=[,}])",
+      "beginCaptures": { "0": { "name": "keyword.operator.equals.hydra" } },
+      "patterns": [ { "include": "#balanced-groups" }, { "include": "#expression" } ]
+    },
+
+    "balanced-groups": {
+      "comment": "Bracket groups and 'let … in', matched as nested regions so the commas inside them are not taken as sugarField separators.",
+      "patterns": [
+        { "include": "#comments" },
+        { "include": "#strings" },
+        { "include": "#backtick-name" },
+        {
+          "begin": "(?<![.\\w])let(?![.\\w])",
+          "end": "(?<![.\\w])in(?![.\\w])",
+          "beginCaptures": { "0": { "name": "keyword.control.hydra" } },
+          "endCaptures": { "0": { "name": "keyword.control.hydra" } },
+          "patterns": [ { "include": "#balanced-groups" }, { "include": "#expression" } ]
+        },
+        { "include": "#nominal-sugar" },
+        { "begin": "\\(", "end": "\\)", "patterns": [ { "include": "#balanced-groups" }, { "include": "#expression" } ] },
+        { "begin": "\\[", "end": "\\]", "patterns": [ { "include": "#balanced-groups" }, { "include": "#expression" } ] },
+        { "begin": "\\{", "end": "\\}", "patterns": [ { "include": "#balanced-groups" }, { "include": "#expression" } ] }
       ]
     },
 
