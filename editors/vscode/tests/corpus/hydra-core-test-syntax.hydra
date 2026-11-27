@@ -44,6 +44,7 @@ term allTests =
       sourceSpanGroup,
       sourcePositionGroup,
       termDocCommentGroup,
+      typeSourceSpanGroup,
       unqualifiedNamesGroup],
     `cases` = []}
 
@@ -3981,6 +3982,354 @@ term termDocCommentGroup =
                                     [
                                       (Term{variable = Name{"description"}}, Term{literal = Literal{`string` = "Get a character by index"}}),
                                       (Term{variable = Name{"availableSince"}}, Term{literal = Literal{`string` = "0.17.6"}})]}}}}}]}}},
+        description = none,
+        tags = [],
+        provisions = []}]}
+
+## Source spans recorded by the type parser, and SubtypePath-to-span resolution (#833)
+term typeSourceSpanGroup =
+  TestGroup{
+    name = "type source spans",
+    description = none,
+    subgroups = [],
+    `cases` = [
+      TestCaseWithMetadata{
+        name = "variable",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtTypePath SubtypePath{[]} t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTypeWithSpans "a"),
+            expected = λ`_`."[0,1)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "span excludes leading whitespace",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtTypePath SubtypePath{[]} t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTypeWithSpans "  a"),
+            expected = λ`_`."[2,3)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "span excludes trailing whitespace",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtTypePath SubtypePath{[]} t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTypeWithSpans "a   "),
+            expected = λ`_`."[0,1)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "span excludes trailing comment",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtTypePath SubtypePath{[]} t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTypeWithSpans "a # note\n"),
+            expected = λ`_`."[0,1)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "function type spans domain through codomain",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtTypePath SubtypePath{[]} t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTypeWithSpans "a → list<b>"),
+            expected = λ`_`."[0,11)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "function domain",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtTypePath
+                        SubtypePath{[SubtypeStep{functionDomain}]}
+                        t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTypeWithSpans "a → list<b>"),
+            expected = λ`_`."[0,1)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "function codomain",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtTypePath
+                        SubtypePath{[SubtypeStep{functionCodomain}]}
+                        t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTypeWithSpans "a → list<b>"),
+            expected = λ`_`."[4,11)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "list element within codomain",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtTypePath
+                        SubtypePath{[SubtypeStep{functionCodomain}, SubtypeStep{listElement}]}
+                        t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTypeWithSpans "a → list<b>"),
+            expected = λ`_`."[9,10)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "path that cannot be followed yields the last type reached",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtTypePath
+                        SubtypePath{[SubtypeStep{functionDomain}, SubtypeStep{listElement}]}
+                        t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTypeWithSpans "a → list<b>"),
+            expected = λ`_`."[0,1)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "type application spans function through argument",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtTypePath SubtypePath{[]} t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTypeWithSpans "f x"),
+            expected = λ`_`."[0,3)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "type application argument",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.match
+                      (spanAtTypePath
+                        SubtypePath{[SubtypeStep{applicationArgument}]}
+                        t)
+                      "none"
+                      (λsp.strings.concat
+                          ["[", printInt32 (SourceSpan[start] sp), ",", printInt32 (SourceSpan[end] sp), ")"]))
+                  (parseTypeWithSpans "f x"),
+            expected = λ`_`."[2,3)"}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "strip type spans: function",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.type (stripTypeSpans t))
+                  (parseTypeWithSpans "a → list<b>"),
+            expected = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.type t)
+                  (parseType "a → list<b>")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "strip type spans: application",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.type (stripTypeSpans t))
+                  (parseTypeWithSpans "f x y"),
+            expected = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.type t)
+                  (parseType "f x y")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "strip type spans: record",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.type (stripTypeSpans t))
+                  (parseTypeWithSpans
+                    "record{x: int32, y: list<string>}"),
+            expected = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.type t)
+                  (parseType
+                    "record{x: int32, y: list<string>}")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "plain type parse records no spans",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.type t)
+                  (parseType "a → list<b>"),
+            expected = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.type (stripTypeSpans t))
+                  (parseType "a → list<b>")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "plain type parse records no spans in nested types",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.type t)
+                  (parseType "record{x: list<a → b>}"),
+            expected = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.type (stripTypeSpans t))
+                  (parseType "record{x: list<a → b>}")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "strip spans: lambda domain",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.term (stripSpans t))
+                  (parseTermWithSpans "λx:list<int32>.x"),
+            expected = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.term t)
+                  (parseTerm "λx:list<int32>.x")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "strip spans: type application",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.term (stripSpans t))
+                  (parseTermWithSpans "f⟨int32 → int32⟩"),
+            expected = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.term t)
+                  (parseTerm "f⟨int32 → int32⟩")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "plain term parse records no spans in a lambda domain",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.term t)
+                  (parseTerm "λx:list<int32>.x"),
+            expected = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.term (stripSpans t))
+                  (parseTerm "λx:list<int32>.x")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "plain term parse records no spans in a type application",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.term t)
+                  (parseTerm "f⟨int32 → int32⟩"),
+            expected = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.term (stripSpans t))
+                  (parseTerm "f⟨int32 → int32⟩")}},
+        description = none,
+        tags = [],
+        provisions = []},
+      TestCaseWithMetadata{
+        name = "plain term parse records no spans in a binding type scheme",
+        case = TestCase{
+          universal = UniversalTestCase{
+            actual = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.term t)
+                  (parseTerm
+                    "let x:(int32) := 1:int32 in x"),
+            expected = λ`_`.eithers.either
+                  (λe.e)
+                  (λt.model.term (stripSpans t))
+                  (parseTerm
+                    "let x:(int32) := 1:int32 in x")}},
         description = none,
         tags = [],
         provisions = []}]}

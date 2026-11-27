@@ -11,7 +11,7 @@ import hydra.core.lib.maps as maps
 import hydra.core.lib.math
 import hydra.core.lib.optionals as optionals
 import hydra.core.lib.ordering
-import hydra.core.lib.pairs
+import hydra.core.lib.pairs as pairs
 import hydra.core.lib.strings as strings
 import hydra.core.model
 import hydra.core.parsing
@@ -38,6 +38,26 @@ term annotateSpan =
         annotation = wrapAnnotationMap
             (maps.singleton keySourceSpan (spanToTerm span))}}
 
+## Annotate a composite type (an application or function type) with the span running from the start of its first part to the end of its last part, when both have spans; otherwise leave it unannotated
+term annotateTypeApplicationSpan =
+  λfirst, last, composite.optionals.match
+      (typeSpan first)
+      composite
+      (λfs.optionals.match
+          (typeSpan last)
+          composite
+          (λls.annotateTypeSpan
+              SourceSpan{start = SourceSpan[start] fs, end = SourceSpan[end] ls}
+              composite))
+
+## Wrap a type in a layer whose only annotation is the reserved span key. Like term spans, this is surface trivia, exempt from the round-trip contract, and is removed by stripTypeSpans.
+term annotateTypeSpan =
+  λspan, `type`.Type{
+      annotated = AnnotatedType{
+        body = `type`,
+        annotation = wrapAnnotationMap
+            (maps.singleton keySourceSpan (spanToTerm span))}}
+
 ## Format a parse failure as 'line:col: message' (1-based line/column), given the full input text, the codepoint offset of the failure, and the raw error message
 term formatParseFailure =
   λtext, offset, message.
@@ -56,20 +76,24 @@ term offsetToPosition =
     let cps := lists.take offset all in
     let nexts := lists.concat2 (lists.drop 1:int32 all) [0:int32] in
     let step := λacc, cn.
-        let c := first cn in
-        let next := second cn in
-        let line := first acc in
-        let col := second acc in
+        let c := pairs.first cn in
+        let next := pairs.second cn in
+        let line := pairs.first acc in
+        let col := pairs.second acc in
         let newline := or
             (equal c 10:int32)
             (and (equal c 13:int32) (not (equal next 10:int32))) in
         let width := ifElse (gte c 65536:int32) 2:int32 1:int32 in
         ifElse newline (add line 1:int32, 0:int32) (line, add col width) in
     let end := lists.foldl step (0:int32, 0:int32) (lists.zip cps nexts) in
-    SourcePosition{line = first end, column = second end}
+    SourcePosition{line = pairs.first end, column = pairs.second end}
 
 ## Remove span-only annotation layers from the top of a term, leaving the term itself
-term peelSpans = λ`term`.optionals.match (spanLayer `term`) `term` (λlayer.peelSpans (second layer))
+term peelSpans = λ`term`.optionals.match (spanLayer `term`) `term` (λlayer.peelSpans (pairs.second layer))
+
+## Remove span-only annotation layers from the top of a type, leaving the type itself
+term peelTypeSpans =
+  λ`type`.optionals.match (typeSpanLayer `type`) `type` (λlayer.peelTypeSpans (pairs.second layer))
 
 ## Resolve a subterm path (as carried by type-checking errors, computed on the span-free term) against a span-annotated term, returning the span of the node it reaches. If the node itself has no span, the span of its nearest enclosing node that has one is returned; if the path cannot be followed, the span of the last node reached.
 term spanAtPath = λpath, `term`.spanAtSteps (SubtermPath[] path) `term`
@@ -82,9 +106,24 @@ term spanAtSteps =
       (lists.uncons steps)
       outer
       (λuc.optionals.match
-          (subtermAtStep (first uc) (peelSpans `term`))
+          (subtermAtStep (pairs.first uc) (peelSpans `term`))
           outer
-          (λchild.optionals.match (spanAtSteps (second uc) child) outer (λfound.given(found))))
+          (λchild.optionals.match (spanAtSteps (pairs.second uc) child) outer (λfound.given(found))))
+
+## Resolve a subtype path (computed on the span-free type) against a span-annotated type, returning the span of the type it reaches. If that type has no span, the span of its nearest enclosing type that has one is returned; if the path cannot be followed, the span of the last type reached.
+term spanAtTypePath = λpath, `type`.spanAtTypeSteps (SubtypePath[] path) `type`
+
+## Resolve a list of subtype steps against a span-annotated type; see spanAtTypePath
+term spanAtTypeSteps =
+  λsteps, `type`.
+    let outer := typeSpan `type`
+    in optionals.match
+      (lists.uncons steps)
+      outer
+      (λuc.optionals.match
+          (subtypeAtStep (pairs.first uc) (peelTypeSpans `type`))
+          outer
+          (λchild.optionals.match (spanAtTypeSteps (pairs.second uc) child) outer (λfound.given(found))))
 
 ## Decode a span from its annotation value, a pair of int32 literals (start, end)
 term spanFromTerm =
@@ -101,8 +140,8 @@ term spanFromTerm =
           t
     in cases(Term){
       pair = λp.optionals.bind
-            (int32Of (first p))
-            (λs.optionals.map (λe.SourceSpan{start = s, end = e}) (int32Of (second p))),
+            (int32Of (pairs.first p))
+            (λs.optionals.map (λe.SourceSpan{start = s, end = e}) (int32Of (pairs.second p))),
       `_` = none}
       `term`
 
@@ -126,7 +165,7 @@ term spanToTerm =
     let int32Term := λn.Term{literal = Literal{integer = IntegerValue{`int32` = n}}}
     in Term{pair = (int32Term (SourceSpan[start] span), int32Term (SourceSpan[end] span))}
 
-## Remove every span-only annotation layer from a term, including those inside user annotation payloads. Applied to a freshly parsed term, this yields exactly the term that parsing without spans produces.
+## Remove every span-only annotation layer from a term, including those inside user annotation payloads and inside the types the term embeds (lambda domains, type applications, binding type schemes). Applied to a freshly parsed term, this yields exactly the term that parsing without spans produces.
 term stripSpans =
   λ`term`.rewriteTerm
       (λrecurse, t.optionals.match
@@ -137,10 +176,58 @@ term stripSpans =
                     body = stripSpans (AnnotatedTerm[body] at),
                     annotation = stripSpans
                         (AnnotatedTerm[annotation] at)}},
+            `_` = stripTermTypeSpans (recurse t)}
+            t)
+          (λlayer.stripSpans (pairs.second layer)))
+      `term`
+
+## Remove span annotations from the types held directly by a term node: a lambda domain, a type application payload, or the type schemes of let bindings. Subterms are not visited.
+term stripTermTypeSpans =
+  λ`term`.
+    let stripScheme := λts.TypeScheme{
+          variables = TypeScheme[variables] ts,
+          body = stripTypeSpans (TypeScheme[body] ts),
+          constraints = TypeScheme[constraints] ts}
+    in cases(Term){
+      lambda = λl.Term{
+            lambda = Lambda{
+              parameter = Lambda[parameter] l,
+              domain = optionals.map stripTypeSpans (Lambda[domain] l),
+              body = Lambda[body] l}},
+      `let` = λlt.Term{
+            `let` = Let{
+              bindings = lists.map
+                  (λb.Binding{
+                      name = Binding[name] b,
+                      `term` = Binding[`term`] b,
+                      typeScheme = optionals.map
+                          stripScheme
+                          (Binding[typeScheme] b)})
+                  (Let[bindings] lt),
+              body = Let[body] lt}},
+      typeApplication = λta.Term{
+            typeApplication = TypeApplicationTerm{
+              body = TypeApplicationTerm[body] ta,
+              `type` = stripTypeSpans
+                  (TypeApplicationTerm[`type`] ta)}},
+      `_` = `term`}
+      `term`
+
+## Remove every span-only annotation layer from a type, including those inside user annotation payloads. Applied to a freshly parsed type, this yields exactly the type that parsing without spans produces.
+term stripTypeSpans =
+  λ`type`.rewriteType
+      (λrecurse, t.optionals.match
+          (typeSpanLayer t)
+          (cases(Type){
+            annotated = λat.Type{
+                  annotated = AnnotatedType{
+                    body = stripTypeSpans (AnnotatedType[body] at),
+                    annotation = stripSpans
+                        (AnnotatedType[annotation] at)}},
             `_` = recurse t}
             t)
-          (λlayer.stripSpans (second layer)))
-      `term`
+          (λlayer.stripTypeSpans (pairs.second layer)))
+      `type`
 
 ## Follow a single subterm step from a (span-free) term to the immediate subterm it names, if the term has that shape. Map-entry and set-element steps depend on a term ordering and are not resolved.
 term subtermAtStep =
@@ -198,8 +285,9 @@ term subtermAtStep =
       letBody = λ`_`.cases(Term){`let` = λlt.given(Let[body] lt), `_` = none} `term`,
       listElement = λi.cases(Term){`list` = λels.lists.at i els, `_` = none} `term`,
       optionalGiven = λ`_`.cases(Term){`optional` = λm.m, `_` = none} `term`,
-      pairFirst = λ`_`.cases(Term){pair = λp.given(first p), `_` = none} `term`,
-      pairSecond = λ`_`.cases(Term){pair = λp.given(second p), `_` = none} `term`,
+      pairFirst = λ`_`.cases(Term){pair = λp.given(pairs.first p), `_` = none} `term`,
+      pairSecond = λ`_`.cases(Term){pair = λp.given(pairs.second p), `_` = none}
+            `term`,
       recordField = λfname.cases(Term){
             `record` = λr.fieldTerm fname (Record[fields] r),
             `_` = none}
@@ -215,5 +303,70 @@ term subtermAtStep =
       `_` = none}
       step
 
+## Follow a single subtype step from a (span-free) type to the immediate subtype it names, if the type has that shape.
+term subtypeAtStep =
+  λstep, `type`.
+    let fieldType := λfname, fields.optionals.map
+          (λf.FieldType[`type`] f)
+          (lists.find (λf.equal (FieldType[name] f) fname) fields)
+    in cases(SubtypeStep){
+      annotatedBody = λ`_`.cases(Type){annotated = λa.given(AnnotatedType[body] a), `_` = none}
+            `type`,
+      applicationArgument = λ`_`.cases(Type){
+            application = λa.given(ApplicationType[argument] a),
+            `_` = none}
+            `type`,
+      applicationFunction = λ`_`.cases(Type){
+            application = λa.given(ApplicationType[function] a),
+            `_` = none}
+            `type`,
+      effectValue = λ`_`.cases(Type){`effect` = λt.given(t), `_` = none} `type`,
+      eitherLeft = λ`_`.cases(Type){`either` = λe.given(EitherType[`left`] e), `_` = none}
+            `type`,
+      eitherRight = λ`_`.cases(Type){`either` = λe.given(EitherType[`right`] e), `_` = none}
+            `type`,
+      forallBody = λ`_`.cases(Type){`forall` = λf.given(ForallType[body] f), `_` = none}
+            `type`,
+      functionCodomain = λ`_`.cases(Type){
+            function = λf.given(FunctionType[codomain] f),
+            `_` = none}
+            `type`,
+      functionDomain = λ`_`.cases(Type){function = λf.given(FunctionType[domain] f), `_` = none}
+            `type`,
+      listElement = λ`_`.cases(Type){`list` = λt.given(t), `_` = none} `type`,
+      mapKeys = λ`_`.cases(Type){`map` = λm.given(MapType[keys] m), `_` = none} `type`,
+      mapValues = λ`_`.cases(Type){`map` = λm.given(MapType[values] m), `_` = none}
+            `type`,
+      optionalElement = λ`_`.cases(Type){`optional` = λt.given(t), `_` = none} `type`,
+      pairFirst = λ`_`.cases(Type){pair = λp.given(PairType[first] p), `_` = none}
+            `type`,
+      pairSecond = λ`_`.cases(Type){pair = λp.given(PairType[second] p), `_` = none}
+            `type`,
+      recordField = λfname.cases(Type){`record` = λfs.fieldType fname fs, `_` = none}
+            `type`,
+      setElement = λ`_`.cases(Type){`set` = λt.given(t), `_` = none} `type`,
+      unionField = λfname.cases(Type){`union` = λfs.fieldType fname fs, `_` = none}
+            `type`,
+      wrapBody = λ`_`.cases(Type){`wrap` = λt.given(t), `_` = none} `type`,
+      `_` = none}
+      step
+
 ## The source span recorded on a term by the parser, if the term's outermost layer is a span annotation
-term termSpan = λ`term`.optionals.map (λlayer.first layer) (spanLayer `term`)
+term termSpan = λ`term`.optionals.map (λlayer.pairs.first layer) (spanLayer `term`)
+
+## The source span recorded on a type by the parser, if the type's outermost layer is a span annotation
+term typeSpan = λ`type`.optionals.map (λlayer.pairs.first layer) (typeSpanLayer `type`)
+
+## If a type is a span-only annotation layer (see annotateTypeSpan), return its span and the type it wraps
+term typeSpanLayer =
+  λ`type`.cases(Type){
+      annotated = λat.
+          let anns := getAnnotationMap (AnnotatedType[annotation] at)
+          in ifElse
+            (equal (maps.size anns) 1:int32)
+            (optionals.bind
+              (maps.lookup keySourceSpan anns)
+              (λv.optionals.map (λsp.(sp, AnnotatedType[body] at)) (spanFromTerm v)))
+            none,
+      `_` = none}
+      `type`
