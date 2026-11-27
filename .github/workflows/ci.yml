@@ -411,9 +411,14 @@ jobs:
       # skips missing entries; generating for hygiene.
       - name: Regenerate on-demand packages (hydra-pg, hydra-rdf, hydra-ext)
         run: |
+          # #824: per-call wall-clock, so the next run shows which (pkg, target) calls
+          # dominate (grep the log for "[timing]") before deciding how to parallelize.
           for pkg in hydra-pg hydra-rdf hydra-ext; do
             for tgt in java python; do
+              t0=$SECONDS
+              echo "[timing] START sync-packages $pkg -> $tgt"
               bin/sync-packages.sh "$pkg" --targets "$tgt" --no-tests
+              echo "[timing] END   sync-packages $pkg -> $tgt: $((SECONDS - t0))s"
             done
           done
       # hydra-rust (#382) is also an on-demand package, outside the bootstrapping
@@ -424,7 +429,9 @@ jobs:
       # be a no-op for this package.
       - name: Regenerate on-demand packages (hydra-rust)
         run: |
+          t0=$SECONDS
           bin/sync-packages.sh hydra-rust --targets haskell --no-tests
+          echo "[timing] END   sync-packages hydra-rust -> haskell: $((SECONDS - t0))s"
       # 0.17.2 hydra-build defect guard: assert every module a package's
       # manifest.json declares in mainModules is actually EMITTED into the
       # assembled dist/haskell tree. The 0.17.2 hydra-build sdist shipped 3 of
