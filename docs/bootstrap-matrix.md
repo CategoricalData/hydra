@@ -35,22 +35,22 @@ omitted.
 
 | Cell | Status | Detail | Last verified |
 |---|---|---|---|
-| Haskell → Haskell | 🟢 | gen 201f/5m28s<br>test-gen 76f/5m28s<br>run 0.5s<br>3765 pass | 2026-11-27 @ `cca45452bd` |
-| Haskell → Java | 🟢 | gen 540f/4m59s<br>test-gen 76f/4m59s<br>run 9.3s<br>3765 pass | 2026-11-27 @ `cca45452bd` |
-| Haskell → Python | 🟢 | gen 181f/31.9s<br>test-gen 76f/31.9s<br>run 15.6s<br>3830 pass | 2026-11-27 @ `cca45452bd` |
+| Haskell → Haskell | 🟢 | gen 201f/8m16s<br>test-gen 76f/8m16s<br>run 0.5s<br>3765 pass | 2026-11-28 @ `9007a16337` |
+| Haskell → Java | 🟢 | gen 540f/6m1s<br>test-gen 76f/6m1s<br>run 9.6s<br>3765 pass | 2026-11-28 @ `9007a16337` |
+| Haskell → Python | 🟢 | gen 181f/51.6s<br>test-gen 76f/51.6s<br>run 16.2s<br>3830 pass | 2026-11-28 @ `9007a16337` |
 | Haskell → Scheme | 🟢 | gen 173f/9.8s<br>test-gen 73f/9.8s<br>run 5.7s<br>3427 pass | 2026-09-30 @ `d0cbc9f634` |
-| Java → Haskell | 🟢 | gen 611f/3m30s<br>test-gen 79f/3m30s<br>run 0.5s<br>3765 pass | 2026-11-27 @ `cca45452bd` |
-| Java → Java | 🟢 | gen 3048f/1m10s<br>test-gen 79f/1m10s<br>run 9.2s<br>3765 pass | 2026-11-27 @ `cca45452bd` |
-| Java → Python | 🟢 | gen 530f/1m1s<br>test-gen 82f/1m1s<br>run 16.0s<br>3830 pass | 2026-11-27 @ `cca45452bd` |
+| Java → Haskell | 🟢 | gen 611f/3m19s<br>test-gen 79f/3m19s<br>run 0.5s<br>3765 pass | 2026-11-28 @ `9007a16337` |
+| Java → Java | 🟢 | gen 3048f/1m10s<br>test-gen 79f/1m10s<br>run 8.9s<br>3765 pass | 2026-11-28 @ `9007a16337` |
+| Java → Python | 🟢 | gen 530f/1m1s<br>test-gen 82f/1m1s<br>run 16.7s<br>3830 pass | 2026-11-28 @ `9007a16337` |
 | Java → Scala | 🟢 | gen 254f/8.7s<br>test-gen 78f/6.6s<br>run 1m33s<br>5908 pass | 2026-10-30 @ `673631ab0d` |
 | Java → TypeScript | 🟢 | gen 246f/46.9s<br>test-gen 77f/48.4s<br>run 24.5s<br>3539 pass | 2026-10-30 @ `673631ab0d` |
 | Java → Clojure | 🟢 | gen 242f/5.4s<br>test-gen 75f/5.4s<br>run 7.7s<br>3427 pass | 2026-10-02 @ `d90d372a45` |
 | Java → Common Lisp | 🟢 | gen 247f/5.2s<br>test-gen 77f/5.2s<br>run 1.1s<br>3427 pass | 2026-10-02 @ `d90d372a45` |
 | Java → Scheme | 🟢 | gen 250f/5.1s<br>test-gen 80f/5.1s<br>run 5.8s<br>3427 pass | 2026-10-02 @ `d90d372a45` |
 | Java → Emacs Lisp | 🟢 | gen 247f/12.4s<br>test-gen 76f/5.5s<br>run 3m1s<br>3539 pass | 2026-10-30 @ `2a7475a326` |
-| Python → Haskell | 🟢 | gen 611f/8m16s<br>test-gen 79f/8m16s<br>run 0.5s<br>3765 pass | 2026-11-27 @ `cca45452bd` |
-| Python → Java | 🟢 | gen 3048f/4m52s<br>test-gen 79f/4m52s<br>run 9.5s<br>3765 pass | 2026-11-27 @ `cca45452bd` |
-| Python → Python | 🟢 | gen 530f/4m13s<br>test-gen 82f/4m13s<br>run 16.5s<br>3830 pass | 2026-11-27 @ `cca45452bd` |
+| Python → Haskell | 🟢 | gen 611f/7m46s<br>test-gen 79f/7m46s<br>run 0.5s<br>3765 pass | 2026-11-28 @ `9007a16337` |
+| Python → Java | 🟢 | gen 3048f/4m46s<br>test-gen 79f/4m46s<br>run 16.1s<br>3765 pass | 2026-11-28 @ `9007a16337` |
+| Python → Python | 🟢 | gen 530f/4m57s<br>test-gen 82f/4m57s<br>run 17.2s<br>3830 pass | 2026-11-28 @ `9007a16337` |
 | Python → Scala | 🟢 | gen 254f/2m37s<br>test-gen 78f/2m59s<br>run 1m30s<br>5913 pass | 2026-10-31 @ `923e9c83f1` |
 | Python → TypeScript | 🟢 | gen 246f/7m41s<br>test-gen 77f/8m51s<br>run 25.2s<br>3544 pass | 2026-10-31 @ `923e9c83f1` |
 | Python → Clojure | 🟢 | gen 278f/2m34s<br>test-gen 76f/2m54s<br>run 9.1s<br>3539 pass | 2026-10-30 @ `673631ab0d` |
@@ -143,42 +143,42 @@ block below._
     },
     "haskell-to-haskell": {
       "mainFiles": 201,
-      "mainGenSeconds": 327.8,
+      "mainGenSeconds": 496.1,
       "passed": 3765,
       "rawStatus": "pass",
       "skipped": 0,
       "status": "green",
       "testFiles": 76,
-      "testGenSeconds": 327.8,
-      "testRunMs": 496.323823928833,
-      "verifiedCommit": "cca45452bd",
-      "verifiedDate": "2026-11-27"
+      "testGenSeconds": 496.1,
+      "testRunMs": 504.2855739593506,
+      "verifiedCommit": "9007a16337",
+      "verifiedDate": "2026-11-28"
     },
     "haskell-to-java": {
       "mainFiles": 540,
-      "mainGenSeconds": 299.4,
+      "mainGenSeconds": 361.3,
       "passed": 3765,
       "rawStatus": "diff",
       "skipped": 0,
       "status": "green",
       "testFiles": 76,
-      "testGenSeconds": 299.4,
-      "testRunMs": 9254.3,
-      "verifiedCommit": "cca45452bd",
-      "verifiedDate": "2026-11-27"
+      "testGenSeconds": 361.3,
+      "testRunMs": 9575.6,
+      "verifiedCommit": "9007a16337",
+      "verifiedDate": "2026-11-28"
     },
     "haskell-to-python": {
       "mainFiles": 181,
-      "mainGenSeconds": 31.9,
+      "mainGenSeconds": 51.6,
       "passed": 3830,
       "rawStatus": "diff",
       "skipped": 0,
       "status": "green",
       "testFiles": 76,
-      "testGenSeconds": 31.9,
-      "testRunMs": 15614.5,
-      "verifiedCommit": "cca45452bd",
-      "verifiedDate": "2026-11-27"
+      "testGenSeconds": 51.6,
+      "testRunMs": 16235,
+      "verifiedCommit": "9007a16337",
+      "verifiedDate": "2026-11-28"
     },
     "haskell-to-scheme": {
       "mainFiles": 173,
@@ -234,42 +234,42 @@ block below._
     },
     "java-to-haskell": {
       "mainFiles": 611,
-      "mainGenSeconds": 210.3,
+      "mainGenSeconds": 199.3,
       "passed": 3765,
       "rawStatus": "diff",
       "skipped": 0,
       "status": "green",
       "testFiles": 79,
-      "testGenSeconds": 210.3,
-      "testRunMs": 478.8651466369629,
-      "verifiedCommit": "cca45452bd",
-      "verifiedDate": "2026-11-27"
+      "testGenSeconds": 199.3,
+      "testRunMs": 493.4375286102295,
+      "verifiedCommit": "9007a16337",
+      "verifiedDate": "2026-11-28"
     },
     "java-to-java": {
       "mainFiles": 3048,
-      "mainGenSeconds": 70.5,
+      "mainGenSeconds": 70.3,
       "passed": 3765,
       "rawStatus": "pass",
       "skipped": 0,
       "status": "green",
       "testFiles": 79,
-      "testGenSeconds": 70.5,
-      "testRunMs": 9221.1,
-      "verifiedCommit": "cca45452bd",
-      "verifiedDate": "2026-11-27"
+      "testGenSeconds": 70.3,
+      "testRunMs": 8879.1,
+      "verifiedCommit": "9007a16337",
+      "verifiedDate": "2026-11-28"
     },
     "java-to-python": {
       "mainFiles": 530,
-      "mainGenSeconds": 61.0,
+      "mainGenSeconds": 60.9,
       "passed": 3830,
       "rawStatus": "pass",
       "skipped": 0,
       "status": "green",
       "testFiles": 82,
-      "testGenSeconds": 61.0,
-      "testRunMs": 15981.4,
-      "verifiedCommit": "cca45452bd",
-      "verifiedDate": "2026-11-27"
+      "testGenSeconds": 60.9,
+      "testRunMs": 16679.5,
+      "verifiedCommit": "9007a16337",
+      "verifiedDate": "2026-11-28"
     },
     "java-to-scala": {
       "mainFiles": 254,
@@ -351,42 +351,42 @@ block below._
     },
     "python-to-haskell": {
       "mainFiles": 611,
-      "mainGenSeconds": 495.6,
+      "mainGenSeconds": 466.5,
       "passed": 3765,
       "rawStatus": "pass",
       "skipped": 0,
       "status": "green",
       "testFiles": 79,
-      "testGenSeconds": 495.6,
-      "testRunMs": 471.75121307373047,
-      "verifiedCommit": "cca45452bd",
-      "verifiedDate": "2026-11-27"
+      "testGenSeconds": 466.5,
+      "testRunMs": 486.4308834075928,
+      "verifiedCommit": "9007a16337",
+      "verifiedDate": "2026-11-28"
     },
     "python-to-java": {
       "mainFiles": 3048,
-      "mainGenSeconds": 292.2,
+      "mainGenSeconds": 285.9,
       "passed": 3765,
       "rawStatus": "pass",
       "skipped": 0,
       "status": "green",
       "testFiles": 79,
-      "testGenSeconds": 292.2,
-      "testRunMs": 9507.0,
-      "verifiedCommit": "cca45452bd",
-      "verifiedDate": "2026-11-27"
+      "testGenSeconds": 285.9,
+      "testRunMs": 16054.5,
+      "verifiedCommit": "9007a16337",
+      "verifiedDate": "2026-11-28"
     },
     "python-to-python": {
       "mainFiles": 530,
-      "mainGenSeconds": 252.8,
+      "mainGenSeconds": 296.9,
       "passed": 3830,
       "rawStatus": "diff",
       "skipped": 0,
       "status": "green",
       "testFiles": 82,
-      "testGenSeconds": 252.8,
-      "testRunMs": 16498.4,
-      "verifiedCommit": "cca45452bd",
-      "verifiedDate": "2026-11-27"
+      "testGenSeconds": 296.9,
+      "testRunMs": 17194.5,
+      "verifiedCommit": "9007a16337",
+      "verifiedDate": "2026-11-28"
     },
     "python-to-scala": {
       "mainFiles": 254,
